@@ -14,10 +14,12 @@ let
     '' else ''
     cat "$1" | col -bx | bat --language man --style plain
   ''));
+
+  _1passwordAgentPath = "~/.1password/agent.sock";
 in {
   # Home-manager 22.11 requires this be set. We never set it so we have
   # to use the old state version.
-  home.stateVersion = "18.09";
+  home.stateVersion = "23.11";
 
   xdg.enable = true;
 
@@ -42,12 +44,16 @@ in {
 
     pkgs.zigpkgs.master
 
+    pkgs._1password
+    pkgs._1password-gui
+
     # Node is required for Copilot.vim
     pkgs.nodejs
   ] ++ (lib.optionals isDarwin [
     # This is automatically setup on Linux
     pkgs.cachix
     pkgs.tailscale  # TODO: try this out.
+
   ]) ++ (lib.optionals (isLinux && !isWSL) [
     pkgs.chromium
     pkgs.firefox
@@ -144,7 +150,7 @@ in {
       credential."https://gist.github.com".helper = "!gh auth git-credential";
       gpg.format = "ssh";
       gpg.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
-      commit.gpgsign = true
+      commit.gpgsign = true;
       filter.lfs = {
         clean = "git-lfs clean -- %f";
         smudge = "git-lfs smudge -- %f";
@@ -229,6 +235,21 @@ in {
   };
 
   xresources.extraConfig = builtins.readFile ./Xresources;
+
+  programs.ssh.extraConfig = ''
+  # Personal hosts.
+  Host github.com
+    User git
+    IdentityAgent "${_1passwordAgentPath}"
+  Host linode bc
+    HostName 172.105.192.143
+    IdentityAgent "${_1passwordAgentPath}"
+    ForwardAgent yes
+  Host skullkid.local
+    HostName 192.168.86.43
+    IdentityAgent "${_1passwordAgentPath}"
+    ForwardAgent yes
+  ''
 
   # Make cursor not tiny on HiDPI screens
   home.pointerCursor = lib.mkIf (isLinux && !isWSL) {

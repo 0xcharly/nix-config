@@ -162,7 +162,7 @@
         "owner": "oh-my-fish",
         "repo": "plugin-title",
         "rev": "320188bc2ea98ac658a78e927fcb25087d08f22c",
-        "sha256": "3f155b9caa7f854dfb123f59d539fc6fdd0fa7b0df7eae45e5fd645e9b03e866",
+        "sha256": "15f9xrp4b5hfa26v2j428izfcmv47v5kyhbxxa4cyz6s19llsxiv",
         "type": "tarball",
         "url": "https://github.com/oh-my-fish/plugin-title/archive/320188bc2ea98ac658a78e927fcb25087d08f22c.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
