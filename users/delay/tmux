@@ -1,0 +1,91 @@
+# Use the tmux terminal description for better support of escape codes (e.g. italics).
+set -g default-terminal "tmux"
+
+# Escape sequences support.
+set -ga terminal-overrides ",*256col*:Tc" # True color
+set -as terminal-overrides ',xterm*:sitm=\E[3m' # Italics
+set -as terminal-overrides ',*:Smulx=\E[4::%p1%dm'  # Undercurl
+set -as terminal-overrides ',*:Setulc=\E[58::2::%p1%{65536}%/%d::%p1%{256}%/%{255}%&%d::%p1%{255}%&%d%;m' # Underscore colours - needs tmux-3.0
+
+# Status bar.
+set -g status on
+set -g status-position bottom
+set -g status-justify left
+set -g status-left-length 50
+set -g status-left "  #[bold]#H#[nobold]  "
+set -g status-right "  "
+set -g status-style "fg=white bg=default reverse"
+set -g message-style "fg=white bg=default reverse" # Used for message and prompt.
+set -g message-command-style "fg=brightwhite bg=default reverse" # Command prompt with vi mode.
+set -g window-status-separator ""
+set -g window-status-format "#[fg=white,bg=default,reverse]#[fg=brightwhite,noreverse] #I #[fg=white,reverse]#[noreverse]"
+set -g window-status-current-format "#[fg=white,bg=default,reverse]#[fg=red,noreverse,bold] #I #[fg=white,reverse]#[bg=default]"
+
+set-option -g set-titles off          # Disable syncing terminal window titles with tmux sessions name.
+set-option -g focus-event on          # Enable focus event for neovim autoread.
+set -sg escape-time 0                 # Prefix.
+set -g renumber-windows on            # So you don't end up with window numbers like: 0 1 4 5 6.
+set -g allow-rename off               # Disallow renaming a window.
+setw -g automatic-rename off
+set -g mouse on                       # Enable mouse support.
+set -ag update-environment "SSH_TTY"  # Auto update SSH_TTY envvar.
+setw -g monitor-activity off          # Visual notification of activity in other windows.
+set -g visual-activity off
+set -gw mode-keys vi                  # Use vi keys.
+set -g set-clipboard off
+
+# Rename shortcuts.
+bind , command-prompt -p "(rename-window '#W')" "rename-window '%%'"
+bind '$' command-prompt -p "(rename-session '#S')" "rename-session '%%'"
+
+unbind -T copy-mode-vi MouseDragEnd1Pane # Unbind "release mouse click to copy selection & exit copy-mode" behavior.
+unbind -T copy-mode-vi y
+unbind-key -T copy-mode-vi MouseDragEnd1Pane
+unbind-key -n MouseDown2Pane
+unbind-key v
+bind -T copy-mode-vi v send-keys -X begin-selection
+
+if "test `uname` = 'Linux'" "set -g copy-command 'xclip -i -sel primary'"
+# DO NOT UNCOMMENT: avoid accidentally copying sensitive content to the system clipboard on macOS.
+# if "test `uname` = 'Darwin'" "set -g copy-command 'pbcopy'"
+
+# 'copy-mode-vi y' copies to clipboard buffer.
+if "test `uname` = 'Linux'" "bind -T copy-mode-vi y send -X copy-pipe-and-cancel 'xclip -i -sel clipboard'"
+if "test `uname` = 'Darwin'" "bind -T copy-mode-vi y send -X copy-pipe-and-cancel 'pbcopy'"
+
+# Copy on mouse select copies to primary clipboard on Linux only (because macOS
+# doesn't have a concept of primary/clipboard selection, and every app has
+# access to the content of the clipboard).
+# Do not reset scroll position on mouse select ('copy-pipe' instead of 'copy-pipe-and-cancel').
+if "test `uname` = 'Linux'" "bind-key -T copy-mode-vi MouseDragEnd1Pane send -X copy-pipe-no-clear 'xclip -i -sel primary'"
+
+# Middle-click pastes from the primary clipboard on Linux, system clipboard on macOS (for convenience).
+if "test `uname` = 'Linux'" "bind-key -n MouseDown2Pane run 'tmux load-buffer -b primary_selection <(xclip -o -sel primary); tmux paste-buffer -b primary_selection'"
+if "test `uname` = 'Darwin'" "bind-key -n MouseDown2Pane run 'tmux load-buffer -b clipboard_selection <(pbpaste); tmux paste-buffer -b clipboard_selection'"
+
+# Prefix-v pastes from the primary clipboard, system clipboard on macOS (for convenience).
+if "test `uname` = 'Linux'" "bind-key v run 'tmux load-buffer -b primary_selection <(xclip -o -sel primary); tmux paste-buffer -b primary_selection'"
+if "test `uname` = 'Darwin'" "bind-key v run 'tmux load-buffer -b clipboard_selection <(pbpaste); tmux paste-buffer -b clipboard_selection'"
+
+# screen-like pane switching
+bind C-b last-window
+
+# Custom remaps.
+bind l send 'C-l'
+
+# Swap/reorder windows.
+bind -r J swap-window -t -1 \; select-window -t -1
+bind -r K swap-window -t +1 \; select-window -t +1
+
+# Go to windows.
+bind -r h select-window -t 0
+bind -r t select-window -t 1
+bind -r n select-window -t 2
+bind -r s select-window -t 3
+bind -r C-h select-window -t 0
+bind -r C-t select-window -t 1
+bind -r C-n select-window -t 2
+bind -r C-s select-window -t 3
+
+# Citc workspace fuzzy finder.
+bind f run-shell "tmux new-window ~/.local/bin/open-tmux-workspace"
