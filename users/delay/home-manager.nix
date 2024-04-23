@@ -7,6 +7,8 @@ let
   isDarwin = pkgs.stdenv.isDarwin;
   isLinux = pkgs.stdenv.isLinux;
 
+  isCorpManaged = lib.filesystem.pathIsDirectory "/google/src/cloud/delay/";
+
   # For our MANPAGER env var
   # https://github.com/sharkdp/bat/issues/1145
   manpager = (pkgs.writeShellScriptBin "manpager" (if isDarwin then ''
@@ -15,10 +17,18 @@ let
     cat "$1" | col -bx | bat --language man --style plain
   ''));
 
-  _1passwordAgentPath = "~/.1password/agent.sock";
+  # TODO: Adjust path on macOS.
+  _1passwordAgentPath = (if isDarwin then
+      "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
+    else
+      "~/.1password/agent.sock"
+    );
+  _1passwordSshSignPath = (if isDarwin then
+      "${pkgs._1password-gui}/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+    else
+      "${pkgs._1password-gui}/bin/op-ssh-sign"
+    );
 in {
-  # Home-manager 22.11 requires this be set. We never set it so we have
-  # to use the old state version.
   home.stateVersion = "23.11";
 
   xdg.enable = true;
@@ -38,9 +48,11 @@ in {
     pkgs.gh
     pkgs.htop
     pkgs.jq
+    pkgs.neovim
     pkgs.ripgrep
     pkgs.tree
     pkgs.watch
+    pkgs.wezterm
 
     pkgs.zigpkgs.master
 
@@ -52,6 +64,7 @@ in {
   ] ++ (lib.optionals isDarwin [
     # This is automatically setup on Linux
     pkgs.cachix
+    pkgs.scrcpy
     pkgs.tailscale  # TODO: try this out.
 
   ]) ++ (lib.optionals (isLinux && !isWSL) [
@@ -99,7 +112,7 @@ in {
   # Programs
   #---------------------------------------------------------------------
 
-  programs.gpg.enable = !isDarwin;
+  programs.home-manager.enable = true;
 
   programs.bash = {
     enable = true;
@@ -127,6 +140,11 @@ in {
     ];
   };
 
+  programs.wezterm = {
+    enable = true;
+    package = inputs.wezterm.packages.${pkgs.system}.default;
+  };
+
   programs.git = {
     enable = true;
     userName = "Charly Delay";
@@ -149,7 +167,7 @@ in {
       credential."https://github.com".helper = "!gh auth git-credential";
       credential."https://gist.github.com".helper = "!gh auth git-credential";
       gpg.format = "ssh";
-      gpg.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+      gpg.ssh.program = "${_1passwordSshSignPath}";
       commit.gpgsign = true;
       filter.lfs = {
         clean = "git-lfs clean -- %f";
@@ -166,7 +184,10 @@ in {
     aggressiveResize = true;
     secureSocket = true; # If 'false', forces tmux to use /tmp for sockets (WSL2 compat).
 
-    extraConfig = builtins.readFile ./tmux;
+    extraConfig = lib.strings.concatStrings (lib.strings.intersperse "\n" ([
+      (builtins.readFile ./tmux)
+      "run-shell ${sources.tmux-pain-control}/pain_control.tmux"
+    ]))
   };
 
   programs.i3status = {
@@ -188,47 +209,40 @@ in {
 
   programs.neovim = {
     enable = true;
-    package = pkgs.neovim-nightly;
-
+    viAlias = true;
+    vimAlias = true;
+    defaultEditor = true;
     withPython3 = true;
 
     plugins = with pkgs; [
-      customVim.vim-copilot
-      customVim.vim-cue
       customVim.vim-fish
       customVim.vim-fugitive
-      customVim.vim-glsl
-      customVim.vim-misc
       customVim.vim-pgsql
-      customVim.vim-tla
       customVim.vim-zig
-      customVim.pigeon
-      customVim.AfterColors
+      customVim.vim-nix
 
-      customVim.vim-nord
+      customVim.nvim-auto-hlsearch
+      customVim.nvim-catppuccin
       customVim.nvim-comment
       customVim.nvim-conform
+      customVim.nvim-gitsigns
+      customVim.nvim-lastplace
+      customVim.nvim-lualine
       customVim.nvim-lspconfig
-      customVim.nvim-plenary # required for telescope
+      customVim.nvim-neodev
+      customVim.nvim-nonicons
+      customVim.nvim-plenary
+      customVim.nvim-rustacean
+      customVim.nvim-surround
       customVim.nvim-telescope
       customVim.nvim-treesitter
-      customVim.nvim-treesitter-playground
       customVim.nvim-treesitter-textobjects
+      customVim.nvim-trouble
+      customVim.nvim-web-devicons
 
-      vimPlugins.vim-airline
-      vimPlugins.vim-airline-themes
-      vimPlugins.vim-eunuch
-      vimPlugins.vim-gitgutter
-
-      vimPlugins.vim-markdown
-      vimPlugins.vim-nix
-      vimPlugins.typescript-vim
-      vimPlugins.nvim-treesitter-parsers.elixir
-    ] ++ (lib.optionals (!isWSL) [
-      # This is causing a segfaulting while building our installer
-      # for WSL so just disable it for now. This is a pretty
-      # unimportant plugin anyway.
-      customVim.vim-devicons
+      customVim.vim-markdown
+    ] ++ (lib.optionals (!isCorpManaged) [
+      customVim.vim-copilot
     ]);
 
     extraConfig = (import ./vim-config.nix) { inherit sources; };
