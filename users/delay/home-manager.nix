@@ -19,7 +19,7 @@ let
 
   # TODO: Adjust path on macOS.
   _1passwordAgentPath = (if isDarwin then
-      "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
+      "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
     else
       "~/.1password/agent.sock"
     );
@@ -48,11 +48,9 @@ in {
     pkgs.gh
     pkgs.htop
     pkgs.jq
-    pkgs.neovim
     pkgs.ripgrep
     pkgs.tree
     pkgs.watch
-    pkgs.wezterm
 
     pkgs.zigpkgs.master
 
@@ -89,10 +87,10 @@ in {
     MANPAGER = "${manpager}/bin/manpager";
   };
 
-  # xdg.configFile = {
-  #   "i3/config".text = builtins.readFile ./i3;
+  xdg.configFile = {
+     "i3/config".text = builtins.readFile ./i3;
   #   "rofi/config.rasi".text = builtins.readFile ./rofi;
-
+  };
   #   # tree-sitter parsers
   #   "nvim/parser/proto.so".source = "${pkgs.tree-sitter-proto}/parser";
   #   "nvim/queries/proto/folds.scm".source =
@@ -187,7 +185,7 @@ in {
     extraConfig = lib.strings.concatStrings (lib.strings.intersperse "\n" ([
       (builtins.readFile ./tmux)
       "run-shell ${sources.tmux-pain-control}/pain_control.tmux"
-    ]))
+    ]));
   };
 
   programs.i3status = {
@@ -263,7 +261,7 @@ in {
     HostName 192.168.86.43
     IdentityAgent "${_1passwordAgentPath}"
     ForwardAgent yes
-  ''
+  '';
 
   # Make cursor not tiny on HiDPI screens
   home.pointerCursor = lib.mkIf (isLinux && !isWSL) {

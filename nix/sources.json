@@ -66,7 +66,7 @@
         "owner": "catppuccin",
         "repo": "nvim",
         "rev": "a1439ad7c584efb3d0ce14ccb835967f030450fe",
-        "sha256": "15xdnhccqzwaas27a8anm0ln2dj2409rh4v0pldyv4j8fzbfdd8w",
+        "sha256": "1ngjll0khnx1nighazw64kvfdl139z8xhv0hh2r4bb40ynxnhdf9",
         "type": "tarball",
         "url": "https://github.com/catppuccin/nvim/archive/a1439ad7c584efb3d0ce14ccb835967f030450fe.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
@@ -186,7 +186,7 @@
         "owner": "nvim-lua",
         "repo": "plenary.nvim",
         "rev": "5129a3693c482fcbc5ab99a7706ffc4360b995a0",
-        "sha256": "02sb5vam4vg2ah0ry6ydhlvi771mw7an864r4sjncb9g50dpxpf5",
+        "sha256": "0z8frdjcnc547bx3h9dv0b51ghddb2mpa6j664xqj628gbbarcd2",
         "type": "tarball",
         "url": "https://github.com/nvim-lua/plenary.nvim/archive/5129a3693c482fcbc5ab99a7706ffc4360b995a0.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
