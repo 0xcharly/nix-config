@@ -35,11 +35,10 @@ endif
 # This builds the given NixOS configuration and pushes the results to the
 # cache. This does not alter the current running system. This requires
 # cachix authentication to be configured out of band.
-# TODO: setup own cachix instance.
 cache:
 	nix build '.#nixosConfigurations.$(NIXNAME).config.system.build.toplevel' --json \
 		| jq -r '.[].outputs | to_entries[].value' \
-		| cachix push mitchellh-nixos-config
+		| cachix push 0xcharly-nixos-config
 
 # bootstrap a brand new VM. The VM should have NixOS ISO on the CD drive
 # and just set the password of the root user to "root". This will install
@@ -67,12 +66,12 @@ vm/bootstrap0:
 		sed --in-place '/system\.stateVersion = .*/a \
 			nix.package = pkgs.nixUnstable;\n \
 			nix.extraOptions = \"experimental-features = nix-command flakes\";\n \
-			nix.settings.substituters = [\"https://mitchellh-nixos-config.cachix.org\"];\n \
-			nix.settings.trusted-public-keys = [\"mitchellh-nixos-config.cachix.org-1:bjEbXJyLrL1HZZHBbO4QALnI5faYZppzkU4D2s0G8RQ=\"];\n \
+			nix.settings.substituters = [\"https://0xcharly-nixos-config.cachix.org\"];\n \
+			nix.settings.trusted-public-keys = [\"0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU=\"];\n \
 			services.openssh.enable = true;\n \
 			services.openssh.settings.PasswordAuthentication = true;\n \
 			services.openssh.settings.PermitRootLogin = \"yes\";\n \
-			users.users.root.initialPassword = \"root\";\n \
+			users.users.root.initialHashedPassword = \"\$$y\$$j9T\$$4khyPQBDfNOm5ZM0tlorW1\$$n3jptX37mtDoPL7lLkgY2HFnGoOQ7Sq9DFRRoYh/3cC\";\n \
 		' /mnt/etc/nixos/configuration.nix; \
 		nixos-install --no-root-passwd && reboot; \
 	"
@@ -95,6 +94,8 @@ sed --in-place -f - /mnt/etc/nixos/configuration.nix <<- 'EOF'
 	/system\.stateVersion = .*/a \
 	nix.package = pkgs.nixUnstable;\n \
 	nix.extraOptions = "experimental-features = nix-command flakes";\n \
+	nix.settings.substituters = [ "https://0xcharly-nixos-config.cachix.org" ];\n \
+	nix.settings.trusted-public-keys = [ "0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU=" ];\n \
 	boot.kernelParams = [ "console=ttyS0,19200n8" ];\n \
 	boot.loader.grub.extraConfig = ''\n \
 		serial --speed=19200 --unit=0 --word=8 --parity=no --stop=1;\n \
@@ -111,9 +112,9 @@ sed --in-place -f - /mnt/etc/nixos/configuration.nix <<- 'EOF'
 	networking.usePredictableInterfaceNames = false;\n \
 	networking.interfaces.eth0.useDHCP = true;\n \
 	environment.systemPackages = with pkgs; [ inetutils mtr sysstat ];\n \
-	users.users.root.initialPassword = "root";\n
+	users.users.root.initialHashedPassword = "\$$y\$$j9T\$$4khyPQBDfNOm5ZM0tlorW1\$$n3jptX37mtDoPL7lLkgY2HFnGoOQ7Sq9DFRRoYh/3cC";\n \
 EOF
-nixos-install --no-root-passwd # && reboot
+nixos-install --no-root-passwd && reboot
 endef
 export linode_bootstrap0 = $(value _linode_bootstrap0)
 
@@ -133,7 +134,10 @@ vm/bootstrap:
 vm/copy:
 	rsync -av -e 'ssh $(SSH_OPTIONS) -p$(NIXPORT)' \
 		--exclude='vendor/' \
+		--exclude='.gitignore' \
+		--exclude='.gitconfig' \
 		--exclude='.git/' \
+		--exclude='.github/' \
 		--exclude='.git-crypt/' \
 		--exclude='iso/' \
 		--rsync-path="sudo rsync" \

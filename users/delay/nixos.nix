@@ -15,7 +15,8 @@
     home = "/home/delay";
     extraGroups = [ "docker" "wheel" ];
     shell = pkgs.fish;
-    hashedPassword = "$6$hty0MeXqIVM0ClKt$6KiNbz5lDxjQOESemC40.T/aK4IOGLgY7YnlgJ./ltd/lVUPRGRCE4fAvKeDJ2v5r7mmmC43gm72zjGmwcbNL1";
+    # Create a hashed password with `nix-shell -p mkpasswd --run "mkpasswd -m yescrypt"`
+    hashedPassword = "$y$j9T$6Obep7H1BnzgcBCOdY9hO/$tyLpdkxXnRPumeqlm43Uh4UPj1UQgymEiREPSr49ZR1";
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP4Jr8wJUXhECjbSXlGPpLFAN0Zq+eY6n4w+0ezoMxFK delay"
     ];

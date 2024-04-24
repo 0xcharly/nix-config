@@ -1,6 +1,6 @@
 # This function creates a NixOS system based on our VM setup for a
 # particular architecture.
-{ nixpkgs, overlays, inputs }:
+{ nixpkgs, inputs }:
 
 name:
 {
@@ -26,11 +26,6 @@ in systemFunc rec {
   inherit system;
 
   modules = [
-    # Apply our overlays. Overlays are keyed by system type so we have
-    # to go through and apply our system type. We do this first so
-    # the overlays are available globally.
-    { nixpkgs.overlays = overlays; }
-
     # Bring in WSL if this is a WSL build
     (if isWSL then inputs.nixos-wsl.nixosModules.wsl else {})
 

@@ -16,8 +16,8 @@
     # this, use your own, or toss it. Its typically safe to use a binary cache
     # since the data inside is checksummed.
     settings = {
-      substituters = ["https://mitchellh-nixos-config.cachix.org"];
-      trusted-public-keys = ["mitchellh-nixos-config.cachix.org-1:bjEbXJyLrL1HZZHBbO4QALnI5faYZppzkU4D2s0G8RQ="];
+      substituters = ["https://0xcharly-nixos-config.cachix.org"];
+      trusted-public-keys = ["0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU="];
     };
   };
 

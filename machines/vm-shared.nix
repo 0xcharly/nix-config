@@ -1,11 +1,6 @@
 { config, pkgs, lib, currentSystem, currentSystemName,... }:
 
-let
-  # Turn this to true to use gnome instead of i3. This is a bit
-  # of a hack, I just flip it on as I need to develop gnome stuff
-  # for now.
-  linuxGnome = true;
-in {
+{
   # Be careful updating this.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
@@ -22,8 +17,8 @@ in {
     # this, use your own, or toss it. Its typically safe to use a binary cache
     # since the data inside is checksummed.
     settings = {
-      substituters = ["https://mitchellh-nixos-config.cachix.org"];
-      trusted-public-keys = ["mitchellh-nixos-config.cachix.org-1:bjEbXJyLrL1HZZHBbO4QALnI5faYZppzkU4D2s0G8RQ="];
+      substituters = ["https://0xcharly-nixos-config.cachix.org"];
+      trusted-public-keys = ["0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU="];
     };
   };
 
@@ -68,15 +63,11 @@ in {
   };
 
   # setup windowing environment
-  services.xserver = if linuxGnome then {
-    enable = true;
-    layout = "us";
-    desktopManager.gnome.enable = true;
-    displayManager.gdm.enable = true;
-  } else {
+  services.xserver = {
     enable = true;
     layout = "us";
     dpi = 220;
+    autorun = true;
 
     desktopManager = {
       xterm.enable = false;
@@ -87,8 +78,6 @@ in {
       defaultSession = "none+i3";
       lightdm.enable = true;
 
-      # AARCH64: For now, on Apple Silicon, we must manually set the
-      # display resolution. This is a known issue with VMware Fusion.
       sessionCommands = ''
         ${pkgs.xorg.xset}/bin/xset r rate 200 40
       '';
@@ -163,5 +152,5 @@ in {
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "20.09"; # Did you read the comment?
+  system.stateVersion = "23.11"; # Did you read the comment?
 }

@@ -26,9 +26,6 @@
 
     wezterm.url = "github:wez/wezterm?dir=nix";
 
-    # Other packages
-    zig.url = "github:mitchellh/zig-overlay";
-
     # Non-flakes
     nvim-conform.url = "github:stevearc/conform.nvim/v5.6.0";
     nvim-conform.flake = false;
@@ -39,13 +36,8 @@
   };
 
   outputs = { self, nixpkgs, home-manager, darwin, ... }@inputs: let
-    # Overlays is the list of overlays we want to apply from flake inputs.
-    overlays = [
-      inputs.zig.overlays.default
-    ];
-
     mkSystem = import ./lib/mksystem.nix {
-      inherit overlays nixpkgs inputs;
+      inherit nixpkgs inputs;
     };
   in {
     nixosConfigurations.vm-aarch64 = mkSystem "vm-aarch64" {

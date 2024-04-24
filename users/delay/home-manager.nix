@@ -4,8 +4,9 @@
 
 let
   sources = import ../../nix/sources.nix;
-  isDarwin = pkgs.stdenv.isDarwin;
-  isLinux = pkgs.stdenv.isLinux;
+
+  inherit (lib) mkIf;
+  inherit (pkgs.stdenv) isDarwin isLinux;
 
   isCorpManaged = lib.filesystem.pathIsDirectory "/google/src/cloud/delay/";
 
@@ -30,8 +31,6 @@ let
 in {
   home.stateVersion = "23.11";
 
-  xdg.enable = true;
-
   #---------------------------------------------------------------------
   # Packages
   #---------------------------------------------------------------------
@@ -50,8 +49,6 @@ in {
     pkgs.ripgrep
     pkgs.tree
     pkgs.watch
-
-    pkgs.zigpkgs.master
 
     # Node is required for Copilot.vim
     pkgs.nodejs
@@ -86,10 +83,11 @@ in {
     MANPAGER = "${manpager}/bin/manpager";
   };
 
+  xdg.enable = true;
   xdg.configFile = {
-     "i3/config".text = builtins.readFile ./i3;
+  #   "wezterm/wezterm.lua".text = builtins.readFile ./wezterm.lua;
   #   "rofi/config.rasi".text = builtins.readFile ./rofi;
-  };
+  #  };
   #   # tree-sitter parsers
   #   "nvim/parser/proto.so".source = "${pkgs.tree-sitter-proto}/parser";
   #   "nvim/queries/proto/folds.scm".source =
@@ -98,16 +96,32 @@ in {
   #     "${sources.tree-sitter-proto}/queries/highlights.scm";
   #   "nvim/queries/proto/textobjects.scm".source =
   #     ./textobjects.scm;
-  # } // (if isDarwin then {
+  } // (if isDarwin then {
   #   # Rectangle.app. This has to be imported manually using the app.
   #   "rectangle/RectangleConfig.json".text = builtins.readFile ./RectangleConfig.json;
-  # } else {}) // (if isLinux then {
+  } else {}) // (if isLinux then {
   #   "ghostty/config".text = builtins.readFile ./ghostty.linux;
-  # } else {});
+  #   "i3/config".text = builtins.readFile ./i3;
+  } else {});
 
   #---------------------------------------------------------------------
   # Programs
   #---------------------------------------------------------------------
+
+  xsession = mkIf isLinux {
+    enable = true;
+    windowManager.i3 = rec {
+      enable = true;
+      config = {
+        modifier = "Mod4";
+        startup = [
+          { command = "xrandr-auto"; notification = false; }
+        ];
+        keybindings = import ./i3-keybindings.nix config.modifier;
+      };
+      #extraConfig = builtins.readFile ./i3;
+    };
+  };
 
   programs.home-manager.enable = true;
 
@@ -140,6 +154,24 @@ in {
   programs.wezterm = {
     enable = true;
     package = inputs.wezterm.packages.${pkgs.system}.default;
+    extraConfig = builtins.readFile ./wezterm.lua;
+  };
+
+  programs.i3status = {
+    enable = isLinux && !isWSL;
+
+    general = {
+      colors = true;
+      color_good = "#8C9440";
+      color_bad = "#A54242";
+      color_degraded = "#DE935F";
+    };
+
+    modules = {
+      ipv6.enable = false;
+      "wireless _first_".enable = false;
+      "battery all".enable = false;
+    };
   };
 
   programs.git = {
@@ -187,23 +219,6 @@ in {
     ]));
   };
 
-  programs.i3status = {
-    enable = isLinux && !isWSL;
-
-    general = {
-      colors = true;
-      color_good = "#8C9440";
-      color_bad = "#A54242";
-      color_degraded = "#DE935F";
-    };
-
-    modules = {
-      ipv6.enable = false;
-      "wireless _first_".enable = false;
-      "battery all".enable = false;
-    };
-  };
-
   programs.neovim = {
     enable = true;
     viAlias = true;
@@ -247,23 +262,26 @@ in {
 
   xresources.extraConfig = builtins.readFile ./Xresources;
 
-  programs.ssh.extraConfig = ''
-  # Personal hosts.
-  Host github.com
-    User git
-    IdentityAgent "${_1passwordAgentPath}"
-  Host linode bc
-    HostName 172.105.192.143
-    IdentityAgent "${_1passwordAgentPath}"
-    ForwardAgent yes
-  Host skullkid.local
-    HostName 192.168.86.43
-    IdentityAgent "${_1passwordAgentPath}"
-    ForwardAgent yes
-  '';
+  programs.ssh = {
+    enable = true;
+    extraConfig = ''
+    # Personal hosts.
+    Host github.com
+      User git
+      IdentityAgent "${_1passwordAgentPath}"
+    Host linode bc
+      HostName 172.105.192.143
+      IdentityAgent "${_1passwordAgentPath}"
+      ForwardAgent yes
+    Host skullkid.local
+      HostName 192.168.86.43
+      IdentityAgent "${_1passwordAgentPath}"
+      ForwardAgent yes
+    '';
+  };
 
   # Make cursor not tiny on HiDPI screens
-  home.pointerCursor = lib.mkIf (isLinux && !isWSL) {
+  home.pointerCursor = mkIf (isLinux && !isWSL) {
     name = "Vanilla-DMZ";
     package = pkgs.vanilla-dmz;
     size = 128;
