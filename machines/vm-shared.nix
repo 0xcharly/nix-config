@@ -27,10 +27,7 @@ in {
     };
   };
 
-  nixpkgs.config.permittedInsecurePackages = [
-    # Needed for k2pdfopt 2.53.
-    "mupdf-1.17.0"
-  ];
+  nixpkgs.config.permittedInsecurePackages = [ ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -44,7 +41,7 @@ in {
   networking.hostName = "dev";
 
   # Set your time zone.
-  time.timeZone = "America/Los_Angeles";
+  time.timeZone = "Japan/Tokyo";
 
   # The global useDHCP flag is deprecated, therefore explicitly set to false here.
   # Per-interface useDHCP will be mandatory in the future, so this generated config
@@ -105,7 +102,7 @@ in {
   # Enable tailscale. We manually authenticate when we want with
   # "sudo tailscale up". If you don't use tailscale, you should comment
   # out or delete all of this.
-  services.tailscale.enable = true;
+  #services.tailscale.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.mutableUsers = false;
@@ -116,8 +113,8 @@ in {
     fontDir.enable = true;
 
     packages = [
-      pkgs.fira-code
-      pkgs.jetbrains-mono
+      # pkgs.fira-code
+      # pkgs.jetbrains-mono
     ];
   };
 

@@ -35,6 +35,7 @@ endif
 # This builds the given NixOS configuration and pushes the results to the
 # cache. This does not alter the current running system. This requires
 # cachix authentication to be configured out of band.
+# TODO: setup own cachix instance.
 cache:
 	nix build '.#nixosConfigurations.$(NIXNAME).config.system.build.toplevel' --json \
 		| jq -r '.[].outputs | to_entries[].value' \
@@ -49,11 +50,11 @@ cache:
 # in one step but when I tried to merge them I got errors. One day.
 vm/bootstrap0:
 	ssh $(SSH_OPTIONS) -p$(NIXPORT) root@$(NIXADDR) " \
-		parted /dev/sda -- mklabel gpt; \
-		parted /dev/sda -- mkpart primary 512MB -8GB; \
-		parted /dev/sda -- mkpart primary linux-swap -8GB 100\%; \
-		parted /dev/sda -- mkpart ESP fat32 1MB 512MB; \
-		parted /dev/sda -- set 3 esp on; \
+		parted -s /dev/sda -- mklabel gpt; \
+		parted -s /dev/sda -- mkpart primary 512MB -8GB; \
+		parted -s /dev/sda -- mkpart primary linux-swap -8GB 100\%; \
+		parted -s /dev/sda -- mkpart ESP fat32 1MB 512MB; \
+		parted -s /dev/sda -- set 3 esp on; \
 		sleep 1; \
 		mkfs.ext4 -L nixos /dev/sda1; \
 		mkswap -L swap /dev/sda2; \
@@ -68,7 +69,7 @@ vm/bootstrap0:
 			nix.extraOptions = \"experimental-features = nix-command flakes\";\n \
 			nix.settings.substituters = [\"https://mitchellh-nixos-config.cachix.org\"];\n \
 			nix.settings.trusted-public-keys = [\"mitchellh-nixos-config.cachix.org-1:bjEbXJyLrL1HZZHBbO4QALnI5faYZppzkU4D2s0G8RQ=\"];\n \
-  			services.openssh.enable = true;\n \
+			services.openssh.enable = true;\n \
 			services.openssh.settings.PasswordAuthentication = true;\n \
 			services.openssh.settings.PermitRootLogin = \"yes\";\n \
 			users.users.root.initialPassword = \"root\";\n \
@@ -76,29 +77,57 @@ vm/bootstrap0:
 		nixos-install --no-root-passwd && reboot; \
 	"
 
+define _linode_bootstrap0
+umount --force --recursive /mnt
+mkfs.ext4 -F -L nixos /dev/sda
+mkswap -L swap /dev/sdb
+mkfs.fat -F 32 -n boot /dev/sdc
+mount /dev/sda /mnt
+mkdir -p /mnt/boot
+mount /dev/sdc /mnt/boot
+nixos-generate-config --root /mnt
+sed --in-place -f - /mnt/etc/nixos/hardware-configuration.nix <<- 'EOF'
+		s|swapDevices = \[ \]|swapDevices = [ { device = "/dev/disk/by-label/swap"; } ]|
+		s|"/dev/disk/by-uuid/.*"|"/dev/disk/by-label/nixos"|
+		s|"/dev/sdc"|"/dev/disk/by-label/boot"|
+EOF
+sed --in-place -f - /mnt/etc/nixos/configuration.nix <<- 'EOF'
+	/system\.stateVersion = .*/a \
+	nix.package = pkgs.nixUnstable;\n \
+	nix.extraOptions = "experimental-features = nix-command flakes";\n \
+	boot.kernelParams = [ "console=ttyS0,19200n8" ];\n \
+	boot.loader.grub.extraConfig = ''\n \
+		serial --speed=19200 --unit=0 --word=8 --parity=no --stop=1;\n \
+		terminal_input serial;\n \
+		terminal_output serial\n \
+	'';\n \
+	boot.loader.grub.forceInstall = true;\n \
+	boot.loader.grub.device = "nodev";\n \
+	boot.loader.timeout = 10;\n \
+	services.openssh.enable = true;\n \
+	services.openssh.settings.PasswordAuthentication = true;\n \
+	services.openssh.settings.PermitRootLogin = "yes";\n \
+	networking.useDHCP = false;\n \
+	networking.usePredictableInterfaceNames = false;\n \
+	networking.interfaces.eth0.useDHCP = true;\n \
+	environment.systemPackages = with pkgs; [ inetutils mtr sysstat ];\n \
+	users.users.root.initialPassword = "root";\n
+EOF
+nixos-install --no-root-passwd # && reboot
+endef
+export linode_bootstrap0 = $(value _linode_bootstrap0)
+
+linode/bootstrap0:
+	ssh $(SSH_OPTIONS) -p$(NIXPORT) -lroot $(NIXADDR) "$$linode_bootstrap0"
+
 # after bootstrap0, run this to finalize. After this, do everything else
 # in the VM unless secrets change.
 vm/bootstrap:
 	NIXUSER=root $(MAKE) vm/copy
 	NIXUSER=root $(MAKE) vm/switch
-	# TODO: delay - Install or setup your own secrets.
-	#$(MAKE) vm/secrets
-	ssh $(SSH_OPTIONS) -p$(NIXPORT) $(NIXUSER)@$(NIXADDR) " \
+	ssh $(SSH_OPTIONS) -p$(NIXPORT)$(NIXUSER)@$(NIXADDR) " \
 		sudo reboot; \
 	"
-
-# copy our secrets into the VM
-vm/secrets:
-	# GPG keyring
-	rsync -av -e 'ssh $(SSH_OPTIONS)' \
-		--exclude='.#*' \
-		--exclude='S.*' \
-		--exclude='*.conf' \
-		$(HOME)/.gnupg/ $(NIXUSER)@$(NIXADDR):~/.gnupg
-	# SSH keys
-	rsync -av -e 'ssh $(SSH_OPTIONS)' \
-		--exclude='environment' \
-		$(HOME)/.ssh/ $(NIXUSER)@$(NIXADDR):~/.ssh
 
 # copy the Nix configurations into the VM.
 vm/copy:
