@@ -7,6 +7,7 @@
     enable = true;
     casks  = [
       "1password"
+      "1password-cli"
       "cleanshot"
       "discord"
       "firefox"

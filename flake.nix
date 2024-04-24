@@ -74,7 +74,7 @@
       wsl    = true;
     };
 
-    darwinConfigurations.macbook-pro-m1 = mkSystem "macbook-pro-m1" {
+    darwinConfigurations.macbook-pro-m3 = mkSystem "macbook-pro-m3" {
       system = "aarch64-darwin";
       user   = "delay";
       darwin = true;

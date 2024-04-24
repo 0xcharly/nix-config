@@ -17,14 +17,13 @@ let
     cat "$1" | col -bx | bat --language man --style plain
   ''));
 
-  # TODO: Adjust path on macOS.
   _1passwordAgentPath = (if isDarwin then
       "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
     else
       "~/.1password/agent.sock"
     );
   _1passwordSshSignPath = (if isDarwin then
-      "${pkgs._1password-gui}/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+      "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
     else
       "${pkgs._1password-gui}/bin/op-ssh-sign"
     );
@@ -54,9 +53,6 @@ in {
 
     pkgs.zigpkgs.master
 
-    pkgs._1password
-    pkgs._1password-gui
-
     # Node is required for Copilot.vim
     pkgs.nodejs
   ] ++ (lib.optionals isDarwin [
@@ -66,6 +62,9 @@ in {
     pkgs.tailscale  # TODO: try this out.
 
   ]) ++ (lib.optionals (isLinux && !isWSL) [
+    pkgs._1password
+    pkgs._1password-gui
+
     pkgs.chromium
     pkgs.firefox
     pkgs.rofi
