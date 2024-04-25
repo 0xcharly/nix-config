@@ -60,8 +60,8 @@ in {
     # pkgs.tailscale  # TODO: try this out.
 
   ]) ++ (lib.optionals (isLinux && !isWSL) [
-    pkgs._1password
-    pkgs._1password-gui
+    # pkgs._1password
+    # pkgs._1password-gui
 
     pkgs.chromium
     pkgs.firefox
