@@ -27,6 +27,12 @@
 
     wezterm.url = "github:wez/wezterm?dir=nix";
 
+    nixvim = {
+      # If using a stable channel you can use `url = "github:nix-community/nixvim/nixos-<version>"`
+      url = "github:nix-community/nixvim/nixos-23.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Non-flakes
     nvim-conform.url = "github:stevearc/conform.nvim/v5.6.0";
     nvim-conform.flake = false;
