@@ -1,4 +1,4 @@
-{ config, pkgs, lib, currentSystem, currentSystemName,... }:
+{ channels, config, pkgs, lib, currentSystem, currentSystemName,... }:
 
 {
   # Be careful updating this.
@@ -65,7 +65,7 @@
   # setup windowing environment
   services.xserver = {
     enable = true;
-    layout = "us";
+    xkb.layout = "us";
     dpi = 220;
     autorun = true;
 
@@ -75,7 +75,6 @@
     };
 
     displayManager = {
-      defaultSession = "none+i3";
       lightdm.enable = true;
 
       sessionCommands = ''
@@ -88,6 +87,10 @@
     };
   };
 
+  services.displayManager = {
+    defaultSession = "none+i3";
+  };
+
   # Enable tailscale. We manually authenticate when we want with
   # "sudo tailscale up". If you don't use tailscale, you should comment
   # out or delete all of this.
@@ -96,14 +99,14 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.mutableUsers = false;
 
-  # Manage fonts. We pull these from a secret directory since most of these
-  # fonts require a purchase.
+  # Manage fonts.
   fonts = {
     fontDir.enable = true;
 
-    packages = [
-      # pkgs.fira-code
-      # pkgs.jetbrains-mono
+    packages = with pkgs; [
+      (iosevka-bin.override { variant = "SGr-IosevkaTermCurly"; })
+      (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
+      material-design-icons
     ];
   };
 

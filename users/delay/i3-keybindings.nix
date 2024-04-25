@@ -1,5 +1,6 @@
 mod:
 {
+  "${mod}+Return" = "exec i3-sensible-terminal";
   "${mod}+o" = "exec rofi -show run";
   "${mod}+1" = "workspace 1";
   "${mod}+2" = "workspace 2";

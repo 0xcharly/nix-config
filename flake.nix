@@ -5,7 +5,8 @@
     # Pin our primary nixpkgs repository. This is the main nixpkgs repository
     # we'll use for our configurations. Be very careful changing this because
     # it'll impact your entire system.
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+    # TODO: Change this to the next stable channel (24.05) when it's released.
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # We use the unstable nixpkgs repo for some packages.
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
@@ -15,13 +16,15 @@
     nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-23.11";
+      # TODO: Change this to the next stable channel (24.05) when it's released.
+      # url = "github:nix-community/home-manager/release-24.05";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     darwin = {
       url = "github:LnL7/nix-darwin";
-      inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-23.11-darwin";
+      # inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-23.11-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -29,17 +32,10 @@
 
     nixvim = {
       # If using a stable channel you can use `url = "github:nix-community/nixvim/nixos-<version>"`
-      url = "github:nix-community/nixvim/nixos-23.11";
-      inputs.nixpkgs.follows = "nixpkgs";
+      # TODO: Change this to the next stable channel (24.05) when it's released.
+      url = "github:nix-community/nixvim";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-
-    # Non-flakes
-    nvim-conform.url = "github:stevearc/conform.nvim/v5.6.0";
-    nvim-conform.flake = false;
-    nvim-treesitter.url = "github:nvim-treesitter/nvim-treesitter/v0.9.2";
-    nvim-treesitter.flake = false;
-    vim-copilot.url = "github:github/copilot.vim/v1.29.0";
-    vim-copilot.flake = false;
   };
 
   outputs = { self, nixpkgs, home-manager, nix-darwin, darwin, ... }@inputs: let

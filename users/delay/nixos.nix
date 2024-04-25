@@ -7,7 +7,10 @@
   # Add ~/.local/bin to PATH
   environment.localBinInPath = true;
 
-  # Since we're using fish as our shell
+  # Required for graphical interfaces (X or Wayland) to work.
+  security.polkit.enable = true;
+
+  # Since we're using fish as our shell.
   programs.fish.enable = true;
 
   users.users.delay = {

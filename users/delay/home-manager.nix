@@ -55,10 +55,9 @@ in {
     # Node is required for Copilot.vim
     pkgs.nodejs
   ] ++ (lib.optionals isDarwin [
-    # This is automatically setup on Linux
-    pkgs.cachix
+    pkgs.cachix # This is automatically setup on Linux
     pkgs.scrcpy
-    pkgs.tailscale  # TODO: try this out.
+    # pkgs.tailscale  # TODO: try this out.
 
   ]) ++ (lib.optionals (isLinux && !isWSL) [
     pkgs._1password
@@ -158,6 +157,7 @@ in {
     package = inputs.wezterm.packages.${pkgs.system}.default;
     extraConfig = builtins.readFile ./wezterm.lua;
   };
+  home.sessionVariables.TERMINAL = "wezterm";
 
   programs.i3status = {
     enable = isLinux && !isWSL;
@@ -286,27 +286,21 @@ in {
 
     colorschemes.catppuccin = {
       enable = true;
-      flavour = "mocha";
-      transparentBackground = true;
-      terminalColors = true;
-      # From the next release:
-      # settings = {
-      #   flavour = "mocha";
-      #   transparentBackground = true;
-      #   term_colors = true;
-      # }
+      settings = {
+        flavour = "mocha";
+        transparentBackground = true;
+        term_colors = true;
+      };
     };
     plugins.comment-nvim.enable = true;
-    # From the next release:
-    # plugins.comment.enable = true;
+    plugins.comment.enable = true;
     plugins.conform-nvim.enable = true;
     plugins.copilot-vim.enable = !isCorpManaged;
     plugins.fugitive.enable = true;
     plugins.gitsigns.enable = true;
     plugins.lastplace.enable = true;
     plugins.nix.enable = true;
-    # From the next release:
-    # plugins.rustaceanvim.enable = true;
+    plugins.rustaceanvim.enable = true;
     plugins.surround.enable = true;
     plugins.trouble.enable = true;
     plugins.zig.enable = true;
