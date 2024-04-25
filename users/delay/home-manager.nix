@@ -234,7 +234,18 @@ in {
       customVim.vim-nix
 
       customVim.nvim-auto-hlsearch
-      customVim.nvim-catppuccin
+      {
+        plugin = customVim.nvim-catppuccin;
+        config = ''
+          packadd! catppuccin
+          lua << END
+          vim.o.termguicolors = true
+          require 'catppuccin'.setup { transparent_background = true }
+          vim.cmd [[colorscheme catppuccin-mocha]]
+          END
+        '';
+      }
+
       customVim.nvim-comment
       customVim.nvim-conform
       customVim.nvim-gitsigns
@@ -257,7 +268,9 @@ in {
       customVim.vim-copilot
     ]);
 
-    extraConfig = (import ./vim-config.nix) { inherit sources; };
+    extraConfig = builtins.readFile ./nvim-config.vim;
+    extraLuaConfig = builtins.readFile ./nvim-config.lua;
+    #extraConfig = (import ./vim-config.nix) { inherit sources; };
   };
 
   xresources.extraConfig = builtins.readFile ./Xresources;

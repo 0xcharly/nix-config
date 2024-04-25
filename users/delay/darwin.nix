@@ -1,6 +1,8 @@
-{ inputs, pkgs, ... }:
+{ inputs, lib, pkgs, ... }:
 
-{
+let
+  isCorpManaged = lib.filesystem.pathIsDirectory "/google/src/cloud/delay/";
+in {
   nixpkgs.overlays = [(import ./vim.nix { inherit inputs; })];
 
   homebrew = {
@@ -8,16 +10,16 @@
     casks  = [
       "1password"
       "1password-cli"
-      "cleanshot"
       "discord"
       "firefox"
       "firefox-developer-edition"
-      "google-chrome"
-      "hammerspoon"
-      "monodraw"
+      #"hammerspoon"
+      #"monodraw"
       "raycast"
       "spotify"
-    ];
+    ] ++ (lib.optionals (!isCorpManaged) [
+      #"google-chrome"
+    ]);
   };
 
   # The user should already exist, but we need to set this up so Nix knows

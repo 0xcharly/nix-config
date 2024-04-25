@@ -3,7 +3,6 @@
 self: super:
 
 let sources = import ../../nix/sources.nix; in rec {
-  # My vim config
   customVim = with self; {
     vim-fish = vimUtils.buildVimPlugin {
       name = "vim-fish";

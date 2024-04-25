@@ -21,6 +21,7 @@
 
     darwin = {
       url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-23.11-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -35,7 +36,7 @@
     vim-copilot.flake = false;
   };
 
-  outputs = { self, nixpkgs, home-manager, darwin, ... }@inputs: let
+  outputs = { self, nixpkgs, home-manager, nix-darwin, darwin, ... }@inputs: let
     mkSystem = import ./lib/mksystem.nix {
       inherit nixpkgs inputs;
     };
