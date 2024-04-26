@@ -1,4 +1,4 @@
-{ isWSL, inputs, ... }:
+{ inputs, ... }:
 
 { config, lib, pkgs, ... }:
 
@@ -59,7 +59,7 @@ in {
     pkgs.scrcpy
     # pkgs.tailscale  # TODO: try this out.
 
-  ]) ++ (lib.optionals (isLinux && !isWSL) [
+  ]) ++ (lib.optionals (isLinux) [
     # pkgs._1password
     # pkgs._1password-gui
 
@@ -160,7 +160,7 @@ in {
   home.sessionVariables.TERMINAL = "wezterm";
 
   programs.i3status = {
-    enable = isLinux && !isWSL;
+    enable = isLinux;
 
     general = {
       colors = true;
@@ -334,7 +334,7 @@ in {
   };
 
   # Make cursor not tiny on HiDPI screens
-  home.pointerCursor = mkIf (isLinux && !isWSL) {
+  home.pointerCursor = mkIf isLinux {
     name = "Vanilla-DMZ";
     package = pkgs.vanilla-dmz;
     size = 128;

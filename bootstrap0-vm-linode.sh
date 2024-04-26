@@ -21,28 +21,29 @@ sed --in-place -f - /mnt/etc/nixos/hardware-configuration.nix <<- 'EOF'
 EOF
 
 ex -s /mnt/etc/nixos/configuration.nix <<- 'EOF'
-$i
-    nix.package = pkgs.nixUnstable;
-    nix.extraOptions = "experimental-features = nix-command flakes";
-    nix.settings.substituters = [ "https://0xcharly-nixos-config.cachix.org" ];
-    nix.settings.trusted-public-keys = [ "0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU=" ];
-    boot.kernelParams = [ "console=ttyS0,19200n8" ];
-    boot.loader.grub.extraConfig = ''
-        serial --speed=19200 --unit=0 --word=8 --parity=no --stop=1;
-        terminal_input serial;
-        terminal_output serial
-    '';
-    boot.loader.grub.forceInstall = true;
-    boot.loader.grub.device = "nodev";
-    boot.loader.timeout = 10;
-    services.openssh.enable = true;
-    services.openssh.settings.PasswordAuthentication = true;
-    services.openssh.settings.PermitRootLogin = "yes";
-    networking.useDHCP = false;
-    networking.usePredictableInterfaceNames = false;
-    networking.interfaces.eth0.useDHCP = true;
-    environment.systemPackages = with pkgs; [ inetutils mtr sysstat ];
-    users.users.root.initialHashedPassword = "$y$j9T$4khyPQBDfNOm5ZM0tlorW1$n3jptX37mtDoPL7lLkgY2HFnGoOQ7Sq9DFRRoYh/3cC";
+$?}
+i
+  nix.package = pkgs.nixUnstable;
+  nix.extraOptions = "experimental-features = nix-command flakes";
+  nix.settings.substituters = [ "https://0xcharly-nixos-config.cachix.org" ];
+  nix.settings.trusted-public-keys = [ "0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU=" ];
+  boot.kernelParams = [ "console=ttyS0,19200n8" ];
+  boot.loader.grub.extraConfig = ''
+    serial --speed=19200 --unit=0 --word=8 --parity=no --stop=1;
+    terminal_input serial;
+    terminal_output serial
+  '';
+  boot.loader.grub.forceInstall = true;
+  boot.loader.grub.device = "nodev";
+  boot.loader.timeout = 10;
+  services.openssh.enable = true;
+  services.openssh.settings.PasswordAuthentication = true;
+  services.openssh.settings.PermitRootLogin = "yes";
+  networking.useDHCP = false;
+  networking.usePredictableInterfaceNames = false;
+  networking.interfaces.eth0.useDHCP = true;
+  environment.systemPackages = with pkgs; [ inetutils mtr sysstat ];
+  users.users.root.initialHashedPassword = "$y$j9T$4khyPQBDfNOm5ZM0tlorW1$n3jptX37mtDoPL7lLkgY2HFnGoOQ7Sq9DFRRoYh/3cC";
 .
 w
 EOF

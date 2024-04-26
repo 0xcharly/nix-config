@@ -21,15 +21,16 @@ nixos-generate-config --root /mnt
 
 # Update generated config.
 ex -s /mnt/etc/nixos/configuration.nix <<- 'EOF'
-$i
-    nix.package = pkgs.nixUnstable;
-    nix.extraOptions = "experimental-features = nix-command flakes";
-    nix.settings.substituters = ["https://0xcharly-nixos-config.cachix.org"];
-    nix.settings.trusted-public-keys = ["0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU="];
-    services.openssh.enable = true;
-    services.openssh.settings.PasswordAuthentication = true;
-    services.openssh.settings.PermitRootLogin = "yes";
-    users.users.root.initialHashedPassword = "$y$j9T$4khyPQBDfNOm5ZM0tlorW1\$$n3jptX37mtDoPL7lLkgY2HFnGoOQ7Sq9DFRRoYh/3cC";
+$?}
+i
+  nix.package = pkgs.nixUnstable;
+  nix.extraOptions = "experimental-features = nix-command flakes";
+  nix.settings.substituters = ["https://0xcharly-nixos-config.cachix.org"];
+  nix.settings.trusted-public-keys = ["0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU="];
+  services.openssh.enable = true;
+  services.openssh.settings.PasswordAuthentication = true;
+  services.openssh.settings.PermitRootLogin = "yes";
+  users.users.root.initialHashedPassword = "$y$j9T$4khyPQBDfNOm5ZM0tlorW1$n3jptX37mtDoPL7lLkgY2HFnGoOQ7Sq9DFRRoYh/3cC";
 .
 w
 EOF
