@@ -29,7 +29,7 @@ let
       "${pkgs._1password-gui}/bin/op-ssh-sign"
     );
 in {
-  imports = [ inputs.nixvim.homeManagerModules.nixvim ];
+  imports = [ (import ./nvim { inputs = inputs; }) ];
 
   home.stateVersion = "23.11";
 
@@ -40,35 +40,28 @@ in {
   # Packages I always want installed. Most packages I install using
   # per-project flakes sourced with direnv and nix-shell, so this is
   # not a huge list.
-  home.packages = [
-    pkgs.asciinema
-    pkgs.bat
-    pkgs.fd
-    pkgs.fzf
-    pkgs.gh
-    pkgs.htop
-    pkgs.jq
-    pkgs.ripgrep
-    pkgs.tree
-    pkgs.watch
-
-    # Node is required for Copilot.vim
-    pkgs.nodejs
+  home.packages = with pkgs; [
+    asciinema
+    bat
+    fd
+    fzf
+    gh
+    htop
+    jq
+    ripgrep
+    tree
+    watch
   ] ++ (lib.optionals isDarwin [
-    pkgs.cachix # This is automatically setup on Linux
-    pkgs.scrcpy
-    # pkgs.tailscale  # TODO: try this out.
+    cachix # This is automatically setup on Linux
+    scrcpy
+    # tailscale  # TODO: try this out.
 
   ]) ++ (lib.optionals (isLinux) [
-    # pkgs._1password
-    # pkgs._1password-gui
-
-    pkgs.chromium
-    pkgs.firefox
-    pkgs.rofi
-    pkgs.valgrind
-    pkgs.zathura  # A PDF Viewer.
-    pkgs.xfce.xfce4-terminal
+    chromium
+    firefox
+    rofi
+    valgrind
+    zathura  # A PDF Viewer.
   ]);
 
   #---------------------------------------------------------------------
@@ -79,7 +72,6 @@ in {
     LANG = "en_US.UTF-8";
     LC_CTYPE = "en_US.UTF-8";
     LC_ALL = "en_US.UTF-8";
-    EDITOR = "nvim";
     PAGER = "less -FirSwX";
     MANPAGER = "${manpager}/bin/manpager";
   };
@@ -219,98 +211,6 @@ in {
       (builtins.readFile ./tmux)
       "run-shell ${sources.tmux-pain-control}/pain_control.tmux"
     ]));
-  };
-
-  # programs.neovim = {
-  #   enable = true;
-  #   viAlias = true;
-  #   vimAlias = true;
-  #   defaultEditor = true;
-  #   withPython3 = true;
-
-  #   plugins = with pkgs; [
-  #     customVim.vim-fish
-  #     customVim.vim-fugitive
-  #     customVim.vim-pgsql
-  #     customVim.vim-zig
-  #     customVim.vim-nix
-
-  #     customVim.nvim-auto-hlsearch
-  #     {
-  #       plugin = customVim.nvim-catppuccin;
-  #       config = ''
-  #         packadd! catppuccin
-  #         lua << END
-  #         vim.o.termguicolors = true
-  #         require 'catppuccin'.setup { transparent_background = true }
-  #         vim.cmd [[colorscheme catppuccin-mocha]]
-  #         END
-  #       '';
-  #     }
-
-  #     customVim.nvim-comment
-  #     customVim.nvim-conform
-  #     customVim.nvim-gitsigns
-  #     customVim.nvim-lastplace
-  #     customVim.nvim-lualine
-  #     customVim.nvim-lspconfig
-  #     customVim.nvim-neodev
-  #     customVim.nvim-nonicons
-  #     customVim.nvim-plenary
-  #     customVim.nvim-rustacean
-  #     customVim.nvim-surround
-  #     customVim.nvim-telescope
-  #     customVim.nvim-treesitter
-  #     customVim.nvim-treesitter-textobjects
-  #     customVim.nvim-trouble
-  #     customVim.nvim-web-devicons
-
-  #     customVim.vim-markdown
-  #   ] ++ (lib.optionals (!isCorpManaged) [
-  #     customVim.vim-copilot
-  #   ]);
-
-  #   extraConfig = builtins.readFile ./nvim-config.vim;
-  #   extraLuaConfig = builtins.readFile ./nvim-config.lua;
-  #   #extraConfig = (import ./vim-config.nix) { inherit sources; };
-  # };
-
-  programs.nixvim = mkIf isLinux {
-    enable = true;
-    defaultEditor = true;
-
-    viAlias = true;
-    vimAlias = true;
-
-    luaLoader.enable = true;
-
-    colorschemes.catppuccin = {
-      enable = true;
-      settings = {
-        flavour = "mocha";
-        transparentBackground = true;
-        term_colors = true;
-      };
-    };
-    plugins.comment.enable = true;
-    plugins.conform-nvim.enable = true;
-    plugins.copilot-vim.enable = !isCorpManaged;
-    plugins.fugitive.enable = true;
-    plugins.gitsigns.enable = true;
-    plugins.lastplace.enable = true;
-    plugins.nix.enable = true;
-    plugins.rustaceanvim.enable = true;
-    plugins.surround.enable = true;
-    plugins.trouble.enable = true;
-    plugins.zig.enable = true;
-
-    # TODO: auto-hlsearch
-    # TODO: cmp
-    # TODO: fish
-    # TODO: lualine
-    # TODO: lspconfig
-    # TODO: telescope
-    # TODO: treesitter
   };
 
   xresources.extraConfig = builtins.readFile ./Xresources;
