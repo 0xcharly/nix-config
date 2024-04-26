@@ -275,7 +275,7 @@ in {
   #   #extraConfig = (import ./vim-config.nix) { inherit sources; };
   # };
 
-  programs.nixvim = {
+  programs.nixvim = mkIf isLinux {
     enable = true;
     defaultEditor = true;
 
@@ -292,7 +292,6 @@ in {
         term_colors = true;
       };
     };
-    plugins.comment-nvim.enable = true;
     plugins.comment.enable = true;
     plugins.conform-nvim.enable = true;
     plugins.copilot-vim.enable = !isCorpManaged;

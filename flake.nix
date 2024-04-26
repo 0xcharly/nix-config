@@ -48,17 +48,7 @@
       user   = "delay";
     };
 
-    nixosConfigurations.vm-aarch64-prl = mkSystem "vm-aarch64-prl" rec {
-      system = "aarch64-linux";
-      user   = "delay";
-    };
-
-    nixosConfigurations.vm-aarch64-utm = mkSystem "vm-aarch64-utm" rec {
-      system = "aarch64-linux";
-      user   = "delay";
-    };
-
-    nixosConfigurations.vm-intel = mkSystem "vm-intel" rec {
+    nixosConfigurations.vm-intel = mkSystem "vm-intel" {
       system = "x86_64-linux";
       user   = "delay";
     };
@@ -69,7 +59,13 @@
       wsl    = true;
     };
 
-    darwinConfigurations.macbook-pro-m3 = mkSystem "macbook-pro-m3" {
+    darwinConfigurations.darwin = mkSystem "darwin" {
+      system = "aarch64-darwin";
+      user   = "delay";
+      darwin = true;
+    };
+
+    darwinConfigurations.darwin-corp = mkSystem "darwin-corp" {
       system = "aarch64-darwin";
       user   = "delay";
       darwin = true;

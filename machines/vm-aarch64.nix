@@ -1,8 +1,10 @@
-{ config, pkgs, lib, ... }: {
+{ config, pkgs, lib, ... }:
+
+{
   imports = [
     ./hardware/vm-aarch64.nix
     ../modules/vmware-guest.nix
-    ./vm-shared.nix
+    ./vm-nat-common.nix
   ];
 
   # Setup qemu so we can run x86_64 binaries
@@ -12,7 +14,7 @@
   # customizations to make this work on aarch64.
   disabledModules = [ "virtualisation/vmware-guest.nix" ];
 
-  # Interface is this on M1
+  # Interface is this on M1, M3.
   networking.interfaces.ens160.useDHCP = true;
 
   # Lots of stuff that uses aarch64 that claims doesn't work, but actually works.

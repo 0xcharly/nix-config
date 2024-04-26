@@ -1,7 +1,7 @@
 { config, pkgs, ... }: {
   imports = [
     ./hardware/vm-intel.nix
-    ./vm-shared.nix
+    ./vm-nat-common.nix
   ];
 
   virtualisation.vmware.guest.enable = true;

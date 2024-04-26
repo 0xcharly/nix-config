@@ -1,7 +1,7 @@
 { config, pkgs, ... }: {
   imports = [
     ./hardware/vm-linode.nix
-    ./vm-shared.nix
+    ./vm-common.nix
   ];
 
   # Most of Linode’s default images have had systemd’s predictable interface

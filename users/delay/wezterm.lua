@@ -75,7 +75,5 @@ config.hyperlink_rules = {
   { regex = '\\bb/(\\d+)\\b',                              format = 'https://b.corp.google.com/issues/$1' },
   { regex = '\\bcl/(\\d+)\\b',                             format = 'https://critique.corp.google.com/issues/$1' },
 }
-config.window_background_opacity = 0.92
-config.macos_window_background_blur = 20
 
 return config

@@ -1,39 +1,14 @@
 { channels, config, pkgs, lib, currentSystem, currentSystemName,... }:
 
 {
+  imports = [ ./common.nix ];
+
   # Be careful updating this.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  nix = {
-    # use unstable nix so we can access flakes
-    package = pkgs.nixUnstable;
-    extraOptions = ''
-      experimental-features = nix-command flakes
-      keep-outputs = true
-      keep-derivations = true
-    '';
-
-    # public binary cache that I use for all my derivations. You can keep
-    # this, use your own, or toss it. Its typically safe to use a binary cache
-    # since the data inside is checksummed.
-    settings = {
-      substituters = ["https://0xcharly-nixos-config.cachix.org"];
-      trusted-public-keys = ["0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU="];
-    };
-  };
-
+  # Use unstable nix to access flakes
+  nix.package = pkgs.nixUnstable;
   nixpkgs.config.permittedInsecurePackages = [ ];
-
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  # VMware, Parallels both only support this being 0 otherwise you see
-  # "error switching console mode" on boot.
-  boot.loader.systemd-boot.consoleMode = "0";
-
-  # Define your hostname.
-  networking.hostName = "dev";
 
   # Set your time zone.
   time.timeZone = "Japan/Tokyo";
@@ -43,26 +18,10 @@
   # replicates the default behaviour.
   networking.useDHCP = false;
 
-  # Don't require password for sudo
-  security.sudo.wheelNeedsPassword = false;
-
-  # Virtualization settings
-  virtualisation.docker.enable = true;
-
   # Select internationalisation properties.
-  i18n = {
-    defaultLocale = "en_US.UTF-8";
-    inputMethod = {
-      enabled = "fcitx5";
-      fcitx5.addons = with pkgs; [
-        fcitx5-mozc
-        fcitx5-gtk
-        fcitx5-chinese-addons
-      ];
-    };
-  };
+  i18n.defaultLocale = "en_US.UTF-8";
 
-  # setup windowing environment
+  # Windowing environment.
   services.xserver = {
     enable = true;
     xkb.layout = "us";
@@ -82,13 +41,19 @@
       '';
     };
 
-    windowManager = {
-      i3.enable = true;
-    };
+    windowManager.i3.enable = true;
   };
 
   services.displayManager = {
+    enable = true;
     defaultSession = "none+i3";
+  };
+
+  # Manage fonts.
+  fonts = {
+    fontDir.enable = true;
+
+    packages = import ../modules/fonts { pkgs = pkgs; };
   };
 
   # Enable tailscale. We manually authenticate when we want with
@@ -98,17 +63,6 @@
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.mutableUsers = false;
-
-  # Manage fonts.
-  fonts = {
-    fontDir.enable = true;
-
-    packages = with pkgs; [
-      (iosevka-bin.override { variant = "SGr-IosevkaTermCurly"; })
-      (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" ]; })
-      material-design-icons
-    ];
-  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -132,22 +86,14 @@
     gtkmm3
   ];
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
-
   # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-  services.openssh.settings.PasswordAuthentication = true;
-  services.openssh.settings.PermitRootLogin = "no";
-
-  # Disable the firewall since we're in a VM and we want to make it
-  # easy to visit stuff in here. We only use NAT networking anyways.
-  networking.firewall.enable = false;
+  services.openssh = {
+    enable = true;
+    settings = {
+      PasswordAuthentication = true;
+      PermitRootLogin = "no";
+    };
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
