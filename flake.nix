@@ -48,7 +48,7 @@
       user   = "delay";
     };
 
-    nixosConfigurations.vm-intel = mkSystem "vm-intel" {
+    nixosConfigurations.vm-linode = mkSystem "vm-linode" {
       system = "x86_64-linux";
       user   = "delay";
     };
