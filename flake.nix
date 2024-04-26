@@ -1,5 +1,5 @@
 {
-  description = "NixOS systems and tools by delay";
+  description = "NixOS systems and configs for delay";
 
   inputs = {
     # Pin our primary nixpkgs repository. This is the main nixpkgs repository
@@ -53,22 +53,16 @@
       user   = "delay";
     };
 
-    nixosConfigurations.wsl = mkSystem "wsl" {
-      system = "x86_64-linux";
-      user   = "delay";
-      wsl    = true;
-    };
-
     darwinConfigurations.darwin = mkSystem "darwin" {
-      system = "aarch64-darwin";
-      user   = "delay";
-      darwin = true;
+      system   = "aarch64-darwin";
+      user     = "delay";
+      isDarwin = true;
     };
 
     darwinConfigurations.darwin-corp = mkSystem "darwin-corp" {
-      system = "aarch64-darwin";
-      user   = "delay";
-      darwin = true;
+      system   = "aarch64-darwin";
+      user     = "delay";
+      isDarwin = true;
     };
   };
 }

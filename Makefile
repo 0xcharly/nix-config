@@ -48,78 +48,7 @@ cache:
 # NOTE(mitchellh): I'm sure there is a way to do this and bootstrap all
 # in one step but when I tried to merge them I got errors. One day.
 vm/bootstrap0:
-	ssh $(SSH_OPTIONS) -p$(NIXPORT) root@$(NIXADDR) " \
-		parted -s /dev/sda -- mklabel gpt; \
-		parted -s /dev/sda -- mkpart primary 512MB -8GB; \
-		parted -s /dev/sda -- mkpart primary linux-swap -8GB 100\%; \
-		parted -s /dev/sda -- mkpart ESP fat32 1MB 512MB; \
-		parted -s /dev/sda -- set 3 esp on; \
-		sleep 1; \
-		mkfs.ext4 -L nixos /dev/sda1; \
-		mkswap -L swap /dev/sda2; \
-		mkfs.fat -F 32 -n boot /dev/sda3; \
-		sleep 1; \
-		mount /dev/disk/by-label/nixos /mnt; \
-		mkdir -p /mnt/boot; \
-		mount /dev/disk/by-label/boot /mnt/boot; \
-		nixos-generate-config --root /mnt; \
-		sed --in-place '/system\.stateVersion = .*/a \
-			nix.package = pkgs.nixUnstable;\n \
-			nix.extraOptions = \"experimental-features = nix-command flakes\";\n \
-			nix.settings.substituters = [\"https://0xcharly-nixos-config.cachix.org\"];\n \
-			nix.settings.trusted-public-keys = [\"0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU=\"];\n \
-			services.openssh.enable = true;\n \
-			services.openssh.settings.PasswordAuthentication = true;\n \
-			services.openssh.settings.PermitRootLogin = \"yes\";\n \
-			users.users.root.initialHashedPassword = \"\$$y\$$j9T\$$4khyPQBDfNOm5ZM0tlorW1\$$n3jptX37mtDoPL7lLkgY2HFnGoOQ7Sq9DFRRoYh/3cC\";\n \
-		' /mnt/etc/nixos/configuration.nix; \
-		nixos-install --no-root-passwd && reboot; \
-	"
-
-define _linode_bootstrap0
-umount --force --recursive /mnt
-mkfs.ext4 -F -L nixos /dev/sda
-mkswap -L swap /dev/sdb
-mkfs.fat -F 32 -n boot /dev/sdc
-mount /dev/sda /mnt
-mkdir -p /mnt/boot
-mount /dev/sdc /mnt/boot
-nixos-generate-config --root /mnt
-sed --in-place -f - /mnt/etc/nixos/hardware-configuration.nix <<- 'EOF'
-		s|swapDevices = \[ \]|swapDevices = [ { device = "/dev/disk/by-label/swap"; } ]|
-		s|"/dev/disk/by-uuid/.*"|"/dev/disk/by-label/nixos"|
-		s|"/dev/sdc"|"/dev/disk/by-label/boot"|
-EOF
-sed --in-place -f - /mnt/etc/nixos/configuration.nix <<- 'EOF'
-	/system\.stateVersion = .*/a \
-	nix.package = pkgs.nixUnstable;\n \
-	nix.extraOptions = "experimental-features = nix-command flakes";\n \
-	nix.settings.substituters = [ "https://0xcharly-nixos-config.cachix.org" ];\n \
-	nix.settings.trusted-public-keys = [ "0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU=" ];\n \
-	boot.kernelParams = [ "console=ttyS0,19200n8" ];\n \
-	boot.loader.grub.extraConfig = ''\n \
-		serial --speed=19200 --unit=0 --word=8 --parity=no --stop=1;\n \
-		terminal_input serial;\n \
-		terminal_output serial\n \
-	'';\n \
-	boot.loader.grub.forceInstall = true;\n \
-	boot.loader.grub.device = "nodev";\n \
-	boot.loader.timeout = 10;\n \
-	services.openssh.enable = true;\n \
-	services.openssh.settings.PasswordAuthentication = true;\n \
-	services.openssh.settings.PermitRootLogin = "yes";\n \
-	networking.useDHCP = false;\n \
-	networking.usePredictableInterfaceNames = false;\n \
-	networking.interfaces.eth0.useDHCP = true;\n \
-	environment.systemPackages = with pkgs; [ inetutils mtr sysstat ];\n \
-	users.users.root.initialHashedPassword = "\$$y\$$j9T\$$4khyPQBDfNOm5ZM0tlorW1\$$n3jptX37mtDoPL7lLkgY2HFnGoOQ7Sq9DFRRoYh/3cC";\n \
-EOF
-nixos-install --no-root-passwd && reboot
-endef
-export linode_bootstrap0 = $(value _linode_bootstrap0)
-
-linode/bootstrap0:
-	ssh $(SSH_OPTIONS) -p$(NIXPORT) -lroot $(NIXADDR) "$$linode_bootstrap0"
+	ssh $(SSH_OPTIONS) -p$(NIXPORT) -lroot $(NIXADDR) "bash -" < $(MAKEFILE_DIR)/bootstrap0-$(NIXNAME).sh
 
 # after bootstrap0, run this to finalize. After this, do everything else
 # in the VM unless secrets change.
@@ -149,8 +78,3 @@ vm/switch:
 	ssh $(SSH_OPTIONS) -p$(NIXPORT) $(NIXUSER)@$(NIXADDR) " \
 		sudo NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild switch --show-trace --flake \"/nix-config#${NIXNAME}\" \
 	"
-
-# Build a WSL installer
-.PHONY: wsl
-wsl:
-	 nix build ".#nixosConfigurations.wsl.config.system.build.installer"
