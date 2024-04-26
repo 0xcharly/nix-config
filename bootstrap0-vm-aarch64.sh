@@ -28,9 +28,12 @@ i
   nix.settings.substituters = ["https://0xcharly-nixos-config.cachix.org"];
   nix.settings.trusted-public-keys = ["0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU="];
   services.openssh.enable = true;
-  services.openssh.settings.PasswordAuthentication = true;
+  services.openssh.settings.PasswordAuthentication = false;
   services.openssh.settings.PermitRootLogin = "yes";
   users.users.root.initialHashedPassword = "$y$j9T$4khyPQBDfNOm5ZM0tlorW1$n3jptX37mtDoPL7lLkgY2HFnGoOQ7Sq9DFRRoYh/3cC";
+  users.users.root.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP4Jr8wJUXhECjbSXlGPpLFAN0Zq+eY6n4w+0ezoMxFK delay"
+  ];
 .
 w
 EOF
