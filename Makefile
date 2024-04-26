@@ -9,9 +9,10 @@ MAKEFILE_DIR := $(patsubst %/,%,$(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
 # The name of the nixosConfiguration in the flake
 NIXNAME ?= vm-aarch64
 
-# SSH options that are used. These aren't meant to be overridden but are
-# reused a lot so we just store them up here.
-SSH_OPTIONS=-o PubkeyAuthentication=no -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
+# SSH options that are used. These aren't meant to be overridden but are reused a lot so we just
+# store them up here.
+BOOTSTRAP0_SSH_OPTIONS=-o PubkeyAuthentication=no -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
+SSH_OPTIONS=-o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
 
 # We need to do some OS switching below.
 UNAME := $(shell uname)
@@ -48,16 +49,14 @@ cache:
 # NOTE(mitchellh): I'm sure there is a way to do this and bootstrap all
 # in one step but when I tried to merge them I got errors. One day.
 vm/bootstrap0:
-	ssh $(SSH_OPTIONS) -p$(NIXPORT) -lroot $(NIXADDR) "bash -" < $(MAKEFILE_DIR)/bootstrap0-$(NIXNAME).sh
+	ssh $(BOOTSTRAP0_SSH_OPTIONS) -p$(NIXPORT) -lroot $(NIXADDR) "bash -" < $(MAKEFILE_DIR)/bootstrap0-$(NIXNAME).sh
 
 # after bootstrap0, run this to finalize. After this, do everything else
 # in the VM unless secrets change.
 vm/bootstrap:
 	NIXUSER=root $(MAKE) vm/copy
 	NIXUSER=root $(MAKE) vm/switch
-	ssh $(SSH_OPTIONS) -p$(NIXPORT)$(NIXUSER)@$(NIXADDR) " \
-		sudo reboot; \
-	"
+	ssh $(SSH_OPTIONS) -p$(NIXPORT) -l$(NIXUSER) $(NIXADDR) "sudo reboot"
 
 # copy the Nix configurations into the VM.
 vm/copy:
@@ -75,6 +74,5 @@ vm/copy:
 # run the nixos-rebuild switch command. This does NOT copy files so you
 # have to run vm/copy before.
 vm/switch:
-	ssh $(SSH_OPTIONS) -p$(NIXPORT) $(NIXUSER)@$(NIXADDR) " \
-		sudo NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild switch --show-trace --flake \"/nix-config#${NIXNAME}\" \
-	"
+	ssh $(SSH_OPTIONS) -p$(NIXPORT) -l$(NIXUSER) $(NIXADDR) \
+		"sudo NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild switch --flake \"/nix-config#${NIXNAME}\""
