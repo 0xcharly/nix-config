@@ -29,7 +29,7 @@ let
       "${pkgs._1password-gui}/bin/op-ssh-sign"
     );
 in {
-  imports = [ (import ./nvim { inputs = inputs; }) ];
+  imports = [ (import ./nvim { inherit inputs; }) ];
 
   home.stateVersion = "23.11";
 

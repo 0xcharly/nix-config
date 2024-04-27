@@ -120,6 +120,13 @@
       # Tab navigation.
       "<A-Left>" = "vim.cmd.tabprev";
       "<A-Right>" = "vim.cmd.tabnext";
+
+      # Formatting (see ./conform-nvim.nix).
+      "cf" = ''
+        function()
+          require 'conform'.format { async = true, lsp_fallback = true }
+        end
+      '';
     };
     insert_lua = lib.mapAttrsToList (key: action: {
       mode = "i";

@@ -1,6 +1,6 @@
 { inputs, ... }:
 
-{ config, lib, pkgs, ... }:
+{ config, helpers, lib, pkgs, ... }:
 
 let
   inherit (lib) mkIf;
@@ -81,7 +81,7 @@ in {
       };
     };
     plugins.comment.enable = true;
-    plugins.conform-nvim.enable = true;
+    plugins.conform-nvim = import ./conform-nvim.nix;
     plugins.copilot-vim.enable = !isCorpManaged;
     plugins.fugitive.enable = true;
     plugins.gitsigns.enable = true;
@@ -90,6 +90,8 @@ in {
     plugins.nix.enable = true;
     plugins.rustaceanvim.enable = true;
     plugins.surround.enable = true;
+    plugins.telescope = import ./telescope.nix { inherit config; };
+    plugins.treesitter = import ./treesitter.nix;
     plugins.trouble.enable = true;
     plugins.zig.enable = true;
 
@@ -100,8 +102,6 @@ in {
 
       # TODO: cmp
       # TODO: lspconfig
-      # TODO: telescope
-      # TODO: treesitter
     ];
-  };
+ };
 }
