@@ -27,7 +27,7 @@ in {
   extensions.fzf-native.enable = true;
   settings = {
     defaults = {
-      prompt_prefix = " :";
+      prompt_prefix = "∶ ";
       entry_prefix = "   ";
       selection_caret = "  ";
       layout_strategy = "flex";
