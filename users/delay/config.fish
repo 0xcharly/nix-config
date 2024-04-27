@@ -40,7 +40,6 @@ function fish_mode_prompt -d "Disable prompt vi mode reporting"
 end
 
 function fish_prompt
-    title (hostname)
     print_pwd
     set_color normal
     set_color "#a6adc8"
@@ -55,9 +54,6 @@ function print_pwd
     set -l whoami (whoami)
     string match -rq "/google/src/cloud/$whoami/(?<citc_space>[a-zA-Z0-9_-]+)/google3" (pwd)
     if test -n "$citc_space"
-        # Rename the current tab.
-        # title $citc_space
-
         set_color "#1e1e2e"
         set_color --background "#89b4fa"
         printf " $citc_space "
@@ -78,6 +74,6 @@ function print_pwd
 end
 
 # Shortcut to setup a nix-shell with fish. This lets you do something like
-# `fnix -p go` to get an environment with Go but use the fish shell along
+# `nixsh -p go` to get an environment with Go but use the fish shell along
 # with it.
-alias fnix "nix-shell --run fish"
+alias nixsh "nix-shell --run fish"

@@ -140,7 +140,6 @@ in {
     }) [
       "fish-fzf"
       "fish-foreign-env"
-      "plugin-title"
     ];
   };
 
@@ -230,6 +229,8 @@ in {
       HostName 192.168.86.43
       IdentityAgent "${_1passwordAgentPath}"
       ForwardAgent yes
+    Host 192.168.*
+      IdentityAgent "${_1passwordAgentPath}"
     '';
   };
 

@@ -1,14 +1,21 @@
 { inputs, ... }:
 
-{ lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   inherit (lib) mkIf;
   inherit (pkgs.stdenv) isDarwin isLinux;
 
+  common = import ./common.nix;
+
   isCorpManaged = lib.filesystem.pathIsDirectory "/google/src/cloud/delay/";
 in {
-  imports = [ inputs.nixvim.homeManagerModules.nixvim ];
+  imports = [
+    inputs.nixvim.homeManagerModules.nixvim
+    ./autocmd.nix
+    ./keymap.nix
+    ./options.nix
+  ];
 
   home.sessionVariables.EDITOR = "nvim";
 
@@ -18,14 +25,12 @@ in {
   #   vimAlias = true;
   #   defaultEditor = true;
   #   withPython3 = true;
-
   #   plugins = with pkgs; [
   #     customVim.vim-fish
   #     customVim.vim-fugitive
   #     customVim.vim-pgsql
   #     customVim.vim-zig
   #     customVim.vim-nix
-
   #     customVim.nvim-auto-hlsearch
   #     {
   #       plugin = customVim.nvim-catppuccin;
@@ -38,7 +43,6 @@ in {
   #         END
   #       '';
   #     }
-
   #     customVim.nvim-comment
   #     customVim.nvim-conform
   #     customVim.nvim-gitsigns
@@ -55,16 +59,10 @@ in {
   #     customVim.nvim-treesitter-textobjects
   #     customVim.nvim-trouble
   #     customVim.nvim-web-devicons
-
   #     customVim.vim-markdown
   #   ] ++ (lib.optionals (!isCorpManaged) [
   #     customVim.vim-copilot
   #   ]);
- 
-  #   extraConfig = builtins.readFile ./nvim-config.vim;
-  #   extraLuaConfig = builtins.readFile ./nvim-config.lua;
-  #   #extraConfig = (import ./vim-config.nix) { inherit sources; };
-  # };
 
   programs.nixvim = mkIf isLinux {
     enable = true;
@@ -79,7 +77,6 @@ in {
       enable = true;
       settings = {
         flavour = "mocha";
-        transparentBackground = true;
         term_colors = true;
       };
     };
@@ -89,18 +86,22 @@ in {
     plugins.fugitive.enable = true;
     plugins.gitsigns.enable = true;
     plugins.lastplace.enable = true;
+    plugins.lualine = import ./lualine.nix;
     plugins.nix.enable = true;
     plugins.rustaceanvim.enable = true;
     plugins.surround.enable = true;
     plugins.trouble.enable = true;
     plugins.zig.enable = true;
 
-    # TODO: auto-hlsearch
-    # TODO: cmp
-    # TODO: fish
-    # TODO: lualine
-    # TODO: lspconfig
-    # TODO: telescope
-    # TODO: treesitter
+    extraPlugins = with pkgs.vimPlugins; [
+      vim-fish
+
+      (import ./auto-hlsearch.nix { inherit pkgs; })
+
+      # TODO: cmp
+      # TODO: lspconfig
+      # TODO: telescope
+      # TODO: treesitter
+    ];
   };
 }

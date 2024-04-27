@@ -1,86 +1,4 @@
--- Set global leader key.
-vim.g.mapleader = ','
-vim.g.maplocalleader = ' '
-
 if not vim.g.vscode then
-  ---[[ UI ]]
-  -- catppuccin/nvim
-  -- vim.o.termguicolors = true
-  -- require 'catppuccin'.setup { transparent_background = true }
-  -- vim.cmd [[colorscheme catppuccin-mocha]]
-
-  -- nvim-lualine/lualine.nvim
-  local section_filename = {
-    'filename',
-    symbols = {
-      modified = '󱇨 ', -- Text to show when the file is modified.
-      readonly = '󱀰 ', -- Text to show when the file is non-modifiable or readonly.
-      unnamed = '󰡯 ', -- Text to show for unnamed buffers.
-      newfile = '󰻭 ', -- Text to show for newly created file before first write
-    },
-  }
-  local lualine_groups_generator = function(suffix)
-    return {
-      a = 'LualineA' .. suffix,
-      b = 'LualineB' .. suffix,
-      c = 'LualineC' .. suffix,
-      x = 'LualineX' .. suffix,
-      y = 'LualineY' .. suffix,
-      z = 'LualineZ' .. suffix,
-    }
-  end
-  require 'lualine'.setup {
-    options = {
-      theme = {
-        normal = lualine_groups_generator 'Normal',
-        insert = lualine_groups_generator 'Insert',
-        visual = lualine_groups_generator 'Visual',
-        replace = lualine_groups_generator 'Replace',
-        command = lualine_groups_generator 'Command',
-        inactive = lualine_groups_generator 'Inactive',
-      },
-    },
-    sections = {
-      lualine_a = { 'mode' },
-      lualine_b = { section_filename },
-      lualine_c = {
-        {
-          'lsp_info',
-          separator = '‥',
-        },
-        {
-          'diagnostics',
-          symbols = {
-            error = require 'user.utils.lsp'.diagnostic_signs.Error,
-            warn = require 'user.utils.lsp'.diagnostic_signs.Warn,
-            info = require 'user.utils.lsp'.diagnostic_signs.Info,
-            hint = require 'user.utils.lsp'.diagnostic_signs.Hint,
-          },
-        },
-      },
-      lualine_x = {
-        {
-          'diff',
-          symbols = { added = '󱍭 ', modified = '󱨈 ', removed = '󱍪 ' },
-          separator = '‥',
-        },
-        {
-          'branch',
-          icon = { '', align = 'right' },
-        },
-      },
-      lualine_y = { 'progress' },
-      lualine_z = { 'location' },
-    },
-    inactive_sections = {
-      lualine_a = { 'mode' },
-      lualine_b = {},
-      lualine_c = { section_filename },
-      lualine_x = { 'location' },
-      lualine_y = {},
-      lualine_z = {}
-    },
-  }
 
   -- folke/trouble.nvim
   vim.keymap.set('<leader>xx', function() require 'trouble'.toggle() end)
@@ -392,15 +310,21 @@ vim.o.updatetime = 50                         -- Make updates happen faster
 vim.o.scrolloff = 8                           -- Make it so there are always 8 lines below my cursor
 
 vim.opt.formatoptions = vim.opt.formatoptions -- :h fo
-    - 'a'                                     -- Auto formatting is BAD.
-    - 't'                                     -- Don't auto format my code. I got linters for that.
-    + 'q'                                     -- continue comments with gq'.
-    + 'c'                                     -- Auto-wrap comments using textwidth.
-    - 'o'                                     -- O and o, don't continue comments.
-    + 'r'                                     -- But do continue when pressing enter.
-    + 'n'                                     -- Indent past the formatlistpat, not underneath it.
-    + 'j'                                     -- Auto-remove comments if possible.
-    - '2'                                     -- Use indent from 2nd line of a paragraph.
+  - 't'        -- Don't auto-wrap text at 'textwidth'.
+  - 'c'        -- Don't auto-wrap comments using textwidth.
+  + 'r'        -- Insert comment leader on newline in Insert mode.
+  -- TODO: test drive o=true,/=true.
+  + 'o'        -- "O" and "o" continue comments...
+  + '/'        -- ...unless it's a // comment after a statement.
+  + 'q'        -- Format comments with "gq".
+  - 'w'        -- Don't use trailing whitespace to detect end of paragraphs.
+  - 'a'        -- Don't auto-format paragraphs.
+  + 'n'        -- Detect numbered lists when formatting.
+  - '2'        -- Use indent from the 1st line of a paragraph.
+  - 'v'        -- Don't try to be Vi-compatible.
+  - 'b'        -- Don't try to be Vi-compatible.
+  + 'l'        -- Don't break long lines in insert mode.
+  + 'j'        -- Auto-remove comments leader when joining lines.
 
 -- Message output.
 vim.opt.shortmess = {
