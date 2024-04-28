@@ -14,8 +14,10 @@ let
   # https://github.com/sharkdp/bat/issues/1145
   manpager = (pkgs.writeShellScriptBin "manpager" (if isDarwin then ''
     sh -c 'col -bx | bat -l man -p'
-    '' else ''
-    cat "$1" | col -bx | bat --language man --style plain
+  '' else ''
+    # mandoc passes a file name, other tools write to stdout.
+    # Using `cat "$@"` we take care of both reading from file and stdin.
+    exec cat "$@" | col -bx | bat --language man --style plain --pager "$PAGER"
   ''));
 
   _1passwordAgentPath = (if isDarwin then
