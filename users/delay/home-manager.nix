@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ currentSystemName, inputs, ... }:
 
 { config, lib, pkgs, ... }:
 
@@ -217,20 +217,21 @@ in {
   programs.ssh = {
     enable = true;
     extraConfig = ''
-    # Personal hosts.
-    Host github.com
-      User git
-      IdentityAgent "${_1passwordAgentPath}"
-    Host linode bc
-      HostName 172.105.192.143
-      IdentityAgent "${_1passwordAgentPath}"
-      ForwardAgent yes
-    Host skullkid.local
-      HostName 192.168.86.43
-      IdentityAgent "${_1passwordAgentPath}"
-      ForwardAgent yes
-    Host 192.168.*
-      IdentityAgent "${_1passwordAgentPath}"
+      # Personal hosts.
+      Host github.com
+        User git
+        IdentityAgent "${_1passwordAgentPath}"
+      Host linode bc
+        HostName 172.105.192.143
+        IdentityAgent "${_1passwordAgentPath}"
+        ForwardAgent yes
+      Host skullkid.local
+        HostName 192.168.86.43
+        IdentityAgent "${_1passwordAgentPath}"
+        ForwardAgent yes
+    '' + lib.optionalString (currentSystemName == "darwin") ''
+      Host 192.168.*
+        IdentityAgent "${_1passwordAgentPath}"
     '';
   };
 

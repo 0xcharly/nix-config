@@ -15,6 +15,7 @@
     "lua"
     "markdown"
     "markdown_inline"
+    "nix"
     "python"
     "regex"
     "rst"

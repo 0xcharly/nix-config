@@ -1,8 +1,6 @@
-{ inputs, lib, pkgs, ... }:
+{ currentSystemName, inputs, lib, pkgs, ... }:
 
-let
-  isCorpManaged = lib.filesystem.pathIsDirectory "/google/src/cloud/delay/";
-in {
+{
   nixpkgs.overlays = [(import ./vim.nix { inherit inputs; })];
 
   homebrew = {
@@ -17,8 +15,8 @@ in {
       #"monodraw"
       "raycast"
       "spotify"
-    ] ++ (lib.optionals (!isCorpManaged) [
-      #"google-chrome"
+    ] ++ (lib.optionals (currentSystemName != "darwin-corp") [
+      "google-chrome"
     ]);
   };
 
