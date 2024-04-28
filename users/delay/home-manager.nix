@@ -1,24 +1,12 @@
-{ currentSystemName, inputs, ... }:
+{ currentSystemName, inputs, isCorpManaged, ... }:
 
-{ config, lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 let
   sources = import ../../nix/sources.nix;
 
   inherit (lib) mkIf;
   inherit (pkgs.stdenv) isDarwin isLinux;
-
-  isCorpManaged = lib.filesystem.pathIsDirectory "/google/src/cloud/delay/";
-
-  # For our MANPAGER env var
-  # https://github.com/sharkdp/bat/issues/1145
-  manpager = (pkgs.writeShellScriptBin "manpager" (if isDarwin then ''
-    sh -c 'col -bx | bat -l man -p'
-  '' else ''
-    # mandoc passes a file name, other tools write to stdout.
-    # Using `cat "$@"` we take care of both reading from file and stdin.
-    exec cat "$@" | col -bx | bat --language man --style plain --pager "$PAGER"
-  ''));
 
   _1passwordAgentPath = (if isDarwin then
       "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
@@ -31,7 +19,7 @@ let
       "${pkgs._1password-gui}/bin/op-ssh-sign"
     );
 in {
-  imports = [ (import ./nvim { inherit inputs; }) ];
+  imports = [ (import ./nvim { inherit inputs isCorpManaged; }) ];
 
   home.stateVersion = "23.11";
 
@@ -53,6 +41,8 @@ in {
     ripgrep
     tree
     watch
+
+    nixpkgs-fmt
   ] ++ (lib.optionals isDarwin [
     cachix # This is automatically setup on Linux
     scrcpy
@@ -75,8 +65,12 @@ in {
     LC_CTYPE = "en_US.UTF-8";
     LC_ALL = "en_US.UTF-8";
     PAGER = "less -FirSwX";
-    MANPAGER = "${manpager}/bin/manpager";
-  };
+    MANPAGER = "nvim +Man!";
+    BAT_THEME = "base16";
+    TERMINAL = "wezterm";
+  } // (if isDarwin then {
+    HOMEBREW_NO_AUTO_UPDATE = 1;
+  } else {});
 
   xdg.enable = true;
   xdg.configFile = {
@@ -120,9 +114,7 @@ in {
 
   programs.home-manager.enable = true;
 
-  programs.bash = {
-    enable = true;
-  };
+  programs.bash.enable = true;
 
   programs.fish = {
     enable = true;
@@ -132,8 +124,14 @@ in {
     ]));
 
     shellAliases = if isLinux then {
+      # For consistency with macOS.
       pbcopy = "xclip";
       pbpaste = "xclip -o";
+      # Shortcut to setup a nix-shell with fish. This lets you do something like
+      # `nixsh -p go` to get an environment with Go but use the fish shell along
+      # with it.
+      nsh = "nix-shell --run fish";
+      ls = "${pkgs.eza}/bin/eza";
     } else {};
 
     plugins = map (n: {
@@ -150,7 +148,6 @@ in {
     package = inputs.wezterm.packages.${pkgs.system}.default;
     extraConfig = builtins.readFile ./wezterm.lua;
   };
-  home.sessionVariables.TERMINAL = "wezterm";
 
   programs.i3status = {
     enable = isLinux;

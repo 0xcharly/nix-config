@@ -30,6 +30,7 @@ in systemFunc rec {
       home-manager.users.${user} = import userHMConfig {
         currentSystemName = name;
         inputs = inputs;
+        isCorpManaged = (name == "darwin-corp");
       };
     }
 
