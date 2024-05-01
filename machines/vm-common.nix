@@ -49,6 +49,11 @@
     defaultSession = "none+i3";
   };
 
+  console = {
+    font = "Lat2-Terminus16";
+    keyMap = "us";
+  };
+
   # Manage fonts.
   fonts = {
     fontDir.enable = true;

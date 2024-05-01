@@ -22,13 +22,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nvim = {
+      url = "github:0xcharly/nix-config-nvim";
+    };
+
     darwin = {
       url = "github:LnL7/nix-darwin";
       # inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    wezterm.url = "github:wez/wezterm?dir=nix";
+    wezterm.url = "github:wez/wezterm/20240203-110809-5046fc22?dir=nix";
 
     nixvim = {
       # If using a stable channel you can use `url = "github:nix-community/nixvim/nixos-<version>"`

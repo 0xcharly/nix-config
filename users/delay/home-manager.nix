@@ -19,7 +19,7 @@ let
       "${pkgs._1password-gui}/bin/op-ssh-sign"
     );
 in {
-  imports = [ (import ./nvim { inherit inputs isCorpManaged; }) ];
+  # imports = [ (import ./nvim { inherit inputs isCorpManaged; }) ];
 
   home.stateVersion = "23.11";
 
@@ -41,6 +41,8 @@ in {
     ripgrep
     tree
     watch
+
+    inputs.nvim.packages.${pkgs.system}.nvim
 
     nixpkgs-fmt
   ] ++ (lib.optionals isDarwin [
