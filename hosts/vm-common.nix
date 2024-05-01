@@ -34,7 +34,7 @@
     };
 
     displayManager = {
-      lightdm.enable = true;
+      gdm.enable = true;
 
       sessionCommands = ''
         ${pkgs.xorg.xset}/bin/xset r rate 200 40
@@ -48,6 +48,8 @@
     enable = true;
     defaultSession = "none+i3";
   };
+
+  services.fprintd.enable = true;
 
   console = {
     font = "Lat2-Terminus16";

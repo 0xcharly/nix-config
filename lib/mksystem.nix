@@ -11,18 +11,18 @@ name:
 
 let
   # The config files for this system.
-  machineConfig = ../machines/${name}.nix;
+  hostConfig = ../hosts/${name}.nix;
   userOSConfig = ../users/${user}/${if isDarwin then "darwin" else "nixos" }.nix;
   userHMConfig = ../users/${user}/home-manager.nix;
 
-  # NixOS vs nix-darwin functionst
+  # NixOS vs nix-darwin functions.
   systemFunc = if isDarwin then inputs.darwin.lib.darwinSystem else nixpkgs.lib.nixosSystem;
   home-manager = if isDarwin then inputs.home-manager.darwinModules else inputs.home-manager.nixosModules;
 in systemFunc rec {
   inherit system;
 
   modules = [
-    machineConfig
+    hostConfig
     userOSConfig
     home-manager.home-manager {
       home-manager.useGlobalPkgs = true;
