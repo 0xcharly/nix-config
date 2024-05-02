@@ -14,4 +14,6 @@ mod:
   "${mod}+Shift+5" = "move container to workspace 5";
   "${mod}+Shift+c" = "reload";
   "${mod}+Shift+r" = "restart";
+  # Disable Alt+Enter (fullscreen) as it's used in nvim for code actions.
+  "Mod1+Return" = "nop";
 }

@@ -42,7 +42,7 @@ in {
     tree
     watch
 
-    inputs.nvim.packages.${pkgs.system}.nvim
+    inputs.nvim.packages.${pkgs.system}.stable
 
     nixpkgs-fmt
   ] ++ (lib.optionals isDarwin [

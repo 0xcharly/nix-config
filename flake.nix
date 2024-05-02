@@ -1,19 +1,27 @@
 {
   description = "NixOS systems and configs for delay";
 
+  nixConfig = {
+    extra-substituters = [
+"https://0xcharly-nixos-config.cachix.org"
+      "https://arm.cachix.org"
+    ];
+
+    extra-trusted-public-keys = [
+"0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU="
+    "arm.cachix.org-1:5BZ2kjoL1q6nWhlnrbAl+G7ThY7+HaBRD9PZzqZkbnM="
+    ];
+  };
+
   inputs = {
     # Pin our primary nixpkgs repository. This is the main nixpkgs repository
-    # we'll use for our configurations. Be very careful changing this because
-    # it'll impact your entire system.
+    # we'll use for our configurations.
     # TODO: Change this to the next stable channel (24.05) when it's released.
+    # nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # We use the unstable nixpkgs repo for some packages.
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-
-    # Build a custom WSL installer
-    nixos-wsl.url = "github:nix-community/NixOS-WSL";
-    nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
 
     home-manager = {
       # TODO: Change this to the next stable channel (24.05) when it's released.
@@ -33,13 +41,6 @@
     };
 
     wezterm.url = "github:wez/wezterm/20240203-110809-5046fc22?dir=nix";
-
-    nixvim = {
-      # If using a stable channel you can use `url = "github:nix-community/nixvim/nixos-<version>"`
-      # TODO: Change this to the next stable channel (24.05) when it's released.
-      url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
   };
 
   outputs = { self, nixpkgs, home-manager, nix-darwin, darwin, ... }@inputs: let

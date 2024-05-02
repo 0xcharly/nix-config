@@ -6,10 +6,6 @@
   # Be careful updating this.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  # Use unstable nix to access flakes
-  nix.package = pkgs.nixUnstable;
-  nixpkgs.config.permittedInsecurePackages = [ ];
-
   # Set your time zone.
   time.timeZone = "Asia/Tokyo";
 
