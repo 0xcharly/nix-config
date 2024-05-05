@@ -11,10 +11,11 @@ mkfs.ext4 -L nixos /dev/sda1
 mkswap -L swap /dev/sda2
 mkfs.fat -F 32 -n boot /dev/sda3
 
-# Mount future system.
+# Mount future system, activate swap device.
 mount /dev/disk/by-label/nixos /mnt
 mkdir -p /mnt/boot
 mount /dev/disk/by-label/boot /mnt/boot
+swapon /dev/sda2
 
 # Generate initial config.
 nixos-generate-config --root /mnt

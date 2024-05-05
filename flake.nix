@@ -3,13 +3,13 @@
 
   nixConfig = {
     extra-substituters = [
-"https://0xcharly-nixos-config.cachix.org"
+      "https://0xcharly-nixos-config.cachix.org"
       "https://arm.cachix.org"
     ];
 
     extra-trusted-public-keys = [
-"0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU="
-    "arm.cachix.org-1:5BZ2kjoL1q6nWhlnrbAl+G7ThY7+HaBRD9PZzqZkbnM="
+      "0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU="
+      "arm.cachix.org-1:5BZ2kjoL1q6nWhlnrbAl+G7ThY7+HaBRD9PZzqZkbnM="
     ];
   };
 
@@ -23,6 +23,12 @@
     # We use the unstable nixpkgs repo for some packages.
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
+    pre-commit-hooks = {
+      url = "github:cachix/pre-commit-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    flake-utils.url = "github:numtide/flake-utils";
+
     home-manager = {
       # TODO: Change this to the next stable channel (24.05) when it's released.
       # url = "github:nix-community/home-manager/release-24.05";
@@ -30,9 +36,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nvim = {
-      url = "github:0xcharly/nix-config-nvim";
-    };
+    nvim.url = "github:0xcharly/nix-config-nvim";
 
     darwin = {
       url = "github:LnL7/nix-darwin";
@@ -40,34 +44,77 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Last stable release.
     wezterm.url = "github:wez/wezterm/20240203-110809-5046fc22?dir=nix";
   };
 
-  outputs = { self, nixpkgs, home-manager, nix-darwin, darwin, ... }@inputs: let
+  outputs = inputs @ {
+    self,
+    nixpkgs,
+    flake-utils,
+    pre-commit-hooks,
+    ...
+  }: let
+    supportedSystems = [
+      "aarch64-darwin"
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
+
     mkSystem = import ./lib/mksystem.nix {
       inherit nixpkgs inputs;
     };
-  in {
-    nixosConfigurations.vm-aarch64 = mkSystem "vm-aarch64" {
-      system = "aarch64-linux";
-      user   = "delay";
-    };
+  in
+    flake-utils.lib.eachSystem supportedSystems
+    (system: let
+      pkgs = import nixpkgs {inherit system;};
+      shell =
+        pkgs.mkShell
+        {
+          name = "nix-config-devShell";
+          buildInputs = with pkgs; [
+            alejandra
+            nixd
+            # nixpkgs-fmt
+            markdownlint-cli
+          ];
+          shellHook = ''
+            ${self.checks.${system}.pre-commit-check.shellHook}
+          '';
+        };
+      pre-commit-check = pre-commit-hooks.lib.${system}.run {
+        src = self;
+        hooks = {
+          alejandra.enable = true;
+          # nixpkgs-fmt.enable = true;
+          markdownlint.enable = true;
+        };
+      };
+    in {
+      devShells = {default = shell;};
+      checks = {inherit pre-commit-check;};
+    })
+    // {
+      nixosConfigurations.vm-aarch64 = mkSystem "vm-aarch64" {
+        system = "aarch64-linux";
+        user = "delay";
+      };
 
-    nixosConfigurations.vm-linode = mkSystem "vm-linode" {
-      system = "x86_64-linux";
-      user   = "delay";
-    };
+      nixosConfigurations.vm-linode = mkSystem "vm-linode" {
+        system = "x86_64-linux";
+        user = "delay";
+      };
 
-    darwinConfigurations.darwin = mkSystem "darwin" {
-      system   = "aarch64-darwin";
-      user     = "delay";
-      isDarwin = true;
-    };
+      darwinConfigurations.darwin = mkSystem "darwin" {
+        system = "aarch64-darwin";
+        user = "delay";
+        isDarwin = true;
+      };
 
-    darwinConfigurations.darwin-corp = mkSystem "darwin-corp" {
-      system   = "aarch64-darwin";
-      user     = "delay";
-      isDarwin = true;
+      darwinConfigurations.darwin-corp = mkSystem "darwin-corp" {
+        system = "aarch64-darwin";
+        user = "delay";
+        isDarwin = true;
+      };
     };
-  };
 }

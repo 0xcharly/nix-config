@@ -1,23 +1,28 @@
-{ currentSystemName, inputs, isCorpManaged, ... }:
-
-{ lib, pkgs, ... }:
-
-let
+{
+  currentSystemName,
+  inputs,
+  isCorpManaged,
+  ...
+}: {
+  lib,
+  pkgs,
+  ...
+}: let
   sources = import ../../nix/sources.nix;
 
   inherit (lib) mkIf;
   inherit (pkgs.stdenv) isDarwin isLinux;
 
-  _1passwordAgentPath = (if isDarwin then
-      "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
-    else
-      "~/.1password/agent.sock"
-    );
-  _1passwordSshSignPath = (if isDarwin then
-      "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
-    else
-      "${pkgs._1password-gui}/bin/op-ssh-sign"
-    );
+  _1passwordAgentPath = (
+    if isDarwin
+    then "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+    else "~/.1password/agent.sock"
+  );
+  _1passwordSshSignPath = (
+    if isDarwin
+    then "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+    else "${pkgs._1password-gui}/bin/op-ssh-sign"
+  );
 in {
   # imports = [ (import ./nvim { inherit inputs isCorpManaged; }) ];
 
@@ -30,70 +35,88 @@ in {
   # Packages I always want installed. Most packages I install using
   # per-project flakes sourced with direnv and nix-shell, so this is
   # not a huge list.
-  home.packages = with pkgs; [
-    asciinema
-    bat
-    fd
-    fzf
-    gh
-    htop
-    jq
-    ripgrep
-    tree
-    watch
+  home.packages = with pkgs;
+    [
+      asciinema
+      bat
+      fd
+      fzf
+      gh
+      htop
+      jq
+      ripgrep
+      tree
+      watch
 
-    inputs.nvim.packages.${pkgs.system}.stable
+      inputs.nvim.packages.${pkgs.system}.stable
 
-    nixpkgs-fmt
-  ] ++ (lib.optionals isDarwin [
-    cachix # This is automatically setup on Linux
-    scrcpy
-    # tailscale  # TODO: try this out.
+      nixd
+      nixpkgs-fmt
+    ]
+    ++ (lib.optionals isDarwin [
+      scrcpy
+      # tailscale  # TODO: try this out.
+    ])
+    ++ (lib.optionals isLinux [
+      # TODO: Reenable when configuration is more stable and reinstall less frequent.
+      # Man pages.
+      # linux-manual
+      # man-pages
+      # man-pages-posix
 
-  ]) ++ (lib.optionals (isLinux) [
-    chromium
-    firefox
-    rofi
-    valgrind
-    zathura  # A PDF Viewer.
-  ]);
+      chromium
+      # firefox
+      firefox-devedition
+      rofi
+      valgrind
+      zathura # A PDF Viewer.
+    ]);
 
   #---------------------------------------------------------------------
   # Env vars and dotfiles
   #---------------------------------------------------------------------
 
-  home.sessionVariables = {
-    LANG = "en_US.UTF-8";
-    LC_CTYPE = "en_US.UTF-8";
-    LC_ALL = "en_US.UTF-8";
-    PAGER = "less -FirSwX";
-    MANPAGER = "nvim +Man!";
-    BAT_THEME = "base16";
-    TERMINAL = "wezterm";
-  } // (if isDarwin then {
-    HOMEBREW_NO_AUTO_UPDATE = 1;
-  } else {});
+  home.sessionVariables =
+    {
+      LANG = "en_US.UTF-8";
+      LC_CTYPE = "en_US.UTF-8";
+      LC_ALL = "en_US.UTF-8";
+      PAGER = "less -FirSwX";
+      MANPAGER = "nvim +Man!";
+      BAT_THEME = "base16";
+      TERMINAL = "wezterm";
+    }
+    // (
+      if isDarwin
+      then {
+        HOMEBREW_NO_AUTO_UPDATE = 1;
+      }
+      else {}
+    );
 
   xdg.enable = true;
-  xdg.configFile = {
-  #   "wezterm/wezterm.lua".text = builtins.readFile ./wezterm.lua;
-  #   "rofi/config.rasi".text = builtins.readFile ./rofi;
-  #  };
-  #   # tree-sitter parsers
-  #   "nvim/parser/proto.so".source = "${pkgs.tree-sitter-proto}/parser";
-  #   "nvim/queries/proto/folds.scm".source =
-  #     "${sources.tree-sitter-proto}/queries/folds.scm";
-  #   "nvim/queries/proto/highlights.scm".source =
-  #     "${sources.tree-sitter-proto}/queries/highlights.scm";
-  #   "nvim/queries/proto/textobjects.scm".source =
-  #     ./textobjects.scm;
-  } // (if isDarwin then {
-  #   # Rectangle.app. This has to be imported manually using the app.
-  #   "rectangle/RectangleConfig.json".text = builtins.readFile ./RectangleConfig.json;
-  } else {}) // (if isLinux then {
-  #   "ghostty/config".text = builtins.readFile ./ghostty.linux;
-  #   "i3/config".text = builtins.readFile ./i3;
-  } else {});
+  xdg.configFile =
+    {
+      #   "wezterm/wezterm.lua".text = builtins.readFile ./wezterm.lua;
+      #   "rofi/config.rasi".text = builtins.readFile ./rofi;
+      #  };
+      #   # tree-sitter parsers
+      #   "nvim/parser/proto.so".source = "${pkgs.tree-sitter-proto}/parser";
+      #   "nvim/queries/proto/folds.scm".source =
+      #     "${sources.tree-sitter-proto}/queries/folds.scm";
+      #   "nvim/queries/proto/highlights.scm".source =
+      #     "${sources.tree-sitter-proto}/queries/highlights.scm";
+      #   "nvim/queries/proto/textobjects.scm".source =
+      #     ./textobjects.scm;
+    }
+    // (lib.optionalAttrs isDarwin {
+      #   # Rectangle.app. This has to be imported manually using the app.
+      #   "rectangle/RectangleConfig.json".text = builtins.readFile ./RectangleConfig.json;
+    })
+    // (lib.optionalAttrs isLinux {
+      #   "ghostty/config".text = builtins.readFile ./ghostty.linux;
+      #   "i3/config".text = builtins.readFile ./i3;
+    });
 
   #---------------------------------------------------------------------
   # Programs
@@ -106,7 +129,10 @@ in {
       config = {
         modifier = "Mod4";
         startup = [
-          { command = "xrandr-auto"; notification = false; }
+          {
+            command = "xrandr-auto";
+            notification = false;
+          }
         ];
         keybindings = import ./i3-keybindings.nix config.modifier;
       };
@@ -116,33 +142,45 @@ in {
 
   programs.home-manager.enable = true;
 
+  # TODO: Reenable when configuration is more stable and reinstall less frequent.
+  # programs.man = {
+  #   enable = true;
+  #   generateCaches = true;
+  # };
+
   programs.bash.enable = true;
 
   programs.fish = {
     enable = true;
-    interactiveShellInit = lib.strings.concatStrings (lib.strings.intersperse "\n" ([
+    interactiveShellInit = lib.strings.concatStrings (lib.strings.intersperse "\n" [
       (builtins.readFile ./config.fish)
       "set -g SHELL ${pkgs.fish}/bin/fish"
-    ]));
+    ]);
 
-    shellAliases = if isLinux then {
-      # For consistency with macOS.
-      pbcopy = "xclip";
-      pbpaste = "xclip -o";
-      # Shortcut to setup a nix-shell with fish. This lets you do something like
-      # `nixsh -p go` to get an environment with Go but use the fish shell along
-      # with it.
-      nsh = "nix-shell --run fish";
-      ls = "${pkgs.eza}/bin/eza";
-    } else {};
+    shellAliases =
+      {
+        # Shortcut to setup a nix-shell with fish. This lets you do something like
+        # `nixsh -p go` to get an environment with Go but use the fish shell along
+        # with it.
+        nixsh = "nix-shell --run fish";
+        devsh = "nix develop --command fish";
+        ls = "${pkgs.eza}/bin/eza";
+      }
+      // (lib.optionalAttrs isLinux {
+        # For consistency with macOS.
+        pbcopy = "xclip";
+        pbpaste = "xclip -o";
+      });
 
-    plugins = map (n: {
-      name = n;
-      src  = sources.${n};
-    }) [
-      "fish-fzf"
-      "fish-foreign-env"
-    ];
+    plugins =
+      map
+      (n: {
+        name = n;
+        src = sources.${n};
+      }) [
+        "fish-fzf"
+        "fish-foreign-env"
+      ];
   };
 
   programs.wezterm = {
@@ -207,33 +245,35 @@ in {
     aggressiveResize = true;
     secureSocket = true; # If 'false', forces tmux to use /tmp for sockets (WSL2 compat).
 
-    extraConfig = lib.strings.concatStrings (lib.strings.intersperse "\n" ([
+    extraConfig = lib.strings.concatStrings (lib.strings.intersperse "\n" [
       (builtins.readFile ./tmux)
       "run-shell ${sources.tmux-pain-control}/pain_control.tmux"
-    ]));
+    ]);
   };
 
   xresources.extraConfig = builtins.readFile ./Xresources;
 
   programs.ssh = {
     enable = true;
-    extraConfig = ''
-      # Personal hosts.
-      Host github.com
-        User git
-        IdentityAgent "${_1passwordAgentPath}"
-      Host linode bc
-        HostName 172.105.192.143
-        IdentityAgent "${_1passwordAgentPath}"
-        ForwardAgent yes
-      Host skullkid.local
-        HostName 192.168.86.43
-        IdentityAgent "${_1passwordAgentPath}"
-        ForwardAgent yes
-    '' + lib.optionalString (currentSystemName == "darwin") ''
-      Host 192.168.*
-        IdentityAgent "${_1passwordAgentPath}"
-    '';
+    extraConfig =
+      ''
+        # Personal hosts.
+        Host github.com
+          User git
+          IdentityAgent "${_1passwordAgentPath}"
+        Host linode bc
+          HostName 172.105.192.143
+          IdentityAgent "${_1passwordAgentPath}"
+          ForwardAgent yes
+        Host skullkid.local
+          HostName 192.168.86.43
+          IdentityAgent "${_1passwordAgentPath}"
+          ForwardAgent yes
+      ''
+      + lib.optionalString (currentSystemName == "darwin") ''
+        Host 192.168.*
+          IdentityAgent "${_1passwordAgentPath}"
+      '';
   };
 
   # Make cursor not tiny on HiDPI screens

@@ -1,7 +1,12 @@
-{ channels, config, pkgs, lib, currentSystemName,... }:
-
 {
-  imports = [ ./common.nix ];
+  channels,
+  config,
+  pkgs,
+  lib,
+  currentSystemName,
+  ...
+}: {
+  imports = [./common.nix];
 
   # Be careful updating this.
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -56,7 +61,7 @@
   fonts = {
     fontDir.enable = true;
 
-    packages = import ../modules/fonts { pkgs = pkgs; };
+    packages = import ../modules/fonts {pkgs = pkgs;};
   };
 
   # Enable tailscale. We manually authenticate when we want with
@@ -73,7 +78,6 @@
     cachix
     gnumake
     killall
-    niv
     rxvt_unicode
     xclip
 
@@ -82,12 +86,14 @@
     (writeShellScriptBin "xrandr-auto" ''
       xrandr --output Virtual-1 --auto
     '')
-  ] ++ lib.optionals (currentSystemName == "vm-aarch64") [
-    # This is needed for the vmware user tools clipboard to work.
-    # You can test if you don't need this by deleting this and seeing
-    # if the clipboard sill works.
-    gtkmm3
   ];
+
+  # TODO: Reenable when configuration is more stable and reinstall less frequent.
+  # documentation = {
+  #   enable = true;
+  #   man.enable = true;
+  #   dev.enable = true;
+  # };
 
   # Enable the OpenSSH daemon.
   services.openssh = {

@@ -21,7 +21,8 @@ end
 
 function fish_prompt
     set_color brgrey
-    printf "∶ "
+    string repeat --count $SHLVL --no-newline ":"
+    printf " "
     set_color normal
 end
 
