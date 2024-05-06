@@ -1,15 +1,12 @@
-{
-  currentSystemName,
-  inputs,
-  isCorpManaged,
-  ...
-}: {
-  lib,
-  pkgs,
-  ...
-}: let
-  sources = import ../../nix/sources.nix;
-
+{ currentSystemName
+, inputs
+, isCorpManaged
+, ...
+}: { lib
+   , pkgs
+   , ...
+   }:
+let
   inherit (lib) mkIf;
   inherit (pkgs.stdenv) isDarwin isLinux;
 
@@ -23,7 +20,8 @@
     then "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
     else "${pkgs._1password-gui}/bin/op-ssh-sign"
   );
-in {
+in
+{
   # imports = [ (import ./nvim { inherit inputs isCorpManaged; }) ];
 
   home.stateVersion = "23.11";
@@ -170,12 +168,12 @@ in {
 
     plugins =
       map
-      (n: {
-        name = n;
-        src = sources.${n};
-      }) [
-        "fish-fzf"
-        "fish-foreign-env"
+        (n: {
+          name = n;
+          src = pkgs.fishPlugins.${n};
+        }) [
+        "fzf"
+        "foreign-env"
       ];
   };
 
@@ -192,7 +190,7 @@ in {
       (lib.optionalString isLinux
         ''
           config.window_decorations = 'NONE'
-          config.window_padding = { top = 0, left = 0, right = 0, bottom = 0 }
+          config.window_padding = { top = 8, left = 0, right = 0, bottom = 0 }
         '')
       ''
         return config
@@ -256,10 +254,7 @@ in {
     aggressiveResize = true;
     secureSocket = true; # If 'false', forces tmux to use /tmp for sockets (WSL2 compat).
 
-    extraConfig = lib.strings.concatStrings (lib.strings.intersperse "\n" [
-      (builtins.readFile ./tmux)
-      "run-shell ${sources.tmux-pain-control}/pain_control.tmux"
-    ]);
+    extraConfig = builtins.readFile ./tmux;
   };
 
   xresources.extraConfig = builtins.readFile ./Xresources;

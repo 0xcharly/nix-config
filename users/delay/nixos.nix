@@ -1,4 +1,4 @@
-{ pkgs, lib, inputs, ... }:
+{ pkgs, lib, ... }:
 
 {
   # https://github.com/nix-community/home-manager/pull/2408
@@ -38,6 +38,4 @@
     # require enabling PolKit integration on some desktop environments (e.g. Plasma).
     polkitPolicyOwners = [ "delay" ];
   };
-
-  nixpkgs.overlays = [ (import ./vim.nix { inherit inputs; }) ];
 }
