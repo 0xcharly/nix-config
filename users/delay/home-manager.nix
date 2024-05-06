@@ -1,15 +1,17 @@
-{ currentSystemName
-, inputs
-, isCorpManaged
-, ...
-}: { lib
-   , pkgs
-   , ...
-   }:
-let
+{
+  currentSystemName,
+  inputs,
+  isCorpManaged,
+  ...
+}: {
+  lib,
+  pkgs,
+  ...
+}: let
   inherit (lib) mkIf;
   inherit (pkgs.stdenv) isDarwin isLinux;
 
+  wezterm-pkg = inputs.wezterm.packages.${pkgs.system}.default;
   _1passwordAgentPath = (
     if isDarwin
     then "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
@@ -20,10 +22,7 @@ let
     then "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
     else "${pkgs._1password-gui}/bin/op-ssh-sign"
   );
-in
-{
-  # imports = [ (import ./nvim { inherit inputs isCorpManaged; }) ];
-
+in {
   home.stateVersion = "23.11";
 
   #---------------------------------------------------------------------
@@ -33,41 +32,40 @@ in
   # Packages I always want installed. Most packages I install using
   # per-project flakes sourced with direnv and nix-shell, so this is
   # not a huge list.
-  home.packages = with pkgs;
+  # TODO: try pkgs.tailscale.
+  home.packages =
     [
-      asciinema
-      bat
-      fd
-      fzf
-      gh
-      htop
-      jq
-      ripgrep
-      tree
-      watch
+      pkgs.asciinema
+      pkgs.bat
+      pkgs.fd
+      pkgs.fzf
+      pkgs.gh
+      pkgs.htop
+      pkgs.jq
+      pkgs.ripgrep
+      pkgs.tree
+      pkgs.watch
 
-      inputs.nvim.packages.${pkgs.system}.stable
-
-      nixd
-      nixpkgs-fmt
+      pkgs.alejandra
+      pkgs.manix
+      pkgs.nixd
+      pkgs.nixpkgs-fmt
     ]
-    ++ (lib.optionals isDarwin [
-      scrcpy
-      # tailscale  # TODO: try this out.
-    ])
+    ++ [inputs.nvim.packages.${pkgs.system}.stable]
+    ++ (lib.optionals isDarwin [pkgs.scrcpy])
     ++ (lib.optionals isLinux [
       # TODO: Reenable when configuration is more stable and reinstall less frequent.
       # Man pages.
-      # linux-manual
-      # man-pages
-      # man-pages-posix
+      # pkgs.linux-manual
+      # pkgs.man-pages
+      # pkgs.man-pages-posix
 
-      chromium
-      # firefox
-      firefox-devedition
-      rofi
-      valgrind
-      zathura # A PDF Viewer.
+      pkgs.chromium
+      # pkgs.firefox
+      pkgs.firefox-devedition
+      pkgs.rofi
+      pkgs.valgrind
+      pkgs.zathura # A PDF Viewer.
     ]);
 
   #---------------------------------------------------------------------
@@ -88,29 +86,30 @@ in
       HOMEBREW_NO_AUTO_UPDATE = 1;
     });
 
-  xdg.enable = true;
-  xdg.configFile =
-    {
-      #   "wezterm/wezterm.lua".text = builtins.readFile ./wezterm.lua;
-      #   "rofi/config.rasi".text = builtins.readFile ./rofi;
-      #  };
-      #   # tree-sitter parsers
-      #   "nvim/parser/proto.so".source = "${pkgs.tree-sitter-proto}/parser";
-      #   "nvim/queries/proto/folds.scm".source =
-      #     "${sources.tree-sitter-proto}/queries/folds.scm";
-      #   "nvim/queries/proto/highlights.scm".source =
-      #     "${sources.tree-sitter-proto}/queries/highlights.scm";
-      #   "nvim/queries/proto/textobjects.scm".source =
-      #     ./textobjects.scm;
-    }
-    // (lib.optionalAttrs isDarwin {
-      #   # Rectangle.app. This has to be imported manually using the app.
-      #   "rectangle/RectangleConfig.json".text = builtins.readFile ./RectangleConfig.json;
-    })
-    // (lib.optionalAttrs isLinux {
-      #   "ghostty/config".text = builtins.readFile ./ghostty.linux;
-      #   "i3/config".text = builtins.readFile ./i3;
-    });
+  xdg = {
+    enable = true;
+    configFile =
+      {
+        #   "rofi/config.rasi".text = builtins.readFile ./rofi;
+      }
+      // (lib.optionalAttrs isDarwin {
+        #   # Rectangle.app. This has to be imported manually using the app.
+        #   "rectangle/RectangleConfig.json".text = builtins.readFile ./RectangleConfig.json;
+      })
+      // (lib.optionalAttrs isLinux {
+        #   "ghostty/config".text = builtins.readFile ./ghostty.linux;
+      });
+
+    mimeApps = {
+      defaultApplications = {
+        "text/html" = "firefox-devedition.desktop";
+        "x-scheme-handler/http" = "firefox-devedition.desktop";
+        "x-scheme-handler/https" = "firefox-devedition.desktop";
+        "x-scheme-handler/about" = "firefox-devedition.desktop";
+        "x-scheme-handler/unknown" = "firefox-devedition.desktop";
+      };
+    };
+  };
 
   #---------------------------------------------------------------------
   # Programs
@@ -122,15 +121,39 @@ in
       enable = true;
       config = {
         modifier = "Mod4";
+        terminal = "${wezterm-pkg}/bin/wezterm";
         startup = [
           {
-            command = "xrandr-auto";
+            command = config.terminal;
             notification = false;
           }
         ];
-        keybindings = import ./i3-keybindings.nix config.modifier;
+        keybindings = {
+          "${config.modifier}+Return" = "exec ${config.terminal}";
+          "${config.modifier}+o" = "exec ${pkgs.rofi}/bin/rofi -show run";
+          "${config.modifier}+1" = "workspace 1";
+          "${config.modifier}+2" = "workspace 2";
+          "${config.modifier}+3" = "workspace 3";
+          "${config.modifier}+4" = "workspace 4";
+          "${config.modifier}+5" = "workspace 5";
+          "${config.modifier}+Shift+1" = "move container to workspace 1";
+          "${config.modifier}+Shift+2" = "move container to workspace 2";
+          "${config.modifier}+Shift+3" = "move container to workspace 3";
+          "${config.modifier}+Shift+4" = "move container to workspace 4";
+          "${config.modifier}+Shift+5" = "move container to workspace 5";
+          "${config.modifier}+Shift+c" = "reload";
+          "${config.modifier}+Shift+r" = "restart";
+        };
+        bars = [
+          {
+            fonts = {
+              names = ["IosevkaEtoile" "FontAwesome6Free"];
+              style = "Regular";
+              size = 12.0;
+            };
+          }
+        ];
       };
-      #extraConfig = builtins.readFile ./i3;
     };
   };
 
@@ -168,10 +191,10 @@ in
 
     plugins =
       map
-        (n: {
-          name = n;
-          src = pkgs.fishPlugins.${n};
-        }) [
+      (n: {
+        name = n;
+        src = pkgs.fishPlugins.${n};
+      }) [
         "fzf"
         "foreign-env"
       ];
@@ -179,7 +202,7 @@ in
 
   programs.wezterm = {
     enable = true;
-    package = inputs.wezterm.packages.${pkgs.system}.default;
+    package = wezterm-pkg;
     extraConfig = lib.strings.concatStrings (lib.strings.intersperse "\n" [
       (builtins.readFile ./wezterm.lua)
       (lib.optionalString isDarwin
@@ -196,23 +219,6 @@ in
         return config
       ''
     ]);
-  };
-
-  programs.i3status = mkIf isLinux {
-    enable = true;
-
-    general = {
-      colors = true;
-      color_good = "#8C9440";
-      color_bad = "#A54242";
-      color_degraded = "#DE935F";
-    };
-
-    modules = {
-      ipv6.enable = false;
-      "wireless _first_".enable = false;
-      "battery all".enable = false;
-    };
   };
 
   programs.git = {

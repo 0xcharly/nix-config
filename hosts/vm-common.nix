@@ -26,7 +26,7 @@
   services.xserver = {
     enable = true;
     xkb.layout = "us";
-    dpi = 220;
+    xrandrHeads = ["Virtual-1"];
     autorun = true;
 
     desktopManager = {
@@ -80,12 +80,6 @@
     killall
     rxvt_unicode
     xclip
-
-    # For hypervisors that support auto-resizing, this script forces it.
-    # I've noticed not everyone listens to the udev events so this is a hack.
-    (writeShellScriptBin "xrandr-auto" ''
-      xrandr --output Virtual-1 --auto
-    '')
   ];
 
   environment.etc = {

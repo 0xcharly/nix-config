@@ -72,12 +72,18 @@
         pkgs.mkShell
         {
           name = "nix-config-devShell";
-          buildInputs = with pkgs; [
-            alejandra
-            nixd
-            # nixpkgs-fmt
-            markdownlint-cli
-          ];
+          buildInputs =
+            (with pre-commit-hooks.packages.${system}; [
+              # Nix tools.
+              alejandra
+              markdownlint-cli
+              luacheck
+              stylua
+            ])
+            ++ (with pkgs; [
+              lua-language-server
+              nixd
+            ]);
           shellHook = ''
             ${self.checks.${system}.pre-commit-check.shellHook}
           '';
@@ -86,8 +92,10 @@
         src = self;
         hooks = {
           alejandra.enable = true;
-          # nixpkgs-fmt.enable = true;
+          # luacheck.enable = true;
           markdownlint.enable = true;
+          # nixpkgs-fmt.enable = true;
+          stylua.enable = true;
         };
       };
     in {
