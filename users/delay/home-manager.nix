@@ -86,13 +86,9 @@ in {
       BAT_THEME = "base16";
       TERMINAL = "wezterm";
     }
-    // (
-      if isDarwin
-      then {
-        HOMEBREW_NO_AUTO_UPDATE = 1;
-      }
-      else {}
-    );
+    // (lib.optionalAttrs isDarwin {
+      HOMEBREW_NO_AUTO_UPDATE = 1;
+    });
 
   xdg.enable = true;
   xdg.configFile =
@@ -186,11 +182,26 @@ in {
   programs.wezterm = {
     enable = true;
     package = inputs.wezterm.packages.${pkgs.system}.default;
-    extraConfig = builtins.readFile ./wezterm.lua;
+    extraConfig = lib.strings.concatStrings (lib.strings.intersperse "\n" [
+      (builtins.readFile ./wezterm.lua)
+      (lib.optionalString isDarwin
+        ''
+          config.window_decorations = 'INTEGRATED_BUTTONS|RESIZE'
+          config.window_padding = { top = 48, left = 0, right = 0, bottom = 0 }
+        '')
+      (lib.optionalString isLinux
+        ''
+          config.window_decorations = 'NONE'
+          config.window_padding = { top = 0, left = 0, right = 0, bottom = 0 }
+        '')
+      ''
+        return config
+      ''
+    ]);
   };
 
-  programs.i3status = {
-    enable = isLinux;
+  programs.i3status = mkIf isLinux {
+    enable = true;
 
     general = {
       colors = true;

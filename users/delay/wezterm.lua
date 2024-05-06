@@ -1,5 +1,3 @@
-local wezterm = require 'wezterm'
-
 -- Load the builtin Catppuccin colorscheme.
 local catppuccin_mocha = wezterm.color.get_builtin_schemes()['Catppuccin Mocha']
 catppuccin_mocha.tab_bar.background = catppuccin_mocha.ansi[8]
@@ -75,5 +73,3 @@ config.hyperlink_rules = {
   { regex = '\\bb/(\\d+)\\b',                              format = 'https://b.corp.google.com/issues/$1' },
   { regex = '\\bcl/(\\d+)\\b',                             format = 'https://critique.corp.google.com/issues/$1' },
 }
-
-return config
