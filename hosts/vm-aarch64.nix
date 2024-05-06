@@ -1,19 +1,20 @@
-{ config, pkgs, lib, ... }:
-
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: {
   imports = [
     ./hardware/vm-aarch64.nix
-    ../modules/vmware-guest.nix # TODO: try the official module instead. This one has been lagging behind for a while now.
+    ../modules/vmware-guest.nix
     ./vm-nat-common.nix
   ];
 
   # Setup qemu so we can run x86_64 binaries
   boot.binfmt.emulatedSystems = ["x86_64-linux"];
 
-  # Disable the default module and import our override. We have
-  # customizations to make this work on aarch64.
-  # TODO: remove when using the official module instead.
-  disabledModules = [ "virtualisation/vmware-guest.nix" ];
+  # Disable the default module and import our override that works on aarch64.
+  disabledModules = ["virtualisation/vmware-guest.nix"];
 
   # Interface is this on M1, M3.
   networking.interfaces.ens160.useDHCP = true;
