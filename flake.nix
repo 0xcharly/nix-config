@@ -100,6 +100,11 @@
         user = "delay";
       };
 
+      nixosConfigurations.vm-aarch64-prl = mkSystem "vm-aarch64-prl" {
+        system = "aarch64-linux";
+        user = "delay";
+      };
+
       nixosConfigurations.vm-linode = mkSystem "vm-linode" {
         system = "x86_64-linux";
         user = "delay";

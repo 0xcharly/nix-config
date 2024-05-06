@@ -75,4 +75,4 @@ vm/copy:
 # have to run vm/copy before.
 vm/switch:
 	ssh $(SSH_OPTIONS) -p$(NIXPORT) -l$(NIXUSER) $(NIXADDR) \
-		"sudo NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild switch --flake \"/nix-config#${NIXNAME}\""
+		"sudo NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild --option accept-flake-config true switch --flake \"/nix-config#${NIXNAME}\""

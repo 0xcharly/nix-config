@@ -7,15 +7,15 @@ parted -s /dev/sda -- mkpart primary linux-swap -8GB 100\%
 parted -s /dev/sda -- mkpart ESP fat32 1MB 512MB
 parted -s /dev/sda -- set 3 esp on
 
-mkfs.ext4 -L nixos /dev/sda1
-mkswap -L swap /dev/sda2
-mkfs.fat -F 32 -n boot /dev/sda3
+mkfs.ext4 -L nixos /dev/disk/by-label/nixos
+mkswap -L swap /dev/disk/by-label/swap
+mkfs.fat -F 32 -n boot /dev/disk/by-label/boot
 
 # Mount future system, activate swap device.
 mount /dev/disk/by-label/nixos /mnt
 mkdir -p /mnt/boot
 mount /dev/disk/by-label/boot /mnt/boot
-swapon /dev/sda2
+swapon /dev/disk/by-label/swap
 
 # Generate initial config.
 nixos-generate-config --root /mnt

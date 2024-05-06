@@ -3,7 +3,7 @@
 {
   imports = [
     ./hardware/vm-aarch64.nix
-    ../modules/vmware-guest.nix
+    ../modules/vmware-guest.nix # TODO: try the official module instead. This one has been lagging behind for a while now.
     ./vm-nat-common.nix
   ];
 
@@ -12,6 +12,7 @@
 
   # Disable the default module and import our override. We have
   # customizations to make this work on aarch64.
+  # TODO: remove when using the official module instead.
   disabledModules = [ "virtualisation/vmware-guest.nix" ];
 
   # Interface is this on M1, M3.

@@ -5,6 +5,7 @@
   nix = {
     # Enable flakes.
     extraOptions = ''
+      accept-flake-config = true
       experimental-features = nix-command flakes
       keep-outputs = true
       keep-derivations = true
