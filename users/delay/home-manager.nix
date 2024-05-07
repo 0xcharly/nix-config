@@ -50,8 +50,9 @@ in {
       pkgs.manix
       pkgs.nixd
       pkgs.nixpkgs-fmt
+
+      inputs.nvim.packages.${pkgs.system}.stable
     ]
-    ++ [inputs.nvim.packages.${pkgs.system}.stable]
     ++ (lib.optionals isDarwin [pkgs.scrcpy])
     ++ (lib.optionals isLinux [
       # TODO: Reenable when configuration is more stable and reinstall less frequent.
@@ -169,10 +170,10 @@ in {
 
   programs.fish = {
     enable = true;
-    interactiveShellInit = lib.strings.concatStrings (lib.strings.intersperse "\n" [
+    interactiveShellInit = lib.strings.concatStringsSep "\n" [
       (builtins.readFile ./config.fish)
       "set -g SHELL ${pkgs.fish}/bin/fish"
-    ]);
+    ];
 
     shellAliases =
       {
@@ -203,7 +204,7 @@ in {
   programs.wezterm = {
     enable = true;
     package = wezterm-pkg;
-    extraConfig = lib.strings.concatStrings (lib.strings.intersperse "\n" [
+    extraConfig = lib.strings.concatStringsSep "\n" [
       (builtins.readFile ./wezterm.lua)
       (lib.optionalString isDarwin
         ''
@@ -218,7 +219,7 @@ in {
       ''
         return config
       ''
-    ]);
+    ];
   };
 
   programs.git = {

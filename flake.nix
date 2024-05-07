@@ -2,15 +2,8 @@
   description = "NixOS systems and configs for delay";
 
   nixConfig = {
-    extra-substituters = [
-      "https://0xcharly-nixos-config.cachix.org"
-      "https://arm.cachix.org"
-    ];
-
-    extra-trusted-public-keys = [
-      "0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU="
-      "arm.cachix.org-1:5BZ2kjoL1q6nWhlnrbAl+G7ThY7+HaBRD9PZzqZkbnM="
-    ];
+    extra-substituters = [ "https://0xcharly-nixos-config.cachix.org" ];
+    extra-trusted-public-keys = [ "0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU=" ];
   };
 
   inputs = {

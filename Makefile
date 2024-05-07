@@ -20,7 +20,7 @@ UNAME := $(shell uname)
 switch:
 ifeq ($(UNAME), Darwin)
 	nix build --show-trace --extra-experimental-features nix-command --extra-experimental-features flakes ".#darwinConfigurations.${NIXNAME}.system"
-	./result/sw/bin/darwin-rebuild switch --flake "$$(pwd)#${NIXNAME}"
+	./result/sw/bin/darwin-rebuild --option accept-flake-config true switch --flake "$$(pwd)#${NIXNAME}"
 else
 	sudo NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild --show-trace switch --flake ".#${NIXNAME}"
 endif
