@@ -268,25 +268,85 @@ in {
 
   programs.ssh = {
     enable = true;
-    extraConfig =
-      ''
+    matchBlocks =
+      {
         # Personal hosts.
-        Host github.com
-          User git
-          IdentityAgent "${_1passwordAgentPath}"
-        Host linode bc
-          HostName 172.105.192.143
-          IdentityAgent "${_1passwordAgentPath}"
-          ForwardAgent yes
-        Host skullkid.local
-          HostName 192.168.86.43
-          IdentityAgent "${_1passwordAgentPath}"
-          ForwardAgent yes
-      ''
-      + lib.optionalString (currentSystemName == "darwin") ''
-        Host 192.168.*
-          IdentityAgent "${_1passwordAgentPath}"
-      '';
+        "github.com" = {
+          user = "git";
+          extraOptions = {"IdentityAgent" = "\"${_1passwordAgentPath}\"";};
+        };
+        "linode" = {
+          hostname = "172.105.192.143";
+          extraOptions = {"IdentityAgent" = "\"${_1passwordAgentPath}\"";};
+          forwardAgent = true;
+        };
+      }
+      // (lib.optionalAttrs (currentSystemName == "darwin") {
+        # Home storage host.
+        "skullkid.local" = {
+          hostname = "192.168.86.43";
+          extraOptions = {"IdentityAgent" = "\"${_1passwordAgentPath}\"";};
+          forwardAgent = true;
+        };
+        # VMWare hosts.
+        "192.168.*" = {
+          user = "git";
+          extraOptions = {"IdentityAgent" = "\"${_1passwordAgentPath}\"";};
+        };
+      })
+      // (lib.optionalAttrs (currentSystemName == "darwin-corp") {
+        "*.c.googlers.com" = {
+          compression = true;
+          remoteForwards = [
+            # Forward ADB server port.
+            {
+              bind.port = 5037;
+              host.address = "127.0.0.1";
+              host.port = 5037;
+            }
+          ];
+          serverAliveInterval = 60;
+          extraOptions = {
+            "ControlMaster" = "auto";
+            "ControlPath" = "~/.ssh/cloudtop-ctrl-%C";
+            "ControlPersist" = "yes";
+          };
+        };
+      });
+    # extraConfig = lib.strings.concatStringsSep "\n" [
+    #   ''
+    #     # Personal hosts.
+    #     Host github.com
+    #       User git
+    #       IdentityAgent "${_1passwordAgentPath}"
+    #     Host linode bc
+    #       HostName 172.105.192.143
+    #       IdentityAgent "${_1passwordAgentPath}"
+    #       ForwardAgent yes
+    #   ''
+    #   (lib.optionalString (currentSystemName == "darwin") ''
+    #     # Home storage host.
+    #     Host skullkid.local
+    #       HostName 192.168.86.43
+    #       IdentityAgent "${_1passwordAgentPath}"
+    #       ForwardAgent yes
+    #
+    #     # VMWare hosts.
+    #     Host 192.168.*
+    #       IdentityAgent "${_1passwordAgentPath}"
+    #   '')
+    #   (lib.optionalString (currentSystemName == "darwin-corp") ''
+    #     # Cloudtop hosts.
+    #     Host *.c.googlers.com
+    #       ControlMaster auto
+    #       ControlPath ~/.ssh/cloudtop-ctrl-%C
+    #       ControlPersist yes
+    #       Compression yes
+    #       ServerAliveInternal 60
+    #       # Forward ADB server port.
+    #       RemoteForward 5037 127.0.0.1:5037
+    #   '')
+    # ];
   };
 
   # Make cursor not tiny on HiDPI screens
