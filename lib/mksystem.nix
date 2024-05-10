@@ -4,8 +4,7 @@
   nixpkgs,
   inputs,
 }: {
-  hostConfiguration,
-  osConfiguration,
+  configuration,
   isCorpManaged ? false,
   isDarwin ? false,
   isHeadless ? false,
@@ -25,8 +24,7 @@ in
     specialArgs = {inherit isCorpManaged isHeadless;};
 
     modules = [
-      hostConfiguration
-      osConfiguration
+      configuration
       hmModules.home-manager
       {
         home-manager.extraSpecialArgs = {inherit inputs isCorpManaged isHeadless;};

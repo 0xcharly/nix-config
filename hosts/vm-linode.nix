@@ -1,7 +1,8 @@
 {...}: {
   imports = [
-    ./hardware/vm-linode.nix
-    ./vm-common.nix
+    ./hw/vm-linode.nix
+    ./os/nixos.nix
+    ./shared/nixos.nix
   ];
 
   # Most of Linode’s default images have had systemd’s predictable interface

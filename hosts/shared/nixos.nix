@@ -1,5 +1,5 @@
 {pkgs, ...}: {
-  imports = [./common.nix];
+  imports = [./shared.nix];
 
   # Be careful updating this.
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -54,7 +54,7 @@
   fonts = {
     fontDir.enable = true;
 
-    packages = import ../modules/fonts {pkgs = pkgs;};
+    packages = import ../../modules/fonts {pkgs = pkgs;};
   };
 
   # Enable tailscale. We manually authenticate when we want with

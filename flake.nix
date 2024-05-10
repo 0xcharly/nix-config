@@ -102,25 +102,21 @@
     })
     // {
       nixosConfigurations.vm-aarch64 = mkSystem {
-        osConfiguration = ./os/nixos.nix;
-        hostConfiguration = ./hosts/vm-aarch64.nix;
+        configuration = ./hosts/vm-aarch64.nix;
       };
 
       nixosConfigurations.vm-linode = mkSystem {
-        osConfiguration = ./os/nixos.nix;
-        hostConfiguration = ./hosts/vm-linode.nix;
+        configuration = ./hosts/vm-linode.nix;
         isHeadless = true;
       };
 
       darwinConfigurations.macpro = mkSystem {
-        osConfiguration = ./os/darwin.nix;
-        hostConfiguration = ./hosts/darwin.nix;
+        configuration = ./hosts/darwin.nix;
         isDarwin = true;
       };
 
       darwinConfigurations.mpb-roam = mkSystem {
-        osConfiguration = ./os/darwin.nix;
-        hostConfiguration = ./hosts/darwin.nix;
+        configuration = ./hosts/darwin.nix;
         isDarwin = true;
       };
 
@@ -128,8 +124,7 @@
       # TODO: rename to mbp-delay
       # TODO: rename and add config for mbp-delay-roam
       darwinConfigurations.charly = mkSystem {
-        osConfiguration = ./os/darwin.nix;
-        hostConfiguration = ./hosts/darwin-corp.nix;
+        configuration = ./hosts/darwin-corp.nix;
         isCorpManaged = true;
         isDarwin = true;
       };
