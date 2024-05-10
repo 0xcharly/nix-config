@@ -110,7 +110,7 @@
         isHeadless = true;
       };
 
-      darwinConfigurations.macpro = mkSystem {
+      darwinConfigurations.mac-studio = mkSystem {
         configuration = ./hosts/darwin.nix;
         isDarwin = true;
       };
