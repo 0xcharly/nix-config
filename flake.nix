@@ -112,14 +112,20 @@
         isHeadless = true;
       };
 
-      darwinConfigurations.darwin = mkSystem {
+      darwinConfigurations.macpro = mkSystem {
         osConfiguration = ./os/darwin.nix;
         hostConfiguration = ./hosts/darwin.nix;
         isDarwin = true;
       };
 
-      # Corp MacBook M1 Max.
-      # TODO: rename to mbp-delay-strm
+      darwinConfigurations.mpb-roam = mkSystem {
+        osConfiguration = ./os/darwin.nix;
+        hostConfiguration = ./hosts/darwin.nix;
+        isDarwin = true;
+      };
+
+      # Corp MacBooks.
+      # TODO: rename to mbp-delay
       # TODO: rename and add config for mbp-delay-roam
       darwinConfigurations.charly = mkSystem {
         osConfiguration = ./os/darwin.nix;

@@ -12,19 +12,37 @@ NIXNAME ?= vm-aarch64
 # SSH options that are used. These aren't meant to be overridden but are reused a lot so we just
 # store them up here.
 BOOTSTRAP0_SSH_OPTIONS=-o PubkeyAuthentication=no -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
+NIXOS_REBUILD_OPTIONS=--option accept-flake-config true --show-trace
 SSH_OPTIONS=-o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
 
 switch:
-	sudo NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild --show-trace switch --flake .
+	sudo NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild $(NIXOS_REBUILD_OPTIONS) switch --flake .
 
 test:
-	sudo NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild test --flake .
+	sudo NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild $(NIXOS_REBUILD_OPTIONS) test --flake .
 
 # This builds the given NixOS configuration and pushes the results to the
 # cache. This does not alter the current running system. This requires
 # cachix authentication to be configured out of band.
 cache:
 	nix build '.#nixosConfigurations.$(NIXNAME).config.system.build.toplevel' --json \
+		| jq -r '.[].outputs | to_entries[].value' \
+		| op plugin run -- cachix push 0xcharly-nixos-config
+
+darwin/bootstrap:
+	nix run nix-darwin -- switch --flake .
+
+darwin/switch:
+	darwin-rebuild switch --flake .
+
+darwin/test:
+	darwin-rebuild test --flake .
+
+# This builds the given nix-darwin configuration and pushes the results to the
+# cache. This does not alter the current running system. This requires cachix
+# authentication to be configured out of band.
+darwin/cache:
+	nix build '.#darwinConfigurations.$(NIXNAME).config.system.build.toplevel' --json \
 		| jq -r '.[].outputs | to_entries[].value' \
 		| op plugin run -- cachix push 0xcharly-nixos-config
 
@@ -58,5 +76,4 @@ vm/copy:
 # Run the nixos-rebuild switch command. This does NOT copy files so you have to
 # run vm/copy before.
 vm/switch:
-	ssh $(SSH_OPTIONS) -p$(NIXPORT) -l$(NIXUSER) $(NIXADDR) \
-		"sudo NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild --option accept-flake-config true switch --flake \"/nix-config#${NIXNAME}\""
+	ssh $(SSH_OPTIONS) -p$(NIXPORT) -l$(NIXUSER) $(NIXADDR) "make -C /nix-config switch"
