@@ -15,6 +15,7 @@
         "firefox-developer-edition"
         #"hammerspoon"
         #"monodraw"
+        "proton-mail"
         "raycast"
         "spotify"
       ]
