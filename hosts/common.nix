@@ -1,12 +1,10 @@
-{ pkgs, ... }:
-
-{
+{pkgs, ...}: {
   # Flakes support.
   nix = {
     # Enable flakes.
+    settings.experimental-features = "nix-command flakes";
     extraOptions = ''
       accept-flake-config = true
-      experimental-features = nix-command flakes
       keep-outputs = true
       keep-derivations = true
     '';

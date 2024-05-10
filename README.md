@@ -31,7 +31,7 @@ so expect issues on other virtualization solutions without minor changes.
 
   * ISO: NixOS 23.11 or later.
   * Disk: SATA 150 GB+
-  * CPU/Memory: I give at least half my cores and half my RAM, as much as you can.
+  * CPU/Memory: I give at least half my cores and half my RAM (up to 32GB), as much as you can.
   * Graphics: Full acceleration, full resolution, maximum graphics RAM.
   * Network: Shared with my Mac.
   * Remove sound card, remove video camera.
@@ -99,10 +99,25 @@ To utilize the Mac setup, first install Nix using some Nix installer.
 I use the [nix-installer](https://github.com/DeterminateSystems/nix-installer) by Determinate
 Systems.com. The point is just to get the `nix` CLI with flake support installed.
 
-Once installed, clone this repo and run `make`. If there are any errors, follow the error message
-(some folders may need permissions changed, some files may need to be deleted). That's it.
+Once installed, clone this repo and bootstrap the `nix-darwin` installation:
 
-**WARNING: Don't do this without reading the source.** This repository is and always has been _my_
-configurations. If you blindly run this, your system may be changed in ways that you don't want.
+```
+$ nix run nix-darwin -- switch --flake .
+```
 
-Read the source!
+If there are any errors, follow the error message (e.g. some folders may need permissions changed,
+etc…). That's it.
+
+Once `nix-darwin` is installed, successive incremental changes are applied with `darwin-rebuild`:
+
+```
+$ darwin-rebuild switch --flake .
+```
+
+>[!WARNING]
+>
+> **Don't do this without reading the source.**
+> This repository is and always has been _my_ configurations. If you blindly run this, your system
+> may be changed in ways that you don't want.
+>
+> Read the source!

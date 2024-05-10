@@ -1,9 +1,6 @@
-{
-  currentSystemName,
-  inputs,
+{inputs, ...}: {
   isCorpManaged,
-  ...
-}: {
+  isHeadless,
   lib,
   pkgs,
   ...
@@ -11,7 +8,9 @@
   inherit (lib) mkIf;
   inherit (pkgs.stdenv) isDarwin isLinux;
 
+  nvim-pkg = inputs.nvim.packages.${pkgs.system}.stable;
   wezterm-pkg = inputs.wezterm.packages.${pkgs.system}.default;
+
   _1passwordAgentPath = (
     if isDarwin
     then "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
@@ -24,6 +23,7 @@
   );
 in {
   home.stateVersion = "23.11";
+  programs.home-manager.enable = true;
 
   #---------------------------------------------------------------------
   # Packages
@@ -35,7 +35,6 @@ in {
   # TODO: try pkgs.tailscale.
   home.packages =
     [
-      pkgs.asciinema
       pkgs.bat
       pkgs.fd
       pkgs.fzf
@@ -51,10 +50,11 @@ in {
       pkgs.nixd
       pkgs.nixpkgs-fmt
 
-      inputs.nvim.packages.${pkgs.system}.stable
+      nvim-pkg
     ]
+    ++ (lib.optionals (!isHeadless) [pkgs.asciinema])
     ++ (lib.optionals isDarwin [pkgs.scrcpy])
-    ++ (lib.optionals isLinux [
+    ++ (lib.optionals (isLinux && !isHeadless) [
       # TODO: Reenable when configuration is more stable and reinstall less frequent.
       # Man pages.
       # pkgs.linux-manual
@@ -93,11 +93,7 @@ in {
       {
         #   "rofi/config.rasi".text = builtins.readFile ./rofi;
       }
-      // (lib.optionalAttrs isDarwin {
-        #   # Rectangle.app. This has to be imported manually using the app.
-        #   "rectangle/RectangleConfig.json".text = builtins.readFile ./RectangleConfig.json;
-      })
-      // (lib.optionalAttrs isLinux {
+      // (lib.optionalAttrs (isLinux && !isHeadless) {
         #   "ghostty/config".text = builtins.readFile ./ghostty.linux;
       });
 
@@ -116,7 +112,7 @@ in {
   # Programs
   #---------------------------------------------------------------------
 
-  xsession = mkIf isLinux {
+  xsession = mkIf (isLinux && !isHeadless) {
     enable = true;
     windowManager.i3 = rec {
       enable = true;
@@ -157,8 +153,6 @@ in {
       };
     };
   };
-
-  programs.home-manager.enable = true;
 
   # TODO: Reenable when configuration is more stable and reinstall less frequent.
   # programs.man = {
@@ -201,7 +195,7 @@ in {
       ];
   };
 
-  programs.wezterm = {
+  programs.wezterm = mkIf (!isHeadless) {
     enable = true;
     package = wezterm-pkg;
     extraConfig = lib.strings.concatStringsSep "\n" [
@@ -244,7 +238,7 @@ in {
       credential."https://github.com".helper = "!gh auth git-credential";
       credential."https://gist.github.com".helper = "!gh auth git-credential";
       gpg.format = "ssh";
-      gpg.ssh.program = "${_1passwordSshSignPath}";
+      gpg.ssh.program = _1passwordSshSignPath;
       commit.gpgsign = true;
       filter.lfs = {
         clean = "git-lfs clean -- %f";
@@ -259,12 +253,14 @@ in {
     enable = true;
     terminal = "tmux";
     aggressiveResize = true;
-    secureSocket = true; # If 'false', forces tmux to use /tmp for sockets (WSL2 compat).
+    secureSocket = true;
 
     extraConfig = builtins.readFile ./tmux;
   };
 
-  xresources.extraConfig = builtins.readFile ./Xresources;
+  xresources = mkIf (isLinux && !isHeadless) {
+    extraConfig = builtins.readFile ./Xresources;
+  };
 
   programs.ssh = {
     enable = true;
@@ -281,7 +277,7 @@ in {
           forwardAgent = true;
         };
       }
-      // (lib.optionalAttrs (currentSystemName == "darwin") {
+      // (lib.optionalAttrs (isDarwin && !isCorpManaged) {
         # Home storage host.
         "skullkid.local" = {
           hostname = "192.168.86.43";
@@ -294,7 +290,7 @@ in {
           extraOptions = {"IdentityAgent" = "\"${_1passwordAgentPath}\"";};
         };
       })
-      // (lib.optionalAttrs (currentSystemName == "darwin-corp") {
+      // (lib.optionalAttrs (isDarwin && isCorpManaged) {
         "*.c.googlers.com" = {
           compression = true;
           remoteForwards = [
@@ -313,44 +309,10 @@ in {
           };
         };
       });
-    # extraConfig = lib.strings.concatStringsSep "\n" [
-    #   ''
-    #     # Personal hosts.
-    #     Host github.com
-    #       User git
-    #       IdentityAgent "${_1passwordAgentPath}"
-    #     Host linode bc
-    #       HostName 172.105.192.143
-    #       IdentityAgent "${_1passwordAgentPath}"
-    #       ForwardAgent yes
-    #   ''
-    #   (lib.optionalString (currentSystemName == "darwin") ''
-    #     # Home storage host.
-    #     Host skullkid.local
-    #       HostName 192.168.86.43
-    #       IdentityAgent "${_1passwordAgentPath}"
-    #       ForwardAgent yes
-    #
-    #     # VMWare hosts.
-    #     Host 192.168.*
-    #       IdentityAgent "${_1passwordAgentPath}"
-    #   '')
-    #   (lib.optionalString (currentSystemName == "darwin-corp") ''
-    #     # Cloudtop hosts.
-    #     Host *.c.googlers.com
-    #       ControlMaster auto
-    #       ControlPath ~/.ssh/cloudtop-ctrl-%C
-    #       ControlPersist yes
-    #       Compression yes
-    #       ServerAliveInternal 60
-    #       # Forward ADB server port.
-    #       RemoteForward 5037 127.0.0.1:5037
-    #   '')
-    # ];
   };
 
-  # Make cursor not tiny on HiDPI screens
-  home.pointerCursor = mkIf isLinux {
+  # Make cursor not tiny on HiDPI screens.
+  home.pointerCursor = mkIf (isLinux && !isHeadless) {
     name = "Vanilla-DMZ";
     package = pkgs.vanilla-dmz;
     size = 128;

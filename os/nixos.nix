@@ -1,8 +1,10 @@
-{ pkgs, lib, ... }:
-
 {
+  pkgs,
+  lib,
+  ...
+}: {
   # https://github.com/nix-community/home-manager/pull/2408
-  environment.pathsToLink = [ "/share/fish" ];
+  environment.pathsToLink = ["/share/fish"];
 
   # Add ~/.local/bin to PATH
   environment.localBinInPath = true;
@@ -16,7 +18,7 @@
   users.users.delay = {
     isNormalUser = true;
     home = "/home/delay";
-    extraGroups = [ "docker" "wheel" ];
+    extraGroups = ["docker" "wheel"];
     shell = pkgs.fish;
     # Create a hashed password with `nix-shell -p mkpasswd --run "mkpasswd -m yescrypt"`
     hashedPassword = "$y$j9T$6Obep7H1BnzgcBCOdY9hO/$tyLpdkxXnRPumeqlm43Uh4UPj1UQgymEiREPSr49ZR1";
@@ -26,16 +28,17 @@
   };
 
   # Enable the unfree 1Password packages
-  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-    "1password"
-    "1password-gui"
-  ];
+  nixpkgs.config.allowUnfreePredicate = pkg:
+    builtins.elem (lib.getName pkg) [
+      "1password"
+      "1password-gui"
+    ];
 
   programs._1password.enable = true;
   programs._1password-gui = {
     enable = true;
     # Certain features, including CLI integration and system authentication support,
     # require enabling PolKit integration on some desktop environments (e.g. Plasma).
-    polkitPolicyOwners = [ "delay" ];
+    polkitPolicyOwners = ["delay"];
   };
 }

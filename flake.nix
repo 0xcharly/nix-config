@@ -2,8 +2,8 @@
   description = "NixOS systems and configs for delay";
 
   nixConfig = {
-    extra-substituters = [ "https://0xcharly-nixos-config.cachix.org" ];
-    extra-trusted-public-keys = [ "0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU=" ];
+    extra-substituters = ["https://0xcharly-nixos-config.cachix.org"];
+    extra-trusted-public-keys = ["0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU="];
   };
 
   inputs = {
@@ -86,7 +86,7 @@
         hooks = {
           alejandra.enable = true;
           # luacheck.enable = true;
-          markdownlint.enable = true;
+          # markdownlint.enable = true;
           # nixpkgs-fmt.enable = true;
           stylua.enable = true;
         };
@@ -96,25 +96,31 @@
       checks = {inherit pre-commit-check;};
     })
     // {
-      nixosConfigurations.vm-aarch64 = mkSystem "vm-aarch64" {
-        system = "aarch64-linux";
-        user = "delay";
+      nixosConfigurations.vm-aarch64 = mkSystem {
+        osConfiguration = ./os/nixos.nix;
+        hostConfiguration = ./hosts/vm-aarch64.nix;
+        # TODO: set in host configuration.
+        # hostPlatform = "aarch64-linux";
       };
 
-      nixosConfigurations.vm-linode = mkSystem "vm-linode" {
-        system = "x86_64-linux";
-        user = "delay";
+      nixosConfigurations.vm-linode = mkSystem {
+        osConfiguration = ./os/nixos.nix;
+        hostConfiguration = ./hosts/vm-linode.nix;
+        # TODO: set in host configuration.
+        # hostPlatform = "x86_64-linux";
       };
 
-      darwinConfigurations.darwin = mkSystem "darwin" {
-        system = "aarch64-darwin";
-        user = "delay";
+      darwinConfigurations.darwin = mkSystem {
+        osConfiguration = ./os/darwin.nix;
+        hostConfiguration = ./hosts/darwin.nix;
         isDarwin = true;
       };
 
-      darwinConfigurations.darwin-corp = mkSystem "darwin-corp" {
-        system = "aarch64-darwin";
-        user = "delay";
+      # Corp MacBook M1 Max.
+      darwinConfigurations."charly" = mkSystem {
+        osConfiguration = ./os/darwin.nix;
+        hostConfiguration = ./hosts/darwin-corp.nix;
+        isCorpManaged = true;
         isDarwin = true;
       };
     };

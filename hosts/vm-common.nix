@@ -1,11 +1,4 @@
-{
-  channels,
-  config,
-  pkgs,
-  lib,
-  currentSystemName,
-  ...
-}: {
+{pkgs, ...}: {
   imports = [./common.nix];
 
   # Be careful updating this.
