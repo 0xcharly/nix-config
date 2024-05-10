@@ -86,7 +86,12 @@
         hooks = {
           alejandra.enable = true;
           # luacheck.enable = true;
-          # markdownlint.enable = true;
+          markdownlint = {
+            enable = true;
+            settings.configuration = {
+              MD034 = false;
+            };
+          };
           # nixpkgs-fmt.enable = true;
           stylua.enable = true;
         };
@@ -99,15 +104,12 @@
       nixosConfigurations.vm-aarch64 = mkSystem {
         osConfiguration = ./os/nixos.nix;
         hostConfiguration = ./hosts/vm-aarch64.nix;
-        # TODO: set in host configuration.
-        # hostPlatform = "aarch64-linux";
       };
 
       nixosConfigurations.vm-linode = mkSystem {
         osConfiguration = ./os/nixos.nix;
         hostConfiguration = ./hosts/vm-linode.nix;
-        # TODO: set in host configuration.
-        # hostPlatform = "x86_64-linux";
+        isHeadless = true;
       };
 
       darwinConfigurations.darwin = mkSystem {
@@ -117,7 +119,9 @@
       };
 
       # Corp MacBook M1 Max.
-      darwinConfigurations."charly" = mkSystem {
+      # TODO: rename to mbp-delay-strm
+      # TODO: rename and add config for mbp-delay-roam
+      darwinConfigurations.charly = mkSystem {
         osConfiguration = ./os/darwin.nix;
         hostConfiguration = ./hosts/darwin-corp.nix;
         isCorpManaged = true;

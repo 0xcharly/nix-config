@@ -1,4 +1,4 @@
-{ config, pkgs, ... }: {
+{...}: {
   imports = [
     ./hardware/vm-linode.nix
     ./vm-common.nix

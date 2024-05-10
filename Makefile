@@ -15,10 +15,10 @@ BOOTSTRAP0_SSH_OPTIONS=-o PubkeyAuthentication=no -o UserKnownHostsFile=/dev/nul
 SSH_OPTIONS=-o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
 
 switch:
-	sudo NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild --show-trace switch --flake ".#${NIXNAME}"
+	sudo NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild --show-trace switch --flake .
 
 test:
-	sudo NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild test --flake ".#$(NIXNAME)"
+	sudo NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild test --flake .
 
 # This builds the given NixOS configuration and pushes the results to the
 # cache. This does not alter the current running system. This requires
@@ -28,24 +28,21 @@ cache:
 		| jq -r '.[].outputs | to_entries[].value' \
 		| op plugin run -- cachix push 0xcharly-nixos-config
 
-# bootstrap a brand new VM. The VM should have NixOS ISO on the CD drive
-# and just set the password of the root user to "root". This will install
-# NixOS. After installing NixOS, you must reboot and set the root password
-# for the next step.
+# bootstrap a brand new VM. The VM should have NixOS ISO on the CD drive and
+# just set the password of the root user. This will install NixOS and reboot.
 #
-# NOTE(mitchellh): I'm sure there is a way to do this and bootstrap all
-# in one step but when I tried to merge them I got errors. One day.
+# TODO(delay): do this and vm/bootstrap all in one step.
 vm/bootstrap0:
 	ssh $(BOOTSTRAP0_SSH_OPTIONS) -p$(NIXPORT) -lroot $(NIXADDR) "bash -" < $(MAKEFILE_DIR)/bootstrap0-$(NIXNAME).sh
 
-# after bootstrap0, run this to finalize. After this, do everything else
-# in the VM unless secrets change.
+# After bootstrap0, run this to finalize. After this, do everything else in the
+# VM.
 vm/bootstrap:
 	NIXUSER=root $(MAKE) vm/copy
 	NIXUSER=root $(MAKE) vm/switch
 	ssh $(SSH_OPTIONS) -p$(NIXPORT) -l$(NIXUSER) $(NIXADDR) "sudo reboot"
 
-# copy the Nix configurations into the VM.
+# Copy the Nix configurations into the VM.
 vm/copy:
 	rsync -av -e 'ssh $(SSH_OPTIONS) -p$(NIXPORT)' \
 		--exclude='vendor/' \
@@ -58,8 +55,8 @@ vm/copy:
 		--rsync-path="sudo rsync" \
 		$(MAKEFILE_DIR)/ $(NIXUSER)@$(NIXADDR):/nix-config
 
-# run the nixos-rebuild switch command. This does NOT copy files so you
-# have to run vm/copy before.
+# Run the nixos-rebuild switch command. This does NOT copy files so you have to
+# run vm/copy before.
 vm/switch:
 	ssh $(SSH_OPTIONS) -p$(NIXPORT) -l$(NIXUSER) $(NIXADDR) \
 		"sudo NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1 nixos-rebuild --option accept-flake-config true switch --flake \"/nix-config#${NIXNAME}\""

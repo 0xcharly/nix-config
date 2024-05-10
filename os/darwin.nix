@@ -27,6 +27,4 @@
     home = "/Users/delay";
     shell = pkgs.fish;
   };
-
-  nixpkgs.hostPlatform = "aarch64-darwin";
 }

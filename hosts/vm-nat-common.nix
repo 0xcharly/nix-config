@@ -9,9 +9,6 @@
   # "error switching console mode" on boot.
   boot.loader.systemd-boot.consoleMode = "0";
 
-  # Define your hostname.
-  networking.hostName = "dev";
-
   # Don't require password for sudo.
   security.sudo.wheelNeedsPassword = false;
 

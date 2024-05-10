@@ -22,8 +22,6 @@
     else inputs.home-manager.nixosModules;
 in
   osSystem {
-    # Replaced with |opt.hostPlatform|. TODO: need to update NixOS config.
-    # system = hostPlatform;
     specialArgs = {inherit isCorpManaged isHeadless;};
 
     modules = [
@@ -31,12 +29,10 @@ in
       osConfiguration
       hmModules.home-manager
       {
-        home-manager.extraSpecialArgs = {inherit isCorpManaged isHeadless;};
+        home-manager.extraSpecialArgs = {inherit inputs isCorpManaged isHeadless;};
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
-        home-manager.users.${user} = import ../users/${user}/home-manager.nix {
-          inputs = inputs;
-        };
+        home-manager.users.${user} = import ../users/${user}/home-manager.nix;
       }
     ];
   }

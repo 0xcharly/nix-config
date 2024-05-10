@@ -1,4 +1,5 @@
-{inputs, ...}: {
+{
+  inputs,
   isCorpManaged,
   isHeadless,
   lib,
