@@ -110,7 +110,7 @@
         isHeadless = true;
       };
 
-      darwinConfigurations.mac-studio = mkSystem {
+      darwinConfigurations.studio = mkSystem {
         configuration = ./hosts/darwin.nix;
         isDarwin = true;
       };
@@ -121,9 +121,20 @@
       };
 
       # Corp MacBooks.
-      # TODO: rename to mbp-delay
-      # TODO: rename and add config for mbp-delay-roam
+      # TODO: delete once renamed to mbp-delay
       darwinConfigurations.charly = mkSystem {
+        configuration = ./hosts/darwin-corp.nix;
+        isCorpManaged = true;
+        isDarwin = true;
+      };
+
+      darwinConfigurations.mbp-delay = mkSystem {
+        configuration = ./hosts/darwin-corp.nix;
+        isCorpManaged = true;
+        isDarwin = true;
+      };
+
+      darwinConfigurations.mbp-delay-roam = mkSystem {
         configuration = ./hosts/darwin-corp.nix;
         isCorpManaged = true;
         isDarwin = true;

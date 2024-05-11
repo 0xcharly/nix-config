@@ -1,6 +1,4 @@
 {pkgs, ...}: {
-  imports = [./shared.nix];
-
   # Be careful updating this.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
@@ -15,46 +13,9 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
 
-  # Windowing environment.
-  services.xserver = {
-    enable = true;
-    xkb.layout = "us";
-    xrandrHeads = ["Virtual-1"];
-    autorun = true;
-
-    desktopManager = {
-      xterm.enable = false;
-      wallpaper.mode = "fill";
-    };
-
-    displayManager = {
-      gdm.enable = true;
-
-      sessionCommands = ''
-        ${pkgs.xorg.xset}/bin/xset r rate 200 40
-      '';
-    };
-
-    windowManager.i3.enable = true;
-  };
-
-  services.displayManager = {
-    enable = true;
-    defaultSession = "none+i3";
-  };
-
-  services.fprintd.enable = true;
-
   console = {
     font = "Lat2-Terminus16";
     keyMap = "us";
-  };
-
-  # Manage fonts.
-  fonts = {
-    fontDir.enable = true;
-
-    packages = import ../../modules/fonts {pkgs = pkgs;};
   };
 
   # Enable tailscale. We manually authenticate when we want with
@@ -72,25 +33,7 @@
     gnumake
     killall
     rxvt_unicode
-    xclip
   ];
-
-  environment.etc = {
-    "xdg/gtk-2.0/gtkrc".text = ''
-      gtk-application-prefer-dark-theme=1
-      gtk-error-bell=0
-    '';
-    "xdg/gtk-3.0/settings.ini".text = ''
-      [Settings]
-      gtk-application-prefer-dark-theme=1
-      gtk-error-bell=false
-    '';
-    "xdg/gtk-4.0/settings.ini".text = ''
-      [Settings]
-      gtk-application-prefer-dark-theme=1
-      gtk-error-bell=false
-    '';
-  };
 
   # TODO: Reenable when configuration is more stable and reinstall less frequent.
   # documentation = {

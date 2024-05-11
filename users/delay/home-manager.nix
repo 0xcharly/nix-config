@@ -6,22 +6,13 @@
   pkgs,
   ...
 }: let
-  inherit (lib) mkIf;
   inherit (pkgs.stdenv) isDarwin isLinux;
 
   nvim-pkg = inputs.nvim.packages.${pkgs.system}.stable;
   wezterm-pkg = inputs.wezterm.packages.${pkgs.system}.default;
 
-  _1passwordAgentPath = (
-    if isDarwin
-    then "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
-    else "~/.1password/agent.sock"
-  );
-  _1passwordSshSignPath = (
-    if isDarwin
-    then "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
-    else "${pkgs._1password-gui}/bin/op-ssh-sign"
-  );
+  _1passwordAgentPathMacOS = "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
+  _1passwordSshSignPathMacOS = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
 in {
   home.stateVersion = "23.11";
   programs.home-manager.enable = true;
@@ -79,10 +70,10 @@ in {
       LANG = "en_US.UTF-8";
       LC_CTYPE = "en_US.UTF-8";
       LC_ALL = "en_US.UTF-8";
-      PAGER = "less -FirSwX";
-      MANPAGER = "nvim +Man!";
       BAT_THEME = "base16";
-      TERMINAL = "wezterm";
+      PAGER = "less -FirSwX";
+      MANPAGER = "${nvim-pkg}/bin/nvim +Man!";
+      TERMINAL = "${wezterm-pkg}/bin/wezterm";
     }
     // (lib.optionalAttrs isDarwin {
       HOMEBREW_NO_AUTO_UPDATE = 1;
@@ -98,7 +89,7 @@ in {
         #   "ghostty/config".text = builtins.readFile ./ghostty.linux;
       });
 
-    mimeApps = {
+    mimeApps = lib.mkIf (isLinux && !isHeadless) {
       defaultApplications = {
         "text/html" = "firefox-devedition.desktop";
         "x-scheme-handler/http" = "firefox-devedition.desktop";
@@ -113,7 +104,7 @@ in {
   # Programs
   #---------------------------------------------------------------------
 
-  xsession = mkIf (isLinux && !isHeadless) {
+  xsession = lib.mkIf (isLinux && !isHeadless) {
     enable = true;
     windowManager.i3 = rec {
       enable = true;
@@ -168,6 +159,7 @@ in {
     interactiveShellInit = lib.strings.concatStringsSep "\n" [
       (builtins.readFile ./config.fish)
       "set -g SHELL ${pkgs.fish}/bin/fish"
+      (lib.optionalString isLinux "eval $(${pkgs.keychain}/bin/keychain --eval --nogui --quiet)")
     ];
 
     shellAliases =
@@ -196,7 +188,7 @@ in {
       ];
   };
 
-  programs.wezterm = mkIf (!isHeadless) {
+  programs.wezterm = lib.mkIf (!isHeadless) {
     enable = true;
     package = wezterm-pkg;
     extraConfig = lib.strings.concatStringsSep "\n" [
@@ -229,25 +221,28 @@ in {
       prettylog = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(r) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
       root = "rev-parse --show-toplevel";
     };
-    extraConfig = {
-      branch.autosetuprebase = "always";
-      color.ui = true;
-      github.user = "0xcharly";
-      push.default = "tracking";
-      init.defaultBranch = "main";
-      branch.sort = "-committerdate";
-      credential."https://github.com".helper = "!gh auth git-credential";
-      credential."https://gist.github.com".helper = "!gh auth git-credential";
-      gpg.format = "ssh";
-      gpg.ssh.program = _1passwordSshSignPath;
-      commit.gpgsign = true;
-      filter.lfs = {
-        clean = "git-lfs clean -- %f";
-        smudge = "git-lfs smudge -- %f";
-        process = "git-lfs filter-process";
-        required = true;
-      };
-    };
+    extraConfig =
+      {
+        branch.autosetuprebase = "always";
+        color.ui = true;
+        github.user = "0xcharly";
+        push.default = "tracking";
+        init.defaultBranch = "main";
+        branch.sort = "-committerdate";
+        credential."https://github.com".helper = "!gh auth git-credential";
+        credential."https://gist.github.com".helper = "!gh auth git-credential";
+        gpg.format = "ssh";
+        commit.gpgsign = true;
+        filter.lfs = {
+          clean = "git-lfs clean -- %f";
+          smudge = "git-lfs smudge -- %f";
+          process = "git-lfs filter-process";
+          required = true;
+        };
+      }
+      // (lib.optionalAttrs isDarwin {
+        gpg.ssh.program = _1passwordSshSignPathMacOS;
+      });
   };
 
   programs.tmux = {
@@ -259,7 +254,7 @@ in {
     extraConfig = builtins.readFile ./tmux;
   };
 
-  xresources = mkIf (isLinux && !isHeadless) {
+  xresources = lib.mkIf (isLinux && !isHeadless) {
     extraConfig = builtins.readFile ./Xresources;
   };
 
@@ -270,11 +265,15 @@ in {
         # Personal hosts.
         "github.com" = {
           user = "git";
-          extraOptions = {"IdentityAgent" = "\"${_1passwordAgentPath}\"";};
+          extraOptions =
+            lib.optionalAttrs isDarwin {IdentityAgent = "\"${_1passwordAgentPathMacOS}\"";}
+            // (lib.optionalAttrs (isLinux && !isHeadless) {IdentityFile = "~/.ssh/github";});
         };
         "linode" = {
           hostname = "172.105.192.143";
-          extraOptions = {"IdentityAgent" = "\"${_1passwordAgentPath}\"";};
+          extraOptions =
+            lib.optionalAttrs isDarwin {IdentityAgent = "\"${_1passwordAgentPathMacOS}\"";}
+            // (lib.optionalAttrs (isLinux && !isHeadless) {IdentityFile = "~/.ssh/linode";});
           forwardAgent = true;
         };
       }
@@ -282,13 +281,12 @@ in {
         # Home storage host.
         "skullkid.local" = {
           hostname = "192.168.86.43";
-          extraOptions = {"IdentityAgent" = "\"${_1passwordAgentPath}\"";};
+          extraOptions = {IdentityAgent = "\"${_1passwordAgentPathMacOS}\"";};
           forwardAgent = true;
         };
         # VMWare hosts.
         "192.168.*" = {
-          user = "git";
-          extraOptions = {"IdentityAgent" = "\"${_1passwordAgentPath}\"";};
+          extraOptions = {IdentityAgent = "\"${_1passwordAgentPathMacOS}\"";};
         };
       })
       // (lib.optionalAttrs (isDarwin && isCorpManaged) {
@@ -304,16 +302,16 @@ in {
           ];
           serverAliveInterval = 60;
           extraOptions = {
-            "ControlMaster" = "auto";
-            "ControlPath" = "~/.ssh/cloudtop-ctrl-%C";
-            "ControlPersist" = "yes";
+            ControlMaster = "auto";
+            ControlPath = "~/.ssh/cloudtop-ctrl-%C";
+            ControlPersist = "yes";
           };
         };
       });
   };
 
   # Make cursor not tiny on HiDPI screens.
-  home.pointerCursor = mkIf (isLinux && !isHeadless) {
+  home.pointerCursor = lib.mkIf (isLinux && !isHeadless) {
     name = "Vanilla-DMZ";
     package = pkgs.vanilla-dmz;
     size = 128;

@@ -2,7 +2,7 @@
   imports = [
     ./hw/vm-aarch64.nix
     ./os/nixos.nix
-    ./shared/nixos.nix
+    ./shared/nixos-x11.nix
     ../modules/vmware-guest.nix
   ];
 
@@ -23,8 +23,8 @@
   # Don't require password for sudo.
   security.sudo.wheelNeedsPassword = false;
 
-  # Interface is this on M1, M3.
-  networking.interfaces.ens160.useDHCP = true;
+  # Interface names on M1, M3.
+  networking.interfaces.ens160.useDHCP = true; # NAT adapter.
 
   # Disable the firewall since we're in a VM and we want to make it
   # easy to visit stuff in here. We only use NAT networking anyways.

@@ -2,7 +2,7 @@
   imports = [
     ./hw/vm-linode.nix
     ./os/nixos.nix
-    ./shared/nixos.nix
+    ./shared/nixos-headless.nix
   ];
 
   # Most of Linode’s default images have had systemd’s predictable interface
