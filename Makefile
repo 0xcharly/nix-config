@@ -77,11 +77,11 @@ vm/copy:
 vm/copy-secrets:
 	op read "op://private/GitHub SSH Key/encrypted private key" \
 		| ssh $(SSH_OPTIONS) -p$(NIXPORT) -l$(NIXUSER) $(NIXADDR) 'dd of=$$HOME/.ssh/github'
-	op read "op://private/Git Commit Signing SSH Key/encrypted private key"
+	op read "op://private/Git Commit Signing SSH Key/encrypted private key" \
 		| ssh $(SSH_OPTIONS) -p$(NIXPORT) -l$(NIXUSER) $(NIXADDR) 'dd of=$$HOME/.ssh/git-signin'
 	op read "op://private/Linode SSH Key/encrypted private key" \
 		| ssh $(SSH_OPTIONS) -p$(NIXPORT) -l$(NIXUSER) $(NIXADDR) 'dd of=$$HOME/.ssh/linode'
-	ssh $(SSH_OPTIONS) -p$(NIXPORT) -l$(NIXUSER) $(NIXADDR) 'chmod 400 $$HOME/.ssh/{github,git-signin,linode}'
+	ssh $(SSH_OPTIONS) -p$(NIXPORT) -l$(NIXUSER) $(NIXADDR) 'chmod 600 $$HOME/.ssh/{github,git-signin,linode}'
 
 # Run the nixos-rebuild switch command. This does NOT copy files so you have to
 # run vm/copy before.
