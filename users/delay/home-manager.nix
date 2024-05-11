@@ -213,10 +213,12 @@ in {
     enable = true;
     userName = "Charly Delay";
     userEmail = "charly@delay.gg";
-    signing = {
-      key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPf5EWFb/MW+1ZdQxDLZJWPrgrtibMcCmmKeCp+QMWBl";
-      signByDefault = true;
-    };
+    signing =
+      {
+        key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPf5EWFb/MW+1ZdQxDLZJWPrgrtibMcCmmKeCp+QMWBl";
+        signByDefault = true;
+      }
+      // (lib.optionalAttrs isDarwin {gpgPath = _1passwordSshSignPathMacOS;});
     aliases = {
       prettylog = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(r) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
       root = "rev-parse --show-toplevel";
@@ -241,6 +243,7 @@ in {
         };
       }
       // (lib.optionalAttrs isDarwin {
+        gpg.format = "ssh";
         gpg.ssh.program = _1passwordSshSignPathMacOS;
       });
   };
