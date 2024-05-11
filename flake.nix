@@ -115,7 +115,7 @@
         isDarwin = true;
       };
 
-      darwinConfigurations.mpb-roam = mkSystem {
+      darwinConfigurations.mbp-roam = mkSystem {
         configuration = ./hosts/darwin.nix;
         isDarwin = true;
       };

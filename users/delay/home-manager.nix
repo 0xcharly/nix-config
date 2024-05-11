@@ -43,6 +43,11 @@ in {
       pkgs.nixpkgs-fmt
 
       nvim-pkg
+
+      pkgs.fishPlugins.done
+      pkgs.fishPlugins.github-copilot-cli-fish
+      pkgs.fishPlugins.fzf
+      pkgs.fishPlugins.foreign-env
     ]
     ++ (lib.optionals (!isHeadless) [pkgs.asciinema])
     ++ (lib.optionals isDarwin [pkgs.scrcpy])
@@ -176,16 +181,6 @@ in {
         pbcopy = "xclip";
         pbpaste = "xclip -o";
       });
-
-    plugins =
-      map
-      (n: {
-        name = n;
-        src = pkgs.fishPlugins.${n};
-      }) [
-        "fzf"
-        "foreign-env"
-      ];
   };
 
   programs.wezterm = lib.mkIf (!isHeadless) {
