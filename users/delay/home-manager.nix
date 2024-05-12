@@ -186,22 +186,7 @@ in {
   programs.wezterm = lib.mkIf (!isHeadless) {
     enable = true;
     package = wezterm-pkg;
-    extraConfig = lib.strings.concatStringsSep "\n" [
-      (builtins.readFile ./wezterm.lua)
-      (lib.optionalString isDarwin
-        ''
-          config.window_decorations = 'INTEGRATED_BUTTONS|RESIZE'
-          config.window_padding = { top = 48, left = 0, right = 0, bottom = 0 }
-        '')
-      (lib.optionalString isLinux
-        ''
-          config.window_decorations = 'NONE'
-          config.window_padding = { top = 8, left = 0, right = 0, bottom = 0 }
-        '')
-      ''
-        return config
-      ''
-    ];
+    extraConfig = builtins.readFile ./wezterm.lua;
   };
 
   programs.git = {

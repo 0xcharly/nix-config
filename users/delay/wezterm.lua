@@ -67,8 +67,9 @@ config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = true
 config.hide_tab_bar_if_only_one_tab = false
 config.show_new_tab_button_in_tab_bar = false
-config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
-config.window_padding = { top = 48, left = 0, right = 0, bottom = 0 }
+config.window_decorations = "RESIZE"
+config.window_padding = { top = 8, left = 0, right = 0, bottom = 0 }
+config.window_close_confirmation = "NeverPrompt"
 config.hyperlink_rules = {
 	{ regex = "\\b\\w+://(?:[\\w.-]+)\\.[a-z]{2,15}\\S*\\b", format = "$0" },
 	{ regex = "\\b\\w+://(?:[\\w.-]+)\\S*\\b", format = "$0" },
@@ -84,3 +85,5 @@ config.keys = {
 		action = wezterm.action.DisableDefaultAssignment,
 	},
 }
+
+return config
