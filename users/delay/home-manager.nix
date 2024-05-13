@@ -42,6 +42,8 @@ in {
       pkgs.nixd
       pkgs.nixpkgs-fmt
 
+      pkgs.tldr
+
       nvim-pkg
 
       pkgs.fishPlugins.done
