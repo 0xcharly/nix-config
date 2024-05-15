@@ -27,6 +27,7 @@
         "1password"
         "1password-cli"
         "arc"
+        "alacritty"
         "discord"
         "firefox"
         "firefox@developer-edition"

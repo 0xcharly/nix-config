@@ -1,6 +1,7 @@
 # This function creates a NixOS system based on our VM setup for a
 # particular architecture.
 {
+  overlays,
   nixpkgs,
   inputs,
 }: {
@@ -24,6 +25,9 @@ in
     specialArgs = {inherit isCorpManaged isHeadless;};
 
     modules = [
+      # Apply our overlays.
+      {nixpkgs.overlays = overlays;}
+
       configuration
       hmModules.home-manager
       {

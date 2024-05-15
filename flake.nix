@@ -39,6 +39,9 @@
 
     # Last stable release.
     wezterm.url = "github:wez/wezterm/20240203-110809-5046fc22?dir=nix";
+
+    # Alacritty Themes (includes Catppuccin).
+    alacritty-theme.url = "github:alexghr/alacritty-theme.nix";
   };
 
   outputs = inputs @ {
@@ -54,8 +57,12 @@
       "x86_64-linux"
     ];
 
+    overlays = [
+      inputs.alacritty-theme.overlays.default
+    ];
+
     mkSystem = import ./lib/mksystem.nix {
-      inherit nixpkgs inputs;
+      inherit overlays nixpkgs inputs;
     };
   in
     flake-utils.lib.eachSystem supportedSystems

@@ -191,6 +191,30 @@ in {
     extraConfig = builtins.readFile ./wezterm.lua;
   };
 
+  programs.alacritty = lib.mkIf (!isHeadless) {
+    enable = true;
+    settings = {
+      import = [pkgs.alacritty-theme.catppuccin_mocha];
+      # import = [ (pkgs.writeText "catppuccin-mocha.toml" (lib.readFile ./catppuccin-mocha.toml)) ];
+      font = {
+        normal.family = "Iosevka Term Curly";
+        size = 14;
+      };
+      keyboard.bindings = [
+        {
+          key = "Tab";
+          mods = "Control";
+          action = "SelectNextTab";
+        }
+        {
+          key = "Tab";
+          mods = "Control|Shift";
+          action = "SelectPreviousTab";
+        }
+      ];
+    };
+  };
+
   programs.git = {
     enable = true;
     userName = "Charly Delay";
