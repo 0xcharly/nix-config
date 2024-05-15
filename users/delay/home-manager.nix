@@ -195,23 +195,43 @@ in {
     enable = true;
     settings = {
       import = [pkgs.alacritty-theme.catppuccin_mocha];
-      # import = [ (pkgs.writeText "catppuccin-mocha.toml" (lib.readFile ./catppuccin-mocha.toml)) ];
       font = {
-        normal.family = "Iosevka Term Curly";
+        normal.family = "IosevkaTerm Nerd Font";
         size = 14;
       };
-      keyboard.bindings = [
-        {
-          key = "Tab";
-          mods = "Control";
-          action = "SelectNextTab";
-        }
-        {
-          key = "Tab";
-          mods = "Control|Shift";
-          action = "SelectPreviousTab";
-        }
+      hints.enabled = let
+        hyperlink = regex: {
+          inherit regex;
+          hyperlinks = true;
+          post_processing = true;
+          mouse.enabled = true;
+          command =
+            if isDarwin
+            then "open"
+            else "xdg-open";
+        };
+      in [
+        (hyperlink "b/[0-9]+")
+        (hyperlink "cl/[0-9]+")
       ];
+      keyboard.bindings =
+        []
+        ++ (lib.optionals isDarwin [
+          {
+            key = "Tab";
+            mods = "Control";
+            action = "SelectNextTab";
+          }
+          {
+            key = "Tab";
+            mods = "Control|Shift";
+            action = "SelectPreviousTab";
+          }
+        ]);
+      window.decorations =
+        if isDarwin
+        then "Transparent"
+        else "None";
     };
   };
 
