@@ -78,6 +78,7 @@ in {
       LC_CTYPE = "en_US.UTF-8";
       LC_ALL = "en_US.UTF-8";
       BAT_THEME = "base16";
+      EDITOR = "${nvim-pkg}/bin/nvim";
       PAGER = "less -FirSwX";
       MANPAGER = "${nvim-pkg}/bin/nvim +Man!";
       TERMINAL = "${wezterm-pkg}/bin/wezterm";
