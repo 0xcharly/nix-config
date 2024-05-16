@@ -47,10 +47,46 @@ in {
       nvim-pkg
 
       pkgs.fishPlugins.done
-      pkgs.fishPlugins.github-copilot-cli-fish
       pkgs.fishPlugins.fzf
       pkgs.fishPlugins.foreign-env
+
+      (pkgs.writeShellScriptBin "term-capabilities" (builtins.readFile ./bin/term-capabilities.sh))
+      (pkgs.writeShellScriptBin "term-truecolors" (builtins.readFile ./bin/term-truecolors.sh))
     ]
+    ++ (
+      lib.optionals (isDarwin && isCorpManaged)
+      (
+        let
+          devices = [
+            {
+              adbId = "33301JEHN18611";
+              name = "Pixel 7a";
+            }
+            {
+              adbId = "35061FDHS000A4";
+              name = "Pixel Fold";
+            }
+            {
+              adbId = "98311FFAZ004TE";
+              name = "Pixel 4";
+            }
+            {
+              adbId = "99091FFBA005TS";
+              name = "Pixel 4 XL";
+            }
+          ];
+        in (builtins.map
+          (device:
+            pkgs.writeShellScriptBin "adb-scrcpy-${device.adbId}"
+            (import ./bin/adb-scrcpy.nix {inherit device;}))
+          devices)
+      )
+      ++ [
+        (pkgs.writeShellScriptBin "adb-scrcpy" (builtins.readFile ./bin/adb-scrcpy.sh))
+        (pkgs.writeShellScriptBin "open-tmux-workspace" (builtins.readFile ./bin/open-tmux-workspace.sh))
+      ]
+    )
+    ++ (lib.optionals (!isCorpManaged) [pkgs.fishPlugins.github-copilot-cli-fish])
     ++ (lib.optionals (!isHeadless) [pkgs.asciinema])
     ++ (lib.optionals isDarwin [pkgs.scrcpy])
     ++ (lib.optionals (isLinux && !isHeadless) [
@@ -196,43 +232,59 @@ in {
     enable = true;
     settings = {
       import = [pkgs.alacritty-theme.catppuccin_mocha];
+      env.TERM = "alacritty";
       font = {
-        normal.family = "IosevkaTerm Nerd Font";
+        normal = {
+          family = "IosevkaTerm Nerd Font";
+          style = "Light";
+        };
+        bold = {
+          family = "IosevkaTerm Nerd Font";
+          style = "Medium";
+        };
         size = 14;
       };
       hints.enabled = let
-        hyperlink = regex: {
+        open-cmd =
+          if isDarwin
+          then "open"
+          else "xdg-open";
+        open-g3-short-links = pkgs.writeShellScriptBin "open-g3-short-links" ''
+          ${open-cmd} "http://$1"
+        '';
+        g3-hyperlink = regex: {
           inherit regex;
           hyperlinks = true;
           post_processing = true;
           mouse.enabled = true;
-          command =
-            if isDarwin
-            then "open"
-            else "xdg-open";
+          command = "${open-g3-short-links}/bin/open-g3-short-links";
         };
       in [
-        (hyperlink "b/[0-9]+")
-        (hyperlink "cl/[0-9]+")
+        (g3-hyperlink "b/[0-9]+")
+        (g3-hyperlink "cl/[0-9]+")
       ];
-      keyboard.bindings =
-        []
-        ++ (lib.optionals isDarwin [
-          {
-            key = "Tab";
-            mods = "Control";
-            action = "SelectNextTab";
-          }
-          {
-            key = "Tab";
-            mods = "Control|Shift";
-            action = "SelectPreviousTab";
-          }
-        ]);
-      window.decorations =
-        if isDarwin
-        then "Transparent"
-        else "None";
+      keyboard.bindings = [
+        {
+          key = "Left";
+          mods = "Control";
+          chars = "\\ed";
+        }
+        {
+          key = "Right";
+          mods = "Control";
+          chars = "\\ef";
+        }
+      ];
+      window = {
+        decorations =
+          if isDarwin
+          then "Buttonless"
+          else "None";
+        padding = {
+          x = 4;
+          y = 4;
+        };
+      };
     };
   };
 
@@ -279,7 +331,14 @@ in {
     aggressiveResize = true;
     secureSocket = true;
 
-    extraConfig = builtins.readFile ./tmux;
+    clock24 = true;
+    escapeTime = 0;
+    historyLimit = 10000;
+    keyMode = "vi";
+    mouse = true;
+    sensibleOnTop = false;
+
+    extraConfig = builtins.readFile ./tmux.conf;
   };
 
   xresources = lib.mkIf (isLinux && !isHeadless) {
