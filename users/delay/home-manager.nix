@@ -117,7 +117,7 @@ in {
       EDITOR = "${nvim-pkg}/bin/nvim";
       PAGER = "less -FirSwX";
       MANPAGER = "${nvim-pkg}/bin/nvim +Man!";
-      TERMINAL = "${wezterm-pkg}/bin/wezterm";
+      TERMINAL = "${pkgs.alacritty}/bin/alacritty";
     }
     // (lib.optionalAttrs isDarwin {
       HOMEBREW_NO_AUTO_UPDATE = 1;
@@ -154,7 +154,7 @@ in {
       enable = true;
       config = {
         modifier = "Mod4";
-        terminal = "${wezterm-pkg}/bin/wezterm";
+        terminal = "${pkgs.alacritty}/bin/alacritty";
         startup = [
           {
             command = config.terminal;
@@ -244,7 +244,7 @@ in {
         };
         size = 14;
       };
-      hints.enabled = let
+      hints.enabled = lib.optionals isCorpManaged (let
         open-cmd =
           if isDarwin
           then "open"
@@ -262,24 +262,21 @@ in {
       in [
         (g3-hyperlink "b/[0-9]+")
         (g3-hyperlink "cl/[0-9]+")
-      ];
-      keyboard.bindings = [
+      ]);
+      keyboard.bindings = lib.optionals isDarwin [
         {
-          key = "Left";
+          key = "Tab";
           mods = "Control";
-          chars = "\\ed";
+          action = "SelectNextTab";
         }
         {
-          key = "Right";
-          mods = "Control";
-          chars = "\\ef";
+          key = "Tab";
+          mods = "Control|Shift";
+          action = "SelectPreviousTab";
         }
       ];
       window = {
-        decorations =
-          if isDarwin
-          then "Buttonless"
-          else "None";
+        decorations = "Full";
         padding = {
           x = 4;
           y = 4;
