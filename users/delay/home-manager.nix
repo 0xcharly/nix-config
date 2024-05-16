@@ -144,15 +144,17 @@ in {
     };
   };
 
-  #---------------------------------------------------------------------
-  # Programs
-  #---------------------------------------------------------------------
-
   xsession = lib.mkIf (isLinux && !isHeadless) {
     enable = true;
     windowManager.i3 = rec {
       enable = true;
-      config = {
+      config = let
+        fonts = {
+          names = ["IosevkaEtoile" "FontAwesome6Free"];
+          style = "Regular";
+          size = 12.0;
+        };
+      in {
         modifier = "Mod4";
         terminal = "${pkgs.alacritty}/bin/alacritty";
         startup = [
@@ -169,6 +171,14 @@ in {
           "${config.modifier}+3" = "workspace 3";
           "${config.modifier}+4" = "workspace 4";
           "${config.modifier}+5" = "workspace 5";
+          "${config.modifier}+Left" = "focus left";
+          "${config.modifier}+Right" = "focus right";
+          "${config.modifier}+Up" = "focus up";
+          "${config.modifier}+Down" = "focus down";
+          "${config.modifier}+Shift+Left" = "move left";
+          "${config.modifier}+Shift+Right" = "move right";
+          "${config.modifier}+Shift+Up" = "move up";
+          "${config.modifier}+Shift+Down" = "move down";
           "${config.modifier}+Shift+1" = "move container to workspace 1";
           "${config.modifier}+Shift+2" = "move container to workspace 2";
           "${config.modifier}+Shift+3" = "move container to workspace 3";
@@ -177,24 +187,29 @@ in {
           "${config.modifier}+Shift+c" = "reload";
           "${config.modifier}+Shift+r" = "restart";
         };
-        bars = [
-          {
-            fonts = {
-              names = ["IosevkaEtoile" "FontAwesome6Free"];
-              style = "Regular";
-              size = 12.0;
-            };
-          }
-        ];
+        inherit fonts;
+        bars = [{inherit fonts;}];
       };
     };
   };
+
+  #---------------------------------------------------------------------
+  # Programs
+  #---------------------------------------------------------------------
 
   # TODO: Reenable when configuration is more stable and reinstall less frequent.
   # programs.man = {
   #   enable = true;
   #   generateCaches = true;
   # };
+
+  programs.direnv = {
+    enable = true;
+    enableBashIntegration = true;
+    # enableFishIntegration = true; # read-only; always enabled.
+    enableZshIntegration = true;
+    nix-direnv.enable = true;
+  };
 
   programs.bash.enable = true;
 
@@ -244,25 +259,27 @@ in {
         };
         size = 14;
       };
-      hints.enabled = lib.optionals isCorpManaged (let
-        open-cmd =
-          if isDarwin
-          then "open"
-          else "xdg-open";
-        open-g3-short-links = pkgs.writeShellScriptBin "open-g3-short-links" ''
-          ${open-cmd} "http://$1"
-        '';
-        g3-hyperlink = regex: {
-          inherit regex;
-          hyperlinks = true;
-          post_processing = true;
-          mouse.enabled = true;
-          command = "${open-g3-short-links}/bin/open-g3-short-links";
-        };
-      in [
-        (g3-hyperlink "b/[0-9]+")
-        (g3-hyperlink "cl/[0-9]+")
-      ]);
+      hints.enabled = lib.optionals isCorpManaged (
+        let
+          open-cmd =
+            if isDarwin
+            then "open"
+            else "xdg-open";
+          open-g3-short-links = pkgs.writeShellScriptBin "open-g3-short-links" ''
+            ${open-cmd} "http://$1"
+          '';
+          g3-hyperlink = regex: {
+            inherit regex;
+            hyperlinks = true;
+            post_processing = true;
+            mouse.enabled = true;
+            command = "${open-g3-short-links}/bin/open-g3-short-links";
+          };
+        in [
+          (g3-hyperlink "b/[0-9]+")
+          (g3-hyperlink "cl/[0-9]+")
+        ]
+      );
       keyboard.bindings = lib.optionals isDarwin [
         {
           key = "Tab";

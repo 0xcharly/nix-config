@@ -104,7 +104,7 @@
         };
       };
     in {
-      devShells = {default = shell;};
+      devShells.default = shell;
       checks = {inherit pre-commit-check;};
     })
     // {

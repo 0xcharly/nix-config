@@ -20,7 +20,7 @@ function fish_mode_prompt -d "Disable prompt vi mode reporting"
 end
 
 function fish_prompt
-    set_color brgrey
+    set_color -o brgrey
     string repeat --count $SHLVL --no-newline ":"
     printf " "
     set_color normal
