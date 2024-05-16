@@ -99,7 +99,6 @@
               MD034 = false;
             };
           };
-          # nixpkgs-fmt.enable = true;
           stylua.enable = true;
         };
       };
