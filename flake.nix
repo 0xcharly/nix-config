@@ -126,14 +126,6 @@
         isDarwin = true;
       };
 
-      # Corp MacBooks.
-      # TODO: delete once renamed to mbp-delay
-      darwinConfigurations.charly = mkSystem {
-        configuration = ./hosts/darwin-corp.nix;
-        isCorpManaged = true;
-        isDarwin = true;
-      };
-
       darwinConfigurations.mbp-delay = mkSystem {
         configuration = ./hosts/darwin-corp.nix;
         isCorpManaged = true;
