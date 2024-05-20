@@ -22,6 +22,7 @@
     };
     flake-utils.url = "github:numtide/flake-utils";
 
+    # Manages home directory, dotfiles and base environment.
     home-manager = {
       # TODO: Change this to the next stable channel (24.05) when it's released.
       # url = "github:nix-community/home-manager/release-24.05";
@@ -29,13 +30,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nvim.url = "github:0xcharly/nix-config-nvim";
-
+    # macOS system configuration with Nix.
     darwin = {
       url = "github:LnL7/nix-darwin";
-      # inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Neovim overlay with personal configuration.
+    nvim.url = "github:0xcharly/nix-config-nvim";
 
     # Last stable release.
     wezterm.url = "github:wez/wezterm/20240203-110809-5046fc22?dir=nix";
