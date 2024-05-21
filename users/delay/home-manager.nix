@@ -11,6 +11,8 @@
   nvim-pkg = inputs.nvim.packages.${pkgs.system}.stable;
   wezterm-pkg = inputs.wezterm.packages.${pkgs.system}.default;
 
+  mdproxyLocalRoot = "~/mdproxy";
+
   _1passwordAgentPathMacOS = "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
   _1passwordSshSignPathMacOS = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
 in {
@@ -211,7 +213,45 @@ in {
     nix-direnv.enable = true;
   };
 
-  programs.bash.enable = true;
+  programs.bash = {
+    enable = true;
+    # profileExtra = lib.optionalString (isDarwin && isCorpManaged) (let
+    #   mdproxy_bash_profile = "${mdproxyLocalRoot}/data/mdproxy_bash_profile";
+    # in ''
+    #   [[ -z "$ZSH_VERSION" && -e "${mdproxy_bash_profile}" ]] && source "${mdproxy_bash_profile}" # MDPROXY-BASH-PROFILE
+    # '');
+  };
+
+  home.file.".bash_profile".source = lib.mkForce (pkgs.writeTextFile {
+    name = "bash_profile";
+    text =
+      ''
+        # include .profile if it exists
+        [[ -f ~/.profile ]] && . ~/.profile
+
+        # include .bashrc if it exists
+        [[ -f ~/.bashrc ]] && . ~/.bashrc
+      ''
+      + lib.optionalString (isDarwin && isCorpManaged) (
+        let
+          mdproxy_bash_profile = "${mdproxyLocalRoot}/data/mdproxy_bash_profile";
+        in ''
+          [[ -z "$ZSH_VERSION" && -e "${mdproxy_bash_profile}" ]] && source "${mdproxy_bash_profile}" # MDPROXY-BASH-PROFILE
+        ''
+      );
+    checkPhase = ''
+      ${pkgs.stdenv.shellDryRun} "$target"
+    '';
+  });
+
+  programs.zsh = {
+    enable = true;
+    initExtra = lib.optionalString (isDarwin && isCorpManaged) (let
+      mdproxy_zshrc = "${mdproxyLocalRoot}/data/mdproxy_zshrc";
+    in ''
+      [[ -e "${mdproxy_zshrc}" ]] && source "${mdproxy_zshrc}" # MDPROXY-ZSHRC
+    '');
+  };
 
   programs.fish = {
     enable = true;
@@ -393,6 +433,7 @@ in {
       // (lib.optionalAttrs (isDarwin && isCorpManaged) {
         "*.c.googlers.com" = {
           compression = true;
+          forwardAgent = true;
           remoteForwards = [
             # Forward ADB server port.
             {
@@ -404,11 +445,12 @@ in {
           serverAliveInterval = 60;
           extraOptions = {
             ControlMaster = "auto";
-            ControlPath = "~/.ssh/cloudtop-ctrl-%C";
+            ControlPath = "~/.ssh/master-%C";
             ControlPersist = "yes";
           };
         };
       });
+    includes = lib.optionals (isDarwin && isCorpManaged) ["~/mdproxy/data/ssh_config"];
   };
 
   # Make cursor not tiny on HiDPI screens.
