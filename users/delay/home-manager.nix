@@ -12,9 +12,6 @@
   wezterm-pkg = inputs.wezterm.packages.${pkgs.system}.default;
 
   mdproxyLocalRoot = "~/mdproxy";
-
-  _1passwordAgentPathMacOS = "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
-  _1passwordSshSignPathMacOS = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
 in {
   home.stateVersion = "23.11";
   programs.home-manager.enable = true;
@@ -354,29 +351,24 @@ in {
       prettylog = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(r) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
       root = "rev-parse --show-toplevel";
     };
-    extraConfig =
-      {
-        branch.autosetuprebase = "always";
-        color.ui = true;
-        github.user = "0xcharly";
-        push.default = "tracking";
-        init.defaultBranch = "main";
-        branch.sort = "-committerdate";
-        credential."https://github.com".helper = "!gh auth git-credential";
-        credential."https://gist.github.com".helper = "!gh auth git-credential";
-        gpg.format = "ssh";
-        commit.gpgsign = true;
-        filter.lfs = {
-          clean = "git-lfs clean -- %f";
-          smudge = "git-lfs smudge -- %f";
-          process = "git-lfs filter-process";
-          required = true;
-        };
-      }
-      // (lib.optionalAttrs isDarwin {
-        gpg.format = "ssh";
-        gpg.ssh.program = _1passwordSshSignPathMacOS;
-      });
+    extraConfig = {
+      branch.autosetuprebase = "always";
+      color.ui = true;
+      github.user = "0xcharly";
+      push.default = "tracking";
+      init.defaultBranch = "main";
+      branch.sort = "-committerdate";
+      credential."https://github.com".helper = "!gh auth git-credential";
+      credential."https://gist.github.com".helper = "!gh auth git-credential";
+      gpg.format = "ssh";
+      commit.gpgsign = true;
+      filter.lfs = {
+        clean = "git-lfs clean -- %f";
+        smudge = "git-lfs smudge -- %f";
+        process = "git-lfs filter-process";
+        required = true;
+      };
+    };
   };
 
   programs.tmux = {
@@ -407,14 +399,12 @@ in {
         "github.com" = {
           user = "git";
           extraOptions =
-            lib.optionalAttrs isDarwin {IdentityAgent = "\"${_1passwordAgentPathMacOS}\"";}
-            // (lib.optionalAttrs (isLinux && !isHeadless) {IdentityFile = "~/.ssh/github";});
+            lib.optionalAttrs (isLinux && !isHeadless) {IdentityFile = "~/.ssh/github";};
         };
         "linode" = {
           hostname = "172.105.192.143";
           extraOptions =
-            lib.optionalAttrs isDarwin {IdentityAgent = "\"${_1passwordAgentPathMacOS}\"";}
-            // (lib.optionalAttrs (isLinux && !isHeadless) {IdentityFile = "~/.ssh/linode";});
+            lib.optionalAttrs (isLinux && !isHeadless) {IdentityFile = "~/.ssh/linode";};
           forwardAgent = true;
         };
       }
@@ -422,12 +412,14 @@ in {
         # Home storage host.
         "skullkid.local" = {
           hostname = "192.168.86.43";
-          extraOptions = {IdentityAgent = "\"${_1passwordAgentPathMacOS}\"";};
+          extraOptions =
+            lib.optionalAttrs (isLinux && !isHeadless) {IdentityFile = "~/.ssh/skullkid";};
           forwardAgent = true;
         };
         # VMWare hosts.
         "192.168.*" = {
-          extraOptions = {IdentityAgent = "\"${_1passwordAgentPathMacOS}\"";};
+          extraOptions =
+            lib.optionalAttrs (isLinux && !isHeadless) {IdentityFile = "~/.ssh/vm-aarch64";};
         };
       })
       // (lib.optionalAttrs (isDarwin && isCorpManaged) {
