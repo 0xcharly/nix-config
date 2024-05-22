@@ -20,34 +20,73 @@ function fish_mode_prompt -d "Disable prompt vi mode reporting"
 end
 
 function fish_prompt
-    set_color -o brgrey
-    string repeat --count $SHLVL --no-newline ":"
-    printf " "
-    set_color normal
+  set_color -o brgrey
+  string repeat --count $SHLVL --no-newline ":"
+  printf " "
+  set_color normal
+end
+
+# TODO: move this to corp-machines only.
+function citc_get_space_name
+  set -l pwd (pwd)
+  set -l whoami (whoami)
+  string match -rq "/google/src/cloud/$whoami/(?<citc_space>[a-zA-Z0-9_-]+)/google3" (pwd)
+  if test -n "$citc_space"
+    printf "$citc_space"
+  end
+end
+
+function nix_shell_get_name
+  if test -n "$IN_NIX_SHELL"
+      path basename $PWD
+  end
+end
+
+function git_repo_get_name
+  set -l git_dir (git rev-parse --show-toplevel)
+  if test -n "$git_dir"
+    path basename $git_dir
+  end
 end
 
 function fish_right_prompt
-    set_color brgrey
-    printf " %s " (date '+%H:%M:%S')
-    print_pwd
-    set_color normal
-end
+  set -l citc_space (citc_get_space_name)
+  set -l nix_shell (nix_shell_get_name)
+  set -l git_repo (git_repo_get_name)
 
-function print_pwd
-    set -l pwd (pwd)
-    # TODO: move this to corp-machines only.
-    set -l whoami (whoami)
-    string match -rq "/google/src/cloud/$whoami/(?<citc_space>[a-zA-Z0-9_-]+)/google3" (pwd)
-    if test -n "$citc_space"
-        set_color blue
-        printf "<$citc_space>"
-    else if set -q VIRTUAL_ENV
-        set_color magenta
-        printf "<%s>" (basename $VIRTUAL_ENV)
-    else
-        set -l pwd_segment_bg_color green
-        fish_is_root_user; and set pwd_segment_bg_color red
-        set_color $pwd_segment_bg_color
-        printf "<%s> " (path basename $PWD)
-    end
+  set_color brgrey
+  printf ""
+  set_color normal; set_color --background brgrey --bold
+  printf " %s " (date '+%H:%M:%S')
+  set_color normal; set_color brgrey
+  printf ""
+  set_color normal
+  if test -n "$citc_space"
+    set_color magenta --reverse --bold
+    printf "   %s " $citc_space
+  else if test -n "$nix_shell"
+    set_color blue --reverse --bold
+    printf " 󱄅  %s " $nix_shell
+  else if test -n "$git_repo"
+    set_color red --reverse --bold
+    printf " 󰊢  %s " $git_repo
+  else if test -n "$nix_shell"
+    set_color blue --reverse --bold
+    printf " 󱄅  %s " $nix_shell
+  else
+    set_color green --reverse --bold
+    printf " 󰉋  %s " (path basename $PWD)
+  end
+  set_color normal
+  if test -n "$citc_space"
+    set_color magenta
+  else if test -n "$nix_shell"
+    set_color blue
+  else if test -n "$git_repo"
+    set_color red
+  else
+    set_color green
+  end
+  printf " "
+  set_color normal
 end
