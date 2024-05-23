@@ -54,27 +54,27 @@ function fish_right_prompt
   set -l nix_shell (nix_shell_get_name)
   set -l git_repo (git_repo_get_name)
 
-  set_color brgrey
+  set_color black
   printf ""
-  set_color normal; set_color --background brgrey --bold
+  set_color normal; set_color grey --background black
   printf " %s " (date '+%H:%M:%S')
-  set_color normal; set_color brgrey
+  set_color normal; set_color black
   printf ""
   set_color normal
   if test -n "$citc_space"
-    set_color magenta --reverse --bold
+    set_color magenta --reverse
     printf "   %s " $citc_space
   else if test -n "$nix_shell"
-    set_color blue --reverse --bold
+    set_color blue --reverse
     printf " 󱄅  %s " $nix_shell
   else if test -n "$git_repo"
-    set_color red --reverse --bold
+    set_color red --reverse
     printf " 󰊢  %s " $git_repo
   else if test -n "$nix_shell"
-    set_color blue --reverse --bold
+    set_color blue --reverse
     printf " 󱄅  %s " $nix_shell
   else
-    set_color green --reverse --bold
+    set_color green --reverse
     printf " 󰉋  %s " (path basename $PWD)
   end
   set_color normal
