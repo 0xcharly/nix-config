@@ -88,11 +88,10 @@ in {
     ++ (lib.optionals (!isHeadless) [pkgs.asciinema])
     ++ (lib.optionals isDarwin [pkgs.scrcpy])
     ++ (lib.optionals (isLinux && !isHeadless) [
-      # TODO: Reenable when configuration is more stable and reinstall less frequent.
       # Man pages.
-      # pkgs.linux-manual
-      # pkgs.man-pages
-      # pkgs.man-pages-posix
+      pkgs.linux-manual
+      pkgs.man-pages
+      pkgs.man-pages-posix
 
       pkgs.chromium
       # pkgs.firefox
@@ -195,11 +194,10 @@ in {
   # Programs
   #---------------------------------------------------------------------
 
-  # TODO: Reenable when configuration is more stable and reinstall less frequent.
-  # programs.man = {
-  #   enable = true;
-  #   generateCaches = true;
-  # };
+  programs.man = {
+    enable = true;
+    generateCaches = true;
+  };
 
   programs.direnv = {
     enable = true;

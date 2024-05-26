@@ -35,12 +35,11 @@
     rxvt_unicode
   ];
 
-  # TODO: Reenable when configuration is more stable and reinstall less frequent.
-  # documentation = {
-  #   enable = true;
-  #   man.enable = true;
-  #   dev.enable = true;
-  # };
+  documentation = {
+    enable = true;
+    man.enable = true;
+    dev.enable = true;
+  };
 
   # Enable the OpenSSH daemon.
   services.openssh = {
