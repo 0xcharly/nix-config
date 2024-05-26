@@ -88,11 +88,6 @@ in {
     ++ (lib.optionals (!isHeadless) [pkgs.asciinema])
     ++ (lib.optionals isDarwin [pkgs.scrcpy])
     ++ (lib.optionals (isLinux && !isHeadless) [
-      # Man pages.
-      pkgs.linux-manual
-      pkgs.man-pages
-      pkgs.man-pages-posix
-
       pkgs.chromium
       # pkgs.firefox
       pkgs.firefox-devedition
@@ -193,11 +188,6 @@ in {
   #---------------------------------------------------------------------
   # Programs
   #---------------------------------------------------------------------
-
-  programs.man = {
-    enable = true;
-    generateCaches = true;
-  };
 
   programs.direnv = {
     enable = true;

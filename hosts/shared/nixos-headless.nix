@@ -35,12 +35,6 @@
     rxvt_unicode
   ];
 
-  documentation = {
-    enable = true;
-    man.enable = true;
-    dev.enable = true;
-  };
-
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
