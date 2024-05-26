@@ -43,7 +43,7 @@ function nix_shell_get_name
 end
 
 function git_repo_get_name
-  set -l git_dir (git rev-parse --show-toplevel)
+  set -l git_dir (git rev-parse --show-toplevel 2>&1 > /dev/null)
   if test -n "$git_dir"
     path basename $git_dir
   end

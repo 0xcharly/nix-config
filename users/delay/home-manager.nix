@@ -8,12 +8,11 @@
 }: let
   inherit (pkgs.stdenv) isDarwin isLinux;
 
-  nvim-pkg = inputs.nvim.packages.${pkgs.system}.stable;
-  wezterm-pkg = inputs.wezterm.packages.${pkgs.system}.default;
+  nvim-pkg = inputs.nvim.packages.${pkgs.system}.latest;
 
   mdproxyLocalRoot = "~/mdproxy";
 in {
-  home.stateVersion = "23.11";
+  home.stateVersion = "24.05";
   programs.home-manager.enable = true;
 
   #---------------------------------------------------------------------
@@ -149,7 +148,7 @@ in {
       enable = true;
       config = let
         fonts = {
-          names = ["IosevkaEtoile" "FontAwesome6Free"];
+          names = ["MonaspaceKrypton" "FontAwesome6Free"];
           style = "Regular";
           size = 12.0;
         };
@@ -272,12 +271,6 @@ in {
         pbcopy = "xclip";
         pbpaste = "xclip -o";
       });
-  };
-
-  programs.wezterm = lib.mkIf (!isHeadless) {
-    enable = true;
-    package = wezterm-pkg;
-    extraConfig = builtins.readFile ./wezterm.lua;
   };
 
   programs.alacritty = lib.mkIf (!isHeadless) {

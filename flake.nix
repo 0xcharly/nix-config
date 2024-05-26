@@ -9,9 +9,7 @@
   inputs = {
     # Pin our primary nixpkgs repository. This is the main nixpkgs repository
     # we'll use for our configurations.
-    # TODO: Change this to the next stable channel (24.05) when it's released.
-    # nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
 
     # We use the unstable nixpkgs repo for some packages.
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
@@ -24,9 +22,7 @@
 
     # Manages home directory, dotfiles and base environment.
     home-manager = {
-      # TODO: Change this to the next stable channel (24.05) when it's released.
-      # url = "github:nix-community/home-manager/release-24.05";
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -38,9 +34,6 @@
 
     # Neovim overlay with personal configuration.
     nvim.url = "github:0xcharly/nix-config-nvim";
-
-    # Last stable release.
-    wezterm.url = "github:wez/wezterm/20240203-110809-5046fc22?dir=nix";
 
     # Alacritty Themes (includes Catppuccin).
     alacritty-theme.url = "github:alexghr/alacritty-theme.nix";
