@@ -35,6 +35,7 @@
         "mimestream"
         "notion"
         "proton-mail"
+        "prusaslicer"
         "raycast"
         "spotify"
         "vlc"
