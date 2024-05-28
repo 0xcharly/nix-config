@@ -195,6 +195,7 @@ in {
     # enableFishIntegration = true; # read-only; always enabled.
     enableZshIntegration = true;
     nix-direnv.enable = true;
+    config.whitelist.prefix = ["~/code/"];
   };
 
   programs.bash = {
