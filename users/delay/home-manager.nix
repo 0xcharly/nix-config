@@ -297,6 +297,13 @@ in {
         in [
           (g3-hyperlink "b/[0-9]+")
           (g3-hyperlink "cl/[0-9]+")
+          {
+            regex = "http://sponge2/[0-9a-z-]+";
+            hyperlinks = true;
+            post_processing = true;
+            mouse.enabled = true;
+            command = open-cmd;
+          }
         ]
       );
       keyboard.bindings = lib.optionals isDarwin [
