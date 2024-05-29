@@ -244,6 +244,12 @@ in {
       (builtins.readFile ./config.fish)
       "set -g SHELL ${pkgs.fish}/bin/fish"
       (lib.optionalString isLinux "eval $(${pkgs.keychain}/bin/keychain --eval --nogui --quiet)")
+      (lib.optionalString (isDarwin && isCorpManaged) ''
+        set -l MDPROXY_BIN ~/mdproxy/bin
+        if test -d "$MDPROXY_BIN"
+          fish_add_path "$MDPROXY_BIN"
+        end
+      '')
     ];
 
     shellAliases =
