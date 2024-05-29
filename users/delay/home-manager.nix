@@ -393,13 +393,12 @@ in {
         # Personal hosts.
         "github.com" = {
           user = "git";
-          extraOptions =
-            lib.optionalAttrs (isLinux && !isHeadless) {IdentityFile = "~/.ssh/github";};
+          extraOptions.
+             IdentityFile = "~/.ssh/github";
         };
         "linode" = {
           hostname = "172.105.192.143";
-          extraOptions =
-            lib.optionalAttrs (isLinux && !isHeadless) {IdentityFile = "~/.ssh/linode";};
+          extraOptions .IdentityFile = "~/.ssh/linode";
           forwardAgent = true;
         };
       }
