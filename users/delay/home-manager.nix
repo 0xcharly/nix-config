@@ -393,12 +393,11 @@ in {
         # Personal hosts.
         "github.com" = {
           user = "git";
-          extraOptions.
-             IdentityFile = "~/.ssh/github";
+          extraOptions = lib.optionalAttrs (!isHeadless) {IdentityFile = "~/.ssh/github";};
         };
         "linode" = {
           hostname = "172.105.192.143";
-          extraOptions .IdentityFile = "~/.ssh/linode";
+          extraOptions = lib.optionalAttrs (!isHeadless) {IdentityFile = "~/.ssh/linode";};
           forwardAgent = true;
         };
       }
@@ -407,13 +406,13 @@ in {
         "skullkid.local" = {
           hostname = "192.168.86.43";
           extraOptions =
-            lib.optionalAttrs (isLinux && !isHeadless) {IdentityFile = "~/.ssh/skullkid";};
+            lib.optionalAttrs (!isHeadless) {IdentityFile = "~/.ssh/skullkid";};
           forwardAgent = true;
         };
         # VMWare hosts.
         "192.168.*" = {
           extraOptions =
-            lib.optionalAttrs (isLinux && !isHeadless) {IdentityFile = "~/.ssh/vm-aarch64";};
+            lib.optionalAttrs (!isHeadless) {IdentityFile = "~/.ssh/vm-aarch64";};
         };
       })
       // (lib.optionalAttrs (isDarwin && isCorpManaged) {
