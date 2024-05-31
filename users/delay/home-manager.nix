@@ -198,14 +198,7 @@ in {
     config.whitelist.prefix = ["~/code/"];
   };
 
-  programs.bash = {
-    enable = true;
-    # profileExtra = lib.optionalString (isDarwin && isCorpManaged) (let
-    #   mdproxy_bash_profile = "${mdproxyLocalRoot}/data/mdproxy_bash_profile";
-    # in ''
-    #   [[ -z "$ZSH_VERSION" && -e "${mdproxy_bash_profile}" ]] && source "${mdproxy_bash_profile}" # MDPROXY-BASH-PROFILE
-    # '');
-  };
+  programs.bash.enable = true;
 
   home.file.".bash_profile".source = lib.mkForce (pkgs.writeTextFile {
     name = "bash_profile";
