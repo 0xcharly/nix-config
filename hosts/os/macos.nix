@@ -32,6 +32,7 @@
         "firefox@developer-edition"
         #"hammerspoon"
         #"monodraw"
+        "messenger"
         "mimestream"
         "notion"
         "notion-calendar"
