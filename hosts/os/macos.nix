@@ -34,6 +34,7 @@
         #"monodraw"
         "mimestream"
         "notion"
+        "notion-calendar"
         "proton-mail"
         "prusaslicer"
         "raycast"
