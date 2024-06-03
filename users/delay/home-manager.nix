@@ -95,20 +95,42 @@ in {
             })
           devices)
       )
+      ++ (
+        let
+          # Install missing mdproxy binaries.
+          formatters = [
+            {
+              name = "mdformat";
+              path = "/google/bin/releases/corpeng-engdoc/tools/mdformat";
+            }
+            {
+              name = "textpbfmt";
+              path = "/google/bin/releases/text-proto-format/public/fmt";
+            }
+          ];
+        in (builtins.map
+          (formatter: pkgs.writeShellScriptBin formatter.name ''mdproxy ${formatter.path} "$@"'')
+          formatters)
+      )
       ++ [
-        (pkgs.writeShellApplication {
-          name = "adb-scrcpy";
-          runtimeInputs = [pkgs.scrcpy];
-          text = builtins.readFile ./bin/adb-scrcpy.sh;
-        })
+        # Workspace switcher.
+        open-tmux-workspace-pkg
+
+        # Config rebuilder.
         (pkgs.writeShellApplication {
           name = "darwin-rebuild-corp";
           runtimeInputs = [inputs.darwin.packages.${pkgs.system}.darwin-rebuild];
           text = builtins.readFile ./bin/darwin-rebuild-corp.sh;
         })
-        open-tmux-workspace-pkg
       ]
     )
+    ++ lib.optionals isDarwin [
+      (pkgs.writeShellApplication {
+        name = "adb-scrcpy";
+        runtimeInputs = [pkgs.scrcpy];
+        text = builtins.readFile ./bin/adb-scrcpy.sh;
+      })
+    ]
     ++ (lib.optionals (!isCorpManaged) [pkgs.fishPlugins.github-copilot-cli-fish])
     ++ (lib.optionals (!isHeadless) [pkgs.asciinema])
     ++ (lib.optionals (isLinux && !isHeadless) [
