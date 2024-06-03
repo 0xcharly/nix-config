@@ -81,6 +81,7 @@ in {
       )
       ++ [
         (pkgs.writeShellScriptBin "adb-scrcpy" (builtins.readFile ./bin/adb-scrcpy.sh))
+        (pkgs.writeShellScriptBin "darwin-rebuild-corp" (builtins.readFile ./bin/darwin-rebuild-corp.sh))
         (pkgs.writeShellScriptBin "open-tmux-workspace" (builtins.readFile ./bin/open-tmux-workspace.sh))
       ]
     )
