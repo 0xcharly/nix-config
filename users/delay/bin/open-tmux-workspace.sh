@@ -15,7 +15,7 @@ fi
 # Update the terminal window name.
 echo -ne "\033]0;$selected_workspace\007"
 
-if [ -z "$TMUX" ]; then
+if [ -z "${TMUX:-}" ]; then
     # If we're not running in a tmux client, attach to the session.
     tmux attach-session -t "$selected_workspace"
 else
