@@ -7,18 +7,6 @@ test -d $HOME/.cargo/bin && fish_add_path $HOME/.cargo/bin
 test -d $HOME/.local/bin && fish_add_path $HOME/.local/bin
 test -x /opt/homebrew/bin/brew && eval (/opt/homebrew/bin/brew shellenv)
 
-string match -q -- "*.c.googlers.com" (hostname) && alias bat batcat
-
-# Catppuccin theme for FzF. https://github.com/catppuccin/fzf
-set -e FZF_DEFAULT_OPTS
-set -Ux FZF_DEFAULT_OPTS "--color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8,fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc,marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
-
-bind \cf ~/.local/bin/open-tmux-workspace
-bind -M insert \cf ~/.local/bin/open-tmux-workspace
-
-function fish_mode_prompt -d "Disable prompt vi mode reporting"
-end
-
 function fish_prompt
   set_color --bold brgrey
   string repeat --count $SHLVL --no-newline ":"

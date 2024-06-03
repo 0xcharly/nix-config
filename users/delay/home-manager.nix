@@ -10,6 +10,13 @@
 
   nvim-pkg = inputs.nvim.packages.${pkgs.system}.latest;
 
+  open-tmux-workspace-pkg = pkgs.writeShellApplication {
+    name = "open-tmux-workspace";
+    # Do not add pkgs.mercurial as we need to use the system's version.
+    runtimeInputs = [pkgs.tmux];
+    text = builtins.readFile ./bin/open-tmux-workspace.sh;
+  };
+
   mdproxyLocalRoot = "~/mdproxy";
 in {
   home.stateVersion = "24.05";
@@ -75,19 +82,29 @@ in {
           ];
         in (builtins.map
           (device:
-            pkgs.writeShellScriptBin "adb-scrcpy-${device.adbId}"
-            (import ./bin/adb-scrcpy.nix {inherit device;}))
+            pkgs.writeShellApplication {
+              name = "adb-scrcpy-${device.adbId}";
+              runtimeInputs = [pkgs.scrcpy];
+              text = import ./bin/adb-scrcpy.nix {inherit device;};
+            })
           devices)
       )
       ++ [
-        (pkgs.writeShellScriptBin "adb-scrcpy" (builtins.readFile ./bin/adb-scrcpy.sh))
-        (pkgs.writeShellScriptBin "darwin-rebuild-corp" (builtins.readFile ./bin/darwin-rebuild-corp.sh))
-        (pkgs.writeShellScriptBin "open-tmux-workspace" (builtins.readFile ./bin/open-tmux-workspace.sh))
+        (pkgs.writeShellApplication {
+          name = "adb-scrcpy";
+          runtimeInputs = [pkgs.scrcpy];
+          text = builtins.readFile ./bin/adb-scrcpy.sh;
+        })
+        (pkgs.writeShellApplication {
+          name = "darwin-rebuild-corp";
+          runtimeInputs = [inputs.darwin.packages.${pkgs.system}.darwin-rebuild];
+          text = builtins.readFile ./bin/darwin-rebuild-corp.sh;
+        })
+        open-tmux-workspace-pkg
       ]
     )
     ++ (lib.optionals (!isCorpManaged) [pkgs.fishPlugins.github-copilot-cli-fish])
     ++ (lib.optionals (!isHeadless) [pkgs.asciinema])
-    ++ (lib.optionals isDarwin [pkgs.scrcpy])
     ++ (lib.optionals (isLinux && !isHeadless) [
       pkgs.chromium
       # pkgs.firefox
@@ -111,6 +128,8 @@ in {
       PAGER = "less -FirSwX";
       MANPAGER = "${nvim-pkg}/bin/nvim +Man!";
       TERMINAL = "${pkgs.alacritty}/bin/alacritty";
+      # Catppuccin theme for FzF. https://github.com/catppuccin/fzf
+      FZF_DEFAULT_OPTS = "--color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8,fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc,marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8";
     }
     // (lib.optionalAttrs isDarwin {
       HOMEBREW_NO_AUTO_UPDATE = 1;
@@ -238,6 +257,10 @@ in {
       (builtins.readFile ./config.fish)
       "set -g SHELL ${pkgs.fish}/bin/fish"
       (lib.optionalString isLinux "eval $(${pkgs.keychain}/bin/keychain --eval --nogui --quiet)")
+      (lib.optionalString isCorpManaged ''
+        bind \cf ${open-tmux-workspace-pkg}/bin/open-tmux-workspace
+        bind -M insert \cf ${open-tmux-workspace-pkg}/bin/open-tmux-workspace
+      '')
       (lib.optionalString (isDarwin && isCorpManaged) ''
         set -l MDPROXY_BIN ~/mdproxy/bin
         if test -d "$MDPROXY_BIN"
@@ -246,6 +269,9 @@ in {
       '')
     ];
 
+    functions = {
+      fish_mode_prompt = ""; # Disable prompt vi mode reporting.
+    };
     shellAliases =
       {
         # Shortcut to setup a nix-shell with fish. This lets you do something like
@@ -259,6 +285,9 @@ in {
         # For consistency with macOS.
         pbcopy = "xclip";
         pbpaste = "xclip -o";
+      })
+      // (lib.optionalAttrs (isLinux && isCorpManaged) {
+        bat = "batcat";
       });
   };
 
@@ -373,7 +402,13 @@ in {
     mouse = true;
     sensibleOnTop = false;
 
-    extraConfig = builtins.readFile ./tmux.conf;
+    extraConfig = lib.strings.concatStringsSep "\n" [
+      (builtins.readFile ./tmux.conf)
+      (lib.optionalString isCorpManaged ''
+        # Citc workspace fuzzy finder.
+        bind f run-shell "${pkgs.tmux}/bin/tmux new-window ${open-tmux-workspace-pkg}/bin/open-tmux-workspace"
+      '')
+    ];
   };
 
   xresources = lib.mkIf (isLinux && !isHeadless) {

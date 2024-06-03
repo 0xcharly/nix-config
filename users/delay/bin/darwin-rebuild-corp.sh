@@ -11,4 +11,4 @@ do
 done
 
 # Rebuild config.
-darwin-rebuild $@
+darwin-rebuild "$@"
