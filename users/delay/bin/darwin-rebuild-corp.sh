@@ -7,7 +7,8 @@
 # installation?
 for rc in bashrc zshrc
 do
-  sudo mv /etc/$rc{,.before-nix-darwin}
+  rc_path="/etc/$rc"
+  [[ -f "$rc_path" ]] && sudo mv "$rc_path" "$rc_path.before-nix-darwin"
 done
 
 # Rebuild config.
