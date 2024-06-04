@@ -47,7 +47,6 @@
         "raycast"
         "spotify"
         "vlc"
-        "wezterm"
       ]
       ++ (lib.optionals (!isCorpManaged) [
         "google-chrome"
