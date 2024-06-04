@@ -1,6 +1,5 @@
 {
   isCorpManaged,
-  isDarwin,
   lib,
   pkgs,
   ...
