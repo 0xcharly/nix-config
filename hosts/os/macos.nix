@@ -55,10 +55,10 @@
   };
 
   mule = {
-    enable = isDarwin && isCorpManaged;
+    enable = isCorpManaged;
     packages = [
-      "srcfs"
       "Android Studio with Blaze Canary"
+      "srcfs"
     ];
   };
 
