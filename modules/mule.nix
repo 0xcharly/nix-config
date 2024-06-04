@@ -27,12 +27,19 @@ in {
         List of applications to install using {command}`mule`.
       '';
     };
+
+    config = {
+      muleCmd = lib.concatStringsSep " " (
+        ["mule" "install"]
+        ++ config.packages
+      );
+    };
   };
   config = {
     system.activationScripts.mule.text = lib.mkIf cfg.enable ''
       echo >&2 "Mule..."
       if [ -f "${cfg.prefix}/mule" ]; then
-        PATH="${cfg.prefix}":$PATH mule
+        PATH="${cfg.prefix}":$PATH ${cfg.muleCmd}
       else
         echo -e "\e[1;31merror: Mule is not installed, skipping...\e[0m" >&2
       fi
