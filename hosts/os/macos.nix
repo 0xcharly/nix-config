@@ -1,16 +1,22 @@
 {
   isCorpManaged,
+  isDarwin,
   lib,
   pkgs,
   ...
 }: {
+  imports = [../../modules/mule.nix];
+
   homebrew = {
     enable = true;
     onActivation = {
       autoUpdate = true;
       cleanup = "zap";
     };
-    global.brewfile = true;
+    global = {
+      brewfile = true;
+      autoUpdate = false;
+    };
     masApps =
       {
         "1Password for Safari" = 1569813296;
@@ -47,6 +53,14 @@
         "google-chrome"
         "transmission"
       ]);
+  };
+
+  mule = {
+    enable = isDarwin && isCorpManaged;
+    packages = [
+      "srcfs"
+      "Android Studio with Blaze Canary"
+    ];
   };
 
   # The user should already exist, but we need to set this up so Nix knows

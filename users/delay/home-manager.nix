@@ -146,22 +146,18 @@ in {
   # Env vars and dotfiles
   #---------------------------------------------------------------------
 
-  home.sessionVariables =
-    {
-      LANG = "en_US.UTF-8";
-      LC_CTYPE = "en_US.UTF-8";
-      LC_ALL = "en_US.UTF-8";
-      BAT_THEME = "base16";
-      EDITOR = "${nvim-pkg}/bin/nvim";
-      PAGER = "less -FirSwX";
-      MANPAGER = "${nvim-pkg}/bin/nvim +Man!";
-      TERMINAL = "${pkgs.alacritty}/bin/alacritty";
-      # Catppuccin theme for FzF. https://github.com/catppuccin/fzf
-      FZF_DEFAULT_OPTS = "--color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8,fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc,marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8";
-    }
-    // (lib.optionalAttrs isDarwin {
-      HOMEBREW_NO_AUTO_UPDATE = 1;
-    });
+  home.sessionVariables = {
+    LANG = "en_US.UTF-8";
+    LC_CTYPE = "en_US.UTF-8";
+    LC_ALL = "en_US.UTF-8";
+    BAT_THEME = "base16";
+    EDITOR = "${nvim-pkg}/bin/nvim";
+    PAGER = "less -FirSwX";
+    MANPAGER = "${nvim-pkg}/bin/nvim +Man!";
+    TERMINAL = "${pkgs.alacritty}/bin/alacritty";
+    # Catppuccin theme for FzF. https://github.com/catppuccin/fzf
+    FZF_DEFAULT_OPTS = "--color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8,fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc,marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8";
+  };
 
   xdg = {
     enable = true;
