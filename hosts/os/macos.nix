@@ -56,7 +56,7 @@
   mule = {
     enable = isCorpManaged;
     packages = [
-      "Android Studio with Blaze Canary"
+      "android-studio-with-blaze-canary"
       "srcfs"
     ];
   };
