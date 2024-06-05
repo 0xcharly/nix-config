@@ -17,6 +17,16 @@
     text = builtins.readFile ./bin/open-tmux-workspace.sh;
   };
 
+  writePython312 = pkgs.writers.makePythonWriter pkgs.python312 pkgs.python312Packages pkgs.buildPackages.python312Packages;
+  writePython312Bin = name: libraries:
+    writePython312 "/bin/${name}" {
+      inherit libraries;
+      flakeIgnore = [
+        "E501" # Line length.
+        "F811" # Redefinition of unused variable (used for argparse custom type argument builder).
+      ];
+    };
+
   mdproxyLocalRoot = "~/mdproxy";
 in {
   home.stateVersion = "24.05";
@@ -63,6 +73,13 @@ in {
         runtimeInputs = [pkgs.curl];
         text = ''curl -sL "https://www.gitignore.io/api/$1"'';
       })
+
+      (writePython312Bin "vault" (
+        with pkgs.python312Packages; [
+          bcrypt
+          cryptography
+        ]
+      ) (builtins.readFile ./bin/vault.py))
     ]
     ++ (
       lib.optionals (isDarwin && isCorpManaged)
