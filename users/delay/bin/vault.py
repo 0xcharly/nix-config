@@ -107,7 +107,7 @@ class ReadSshPrivateKeyOptions(NamedTuple):
 
     dry_run: bool
     op_private_key_entry: OpPrivateKeyEntry
-    output_file: Optional[argparse.FileType]
+    output_file: Optional[IO[bytes]]
     ask_for_passphrase: bool
     passphrase_op_vault_uri: VaultUri
 
