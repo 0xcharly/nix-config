@@ -31,7 +31,13 @@ import argparse
 import os
 import subprocess
 import sys
+
+from pathlib import Path
+from typing import NamedTuple
+from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
+
 from cryptography.exceptions import UnsupportedAlgorithm
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives.serialization import (
     BestAvailableEncryption,
     Encoding,
@@ -39,90 +45,114 @@ from cryptography.hazmat.primitives.serialization import (
     SSHPrivateKeyTypes,
     load_ssh_private_key,
 )
-from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
-from pathlib import Path
-from typing import NamedTuple
-from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 
 type VaultUri = str
 
 
-def VaultUri(s: str) -> str:
+_DEFAULT_PRIVATE_KEY_PASSPHRASE_OP_VAULT_URI: VaultUri = (
+    "op://Private/SSH Key Passphrase/password"
+)
+
+
+def vault_uri(s: str) -> VaultUri:
     """Constructor function for ArgParse."""
     return s
 
 
 class OpPrivateKeyEntry(NamedTuple):
+    """Represents a 1Password SSH Private Key entry."""
     output_file: Path
     op_vault_uri: VaultUri
 
     @property
     def name(self) -> str:
+        """Returns the name of the entry."""
         return os.path.basename(self.output_file)
 
     def __repr__(self) -> str:
-        return '"{}"'.format(self.name)
+        return f'"{self.name}"'
 
 
 _SUPPORTED_PRIVATE_KEYS = frozenset(
     (
-        OpPrivateKeyEntry("~/.ssh/git-commit-signing", "op://Private/Git Commit Signing SSH Key/private key"),
+        OpPrivateKeyEntry(
+            "~/.ssh/git-commit-signing",
+            "op://Private/Git Commit Signing SSH Key/private key",
+        ),
         OpPrivateKeyEntry("~/.ssh/github", "op://Private/GitHub SSH Key/private key"),
         OpPrivateKeyEntry("~/.ssh/linode", "op://Private/Linode SSH Key/private key"),
-        OpPrivateKeyEntry("~/.ssh/skullkid", "op://Private/SkullKid SSH Key/private key"),
+        OpPrivateKeyEntry(
+            "~/.ssh/skullkid", "op://Private/SkullKid SSH Key/private key"
+        ),
         OpPrivateKeyEntry("~/.ssh/vm", "op://Private/VM SSH Key/private key"),
     )
 )
-_DEFAULT_PRIVATE_KEY_PASSPHRASE_OP_VAULT_URI: VaultUri = "op://Private/SSH Key Passphrase/password"
 
 
-def OpPrivateKeyEntry(s: str) -> OpPrivateKeyEntry:
+def op_private_key_entry(s: str) -> OpPrivateKeyEntry:
+    """Constructor function for ArgParse."""
     return next((key for key in _SUPPORTED_PRIVATE_KEYS if key.name == s), s)
 
 
 class ListSshPrivateKeyOptions(NamedTuple):
+    """List of command line options of the `list-ssh-key` subcommand."""
     verbose: bool
 
 
 class ReadSshPrivateKeyOptions(NamedTuple):
+    """List of command line options of the `read-ssh-key` subcommand."""
+    dry_run: bool
     op_private_key_entries: list[OpPrivateKeyEntry]
     ask_for_passphrase: bool
-    op_passphrase_vault_uri: VaultUri
+    passphrase_op_vault_uri: VaultUri
 
 
 def _parse_argv(argv: list[str]) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Utility script to manipulate personal vault and stored secrets")
+    parser = argparse.ArgumentParser(
+        description="Utility script to manipulate personal vault and stored secrets"
+    )
     subparsers = parser.add_subparsers(title="Subcommands")
-    list_ssh_private_keys = subparsers.add_parser("list-ssh-key", help="List supported SSH Private Keys")
+    list_ssh_private_keys = subparsers.add_parser(
+        "list-ssh-key", help="List supported SSH Private Keys"
+    )
     list_ssh_private_keys.set_defaults(func=_command_list_ssh_private_key)
-    list_ssh_private_keys.add_argument("-v", "--verbose", action="store_true", help="Print additional details")
+    list_ssh_private_keys.add_argument(
+        "-v", "--verbose", action="store_true", help="increase verbosity"
+    )
     read_ssh_private_keys = subparsers.add_parser(
-        "read-ssh-key", help="Extract, encrypt and save SSH private keys stored in 1Password"
+        "read-ssh-key",
+        help="Extract, encrypt and save SSH private keys stored in 1Password",
     )
     read_ssh_private_keys.set_defaults(func=_command_read_ssh_private_key)
     read_ssh_private_keys.add_argument(
         "-k",
         "--private-key",
-        type=OpPrivateKeyEntry,
+        type=op_private_key_entry,
         nargs="*",
         choices=_SUPPORTED_PRIVATE_KEYS,
         default=_SUPPORTED_PRIVATE_KEYS,
-        help="The list of private keys to extract and save to disk",
+        help="list of private keys to save to disk",
+    )
+    read_ssh_private_keys.add_argument(
+        "-n",
+        "--dry-run",
+        action="store_true",
+        help="show what would have been written",
     )
     group = read_ssh_private_keys.add_mutually_exclusive_group()
     group.add_argument(
         "-a",
         "--ask-for-passphrase",
         action="store_true",
-        help="Ask for the passphrase instead of reading it from the 1Password vault",
+        help="use provided passphrase over the one in 1Password vault",
     )
     group.add_argument(
         "-p",
         "--passphrase-op-vault-uri",
-        type=VaultUri,
+        type=vault_uri,
         default=_DEFAULT_PRIVATE_KEY_PASSPHRASE_OP_VAULT_URI,
-        help="The 1Password URI of the passphrase to use to encrypt the private key",
+        help="1Password URI of the passphrase to use to encrypt the private key",
     )
     return parser.parse_args(argv)
 
@@ -134,7 +164,9 @@ def _op_read(op_vault_uri: VaultUri, params: dict[str, str] = None) -> bytes:
         query = parse_qs(parts.query)
         query.update(params)
         parts = parts._replace(query=urlencode(query))
-    process = subprocess.run(["op", "read", urlunparse(parts)], capture_output=True)
+    process = subprocess.run(
+        ["op", "read", urlunparse(parts)], capture_output=True, check=True
+    )
     return process.stdout.strip()
 
 
@@ -155,7 +187,9 @@ def _load_openssh_private_key(entry: OpPrivateKeyEntry) -> SSHPrivateKeyTypes:
         return None
 
 
-def _encode_and_encrypt_private_key(entry: OpPrivateKeyEntry, key: SSHPrivateKeyTypes, passphrase: str) -> bytes:
+def _encode_and_encrypt_private_key(
+    entry: OpPrivateKeyEntry, key: SSHPrivateKeyTypes, passphrase: str
+) -> bytes:
     if not isinstance(key, Ed25519PrivateKey):
         print(f'Warning: key "{entry.name}" is not ed25519', file=sys.stderr)
     encoded_and_encrypted_private_key = key.private_bytes(
@@ -169,7 +203,7 @@ def _encode_and_encrypt_private_key(entry: OpPrivateKeyEntry, key: SSHPrivateKey
 def _get_private_key_passphrase(options: ReadSshPrivateKeyOptions) -> str:
     if options.ask_for_passphrase:
         return "dummy_passphrase"  # TODO: read from input.
-    return _op_read_private_key_passphrase(options.op_passphrase_vault_uri)
+    return _op_read_private_key_passphrase(options.passphrase_op_vault_uri)
 
 
 def _command_list_ssh_private_key(args: argparse.Namespace):
@@ -183,30 +217,30 @@ def _command_list_ssh_private_key(args: argparse.Namespace):
             print(key.name)
 
 
-class ReadSshPrivateKeyOptions(NamedTuple):
-    op_private_key_entries: list[OpPrivateKeyEntry]
-    ask_for_passphrase: bool
-    op_passphrase_vault_uri: VaultUri
-
-
 def _command_read_ssh_private_key(args: argparse.Namespace):
     options = ReadSshPrivateKeyOptions(
-        args.private_key or _SUPPORTED_PRIVATE_KEYS, args.ask_for_passphrase, args.passphrase_op_vault_uri
+        dry_run=args.dry_run,
+        op_private_key_entries=args.private_key or _SUPPORTED_PRIVATE_KEYS,
+        ask_for_passphrase=args.ask_for_passphrase,
+        passphrase_op_vault_uri=args.passphrase_op_vault_uri,
     )
     passphrase = _get_private_key_passphrase(options)
     for entry in options.op_private_key_entries:
         key = _load_openssh_private_key(entry)
         if key:
             private_bytes = _encode_and_encrypt_private_key(entry, key, passphrase)
-            with open(os.path.expanduser(entry.output_file), "wb") as out:
-                out.write(private_bytes)
-            print(f"Wrote encrypted SSH private key to {entry.output_file}")
+            if not options.dry_run:
+                with open(os.path.expanduser(entry.output_file), "wb") as out:
+                    out.write(private_bytes)
+                print(f"Wrote encrypted SSH private key to {entry.output_file}")
+            else:
+                print(f"Would write encrypted SSH private key to {entry.output_file}")
 
 
-def main():
+def _main():
     args = _parse_argv(sys.argv[1:])
     args.func(args)
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(_main())
