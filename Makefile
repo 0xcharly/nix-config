@@ -75,11 +75,11 @@ vm/copy:
 		$(MAKEFILE_DIR)/ $(NIXUSER)@$(NIXADDR):/nix-config
 
 vm/copy-secrets:
-	op read "op://private/GitHub SSH Key/encrypted private key" \
+	vault read-ssh-key -k github -o - \
 		| ssh $(SSH_OPTIONS) -p$(NIXPORT) -l$(NIXUSER) $(NIXADDR) 'dd of=$$HOME/.ssh/github'
-	op read "op://private/Git Commit Signing SSH Key/encrypted private key" \
+	op read-ssh-key -k git-commit-signing -o - \
 		| ssh $(SSH_OPTIONS) -p$(NIXPORT) -l$(NIXUSER) $(NIXADDR) 'dd of=$$HOME/.ssh/git-commit-signing'
-	op read "op://private/Linode SSH Key/encrypted private key" \
+	op read-ssh-key -k linode -o - \
 		| ssh $(SSH_OPTIONS) -p$(NIXPORT) -l$(NIXUSER) $(NIXADDR) 'dd of=$$HOME/.ssh/linode'
 	ssh $(SSH_OPTIONS) -p$(NIXPORT) -l$(NIXUSER) $(NIXADDR) 'chmod 600 $$HOME/.ssh/{github,git-commit-signing,linode}'
 

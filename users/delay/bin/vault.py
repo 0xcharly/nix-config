@@ -33,7 +33,7 @@ import subprocess
 import sys
 
 from pathlib import Path
-from typing import NamedTuple
+from typing import IO, NamedTuple, Optional
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
 from cryptography.exceptions import UnsupportedAlgorithm
@@ -62,6 +62,7 @@ def vault_uri(s: str) -> VaultUri:
 
 class OpPrivateKeyEntry(NamedTuple):
     """Represents a 1Password SSH Private Key entry."""
+
     output_file: Path
     op_vault_uri: VaultUri
 
@@ -97,13 +98,16 @@ def op_private_key_entry(s: str) -> OpPrivateKeyEntry:
 
 class ListSshPrivateKeyOptions(NamedTuple):
     """List of command line options of the `list-ssh-key` subcommand."""
+
     verbose: bool
 
 
 class ReadSshPrivateKeyOptions(NamedTuple):
     """List of command line options of the `read-ssh-key` subcommand."""
+
     dry_run: bool
-    op_private_key_entries: list[OpPrivateKeyEntry]
+    op_private_key_entry: OpPrivateKeyEntry
+    output_file: Optional[argparse.FileType]
     ask_for_passphrase: bool
     passphrase_op_vault_uri: VaultUri
 
@@ -126,19 +130,24 @@ def _parse_argv(argv: list[str]) -> argparse.Namespace:
     )
     read_ssh_private_keys.set_defaults(func=_command_read_ssh_private_key)
     read_ssh_private_keys.add_argument(
-        "-k",
-        "--private-key",
-        type=op_private_key_entry,
-        nargs="*",
-        choices=_SUPPORTED_PRIVATE_KEYS,
-        default=_SUPPORTED_PRIVATE_KEYS,
-        help="list of private keys to save to disk",
-    )
-    read_ssh_private_keys.add_argument(
         "-n",
         "--dry-run",
         action="store_true",
         help="show what would have been written",
+    )
+    read_ssh_private_keys.add_argument(
+        "-k",
+        "--private-key",
+        type=op_private_key_entry,
+        required=True,
+        choices=_SUPPORTED_PRIVATE_KEYS,
+        help="the private key to save to disk",
+    )
+    read_ssh_private_keys.add_argument(
+        "-o",
+        "--output-file",
+        type=argparse.FileType('wb'),
+        help="path on the local filesystem to save the key to",
     )
     group = read_ssh_private_keys.add_mutually_exclusive_group()
     group.add_argument(
@@ -217,24 +226,32 @@ def _command_list_ssh_private_key(args: argparse.Namespace):
             print(key.name)
 
 
+def _write_private_bytes(out: IO[bytes], private_bytes: bytes, dry_run: bool):
+    if not dry_run:
+        out.write(private_bytes)
+        print(f"Wrote encrypted SSH private key to {out.name}", file=sys.stderr)
+    else:
+        print(f"Would write encrypted SSH private key to {out.name}", file=sys.stderr)
+
+
 def _command_read_ssh_private_key(args: argparse.Namespace):
     options = ReadSshPrivateKeyOptions(
         dry_run=args.dry_run,
-        op_private_key_entries=args.private_key or _SUPPORTED_PRIVATE_KEYS,
+        op_private_key_entry=args.private_key,
+        output_file=args.output_file,
         ask_for_passphrase=args.ask_for_passphrase,
         passphrase_op_vault_uri=args.passphrase_op_vault_uri,
     )
     passphrase = _get_private_key_passphrase(options)
-    for entry in options.op_private_key_entries:
-        key = _load_openssh_private_key(entry)
-        if key:
-            private_bytes = _encode_and_encrypt_private_key(entry, key, passphrase)
-            if not options.dry_run:
-                with open(os.path.expanduser(entry.output_file), "wb") as out:
-                    out.write(private_bytes)
-                print(f"Wrote encrypted SSH private key to {entry.output_file}")
-            else:
-                print(f"Would write encrypted SSH private key to {entry.output_file}")
+    entry = options.op_private_key_entry
+    key = _load_openssh_private_key(entry)
+    if key:
+        private_bytes = _encode_and_encrypt_private_key(entry, key, passphrase)
+        if options.output_file is not None:
+            _write_private_bytes(options.output_file, private_bytes, options.dry_run)
+        else:
+            with open(os.path.expanduser(entry.output_file), 'wb') as out:
+                _write_private_bytes(out, private_bytes, options.dry_run)
 
 
 def _main():
