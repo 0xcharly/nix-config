@@ -23,4 +23,11 @@
   environment.systemPackages = with pkgs; [
     cachix
   ];
+
+  fonts = {
+    fontDir.enable = true;
+    # nix-darwin still uses `fonts.fonts` instead of the new `fonts.packages`.
+    # https://github.com/LnL7/nix-darwin/pull/754
+    fonts = import ../../modules/fonts {pkgs = pkgs;};
+  };
 }
