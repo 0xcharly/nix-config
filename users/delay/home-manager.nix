@@ -82,64 +82,65 @@ in {
       ) (builtins.readFile ./bin/vault.py))
     ]
     ++ (
-      lib.optionals (isDarwin && isCorpManaged)
-      (
-        let
-          devices = [
-            {
-              adbId = "33301JEHN18611";
-              name = "Pixel 7a";
-            }
-            {
-              adbId = "35061FDHS000A4";
-              name = "Pixel Fold";
-            }
-            {
-              adbId = "98311FFAZ004TE";
-              name = "Pixel 4";
-            }
-            {
-              adbId = "99091FFBA005TS";
-              name = "Pixel 4 XL";
-            }
-          ];
-        in (builtins.map
-          (device:
-            pkgs.writeShellApplication {
-              name = "adb-scrcpy-${device.adbId}";
-              runtimeInputs = [pkgs.scrcpy];
-              text = import ./bin/adb-scrcpy.nix {inherit device;};
-            })
-          devices)
-      )
-      ++ (
-        let
-          # Install missing mdproxy binaries.
-          formatters = [
-            {
-              name = "mdformat";
-              path = "/google/bin/releases/corpeng-engdoc/tools/mdformat";
-            }
-            {
-              name = "textpbfmt";
-              path = "/google/bin/releases/text-proto-format/public/fmt";
-            }
-          ];
-        in (builtins.map
-          (formatter: pkgs.writeShellScriptBin formatter.name ''mdproxy ${formatter.path} "$@"'')
-          formatters)
-      )
-      ++ [
-        # Workspace switcher.
-        open-tmux-workspace-pkg
+      lib.optionals (isDarwin && isCorpManaged) (
+        (
+          let
+            devices = [
+              {
+                adbId = "33301JEHN18611";
+                name = "Pixel 7a";
+              }
+              {
+                adbId = "35061FDHS000A4";
+                name = "Pixel Fold";
+              }
+              {
+                adbId = "98311FFAZ004TE";
+                name = "Pixel 4";
+              }
+              {
+                adbId = "99091FFBA005TS";
+                name = "Pixel 4 XL";
+              }
+            ];
+          in (builtins.map
+            (device:
+              pkgs.writeShellApplication {
+                name = "adb-scrcpy-${device.adbId}";
+                runtimeInputs = [pkgs.scrcpy];
+                text = import ./bin/adb-scrcpy.nix {inherit device;};
+              })
+            devices)
+        )
+        ++ (
+          let
+            # Install missing mdproxy binaries.
+            formatters = [
+              {
+                name = "mdformat";
+                path = "/google/bin/releases/corpeng-engdoc/tools/mdformat";
+              }
+              {
+                name = "textpbfmt";
+                path = "/google/bin/releases/text-proto-format/public/fmt";
+              }
+            ];
+          in (builtins.map
+            (formatter: pkgs.writeShellScriptBin formatter.name ''mdproxy ${formatter.path} "$@"'')
+            formatters)
+        )
+        ++ [
+          # Workspace switcher.
+          open-tmux-workspace-pkg
 
-        # Config rebuilder.
-        (pkgs.writeShellApplication {
-          name = "darwin-rebuild-corp";
-          runtimeInputs = [inputs.darwin.packages.${pkgs.system}.darwin-rebuild];
-          text = builtins.readFile ./bin/darwin-rebuild-corp.sh;
-        })
-      ]
+          # Config rebuilder.
+          (pkgs.writeShellApplication {
+            name = "darwin-rebuild-corp";
+            runtimeInputs = [inputs.darwin.packages.${pkgs.system}.darwin-rebuild];
+            text = builtins.readFile ./bin/darwin-rebuild-corp.sh;
+          })
+        ]
+      )
     )
     ++ lib.optionals isDarwin [
       (pkgs.writeShellApplication {
