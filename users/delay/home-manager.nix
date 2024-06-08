@@ -18,14 +18,7 @@
   };
 
   writePython312 = pkgs.writers.makePythonWriter pkgs.python312 pkgs.python312Packages pkgs.buildPackages.python312Packages;
-  writePython312Bin = name: libraries:
-    writePython312 "/bin/${name}" {
-      inherit libraries;
-      flakeIgnore = [
-        "E501" # Line length.
-        "F811" # Redefinition of unused variable (used for argparse custom type argument builder).
-      ];
-    };
+  writePython312Bin = name: writePython312 "/bin/${name}";
 
   mdproxyLocalRoot = "~/mdproxy";
 in {
@@ -36,9 +29,8 @@ in {
   # Packages
   #---------------------------------------------------------------------
 
-  # Packages I always want installed. Most packages I install using
-  # per-project flakes sourced with direnv and nix-shell, so this is
-  # not a huge list.
+  # Packages I always want installed. Most packages I install using per-project
+  # flakes sourced with direnv and nix-shell, so this is not a huge list.
   # TODO: try pkgs.tailscale.
   home.packages =
     [
@@ -57,8 +49,6 @@ in {
       pkgs.nixd
       pkgs.nixpkgs-fmt
 
-      pkgs.tldr
-
       nvim-pkg
 
       pkgs.fishPlugins.done
@@ -74,12 +64,15 @@ in {
         text = ''curl -sL "https://www.gitignore.io/api/$1"'';
       })
 
-      (writePython312Bin "vault" (
-        with pkgs.python312Packages; [
+      (writePython312Bin "vault" {
+        libraries = with pkgs.python312Packages; [
           bcrypt
           cryptography
-        ]
-      ) (builtins.readFile ./bin/vault.py))
+        ];
+        flakeIgnore = [
+          "E501" # Line length.
+        ];
+      } (builtins.readFile ./bin/vault.py))
     ]
     ++ (
       lib.optionals (isDarwin && isCorpManaged) (
@@ -149,15 +142,10 @@ in {
         text = builtins.readFile ./bin/adb-scrcpy.sh;
       })
     ]
-    ++ (lib.optionals (!isCorpManaged) [pkgs.fishPlugins.github-copilot-cli-fish])
-    ++ (lib.optionals (!isHeadless) [pkgs.asciinema])
     ++ (lib.optionals (isLinux && !isHeadless) [
-      pkgs.chromium
-      # pkgs.firefox
       pkgs.firefox-devedition
       pkgs.rofi
       pkgs.valgrind
-      pkgs.zathura # A PDF Viewer.
     ]);
 
   #---------------------------------------------------------------------
@@ -204,9 +192,9 @@ in {
       enable = true;
       config = let
         fonts = {
-          names = ["MonaspaceKrypton" "FontAwesome6Free"];
+          names = ["IosevkaTerm Nerd Font" "FontAwesome6Free"];
           style = "Regular";
-          size = 12.0;
+          size = 10.0;
         };
       in {
         modifier = "Mod4";
@@ -316,9 +304,9 @@ in {
     };
     shellAliases =
       {
-        # Shortcut to setup a nix-shell with fish. This lets you do something like
-        # `nixsh -p go` to get an environment with Go but use the fish shell along
-        # with it.
+        # Shortcut to setup a nix-shell with fish. This lets you do something
+        # like `nixsh -p go` to get an environment with Go but use the fish
+        # shell along with it.
         nixsh = "nix-shell --run fish";
         devsh = "nix develop --command fish";
         ls = "${pkgs.eza}/bin/eza";
