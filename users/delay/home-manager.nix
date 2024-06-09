@@ -54,6 +54,7 @@ in {
       pkgs.fishPlugins.done
       pkgs.fishPlugins.fzf
       pkgs.fishPlugins.foreign-env
+      pkgs.fishPlugins.transient-fish
 
       (pkgs.writeShellScriptBin "term-capabilities" (builtins.readFile ./bin/term-capabilities.sh))
       (pkgs.writeShellScriptBin "term-truecolors" (builtins.readFile ./bin/term-truecolors.sh))

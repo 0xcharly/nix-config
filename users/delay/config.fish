@@ -14,6 +14,12 @@ function fish_prompt
   set_color normal
 end
 
+function transient_prompt_func
+  set_color --bold brgrey
+  printf ": "
+  set_color normal
+end
+
 # TODO: move this to corp-machines only.
 function citc_get_space_name
   set -l pwd (pwd)
