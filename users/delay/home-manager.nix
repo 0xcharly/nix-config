@@ -65,15 +65,16 @@ in {
         text = ''curl -sL "https://www.gitignore.io/api/$1"'';
       })
 
-      (writePython312Bin "vault" {
+      (writePython312Bin "sekrets" {
         libraries = with pkgs.python312Packages; [
           bcrypt
           cryptography
+          rich
         ];
         flakeIgnore = [
           "E501" # Line length.
         ];
-      } (builtins.readFile ./bin/vault.py))
+      } (builtins.readFile ./bin/sekrets.py))
     ]
     ++ (
       lib.optionals (isDarwin && isCorpManaged) (

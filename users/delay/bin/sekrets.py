@@ -1,12 +1,12 @@
 """Utility script to manipulate personal vault and stored secrets.
 
-# vault list-ssh-private-key
+# sekrets list-ssh-keys
 
 List supported SSH Private Keys.
 
-These keys can be extracted with `vault read-ssh-private-key'.
+These keys can be extracted with `sekrets read-ssh-private-key'.
 
-# vault read-ssh-private-key
+# sekrets read-ssh-key
 
 Extract, encrypt and save SSH private keys stored in 1Password.
 
@@ -45,6 +45,7 @@ from cryptography.hazmat.primitives.serialization import (
     SSHPrivateKeyTypes,
     load_ssh_private_key,
 )
+from rich.prompt import Confirm, Prompt
 
 
 type VaultUri = str
@@ -118,7 +119,7 @@ def _parse_argv(argv: list[str]) -> argparse.Namespace:
     )
     subparsers = parser.add_subparsers(title="Subcommands")
     list_ssh_private_keys = subparsers.add_parser(
-        "list-ssh-key", help="List supported SSH Private Keys"
+        "list-ssh-keys", help="List supported SSH Private Keys"
     )
     list_ssh_private_keys.set_defaults(func=_command_list_ssh_private_key)
     list_ssh_private_keys.add_argument(
@@ -146,7 +147,7 @@ def _parse_argv(argv: list[str]) -> argparse.Namespace:
     read_ssh_private_keys.add_argument(
         "-o",
         "--output-file",
-        type=argparse.FileType('wb'),
+        type=argparse.FileType("wb"),
         help="path on the local filesystem to save the key to",
     )
     group = read_ssh_private_keys.add_mutually_exclusive_group()
@@ -211,7 +212,7 @@ def _encode_and_encrypt_private_key(
 
 def _get_private_key_passphrase(options: ReadSshPrivateKeyOptions) -> str:
     if options.ask_for_passphrase:
-        return "dummy_passphrase"  # TODO: read from input.
+        return Prompt.ask("Enter your passphrase", password=True).encode("ascii")
     return _op_read_private_key_passphrase(options.passphrase_op_vault_uri)
 
 
@@ -250,7 +251,12 @@ def _command_read_ssh_private_key(args: argparse.Namespace):
         if options.output_file is not None:
             _write_private_bytes(options.output_file, private_bytes, options.dry_run)
         else:
-            with open(os.path.expanduser(entry.output_file), 'wb') as out:
+            output_file = os.path.expanduser(entry.output_file)
+            if os.path.isfile(output_file) and not Confirm.ask(
+                f'File "{output_file}" already exists. Overwrite?'
+            ):
+                return
+            with open(os.path.expanduser(entry.output_file), "wb") as out:
                 _write_private_bytes(out, private_bytes, options.dry_run)
 
 

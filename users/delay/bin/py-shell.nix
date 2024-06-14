@@ -9,6 +9,7 @@ in
         python-pkgs.pylint
         python-pkgs.python-lsp-black
         python-pkgs.python-lsp-server
+        python-pkgs.rich
       ]))
     ];
   }
