@@ -48,6 +48,7 @@ function fish_right_prompt
   set -l nix_shell (nix_shell_get_name)
   set -l git_repo (git_repo_get_name)
 
+  printf " "
   set_color black
   printf ""
   set_color normal; set_color grey --background black
