@@ -31,7 +31,6 @@
       [
         "1password"
         "1password-cli"
-        "arc"
         "discord"
         "firefox"
         "firefox@developer-edition"
