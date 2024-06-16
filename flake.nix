@@ -37,11 +37,15 @@
 
     # Alacritty Themes (includes Catppuccin).
     alacritty-theme.url = "github:alexghr/alacritty-theme.nix";
+
+    # macOS only: Homebrew for Nix.
+    homebrew.url = "github:zhaofengli-wip/nix-homebrew";
   };
 
   outputs = inputs @ {
     self,
     nixpkgs,
+    homebrew,
     flake-utils,
     pre-commit-hooks,
     ...
@@ -57,7 +61,7 @@
     ];
 
     mkSystem = import ./lib/mksystem.nix {
-      inherit overlays nixpkgs inputs;
+      inherit homebrew overlays nixpkgs inputs;
     };
   in
     flake-utils.lib.eachSystem supportedSystems

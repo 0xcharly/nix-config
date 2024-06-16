@@ -1,6 +1,7 @@
 # This function creates a NixOS system based on our VM setup for a
 # particular architecture.
 {
+  homebrew,
   overlays,
   nixpkgs,
   inputs,
@@ -36,6 +37,23 @@ in
         home-manager.useUserPackages = true;
         home-manager.backupFileExtension = "nix-backup";
         home-manager.users.${user} = import ../users/${user}/home-manager.nix;
+      }
+
+      homebrew.darwinModules.nix-homebrew
+      {
+        nix-homebrew = {
+          # Install Homebrew under the default prefix
+          enable = true;
+
+          # Apple Silicon Only: Also install Homebrew under the default Intel prefix for Rosetta 2
+          enableRosetta = false;
+
+          # User owning the Homebrew prefix
+          inherit user;
+
+          # Automatically migrate existing Homebrew installations
+          # autoMigrate = true;
+        };
       }
     ];
   }
