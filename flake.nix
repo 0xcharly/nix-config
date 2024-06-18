@@ -118,6 +118,7 @@
       darwinConfigurations.studio = mkSystem {
         configuration = ./hosts/darwin.nix;
         isDarwin = true;
+        migrateHomebrew = true;
       };
 
       darwinConfigurations.mbp-roam = mkSystem {
@@ -135,6 +136,7 @@
         configuration = ./hosts/darwin-corp.nix;
         isCorpManaged = true;
         isDarwin = true;
+        migrateHomebrew = true;
       };
     };
 }

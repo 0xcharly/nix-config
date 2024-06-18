@@ -10,6 +10,7 @@
   isCorpManaged ? false,
   isDarwin ? false,
   isHeadless ? false,
+  migrateHomebrew ? false,
   user ? "delay",
 }: let
   # NixOS vs nix-darwin functions.
@@ -29,8 +30,10 @@ in
       [
         # Apply our overlays.
         {nixpkgs.overlays = overlays;}
-
+        # Apply system configuration.
         configuration
+
+        # Apply user configuration.
         hmModules.home-manager
         {
           home-manager.extraSpecialArgs = {inherit inputs isCorpManaged isHeadless;};
@@ -41,11 +44,13 @@ in
         }
       ]
       ++ nixpkgs.lib.optionals isDarwin [
+        # Nix-managed homebrew.
         homebrew.darwinModules.nix-homebrew
         {
           nix-homebrew = {
-            enable = true; # Install Homebrew under the default prefix
-            inherit user; # User owning the Homebrew prefix
+            enable = true; # Install Homebrew under the default prefix.
+            inherit user; # User owning the Homebrew prefix.
+            autoMigrate = migrateHomebrew; # Enable when migrating from an existing setup.
           };
         }
       ];
