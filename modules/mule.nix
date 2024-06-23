@@ -4,6 +4,11 @@
   ...
 }: let
   cfg = config.mule;
+
+  muleCmd = lib.concatStringsSep " " (
+    ["mule" "install"]
+    ++ cfg.packages
+  );
 in {
   options.mule = {
     enable = lib.mkEnableOption ''
@@ -27,22 +32,17 @@ in {
         List of applications to install using {command}`mule`.
       '';
     };
-
-    config = {
-      muleCmd = lib.concatStringsSep " " (
-        ["mule" "install"]
-        ++ config.packages
-      );
-    };
   };
   config = {
-    system.activationScripts.mule.text = lib.mkIf cfg.enable ''
+    # Installing script as part of the Homebrew activation script.
+    # https://github.com/LnL7/nix-darwin/issues/663.
+    system.activationScripts.homebrew.text = lib.mkIf cfg.enable (lib.mkAfter ''
       echo >&2 "Mule..."
       if [ -f "${cfg.prefix}/mule" ]; then
-        PATH="${cfg.prefix}":$PATH ${cfg.muleCmd}
+        PATH="${cfg.prefix}":$PATH ${muleCmd}
       else
         echo -e "\e[1;31merror: Mule is not installed, skipping...\e[0m" >&2
       fi
-    '';
+    '');
   };
 }
