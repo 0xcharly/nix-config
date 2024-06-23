@@ -90,6 +90,33 @@
     mru-spaces = false;
   };
 
+  system.defaults.loginwindow.GuestEnabled = false;
+
+  system.defaults.NSGlobalDomain = {
+    AppleShowAllFiles = true;
+    AppleInterfaceStyle = "Dark";
+    AppleShowAllExtensions = true;
+    NSAutomaticCapitalizationEnabled = false;
+    NSAutomaticDashSubstitutionEnabled = false;
+    NSAutomaticPeriodSubstitutionEnabled = false;
+    NSAutomaticQuoteSubstitutionEnabled = false;
+    NSAutomaticSpellingCorrectionEnabled = false;
+
+    InitialKeyRepeat = 10;
+    KeyRepeat = 1;
+
+    "com.apple.sound.beep.volume" = 0.0;
+  };
+
+  system.defaults.finder = {
+    AppleShowAllFiles = true;
+    FXPreferredViewStyle = "clmv";
+    FXEnableExtensionChangeWarning = false;
+  };
+
+  system.defaults.trackpad.ActuationStrength = 0; # Silent clicking.
+  system.defaults.universalaccess.mouseDriverCursorSize = 1.5; # Larger cursor.
+
   # The user should already exist, but we need to set this up so Nix knows
   # what our home directory is (https://github.com/LnL7/nix-darwin/issues/423).
   users.users.delay = {
