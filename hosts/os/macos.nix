@@ -69,6 +69,7 @@
     autohide = true;
     autohide-delay = 0.0;
     autohide-time-modifier = 0.4;
+    expose-animation-duration = 0.4;
     orientation = "left";
     persistent-apps = [];
     persistent-others = [];
