@@ -117,6 +117,10 @@
   system.defaults.trackpad.ActuationStrength = 0; # Silent clicking.
   system.defaults.universalaccess.mouseDriverCursorSize = 1.5; # Larger cursor.
 
+  # To re-enable, either set if to `true` (i.e. removing this line will *not*
+  # revert to the default setting) or run `sudo nvram StartupMute=%00`.
+  system.startup.chime = false;
+
   # The user should already exist, but we need to set this up so Nix knows
   # what our home directory is (https://github.com/LnL7/nix-darwin/issues/423).
   users.users.delay = {
