@@ -21,6 +21,60 @@
   writePython312Bin = name: writePython312 "/bin/${name}";
 
   mdproxyLocalRoot = "~/mdproxy";
+  mdproxy-all-pkgs = let
+    # Install missing mdproxy binaries.
+    formatters = [
+      {
+        name = "mdformat";
+        path = "/google/bin/releases/corpeng-engdoc/tools/mdformat";
+      }
+      {
+        name = "textpbfmt";
+        path = "/google/bin/releases/text-proto-format/public/fmt";
+      }
+    ];
+  in (builtins.map
+    (formatter: pkgs.writeShellScriptBin formatter.name ''mdproxy ${formatter.path} "$@"'')
+    formatters);
+
+  adb-scrcpy-pkg = pkgs.writeShellApplication {
+    name = "adb-scrcpy";
+    runtimeInputs = [pkgs.scrcpy];
+    text = builtins.readFile ./bin/adb-scrcpy.sh;
+  };
+  adb-scrcpy-all-pkgs = (
+    let
+      devices = [
+        {
+          adbId = "33301JEHN18611";
+          name = "Pixel 7a";
+        }
+        {
+          adbId = "35061FDHS000A4";
+          name = "Pixel Fold";
+        }
+        {
+          adbId = "98311FFAZ004TE";
+          name = "Pixel 4";
+        }
+        {
+          adbId = "99091FFBA005TS";
+          name = "Pixel 4 XL";
+        }
+      ];
+    in (builtins.map
+      (device:
+        pkgs.writeShellApplication {
+          name = "adb-scrcpy-${device.adbId}";
+          runtimeInputs = [pkgs.scrcpy];
+          text = import ./bin/adb-scrcpy.nix {inherit device;};
+        })
+      devices)
+  );
+  adb-scrcpy-all-in-one-pkg = pkgs.symlinkJoin {
+    name = "adb-scrcpy-all";
+    paths = adb-scrcpy-all-pkgs;
+  };
 in {
   home.stateVersion = "24.05";
   programs.home-manager.enable = true;
@@ -78,52 +132,8 @@ in {
     ]
     ++ (
       lib.optionals (isDarwin && isCorpManaged) (
-        (
-          let
-            devices = [
-              {
-                adbId = "33301JEHN18611";
-                name = "Pixel 7a";
-              }
-              {
-                adbId = "35061FDHS000A4";
-                name = "Pixel Fold";
-              }
-              {
-                adbId = "98311FFAZ004TE";
-                name = "Pixel 4";
-              }
-              {
-                adbId = "99091FFBA005TS";
-                name = "Pixel 4 XL";
-              }
-            ];
-          in (builtins.map
-            (device:
-              pkgs.writeShellApplication {
-                name = "adb-scrcpy-${device.adbId}";
-                runtimeInputs = [pkgs.scrcpy];
-                text = import ./bin/adb-scrcpy.nix {inherit device;};
-              })
-            devices)
-        )
-        ++ (
-          let
-            # Install missing mdproxy binaries.
-            formatters = [
-              {
-                name = "mdformat";
-                path = "/google/bin/releases/corpeng-engdoc/tools/mdformat";
-              }
-              {
-                name = "textpbfmt";
-                path = "/google/bin/releases/text-proto-format/public/fmt";
-              }
-            ];
-          in (builtins.map
-            (formatter: pkgs.writeShellScriptBin formatter.name ''mdproxy ${formatter.path} "$@"'')
-            formatters)
-        )
+        adb-scrcpy-all-pkgs
+        ++ mdproxy-all-pkgs
         ++ [
           # Workspace switcher.
           open-tmux-workspace-pkg
@@ -137,13 +147,7 @@ in {
         ]
       )
     )
-    ++ lib.optionals isDarwin [
-      (pkgs.writeShellApplication {
-        name = "adb-scrcpy";
-        runtimeInputs = [pkgs.scrcpy];
-        text = builtins.readFile ./bin/adb-scrcpy.sh;
-      })
-    ]
+    ++ lib.optionals isDarwin [adb-scrcpy-pkg]
     ++ (lib.optionals (isLinux && !isHeadless) [
       pkgs.firefox-devedition
       pkgs.rofi
@@ -173,6 +177,29 @@ in {
       {
         #   "rofi/config.rasi".text = builtins.readFile ./rofi;
       }
+      # TODO: Raycast expects scripts attributes to be listed at the top of the
+      # file, so a simple wrapper does not work. This *needs* to be a symlink.
+      # // {
+      #   "raycast/adb-scrcpy" = {
+      #     text = "exec ${adb-scrcpy-pkg}/bin/adb-scrcpy";
+      #     executable = true;
+      #   };
+      # }
+      # // (
+      #   lib.optionalAttrs (isDarwin && isCorpManaged) (
+      #     builtins.listToAttrs (
+      #       builtins.map
+      #       (pkg: {
+      #         name = "raycast/${pkg.name}";
+      #         value = {
+      #           text = "exec ${pkg}/bin/${pkg.name}";
+      #           executable = true;
+      #         };
+      #       })
+      #       adb-scrcpy-all-pkgs
+      #     )
+      #   )
+      # )
       // (lib.optionalAttrs (isLinux && !isHeadless) {
         #   "ghostty/config".text = builtins.readFile ./ghostty.linux;
       });
