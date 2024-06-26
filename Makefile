@@ -6,8 +6,18 @@ NIXUSER ?= delay
 # Get the path to this Makefile and directory.
 MAKEFILE_DIR := $(patsubst %/,%,$(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
 
-# The name of the nixosConfiguration in the flake.
+# The name of the configuration in the flake.
 NIXNAME ?= vm-aarch64
+
+# Auto OS selection in commands below.
+UNAME := $(shell uname)
+ifeq ($(UNAME), Darwin)
+	CONFIG_PREFIX := darwinConfigurations
+	REBUILD_COMMAND := darwin-rebuild
+else
+	CONFIG_PREFIX := nixosConfigurations
+	REBUILD_COMMAND := sudo nixos-rebuild
+endif
 
 # Enable flake support.
 REBUILD_OPTIONS=--option accept-flake-config true --show-trace
@@ -17,44 +27,27 @@ REBUILD_OPTIONS=--option accept-flake-config true --show-trace
 PRE_BOOTSTRAP_SSH_OPTIONS=-o PubkeyAuthentication=no -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
 SSH_OPTIONS=-o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
 
+# These switch/test commands are mostly for self documentation. I usually run
+# them manually from the command line.
 switch:
-	sudo nixos-rebuild $(REBUILD_OPTIONS) switch --flake .
+	$(REBUILD_COMMAND) $(REBUILD_OPTIONS) switch --flake .
 
 test:
-	sudo nixos-rebuild $(REBUILD_OPTIONS) test --flake .
+	$(REBUILD_COMMAND) $(REBUILD_OPTIONS) test --flake .
 
-# This builds the given NixOS configuration and pushes the results to the cache.
-# This does not alter the current running system.
-# This requires cachix authentication to be configured out of band.
+# This builds the given configuration and pushes the results to the cache. This
+# does not alter the current running system. This requires cachix authentication
+# to be configured out of band.
 # TODO: redesign cachix authentication since I moved away from 1Password in the
 # VM.
 cache:
-	nix build '.#nixosConfigurations.$(NIXNAME).config.system.build.toplevel' --json \
+	nix build '.#$(CONFIG_PREFIX).$(NIXNAME).config.system.build.toplevel' --json \
 		| jq -r '.[].outputs | to_entries[].value' \
 		| op plugin run -- cachix push 0xcharly-nixos-config
 
+# First run on darwin (equivalent to `nixos-install` to bootstrap the system).
 darwin/bootstrap:
 	nix run nix-darwin -- switch --flake .
-
-darwin/switch:
-	darwin-rebuild $(REBUILD_OPTIONS) switch --flake .
-
-darwin/test:
-	darwin-rebuild $(REBUILD_OPTIONS) test --flake .
-
-darwin-corp/switch:
-	darwin-rebuild-corp $(REBUILD_OPTIONS) switch --flake .
-
-darwin-corp/test:
-	darwin-rebuild-corp $(REBUILD_OPTIONS) test --flake .
-
-# This builds the given nix-darwin configuration and pushes the results to the
-# cache. This does not alter the current running system. This requires cachix
-# authentication to be configured out of band.
-darwin/cache:
-	nix build '.#darwinConfigurations.$(NIXNAME).config.system.build.toplevel' --json \
-		| jq -r '.[].outputs | to_entries[].value' \
-		| op plugin run -- cachix push 0xcharly-nixos-config
 
 # Copy the configuration to the VM and run the bootstrap script.
 vm/bootstrap: hosts/ lib/ modules/ users/ flake.lock flake.nix bootstrap-vm.sh

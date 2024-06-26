@@ -72,9 +72,8 @@ should exist. If `/dev/nvme` or `/dev/vda` exists instead, you didn't configure
 the disk properly. Note, these other block device types work fine, but you'll
 have to modify the `bootstrap-vm.sh` to use the proper block device paths.
 
-Also at this point, I recommend making a snapshot in case anything goes wrong,
-or simply to quickly go back to a blank slate. I usually call this snapshot
-"pre-bootstrap".
+I always take a snapshot at this point, in case anything goes wrong, or simply
+to quickly go back to a blank slate. I usually call it "pre-bootstrap".
 
 Run `ifconfig` and get the IP address of the first device. It is probably
 `192.168.XXX.YYY`, but it can be anything. Pass this to the `Makefile` through
@@ -132,7 +131,7 @@ used on M1 and M3). If you are building for a different target, you must change
 `NIXNAME` (same as `NIXADDR`).
 
 ```shell
-export NIXNAME=vm-aarch64
+export NIXNAME=vm-linode
 ```
 
 Run the bootstrap target. This will install setup your partitions on the VM disk
@@ -167,10 +166,11 @@ sudo nixos-rebuild switch --flake .
 ### `nix-darwin` setup
 
 I share some of my Nix configurations with my Mac host and use Nix to manage
-_some_ aspects of my macOS installation, too. This uses the
+_most_ aspects of my macOS installation, too. This uses the
 [nix-darwin](https://github.com/LnL7/nix-darwin) project. I don't manage
-_everything_ with Nix, for example I don't manage apps, some of my system
-settings, Homebrew, etc. I plan to migrate some of those in time.
+_everything_ with Nix yet, in particular I don't manage apps. I plan to migrate
+some of those in time. My system settings, Homebrew, etc. are however already
+managed by Nix.
 
 To utilize the Mac setup, first install Nix using some Nix installer.
 
