@@ -42,7 +42,7 @@
     runtimeInputs = [pkgs.scrcpy];
     text = builtins.readFile ./bin/adb-scrcpy.sh;
   };
-  adb-scrcpy-all-pkgs = (
+  adb-scrcpy-all-specialized-pkgs = (
     let
       devices = [
         {
@@ -71,10 +71,6 @@
         })
       devices)
   );
-  adb-scrcpy-all-in-one-pkg = pkgs.symlinkJoin {
-    name = "adb-scrcpy-all";
-    paths = adb-scrcpy-all-pkgs;
-  };
 in {
   home.stateVersion = "24.05";
   programs.home-manager.enable = true;
@@ -132,7 +128,7 @@ in {
     ]
     ++ (
       lib.optionals (isDarwin && isCorpManaged) (
-        adb-scrcpy-all-pkgs
+        adb-scrcpy-all-specialized-pkgs
         ++ mdproxy-all-pkgs
         ++ [
           # Workspace switcher.
@@ -177,29 +173,23 @@ in {
       {
         #   "rofi/config.rasi".text = builtins.readFile ./rofi;
       }
-      # TODO: Raycast expects scripts attributes to be listed at the top of the
-      # file, so a simple wrapper does not work. This *needs* to be a symlink.
-      # // {
-      #   "raycast/adb-scrcpy" = {
-      #     text = "exec ${adb-scrcpy-pkg}/bin/adb-scrcpy";
-      #     executable = true;
-      #   };
-      # }
-      # // (
-      #   lib.optionalAttrs (isDarwin && isCorpManaged) (
-      #     builtins.listToAttrs (
-      #       builtins.map
-      #       (pkg: {
-      #         name = "raycast/${pkg.name}";
-      #         value = {
-      #           text = "exec ${pkg}/bin/${pkg.name}";
-      #           executable = true;
-      #         };
-      #       })
-      #       adb-scrcpy-all-pkgs
-      #     )
-      #   )
-      # )
+      # Raycast expects scripts attributes to be listed at the top of the file,
+      # so a simple wrapper does not work. This *needs* to be a symlink.
+      // lib.optionalAttrs isDarwin {
+        "raycast/bin/adb-scrcpy".source = "${adb-scrcpy-pkg.outPath}/bin/adb-scrcpy";
+      }
+      // (
+        lib.optionalAttrs (isDarwin && isCorpManaged) (
+          builtins.listToAttrs (
+            builtins.map
+            (pkg: {
+              name = "raycast/bin/${pkg.name}";
+              value = {source = "${pkg}/bin/${pkg.name}";};
+            })
+            adb-scrcpy-all-specialized-pkgs
+          )
+        )
+      )
       // (lib.optionalAttrs (isLinux && !isHeadless) {
         # TODO: be patient…
         #   "ghostty/config".text = builtins.readFile ./ghostty.linux;
