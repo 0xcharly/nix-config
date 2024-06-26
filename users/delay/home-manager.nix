@@ -201,6 +201,7 @@ in {
       #   )
       # )
       // (lib.optionalAttrs (isLinux && !isHeadless) {
+        # TODO: be patient…
         #   "ghostty/config".text = builtins.readFile ./ghostty.linux;
       });
 
@@ -500,7 +501,7 @@ in {
         # VMWare hosts.
         "192.168.*" = {
           extraOptions =
-            lib.optionalAttrs (!isHeadless) {IdentityFile = "~/.ssh/vm-aarch64";};
+            lib.optionalAttrs (!isHeadless) {IdentityFile = "~/.ssh/vm";};
         };
       })
       // (lib.optionalAttrs (isDarwin && isCorpManaged) {
