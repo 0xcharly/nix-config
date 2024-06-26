@@ -38,8 +38,9 @@ three-finger swipe or use other keyboard shortcuts to activate that window.
 > The original fork of this repository also supports UTM and Parallels but I'm
 > not using either so removed the configurations to simplify maintenance. I've
 > also removed the Windows support (VMware Workstation and Hyper-V).
-> Check out the repository my fork is based on if you're interested in restoring
-> these: [mitchellh/nixos-config](https://github.com/mitchellh/nixos-config).
+> Check out the repository this fork is based on if you're interested in
+> restoring these:
+> [mitchellh/nixos-config](https://github.com/mitchellh/nixos-config).
 
 Download the ISO from [NixOS downloads](https://nixos.org/download/#nixos-iso).
 For Apple Silicon hardware, use the `aarch64` (64-bit ARM) images.
