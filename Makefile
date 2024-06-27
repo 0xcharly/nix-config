@@ -38,8 +38,8 @@ test:
 # This builds the given configuration and pushes the results to the cache. This
 # does not alter the current running system. This requires cachix authentication
 # to be configured out of band.
-# TODO: redesign cachix authentication since I moved away from 1Password in the
-# VM.
+# TODO: redesign cachix authentication on NixOs since I moved away from
+# 1Password in the VM.
 cache:
 	nix build '.#$(CONFIG_PREFIX).$(NIXNAME).config.system.build.toplevel' --json \
 		| jq -r '.[].outputs | to_entries[].value' \
