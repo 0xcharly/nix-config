@@ -35,9 +35,11 @@ three-finger swipe or use other keyboard shortcuts to activate that window.
 >
 > This setup guide will cover VMware Fusion because that is the hypervisor I use
 > day to day.
+>
 > The original fork of this repository also supports UTM and Parallels but I'm
 > not using either so removed the configurations to simplify maintenance. I've
 > also removed the Windows support (VMware Workstation and Hyper-V).
+>
 > Check out the repository this fork is based on if you're interested in
 > restoring these:
 > [mitchellh/nixos-config](https://github.com/mitchellh/nixos-config).
