@@ -1,4 +1,4 @@
-{...}: {
+{pkgs, ...}: {
   imports = [
     ./hw/vm-aarch64.nix
     ./os/nixos.nix
@@ -11,6 +11,9 @@
 
   # Disable the default module and import our override that works on aarch64.
   disabledModules = ["virtualisation/vmware-guest.nix"];
+
+  # This is needed for the vmware user tools clipboard to work.
+  environment.systemPackages = [pkgs.gtkmm3];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
