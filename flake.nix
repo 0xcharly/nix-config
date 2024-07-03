@@ -81,6 +81,7 @@
             ])
             ++ (with pkgs; [
               lua-language-server
+              manix
               nixd
             ]);
           shellHook = ''
@@ -106,6 +107,9 @@
       checks = {inherit pre-commit-check;};
     })
     // {
+      # TODO: look into https://github.com/numtide/system-manager to manage
+      # non-NixOS linux systems.
+
       nixosConfigurations.vm-aarch64 = mkSystem {
         configuration = ./hosts/vm-aarch64.nix;
       };

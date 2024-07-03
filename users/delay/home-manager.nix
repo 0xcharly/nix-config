@@ -86,24 +86,16 @@ in {
     [
       pkgs.bat
       pkgs.fd
-      pkgs.fzf
       pkgs.gh
       pkgs.htop
       pkgs.jq
       pkgs.ripgrep
       pkgs.tree
-      pkgs.watch
-
-      pkgs.alejandra
-      pkgs.manix
-      pkgs.nixd
-      pkgs.nixpkgs-fmt
 
       nvim-pkg
 
       pkgs.fishPlugins.done
       pkgs.fishPlugins.fzf
-      pkgs.fishPlugins.foreign-env
       pkgs.fishPlugins.transient-fish
 
       (pkgs.writeShellScriptBin "term-capabilities" (builtins.readFile ./bin/term-capabilities.sh))
@@ -162,21 +154,21 @@ in {
     EDITOR = "${nvim-pkg}/bin/nvim";
     PAGER = "less -FirSwX";
     MANPAGER = "${nvim-pkg}/bin/nvim +Man!";
+    SHELL = "${pkgs.zsh}/bin/zsh";
     TERMINAL = "${pkgs.alacritty}/bin/alacritty";
-    # Catppuccin theme for FzF. https://github.com/catppuccin/fzf
-    FZF_DEFAULT_OPTS = "--color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8,fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc,marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8";
   };
 
   xdg = {
     enable = true;
     configFile =
       {
-        #   "rofi/config.rasi".text = builtins.readFile ./rofi;
+        # TODO: rofi config.
+        # "rofi/config.rasi".text = builtins.readFile ./rofi;
       }
       # Raycast expects scripts attributes to be listed at the top of the file,
       # so a simple wrapper does not work. This *needs* to be a symlink.
       // lib.optionalAttrs isDarwin {
-        "raycast/bin/adb-scrcpy".source = "${adb-scrcpy-pkg.outPath}/bin/adb-scrcpy";
+        "raycast/bin/adb-scrcpy".source = "${adb-scrcpy-pkg}/bin/adb-scrcpy";
       }
       // (
         lib.optionalAttrs (isDarwin && isCorpManaged) (
@@ -194,16 +186,6 @@ in {
         # TODO: be patient…
         #   "ghostty/config".text = builtins.readFile ./ghostty.linux;
       });
-
-    mimeApps = lib.mkIf (isLinux && !isHeadless) {
-      defaultApplications = {
-        "text/html" = "firefox-devedition.desktop";
-        "x-scheme-handler/http" = "firefox-devedition.desktop";
-        "x-scheme-handler/https" = "firefox-devedition.desktop";
-        "x-scheme-handler/about" = "firefox-devedition.desktop";
-        "x-scheme-handler/unknown" = "firefox-devedition.desktop";
-      };
-    };
   };
 
   xsession = lib.mkIf (isLinux && !isHeadless) {
@@ -292,13 +274,69 @@ in {
     '';
   });
 
+  programs.eza = {
+    enable = true;
+    enableFishIntegration = true;
+    enableZshIntegration = true;
+  };
+
+  programs.fzf = {
+    enable = true;
+    enableFishIntegration = true;
+    enableZshIntegration = true;
+    # Catppuccin theme for FzF. https://github.com/catppuccin/fzf
+    colors = {
+      bg = "#1e1e2e";
+      "bg+" = "#313244";
+      fg = "#cdd6f4";
+      "fg+" = "#cdd6f4";
+      header = "#f38ba8";
+      hl = "#f38ba8";
+      "hl+" = "#f38ba8";
+      info = "#cba6f7";
+      marker = "#f5e0dc";
+      pointer = "#f5e0dc";
+      prompt = "#cba6f7";
+      spinner = "#f5e0dc";
+    };
+  };
+
   programs.zsh = {
     enable = true;
-    initExtra = lib.optionalString (isDarwin && isCorpManaged) (let
-      mdproxy_zshrc = "${mdproxyLocalRoot}/data/mdproxy_zshrc";
-    in ''
-      [[ -e "${mdproxy_zshrc}" ]] && source "${mdproxy_zshrc}" # MDPROXY-ZSHRC
-    '');
+    defaultKeymap = "viins";
+    syntaxHighlighting.enable = true;
+    localVariables = {
+      PS1 = "%B%F{8}:%f%b ";
+    };
+    initExtra = lib.strings.concatStringsSep "\n" [
+      ''setopt TRANSIENT_RPROMPT''
+      (builtins.readFile ./zshrc)
+      (lib.optionalString isLinux "eval $(${pkgs.keychain}/bin/keychain --eval --nogui --quiet)")
+      (lib.optionalString isCorpManaged ''
+        bindkey \cf ${open-tmux-workspace-pkg}/bin/open-tmux-workspace
+      '')
+      (lib.optionalString (isDarwin && isCorpManaged) (let
+        mdproxy_zshrc = "${mdproxyLocalRoot}/data/mdproxy_zshrc";
+      in ''
+        [[ -e "${mdproxy_zshrc}" ]] && source "${mdproxy_zshrc}" # MDPROXY-ZSHRC
+      ''))
+    ];
+    shellAliases =
+      {
+        # Shortcut to setup a nix-shell with zsh. This lets you do something
+        # like `nixsh -p go` to get an environment with Go but use the zsh
+        # shell along with it.
+        nixsh = "nix-shell --run ${pkgs.zsh}/bin/zsh";
+        devsh = "nix develop --command ${pkgs.zsh}/bin/zsh";
+      }
+      // (lib.optionalAttrs isLinux {
+        # For consistency with macOS.
+        pbcopy = "xclip";
+        pbpaste = "xclip -o";
+      })
+      // (lib.optionalAttrs (isLinux && isCorpManaged) {
+        bat = "batcat";
+      });
   };
 
   programs.fish = {
@@ -306,7 +344,7 @@ in {
     interactiveShellInit = lib.strings.concatStringsSep "\n" [
       (builtins.readFile ./config.fish)
       "set -g SHELL ${pkgs.fish}/bin/fish"
-      (lib.optionalString isLinux "eval $(${pkgs.keychain}/bin/keychain --eval --nogui --quiet)")
+      (lib.optionalString isLinux "eval (${pkgs.keychain}/bin/keychain --eval --nogui --quiet)")
       (lib.optionalString isCorpManaged ''
         bind \cf ${open-tmux-workspace-pkg}/bin/open-tmux-workspace
         bind -M insert \cf ${open-tmux-workspace-pkg}/bin/open-tmux-workspace
@@ -327,9 +365,8 @@ in {
         # Shortcut to setup a nix-shell with fish. This lets you do something
         # like `nixsh -p go` to get an environment with Go but use the fish
         # shell along with it.
-        nixsh = "nix-shell --run fish";
-        devsh = "nix develop --command fish";
-        ls = "${pkgs.eza}/bin/eza";
+        nixsh = "nix-shell --run ${pkgs.fish}/bin/fish";
+        devsh = "nix develop --command ${pkgs.fish}/bin/fish";
       }
       // (lib.optionalAttrs isLinux {
         # For consistency with macOS.

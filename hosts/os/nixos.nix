@@ -8,14 +8,15 @@
   # Required for graphical interfaces (X or Wayland) to work.
   security.polkit.enable = true;
 
-  # Since we're using fish as our shell.
-  programs.fish.enable = true;
+  # Since we're using ZSH as our shell.
+  programs.zsh.enable = true;
+  programs.fish.enable = true; # TODO: remove once fully migrated to ZSH.
 
   users.users.delay = {
     isNormalUser = true;
     home = "/home/delay";
     extraGroups = ["docker" "wheel"];
-    shell = pkgs.fish;
+    shell = pkgs.zsh;
     # Create a hashed password with `nix-shell -p mkpasswd --run "mkpasswd -m yescrypt"`
     hashedPassword = "$y$j9T$6Obep7H1BnzgcBCOdY9hO/$tyLpdkxXnRPumeqlm43Uh4UPj1UQgymEiREPSr49ZR1";
     openssh.authorizedKeys.keys = [

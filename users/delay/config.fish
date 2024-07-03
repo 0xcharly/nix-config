@@ -3,10 +3,6 @@ set -g fish_term24bit 1 # Enable true color support.
 
 fish_vi_key_bindings # Enable vi bindings.
 
-test -d $HOME/.cargo/bin && fish_add_path $HOME/.cargo/bin
-test -d $HOME/.local/bin && fish_add_path $HOME/.local/bin
-test -x /opt/homebrew/bin/brew && eval (/opt/homebrew/bin/brew shellenv)
-
 function fish_prompt
   set_color --bold brgrey
   string repeat --count $SHLVL --no-newline ":"
@@ -65,9 +61,6 @@ function fish_right_prompt
   else if test -n "$git_repo"
     set_color red --reverse
     printf " 󰊢  %s " $git_repo
-  else if test -n "$nix_shell"
-    set_color blue --reverse
-    printf " 󱄅  %s " $nix_shell
   else
     set_color green --reverse
     printf " 󰉋  %s " (path basename $PWD)
