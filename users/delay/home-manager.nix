@@ -71,6 +71,22 @@
         })
       devices)
   );
+  shellAliases = shell:
+    {
+      # Shortcut to setup a nix-shell with fish. This lets you do something
+      # like `nixsh -p go` to get an environment with Go but use the fish
+      # shell along with it.
+      nixsh = "nix-shell --run ${shell}";
+      devsh = "nix develop --command ${shell}";
+    }
+    // (lib.optionalAttrs isLinux {
+      # For consistency with macOS.
+      pbcopy = "xclip";
+      pbpaste = "xclip -o";
+    })
+    // (lib.optionalAttrs (isLinux && isCorpManaged) {
+      bat = "batcat";
+    });
 in {
   home.stateVersion = "24.05";
   programs.home-manager.enable = true;
@@ -309,34 +325,16 @@ in {
       PS1 = "%B%F{8}:%f%b ";
     };
     initExtra = lib.strings.concatStringsSep "\n" [
-      ''setopt TRANSIENT_RPROMPT''
-      (builtins.readFile ./zshrc)
+      (builtins.readFile ./rprompt.zsh)
       (lib.optionalString isLinux "eval $(${pkgs.keychain}/bin/keychain --eval --nogui --quiet)")
-      (lib.optionalString isCorpManaged ''
-        bindkey \cf ${open-tmux-workspace-pkg}/bin/open-tmux-workspace
-      '')
+      (lib.optionalString isCorpManaged (builtins.readFile ./tmux-open-citc-workspace.zsh))
       (lib.optionalString (isDarwin && isCorpManaged) (let
         mdproxy_zshrc = "${mdproxyLocalRoot}/data/mdproxy_zshrc";
       in ''
         [[ -e "${mdproxy_zshrc}" ]] && source "${mdproxy_zshrc}" # MDPROXY-ZSHRC
       ''))
     ];
-    shellAliases =
-      {
-        # Shortcut to setup a nix-shell with zsh. This lets you do something
-        # like `nixsh -p go` to get an environment with Go but use the zsh
-        # shell along with it.
-        nixsh = "nix-shell --run ${pkgs.zsh}/bin/zsh";
-        devsh = "nix develop --command ${pkgs.zsh}/bin/zsh";
-      }
-      // (lib.optionalAttrs isLinux {
-        # For consistency with macOS.
-        pbcopy = "xclip";
-        pbpaste = "xclip -o";
-      })
-      // (lib.optionalAttrs (isLinux && isCorpManaged) {
-        bat = "batcat";
-      });
+    shellAliases = shellAliases "${pkgs.zsh}/bin/zsh";
   };
 
   programs.fish = {
@@ -357,25 +355,8 @@ in {
       '')
     ];
 
-    functions = {
-      fish_mode_prompt = ""; # Disable prompt vi mode reporting.
-    };
-    shellAliases =
-      {
-        # Shortcut to setup a nix-shell with fish. This lets you do something
-        # like `nixsh -p go` to get an environment with Go but use the fish
-        # shell along with it.
-        nixsh = "nix-shell --run ${pkgs.fish}/bin/fish";
-        devsh = "nix develop --command ${pkgs.fish}/bin/fish";
-      }
-      // (lib.optionalAttrs isLinux {
-        # For consistency with macOS.
-        pbcopy = "xclip";
-        pbpaste = "xclip -o";
-      })
-      // (lib.optionalAttrs (isLinux && isCorpManaged) {
-        bat = "batcat";
-      });
+    functions.fish_mode_prompt = ""; # Disable prompt vi mode reporting.
+    shellAliases = shellAliases "${pkgs.fish}/bin/fish";
   };
 
   programs.alacritty = lib.mkIf (!isHeadless) {

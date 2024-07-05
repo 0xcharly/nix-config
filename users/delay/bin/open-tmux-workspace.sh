@@ -9,11 +9,8 @@ fi
 # Check if the session exists already, or create it otherwise.
 if ! tmux has-session -t "$selected_workspace" 2>/dev/null; then
     # Create a detached session that we'll join below, creating the workspace if it doesn't exist.
-    tmux new-session -ds "$selected_workspace" -c "$(hg hgd -f "$selected_workspace")"
+    tmux new-session -ds "$selected_workspace" -c "$(hg hgd -qf "$selected_workspace" 2> /dev/null)"
 fi
-
-# Update the terminal window name.
-echo -ne "\033]0;$selected_workspace\007"
 
 if [ -z "${TMUX:-}" ]; then
     # If we're not running in a tmux client, attach to the session.
