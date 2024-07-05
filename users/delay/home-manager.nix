@@ -108,6 +108,8 @@ in {
       pkgs.ripgrep
       pkgs.tree
 
+      pkgs.comma
+
       nvim-pkg
 
       pkgs.fishPlugins.done
@@ -259,7 +261,6 @@ in {
 
   programs.direnv = {
     enable = true;
-    enableBashIntegration = true;
     # enableFishIntegration = true; # read-only; always enabled.
     enableZshIntegration = true;
     nix-direnv.enable = true;
@@ -433,10 +434,6 @@ in {
       key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPf5EWFb/MW+1ZdQxDLZJWPrgrtibMcCmmKeCp+QMWBl";
       signByDefault = true;
     };
-    aliases = {
-      prettylog = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(r) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative";
-      root = "rev-parse --show-toplevel";
-    };
     extraConfig = {
       branch.autosetuprebase = "always";
       color.ui = true;
@@ -448,12 +445,6 @@ in {
       credential."https://gist.github.com".helper = "!gh auth git-credential";
       gpg.format = "ssh";
       commit.gpgsign = true;
-      filter.lfs = {
-        clean = "git-lfs clean -- %f";
-        smudge = "git-lfs smudge -- %f";
-        process = "git-lfs filter-process";
-        required = true;
-      };
     };
   };
 
@@ -470,13 +461,7 @@ in {
     mouse = true;
     sensibleOnTop = false;
 
-    extraConfig = lib.strings.concatStringsSep "\n" [
-      (builtins.readFile ./tmux.conf)
-      (lib.optionalString isCorpManaged ''
-        # Citc workspace fuzzy finder.
-        bind f run-shell "${pkgs.tmux}/bin/tmux new-window ${open-tmux-workspace-pkg}/bin/open-tmux-workspace"
-      '')
-    ];
+    extraConfig = builtins.readFile ./tmux.conf;
   };
 
   xresources = lib.mkIf (isLinux && !isHeadless) {
