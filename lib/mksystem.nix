@@ -1,6 +1,5 @@
 # This function creates a NixOS or nix-darwin system configuration.
 {
-  homebrew,
   overlays,
   nixpkgs,
   inputs,
@@ -20,19 +19,23 @@
     if isDarwin
     then inputs.home-manager.darwinModules
     else inputs.home-manager.nixosModules;
+  nixIndexDb =
+    if isDarwin
+    then inputs.nix-index-database.hmModules
+    else inputs.nix-index-database.nixosModules;
 in
   osSystem {
     specialArgs = {inherit isCorpManaged isHeadless;};
 
     modules =
       [
-        # Apply our overlays.
+        # System options.
         {nixpkgs.overlays = overlays;}
 
-        # Apply system configuration.
+        # System configuration.
         hostModule
 
-        # Apply user configuration.
+        # User configuration.
         hmModules.home-manager
         {
           home-manager.extraSpecialArgs = {inherit inputs isCorpManaged isHeadless;};
@@ -41,10 +44,14 @@ in
           home-manager.backupFileExtension = "nix-backup";
           home-manager.users.${user} = import ../users/${user}/home-manager.nix;
         }
+
+        # nix-index-database configuration.
+        nixIndexDb.nix-index
+        { programs.nix-index-database.comma.enable = true; }
       ]
       ++ nixpkgs.lib.optionals isDarwin [
         # Nix-managed homebrew.
-        homebrew.darwinModules.nix-homebrew
+        inputs.homebrew.darwinModules.nix-homebrew
         {
           nix-homebrew = {
             enable = true; # Install Homebrew under the default prefix.

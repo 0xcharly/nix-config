@@ -32,6 +32,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Weekly updated index: quickly locate nix packages with specific files.
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Neovim overlay with personal configuration.
     nvim.url = "github:0xcharly/nix-config-nvim";
 
@@ -45,7 +51,6 @@
   outputs = inputs @ {
     self,
     nixpkgs,
-    homebrew,
     flake-utils,
     pre-commit-hooks,
     ...
@@ -61,7 +66,7 @@
     ];
 
     mkSystem = import ./lib/mksystem.nix {
-      inherit homebrew overlays nixpkgs inputs;
+      inherit overlays nixpkgs inputs;
     };
 
     mkHome = import ./lib/mkhome.nix {

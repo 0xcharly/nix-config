@@ -108,8 +108,6 @@ in {
       pkgs.ripgrep
       pkgs.tree
 
-      pkgs.comma
-
       nvim-pkg
 
       pkgs.fishPlugins.done

@@ -21,6 +21,7 @@ in
     pkgs = import nixpkgs {inherit system;};
     extraSpecialArgs = {inherit inputs isCorpManaged isHeadless;};
     modules = [
+      # System options.
       {
         nixpkgs.overlays = overlays;
         home = {
@@ -28,6 +29,12 @@ in
           homeDirectory = "/home/${username}";
         };
       }
+
+      # User configuration.
       userModule
+
+      # nix-index-database configuration.
+      inputs.nix-index-database.hmModules.nix-index
+      { programs.nix-index-database.comma.enable = true; }
     ];
   })
