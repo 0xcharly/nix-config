@@ -21,7 +21,7 @@
     else inputs.home-manager.nixosModules;
   nixIndexDb =
     if isDarwin
-    then inputs.nix-index-database.hmModules
+    then inputs.nix-index-database.darwinModules
     else inputs.nix-index-database.nixosModules;
 in
   osSystem {
@@ -47,7 +47,7 @@ in
 
         # nix-index-database configuration.
         nixIndexDb.nix-index
-        { programs.nix-index-database.comma.enable = true; }
+        {programs.nix-index-database.comma.enable = true;}
       ]
       ++ nixpkgs.lib.optionals isDarwin [
         # Nix-managed homebrew.
