@@ -139,11 +139,11 @@
       };
 
       # Home Manager only config for other Linux hosts.
-      homeConfigurations.vm-linode = mkHome {
+      homeConfigurations."delay@linode" = mkHome {
         isHeadless = true;
       };
 
-      homeConfigurations.vm-cloudtop = mkHome {
+      homeConfigurations."delay@cloudtop-delay" = mkHome {
         isCorpManaged = true;
         isHeadless = true;
       };

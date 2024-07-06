@@ -197,3 +197,43 @@ Once `nix-darwin` is installed, successive incremental changes are applied with
 ```shell
 darwin-rebuild switch --flake .
 ```
+
+## Nix on a Linux host (not NixOS)
+
+>[!WARNING]
+>
+> **This configuration is untested**
+> This is currently a work-in-progress attempt at supporting Linux hosts on
+> which I can't install NixOS.
+
+### Home Manager setup
+
+Home Manager is already used to manage all of my user configuration (i.e.
+dotfiles, scripts and more). On non-NixOS hosts, Home Manager can be used
+standalone.
+
+To utilize the Home Manager standalone setup, first install Nix using some Nix
+installer.
+
+I use the [nix-installer](https://github.com/DeterminateSystems/nix-installer)
+by Determinate Systems.com, but it should work with any install, including from
+the system's package manager. The point is just to get the `nix` CLI with flake
+support installed.
+
+Once installed, clone this repo and bootstrap the `home-manager` installation:
+
+```shell
+nix run home-manager -- switch --flake .
+```
+
+If there are any errors, follow the error message (e.g. some folders may need
+permissions changed, etc…). That's it.
+
+### `home-manager` maintenance
+
+Once `home-manager` is installed, successive incremental changes are applied with
+`home-manager`:
+
+```shell
+home-manager switch --flake .
+```
