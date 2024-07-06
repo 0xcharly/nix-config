@@ -1,12 +1,10 @@
-# This function creates a NixOS system based on our VM setup for a
-# particular architecture.
+# This function creates a NixOS or nix-darwin system configuration.
 {
   homebrew,
   overlays,
   nixpkgs,
   inputs,
-}: {
-  configuration,
+}: hostModule: {
   isCorpManaged ? false,
   isDarwin ? false,
   isHeadless ? false,
@@ -30,8 +28,9 @@ in
       [
         # Apply our overlays.
         {nixpkgs.overlays = overlays;}
+
         # Apply system configuration.
-        configuration
+        hostModule
 
         # Apply user configuration.
         hmModules.home-manager

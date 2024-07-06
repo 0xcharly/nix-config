@@ -63,6 +63,10 @@
     mkSystem = import ./lib/mksystem.nix {
       inherit homebrew overlays nixpkgs inputs;
     };
+
+    mkHome = import ./lib/mkhome.nix {
+      inherit overlays nixpkgs inputs;
+    };
   in
     flake-utils.lib.eachSystem supportedSystems
     (system: let
@@ -107,39 +111,41 @@
       checks = {inherit pre-commit-check;};
     })
     // {
-      # TODO: look into https://github.com/numtide/system-manager to manage
-      # non-NixOS linux systems.
+      # NixOS hosts.
+      nixosConfigurations.vm-aarch64 = mkSystem ./hosts/vm-aarch64.nix {};
 
-      nixosConfigurations.vm-aarch64 = mkSystem {
-        configuration = ./hosts/vm-aarch64.nix;
-      };
-
-      nixosConfigurations.vm-linode = mkSystem {
-        configuration = ./hosts/vm-linode.nix;
+      nixosConfigurations.vm-linode = mkSystem ./hosts/vm-linode.nix {
         isHeadless = true;
       };
 
-      darwinConfigurations.studio = mkSystem {
-        configuration = ./hosts/darwin.nix;
+      # nix-darwin hosts.
+      darwinConfigurations.studio = mkSystem ./hosts/darwin.nix {
         isDarwin = true;
       };
 
-      darwinConfigurations.mbp-roam = mkSystem {
-        configuration = ./hosts/darwin.nix;
+      darwinConfigurations.mbp-roam = mkSystem ./hosts/darwin.nix {
         isDarwin = true;
       };
 
-      darwinConfigurations.mbp-delay = mkSystem {
-        configuration = ./hosts/darwin-corp.nix;
+      darwinConfigurations.mbp-delay = mkSystem ./hosts/darwin-corp.nix {
         isCorpManaged = true;
         isDarwin = true;
       };
 
-      darwinConfigurations.mbp-delay-roam = mkSystem {
-        configuration = ./hosts/darwin-corp.nix;
+      darwinConfigurations.mbp-delay-roam = mkSystem ./hosts/darwin-corp.nix {
         isCorpManaged = true;
         isDarwin = true;
         migrateHomebrew = true;
+      };
+
+      # Home Manager only config for other Linux hosts.
+      homeConfigurations.vm-linode = mkHome {
+        isHeadless = true;
+      };
+
+      homeConfigurations.vm-cloudtop = mkHome {
+        isCorpManaged = true;
+        isHeadless = true;
       };
     };
 }
