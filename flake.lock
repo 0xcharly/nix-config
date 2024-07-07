@@ -1577,11 +1577,11 @@
         "telescope-manix": "telescope-manix"
       },
       "locked": {
-        "lastModified": 1719139428,
-        "narHash": "sha256-Q5CiRrCA6sYGvEkU90F1TUS02CgtGZBHo0/Ynq0y01U=",
+        "lastModified": 1720364945,
+        "narHash": "sha256-ORLAbt1jKdX3eXfUPNI06pYCLfJCUuFH3wptUdADvrM=",
         "owner": "0xcharly",
         "repo": "nix-config-nvim",
-        "rev": "5bac5112f18cb45a4dcf05f09ca3af852ddddb3d",
+        "rev": "fbada14bb0f789affb45e993ad119f8c44cebb3b",
         "type": "github"
       },
       "original": {
