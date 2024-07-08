@@ -12,11 +12,17 @@ NIXNAME ?= vm-aarch64
 # Auto OS selection in commands below.
 UNAME := $(shell uname)
 ifeq ($(UNAME), Darwin)
+	# Partially managed nix-darwin machine.
 	CONFIG_PREFIX := darwinConfigurations
 	REBUILD_COMMAND := darwin-rebuild
-else
+else ifeq ($(grep ^NAME= /etc/os-release |cut -d= -f2), NixOS)
+	# Fully managed NixOS machine.
 	CONFIG_PREFIX := nixosConfigurations
 	REBUILD_COMMAND := sudo nixos-rebuild
+else
+	# Other Linux distribution managed via Home Manager standalone.
+	CONFIG_PREFIX := homeConfigurations
+	REBUILD_COMMAND := home-manager
 endif
 
 # Enable flake support.
