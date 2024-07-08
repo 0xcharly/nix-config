@@ -319,11 +319,15 @@ in {
   programs.zsh = {
     enable = true;
     defaultKeymap = "viins";
-    syntaxHighlighting.enable = true;
-    localVariables = {
-      PS1 = "%B%F{8}:%f%b ";
+    history = {
+      ignoreDups = true;
+      ignoreAllDups = true;
     };
     initExtra = lib.strings.concatStringsSep "\n" [
+      ''
+        setopt HIST_REDUCE_BLANKS
+        setopt INC_APPEND_HISTORY # Use `fc -RI` to reload history.
+      ''
       (builtins.readFile ./rprompt.zsh)
       (lib.optionalString isLinux "eval $(${pkgs.keychain}/bin/keychain --eval --nogui --quiet)")
       (lib.optionalString isCorpManaged (builtins.readFile ./tmux-open-citc-workspace.zsh))
@@ -333,7 +337,11 @@ in {
         [[ -e "${mdproxy_zshrc}" ]] && source "${mdproxy_zshrc}" # MDPROXY-ZSHRC
       ''))
     ];
+    localVariables = {
+      PS1 = "%B%F{8}:%f%b ";
+    };
     shellAliases = shellAliases "${pkgs.zsh}/bin/zsh";
+    syntaxHighlighting.enable = true;
   };
 
   programs.fish = {
