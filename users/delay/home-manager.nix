@@ -108,6 +108,10 @@ in {
       pkgs.ripgrep
       pkgs.tree
 
+      # For editing Nix files.
+      pkgs.alejandra
+      pkgs.nixd
+
       nvim-pkg
 
       pkgs.fishPlugins.done
