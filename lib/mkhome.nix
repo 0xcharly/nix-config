@@ -4,11 +4,11 @@
   nixpkgs,
   inputs,
 }: {
-  userModule ? ../users/delay/home-manager.nix,
   system ? "x86_64-linux",
   isCorpManaged ? false,
   isHeadless ? false,
   username ? "delay",
+  userModule ? ../users/${username},
 }: let
   supportedSystems = [
     "aarch64-linux"
@@ -35,6 +35,6 @@ in
 
       # nix-index-database configuration.
       inputs.nix-index-database.hmModules.nix-index
-      { programs.nix-index-database.comma.enable = true; }
+      {programs.nix-index-database.comma.enable = true;}
     ];
   })

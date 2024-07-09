@@ -42,7 +42,7 @@ in
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.backupFileExtension = "nix-backup";
-          home-manager.users.${user} = import ../users/${user}/home-manager.nix;
+          home-manager.users.${user} = import ../users/${user};
         }
 
         # nix-index-database configuration.
