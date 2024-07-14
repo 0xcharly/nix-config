@@ -14,11 +14,8 @@
     # We use the unstable nixpkgs repo for some packages.
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
-    pre-commit-hooks = {
-      url = "github:cachix/pre-commit-hooks.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     flake-parts.url = "github:hercules-ci/flake-parts";
+    pre-commit-hooks-nix.url = "github:cachix/pre-commit-hooks.nix";
 
     # Manages home directory, dotfiles and base environment.
     home-manager = {
@@ -55,6 +52,8 @@
   }:
     flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [
+        inputs.pre-commit-hooks-nix.flakeModule
+
         ./flake/devshells.nix
       ];
 
