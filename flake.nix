@@ -65,11 +65,15 @@
       inputs.alacritty-theme.overlays.default
     ];
 
-    mkSystem = import ./lib/mksystem.nix {
+    mkDarwinSystem = import ./lib/mk-darwin-system.nix {
+      inherit overlays inputs;
+    };
+
+    mkNixOSSystem = import ./lib/mk-nixos-system.nix {
       inherit overlays nixpkgs inputs;
     };
 
-    mkHome = import ./lib/mkhome.nix {
+    mkHomeOnly = import ./lib/mk-home-only.nix {
       inherit overlays nixpkgs inputs;
     };
   in
@@ -85,12 +89,9 @@
               # Nix tools.
               alejandra
               markdownlint-cli
-              luacheck
               stylua
             ])
             ++ (with pkgs; [
-              lua-language-server
-              manix
               nixd
             ]);
           shellHook = ''
@@ -101,14 +102,12 @@
         src = self;
         hooks = {
           alejandra.enable = true;
-          # luacheck.enable = true;
           markdownlint = {
             enable = true;
             settings.configuration = {
               MD034 = false;
             };
           };
-          stylua.enable = true;
         };
       };
     in {
@@ -117,38 +116,32 @@
     })
     // {
       # NixOS hosts.
-      nixosConfigurations.vm-aarch64 = mkSystem ./hosts/vm-aarch64.nix {};
+      nixosConfigurations.vm-aarch64 = mkNixOSSystem ./hosts/vm-aarch64.nix {};
 
-      nixosConfigurations.vm-linode = mkSystem ./hosts/vm-linode.nix {
+      nixosConfigurations.vm-linode = mkNixOSSystem ./hosts/vm-linode.nix {
         isHeadless = true;
       };
 
       # nix-darwin hosts.
-      darwinConfigurations.studio = mkSystem ./hosts/darwin.nix {
-        isDarwin = true;
-      };
+      darwinConfigurations.studio = mkDarwinSystem ./hosts/darwin.nix {};
 
-      darwinConfigurations.mbp-roam = mkSystem ./hosts/darwin.nix {
-        isDarwin = true;
-      };
+      darwinConfigurations.mbp-roam = mkDarwinSystem ./hosts/darwin.nix {};
 
-      darwinConfigurations.mbp-delay = mkSystem ./hosts/darwin-corp.nix {
+      darwinConfigurations.mbp-delay = mkDarwinSystem ./hosts/darwin-corp.nix {
         isCorpManaged = true;
-        isDarwin = true;
       };
 
-      darwinConfigurations.mbp-delay-roam = mkSystem ./hosts/darwin-corp.nix {
+      darwinConfigurations.mbp-delay-roam = mkDarwinSystem ./hosts/darwin-corp.nix {
         isCorpManaged = true;
-        isDarwin = true;
         migrateHomebrew = true;
       };
 
       # Home Manager only config for other Linux hosts.
-      homeConfigurations."delay@linode" = mkHome {
+      homeConfigurations."delay@linode" = mkHomeOnly {
         isHeadless = true;
       };
 
-      homeConfigurations."delay@cloudtop-delay" = mkHome {
+      homeConfigurations."delay@cloudtop-delay" = mkHomeOnly {
         isCorpManaged = true;
         isHeadless = true;
       };

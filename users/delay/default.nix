@@ -73,9 +73,9 @@
   );
   shellAliases = shell:
     {
-      # Shortcut to setup a nix-shell with fish. This lets you do something
-      # like `nixsh -p go` to get an environment with Go but use the fish
-      # shell along with it.
+      # Shortcut to setup a nix-shell with `shell`. This lets you do something
+      # like `nixsh -p go` to get an environment with Go but use `shell` along
+      # with it.
       nixsh = "nix-shell --run ${shell}";
       devsh = "nix develop --command ${shell}";
     }
@@ -185,7 +185,7 @@ in {
         # TODO: rofi config.
         # "rofi/config.rasi".text = builtins.readFile ./rofi;
       }
-      # Raycast expects scripts attributes to be listed at the top of the file,
+      # Raycast expects script attributes to be listed at the top of the file,
       # so a simple wrapper does not work. This *needs* to be a symlink.
       // lib.optionalAttrs isDarwin {
         "raycast/bin/adb-scrcpy".source = "${adb-scrcpy-pkg}/bin/adb-scrcpy";
@@ -342,7 +342,7 @@ in {
       ''))
     ];
     localVariables = {
-      PS1 = "%B%F{8}:%f%b ";
+      PS1 = "%B%F{grey}:%f%b ";
     };
     shellAliases = shellAliases "${pkgs.zsh}/bin/zsh";
     syntaxHighlighting.enable = true;
