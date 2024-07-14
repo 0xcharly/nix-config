@@ -14,8 +14,10 @@
     # We use the unstable nixpkgs repo for some packages.
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
+    # We use flake parts to organize our configurations.
     flake-parts.url = "github:hercules-ci/flake-parts";
     pre-commit-hooks-nix.url = "github:cachix/pre-commit-hooks.nix";
+    treefmt-nix.url = "github:numtide/treefmt-nix";
 
     # Manages home directory, dotfiles and base environment.
     home-manager = {
@@ -53,7 +55,9 @@
     flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [
         inputs.pre-commit-hooks-nix.flakeModule
+        inputs.treefmt-nix.flakeModule
 
+        ./flake/cmd-fmt.nix
         ./flake/devshells.nix
       ];
 
@@ -65,7 +69,7 @@
         ];
 
         mkDarwinSystem = import ./lib/mk-darwin-system.nix {inherit overlays inputs;};
-        mkHomeOnly = import ./lib/mk-home-only.nix {inherit overlays nixpkgs inputs;};
+        mkHomeOnly = import ./lib/mk-home-only.nix {inherit nixpkgs overlays inputs;};
         mkNixOSSystem = import ./lib/mk-nixos-system.nix {inherit overlays nixpkgs inputs;};
       in {
         # NixOS hosts.
