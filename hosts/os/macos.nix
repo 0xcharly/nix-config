@@ -4,8 +4,6 @@
   pkgs,
   ...
 }: {
-  imports = [../../modules/mule.nix];
-
   homebrew = {
     enable = true;
     onActivation = {
@@ -34,7 +32,6 @@
         "discord"
         "firefox"
         "firefox@developer-edition"
-        #"hammerspoon"
         #"monodraw"
         "messenger"
         "mimestream"
@@ -51,14 +48,6 @@
         "protonvpn"
         "transmission"
       ]);
-  };
-
-  mule = {
-    enable = isCorpManaged;
-    packages = [
-      "android-studio-with-blaze-canary"
-      "srcfs"
-    ];
   };
 
   # Enable the `sudo` touch ID prompt.
