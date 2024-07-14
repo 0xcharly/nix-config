@@ -6,9 +6,9 @@
   }: {
     devShells.default = pkgs.mkShell {
       nativeBuildInputs = with pkgs; [
-        nixd
         alejandra
         markdownlint-cli
+        nixd
       ];
 
       shellHook = ''
