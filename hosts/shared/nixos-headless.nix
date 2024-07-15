@@ -1,4 +1,6 @@
 {pkgs, ...}: {
+  imports = [./nix-client-config.nix];
+
   # Be careful updating this.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 

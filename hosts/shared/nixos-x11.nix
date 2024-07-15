@@ -1,8 +1,5 @@
 {pkgs, ...}: {
-  imports = [
-    ./nixos-headless.nix
-    ./shared.nix
-  ];
+  imports = [./nixos-headless.nix];
 
   # Windowing environment.
   services.xserver = {

@@ -7,17 +7,11 @@
   };
 
   inputs = {
-    # Pin our primary nixpkgs repository. This is the main nixpkgs repository
+    # Pin our primary nixpkgs repositories. These are the main nixpkgs repository
     # we'll use for our configurations.
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
-
-    # We use the unstable nixpkgs repo for some packages.
+    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-24.05-darwin";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-
-    # We use flake parts to organize our configurations.
-    flake-parts.url = "github:hercules-ci/flake-parts";
-    pre-commit-hooks-nix.url = "github:cachix/pre-commit-hooks.nix";
-    treefmt-nix.url = "github:numtide/treefmt-nix";
 
     # Manages home directory, dotfiles and base environment.
     home-manager = {
@@ -28,8 +22,16 @@
     # macOS system configuration with Nix.
     darwin = {
       url = "github:LnL7/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
+
+    # We use flake parts to organize our configurations.
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
+    pre-commit-hooks-nix.url = "github:cachix/pre-commit-hooks.nix";
+    treefmt-nix.url = "github:numtide/treefmt-nix";
 
     # Weekly updated index: quickly locate nix packages with specific files.
     nix-index-database = {
@@ -59,48 +61,93 @@
 
         ./flake/cmd-fmt.nix
         ./flake/devshells.nix
+        ./flake/mk-systems.nix
       ];
 
       systems = ["aarch64-darwin" "aarch64-linux" "x86_64-linux"];
 
-      flake = let
+      mkSystems = {
+        root = ./hosts;
+        globalArgs = {inherit inputs;};
+
         overlays = [
           inputs.alacritty-theme.overlays.default
         ];
 
-        mkDarwinSystem = import ./lib/mk-darwin-system.nix {inherit overlays inputs;};
-        mkHomeOnly = import ./lib/mk-home-only.nix {inherit nixpkgs overlays inputs;};
-        mkNixOSSystem = import ./lib/mk-nixos-system.nix {inherit overlays nixpkgs inputs;};
-      in {
         # NixOS hosts.
-        nixosConfigurations.vm-aarch64 = mkNixOSSystem ./hosts/vm-aarch64.nix {};
-
-        nixosConfigurations.vm-linode = mkNixOSSystem ./hosts/vm-linode.nix {
-          isHeadless = true;
+        nixos.hosts = {
+          vm-aarch64 = {}; # Optional.
+          vm-linode = {isHeadless = true;};
         };
 
         # nix-darwin hosts.
-        darwinConfigurations.studio = mkDarwinSystem ./hosts/darwin.nix {};
-        darwinConfigurations.mbp-roam = mkDarwinSystem ./hosts/darwin.nix {};
+        darwin = {
+          injectArgs = {isHeadless = false;};
 
-        darwinConfigurations.mbp-delay = mkDarwinSystem ./hosts/darwin-corp.nix {
-          isCorpManaged = true;
-        };
+          hosts = {
+            studio = {}; # Optional.
+            mbp-roam = {}; # Optional.
 
-        darwinConfigurations.mbp-delay-roam = mkDarwinSystem ./hosts/darwin-corp.nix {
-          isCorpManaged = true;
-          migrateHomebrew = true;
+            mbp-delay.injectArgs = {isCorpManaged = true;};
+            mbp-delay-roam.injectArgs = {
+              isCorpManaged = true;
+              migrateHomebrew = true;
+            };
+          };
         };
 
         # Home Manager only config for other Linux hosts.
-        homeConfigurations."delay@linode" = mkHomeOnly {
-          isHeadless = true;
-        };
+        home = {
+          defaultSystem = "x86_64-linux";
+          users = {
+            "delay@linode".injectArgs = {isHeadless = true;};
 
-        homeConfigurations."delay@cloudtop-delay" = mkHomeOnly {
-          isCorpManaged = true;
-          isHeadless = true;
+            "delay@cloudtop-delay".injectArgs = {
+              isCorpManaged = true;
+              isHeadless = true;
+            };
+          };
         };
+      };
+
+      flake = let
+        # overlays = [
+        #   inputs.alacritty-theme.overlays.default
+        # ];
+        #
+        # mkDarwinSystem = import ./lib/mk-darwin-system.nix {inherit overlays inputs;};
+        # mkHomeOnly = import ./lib/mk-home-only.nix {inherit nixpkgs overlays inputs;};
+        # mkNixOSSystem = import ./lib/mk-nixos-system.nix {inherit overlays nixpkgs inputs;};
+      in {
+        # # NixOS hosts.
+        # nixosConfigurations.vm-aarch64 = mkNixOSSystem ./hosts/vm-aarch64.nix {};
+        #
+        # nixosConfigurations.vm-linode = mkNixOSSystem ./hosts/vm-linode.nix {
+        #   isHeadless = true;
+        # };
+        #
+        # # nix-darwin hosts.
+        # darwinConfigurations.studio = mkDarwinSystem ./hosts/darwin.nix {};
+        # darwinConfigurations.mbp-roam = mkDarwinSystem ./hosts/darwin.nix {};
+        #
+        # darwinConfigurations.mbp-delay = mkDarwinSystem ./hosts/darwin-corp.nix {
+        #   isCorpManaged = true;
+        # };
+        #
+        # darwinConfigurations.mbp-delay-roam = mkDarwinSystem ./hosts/darwin-corp.nix {
+        #   isCorpManaged = true;
+        #   migrateHomebrew = true;
+        # };
+        #
+        # # Home Manager only config for other Linux hosts.
+        # homeConfigurations."delay@linode" = mkHomeOnly {
+        #   isHeadless = true;
+        # };
+        #
+        # homeConfigurations."delay@cloudtop-delay" = mkHomeOnly {
+        #   isCorpManaged = true;
+        #   isHeadless = true;
+        # };
       };
     };
 }
