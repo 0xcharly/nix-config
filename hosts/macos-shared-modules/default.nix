@@ -1,5 +1,5 @@
 {
-  sysModules,
+  osSharedModules,
   pkgs,
   lib,
   ...
@@ -9,7 +9,7 @@
       ../shared/nix-client-config.nix
     ]
     ++ lib.attrValues {
-      inherit (sysModules) aarch64-darwin macos;
+      inherit (osSharedModules) aarch64-darwin macos;
     };
 
   # Mark admins as trusted users to enable cachix repositories.

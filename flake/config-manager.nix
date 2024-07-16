@@ -7,8 +7,8 @@
   inherit (builtins) pathExists readDir readFileType;
   inherit (lib.strings) hasSuffix removeSuffix;
 
-  options = import ./mk-systems-options.nix {inherit config lib;};
-  cfg = config.mkSystems;
+  options = import ./config-manager-options.nix {inherit config lib;};
+  cfg = config.config-manager;
 
   # TODO: consider adding options to pass in the user's inputs name.
   requireInput = name: lib.throwIfNot (inputs ? ${name}) "Missing input: '${name}'" inputs.${name};
@@ -23,9 +23,9 @@
           moduleAsSubdirWithDefault = "${dir}/${entry}/default.nix";
         in
           if (type == "regular" && hasSuffix ".nix" entry)
-          then lib.attrsets.nameValuePair (removeSuffix ".nix" entry) "${dir}/${entry}"
+          then lib.nameValuePair (removeSuffix ".nix" entry) "${dir}/${entry}"
           else if (pathExists moduleAsSubdirWithDefault && readFileType moduleAsSubdirWithDefault == "regular")
-          then lib.attrsets.nameValuePair entry moduleAsSubdirWithDefault
+          then lib.nameValuePair entry moduleAsSubdirWithDefault
           else lib.warn "Unexpected module shape: ${entry}" {}
       )
       (readDir dir));
@@ -35,9 +35,9 @@
   # configurations.
   mkHomeConfigurations = {
     users, # The list of user-defined users (i.e. from the flake config).
-    usrConfigs, # The list of user-provided modules under home-configurations/.
-    usrModules, # The list of user-provided modules under home-modules/ injected in each home configuration module.
-    usrModulesInjectArgs, # Extra parameters to pass to all home configurations.
+    hmConfigModules, # The list of user-provided modules under home-configurations/.
+    hmSharedModules, # The list of user-provided modules under home-modules/ injected in each home configuration module.
+    hmModulesInjectArgs, # Extra parameters to pass to all home configurations.
   }:
     lib.mapAttrs (name: homeConfigModule: let
       userSettings = users.${name} or options.defaults.userSettings;
@@ -53,9 +53,9 @@
       throwForUnsupportedSystems (requireHomeManagerInput.lib.homeManagerConfiguration {
         pkgs = import requireNixpkgsInput {inherit system;};
         extraSpecialArgs =
-          {inherit usrModules;}
-          // cfg.globalArgs
-          // usrModulesInjectArgs
+          {inherit hmSharedModules;}
+          // cfg.injectArgs
+          // hmModulesInjectArgs
           // userSettings.injectArgs;
         # backupFileExtension = hostSettings.homeManagerBackupFileExtension;
         modules = [
@@ -63,13 +63,13 @@
           {nixpkgs.overlays = cfg.overlays;}
 
           # Default user configuration, if any.
-          usrModules.default or {}
+          hmSharedModules.default or {}
 
           # User configuration.
           homeConfigModule
         ];
       }))
-    usrConfigs;
+    hmConfigModules;
 
   # Creates specialized configuration factory functions.
   mkMkSystemConfigurations = {
@@ -78,12 +78,12 @@
   }: {
     users, # The list of user-defined users (i.e. from the flake config).
     hosts, # The list of user-defined hosts (i.e. from the flake config).
-    sysConfigs, # The list of user-provided configurations under (darwin|nixos)-configurations/.
-    sysModules, # The list of user-provided modules under (darwin|nixos)-modules/ injected in each system configuration module.
-    usrConfigs, # The list of user-provided modules under home-configurations/.
-    usrModules, # The list of user-provided modules under home-modules/ injected in each home configuration module.
-    sysModulesInjectArgs, # Extra parameters to pass to all system configurations.
-    usrModulesInjectArgs, # Extra parameters to pass to all home configurations.
+    osConfigModules, # The list of user-provided configurations under (macos|nixos)-configurations/.
+    osSharedModules, # The list of user-provided modules under (macos|nixos)-modules/ injected in each system configuration module.
+    hmConfigModules, # The list of user-provided modules under home-configurations/.
+    hmSharedModules, # The list of user-provided modules under home-modules/ injected in each home configuration module.
+    osModulesInjectArgs, # Extra parameters to pass to all system configurations.
+    hmModulesInjectArgs, # Extra parameters to pass to all home configurations.
   }:
     lib.mapAttrs (name: hostConfigModule: let
       hostSettings = hosts.${name} or options.defaults.hostSettings;
@@ -91,17 +91,17 @@
     in
       mkSystem {
         specialArgs =
-          {inherit sysModules;}
-          // cfg.globalArgs
-          // sysModulesInjectArgs
+          {inherit osSharedModules;}
+          // cfg.injectArgs
+          // osModulesInjectArgs
           // hostSettings.injectArgs
-          // hostSettings.sysInjectArgs;
+          // hostSettings.osInjectArgs;
         modules = [
           # System options.
           {nixpkgs.overlays = cfg.overlays;}
 
           # Default system configuration, if any.
-          sysModules.default or {}
+          osSharedModules.default or {}
 
           # System configuration.
           hostConfigModule
@@ -110,21 +110,21 @@
           mkSystemHomeManagerModule
           {
             home-manager.extraSpecialArgs =
-              {inherit usrModules;}
-              // cfg.globalArgs
-              // usrModulesInjectArgs
+              {inherit hmSharedModules;}
+              // cfg.injectArgs
+              // hmModulesInjectArgs
               // userSettings.injectArgs
               // hostSettings.injectArgs
-              // hostSettings.usrInjectArgs;
+              // hostSettings.hmInjectArgs;
             # TODO: check if these options are required.
             # home-manager.useGlobalPkgs = true;
             # home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = hostSettings.homeManagerBackupFileExtension;
-            home-manager.users.${hostSettings.user} = import usrConfigs.${hostSettings.user};
+            home-manager.backupFileExtension = hostSettings.hmBackupFileExtension;
+            home-manager.users.${hostSettings.user} = import hmConfigModules.${hostSettings.user};
           }
         ];
       })
-    sysConfigs;
+    osConfigModules;
 
   mkDarwinConfigurations = mkMkSystemConfigurations {
     mkSystem = requireDarwinInput.lib.darwinSystem;
@@ -136,36 +136,36 @@
     mkSystemHomeManagerModule = requireHomeManagerInput.nixosModules.home-manager;
   };
 in {
-  options = {inherit (options) mkSystems;};
+  options = {inherit (options) config-manager;};
 
   config.flake = {
     homeConfigurations = mkHomeConfigurations {
       inherit (cfg.home) users;
-      usrConfigs = crawlModuleDir cfg.home.configurationsDirectory;
-      usrModules = crawlModuleDir cfg.home.modulesDirectory;
-      usrModulesInjectArgs = cfg.home.injectArgs;
+      hmConfigModules = crawlModuleDir cfg.home.configModulesDirectory;
+      hmSharedModules = crawlModuleDir cfg.home.sharedModulesDirectory;
+      hmModulesInjectArgs = cfg.home.injectArgs;
     };
 
     darwinConfigurations = mkDarwinConfigurations {
       inherit (cfg.home) users;
-      inherit (cfg.darwin) hosts;
-      sysConfigs = crawlModuleDir cfg.darwin.configurationsDirectory;
-      sysModules = crawlModuleDir cfg.darwin.modulesDirectory;
-      usrConfigs = crawlModuleDir cfg.home.configurationsDirectory;
-      usrModules = crawlModuleDir cfg.home.modulesDirectory;
-      sysModulesInjectArgs = cfg.darwin.injectArgs;
-      usrModulesInjectArgs = cfg.home.injectArgs;
+      inherit (cfg.macos) hosts;
+      osConfigModules = crawlModuleDir cfg.macos.configModulesDirectory;
+      osSharedModules = crawlModuleDir cfg.macos.sharedModulesDirectory;
+      hmConfigModules = crawlModuleDir cfg.home.configModulesDirectory;
+      hmSharedModules = crawlModuleDir cfg.home.sharedModulesDirectory;
+      osModulesInjectArgs = cfg.macos.injectArgs;
+      hmModulesInjectArgs = cfg.home.injectArgs;
     };
 
     nixosConfigurations = mkNixosConfigurations {
       inherit (cfg.home) users;
       inherit (cfg.nixos) hosts;
-      sysConfigs = crawlModuleDir cfg.nixos.configurationsDirectory;
-      sysModules = crawlModuleDir cfg.nixos.modulesDirectory;
-      usrConfigs = crawlModuleDir cfg.home.configurationsDirectory;
-      usrModules = crawlModuleDir cfg.home.modulesDirectory;
-      sysModulesInjectArgs = cfg.nixos.injectArgs;
-      usrModulesInjectArgs = cfg.home.injectArgs;
+      osConfigModules = crawlModuleDir cfg.nixos.configModulesDirectory;
+      osSharedModules = crawlModuleDir cfg.nixos.sharedModulesDirectory;
+      hmConfigModules = crawlModuleDir cfg.home.configModulesDirectory;
+      hmSharedModules = crawlModuleDir cfg.home.sharedModulesDirectory;
+      osModulesInjectArgs = cfg.nixos.injectArgs;
+      hmModulesInjectArgs = cfg.home.injectArgs;
     };
   };
 }

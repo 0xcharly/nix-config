@@ -1,9 +1,9 @@
 {
   inputs,
-  isCorpManaged,
-  isHeadless,
   lib,
   pkgs,
+  isCorpManaged ? false,
+  isHeadless ? false,
   ...
 }: let
   inherit (pkgs.stdenv) isDarwin isLinux;

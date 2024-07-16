@@ -49,11 +49,7 @@
     homebrew.url = "github:zhaofengli-wip/nix-homebrew";
   };
 
-  outputs = inputs @ {
-    flake-parts,
-    nixpkgs,
-    ...
-  }:
+  outputs = inputs @ {flake-parts, ...}:
     flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [
         inputs.pre-commit-hooks-nix.flakeModule
@@ -61,14 +57,14 @@
 
         ./flake/cmd-fmt.nix
         ./flake/devshells.nix
-        ./flake/mk-systems.nix
+        ./flake/config-manager.nix
       ];
 
       systems = ["aarch64-darwin" "aarch64-linux" "x86_64-linux"];
 
-      mkSystems = {
+      config-manager = {
         root = ./hosts;
-        globalArgs = {inherit inputs;};
+        injectArgs = {inherit inputs;};
 
         overlays = [
           inputs.alacritty-theme.overlays.default
@@ -81,7 +77,7 @@
         };
 
         # nix-darwin hosts.
-        darwin = {
+        macos = {
           injectArgs = {isHeadless = false;};
 
           hosts = {
@@ -99,6 +95,8 @@
         # Home Manager only config for other Linux hosts.
         home = {
           defaultSystem = "x86_64-linux";
+          injectArgs = {isHeadless = false;};
+
           users = {
             "delay@linode".injectArgs = {isHeadless = true;};
 
