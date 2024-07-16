@@ -3,7 +3,7 @@
   lib,
 }: let
   inherit (lib) mkOption mkOptionType types;
-  cfg = config.mkSystems;
+  cfg = config.config-manager;
 
   userOptionsSubmodule.options = {
     injectArgs = mkOption {
@@ -18,37 +18,37 @@
       default = cfg.home.defaultSystem;
       type = types.str;
       description = ''
-        The default system to use for this user configurations.
+        The default system to use for this user configuration.
       '';
     };
   };
 
-  mkConfigDirectoriesOptions = prefix: let
+  mkModulesDirectoriesOptions = prefix: let
     supportedPrefixes = [
-      "darwin"
       "home"
+      "macos"
       "nixos"
     ];
     throwForUnsupportedPrefix = expr:
       lib.throwIfNot (builtins.elem prefix supportedPrefixes) "Internal error: unsupported prefix '${prefix}'" expr;
-    requireConfigRoot = lib.throwIfNot (cfg ? root) "mkSystems.root must be set" cfg.root;
+    requireConfigRoot = lib.throwIfNot (cfg ? root) "config-manager.root must be set" cfg.root;
   in
     throwForUnsupportedPrefix {
-      modulesDirectory = mkOption {
-        default = "${requireConfigRoot}/${prefix}-modules";
-        defaultText = lib.literalExpression "\"\${mkSystems.root}/${prefix}-modules\"";
+      sharedModulesDirectory = mkOption {
+        default = "${requireConfigRoot}/${prefix}-shared-modules";
+        defaultText = lib.literalExpression "\"\${config-manager.root}/${prefix}-shared-modules\"";
         type = types.pathInStore;
         description = ''
-          The directory containing ${prefix}Modules.
+          The directory containing shared modules for ${prefix}.
         '';
       };
 
-      configurationsDirectory = mkOption {
-        default = "${requireConfigRoot}/${prefix}-configurations";
-        defaultText = lib.literalExpression "\"\${mkSystems.root}/${prefix}-configurations\"";
+      configModulesDirectory = mkOption {
+        default = "${requireConfigRoot}/${prefix}-config-modules";
+        defaultText = lib.literalExpression "\"\${config-manager.root}/${prefix}-config-modules\"";
         type = types.pathInStore;
         description = ''
-          The directory containing ${prefix}Configurations.
+          The directory containing configuration modules for ${prefix}.
         '';
       };
     };
@@ -62,16 +62,6 @@
       '';
     };
 
-    homeManagerBackupFileExtension = mkOption {
-      type = types.nullOr types.str;
-      default = "nix-backup";
-      example = "nix-backup";
-      description = ''
-        On activation move existing files by appending the given file
-        extension rather than exiting with an error.
-      '';
-    };
-
     injectArgs = mkOption {
       default = {};
       type = types.attrsOf types.anything;
@@ -80,7 +70,7 @@
       '';
     };
 
-    sysInjectArgs = mkOption {
+    osInjectArgs = mkOption {
       default = {};
       type = types.attrsOf types.anything;
       description = ''
@@ -88,17 +78,27 @@
       '';
     };
 
-    usrInjectArgs = mkOption {
+    hmInjectArgs = mkOption {
       default = {};
       type = types.attrsOf types.anything;
       description = ''
         Extra arguments to pass to this host's home configuration.
       '';
     };
+
+    hmBackupFileExtension = mkOption {
+      type = types.nullOr types.str;
+      default = "nix-backup";
+      example = "nix-backup";
+      description = ''
+        On activation move existing files by appending the given file
+        extension rather than exiting with an error.
+      '';
+    };
   };
 
   mkSystemConfigurationOptions = system: let
-    supportedSystems = ["darwin" "nixos"];
+    supportedSystems = ["macos" "nixos"];
     throwForUnsupportedSystems = expr:
       lib.throwIfNot (builtins.elem system supportedSystems) "Internal error: unsupported system '${system}'" expr;
   in
@@ -135,15 +135,15 @@
     };
 
   nixosConfigurationOptions =
-    mkConfigDirectoriesOptions "nixos"
+    mkModulesDirectoriesOptions "nixos"
     // mkSystemConfigurationOptions "nixos";
 
-  darwinConfigurationOptions =
-    mkConfigDirectoriesOptions "darwin"
-    // mkSystemConfigurationOptions "darwin";
+  macosConfigurationOptions =
+    mkModulesDirectoriesOptions "macos"
+    // mkSystemConfigurationOptions "macos";
 
   homeConfigurationOptions =
-    mkConfigDirectoriesOptions "home"
+    mkModulesDirectoriesOptions "home"
     // {
       injectArgs = mkOption {
         default = {};
@@ -195,7 +195,7 @@
   in
     lib.mapAttrs (name: value: requireDefault name value) options;
 in {
-  mkSystems = {
+  config-manager = {
     root = mkOption {
       type = types.pathInStore;
       example = lib.literalExpression "./.";
@@ -213,7 +213,7 @@ in {
       '';
     };
 
-    globalArgs = mkOption {
+    injectArgs = mkOption {
       default = {};
       example = lib.literalExpression "{ inherit inputs; }";
       type = types.attrsOf types.anything;
@@ -224,7 +224,7 @@ in {
 
     home = homeConfigurationOptions;
     nixos = nixosConfigurationOptions;
-    darwin = darwinConfigurationOptions;
+    macos = macosConfigurationOptions;
   };
 
   defaults = {
