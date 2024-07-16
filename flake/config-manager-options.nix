@@ -55,7 +55,7 @@
 
   hostOptionsSubmodule.options = {
     user = mkOption {
-      default = "delay";
+      default = cfg.defaultUser;
       type = types.str;
       description = ''
         The name of the owning user.
@@ -210,6 +210,14 @@ in {
       description = ''
         A list of nixpkgs overlays to apply to all configurations.
         This option allows modifying the Nixpkgs package set accessed through the `pkgs` module argument.
+      '';
+    };
+
+    defaultUser = mkOption {
+      default = "delay";
+      type = types.string;
+      description = ''
+        Default user to install for all systems.
       '';
     };
 

@@ -39,8 +39,7 @@
     hmSharedModules, # The list of user-provided modules under home-modules/ injected in each home configuration module.
     hmModulesInjectArgs, # Extra parameters to pass to all home configurations.
   }:
-    lib.mapAttrs (name: homeConfigModule: let
-      userSettings = users.${name} or options.defaults.userSettings;
+    lib.mapAttrs (name: userSettings: let
       inherit (userSettings) system;
 
       supportedSystems = [
@@ -66,10 +65,11 @@
           hmSharedModules.default or {}
 
           # User configuration.
-          homeConfigModule
+          # TODO: consider failing if the user configuration and default are both missing.
+          hmConfigModules.${name} or hmConfigModules.default or {}
         ];
       }))
-    hmConfigModules;
+    users;
 
   # Creates specialized configuration factory functions.
   mkMkSystemConfigurations = {
@@ -85,9 +85,10 @@
     osModulesInjectArgs, # Extra parameters to pass to all system configurations.
     hmModulesInjectArgs, # Extra parameters to pass to all home configurations.
   }:
-    lib.mapAttrs (name: hostConfigModule: let
-      hostSettings = hosts.${name} or options.defaults.hostSettings;
-      userSettings = users.${name} or options.defaults.userSettings;
+    lib.mapAttrs (hostname: hostSettings: let
+      # TODO: consider failing if `${name} == "default"`.
+      username = hostSettings.user or cfg.defaultUser;
+      userSettings = users.${username} or options.defaults.userSettings;
     in
       mkSystem {
         specialArgs =
@@ -104,9 +105,10 @@
           osSharedModules.default or {}
 
           # System configuration.
-          hostConfigModule
+          osConfigModules.${hostname} or osConfigModules.default or {}
 
           # User configuration.
+          # TODO: consider failing if the user configuration and default are both missing.
           mkSystemHomeManagerModule
           {
             home-manager.extraSpecialArgs =
@@ -120,11 +122,12 @@
             # home-manager.useGlobalPkgs = true;
             # home-manager.useUserPackages = true;
             home-manager.backupFileExtension = hostSettings.hmBackupFileExtension;
-            home-manager.users.${hostSettings.user} = import hmConfigModules.${hostSettings.user};
+            # TODO: consider failing if the user configuration and default are both missing.
+            home-manager.users.${username} = import hmConfigModules.${username} or hmConfigModules.default or {};
           }
         ];
       })
-    osConfigModules;
+    hosts;
 
   mkDarwinConfigurations = mkMkSystemConfigurations {
     mkSystem = requireDarwinInput.lib.darwinSystem;
