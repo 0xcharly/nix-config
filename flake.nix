@@ -78,7 +78,7 @@
 
         # NixOS hosts.
         nixos.hosts = {
-          vm-aarch64.injectArgs = {isCorpManaged = false;}; # Optional.
+          vm-aarch64.injectArgs = {isCorpManaged = false;};
           vm-linode.injectArgs = {isHeadless = true;};
         };
 
@@ -87,8 +87,8 @@
           injectArgs = {isHeadless = false;};
 
           hosts = {
-            studio = {}; # Optional.
-            mbp-roam = {}; # Optional.
+            studio.injectArgs = {isCorpManaged = false;};
+            mbp-roam.injectArgs = {isCorpManaged = false;};
 
             mbp-delay.injectArgs = {isCorpManaged = true;};
             mbp-delay-roam.injectArgs = {
