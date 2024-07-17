@@ -65,6 +65,12 @@
       config-manager = {
         root = ./hosts;
         injectArgs = {inherit inputs;};
+        # NOTE: the notion of "default" user when username is not specified
+        # anywhere in the config currently unsupported.
+        # TODO: consider falling back to "default.nix" when username is not
+        # specified. Currently needs to support reading the actual username
+        # value from somewhere.
+        defaultUser = "delay";
 
         overlays = [
           inputs.alacritty-theme.overlays.default
@@ -72,8 +78,8 @@
 
         # NixOS hosts.
         nixos.hosts = {
-          vm-aarch64 = {}; # Optional.
-          vm-linode = {isHeadless = true;};
+          vm-aarch64.injectArgs = {isCorpManaged = false;}; # Optional.
+          vm-linode.injectArgs = {isHeadless = true;};
         };
 
         # nix-darwin hosts.

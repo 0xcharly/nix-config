@@ -88,9 +88,7 @@
     hmModulesInjectArgs, # Extra parameters to pass to all home configurations.
   }:
     lib.mapAttrs (hostname: hostSettings: let
-      validateUsername = username:
-        lib.throwIf (username == "default") "Invalid username '${username}'" username;
-      username = validateUsername hostSettings.user;
+      username = hostSettings.user;
       userSettings = users.${username} or options.defaults.userSettings;
     in
       mkSystem {
@@ -121,9 +119,8 @@
               // userSettings.injectArgs
               // hostSettings.injectArgs
               // hostSettings.hmInjectArgs;
-            # TODO: check if these options are required.
-            # home-manager.useGlobalPkgs = true;
-            # home-manager.useUserPackages = true;
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
             home-manager.backupFileExtension = hostSettings.hmBackupFileExtension;
             # TODO: consider failing if the user configuration and default are both missing.
             home-manager.users.${username} = import hmConfigModules.${username} or hmConfigModules.default or {};
