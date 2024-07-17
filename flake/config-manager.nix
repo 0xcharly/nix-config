@@ -30,13 +30,14 @@
       )
       (readDir dir));
 
-  # Crawls the home-configurations/ and home-modules/ directories (or whichever
-  # directory specified by the config) and generate all standalone home-manager
-  # configurations.
+  # Crawls the home-configs-modules/ and home-shared-modules/ directories (or
+  # whichever directory specified by the config) and generates all standalone
+  # home-manager configurations.
   mkHomeConfigurations = {
     users, # The list of user-defined users (i.e. from the flake config).
-    hmConfigModules, # The list of user-provided modules under home-configurations/.
-    hmSharedModules, # The list of user-provided modules under home-modules/ injected in each home configuration module.
+    hmConfigModules, # The list of user-provided configurations under home-config-modules/.
+    hmSharedModules, # The list of user-provided modules under home-shared-modules/ injected in each home configuration module.
+    utilsSharedModules, # The list of user-provided utility modules under utils-shared-modules/ injected into all configuration modules.
     hmModulesInjectArgs, # Extra parameters to pass to all home configurations.
   }:
     lib.mapAttrs (name: userSettings: let
@@ -52,11 +53,11 @@
       throwForUnsupportedSystems (requireHomeManagerInput.lib.homeManagerConfiguration {
         pkgs = import requireNixpkgsInput {inherit system;};
         extraSpecialArgs =
-          {inherit hmSharedModules;}
+          {inherit hmSharedModules utilsSharedModules;}
           // cfg.injectArgs
           // hmModulesInjectArgs
           // userSettings.injectArgs;
-        # backupFileExtension = hostSettings.homeManagerBackupFileExtension;
+        # backupFileExtension = hostSettings.hmBackupFileExtension;
         modules = [
           # System options.
           {nixpkgs.overlays = cfg.overlays;}
@@ -78,10 +79,11 @@
   }: {
     users, # The list of user-defined users (i.e. from the flake config).
     hosts, # The list of user-defined hosts (i.e. from the flake config).
-    osConfigModules, # The list of user-provided configurations under (macos|nixos)-configurations/.
-    osSharedModules, # The list of user-provided modules under (macos|nixos)-modules/ injected in each system configuration module.
-    hmConfigModules, # The list of user-provided modules under home-configurations/.
-    hmSharedModules, # The list of user-provided modules under home-modules/ injected in each home configuration module.
+    osConfigModules, # The list of user-provided configurations under (macos|nixos)-config-modules/.
+    osSharedModules, # The list of user-provided modules under (macos|nixos)-shared-modules/ injected in each system configuration module.
+    hmConfigModules, # The list of user-provided configurations under home-config-modules/.
+    hmSharedModules, # The list of user-provided modules under home-shared-modules/ injected in each home configuration module.
+    utilsSharedModules, # The list of user-provided utility modules under utils-shared-modules/ injected into all configuration modules.
     osModulesInjectArgs, # Extra parameters to pass to all system configurations.
     hmModulesInjectArgs, # Extra parameters to pass to all home configurations.
   }:
@@ -93,7 +95,7 @@
     in
       mkSystem {
         specialArgs =
-          {inherit osSharedModules;}
+          {inherit osSharedModules utilsSharedModules;}
           // cfg.injectArgs
           // osModulesInjectArgs
           // hostSettings.injectArgs
@@ -113,7 +115,7 @@
           mkSystemHomeManagerModule
           {
             home-manager.extraSpecialArgs =
-              {inherit hmSharedModules;}
+              {inherit hmSharedModules utilsSharedModules;}
               // cfg.injectArgs
               // hmModulesInjectArgs
               // userSettings.injectArgs
@@ -147,6 +149,7 @@ in {
       inherit (cfg.home) users;
       hmConfigModules = crawlModuleDir cfg.home.configModulesDirectory;
       hmSharedModules = crawlModuleDir cfg.home.sharedModulesDirectory;
+      utilsSharedModules = crawlModuleDir cfg.utilsSharedModulesDirectory;
       hmModulesInjectArgs = cfg.home.injectArgs;
     };
 
@@ -157,6 +160,7 @@ in {
       osSharedModules = crawlModuleDir cfg.macos.sharedModulesDirectory;
       hmConfigModules = crawlModuleDir cfg.home.configModulesDirectory;
       hmSharedModules = crawlModuleDir cfg.home.sharedModulesDirectory;
+      utilsSharedModules = crawlModuleDir cfg.utilsSharedModulesDirectory;
       osModulesInjectArgs = cfg.macos.injectArgs;
       hmModulesInjectArgs = cfg.home.injectArgs;
     };
@@ -168,6 +172,7 @@ in {
       osSharedModules = crawlModuleDir cfg.nixos.sharedModulesDirectory;
       hmConfigModules = crawlModuleDir cfg.home.configModulesDirectory;
       hmSharedModules = crawlModuleDir cfg.home.sharedModulesDirectory;
+      utilsSharedModules = crawlModuleDir cfg.utilsSharedModulesDirectory;
       osModulesInjectArgs = cfg.nixos.injectArgs;
       hmModulesInjectArgs = cfg.home.injectArgs;
     };

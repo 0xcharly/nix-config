@@ -1,11 +1,12 @@
 {
   osSharedModules,
+  utilsSharedModules,
   pkgs,
   ...
 }: {
   imports =
-    [../shared/nix-client-config.nix]
-    ++ (with osSharedModules; [aarch64-darwin macos]);
+    (with osSharedModules; [aarch64-darwin macos])
+    ++ (with utilsSharedModules; [nix-client-config]);
 
   # Mark admins as trusted users to enable cachix repositories.
   nix.settings.trusted-users = ["@admin"];
@@ -17,5 +18,5 @@
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
 
-  fonts.packages = import ../../modules/fonts {pkgs = pkgs;};
+  fonts.packages = import utilsSharedModules.fonts {inherit pkgs;};
 }

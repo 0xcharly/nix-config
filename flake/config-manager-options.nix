@@ -5,6 +5,8 @@
   inherit (lib) mkOption mkOptionType types;
   cfg = config.config-manager;
 
+  requireConfigRoot = lib.throwIfNot (cfg ? root) "config-manager.root must be set" cfg.root;
+
   userOptionsSubmodule.options = {
     injectArgs = mkOption {
       default = {};
@@ -31,7 +33,6 @@
     ];
     throwForUnsupportedPrefix = expr:
       lib.throwIfNot (builtins.elem prefix supportedPrefixes) "Internal error: unsupported prefix '${prefix}'" expr;
-    requireConfigRoot = lib.throwIfNot (cfg ? root) "config-manager.root must be set" cfg.root;
   in
     throwForUnsupportedPrefix {
       sharedModulesDirectory = mkOption {
@@ -226,6 +227,15 @@ in {
       type = types.attrsOf types.anything;
       description = ''
         Extra arguments to pass to all configurations.
+      '';
+    };
+
+    utilsSharedModulesDirectory = mkOption {
+      default = "${requireConfigRoot}/utils-shared-modules";
+      defaultText = lib.literalExpression "\"\${config-manager.root}/utils-shared-modules\"";
+      type = types.pathInStore;
+      description = ''
+        The directory containing modules shared with all configurations.
       '';
     };
 
