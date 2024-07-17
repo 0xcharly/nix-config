@@ -1,6 +1,6 @@
 {
-  utilsSharedModules,
   pkgs,
+  utilsSharedModules,
   ...
 }: {
   imports = with utilsSharedModules; [nix-client-config];

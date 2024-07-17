@@ -5,7 +5,13 @@
   ...
 }: {
   imports =
-    (with osSharedModules; [aarch64-darwin macos])
+    (with osSharedModules; [
+      aarch64-darwin
+      homebrew
+      macos
+      nix-homebrew
+      nix-index
+    ])
     ++ (with utilsSharedModules; [nix-client-config]);
 
   # Mark admins as trusted users to enable cachix repositories.
