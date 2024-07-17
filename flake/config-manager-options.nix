@@ -57,7 +57,7 @@
   hostOptionsSubmodule.options = {
     user = mkOption {
       default = cfg.defaultUser;
-      type = types.str;
+      type = types.nullOr types.str;
       description = ''
         The name of the owning user.
       '';
@@ -87,6 +87,7 @@
       '';
     };
 
+    # TODO: consider a global option for this.
     hmBackupFileExtension = mkOption {
       type = types.nullOr types.str;
       default = "nix-backup";
@@ -215,7 +216,8 @@ in {
     };
 
     defaultUser = mkOption {
-      type = types.nullOr types.string;
+      default = null;
+      type = types.nullOr types.str;
       description = ''
         Default user to install for all systems.
       '';
