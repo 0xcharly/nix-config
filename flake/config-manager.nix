@@ -86,8 +86,9 @@
     hmModulesInjectArgs, # Extra parameters to pass to all home configurations.
   }:
     lib.mapAttrs (hostname: hostSettings: let
-      # TODO: consider failing if `${name} == "default"`.
-      username = hostSettings.user or cfg.defaultUser;
+      validateUsername = username:
+        lib.throwIf (username == "default") "Invalid username '${username}'" username;
+      username = validateUsername hostSettings.user;
       userSettings = users.${username} or options.defaults.userSettings;
     in
       mkSystem {

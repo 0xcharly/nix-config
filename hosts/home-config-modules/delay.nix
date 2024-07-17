@@ -1,7 +1,3 @@
-{
-  hmSharedModules,
-  lib,
-  ...
-}: {
-  imports = lib.attrValues {inherit (hmSharedModules) delay;};
+{hmSharedModules, ...}: {
+  imports = [hmSharedModules.delay];
 }

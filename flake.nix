@@ -95,7 +95,7 @@
         # Home Manager only config for other Linux hosts.
         home = {
           defaultSystem = "x86_64-linux";
-          injectArgs = {isHeadless = false;};
+          injectArgs = {isHeadless = false;}; # TODO: figure out why this is required.
 
           users = {
             "delay@linode".injectArgs = {isHeadless = true;};

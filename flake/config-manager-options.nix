@@ -214,8 +214,7 @@ in {
     };
 
     defaultUser = mkOption {
-      default = "delay";
-      type = types.string;
+      type = types.nullOr types.string;
       description = ''
         Default user to install for all systems.
       '';
