@@ -8,14 +8,6 @@
   requireConfigRoot = lib.throwIfNot (cfg ? root) "config-manager.root must be set" cfg.root;
 
   userOptionsSubmodule.options = {
-    injectArgs = mkOption {
-      default = {};
-      type = types.attrsOf types.anything;
-      description = ''
-        Extra arguments to pass to this host's home configuration.
-      '';
-    };
-
     system = mkOption {
       default = cfg.home.defaultSystem;
       type = types.str;
@@ -63,30 +55,6 @@
       '';
     };
 
-    injectArgs = mkOption {
-      default = {};
-      type = types.attrsOf types.anything;
-      description = ''
-        Extra arguments to pass to this host's system and home configuration.
-      '';
-    };
-
-    osInjectArgs = mkOption {
-      default = {};
-      type = types.attrsOf types.anything;
-      description = ''
-        Extra arguments to pass to this host's system configuration.
-      '';
-    };
-
-    hmInjectArgs = mkOption {
-      default = {};
-      type = types.attrsOf types.anything;
-      description = ''
-        Extra arguments to pass to this host's home configuration.
-      '';
-    };
-
     # TODO: consider a global option for this.
     hmBackupFileExtension = mkOption {
       type = types.nullOr types.str;
@@ -105,14 +73,6 @@
       lib.throwIfNot (builtins.elem system supportedSystems) "Internal error: unsupported system '${system}'" expr;
   in
     throwForUnsupportedSystems {
-      injectArgs = mkOption {
-        default = {};
-        type = types.attrsOf types.anything;
-        description = ''
-          Extra arguments to pass to all ${system}Configurations.
-        '';
-      };
-
       hosts = mkOption {
         default = {};
         type = types.attrsOf (types.submodule hostOptionsSubmodule);
@@ -147,14 +107,6 @@
   homeConfigurationOptions =
     mkModulesDirectoriesOptions "home"
     // {
-      injectArgs = mkOption {
-        default = {};
-        type = types.attrsOf types.anything;
-        description = ''
-          Extra arguments to pass to all homeConfigurations.
-        '';
-      };
-
       defaultSystem = mkOption {
         default = "x86_64-linux";
         type = types.str;
@@ -220,15 +172,6 @@ in {
       type = types.nullOr types.str;
       description = ''
         Default user to install for all systems.
-      '';
-    };
-
-    injectArgs = mkOption {
-      default = {};
-      example = lib.literalExpression "{ inherit inputs; }";
-      type = types.attrsOf types.anything;
-      description = ''
-        Extra arguments to pass to all configurations.
       '';
     };
 

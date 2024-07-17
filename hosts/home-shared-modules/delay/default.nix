@@ -1,11 +1,12 @@
 {
+  config,
   inputs,
   lib,
   pkgs,
-  isCorpManaged ? false,
-  isHeadless ? false,
+  utilsSharedModules,
   ...
 }: let
+  inherit (config.settings) isCorpManaged isHeadless;
   inherit (pkgs.stdenv) isDarwin isLinux;
 
   nvim-pkg = inputs.nvim.packages.${pkgs.system}.latest;
@@ -88,6 +89,9 @@
       bat = "batcat";
     });
 in {
+  # Ensures that the config settings definition is loaded to populate defaults if needed.
+  imports = [utilsSharedModules.settings];
+
   home.stateVersion = "24.05";
   programs.home-manager.enable = true;
 

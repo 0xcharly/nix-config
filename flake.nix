@@ -64,7 +64,6 @@
 
       config-manager = {
         root = ./hosts;
-        injectArgs = {inherit inputs;};
         # NOTE: the notion of "default" user when username is not specified
         # anywhere in the config currently unsupported.
         # TODO: consider falling back to "default.nix" when username is not
@@ -78,38 +77,32 @@
 
         # NixOS hosts.
         nixos.hosts = {
-          vm-aarch64.injectArgs = {isCorpManaged = false;};
-          vm-linode.injectArgs = {isHeadless = true;};
+          vm-aarch64 = {};
+          vm-linode = {};
         };
 
         # nix-darwin hosts.
         macos = {
-          injectArgs = {isHeadless = false;};
-
           hosts = {
-            studio.injectArgs = {isCorpManaged = false;};
-            mbp-roam.injectArgs = {isCorpManaged = false;};
+            studio = {};
+            mbp-roam = {};
 
-            mbp-delay.injectArgs = {isCorpManaged = true;};
-            mbp-delay-roam.injectArgs = {
-              isCorpManaged = true;
-              migrateHomebrew = true;
-            };
+            mbp-delay = {};
+            mbp-delay-roam = {};
           };
         };
 
         # Home Manager only config for other Linux hosts.
         home = {
           defaultSystem = "x86_64-linux";
-          injectArgs = {isHeadless = false;}; # TODO: figure out why this is required.
-
+          # NOTE: because this is used to configure standalone home manager
+          # configuration, it is not an appropriate place to put user-specific
+          # options (because these home-manager configuration options are also
+          # passed to systems).
+          # TODO: distinguish between system options and user options.
           users = {
-            "delay@linode".injectArgs = {isHeadless = true;};
-
-            "delay@cloudtop-delay".injectArgs = {
-              isCorpManaged = true;
-              isHeadless = true;
-            };
+            "delay@linode" = {};
+            "delay@cloudtop-delay" = {};
           };
         };
       };
