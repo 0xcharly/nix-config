@@ -1,9 +1,5 @@
-{
-  hmSharedModules,
-  lib,
-  ...
-}: {
-  imports = lib.attrValues {inherit (hmSharedModules) delay nix-index;};
+{hmSharedModules, ...}: {
+  imports = with hmSharedModules; [delay nix-index];
 
   home = rec {
     username = "delay";
