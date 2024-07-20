@@ -3,10 +3,9 @@
   hmModules,
   ...
 }: {
-  imports =
-    (with hmModules; [delay nix-index])
-    ++ (with globalModules; [settings]);
+  imports = [hmModules.nix-index globalModules.settings];
 
+  settings.isCorpManaged = true;
   settings.isHeadless = true;
 
   home = rec {
