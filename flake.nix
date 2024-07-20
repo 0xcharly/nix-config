@@ -64,6 +64,8 @@
 
       config-manager = {
         root = ./config-manager;
+        overlays = [inputs.alacritty-theme.overlays.default];
+
         # NOTE: the notion of "default" user when username is not specified
         # anywhere in the config currently unsupported.
         # TODO: consider falling back to "default.nix" when username is not
@@ -71,19 +73,12 @@
         # value from somewhere.
         defaultUser = "delay";
 
-        overlays = [
-          inputs.alacritty-theme.overlays.default
-        ];
-
         # Home Manager only config for other Linux hosts.
-        home = {
-          defaultSystem = "x86_64-linux";
-          # NOTE: because this is used to configure standalone home manager
-          # configuration, it is not an appropriate place to put user-specific
-          # options (because these home-manager configuration options are also
-          # passed to systems).
-          # TODO: distinguish between system options and user options.
-        };
+        # NOTE: because this section is used to define standalone home configs,
+        # it is not an appropriate place to put user-specific options (because
+        # these home-manager configuration options are also passed to systems).
+        # TODO: distinguish between system options and user options.
+        home.defaultSystem = "x86_64-linux";
       };
 
       flake = let
