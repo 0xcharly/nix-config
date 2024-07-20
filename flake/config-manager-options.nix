@@ -7,7 +7,7 @@
 
   requireConfigRoot = lib.throwIfNot (cfg ? root) "config-manager.root must be set" cfg.root;
 
-  userOptionsSubmodule.options = {
+  homeOptionsSubmodule.options = {
     system = mkOption {
       default = cfg.home.defaultSystem;
       type = types.str;
@@ -54,7 +54,7 @@
       };
     };
 
-  hostOptionsSubmodule.options = {
+  systemOptionsSubmodule.options = {
     user = mkOption {
       default = cfg.defaultUser;
       type = types.nullOr types.str;
@@ -72,7 +72,7 @@
     throwForUnsupportedSystems {
       hosts = mkOption {
         default = {};
-        type = types.attrsOf (types.submodule hostOptionsSubmodule);
+        type = types.attrsOf (types.submodule systemOptionsSubmodule);
         example = lib.literalExpression ''
           {
             hostname = {
@@ -108,9 +108,9 @@
         '';
       };
 
-      users = mkOption {
+      hosts = mkOption {
         default = {};
-        type = types.attrsOf (types.submodule userOptionsSubmodule);
+        type = types.attrsOf (types.submodule homeOptionsSubmodule);
         example = lib.literalExpression ''
           {
             alice = {
@@ -199,7 +199,8 @@ in {
   };
 
   defaults = {
-    hostSettings = mkDefaultOptions hostOptionsSubmodule.options;
-    userSettings = mkDefaultOptions userOptionsSubmodule.options;
+    home = mkDefaultOptions homeOptionsSubmodule.options;
+    darwin = mkDefaultOptions systemOptionsSubmodule.options;
+    nixos = mkDefaultOptions systemOptionsSubmodule.options;
   };
 }
