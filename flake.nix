@@ -63,7 +63,7 @@
       systems = ["aarch64-darwin" "aarch64-linux" "x86_64-linux"];
 
       config-manager = {
-        root = ./hosts;
+        root = ./config-manager;
         # NOTE: the notion of "default" user when username is not specified
         # anywhere in the config currently unsupported.
         # TODO: consider falling back to "default.nix" when username is not
