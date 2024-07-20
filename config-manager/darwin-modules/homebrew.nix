@@ -1,12 +1,12 @@
 {
   config,
   lib,
-  utilsSharedModules,
+  globalModules,
   ...
 }: let
   inherit (config.settings) isCorpManaged;
 in {
-  imports = [utilsSharedModules.settings];
+  imports = [globalModules.settings];
 
   homebrew = {
     enable = true;

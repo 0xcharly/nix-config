@@ -27,21 +27,21 @@
       lib.throwIfNot (builtins.elem prefix supportedPrefixes) "Internal error: unsupported prefix '${prefix}'" expr;
   in
     throwForUnsupportedPrefix {
-      sharedModulesDirectory = mkOption {
-        default = "${requireConfigRoot}/${prefix}-shared-modules";
-        defaultText = lib.literalExpression "\"\${config-manager.root}/${prefix}-shared-modules\"";
-        type = types.pathInStore;
-        description = ''
-          The directory containing shared modules for ${prefix}.
-        '';
-      };
-
       configModulesDirectory = mkOption {
-        default = "${requireConfigRoot}/${prefix}-config-modules";
-        defaultText = lib.literalExpression "\"\${config-manager.root}/${prefix}-config-modules\"";
+        default = "${requireConfigRoot}/${prefix}-configs";
+        defaultText = lib.literalExpression "\"\${config-manager.root}/${prefix}-configs\"";
         type = types.pathInStore;
         description = ''
           The directory containing configuration modules for ${prefix}.
+        '';
+      };
+
+      sharedModulesDirectory = mkOption {
+        default = "${requireConfigRoot}/${prefix}-modules";
+        defaultText = lib.literalExpression "\"\${config-manager.root}/${prefix}-modules\"";
+        type = types.pathInStore;
+        description = ''
+          The directory containing shared modules for ${prefix}.
         '';
       };
     };
@@ -167,9 +167,9 @@ in {
       '';
     };
 
-    utilsSharedModulesDirectory = mkOption {
-      default = "${requireConfigRoot}/utils-shared-modules";
-      defaultText = lib.literalExpression "\"\${config-manager.root}/utils-shared-modules\"";
+    globalModulesDirectory = mkOption {
+      default = "${requireConfigRoot}/globals";
+      defaultText = lib.literalExpression "\"\${config-manager.root}/globals\"";
       type = types.pathInStore;
       description = ''
         The directory containing modules shared with all configurations.

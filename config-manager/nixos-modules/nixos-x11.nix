@@ -1,6 +1,6 @@
 {
+  globalModules,
   osSharedModules,
-  utilsSharedModules,
   pkgs,
   ...
 }: {
@@ -38,7 +38,7 @@
   fonts = {
     fontDir.enable = true;
 
-    packages = import utilsSharedModules.fonts {inherit pkgs;};
+    packages = import globalModules.fonts {inherit pkgs;};
   };
 
   # List additional packages to install in system profile. To search, run:
