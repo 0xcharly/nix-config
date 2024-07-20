@@ -48,12 +48,12 @@
         "x86_64-linux"
       ];
       throwForUnsupportedSystems = expr:
-        lib.throwIfNot (builtins.elem system supportedSystems) ("Unsupported system '" + system + "'") expr;
+        lib.throwIfNot (builtins.elem system supportedSystems) "Unsupported system '${system}'" expr;
     in
       throwForUnsupportedSystems (requireHomeManagerInput.lib.homeManagerConfiguration {
         pkgs = import requireNixpkgsInput {inherit system;};
         extraSpecialArgs = {inherit inputs hmSharedModules utilsSharedModules;};
-        # backupFileExtension = hostSettings.hmBackupFileExtension;
+        backupFileExtension = cfg.hmBackupFileExtension;
         modules = [
           # System options.
           {nixpkgs.overlays = cfg.overlays;}
@@ -74,8 +74,8 @@
     mkSystemHomeManagerModule,
   }: {
     hosts, # The list of user-defined hosts (i.e. from the flake config).
-    osConfigModules, # The list of user-provided configurations under (macos|nixos)-config-modules/.
-    osSharedModules, # The list of user-provided modules under (macos|nixos)-shared-modules/ injected in each system configuration module.
+    osConfigModules, # The list of user-provided configurations under (darwin|nixos)-config-modules/.
+    osSharedModules, # The list of user-provided modules under (darwin|nixos)-shared-modules/ injected in each system configuration module.
     hmConfigModules, # The list of user-provided configurations under home-config-modules/.
     hmSharedModules, # The list of user-provided modules under home-shared-modules/ injected in each home configuration module.
     utilsSharedModules, # The list of user-provided utility modules under utils-shared-modules/ injected into all configuration modules.
@@ -104,7 +104,7 @@
             home-manager.extraSpecialArgs = {inherit inputs hmSharedModules utilsSharedModules;};
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = hostSettings.hmBackupFileExtension;
+            home-manager.backupFileExtension = cfg.hmBackupFileExtension;
             # TODO: consider failing if the user configuration and default are both missing.
             home-manager.users.${username}.imports = [(hmConfigModules.${username} or hmConfigModules.default or {})];
           }
@@ -133,9 +133,9 @@ in {
     };
 
     darwinConfigurations = mkDarwinConfigurations {
-      inherit (cfg.macos) hosts;
-      osConfigModules = crawlModuleDir cfg.macos.configModulesDirectory;
-      osSharedModules = crawlModuleDir cfg.macos.sharedModulesDirectory;
+      inherit (cfg.darwin) hosts;
+      osConfigModules = crawlModuleDir cfg.darwin.configModulesDirectory;
+      osSharedModules = crawlModuleDir cfg.darwin.sharedModulesDirectory;
       hmConfigModules = crawlModuleDir cfg.home.configModulesDirectory;
       hmSharedModules = crawlModuleDir cfg.home.sharedModulesDirectory;
       utilsSharedModules = crawlModuleDir cfg.utilsSharedModulesDirectory;
