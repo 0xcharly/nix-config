@@ -1,9 +1,9 @@
 {
-  osSharedModules,
   pkgs,
+  systemModules,
   ...
 }: {
-  imports = with osSharedModules; [
+  imports = with systemModules; [
     nixos
     nixos-x11
     vm-aarch64

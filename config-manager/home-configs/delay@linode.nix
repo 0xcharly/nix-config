@@ -1,10 +1,10 @@
 {
   globalModules,
-  hmSharedModules,
+  hmModules,
   ...
 }: {
   imports =
-    (with hmSharedModules; [delay nix-index])
+    (with hmModules; [delay nix-index])
     ++ (with globalModules; [settings]);
 
   settings.isHeadless = true;

@@ -1,11 +1,11 @@
 {
-  globalModules,
-  osSharedModules,
   pkgs,
+  globalModules,
+  systemModules,
   ...
 }: {
   imports =
-    (with osSharedModules; [
+    (with systemModules; [
       aarch64-darwin
       homebrew
       macos

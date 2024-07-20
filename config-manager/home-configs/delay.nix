@@ -1,3 +1,3 @@
-{hmSharedModules, ...}: {
-  imports = [hmSharedModules.delay];
+{hmModules, ...}: {
+  imports = [hmModules.delay];
 }
