@@ -15,6 +15,14 @@
         The default system to use for this user configuration.
       '';
     };
+
+    user = mkOption {
+      default = cfg.defaultUser;
+      type = types.nullOr types.str;
+      description = ''
+        The name of the owning user.
+      '';
+    };
   };
 
   mkModulesDirectoriesOptions = prefix: let
@@ -28,8 +36,8 @@
   in
     throwForUnsupportedPrefix {
       configModulesDirectory = mkOption {
-        default = "${requireConfigRoot}/${prefix}-configs";
-        defaultText = lib.literalExpression "\"\${config-manager.root}/${prefix}-configs\"";
+        default = "${requireConfigRoot}/hosts/${prefix}-configs";
+        defaultText = lib.literalExpression "\"\${config-manager.root}/hosts/${prefix}-configs\"";
         type = types.pathInStore;
         description = ''
           The directory containing configuration modules for ${prefix}.
@@ -37,8 +45,8 @@
       };
 
       sharedModulesDirectory = mkOption {
-        default = "${requireConfigRoot}/${prefix}-modules";
-        defaultText = lib.literalExpression "\"\${config-manager.root}/${prefix}-modules\"";
+        default = "${requireConfigRoot}/hosts/${prefix}-modules";
+        defaultText = lib.literalExpression "\"\${config-manager.root}/hosts/${prefix}-modules\"";
         type = types.pathInStore;
         description = ''
           The directory containing shared modules for ${prefix}.
@@ -157,7 +165,7 @@ in {
       '';
     };
 
-    hmBackupFileExtension = mkOption {
+    backupFileExtension = mkOption {
       type = types.nullOr types.str;
       default = "nix-backup";
       example = "nix-backup";
@@ -173,6 +181,15 @@ in {
       type = types.pathInStore;
       description = ''
         The directory containing modules shared with all configurations.
+      '';
+    };
+
+    usersModulesDirectory = mkOption {
+      default = "${requireConfigRoot}/users";
+      defaultText = lib.literalExpression "\"\${config-manager.root}/users\"";
+      type = types.pathInStore;
+      description = ''
+        The directory containing user configuration modules shared with all systems.
       '';
     };
 

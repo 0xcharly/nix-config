@@ -38,10 +38,11 @@
     hmConfigModules, # The list of user-provided configurations under home-config-modules/.
     hmSharedModules, # The list of user-provided modules under home-shared-modules/ injected in each home configuration module.
     globalModules, # The list of user-provided utility modules under utils-shared-modules/ injected into all configuration modules.
+    usersModules, # The list of user-provided user modules under users/ injected into all system configuration modules.
   }:
     lib.mapAttrs (name: hmConfigModule: let
       userSettings = users.${name} or options.defaults.userSettings;
-      inherit (userSettings) system;
+      inherit (userSettings) system user;
 
       supportedSystems = [
         "aarch64-linux"
@@ -53,17 +54,21 @@
       throwForUnsupportedSystems (requireHomeManagerInput.lib.homeManagerConfiguration {
         pkgs = import requireNixpkgsInput {inherit system;};
         extraSpecialArgs = {inherit inputs hmSharedModules globalModules;};
-        backupFileExtension = cfg.hmBackupFileExtension;
+        backupFileExtension = cfg.backupFileExtension;
         modules = [
           # System options.
           {nixpkgs.overlays = cfg.overlays;}
 
-          # Default user configuration, if any.
+          # Default home-manager configuration, if any.
           hmSharedModules.default or {}
 
-          # User configuration.
+          # home-manager configuration.
           hmConfigModule
           hmConfigModules.default or {}
+
+          # User configuration.
+          # TODO: consider failing if the user configuration and default are both missing.
+          usersModules.${user} or usersModules.default or {}
         ];
       }))
     hmConfigModules;
@@ -76,13 +81,12 @@
     hosts, # The list of user-defined hosts (i.e. from the flake config).
     systemConfigModules, # The list of user-provided configurations under (darwin|nixos)-config-modules/.
     systemSharedModules, # The list of user-provided modules under (darwin|nixos)-shared-modules/ injected in each system configuration module.
-    hmConfigModules, # The list of user-provided configurations under home-config-modules/.
-    hmSharedModules, # The list of user-provided modules under home-shared-modules/ injected in each home configuration module.
     globalModules, # The list of user-provided utility modules under utils-shared-modules/ injected into all configuration modules.
+    usersModules, # The list of user-provided user modules under users/ injected into all system configuration modules.
   }:
     lib.mapAttrs (hostname: systemConfigModule: let
       hostSettings = hosts.${hostname} or options.defaults.hostSettings;
-      username = hostSettings.user or cfg.defaultUser;
+      inherit (hostSettings) user;
     in
       mkSystem {
         specialArgs = {
@@ -101,18 +105,16 @@
           systemConfigModules.default or {}
 
           # User configuration.
-          # TODO: consider failing if the user configuration and default are both missing.
           mkSystemHomeManagerModule
           {
-            home-manager.extraSpecialArgs = {
-              inherit inputs globalModules;
-              hmModules = hmSharedModules;
-            };
+            home-manager.extraSpecialArgs = {inherit inputs globalModules;};
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = cfg.hmBackupFileExtension;
+            home-manager.backupFileExtension = cfg.backupFileExtension;
             # TODO: consider failing if the user configuration and default are both missing.
-            home-manager.users.${username}.imports = [(hmConfigModules.${username} or hmConfigModules.default or {})];
+            home-manager.users.${user}.imports = [
+              usersModules.${user} or usersModules.default or {}
+            ];
           }
         ];
       })
@@ -136,24 +138,23 @@ in {
       hmConfigModules = crawlModuleDir cfg.home.configModulesDirectory;
       hmSharedModules = crawlModuleDir cfg.home.sharedModulesDirectory;
       globalModules = crawlModuleDir cfg.globalModulesDirectory;
+      usersModules = crawlModuleDir cfg.usersModulesDirectory;
     };
 
     darwinConfigurations = mkDarwinConfigurations {
       inherit (cfg.darwin) hosts;
       systemConfigModules = crawlModuleDir cfg.darwin.configModulesDirectory;
       systemSharedModules = crawlModuleDir cfg.darwin.sharedModulesDirectory;
-      hmConfigModules = crawlModuleDir cfg.home.configModulesDirectory;
-      hmSharedModules = crawlModuleDir cfg.home.sharedModulesDirectory;
       globalModules = crawlModuleDir cfg.globalModulesDirectory;
+      usersModules = crawlModuleDir cfg.usersModulesDirectory;
     };
 
     nixosConfigurations = mkNixosConfigurations {
       inherit (cfg.nixos) hosts;
       systemConfigModules = crawlModuleDir cfg.nixos.configModulesDirectory;
       systemSharedModules = crawlModuleDir cfg.nixos.sharedModulesDirectory;
-      hmConfigModules = crawlModuleDir cfg.home.configModulesDirectory;
-      hmSharedModules = crawlModuleDir cfg.home.sharedModulesDirectory;
       globalModules = crawlModuleDir cfg.globalModulesDirectory;
+      usersModules = crawlModuleDir cfg.usersModulesDirectory;
     };
   };
 }
