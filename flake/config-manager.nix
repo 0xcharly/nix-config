@@ -39,7 +39,8 @@
     hmSharedModules, # The list of user-provided modules under home-shared-modules/ injected in each home configuration module.
     utilsSharedModules, # The list of user-provided utility modules under utils-shared-modules/ injected into all configuration modules.
   }:
-    lib.mapAttrs (name: userSettings: let
+    lib.mapAttrs (name: hmConfigModule: let
+      userSettings = users.${name} or options.defaults.userSettings;
       inherit (userSettings) system;
 
       supportedSystems = [
@@ -61,11 +62,11 @@
           hmSharedModules.default or {}
 
           # User configuration.
-          # TODO: consider failing if the user configuration and default are both missing.
-          hmConfigModules.${name} or hmConfigModules.default or {}
+          hmConfigModule
+          hmConfigModules.default or {}
         ];
       }))
-    users;
+    hmConfigModules;
 
   # Creates specialized configuration factory functions.
   mkMkSystemConfigurations = {
@@ -79,8 +80,9 @@
     hmSharedModules, # The list of user-provided modules under home-shared-modules/ injected in each home configuration module.
     utilsSharedModules, # The list of user-provided utility modules under utils-shared-modules/ injected into all configuration modules.
   }:
-    lib.mapAttrs (hostname: hostSettings: let
-      username = hostSettings.user;
+    lib.mapAttrs (hostname: osConfigModule: let
+      hostSettings = hosts.${hostname} or options.defaults.hostSettings;
+      username = hostSettings.user or cfg.defaultUser;
     in
       mkSystem {
         specialArgs = {inherit inputs hostSettings osSharedModules utilsSharedModules;};
@@ -92,7 +94,8 @@
           osSharedModules.default or {}
 
           # System configuration.
-          osConfigModules.${hostname} or osConfigModules.default or {}
+          osConfigModule
+          osConfigModules.default or {}
 
           # User configuration.
           # TODO: consider failing if the user configuration and default are both missing.
@@ -107,7 +110,7 @@
           }
         ];
       })
-    hosts;
+    osConfigModules;
 
   mkDarwinConfigurations = mkMkSystemConfigurations {
     mkSystem = requireDarwinInput.lib.darwinSystem;

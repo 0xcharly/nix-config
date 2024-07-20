@@ -75,23 +75,6 @@
           inputs.alacritty-theme.overlays.default
         ];
 
-        # NixOS hosts.
-        nixos.hosts = {
-          vm-aarch64 = {};
-          vm-linode = {};
-        };
-
-        # nix-darwin hosts.
-        macos = {
-          hosts = {
-            studio = {};
-            mbp-roam = {};
-
-            mbp-delay = {};
-            mbp-delay-roam = {};
-          };
-        };
-
         # Home Manager only config for other Linux hosts.
         home = {
           defaultSystem = "x86_64-linux";
@@ -100,10 +83,6 @@
           # options (because these home-manager configuration options are also
           # passed to systems).
           # TODO: distinguish between system options and user options.
-          users = {
-            "delay@linode" = {};
-            "delay@cloudtop-delay" = {};
-          };
         };
       };
 
