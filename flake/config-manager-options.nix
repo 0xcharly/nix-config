@@ -20,7 +20,7 @@
   mkModulesDirectoriesOptions = prefix: let
     supportedPrefixes = [
       "home"
-      "macos"
+      "darwin"
       "nixos"
     ];
     throwForUnsupportedPrefix = expr:
@@ -54,21 +54,10 @@
         The name of the owning user.
       '';
     };
-
-    # TODO: consider a global option for this.
-    hmBackupFileExtension = mkOption {
-      type = types.nullOr types.str;
-      default = "nix-backup";
-      example = "nix-backup";
-      description = ''
-        On activation move existing files by appending the given file
-        extension rather than exiting with an error.
-      '';
-    };
   };
 
   mkSystemConfigurationOptions = system: let
-    supportedSystems = ["macos" "nixos"];
+    supportedSystems = ["darwin" "nixos"];
     throwForUnsupportedSystems = expr:
       lib.throwIfNot (builtins.elem system supportedSystems) "Internal error: unsupported system '${system}'" expr;
   in
@@ -78,12 +67,8 @@
         type = types.attrsOf (types.submodule hostOptionsSubmodule);
         example = lib.literalExpression ''
           {
-            hostA = {
-              userHomeModules = [ "bob" ];
-            };
-
-            hostB = {
-              arch = "aarch64
+            hostname = {
+              user = "bob";
             };
           }
         '';
@@ -100,9 +85,9 @@
     mkModulesDirectoriesOptions "nixos"
     // mkSystemConfigurationOptions "nixos";
 
-  macosConfigurationOptions =
-    mkModulesDirectoriesOptions "macos"
-    // mkSystemConfigurationOptions "macos";
+  darwinConfigurationOptions =
+    mkModulesDirectoriesOptions "darwin"
+    // mkSystemConfigurationOptions "darwin";
 
   homeConfigurationOptions =
     mkModulesDirectoriesOptions "home"
@@ -121,10 +106,7 @@
         example = lib.literalExpression ''
           {
             alice = {
-              standalone = {
-                enable = true;
-                pkgs = import nixpkgs { system = "x86_64-linux"; };
-              };
+              system = "x86_64-linux";
             };
           }
         '';
@@ -175,6 +157,16 @@ in {
       '';
     };
 
+    hmBackupFileExtension = mkOption {
+      type = types.nullOr types.str;
+      default = "nix-backup";
+      example = "nix-backup";
+      description = ''
+        On activation move existing files by appending the given file
+        extension rather than exiting with an error.
+      '';
+    };
+
     utilsSharedModulesDirectory = mkOption {
       default = "${requireConfigRoot}/utils-shared-modules";
       defaultText = lib.literalExpression "\"\${config-manager.root}/utils-shared-modules\"";
@@ -186,7 +178,7 @@ in {
 
     home = homeConfigurationOptions;
     nixos = nixosConfigurationOptions;
-    macos = macosConfigurationOptions;
+    darwin = darwinConfigurationOptions;
   };
 
   defaults = {
