@@ -1,10 +1,10 @@
 {
-  globalModules,
-  osSharedModules,
   pkgs,
+  globalModules,
+  systemModules,
   ...
 }: {
-  imports = with osSharedModules; [nixos-headless];
+  imports = with systemModules; [nixos-headless];
 
   # Windowing environment.
   services.xserver = {
