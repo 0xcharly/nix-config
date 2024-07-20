@@ -1,13 +1,12 @@
 {
+  globalModules,
   hmSharedModules,
-  utilsSharedModules,
   ...
 }: {
   imports =
     (with hmSharedModules; [delay nix-index])
-    ++ (with utilsSharedModules; [settings]);
+    ++ (with globalModules; [settings]);
 
-  settings.isCorpManaged = true;
   settings.isHeadless = true;
 
   home = rec {

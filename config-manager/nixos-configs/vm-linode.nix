@@ -1,11 +1,11 @@
 {
+  globalModules,
   osSharedModules,
-  utilsSharedModules,
   ...
 }: {
   imports =
     (with osSharedModules; [nixos nixos-headless vm-linode])
-    ++ (with utilsSharedModules; [settings]);
+    ++ (with globalModules; [settings]);
 
   # TODO: consider moving this to `osSharedModules.nixos-headless`. This is
   # currently not feasible because `nixos-x11` imports `nixos-headless`.

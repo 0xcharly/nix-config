@@ -1,9 +1,9 @@
 {
   pkgs,
-  utilsSharedModules,
+  globalModules,
   ...
 }: {
-  imports = with utilsSharedModules; [nix-client-config];
+  imports = with globalModules; [nix-client-config];
 
   # Be careful updating this.
   boot.kernelPackages = pkgs.linuxPackages_latest;

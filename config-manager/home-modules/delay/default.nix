@@ -3,7 +3,7 @@
   inputs,
   lib,
   pkgs,
-  utilsSharedModules,
+  globalModules,
   ...
 }: let
   inherit (config.settings) isCorpManaged isHeadless;
@@ -90,7 +90,7 @@
     });
 in {
   # Ensures that the config settings definition is loaded to populate defaults if needed.
-  imports = [utilsSharedModules.settings];
+  imports = [globalModules.settings];
 
   home.stateVersion = "24.05";
   programs.home-manager.enable = true;
