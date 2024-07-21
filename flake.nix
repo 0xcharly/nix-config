@@ -65,6 +65,7 @@
 
       config-manager = {
         root = ./config-manager;
+        final = false; # This config is extended by a private corp-specific one.
         overlays = [inputs.alacritty-theme.overlays.default];
 
         # NOTE: the notion of "default" user when username is not specified
