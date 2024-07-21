@@ -40,6 +40,7 @@
     sharedModules, # The list of user-provided modules under home-shared-modules/ injected in each home configuration module.
     globalModules, # The list of user-provided utility modules under utils-shared-modules/ injected into all configuration modules.
     usersModules, # The list of user-provided user modules under users/ injected into all system configuration modules.
+    importedModules, # The list of user-provided modules passed to this config via the `imports` option.
   }:
     lib.mapAttrs (name: hmConfigModule: let
       host = hosts.${name} or defaults;
@@ -54,7 +55,11 @@
     in
       throwForUnsupportedSystems (requireHomeManagerInput.lib.homeManagerConfiguration {
         pkgs = import requireNixpkgsInput {inherit system;};
-        extraSpecialArgs = {inherit inputs sharedModules globalModules;};
+        extraSpecialArgs = {
+          inherit inputs;
+          sharedModules = sharedModules // importedModules.sharedModules;
+          globalModules = globalModules // importedModules.globalModules;
+        };
         backupFileExtension = cfg.backupFileExtension;
         modules = [
           # System options.
@@ -85,6 +90,7 @@
     sharedModules, # The list of user-provided modules under (darwin|nixos)-shared-modules/ injected in each system configuration module.
     globalModules, # The list of user-provided utility modules under utils-shared-modules/ injected into all configuration modules.
     usersModules, # The list of user-provided user modules under users/ injected into all system configuration modules.
+    importedModules, # The list of user-provided modules passed to this config via the `imports` option.
   }:
     lib.mapAttrs (hostname: systemConfigModule: let
       host = hosts.${hostname} or defaults;
@@ -109,7 +115,10 @@
           # User configuration.
           mkSystemHomeManagerModule
           {
-            home-manager.extraSpecialArgs = {inherit inputs globalModules;};
+            home-manager.extraSpecialArgs = {
+              inherit inputs;
+              globalModules = globalModules // importedModules.globalModules;
+            };
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.backupFileExtension = cfg.backupFileExtension;
@@ -142,6 +151,11 @@ in {
       sharedModules = crawlModuleDir cfg.home.sharedModulesDirectory;
       globalModules = crawlModuleDir cfg.globalModulesDirectory;
       usersModules = crawlModuleDir cfg.usersModulesDirectory;
+      importedModules = with cfg.imports; {
+        inherit globalModules usersModules;
+        configModules = homeConfigModules;
+        sharedModules = homeSharedModules;
+      };
     };
 
     darwinConfigurations = mkDarwinConfigurations {
@@ -151,6 +165,11 @@ in {
       sharedModules = crawlModuleDir cfg.darwin.sharedModulesDirectory;
       globalModules = crawlModuleDir cfg.globalModulesDirectory;
       usersModules = crawlModuleDir cfg.usersModulesDirectory;
+      importedModules = with cfg.imports; {
+        inherit globalModules usersModules;
+        configModules = darwinConfigModules;
+        sharedModules = darwinSharedModules;
+      };
     };
 
     nixosConfigurations = mkNixosConfigurations {
@@ -160,9 +179,18 @@ in {
       sharedModules = crawlModuleDir cfg.nixos.sharedModulesDirectory;
       globalModules = crawlModuleDir cfg.globalModulesDirectory;
       usersModules = crawlModuleDir cfg.usersModulesDirectory;
+      importedModules = with cfg.imports; {
+        inherit globalModules usersModules;
+        configModules = nixosConfigModules;
+        sharedModules = nixosSharedModules;
+      };
     };
 
-    config-manager = lib.mkIf (!cfg.final) ({...}: {
+    # NOTE: for debug purposes only.
+    # TODO: remove once the options structure is final~ish.
+    inherit cfg;
+
+    config-manager = lib.mkIf (!cfg.final) {
       homeConfigModules = crawlModuleDir cfg.home.configModulesDirectory;
       homeSharedModules = crawlModuleDir cfg.home.sharedModulesDirectory;
       darwinConfigModules = crawlModuleDir cfg.darwin.configModulesDirectory;
@@ -170,7 +198,8 @@ in {
       nixosConfigModules = crawlModuleDir cfg.nixos.configModulesDirectory;
       nixosSharedModules = crawlModuleDir cfg.nixos.sharedModulesDirectory;
       globalModules = crawlModuleDir cfg.globalModulesDirectory;
+      # TODO: consider if `usersModules` should even be exported here?
       usersModules = crawlModuleDir cfg.usersModulesDirectory;
-    });
+    };
   };
 }

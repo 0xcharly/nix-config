@@ -134,6 +134,49 @@
     merge = lib.mergeOneOption;
   };
 
+  importsOptions = {
+    homeConfigModules = mkOption {
+      default = {};
+      type = types.attrsOf types.raw;
+      description = ''TODO'';
+    };
+    homeSharedModules = mkOption {
+      default = {};
+      type = types.attrsOf types.raw;
+      description = ''TODO'';
+    };
+    darwinConfigModules = mkOption {
+      default = {};
+      type = types.attrsOf types.raw;
+      description = ''TODO'';
+    };
+    darwinSharedModules = mkOption {
+      default = {};
+      type = types.attrsOf types.raw;
+      description = ''TODO'';
+    };
+    nixosConfigModules = mkOption {
+      default = {};
+      type = types.attrsOf types.raw;
+      description = ''TODO'';
+    };
+    nixosSharedModules = mkOption {
+      default = {};
+      type = types.attrsOf types.raw;
+      description = ''TODO'';
+    };
+    globalModules = mkOption {
+      default = {};
+      type = types.attrsOf types.raw;
+      description = ''TODO'';
+    };
+    usersModules = mkOption {
+      default = {};
+      type = types.attrsOf types.raw;
+      description = ''TODO'';
+    };
+  };
+
   mkDefaultOptions = options: let
     requireDefault = name: value: lib.throwIfNot (value ? default) "Internal error: missing default value for option '${name}" value.default;
   in
@@ -156,6 +199,17 @@ in {
         upon this config from another, separated one.
       '';
     };
+
+    # TODO: what happens if there's multiple `default` modules defined, or
+    # multiple modules of the same name for that matter?
+    imports = importsOptions;
+    # imports = mkOption {
+    #   default = {};
+    #   type = types.attrsOf (types.submodule importsOptionsSubmodule);
+    #   description = ''
+    #     The list of `config-manager` flake modules to import.
+    #   '';
+    # };
 
     overlays = mkOption {
       default = [];
