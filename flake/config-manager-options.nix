@@ -148,6 +148,15 @@ in {
       '';
     };
 
+    final = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        If false, opens this config for extension. Do this if you want to build
+        upon this config from another, separated one.
+      '';
+    };
+
     overlays = mkOption {
       default = [];
       type = types.listOf overlayType;

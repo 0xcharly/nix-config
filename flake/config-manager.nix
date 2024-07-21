@@ -161,5 +161,16 @@ in {
       globalModules = crawlModuleDir cfg.globalModulesDirectory;
       usersModules = crawlModuleDir cfg.usersModulesDirectory;
     };
+
+    config-manager = lib.mkIf (!cfg.final) ({...}: {
+      homeConfigModules = crawlModuleDir cfg.home.configModulesDirectory;
+      homeSharedModules = crawlModuleDir cfg.home.sharedModulesDirectory;
+      darwinConfigModules = crawlModuleDir cfg.darwin.configModulesDirectory;
+      darwinSharedModules = crawlModuleDir cfg.darwin.sharedModulesDirectory;
+      nixosConfigModules = crawlModuleDir cfg.nixos.configModulesDirectory;
+      nixosSharedModules = crawlModuleDir cfg.nixos.sharedModulesDirectory;
+      globalModules = crawlModuleDir cfg.globalModulesDirectory;
+      usersModules = crawlModuleDir cfg.usersModulesDirectory;
+    });
   };
 }
