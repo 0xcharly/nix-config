@@ -82,50 +82,12 @@
         home.defaultSystem = "x86_64-linux";
       };
 
-      flake = let
-        # overlays = [
-        #   inputs.alacritty-theme.overlays.default
-        # ];
-        #
-        # mkDarwinSystem = import ./lib/mk-darwin-system.nix {inherit overlays inputs;};
-        # mkHomeOnly = import ./lib/mk-home-only.nix {inherit nixpkgs overlays inputs;};
-        # mkNixOSSystem = import ./lib/mk-nixos-system.nix {inherit overlays nixpkgs inputs;};
-      in {
+      flake = {
         # NOTE: during development, the config manager module is stored into
         # this repository for convenience. Expose it through the `flakeModule`
         # output for now.
         # TODO: move the config manager module into its own repository once mature enough.
         flakeModules = {default = ./flake/config-manager.nix;};
-
-        # # NixOS hosts.
-        # nixosConfigurations.vm-aarch64 = mkNixOSSystem ./hosts/vm-aarch64.nix {};
-        #
-        # nixosConfigurations.vm-linode = mkNixOSSystem ./hosts/vm-linode.nix {
-        #   isHeadless = true;
-        # };
-        #
-        # # nix-darwin hosts.
-        # darwinConfigurations.studio = mkDarwinSystem ./hosts/darwin.nix {};
-        # darwinConfigurations.mbp-roam = mkDarwinSystem ./hosts/darwin.nix {};
-        #
-        # darwinConfigurations.mbp-delay = mkDarwinSystem ./hosts/darwin-corp.nix {
-        #   isCorpManaged = true;
-        # };
-        #
-        # darwinConfigurations.mbp-delay-roam = mkDarwinSystem ./hosts/darwin-corp.nix {
-        #   isCorpManaged = true;
-        #   migrateHomebrew = true;
-        # };
-        #
-        # # Home Manager only config for other Linux hosts.
-        # homeConfigurations."delay@linode" = mkHomeOnly {
-        #   isHeadless = true;
-        # };
-        #
-        # homeConfigurations."delay@cloudtop-delay" = mkHomeOnly {
-        #   isCorpManaged = true;
-        #   isHeadless = true;
-        # };
       };
     };
 }
