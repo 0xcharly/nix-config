@@ -4,6 +4,7 @@
   ...
 }: {
   imports = with systemModules; [
+    nix-index
     nixos
     nixos-x11
     vm-aarch64
