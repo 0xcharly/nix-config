@@ -39,14 +39,15 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # macOS only: Homebrew for Nix.
+    homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+
     # Neovim overlay with personal configuration.
+    # TODO: consider using an overlay to install the package.
     nvim.url = "github:0xcharly/nix-config-nvim";
 
     # Alacritty Themes (includes Catppuccin).
     alacritty-theme.url = "github:alexghr/alacritty-theme.nix";
-
-    # macOS only: Homebrew for Nix.
-    homebrew.url = "github:zhaofengli-wip/nix-homebrew";
   };
 
   outputs = inputs @ {flake-parts, ...}:
