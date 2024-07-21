@@ -63,12 +63,6 @@
 
       systems = ["aarch64-darwin" "aarch64-linux" "x86_64-linux"];
 
-      # NOTE: during development, the config manager module is stored into
-      # this repository for convenience. Expose it through the `flakeModule`
-      # output for now.
-      # TODO: move the config manager module into its own repository once mature enough.
-      flakeModules = {default = ./flake/config-manager.nix;};
-
       config-manager = {
         root = ./config-manager;
         overlays = [inputs.alacritty-theme.overlays.default];
@@ -97,6 +91,12 @@
         # mkHomeOnly = import ./lib/mk-home-only.nix {inherit nixpkgs overlays inputs;};
         # mkNixOSSystem = import ./lib/mk-nixos-system.nix {inherit overlays nixpkgs inputs;};
       in {
+        # NOTE: during development, the config manager module is stored into
+        # this repository for convenience. Expose it through the `flakeModule`
+        # output for now.
+        # TODO: move the config manager module into its own repository once mature enough.
+        flakeModules = {default = ./flake/config-manager.nix;};
+
         # # NixOS hosts.
         # nixosConfigurations.vm-aarch64 = mkNixOSSystem ./hosts/vm-aarch64.nix {};
         #
