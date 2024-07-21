@@ -1153,11 +1153,11 @@
         "rustaceanvim": "rustaceanvim"
       },
       "locked": {
-        "lastModified": 1720934560,
-        "narHash": "sha256-kLnTF3QAewdX5ZRO/e5I1C7/ezdfzpNPTqWhkcAQeMw=",
+        "lastModified": 1721546859,
+        "narHash": "sha256-5bUdJVdJrbvmwPy6GOrqW5+R1fb3Oz1FaKTiwGby4WI=",
         "owner": "0xcharly",
         "repo": "nix-config-nvim",
-        "rev": "438a66ec11ada73cd3099f4ac8b58b9d382be872",
+        "rev": "4c6cec918ffa2e71b84c3a8d96fc8e96cafe64f8",
         "type": "github"
       },
       "original": {
