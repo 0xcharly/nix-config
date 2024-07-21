@@ -63,6 +63,12 @@
 
       systems = ["aarch64-darwin" "aarch64-linux" "x86_64-linux"];
 
+      # NOTE: during development, the config manager module is stored into
+      # this repository for convenience. Expose it through the `flakeModule`
+      # output for now.
+      # TODO: move the config manager module into its own repository once mature enough.
+      flakeModules = {default = ./flake/config-manager.nix;};
+
       config-manager = {
         root = ./config-manager;
         overlays = [inputs.alacritty-theme.overlays.default];
@@ -121,12 +127,5 @@
         #   isHeadless = true;
         # };
       };
-    }
-    // {
-      # NOTE: during development, the config manager module is stored into
-      # this repository for convenience. Expose it through the `flakeModule`
-      # output for now.
-      # TODO: move the config manager module into its own repository once mature enough.
-      flakeModule = ./flake/config-manager.nix;
     };
 }
