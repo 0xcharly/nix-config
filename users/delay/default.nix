@@ -8,7 +8,10 @@
 }: let
   inherit (pkgs.stdenv) isDarwin isLinux;
 
-  nvim-pkg = inputs.nvim.packages.${pkgs.system}.latest;
+  nvim-pkg =
+    if isCorpManaged
+    then inputs.nvim.packages.${pkgs.system}.latest-corp
+    else inputs.nvim.packages.${pkgs.system}.latest;
 
   open-tmux-workspace-pkg = pkgs.writeShellApplication {
     name = "open-tmux-workspace";
