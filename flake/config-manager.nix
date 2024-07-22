@@ -37,7 +37,7 @@
     hosts, # The list of user-defined hosts (i.e. from the flake config).
     defaults, # Default configuration values.
     configModules, # The list of user-provided configurations under home-config-modules/.
-    sharedModules, # The list of user-provided modules under home-shared-modules/ injected in each home configuration module.
+    systemModules, # The list of user-provided modules under home-shared-modules/ injected in each home configuration module.
     globalModules, # The list of user-provided utility modules under globals/ injected into all configuration modules.
     usersModules, # The list of user-provided user modules under users/ injected into all system configuration modules.
     importedModules, # The list of user-provided modules passed to this config via the `imports` option.
@@ -58,7 +58,7 @@
         extraSpecialArgs = {
           inherit inputs;
           globalModules = globalModules // importedModules.globalModules;
-          systemModules = sharedModules // importedModules.sharedModules;
+          systemModules = systemModules // importedModules.systemModules;
         };
         backupFileExtension = cfg.backupFileExtension;
         modules = [
@@ -66,9 +66,9 @@
           {nixpkgs.overlays = cfg.overlays;}
 
           # Default home-manager configuration, if any.
-          sharedModules.default or {}
+          systemModules.default or {}
           # Default imported home-manager configuration, if any.
-          importedModules.sharedModules.default or {}
+          importedModules.systemModules.default or {}
 
           # home-manager configuration.
           hmConfigModule
@@ -77,6 +77,7 @@
           # User configuration.
           # TODO: consider failing if the user configuration and default are both missing.
           usersModules.${user} or usersModules.default or {}
+          importedModules.usersModules.${user} or importedModules.usersModules.default or {}
         ];
       }))
     configModules;
@@ -89,7 +90,7 @@
     hosts, # The list of user-defined hosts (i.e. from the flake config).
     defaults, # Default configuration values.
     configModules, # The list of user-provided configurations under (darwin|nixos)-config-modules/.
-    sharedModules, # The list of user-provided modules under (darwin|nixos)-shared-modules/ injected in each system configuration module.
+    systemModules, # The list of user-provided modules under (darwin|nixos)-shared-modules/ injected in each system configuration module.
     globalModules, # The list of user-provided utility modules under globals/ injected into all configuration modules.
     usersModules, # The list of user-provided user modules under users/ injected into all system configuration modules.
     importedModules, # The list of user-provided modules passed to this config via the `imports` option.
@@ -102,16 +103,16 @@
         specialArgs = {
           inherit inputs host;
           globalModules = globalModules // importedModules.globalModules;
-          systemModules = sharedModules // importedModules.sharedModules;
+          systemModules = systemModules // importedModules.systemModules;
         };
         modules = [
           # System options.
           {nixpkgs.overlays = cfg.overlays;}
 
           # Default system configuration, if any.
-          sharedModules.default or {}
+          systemModules.default or {}
           # Default imported system configuration, if any.
-          importedModules.sharedModules.default or {}
+          importedModules.systemModules.default or {}
 
           # System configuration.
           systemConfigModule
@@ -130,6 +131,7 @@
             # TODO: consider failing if the user configuration and default are both missing.
             home-manager.users.${user}.imports = [
               usersModules.${user} or usersModules.default or {}
+              importedModules.usersModules.${user} or importedModules.usersModules.default or {}
             ];
           }
         ];
@@ -153,13 +155,13 @@ in {
       inherit (cfg.home) hosts;
       defaults = options.defaults.home;
       configModules = crawlModuleDir cfg.home.configModulesDirectory;
-      sharedModules = crawlModuleDir cfg.home.sharedModulesDirectory;
+      systemModules = crawlModuleDir cfg.home.sharedModulesDirectory;
       globalModules = crawlModuleDir cfg.globalModulesDirectory;
       usersModules = crawlModuleDir cfg.usersModulesDirectory;
       importedModules = with cfg.imports; {
         inherit globalModules usersModules;
         configModules = homeConfigModules;
-        sharedModules = homeSharedModules;
+        systemModules = homeSharedModules;
       };
     };
 
@@ -167,13 +169,13 @@ in {
       inherit (cfg.darwin) hosts;
       defaults = options.defaults.darwin;
       configModules = crawlModuleDir cfg.darwin.configModulesDirectory;
-      sharedModules = crawlModuleDir cfg.darwin.sharedModulesDirectory;
+      systemModules = crawlModuleDir cfg.darwin.sharedModulesDirectory;
       globalModules = crawlModuleDir cfg.globalModulesDirectory;
       usersModules = crawlModuleDir cfg.usersModulesDirectory;
       importedModules = with cfg.imports; {
         inherit globalModules usersModules;
         configModules = darwinConfigModules;
-        sharedModules = darwinSharedModules;
+        systemModules = darwinSharedModules;
       };
     };
 
@@ -181,13 +183,13 @@ in {
       inherit (cfg.nixos) hosts;
       defaults = options.defaults.nixos;
       configModules = crawlModuleDir cfg.nixos.configModulesDirectory;
-      sharedModules = crawlModuleDir cfg.nixos.sharedModulesDirectory;
+      systemModules = crawlModuleDir cfg.nixos.sharedModulesDirectory;
       globalModules = crawlModuleDir cfg.globalModulesDirectory;
       usersModules = crawlModuleDir cfg.usersModulesDirectory;
       importedModules = with cfg.imports; {
         inherit globalModules usersModules;
         configModules = nixosConfigModules;
-        sharedModules = nixosSharedModules;
+        systemModules = nixosSharedModules;
       };
     };
 
