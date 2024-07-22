@@ -67,6 +67,8 @@
 
           # Default home-manager configuration, if any.
           sharedModules.default or {}
+          # Default imported home-manager configuration, if any.
+          importedModules.sharedModules.default or {}
 
           # home-manager configuration.
           hmConfigModule
@@ -108,6 +110,8 @@
 
           # Default system configuration, if any.
           sharedModules.default or {}
+          # Default imported system configuration, if any.
+          importedModules.sharedModules.default or {}
 
           # System configuration.
           systemConfigModule
