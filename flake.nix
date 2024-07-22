@@ -68,6 +68,11 @@
         final = false; # This config is extended by a private corp-specific one.
         overlays = [inputs.alacritty-theme.overlays.default];
 
+        # NOTE: automatically backing up existing files is currently unsupported
+        # for standalone home-manager setups.
+        # See https://github.com/nix-community/home-manager/issues/5649.
+        # Instead, we the `-b <backup-file-extension>` to `home-manager switch`.
+
         # NOTE: the notion of "default" user when username is not specified
         # anywhere in the config currently unsupported.
         # TODO: consider falling back to "default.nix" when username is not

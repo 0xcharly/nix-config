@@ -60,7 +60,12 @@
           globalModules = globalModules // importedModules.globalModules;
           systemModules = systemModules // importedModules.systemModules;
         };
-        backupFileExtension = cfg.backupFileExtension;
+        # NOTE: automatically backing up existing files is currently unsupported
+        # for standalone home-manager setups.
+        # See https://github.com/nix-community/home-manager/issues/5649.
+        # Instead, we the `-b <backup-file-extension>` to `home-manager switch`.
+        # TODO: contribute support, or find an alternative.
+        # backupFileExtension = cfg.backupFileExtension;
         modules = [
           # System options.
           {nixpkgs.overlays = cfg.overlays;}
