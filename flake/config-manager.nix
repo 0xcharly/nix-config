@@ -38,7 +38,7 @@
     defaults, # Default configuration values.
     configModules, # The list of user-provided configurations under home-config-modules/.
     sharedModules, # The list of user-provided modules under home-shared-modules/ injected in each home configuration module.
-    globalModules, # The list of user-provided utility modules under utils-shared-modules/ injected into all configuration modules.
+    globalModules, # The list of user-provided utility modules under globals/ injected into all configuration modules.
     usersModules, # The list of user-provided user modules under users/ injected into all system configuration modules.
     importedModules, # The list of user-provided modules passed to this config via the `imports` option.
   }:
@@ -57,8 +57,8 @@
         pkgs = import requireNixpkgsInput {inherit system;};
         extraSpecialArgs = {
           inherit inputs;
-          sharedModules = sharedModules // importedModules.sharedModules;
           globalModules = globalModules // importedModules.globalModules;
+          systemModules = sharedModules // importedModules.sharedModules;
         };
         backupFileExtension = cfg.backupFileExtension;
         modules = [
@@ -88,7 +88,7 @@
     defaults, # Default configuration values.
     configModules, # The list of user-provided configurations under (darwin|nixos)-config-modules/.
     sharedModules, # The list of user-provided modules under (darwin|nixos)-shared-modules/ injected in each system configuration module.
-    globalModules, # The list of user-provided utility modules under utils-shared-modules/ injected into all configuration modules.
+    globalModules, # The list of user-provided utility modules under globals/ injected into all configuration modules.
     usersModules, # The list of user-provided user modules under users/ injected into all system configuration modules.
     importedModules, # The list of user-provided modules passed to this config via the `imports` option.
   }:
@@ -98,8 +98,9 @@
     in
       mkSystem {
         specialArgs = {
-          inherit inputs host globalModules;
-          systemModules = sharedModules;
+          inherit inputs host;
+          globalModules = globalModules // importedModules.globalModules;
+          systemModules = sharedModules // importedModules.sharedModules;
         };
         modules = [
           # System options.
