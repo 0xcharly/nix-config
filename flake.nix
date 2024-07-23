@@ -42,6 +42,9 @@
     # macOS only: Homebrew for Nix.
     homebrew.url = "github:zhaofengli-wip/nix-homebrew";
 
+    # Personal config manager.
+    nix-config-manager.url = "github:0xcharly/nix-config-manager";
+
     # Neovim overlay with personal configuration.
     # TODO: consider using an overlay to install the package.
     nvim.url = "github:0xcharly/nix-config-nvim";
@@ -53,12 +56,12 @@
   outputs = inputs @ {flake-parts, ...}:
     flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [
+        inputs.nix-config-manager.flakeModule
         inputs.pre-commit-hooks-nix.flakeModule
         inputs.treefmt-nix.flakeModule
 
         ./flake/cmd-fmt.nix
         ./flake/devshells.nix
-        ./flake/config-manager.nix
       ];
 
       systems = ["aarch64-darwin" "aarch64-linux" "x86_64-linux"];
@@ -74,7 +77,7 @@
         # Instead, we the `-b <backup-file-extension>` to `home-manager switch`.
 
         # NOTE: the notion of "default" user when username is not specified
-        # anywhere in the config currently unsupported.
+        # anywhere in the config is currently unsupported.
         # TODO: consider falling back to "default.nix" when username is not
         # specified. Currently needs to support reading the actual username
         # value from somewhere.
@@ -86,14 +89,6 @@
         # these home-manager configuration options are also passed to systems).
         # TODO: distinguish between system options and user options.
         home.defaultSystem = "x86_64-linux";
-      };
-
-      flake = {
-        # NOTE: during development, the config manager module is stored into
-        # this repository for convenience. Expose it through the `flakeModule`
-        # output for now.
-        # TODO: move the config manager module into its own repository once mature enough.
-        flakeModules = {default = ./flake/config-manager.nix;};
       };
     };
 }
