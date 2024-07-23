@@ -1,12 +1,12 @@
 {
-  config,
   inputs,
   lib,
   pkgs,
+  globalModules,
   ...
 }: let
   inherit (pkgs.stdenv) isDarwin isLinux;
-  inherit (config.settings) isCorpManaged isHeadless;
+  inherit (globalModules.settings) isCorpManaged isHeadless;
 
   nvim-pkg =
     if isCorpManaged
