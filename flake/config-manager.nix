@@ -68,7 +68,7 @@
         # backupFileExtension = cfg.backupFileExtension;
         modules = [
           # System options.
-          {nixpkgs.overlays = cfg.overlays;}
+          {nixpkgs.overlays = cfg.overlays ++ importedModules.overlays;}
 
           # Default home-manager configuration, if any.
           systemModules.default or {}
@@ -112,7 +112,7 @@
         };
         modules = [
           # System options.
-          {nixpkgs.overlays = cfg.overlays;}
+          {nixpkgs.overlays = cfg.overlays ++ importedModules.overlays;}
 
           # Default system configuration, if any.
           systemModules.default or {}
@@ -122,6 +122,7 @@
           # System configuration.
           systemConfigModule
           configModules.default or {}
+          importedModules.configModules.default or {}
 
           # User configuration.
           mkSystemHomeManagerModule
@@ -164,7 +165,8 @@ in {
       globalModules = crawlModuleDir cfg.globalModulesDirectory;
       usersModules = crawlModuleDir cfg.usersModulesDirectory;
       importedModules = with cfg.imports; {
-        inherit globalModules usersModules;
+        # TODO: consider moving `overlays` out of the `importedModules`.
+        inherit overlays globalModules usersModules;
         configModules = homeConfigModules;
         systemModules = homeSharedModules;
       };
@@ -178,7 +180,8 @@ in {
       globalModules = crawlModuleDir cfg.globalModulesDirectory;
       usersModules = crawlModuleDir cfg.usersModulesDirectory;
       importedModules = with cfg.imports; {
-        inherit globalModules usersModules;
+        # TODO: consider moving `overlays` out of the `importedModules`.
+        inherit overlays globalModules usersModules;
         configModules = darwinConfigModules;
         systemModules = darwinSharedModules;
       };
@@ -192,7 +195,8 @@ in {
       globalModules = crawlModuleDir cfg.globalModulesDirectory;
       usersModules = crawlModuleDir cfg.usersModulesDirectory;
       importedModules = with cfg.imports; {
-        inherit globalModules usersModules;
+        # TODO: consider moving `overlays` out of the `importedModules`.
+        inherit overlays globalModules usersModules;
         configModules = nixosConfigModules;
         systemModules = nixosSharedModules;
       };
@@ -203,6 +207,7 @@ in {
     inherit cfg;
 
     config-manager = lib.mkIf (!cfg.final) {
+      overlays = cfg.overlays;
       homeConfigModules = crawlModuleDir cfg.home.configModulesDirectory;
       homeSharedModules = crawlModuleDir cfg.home.sharedModulesDirectory;
       darwinConfigModules = crawlModuleDir cfg.darwin.configModulesDirectory;
