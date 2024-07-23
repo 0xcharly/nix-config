@@ -3,75 +3,24 @@
   inputs,
   lib,
   pkgs,
-  globalModules,
   ...
 }: let
-  inherit (config.settings) isCorpManaged isHeadless;
   inherit (pkgs.stdenv) isDarwin isLinux;
+  inherit (config.settings) isCorpManaged isHeadless;
 
-  nvim-pkg = inputs.nvim.packages.${pkgs.system}.latest;
-
-  open-tmux-workspace-pkg = pkgs.writeShellApplication {
-    name = "open-tmux-workspace";
-    # Do not add pkgs.mercurial as we need to use the system's version.
-    runtimeInputs = [pkgs.tmux];
-    text = builtins.readFile ./bin/open-tmux-workspace.sh;
-  };
+  nvim-pkg =
+    if isCorpManaged
+    then inputs.nvim.packages.${pkgs.system}.latest-corp
+    else inputs.nvim.packages.${pkgs.system}.latest;
 
   writePython312 = pkgs.writers.makePythonWriter pkgs.python312 pkgs.python312Packages pkgs.buildPackages.python312Packages;
   writePython312Bin = name: writePython312 "/bin/${name}";
-
-  mdproxyLocalRoot = "~/mdproxy";
-  mdproxy-all-pkgs = let
-    # Install missing mdproxy binaries.
-    formatters = [
-      {
-        name = "mdformat";
-        path = "/google/bin/releases/corpeng-engdoc/tools/mdformat";
-      }
-      {
-        name = "textpbfmt";
-        path = "/google/bin/releases/text-proto-format/public/fmt";
-      }
-    ];
-  in (builtins.map
-    (formatter: pkgs.writeShellScriptBin formatter.name ''mdproxy ${formatter.path} "$@"'')
-    formatters);
 
   adb-scrcpy-pkg = pkgs.writeShellApplication {
     name = "adb-scrcpy";
     runtimeInputs = [pkgs.scrcpy];
     text = builtins.readFile ./bin/adb-scrcpy.sh;
   };
-  adb-scrcpy-all-specialized-pkgs = (
-    let
-      devices = [
-        {
-          adbId = "33301JEHN18611";
-          name = "Pixel 7a";
-        }
-        {
-          adbId = "35061FDHS000A4";
-          name = "Pixel Fold";
-        }
-        {
-          adbId = "98311FFAZ004TE";
-          name = "Pixel 4";
-        }
-        {
-          adbId = "99091FFBA005TS";
-          name = "Pixel 4 XL";
-        }
-      ];
-    in (builtins.map
-      (device:
-        pkgs.writeShellApplication {
-          name = "adb-scrcpy-${device.adbId}";
-          runtimeInputs = [pkgs.scrcpy];
-          text = import ./bin/adb-scrcpy.nix {inherit device;};
-        })
-      devices)
-  );
   shellAliases = shell:
     {
       # Shortcut to setup a nix-shell with `shell`. This lets you do something
@@ -84,14 +33,8 @@
       # For consistency with macOS.
       pbcopy = "xclip";
       pbpaste = "xclip -o";
-    })
-    // (lib.optionalAttrs (isLinux && isCorpManaged) {
-      bat = "batcat";
     });
 in {
-  # Ensures that the config settings definition is loaded to populate defaults if needed.
-  imports = [globalModules.settings];
-
   home.stateVersion = "24.05";
   programs.home-manager.enable = true;
 
@@ -137,28 +80,9 @@ in {
           cryptography
           rich
         ];
-        flakeIgnore = [
-          "E501" # Line length.
-        ];
+        flakeIgnore = ["E501"]; # Line length.
       } (builtins.readFile ./bin/sekrets.py))
     ]
-    ++ (
-      lib.optionals (isDarwin && isCorpManaged) (
-        adb-scrcpy-all-specialized-pkgs
-        ++ mdproxy-all-pkgs
-        ++ [
-          # Workspace switcher.
-          open-tmux-workspace-pkg
-
-          # Config rebuilder.
-          (pkgs.writeShellApplication {
-            name = "darwin-rebuild-corp";
-            runtimeInputs = [inputs.darwin.packages.${pkgs.system}.darwin-rebuild];
-            text = builtins.readFile ./bin/darwin-rebuild-corp.sh;
-          })
-        ]
-      )
-    )
     ++ lib.optionals isDarwin [adb-scrcpy-pkg]
     ++ (lib.optionals (isLinux && !isHeadless) [
       pkgs.firefox-devedition
@@ -194,18 +118,6 @@ in {
       // lib.optionalAttrs isDarwin {
         "raycast/bin/adb-scrcpy".source = "${adb-scrcpy-pkg}/bin/adb-scrcpy";
       }
-      // (
-        lib.optionalAttrs (isDarwin && isCorpManaged) (
-          builtins.listToAttrs (
-            builtins.map
-            (pkg: {
-              name = "raycast/bin/${pkg.name}";
-              value = {source = "${pkg}/bin/${pkg.name}";};
-            })
-            adb-scrcpy-all-specialized-pkgs
-          )
-        )
-      )
       // (lib.optionalAttrs (isLinux && !isHeadless) {
         # TODO: be patient…
         #   "ghostty/config".text = builtins.readFile ./ghostty.linux;
@@ -275,28 +187,6 @@ in {
 
   programs.bash.enable = true;
 
-  home.file.".bash_profile".source = lib.mkForce (pkgs.writeTextFile {
-    name = "bash_profile";
-    text =
-      ''
-        # include .profile if it exists
-        [[ -f ~/.profile ]] && . ~/.profile
-
-        # include .bashrc if it exists
-        [[ -f ~/.bashrc ]] && . ~/.bashrc
-      ''
-      + lib.optionalString (isDarwin && isCorpManaged) (
-        let
-          mdproxy_bash_profile = "${mdproxyLocalRoot}/data/mdproxy_bash_profile";
-        in ''
-          [[ -z "$ZSH_VERSION" && -e "${mdproxy_bash_profile}" ]] && source "${mdproxy_bash_profile}" # MDPROXY-BASH-PROFILE
-        ''
-      );
-    checkPhase = ''
-      ${pkgs.stdenv.shellDryRun} "$target"
-    '';
-  });
-
   programs.eza = {
     enable = true;
     enableFishIntegration = true;
@@ -338,12 +228,6 @@ in {
       ''
       (builtins.readFile ./rprompt.zsh)
       (lib.optionalString isLinux "eval $(${pkgs.keychain}/bin/keychain --eval --nogui --quiet)")
-      (lib.optionalString isCorpManaged (builtins.readFile ./tmux-open-citc-workspace.zsh))
-      (lib.optionalString (isDarwin && isCorpManaged) (let
-        mdproxy_zshrc = "${mdproxyLocalRoot}/data/mdproxy_zshrc";
-      in ''
-        [[ -e "${mdproxy_zshrc}" ]] && source "${mdproxy_zshrc}" # MDPROXY-ZSHRC
-      ''))
     ];
     localVariables = {
       PS1 = "%B%F{grey}:%f%b ";
@@ -358,16 +242,6 @@ in {
       (builtins.readFile ./config.fish)
       "set -g SHELL ${pkgs.fish}/bin/fish"
       (lib.optionalString isLinux "eval (${pkgs.keychain}/bin/keychain --eval --nogui --quiet)")
-      (lib.optionalString isCorpManaged ''
-        bind \cf ${open-tmux-workspace-pkg}/bin/open-tmux-workspace
-        bind -M insert \cf ${open-tmux-workspace-pkg}/bin/open-tmux-workspace
-      '')
-      (lib.optionalString (isDarwin && isCorpManaged) ''
-        set -l MDPROXY_BIN ~/mdproxy/bin
-        if test -d "$MDPROXY_BIN"
-          fish_add_path "$MDPROXY_BIN"
-        end
-      '')
     ];
 
     functions.fish_mode_prompt = ""; # Disable prompt vi mode reporting.
@@ -390,34 +264,6 @@ in {
         };
         size = 14;
       };
-      hints.enabled = lib.optionals isCorpManaged (
-        let
-          open-cmd =
-            if isDarwin
-            then "open"
-            else "xdg-open";
-          open-g3-short-links = pkgs.writeShellScriptBin "open-g3-short-links" ''
-            ${open-cmd} "http://$1"
-          '';
-          g3-hyperlink = regex: {
-            inherit regex;
-            hyperlinks = true;
-            post_processing = true;
-            mouse.enabled = true;
-            command = "${open-g3-short-links}/bin/open-g3-short-links";
-          };
-        in [
-          (g3-hyperlink "b/[0-9]+")
-          (g3-hyperlink "cl/[0-9]+")
-          {
-            regex = "http://sponge2/[0-9a-z-]+";
-            hyperlinks = true;
-            post_processing = true;
-            mouse.enabled = true;
-            command = open-cmd;
-          }
-        ]
-      );
       keyboard.bindings = lib.optionals isDarwin [
         {
           key = "Tab";
@@ -510,28 +356,7 @@ in {
           extraOptions =
             lib.optionalAttrs (!isHeadless) {IdentityFile = "~/.ssh/vm";};
         };
-      })
-      // (lib.optionalAttrs (isDarwin && isCorpManaged) {
-        "*.c.googlers.com" = {
-          compression = true;
-          forwardAgent = true;
-          remoteForwards = [
-            # Forward ADB server port.
-            {
-              bind.port = 5037;
-              host.address = "127.0.0.1";
-              host.port = 5037;
-            }
-          ];
-          serverAliveInterval = 60;
-          extraOptions = {
-            ControlMaster = "auto";
-            ControlPath = "~/.ssh/master-%C";
-            ControlPersist = "yes";
-          };
-        };
       });
-    includes = lib.optionals (isDarwin && isCorpManaged) ["~/mdproxy/data/ssh_config"];
   };
 
   # Make cursor not tiny on HiDPI screens.
