@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   lib,
   pkgs,
@@ -6,7 +7,7 @@
   ...
 }: let
   inherit (pkgs.stdenv) isDarwin isLinux;
-  inherit (globalModules.settings) isCorpManaged isHeadless;
+  inherit (config.settings) isCorpManaged isHeadless;
 
   nvim-pkg =
     if isCorpManaged
@@ -35,6 +36,8 @@
       pbpaste = "xclip -o";
     });
 in {
+  imports = [globalModules.settings];
+
   home.stateVersion = "24.05";
   programs.home-manager.enable = true;
 
