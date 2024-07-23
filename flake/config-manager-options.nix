@@ -135,6 +135,11 @@
   };
 
   importsOptions = {
+    overlays = mkOption {
+      default = [];
+      type = types.listOf overlayType;
+      description = ''TODO'';
+    };
     homeConfigModules = mkOption {
       default = {};
       type = types.attrsOf types.raw;
