@@ -1,9 +1,9 @@
 {
   pkgs,
-  systemModules,
+  sharedModules,
   ...
 }: {
-  imports = with systemModules; [
+  imports = with sharedModules; [
     nix-index
     nixos
     nixos-x11
