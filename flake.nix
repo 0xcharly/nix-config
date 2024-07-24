@@ -79,7 +79,7 @@
       systems = ["aarch64-darwin" "aarch64-linux" "x86_64-linux"];
 
       config-manager = {
-        root = ./config-manager;
+        root = ./.;
         final = false; # This config is extended by a private corp-specific one.
         overlays = [inputs.alacritty-theme.overlays.default];
 
