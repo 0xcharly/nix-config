@@ -1,9 +1,9 @@
 {
   globalModules,
-  systemModules,
+  sharedModules,
   ...
 }: {
-  imports = [globalModules.settings systemModules.nix-index];
+  imports = [globalModules.settings sharedModules.nix-index];
 
   settings.isHeadless = true;
 
