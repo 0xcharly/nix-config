@@ -30,8 +30,15 @@
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
-    pre-commit-hooks-nix.url = "github:cachix/pre-commit-hooks.nix";
-    treefmt-nix.url = "github:numtide/treefmt-nix";
+    git-hooks-nix = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.nixpkgs-stable.follows = "nixpkgs";
+    };
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Weekly updated index: quickly locate nix packages with specific files.
     nix-index-database = {
@@ -43,7 +50,12 @@
     homebrew.url = "github:zhaofengli-wip/nix-homebrew";
 
     # Personal config manager.
-    nix-config-manager.url = "github:0xcharly/nix-config-manager";
+    nix-config-manager = {
+      url = "github:0xcharly/nix-config-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-darwin.follows = "nixpkgs-darwin";
+      inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
+    };
 
     # Neovim overlay with personal configuration.
     # TODO: consider using an overlay to install the package.
@@ -57,7 +69,7 @@
     flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [
         inputs.nix-config-manager.flakeModule
-        inputs.pre-commit-hooks-nix.flakeModule
+        inputs.git-hooks-nix.flakeModule
         inputs.treefmt-nix.flakeModule
 
         ./flake/cmd-fmt.nix
