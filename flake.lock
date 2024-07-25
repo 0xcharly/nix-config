@@ -904,11 +904,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1721828780,
-        "narHash": "sha256-5PLgxuOpSUUlpszeph8Lh/KGQ20ck3cVZ3JCQegp8L0=",
+        "lastModified": 1721910679,
+        "narHash": "sha256-U8CfHfXvKfYYorqJohfwprI8U7XOE9KNbqAR+p+aKTM=",
         "owner": "0xcharly",
         "repo": "nix-config-manager",
-        "rev": "7f982e9df2d6943cc578759d5404e24f67016ead",
+        "rev": "f33ea42e9462d9a7075cc4ae3c511efe1dd2a3d7",
         "type": "github"
       },
       "original": {
