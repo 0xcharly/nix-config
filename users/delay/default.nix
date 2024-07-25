@@ -68,6 +68,7 @@ in {
       pkgs.fishPlugins.fzf
       pkgs.fishPlugins.transient-fish
 
+      (pkgs.writeShellScriptBin "fish-to-zsh-history" (builtins.readFile ./bin/fish-to-zsh-history.sh))
       (pkgs.writeShellScriptBin "term-capabilities" (builtins.readFile ./bin/term-capabilities.sh))
       (pkgs.writeShellScriptBin "term-truecolors" (builtins.readFile ./bin/term-truecolors.sh))
 
