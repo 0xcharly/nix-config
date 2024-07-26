@@ -1,6 +1,5 @@
 {
   config,
-  inputs,
   lib,
   pkgs,
   globalModules,
@@ -11,8 +10,8 @@
 
   nvim-pkg =
     if isCorpManaged
-    then inputs.nvim.packages.${pkgs.system}.latest-corp
-    else inputs.nvim.packages.${pkgs.system}.latest;
+    then pkgs.delay-nvim-config.latest-corp
+    else pkgs.delay-nvim-config.latest;
 
   writePython312 = pkgs.writers.makePythonWriter pkgs.python312 pkgs.python312Packages pkgs.buildPackages.python312Packages;
   writePython312Bin = name: writePython312 "/bin/${name}";

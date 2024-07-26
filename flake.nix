@@ -58,8 +58,12 @@
     };
 
     # Neovim overlay with personal configuration.
-    # TODO: consider using an overlay to install the package.
-    nvim.url = "github:0xcharly/nix-config-nvim";
+    nix-config-nvim = {
+      url = "github:0xcharly/nix-config-nvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-darwin.follows = "nixpkgs-darwin";
+      inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
+    };
 
     # Alacritty Themes (includes Catppuccin).
     alacritty-theme.url = "github:alexghr/alacritty-theme.nix";
@@ -81,7 +85,10 @@
       config-manager = {
         root = ./.;
         final = false; # This config is extended by a private corp-specific one.
-        overlays = [inputs.alacritty-theme.overlays.default];
+        overlays = [
+          inputs.alacritty-theme.overlays.default
+          inputs.nix-config-nvim.overlays.default
+        ];
 
         # NOTE: automatically backing up existing files is currently unsupported
         # for standalone home-manager setups.
