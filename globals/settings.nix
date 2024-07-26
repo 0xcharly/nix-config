@@ -5,7 +5,7 @@ in {
     default = {};
     type = types.submodule {
       # Settings can be used to store any kind of value.
-      freeformType = types.attrsOf types.any;
+      freeformType = types.attrs;
 
       # Define the settings used in these configs.
       options.isCorpManaged = mkOption {
