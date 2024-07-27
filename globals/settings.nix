@@ -24,4 +24,6 @@ in {
       };
     };
   };
+
+  config.settings._debugIsEnabled = true;
 }

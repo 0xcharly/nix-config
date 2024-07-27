@@ -2,11 +2,10 @@
   config,
   lib,
   pkgs,
-  globalModules,
   ...
 }: let
   inherit (pkgs.stdenv) isDarwin isLinux;
-  inherit (config.settings) isCorpManaged isHeadless;
+  inherit (config.settings) _debugIsEnabled isCorpManaged isHeadless;
 
   nvim-pkg =
     if isCorpManaged
@@ -34,9 +33,9 @@
       pbcopy = "xclip";
       pbpaste = "xclip -o";
     });
-in {
-  imports = [globalModules.settings];
 
+  requireSettingsEnabled = passthrough: lib.throwIfNot _debugIsEnabled "_settingsDefined must be true" passthrough;
+in {
   home.stateVersion = "24.05";
   programs.home-manager.enable = true;
 
@@ -48,6 +47,7 @@ in {
   # flakes sourced with direnv and nix-shell, so this is not a huge list.
   # TODO: try pkgs.tailscale.
   home.packages =
+    requireSettingsEnabled
     [
       pkgs.bat
       pkgs.fd

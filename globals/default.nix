@@ -1,0 +1,3 @@
+{globalModules, ...}: {
+  imports = [globalModules.settings];
+}

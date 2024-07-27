@@ -1,13 +1,10 @@
 {
   config,
   lib,
-  globalModules,
   ...
 }: let
   inherit (config.settings) isCorpManaged;
 in {
-  imports = [globalModules.settings];
-
   homebrew = {
     enable = true;
     onActivation = {
