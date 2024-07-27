@@ -1,3 +1,3 @@
 {globalModules, ...}: {
-  imports = [globalModules.settings];
+  imports = with globalModules; [settings unfree];
 }
