@@ -1,4 +1,4 @@
-{...}: {
+{
   # Flakes support.
   nix = {
     # Enable flakes.

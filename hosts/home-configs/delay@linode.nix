@@ -1,4 +1,4 @@
-{...}: {
+{
   settings.isHeadless = true;
 
   home = rec {

@@ -1,4 +1,4 @@
-{...}: {
+{
   # Enable the `sudo` touch ID prompt.
   security.pam.enableSudoTouchIdAuth = true;
 
