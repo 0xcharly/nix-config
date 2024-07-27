@@ -966,11 +966,11 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1721977416,
-        "narHash": "sha256-qO9W/KubMogq6qQDEf6Hxo2QyWDo7jv4PsyWaoGEJus=",
+        "lastModified": 1722089169,
+        "narHash": "sha256-K4gU8z8phy46MXFVQBvOPkFELdgnO0X/FqZCVyYJ46E=",
         "owner": "0xcharly",
         "repo": "nix-config-nvim",
-        "rev": "40684f7a3eaf468bd49f9bcb7e74a094324395dc",
+        "rev": "a7653ec6a19e1920f388ce140727a2075761604a",
         "type": "github"
       },
       "original": {
