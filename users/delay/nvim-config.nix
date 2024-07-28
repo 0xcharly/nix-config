@@ -14,6 +14,12 @@ in {
       Does not compose with `programs.neovim`.
     '';
 
+    pkgs = mkOption {
+      type = types.pkgs;
+      default = pkgs;
+      description = "The package set to use.";
+    };
+
     src = mkOption {
       type = types.path;
       description = ''
@@ -37,7 +43,7 @@ in {
 
     package = mkOption {
       type = types.package;
-      default = pkgs.neovim-unwrapped;
+      default = cfg.pkgs.neovim-unwrapped;
       defaultText = literalExpression "pkgs.neovim-unwrapped";
       description = "The package to use for the neovim binary.";
     };
@@ -78,7 +84,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable (let
-    mkNeovimPackage = import ./mk-nvim-config.nix pkgs;
+    mkNeovimPackage = import ./mk-nvim-config.nix cfg.pkgs;
   in {
     home.nvim-config.finalPackage = mkNeovimPackage {
       inherit (cfg) src runtime package patches plugins;
