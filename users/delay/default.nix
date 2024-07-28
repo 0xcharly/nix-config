@@ -42,7 +42,6 @@ in {
     runtime = [./nvim-runtime];
     plugins =
       (with pkgs.vimPlugins; [
-        # Plugins pinned to the <nixpkgs> channel.
         actions-preview-nvim
         auto-hlsearch-nvim
         catppuccin-nvim
@@ -83,6 +82,7 @@ in {
         cmp-nvim-lsp-signature-help
         cmp-rg
       ])
+      ++ (lib.optionals (!isCorpManaged) [pkgs.vimPlugins.copilot-vim])
       ++ [pkgs.rustaceanvim];
   };
 
