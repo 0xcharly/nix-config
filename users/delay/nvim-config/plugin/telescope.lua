@@ -153,14 +153,10 @@ require('telescope').setup {
     mappings = {
       n = {
         q = actions.close,
-        ['<C-t>'] = require('trouble.providers.telescope').open_with_trouble,
-        -- TODO: replace with the following once upgraded to `nixpkgs-24.11`.
-        -- ['<C-t>'] = require('trouble.sources.telescope').open,
+        ['<C-t>'] = require('trouble.sources.telescope').open,
       },
       i = {
-        ['<C-t>'] = require('trouble.providers.telescope').open_with_trouble,
-        -- TODO: replace with the following once upgraded to `nixpkgs-24.11`.
-        -- ['<C-t>'] = require('trouble.sources.telescope').open,
+        ['<C-t>'] = require('trouble.sources.telescope').open,
         ['<ESC>'] = actions.close,
         ['<C-x>'] = false,
         ['<C-q>'] = actions.send_to_qflist,

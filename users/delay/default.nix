@@ -41,12 +41,16 @@ in {
     upkgs = import inputs.nixpkgs-unstable {
       inherit (pkgs) system;
       overlays = [inputs.rustaceanvim.overlays.default];
+      config.allowUnfreePredicate = pkg:
+        builtins.elem (lib.getName pkg) (lib.optionals (!config.settings.isCorpManaged) [
+          "copilot.vim"
+        ]);
     };
   in {
     enable = true;
     src = ./nvim-config;
     runtime = [./nvim-runtime];
-    package = upkgs.neovim-unwrapped;
+    pkgs = upkgs;
     plugins =
       (with upkgs.vimPlugins; [
         actions-preview-nvim
@@ -89,8 +93,8 @@ in {
         cmp-nvim-lsp-signature-help
         cmp-rg
       ])
-      ++ (lib.optionals (!isCorpManaged) [pkgs.vimPlugins.copilot-vim])
-      ++ [pkgs.rustaceanvim];
+      ++ (lib.optionals (!isCorpManaged) [upkgs.vimPlugins.copilot-vim])
+      ++ [upkgs.rustaceanvim];
   };
 
   #---------------------------------------------------------------------
