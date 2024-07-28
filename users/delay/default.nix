@@ -7,11 +7,6 @@
   inherit (pkgs.stdenv) isDarwin isLinux;
   inherit (config.settings) _debugIsEnabled isCorpManaged isHeadless;
 
-  nvim-pkg =
-    if isCorpManaged
-    then pkgs.delay-nvim-config.latest-corp
-    else pkgs.delay-nvim-config.latest;
-
   writePython312 = pkgs.writers.makePythonWriter pkgs.python312 pkgs.python312Packages pkgs.buildPackages.python312Packages;
   writePython312Bin = name: writePython312 "/bin/${name}";
 
@@ -36,8 +31,60 @@
 
   requireSettingsEnabled = passthrough: lib.throwIfNot _debugIsEnabled "_settingsDefined must be true" passthrough;
 in {
+  imports = [./nvim-config.nix];
+
   home.stateVersion = "24.05";
   programs.home-manager.enable = true;
+
+  home.nvim-config = {
+    enable = true;
+    src = ./nvim-config;
+    runtime = [./nvim-runtime];
+    plugins =
+      (with pkgs.vimPlugins; [
+        # Plugins pinned to the <nixpkgs> channel.
+        actions-preview-nvim
+        auto-hlsearch-nvim
+        catppuccin-nvim
+        dial-nvim
+        eyeliner-nvim
+        fidget-nvim
+        gitsigns-nvim
+        harpoon2
+        lsp-status-nvim
+        lspkind-nvim
+        lualine-nvim
+        nvim-bqf
+        nvim-lastplace
+        nvim-surround
+        nvim-treesitter.withAllGrammars
+        nvim-treesitter-textobjects
+        nvim-ts-context-commentstring
+        nvim-web-devicons
+        oil-nvim
+        plenary-nvim
+        sqlite-lua
+        telescope-fzf-native-nvim
+        telescope-nvim
+        todo-comments-nvim
+        trouble-nvim
+        vim-matchup
+        vim-repeat
+        which-key-nvim
+        # nvim-cmp and plugins
+        nvim-cmp
+        cmp-buffer
+        cmp-path
+        cmp-cmdline
+        cmp-cmdline-history
+        cmp-nvim-lua
+        cmp-nvim-lsp
+        cmp-nvim-lsp-document-symbol
+        cmp-nvim-lsp-signature-help
+        cmp-rg
+      ])
+      ++ [pkgs.rustaceanvim];
+  };
 
   #---------------------------------------------------------------------
   # Packages
@@ -60,8 +107,6 @@ in {
       # For editing Nix files.
       pkgs.alejandra
       pkgs.nixd
-
-      nvim-pkg
 
       pkgs.fishPlugins.done
       pkgs.fishPlugins.fzf
@@ -97,7 +142,9 @@ in {
   # Env vars and dotfiles
   #---------------------------------------------------------------------
 
-  home.sessionVariables = {
+  home.sessionVariables = let
+    nvim-pkg = config.home.nvim-config.finalPackage;
+  in {
     LANG = "en_US.UTF-8";
     LC_CTYPE = "en_US.UTF-8";
     LC_ALL = "en_US.UTF-8";
