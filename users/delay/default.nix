@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
   ...
@@ -36,12 +37,18 @@ in {
   home.stateVersion = "24.05";
   programs.home-manager.enable = true;
 
-  home.nvim-config = {
+  home.nvim-config = let
+    upkgs = import inputs.nixpkgs-unstable {
+      inherit (pkgs) system;
+      overlays = [inputs.rustaceanvim.overlays.default];
+    };
+  in {
     enable = true;
     src = ./nvim-config;
     runtime = [./nvim-runtime];
+    package = upkgs.neovim-unwrapped;
     plugins =
-      (with pkgs.vimPlugins; [
+      (with upkgs.vimPlugins; [
         actions-preview-nvim
         auto-hlsearch-nvim
         catppuccin-nvim

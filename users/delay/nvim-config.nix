@@ -6,8 +6,6 @@
 }: let
   inherit (lib) literalExpression mkOption mkEnableOption types;
   cfg = config.home.nvim-config;
-
-  mkNeovimPackage = import ./mk-nvim-config.nix {inherit pkgs;};
 in {
   options.home.nvim-config = {
     enable = mkEnableOption ''
@@ -79,7 +77,9 @@ in {
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf cfg.enable (let
+    mkNeovimPackage = import ./mk-nvim-config.nix pkgs;
+  in {
     home.nvim-config.finalPackage = mkNeovimPackage {
       inherit (cfg) src runtime package patches plugins;
     };
@@ -89,5 +89,5 @@ in {
     # which `config.flake` does not exist.
     # TODO: Is it possible to surface the package in outputs.packages.<platforms>?
     # flake.packages.nvim = cfg.finalPackage;
-  };
+  });
 }
