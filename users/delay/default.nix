@@ -321,7 +321,7 @@ in {
           family = "IosevkaTerm Nerd Font";
           style = "Medium";
         };
-        size = 14;
+        size = 16;
       };
       keyboard.bindings = lib.optionals isDarwin [
         {
