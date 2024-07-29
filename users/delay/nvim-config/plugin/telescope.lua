@@ -138,6 +138,12 @@ vim.keymap.set(
 vim.keymap.set('n', '<Leader>th', function()
   extensions.harpoon.marks()
 end, { desc = '[t]elescope: [h]arpoon marks' })
+vim.keymap.set('n', '<Leader>tn', function()
+  extensions.manix.manix()
+end, { desc = '[t]elescope: ma[n]ix' })
+vim.keymap.set('n', '<Leader>tN', function()
+  extensions.manix.manix { cword = true }
+end, { desc = '[t]elescope: ma[N]ix <cword>' })
 
 require('telescope').setup {
   defaults = {
