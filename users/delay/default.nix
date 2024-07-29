@@ -108,11 +108,13 @@ in {
       pkgs.gh
       pkgs.htop
       pkgs.jq
+      pkgs.lazygit
       pkgs.ripgrep
       pkgs.tree
 
       # For editing Nix files.
       pkgs.alejandra
+      pkgs.manix
       pkgs.nixd
 
       pkgs.fishPlugins.done
@@ -351,6 +353,7 @@ in {
       key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPf5EWFb/MW+1ZdQxDLZJWPrgrtibMcCmmKeCp+QMWBl";
       signByDefault = true;
     };
+    delta.enable = true;
     extraConfig = {
       branch.autosetuprebase = "always";
       color.ui = true;
