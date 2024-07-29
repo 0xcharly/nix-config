@@ -6,7 +6,7 @@
   ...
 }: let
   inherit (pkgs.stdenv) isDarwin isLinux;
-  inherit (config.settings) _debugIsEnabled isCorpManaged isHeadless;
+  inherit (config.settings) isCorpManaged isHeadless;
 
   writePython312 = pkgs.writers.makePythonWriter pkgs.python312 pkgs.python312Packages pkgs.buildPackages.python312Packages;
   writePython312Bin = name: writePython312 "/bin/${name}";
@@ -29,8 +29,6 @@
       pbcopy = "xclip";
       pbpaste = "xclip -o";
     });
-
-  requireSettingsEnabled = passthrough: lib.throwIfNot _debugIsEnabled "_settingsDefined must be true" passthrough;
 in {
   imports = [./nvim-config.nix];
 
@@ -39,8 +37,7 @@ in {
 
   home.nvim-config = let
     upkgs = import inputs.nixpkgs-unstable {
-      inherit (pkgs) system;
-      overlays = [inputs.rustaceanvim.overlays.default];
+      inherit (pkgs) system overlays;
       config.allowUnfreePredicate = pkg:
         builtins.elem (lib.getName pkg) (lib.optionals (!config.settings.isCorpManaged) [
           "copilot.vim"
@@ -105,7 +102,6 @@ in {
   # flakes sourced with direnv and nix-shell, so this is not a huge list.
   # TODO: try pkgs.tailscale.
   home.packages =
-    requireSettingsEnabled
     [
       pkgs.bat
       pkgs.fd
