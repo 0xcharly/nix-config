@@ -34,6 +34,7 @@ in {
 
   home.stateVersion = "24.05";
   programs.home-manager.enable = true;
+  manual.json.enable = true; # For manix.
 
   home.nvim-config = let
     upkgs = import inputs.nixpkgs-unstable {
@@ -91,7 +92,10 @@ in {
         cmp-rg
       ])
       ++ (lib.optionals (!isCorpManaged) [upkgs.vimPlugins.copilot-vim])
-      ++ [upkgs.rustaceanvim];
+      ++ (with upkgs; [
+        telescope-manix
+        rustaceanvim
+      ]);
   };
 
   #---------------------------------------------------------------------
