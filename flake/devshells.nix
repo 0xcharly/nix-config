@@ -5,10 +5,12 @@
     ...
   }: {
     devShells.default = pkgs.mkShell {
-      nativeBuildInputs = with pkgs; [
-        alejandra
-        markdownlint-cli
-        nixd
+      nativeBuildInputs = [
+        pkgs.alejandra
+        pkgs.markdownlint-cli
+        pkgs.nixd
+        pkgs.just
+        config.treefmt.build.wrapper
       ];
 
       shellHook = ''
