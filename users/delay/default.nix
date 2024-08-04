@@ -1,6 +1,5 @@
 {
   config,
-  inputs,
   lib,
   pkgs,
   ...
@@ -8,14 +7,6 @@
   inherit (pkgs.stdenv) isDarwin isLinux;
   inherit (config.settings) isCorpManaged isHeadless;
 
-  writePython312 = pkgs.writers.makePythonWriter pkgs.python312 pkgs.python312Packages pkgs.buildPackages.python312Packages;
-  writePython312Bin = name: writePython312 "/bin/${name}";
-
-  adb-scrcpy-pkg = pkgs.writeShellApplication {
-    name = "adb-scrcpy";
-    runtimeInputs = [pkgs.scrcpy];
-    text = builtins.readFile ./bin/adb-scrcpy.sh;
-  };
   shellAliases = shell:
     {
       # Shortcut to setup a nix-shell with `shell`. This lets you do something
@@ -26,77 +17,19 @@
     }
     // (lib.optionalAttrs isLinux {
       # For consistency with macOS.
-      pbcopy = "xclip";
-      pbpaste = "xclip -o";
+      pbcopy = lib.getExe pkgs.xclip;
+      pbpaste = "${lib.getExe pkgs.xclip} -o";
     });
 in {
-  imports = [./nvim-config.nix];
+  imports = [
+    ./nvim.nix
+    ./scripts.nix
+    ./x11.nix
+  ];
 
   home.stateVersion = "24.05";
   programs.home-manager.enable = true;
   manual.json.enable = true; # For manix.
-
-  home.nvim-config = let
-    upkgs = import inputs.nixpkgs-unstable {
-      inherit (pkgs) system overlays;
-      config.allowUnfreePredicate = pkg:
-        builtins.elem (lib.getName pkg) (lib.optionals (!config.settings.isCorpManaged) [
-          "copilot.vim"
-        ]);
-    };
-  in {
-    enable = true;
-    src = ./nvim-config;
-    runtime = [./nvim-runtime];
-    pkgs = upkgs;
-    plugins =
-      (with upkgs.vimPlugins; [
-        actions-preview-nvim
-        auto-hlsearch-nvim
-        catppuccin-nvim
-        dial-nvim
-        eyeliner-nvim
-        fidget-nvim
-        gitsigns-nvim
-        harpoon2
-        lsp-status-nvim
-        lspkind-nvim
-        lualine-nvim
-        nvim-bqf
-        nvim-lastplace
-        nvim-surround
-        nvim-treesitter.withAllGrammars
-        nvim-treesitter-textobjects
-        nvim-ts-context-commentstring
-        nvim-web-devicons
-        oil-nvim
-        plenary-nvim
-        sqlite-lua
-        telescope-fzf-native-nvim
-        telescope-nvim
-        todo-comments-nvim
-        trouble-nvim
-        vim-matchup
-        vim-repeat
-        which-key-nvim
-        # nvim-cmp and plugins
-        nvim-cmp
-        cmp-buffer
-        cmp-path
-        cmp-cmdline
-        cmp-cmdline-history
-        cmp-nvim-lua
-        cmp-nvim-lsp
-        cmp-nvim-lsp-document-symbol
-        cmp-nvim-lsp-signature-help
-        cmp-rg
-      ])
-      ++ (lib.optionals (!isCorpManaged) [upkgs.vimPlugins.copilot-vim])
-      ++ (with upkgs; [
-        telescope-manix
-        rustaceanvim
-      ]);
-  };
 
   #---------------------------------------------------------------------
   # Packages
@@ -124,27 +57,7 @@ in {
       pkgs.fishPlugins.done
       pkgs.fishPlugins.fzf
       pkgs.fishPlugins.transient-fish
-
-      (pkgs.writeShellScriptBin "fish-to-zsh-history" (builtins.readFile ./bin/fish-to-zsh-history.sh))
-      (pkgs.writeShellScriptBin "term-capabilities" (builtins.readFile ./bin/term-capabilities.sh))
-      (pkgs.writeShellScriptBin "term-truecolors" (builtins.readFile ./bin/term-truecolors.sh))
-
-      (pkgs.writeShellApplication {
-        name = "generate-gitignore";
-        runtimeInputs = [pkgs.curl];
-        text = ''curl -sL "https://www.gitignore.io/api/$1"'';
-      })
-
-      (writePython312Bin "sekrets" {
-        libraries = with pkgs.python312Packages; [
-          bcrypt
-          cryptography
-          rich
-        ];
-        flakeIgnore = ["E501"]; # Line length.
-      } (builtins.readFile ./bin/sekrets.py))
     ]
-    ++ lib.optionals isDarwin [adb-scrcpy-pkg]
     ++ (lib.optionals (isLinux && !isHeadless) [
       pkgs.firefox-devedition
       pkgs.rofi
@@ -162,11 +75,11 @@ in {
     LC_CTYPE = "en_US.UTF-8";
     LC_ALL = "en_US.UTF-8";
     BAT_THEME = "base16";
-    EDITOR = "${nvim-pkg}/bin/nvim";
+    EDITOR = lib.getExe nvim-pkg;
     PAGER = "less -FirSwX";
-    MANPAGER = "${nvim-pkg}/bin/nvim +Man!";
-    SHELL = "${pkgs.zsh}/bin/zsh";
-    TERMINAL = "${pkgs.alacritty}/bin/alacritty";
+    MANPAGER = "${lib.getExe nvim-pkg} +Man!";
+    SHELL = lib.getExe pkgs.zsh;
+    TERMINAL = lib.getExe pkgs.alacritty;
   };
 
   xdg = {
@@ -176,64 +89,10 @@ in {
         # TODO: rofi config.
         # "rofi/config.rasi".text = builtins.readFile ./rofi;
       }
-      # Raycast expects script attributes to be listed at the top of the file,
-      # so a simple wrapper does not work. This *needs* to be a symlink.
-      // lib.optionalAttrs isDarwin {
-        "raycast/bin/adb-scrcpy".source = "${adb-scrcpy-pkg}/bin/adb-scrcpy";
-      }
       // (lib.optionalAttrs (isLinux && !isHeadless) {
         # TODO: be patient…
         #   "ghostty/config".text = builtins.readFile ./ghostty.linux;
       });
-  };
-
-  xsession = lib.mkIf (isLinux && !isHeadless) {
-    enable = true;
-    windowManager.i3 = rec {
-      enable = true;
-      config = let
-        fonts = {
-          names = ["IosevkaTerm Nerd Font" "FontAwesome6Free"];
-          style = "Regular";
-          size = 10.0;
-        };
-      in {
-        modifier = "Mod4";
-        terminal = "${pkgs.alacritty}/bin/alacritty";
-        startup = [
-          {
-            command = config.terminal;
-            notification = false;
-          }
-        ];
-        keybindings = {
-          "${config.modifier}+Return" = "exec ${config.terminal}";
-          "${config.modifier}+o" = "exec ${pkgs.rofi}/bin/rofi -show run";
-          "${config.modifier}+1" = "workspace 1";
-          "${config.modifier}+2" = "workspace 2";
-          "${config.modifier}+3" = "workspace 3";
-          "${config.modifier}+4" = "workspace 4";
-          "${config.modifier}+5" = "workspace 5";
-          "${config.modifier}+Left" = "focus left";
-          "${config.modifier}+Right" = "focus right";
-          "${config.modifier}+Up" = "focus up";
-          "${config.modifier}+Down" = "focus down";
-          "${config.modifier}+Shift+Left" = "move left";
-          "${config.modifier}+Shift+Right" = "move right";
-          "${config.modifier}+Shift+Up" = "move up";
-          "${config.modifier}+Shift+Down" = "move down";
-          "${config.modifier}+Shift+1" = "move container to workspace 1";
-          "${config.modifier}+Shift+2" = "move container to workspace 2";
-          "${config.modifier}+Shift+3" = "move container to workspace 3";
-          "${config.modifier}+Shift+4" = "move container to workspace 4";
-          "${config.modifier}+Shift+5" = "move container to workspace 5";
-          "${config.modifier}+Shift+c" = "reload";
-          "${config.modifier}+Shift+r" = "restart";
-        };
-        inherit fonts;
-        bars = [{inherit fonts;}];
-      };
-    };
   };
 
   #---------------------------------------------------------------------
@@ -247,8 +106,6 @@ in {
     nix-direnv.enable = true;
     config.whitelist.prefix = ["~/code/"];
   };
-
-  programs.bash.enable = true;
 
   programs.eza = {
     enable = true;
@@ -277,6 +134,8 @@ in {
     };
   };
 
+  programs.bash.enable = true;
+
   programs.zsh = {
     enable = true;
     defaultKeymap = "viins";
@@ -290,12 +149,12 @@ in {
         setopt INC_APPEND_HISTORY # Use `fc -RI` to reload history.
       ''
       (builtins.readFile ./rprompt.zsh)
-      (lib.optionalString isLinux "eval $(${pkgs.keychain}/bin/keychain --eval --nogui --quiet)")
+      (lib.optionalString isLinux "eval $(${lib.getExe pkgs.keychain} --eval --nogui --quiet)")
     ];
     localVariables = {
       PS1 = "%B%F{grey}:%f%b ";
     };
-    shellAliases = shellAliases "${pkgs.zsh}/bin/zsh";
+    shellAliases = shellAliases (lib.getExe pkgs.zsh);
     syntaxHighlighting.enable = true;
   };
 
@@ -303,12 +162,12 @@ in {
     enable = true;
     interactiveShellInit = lib.strings.concatStringsSep "\n" [
       (builtins.readFile ./config.fish)
-      "set -g SHELL ${pkgs.fish}/bin/fish"
-      (lib.optionalString isLinux "eval (${pkgs.keychain}/bin/keychain --eval --nogui --quiet)")
+      "set -g SHELL ${lib.getExe pkgs.fish}"
+      (lib.optionalString isLinux "eval (${lib.getExe pkgs.keychain} --eval --nogui --quiet)")
     ];
 
     functions.fish_mode_prompt = ""; # Disable prompt vi mode reporting.
-    shellAliases = shellAliases "${pkgs.fish}/bin/fish";
+    shellAliases = shellAliases (lib.getExe pkgs.fish);
   };
 
   programs.alacritty = lib.mkIf (!isHeadless) {
@@ -391,10 +250,6 @@ in {
     extraConfig = builtins.readFile ./tmux.conf;
   };
 
-  xresources = lib.mkIf (isLinux && !isHeadless) {
-    extraConfig = builtins.readFile ./Xresources;
-  };
-
   programs.ssh = {
     enable = true;
     matchBlocks =
@@ -424,13 +279,5 @@ in {
             lib.optionalAttrs (!isHeadless) {IdentityFile = "~/.ssh/vm";};
         };
       });
-  };
-
-  # Make cursor not tiny on HiDPI screens.
-  home.pointerCursor = lib.mkIf (isLinux && !isHeadless) {
-    name = "Vanilla-DMZ";
-    package = pkgs.vanilla-dmz;
-    size = 128;
-    x11.enable = true;
   };
 }
