@@ -229,7 +229,15 @@ in {
       branch.sort = "-committerdate";
       credential."https://github.com".helper = "!gh auth git-credential";
       credential."https://gist.github.com".helper = "!gh auth git-credential";
-      gpg.format = "ssh";
+      gpg =
+        {
+          format = "ssh";
+        }
+        // lib.optionalAttrs isDarwin (let
+          _1passwordSshSignPathMacOS = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+        in {
+          ssh.program = _1passwordSshSignPathMacOS;
+        });
       commit.gpgsign = true;
     };
   };
@@ -250,18 +258,23 @@ in {
     extraConfig = builtins.readFile ./tmux.conf;
   };
 
-  programs.ssh = {
+  programs.ssh = let
+    _1passwordAgentPathMacOS = "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
+    _1passwordAgentOrKey = key:
+      lib.optionalAttrs isDarwin {IdentityAgent = "\"${_1passwordAgentPathMacOS}\"";}
+      // lib.optionalAttrs (isLinux && !isHeadless) {IdentityFile = "~/.ssh/${key}";};
+  in {
     enable = true;
     matchBlocks =
       {
         # Personal hosts.
         "github.com" = {
           user = "git";
-          extraOptions = lib.optionalAttrs (!isHeadless) {IdentityFile = "~/.ssh/github";};
+          extraOptions = _1passwordAgentOrKey "github";
         };
         "linode" = {
           hostname = "172.105.192.143";
-          extraOptions = lib.optionalAttrs (!isHeadless) {IdentityFile = "~/.ssh/linode";};
+          extraOptions = _1passwordAgentOrKey "linode";
           forwardAgent = true;
         };
       }
@@ -269,14 +282,12 @@ in {
         # Home storage host.
         "skullkid.local" = {
           hostname = "192.168.86.43";
-          extraOptions =
-            lib.optionalAttrs (!isHeadless) {IdentityFile = "~/.ssh/skullkid";};
+          extraOptions = _1passwordAgentOrKey "skullkid";
           forwardAgent = true;
         };
         # VMWare hosts.
         "192.168.*" = {
-          extraOptions =
-            lib.optionalAttrs (!isHeadless) {IdentityFile = "~/.ssh/vm";};
+          extraOptions = _1passwordAgentOrKey "vm";
         };
       });
   };
