@@ -58,6 +58,9 @@ in {
       pkgs.fishPlugins.fzf
       pkgs.fishPlugins.transient-fish
     ]
+    ++ (lib.optionals isDarwin [
+      pkgs._1password
+    ])
     ++ (lib.optionals (isLinux && !isHeadless) [
       pkgs.firefox-devedition
       pkgs.rofi
