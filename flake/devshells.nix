@@ -23,6 +23,7 @@
           config.treefmt.build.wrapper
           upkgs.alejandra
           upkgs.cachix
+          upkgs.fish
           upkgs.jq
           upkgs.just
           upkgs.lua-language-server
