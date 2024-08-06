@@ -11,8 +11,8 @@ in {
     extraConfig = builtins.readFile ./Xresources;
   };
 
-  xsession = lib.mkIf (isLinux && !isHeadless) {
-    enable = true;
+  xsession = {
+    enable = isLinux && !isHeadless;
     windowManager.i3 = rec {
       enable = true;
       config = let

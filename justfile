@@ -33,6 +33,17 @@ switch:
     end
     eval $REBUILD_COMMAND {{ rebuildOptions }} switch --flake .
 
+[doc("Rebuild the current host's configuration")]
+[linux]
+test:
+    #! /usr/bin/env fish
+    if test (grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"
+      set REBUILD_COMMAND "sudo nixos-rebuild"
+    else
+      set REBUILD_COMMAND "home-manager"
+    end
+    eval $REBUILD_COMMAND {{ rebuildOptions }} test --flake .
+
 [doc('Update the given flake input')]
 [macos]
 update input:
