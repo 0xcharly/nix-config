@@ -1,12 +1,14 @@
 {inputs, ...}: {
   perSystem = {
     config,
+    lib,
     pkgs,
     ...
   }: let
+    inherit (pkgs.stdenv) isDarwin;
     upkgs =
       import (
-        if pkgs.stdenv.isDarwin
+        if isDarwin
         then inputs.nixpkgs-darwin
         else inputs.nixpkgs
       ) {
@@ -16,18 +18,19 @@
       };
   in {
     devShells.default = upkgs.mkShell {
-      nativeBuildInputs = [
-        config.treefmt.build.wrapper
-        upkgs._1password
-        upkgs.alejandra
-        upkgs.cachix
-        upkgs.jq
-        upkgs.just
-        upkgs.lua-language-server
-        upkgs.markdownlint-cli
-        upkgs.nixd
-        upkgs.stylua
-      ];
+      nativeBuildInputs =
+        [
+          config.treefmt.build.wrapper
+          upkgs.alejandra
+          upkgs.cachix
+          upkgs.jq
+          upkgs.just
+          upkgs.lua-language-server
+          upkgs.markdownlint-cli
+          upkgs.nixd
+          upkgs.stylua
+        ]
+        ++ (lib.optionals isDarwin [upkgs._1password]);
 
       shellHook = ''
         ${config.pre-commit.installationScript}
