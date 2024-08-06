@@ -17,14 +17,16 @@
   in {
     devShells.default = upkgs.mkShell {
       nativeBuildInputs = [
+        config.treefmt.build.wrapper
         upkgs._1password
         upkgs.alejandra
         upkgs.cachix
         upkgs.jq
         upkgs.just
+        upkgs.lua-language-server
         upkgs.markdownlint-cli
         upkgs.nixd
-        config.treefmt.build.wrapper
+        upkgs.stylua
       ];
 
       shellHook = ''
@@ -37,6 +39,8 @@
       settings = {
         hooks = {
           alejandra.enable = true;
+          # TODO: enable when the static analyzer can resolve the `vim` module.
+          # luacheck.enable = true;
           markdownlint = {
             enable = true;
             settings.configuration.MD034 = false;
