@@ -44,23 +44,15 @@ in {
       pkgs.fd
       pkgs.gh
       pkgs.htop
-      pkgs.jq
       pkgs.lazygit
+      pkgs.manix
       pkgs.ripgrep
       pkgs.tree
-
-      # For editing Nix files.
-      pkgs.alejandra
-      pkgs.manix
-      pkgs.nixd
 
       pkgs.fishPlugins.done
       pkgs.fishPlugins.fzf
       pkgs.fishPlugins.transient-fish
     ]
-    ++ (lib.optionals isDarwin [
-      pkgs._1password
-    ])
     ++ (lib.optionals (isLinux && !isHeadless) [
       pkgs.firefox-devedition
       pkgs.rofi
