@@ -31,7 +31,7 @@ switch:
     else
       set REBUILD_COMMAND "home-manager"
     end
-    $REBUILD_COMMAND {{ rebuildOptions }} switch --flake .
+    eval $REBUILD_COMMAND {{ rebuildOptions }} switch --flake .
 
 # Builds the current darwin host's configuration and caches the results.
 #
