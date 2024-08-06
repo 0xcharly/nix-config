@@ -33,10 +33,19 @@ switch:
     end
     eval $REBUILD_COMMAND {{ rebuildOptions }} switch --flake .
 
+[doc('Update the given flake input')]
+[macos]
+update input:
+  nix flake update {{ input }}
+
+[doc('Update the given flake input')]
+[linux]
+update input:
+  nix flake lock --update-input {{ input }}
+
 # Builds the current darwin host's configuration and caches the results.
 #
 # This does not alter the current running system. Requires cachix authentication
-
 # to be configured out of band.
 [doc('Build the given configuration and push the results to the cache')]
 [macos]
@@ -48,7 +57,6 @@ cache:
 # Builds the current host's configuration (NixOS or HM) and caches the results.
 #
 # This does not alter the current running system. Requires cachix authentication
-
 # to be configured out of band.
 [doc('Build the given configuration and push the results to the cache')]
 [linux]
