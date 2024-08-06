@@ -11,11 +11,9 @@ in {
 
   home.nvim-config = let
     upkgs = import inputs.nixpkgs-unstable {
-      inherit (pkgs) system overlays;
+      inherit (pkgs) overlays system;
       config.allowUnfreePredicate = pkg:
-        builtins.elem (lib.getName pkg) (lib.optionals (!isCorpManaged) [
-          "copilot.vim"
-        ]);
+        !isCorpManaged && builtins.elem (lib.getName pkg) ["copilot.vim"];
     };
   in {
     enable = true;
