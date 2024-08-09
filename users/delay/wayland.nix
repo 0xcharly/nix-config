@@ -5,17 +5,20 @@
   ...
 }: let
   inherit (pkgs.stdenv) isLinux;
-  inherit (config.settings) isHeadless;
+  inherit (config.settings) compositor isHeadless;
+  enable = isLinux && !isHeadless && compositor == "wayland";
 in {
-  programs.rofi.package = pkgs.rofi-wayland;
+  programs.rofi = lib.mkIf enable {
+    package = pkgs.rofi-wayland;
+  };
 
-  home.packages = with pkgs; [
+  home.packages = lib.optionals enable (with pkgs; [
     wdisplays
     wlr-randr
     wl-clipboard
-  ];
+  ]);
 
-  home.sessionVariables = {
+  home.sessionVariables = lib.mkIf enable {
     NIXOS_OZONE_WL = 1;
 
     QT_QPA_PLATFORM = "wayland";
@@ -24,48 +27,50 @@ in {
     XDG_SESSION_TYPE = "wayland";
   };
 
-  wayland.windowManager.sway = rec {
-    enable = isLinux && !isHeadless;
-    config = let
-      fonts = {
-        names = ["IosevkaTerm Nerd Font" "FontAwesome6Free"];
-        style = "Regular";
-        size = 10.0;
+  wayland.windowManager = rec {
+    sway = {
+      inherit enable;
+      config = let
+        fonts = {
+          names = ["IosevkaTerm Nerd Font" "FontAwesome6Free"];
+          style = "Regular";
+          size = 10.0;
+        };
+      in {
+        modifier = "Mod4";
+        terminal = lib.getExe pkgs.alacritty;
+        startup = [
+          {
+            command = sway.config.terminal;
+          }
+        ];
+        keybindings = {
+          "${sway.config.modifier}+Return" = "exec ${sway.config.terminal}";
+          "${sway.config.modifier}+o" = "exec ${lib.getExe pkgs.rofi} -show run";
+          "${sway.config.modifier}+1" = "workspace 1";
+          "${sway.config.modifier}+2" = "workspace 2";
+          "${sway.config.modifier}+3" = "workspace 3";
+          "${sway.config.modifier}+4" = "workspace 4";
+          "${sway.config.modifier}+5" = "workspace 5";
+          "${sway.config.modifier}+Left" = "focus left";
+          "${sway.config.modifier}+Right" = "focus right";
+          "${sway.config.modifier}+Up" = "focus up";
+          "${sway.config.modifier}+Down" = "focus down";
+          "${sway.config.modifier}+Shift+Left" = "move left";
+          "${sway.config.modifier}+Shift+Right" = "move right";
+          "${sway.config.modifier}+Shift+Up" = "move up";
+          "${sway.config.modifier}+Shift+Down" = "move down";
+          "${sway.config.modifier}+Shift+1" = "move container to workspace 1";
+          "${sway.config.modifier}+Shift+2" = "move container to workspace 2";
+          "${sway.config.modifier}+Shift+3" = "move container to workspace 3";
+          "${sway.config.modifier}+Shift+4" = "move container to workspace 4";
+          "${sway.config.modifier}+Shift+5" = "move container to workspace 5";
+          "${sway.config.modifier}+Shift+c" = "reload";
+          "${sway.config.modifier}+Shift+r" = "restart";
+        };
+        inherit fonts;
+        bars = [{inherit fonts;}];
       };
-    in {
-      modifier = "Mod4";
-      terminal = lib.getExe pkgs.alacritty;
-      startup = [
-        {
-          command = config.terminal;
-        }
-      ];
-      keybindings = {
-        "${config.modifier}+Return" = "exec ${config.terminal}";
-        "${config.modifier}+o" = "exec ${lib.getExe pkgs.rofi} -show run";
-        "${config.modifier}+1" = "workspace 1";
-        "${config.modifier}+2" = "workspace 2";
-        "${config.modifier}+3" = "workspace 3";
-        "${config.modifier}+4" = "workspace 4";
-        "${config.modifier}+5" = "workspace 5";
-        "${config.modifier}+Left" = "focus left";
-        "${config.modifier}+Right" = "focus right";
-        "${config.modifier}+Up" = "focus up";
-        "${config.modifier}+Down" = "focus down";
-        "${config.modifier}+Shift+Left" = "move left";
-        "${config.modifier}+Shift+Right" = "move right";
-        "${config.modifier}+Shift+Up" = "move up";
-        "${config.modifier}+Shift+Down" = "move down";
-        "${config.modifier}+Shift+1" = "move container to workspace 1";
-        "${config.modifier}+Shift+2" = "move container to workspace 2";
-        "${config.modifier}+Shift+3" = "move container to workspace 3";
-        "${config.modifier}+Shift+4" = "move container to workspace 4";
-        "${config.modifier}+Shift+5" = "move container to workspace 5";
-        "${config.modifier}+Shift+c" = "reload";
-        "${config.modifier}+Shift+r" = "restart";
-      };
-      inherit fonts;
-      bars = [{inherit fonts;}];
     };
   };
 }

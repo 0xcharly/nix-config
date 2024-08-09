@@ -25,6 +25,7 @@ in {
     ./nvim.nix
     ./scripts.nix
     ./x11.nix
+    ./wayland.nix
   ];
 
   home.stateVersion = "24.05";

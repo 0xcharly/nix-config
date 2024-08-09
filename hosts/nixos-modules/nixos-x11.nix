@@ -1,14 +1,14 @@
 {
+  config,
+  lib,
   pkgs,
-  globalModules,
-  sharedModules,
   ...
-}: {
-  imports = with sharedModules; [nixos-headless];
-
+}: let
+  enable = config.settings.compositor == "x11";
+in {
   # Windowing environment.
   services.xserver = {
-    enable = true;
+    inherit enable;
     xkb.layout = "us";
     xrandrHeads = ["Virtual-1"];
     autorun = true;
@@ -19,26 +19,19 @@
     };
 
     displayManager = {
-      gdm.enable = true;
+      gdm = {inherit enable;};
 
       sessionCommands = ''
-        ${pkgs.xorg.xset}/bin/xset r rate 200 40
+        ${lib.getExe pkgs.xorg.xset} r rate 200 40
       '';
     };
 
-    windowManager.i3.enable = true;
+    windowManager.i3 = {inherit enable;};
   };
 
   services.displayManager = {
-    enable = true;
+    inherit enable;
     defaultSession = "none+i3";
-  };
-
-  # Manage fonts.
-  fonts = {
-    fontDir.enable = true;
-
-    packages = import globalModules.fonts {inherit pkgs;};
   };
 
   # List additional packages to install in system profile. To search, run:
@@ -46,21 +39,4 @@
   environment.systemPackages = with pkgs; [
     xclip
   ];
-
-  environment.etc = {
-    "xdg/gtk-2.0/gtkrc".text = ''
-      gtk-application-prefer-dark-theme=1
-      gtk-error-bell=0
-    '';
-    "xdg/gtk-3.0/settings.ini".text = ''
-      [Settings]
-      gtk-application-prefer-dark-theme=1
-      gtk-error-bell=false
-    '';
-    "xdg/gtk-4.0/settings.ini".text = ''
-      [Settings]
-      gtk-application-prefer-dark-theme=1
-      gtk-error-bell=false
-    '';
-  };
 }

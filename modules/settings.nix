@@ -15,11 +15,21 @@ in {
           Whether this host is managed by my employer.
         '';
       };
+
+      # TODO: merge into compositor as new "headless" option.
       options.isHeadless = mkOption {
         default = false;
         type = types.bool;
         description = ''
           Whether this host runs without a graphical environment.
+        '';
+      };
+
+      options.compositor = mkOption {
+        default = "x11";
+        type = types.enum ["x11" "wayland"];
+        description = ''
+          Which compositor to use for the graphical environment on Linux.
         '';
       };
     };

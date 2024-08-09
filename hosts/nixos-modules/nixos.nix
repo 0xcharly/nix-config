@@ -1,26 +1,53 @@
 {pkgs, ...}: {
-  # https://github.com/nix-community/home-manager/pull/2408
-  environment.pathsToLink = ["/share/fish"];
+  # Be careful updating this.
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  # Add ~/.local/bin to PATH
-  environment.localBinInPath = true;
+  # Set your time zone.
+  time.timeZone = "Asia/Tokyo";
 
-  # Required for graphical interfaces (X or Wayland) to work.
-  security.polkit.enable = true;
+  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
+  # Per-interface useDHCP will be mandatory in the future, so this generated config
+  # replicates the default behaviour.
+  networking.useDHCP = false;
 
-  # Since we're using ZSH as our shell.
-  programs.zsh.enable = true;
-  programs.fish.enable = true; # TODO: remove once fully migrated to ZSH.
+  # Select internationalisation properties.
+  i18n.defaultLocale = "en_US.UTF-8";
 
-  users.users.delay = {
-    isNormalUser = true;
-    home = "/home/delay";
-    extraGroups = ["docker" "wheel"];
-    shell = pkgs.zsh;
-    # Create a hashed password with `nix-shell -p mkpasswd --run "mkpasswd -m yescrypt"`
-    hashedPassword = "$y$j9T$6Obep7H1BnzgcBCOdY9hO/$tyLpdkxXnRPumeqlm43Uh4UPj1UQgymEiREPSr49ZR1";
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB/bLz52u0dTFYTfJelVbXbU+VK7H4OXgre/8Mgx1+cq"
-    ];
+  console = {
+    font = "Lat2-Terminus16";
+    keyMap = "us";
   };
+
+  # Enable tailscale. We manually authenticate when we want with
+  # "sudo tailscale up". If you don't use tailscale, you should comment
+  # out or delete all of this.
+  #services.tailscale.enable = true;
+
+  # Define a user account. Don't forget to set a password with ‘passwd’.
+  users.mutableUsers = false;
+
+  # List packages installed in system profile. To search, run:
+  # $ nix search wget
+  environment.systemPackages = with pkgs; [
+    gnumake
+    killall
+    rxvt_unicode
+  ];
+
+  # Enable the OpenSSH daemon.
+  services.openssh = {
+    enable = true;
+    settings = {
+      PasswordAuthentication = true;
+      PermitRootLogin = "no";
+    };
+  };
+
+  # This value determines the NixOS release from which the default
+  # settings for stateful data, like file locations and database versions
+  # on your system were taken. It‘s perfectly fine and recommended to leave
+  # this value at the release version of the first install of this system.
+  # Before changing this value read the documentation for this option
+  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
+  system.stateVersion = "24.05"; # Did you read the comment?
 }

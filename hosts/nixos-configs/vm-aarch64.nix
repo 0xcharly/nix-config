@@ -4,11 +4,11 @@
   ...
 }: {
   imports = with sharedModules; [
-    nix-index
-    nixos
-    nixos-x11
     vm-aarch64
     vmware-guest
+    nixos-compositor-common
+    nixos-x11
+    nixos-wayland
   ];
 
   # Setup qemu so we can run x86_64 binaries

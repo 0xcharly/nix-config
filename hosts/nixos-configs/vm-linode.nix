@@ -1,5 +1,7 @@
 {sharedModules, ...}: {
-  imports = with sharedModules; [nixos nixos-headless vm-linode];
+  imports = with sharedModules; [
+    vm-linode
+  ];
 
   # TODO: consider moving this to `sharedModules.nixos-headless`. This is
   # currently not feasible because `nixos-x11` imports `nixos-headless`.
@@ -11,6 +13,7 @@
   # will have a single interface, it won’t encounter the issues that
   # predictable interface names were designed to solve.
   networking.usePredictableInterfaceNames = false;
+
   # Interface is this on Linode VMs
   networking.interfaces.eth0.useDHCP = true;
 

@@ -1,5 +1,4 @@
 {
-  pkgs,
   globalModules,
   sharedModules,
   ...
@@ -12,7 +11,7 @@
       nix-homebrew
       nix-index
     ])
-    ++ (with globalModules; [nix-client-config]);
+    ++ (with globalModules; [fonts nix-client-config]);
 
   # Mark admins as trusted users to enable cachix repositories.
   nix.settings.trusted-users = ["@admin"];
@@ -23,6 +22,4 @@
 
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
-
-  fonts.packages = import globalModules.fonts {inherit pkgs;};
 }
