@@ -19,7 +19,7 @@ darwin/bootstrap:
 	nix run nix-darwin -- switch --flake .
 
 # Copy the configuration to the VM and run the bootstrap script.
-vm/bootstrap: hosts/ lib/ modules/ users/ flake.lock flake.nix bootstrap-vm.sh
+vm/bootstrap: flake/ hosts/ modules/ users/ flake.lock flake.nix bootstrap-vm.sh
 	tar -C $(MAKEFILE_DIR) -czf - $^ \
 		| ssh $(PRE_BOOTSTRAP_SSH_OPTIONS) -p$(NIXPORT) -lroot $(NIXADDR) \
 		'mkdir -p /nix-config && tar -C /nix-config -xzf - && bash /nix-config/bootstrap-vm.sh $(NIXNAME)'
