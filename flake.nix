@@ -95,7 +95,7 @@
         # NOTE: automatically backing up existing files is currently unsupported
         # for standalone home-manager setups.
         # See https://github.com/nix-community/home-manager/issues/5649.
-        # Instead, we the `-b <backup-file-extension>` to `home-manager switch`.
+        # Instead we pass `-b <backup-file-extension>` to `home-manager switch`.
 
         # NOTE: the notion of "default" user when username is not specified
         # anywhere in the config is currently unsupported.
