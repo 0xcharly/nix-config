@@ -1,6 +1,11 @@
-{pkgs, ...}: {
+{
+  lib,
+  pkgs,
+  ...
+}: {
   fonts = {
-    fontDir.enable = true;
+    # fontDir.enable is not supported on nix-darwin (fonts are enabled by default).
+    fontDir = lib.mkIf (!pkgs.stdenv.isDarwin) {enable = true;};
 
     packages = with pkgs; [
       (iosevka-bin.override {variant = "SGr-IosevkaTermCurly";})
