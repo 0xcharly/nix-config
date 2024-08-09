@@ -22,7 +22,7 @@ darwin/bootstrap:
 vm/bootstrap: flake/ hosts/ modules/ users/ flake.lock flake.nix bootstrap-vm.sh
 	tar -C $(MAKEFILE_DIR) -czf - $^ \
 		| ssh $(PRE_BOOTSTRAP_SSH_OPTIONS) -p$(NIXPORT) -lroot $(NIXADDR) \
-		'mkdir -p /nix-config && tar -C /nix-config -xzf - && bash /nix-config/bootstrap-vm.sh $(NIXNAME)'
+		'mkdir -p /nix-config && tar -C /nix-config -xmzf - && bash /nix-config/bootstrap-vm.sh $(NIXNAME)'
 
 # Copy secrets to the VM. Expects the guest OS to be fully installed.
 vm/copy-secrets:
