@@ -7,8 +7,8 @@
   };
 
   inputs = {
-    # Pin our primary nixpkgs repositories. These are the main nixpkgs repository
-    # we'll use for our configurations.
+    # Pin our primary nixpkgs repositories. These are the main nixpkgs
+    # repositories we'll use for our configurations.
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
     nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-24.05-darwin";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
