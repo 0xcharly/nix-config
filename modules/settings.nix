@@ -17,7 +17,7 @@ in {
       };
 
       options.compositor = mkOption {
-        default = "x11";
+        default = "headless";
         type = types.enum ["headless" "x11" "wayland"];
         description = ''
           Which compositor to use for the graphical environment on Linux.

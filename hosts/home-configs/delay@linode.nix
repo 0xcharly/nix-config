@@ -1,4 +1,5 @@
 {
+  # No graphical environment.
   settings.compositor = "headless";
 
   home = rec {
