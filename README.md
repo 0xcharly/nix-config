@@ -198,6 +198,19 @@ Once `nix-darwin` is installed, successive incremental changes are applied with
 darwin-rebuild switch --flake .
 ```
 
+### Troubleshooting
+
+You may get an error of the form:
+
+```
+2024-08-09 23:03:08.941 defaults[91177:19870960] Could not write domain com.apple.universalaccess; exiting
+```
+
+This usually means that your terminal does not have "Full Disk Access".
+
+Enable it in System Preferences > Security & Privacy > Privacy > Full Disk
+Access.
+
 ## Nix on a Linux host (not NixOS)
 
 >[!WARNING]

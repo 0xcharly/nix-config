@@ -13,6 +13,8 @@
     ])
     ++ (with globalModules; [fonts nix-client-config]);
 
+  settings.compositor = "quartz";
+
   # Mark admins as trusted users to enable cachix repositories.
   nix.settings.trusted-users = ["@admin"];
 

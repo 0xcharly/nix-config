@@ -47,7 +47,11 @@
           # luacheck.enable = true;
           markdownlint = {
             enable = true;
-            settings.configuration.MD034 = false;
+            settings.configuration = {
+              MD034 = false;
+              MD040 = false; # fenced-code-language
+              MD013 = false; #line-length
+            };
           };
         };
       };

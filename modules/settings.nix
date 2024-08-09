@@ -18,11 +18,12 @@ in {
 
       options.compositor = mkOption {
         default = "headless";
-        type = types.enum ["headless" "x11" "wayland"];
+        type = types.enum ["headless" "quartz" "x11" "wayland"];
         description = ''
           Which compositor to use for the graphical environment on Linux.
 
           Use `headless` for a system without a graphical environment.
+          macOS only supports `quartz`.
         '';
       };
     };

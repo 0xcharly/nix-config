@@ -7,7 +7,7 @@
   inherit (pkgs.stdenv) isDarwin isLinux;
   inherit (config.settings) compositor isCorpManaged;
 
-  hasWindowManager = isDarwin || compositor != "headless";
+  hasWindowManager = compositor != "headless";
 
   shellAliases = shell:
     {
