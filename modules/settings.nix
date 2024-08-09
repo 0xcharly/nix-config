@@ -1,5 +1,12 @@
-{lib, ...}: let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   inherit (lib) mkOption types;
+  inherit (pkgs.stdenv) isDarwin;
+  cfg = config.settings;
 in {
   options.settings = mkOption {
     default = {};
@@ -28,4 +35,11 @@ in {
       };
     };
   };
+
+  config.assertions = [
+    {
+      assertion = !(isDarwin && cfg.compositor != "quartz");
+      message = "macOS only supports the `quartz` compositor.";
+    }
+  ];
 }
