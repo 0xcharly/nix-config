@@ -5,8 +5,8 @@
   ...
 }: let
   inherit (pkgs.stdenv) isLinux;
-  inherit (config.settings) compositor isHeadless;
-  enable = isLinux && !isHeadless && compositor == "wayland";
+  inherit (config.settings) compositor;
+  enable = isLinux && compositor == "wayland";
 in {
   programs.rofi = lib.mkIf enable {
     package = pkgs.rofi-wayland;

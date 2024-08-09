@@ -1,5 +1,5 @@
 {
-  settings.isHeadless = true;
+  settings.compositor = "headless";
 
   home = rec {
     username = "delay";

@@ -5,9 +5,9 @@
   ...
 }: let
   inherit (pkgs.stdenv) isLinux;
-  inherit (config.settings) compositor isHeadless;
+  inherit (config.settings) compositor;
 
-  enable = isLinux && !isHeadless && compositor == "x11";
+  enable = isLinux && compositor == "x11";
 in {
   xresources = lib.mkIf enable {
     extraConfig = builtins.readFile ./Xresources;

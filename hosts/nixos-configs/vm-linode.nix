@@ -3,9 +3,8 @@
     vm-linode
   ];
 
-  # TODO: consider moving this to `sharedModules.nixos-headless`. This is
-  # currently not feasible because `nixos-x11` imports `nixos-headless`.
-  settings.isHeadless = true;
+  # No graphical environment.
+  settings.compositor = "headless";
 
   # Most of Linode’s default images have had systemd’s predictable interface
   # names disabled. Because of this, most of Linode’s networking guides assume
@@ -14,9 +13,9 @@
   # predictable interface names were designed to solve.
   networking.usePredictableInterfaceNames = false;
 
-  # Interface is this on Linode VMs
+  # Interface is this on Linode VMs.
   networking.interfaces.eth0.useDHCP = true;
 
-  # Reenable firewall on public machines
+  # Reenable firewall on public machines.
   networking.firewall.enable = true;
 }

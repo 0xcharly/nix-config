@@ -4,11 +4,10 @@
   pkgs,
   ...
 }: let
-  inherit (config.settings) compositor isHeadless;
-  enable = !isHeadless && compositor == "wayland";
+  enable = config.settings.compositor == "wayland";
 in {
   programs.sway = {inherit enable;};
-  xdg.portal = {
+  xdg.portal = lib.mkIf enable {
     inherit enable;
     extraPortals = with pkgs; [
       xdg-desktop-portal-wlr

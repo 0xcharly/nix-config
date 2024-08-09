@@ -5,7 +5,9 @@
   ...
 }: let
   inherit (pkgs.stdenv) isDarwin isLinux;
-  inherit (config.settings) isCorpManaged isHeadless;
+  inherit (config.settings) compositor isCorpManaged;
+
+  hasWindowManager = isDarwin || compositor != "headless";
 
   shellAliases = shell:
     {
@@ -54,7 +56,7 @@ in {
       pkgs.fishPlugins.fzf
       pkgs.fishPlugins.transient-fish
     ]
-    ++ (lib.optionals (isLinux && !isHeadless) [
+    ++ (lib.optionals (isLinux && hasWindowManager) [
       pkgs.firefox-devedition
       pkgs.rofi
       pkgs.valgrind
@@ -80,15 +82,12 @@ in {
 
   xdg = {
     enable = true;
-    configFile =
-      {
-        # TODO: rofi config.
-        # "rofi/config.rasi".text = builtins.readFile ./rofi;
-      }
-      // (lib.optionalAttrs (isLinux && !isHeadless) {
-        # TODO: be patient…
-        #   "ghostty/config".text = builtins.readFile ./ghostty.linux;
-      });
+    configFile = {
+      # TODO: rofi config.
+      # "rofi/config.rasi".text = builtins.readFile ./rofi;
+      # TODO: be patient…
+      #   "ghostty/config".text = builtins.readFile ./ghostty.linux;
+    };
   };
 
   #---------------------------------------------------------------------
@@ -166,7 +165,7 @@ in {
     shellAliases = shellAliases (lib.getExe pkgs.fish);
   };
 
-  programs.alacritty = lib.mkIf (!isHeadless) {
+  programs.alacritty = lib.mkIf hasWindowManager {
     enable = true;
     settings = {
       import = [pkgs.alacritty-theme.catppuccin_mocha];
@@ -258,7 +257,7 @@ in {
     _1passwordAgentPathMacOS = "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
     _1passwordAgentOrKey = key:
       lib.optionalAttrs isDarwin {IdentityAgent = "\"${_1passwordAgentPathMacOS}\"";}
-      // lib.optionalAttrs (isLinux && !isHeadless) {IdentityFile = "~/.ssh/${key}";};
+      // lib.optionalAttrs (isLinux && hasWindowManager) {IdentityFile = "~/.ssh/${key}";};
   in {
     enable = true;
     matchBlocks =
