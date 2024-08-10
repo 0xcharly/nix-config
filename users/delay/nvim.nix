@@ -22,15 +22,12 @@ in {
     pkgs = upkgs;
     plugins =
       (with upkgs.vimPlugins; [
-        actions-preview-nvim
         auto-hlsearch-nvim
         catppuccin-nvim
         dial-nvim
-        eyeliner-nvim
         fidget-nvim
         gitsigns-nvim
         harpoon2
-        lsp-status-nvim
         lspkind-nvim
         lualine-nvim
         nvim-bqf
@@ -47,8 +44,6 @@ in {
         telescope-nvim
         todo-comments-nvim
         trouble-nvim
-        vim-matchup
-        vim-repeat
         which-key-nvim
         # nvim-cmp and plugins
         nvim-cmp
