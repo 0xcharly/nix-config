@@ -145,6 +145,7 @@ in {
         setopt INC_APPEND_HISTORY # Use `fc -RI` to reload history.
       ''
       (builtins.readFile ./rprompt.zsh)
+      (builtins.readFile ./tmux-open-git-repository.zsh)
       (lib.optionalString isLinux "eval $(${lib.getExe pkgs.keychain} --eval --nogui --quiet)")
     ];
     localVariables = {
