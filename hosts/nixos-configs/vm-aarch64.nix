@@ -1,14 +1,14 @@
 {
+  config-manager,
   pkgs,
-  sharedModules,
   ...
 }: {
-  imports = with sharedModules; [
-    vm-aarch64
-    vmware-guest
-    nixos-compositor-common
-    nixos-x11
-    nixos-wayland
+  imports = with config-manager; [
+    system.vm-aarch64
+    system.vmware-guest
+    system.nixos-compositor-common
+    system.nixos-x11
+    system.nixos-wayland
   ];
 
   # Wayland crashes on VMWare Fusion.

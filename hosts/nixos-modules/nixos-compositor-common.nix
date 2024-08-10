@@ -1,5 +1,7 @@
-{globalModules, ...}: {
-  imports = with globalModules; [fonts];
+{config-manager, ...}: {
+  imports = with config-manager; [
+    global.fonts
+  ];
 
   # Required for graphical interfaces (X or Wayland) to work.
   security.polkit.enable = true;

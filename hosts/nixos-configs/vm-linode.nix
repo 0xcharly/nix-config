@@ -1,6 +1,6 @@
-{sharedModules, ...}: {
-  imports = with sharedModules; [
-    vm-linode
+{config-manager, ...}: {
+  imports = with config-manager; [
+    system.vm-linode
   ];
 
   # No graphical environment.

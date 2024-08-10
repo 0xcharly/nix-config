@@ -1,3 +1,3 @@
-{globalModules, ...}: {
-  imports = [globalModules.home-manager-settings-inject];
+{config-manager, ...}: {
+  imports = with config-manager; [global.home-manager-settings-inject];
 }

@@ -1,3 +1,3 @@
-{sharedModules, ...}: {
-  imports = [sharedModules.nix-index];
+{config-manager, ...}: {
+  imports = with config-manager; [system.nix-index];
 }

@@ -1,17 +1,14 @@
-{
-  globalModules,
-  sharedModules,
-  ...
-}: {
-  imports =
-    (with sharedModules; [
-      aarch64-darwin
-      homebrew
-      macos
-      nix-homebrew
-      nix-index
-    ])
-    ++ (with globalModules; [fonts nix-client-config]);
+{config-manager, ...}: {
+  imports = with config-manager; [
+    global.fonts
+    global.nix-client-config
+
+    system.aarch64-darwin
+    system.homebrew
+    system.macos
+    system.nix-homebrew
+    system.nix-index
+  ];
 
   settings.compositor = "quartz";
 

@@ -1,3 +1,6 @@
-{globalModules, ...}: {
-  imports = with globalModules; [settings unfree];
+{config-manager, ...}: {
+  imports = with config-manager; [
+    global.settings
+    global.unfree
+  ];
 }

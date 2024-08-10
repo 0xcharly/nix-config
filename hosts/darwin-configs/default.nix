@@ -1,9 +1,9 @@
 {
+  config-manager,
   pkgs,
-  globalModules,
   ...
 }: {
-  imports = [globalModules.home-manager-settings-inject];
+  imports = with config-manager; [global.home-manager-settings-inject];
 
   # zsh is the default shell on Mac and we want to make sure that we're
   # configuring the rc correctly with nix-darwin paths.
