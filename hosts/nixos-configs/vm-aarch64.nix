@@ -18,6 +18,7 @@
   boot.binfmt.emulatedSystems = ["x86_64-linux"];
 
   # Disable the default module and import our override that works on aarch64.
+  # TODO: revert when https://github.com/NixOS/nixpkgs/pull/326395 is submitted.
   disabledModules = ["virtualisation/vmware-guest.nix"];
 
   # This is needed for the vmware user tools clipboard to work.

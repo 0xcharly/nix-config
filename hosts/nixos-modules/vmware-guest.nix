@@ -1,7 +1,7 @@
 # This is based on the official vmware-guest module, but modified
-# for aarch64 to disable certain features and add support. I'm unsure
-# how to upstream this because I just don't use certain features... maybe
-# making them toggle-able? I'm not sure.
+# for aarch64 to disable certain features and add support for the system.
+# TODO: revert to the official module if/when
+# https://github.com/NixOS/nixpkgs/pull/326395 lands in stable.
 {
   config,
   lib,
@@ -78,7 +78,7 @@ in {
     services.xserver = mkIf (!cfg.headless) {
       modules = lib.optionals pkgs.stdenv.hostPlatform.isx86 [xf86inputvmmouse];
 
-      config = ''
+      config = lib.optionalString pkgs.stdenv.hostPlatform.isx86 ''
         Section "InputClass"
           Identifier "VMMouse"
           MatchDevicePath "/dev/input/event*"
