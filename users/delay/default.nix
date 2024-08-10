@@ -46,6 +46,7 @@ in {
       pkgs.bat
       pkgs.fd
       pkgs.gh
+      pkgs.git-get
       pkgs.htop
       pkgs.lazygit
       pkgs.manix
@@ -234,6 +235,10 @@ in {
           ssh.program = _1passwordSshSignPathMacOS;
         });
       commit.gpgsign = true;
+      gitget = {
+        root = "~/code";
+        host = "github.com";
+      };
     };
   };
 
