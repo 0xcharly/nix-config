@@ -92,7 +92,7 @@ tmux-open-git-repository() {
     zle redisplay
     return 0
   fi
-  local sanitized_repository="$(echo $repository |tr . -)"
+  local sanitized_repository="$(echo $repository |tr . _)"
 
   # TODO: either fail if $repository is not in the input list, or support
   # cloning the repository on the fly.
