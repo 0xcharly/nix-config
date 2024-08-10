@@ -1,13 +1,6 @@
 {pkgs, ...}: {
-  # https://github.com/nix-community/home-manager/pull/2408
-  environment.pathsToLink = ["/share/fish"]; # TODO: update once fully migrated to ZSH.
-
-  # Add ~/.local/bin to PATH
-  environment.localBinInPath = true;
-
   # Since we're using ZSH as our shell.
   programs.zsh.enable = true;
-  programs.fish.enable = true; # TODO: remove once fully migrated to ZSH.
 
   users.users.delay = {
     isNormalUser = true;
