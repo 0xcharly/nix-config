@@ -35,9 +35,17 @@
               label = "nixos";
               size = "100%"; # Remainder of the disk.
               content = {
-                type = "filesystem";
-                format = "ext4";
-                mountpoint = "/";
+                type = "btrfs";
+                subvolumes = {
+                  "/" = {
+                    mountpoint = "/";
+                    mountOptions = ["compress=zstd"];
+                  };
+                  "/nix" = {
+                    mountOptions = ["compress=zstd" "noatime"];
+                  };
+                };
+                mountpoint = "/nixos";
               };
             };
           };
