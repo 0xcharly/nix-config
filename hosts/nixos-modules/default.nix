@@ -4,7 +4,6 @@
   ...
 }: {
   imports = with config-manager; [
-    global.nix-client-config
     system.nix-index
     system.user-delay
   ];
