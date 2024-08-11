@@ -25,6 +25,11 @@
       inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
 
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # We use flake parts to organize our configurations.
     flake-parts = {
       url = "github:hercules-ci/flake-parts";

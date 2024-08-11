@@ -4,12 +4,16 @@
   ...
 }: {
   imports = with config-manager; [
-    system.vm-aarch64
+    system.vm-disks
     system.vmware-guest
     system.nixos-compositor-common
     system.nixos-x11
     system.nixos-wayland
   ];
+
+  # Disable the default module and import our override that works on aarch64.
+  # TODO: revert when https://github.com/NixOS/nixpkgs/pull/326395 is stable.
+  disabledModules = ["virtualisation/vmware-guest.nix"];
 
   # Wayland crashes on VMWare Fusion.
   settings.compositor = "x11";
@@ -17,12 +21,17 @@
   # Setup qemu so we can run x86_64 binaries
   boot.binfmt.emulatedSystems = ["x86_64-linux"];
 
-  # Disable the default module and import our override that works on aarch64.
-  # TODO: revert when https://github.com/NixOS/nixpkgs/pull/326395 is submitted.
-  disabledModules = ["virtualisation/vmware-guest.nix"];
+  # This works through our custom module imported above
+  virtualisation.vmware.guest.enable = true;
 
   # This is needed for the vmware user tools clipboard to work.
   environment.systemPackages = [pkgs.gtkmm3];
+
+  # Boot configuration.
+  boot.initrd.availableKernelModules = ["uhci_hcd" "ahci" "xhci_pci" "nvme" "usbhid" "sr_mod"];
+  boot.initrd.kernelModules = [];
+  boot.kernelModules = [];
+  boot.extraModulePackages = [];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -35,21 +44,32 @@
   # Don't require password for sudo.
   security.sudo.wheelNeedsPassword = false;
 
-  # Interface names on M1, M3.
-  networking.interfaces.ens160.useDHCP = true; # NAT adapter.
+  networking = {
+    # Define your hostname.
+    hostName = "vm-aarch64";
 
-  # Disable the firewall since we're in a VM and we want to make it
-  # easy to visit stuff in here. We only use NAT networking anyways.
-  networking.firewall.enable = false;
+    # Interface names on M1, M3.
+    interfaces.ens160.useDHCP = true; # NAT adapter.
 
-  # Lots of stuff that uses aarch64 that claims doesn't work, but actually works.
-  nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.allowUnsupportedSystem = true;
+    # Disable the firewall since we're in a VM and we want to make it
+    # easy to visit stuff in here. We only use NAT networking anyways.
+    firewall.enable = false;
+  };
 
-  # This works through our custom module imported above
-  virtualisation.vmware.guest.enable = true;
+  # Configure nixpkgs.
+  nixpkgs = {
+    hostPlatform = "aarch64-linux";
 
-  # Share our host filesystem
+    config = {
+      # TODO: is this needed for anything? I'm already allowing unfree packages
+      # on a per-case basis.
+      allowUnfree = true;
+      # Lots of stuff that uses aarch64 that claims doesn't work, but actually works.
+      allowUnsupportedSystem = true;
+    };
+  };
+
+  # Share our host filesystem.
   fileSystems."/host" = {
     fsType = "fuse./run/current-system/sw/bin/vmhgfs-fuse";
     device = ".host:/";

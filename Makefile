@@ -26,7 +26,7 @@ vm/bootstrap: flake/ hosts/ modules/ users/ flake.lock flake.nix bootstrap-vm.sh
 
 # Copy secrets to the VM. Expects the guest OS to be fully installed.
 vm/copy-secrets:
-	for key in github git-commit-signing linode; do \
+	for key in github git-commit-signing; do \
 		sekrets read-ssh-key -k $$key -o - \
 			| ssh $(SSH_OPTIONS) -p$(NIXPORT) -l$(NIXUSER) $(NIXADDR) \
 			"bash -c \"install -m 400 <(dd) \$$HOME/.ssh/$$key\""; \

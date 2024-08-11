@@ -1,5 +1,6 @@
 {config-manager, ...}: {
   imports = with config-manager; [
+    system.vm-disks
     system.vm-linode
   ];
 
