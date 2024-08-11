@@ -1,6 +1,7 @@
 {config-manager, ...}: {
   imports = with config-manager; [
     global.fonts
+    global.nix-path
 
     system.aarch64-darwin
     system.homebrew

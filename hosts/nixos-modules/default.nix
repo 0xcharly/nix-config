@@ -4,6 +4,8 @@
   ...
 }: {
   imports = with config-manager; [
+    global.nix-path
+
     system.nix-index
     system.user-delay
   ];
