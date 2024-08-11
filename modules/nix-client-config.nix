@@ -9,7 +9,7 @@
     keep-derivations = true;
     keep-outputs = true;
 
-    # Public binary cache used for derivations.
+    # Public binary caches used for derivations.
     substituters = [
       "https://cache.nixos.org"
       "https://nix-community.cachix.org"
