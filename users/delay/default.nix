@@ -150,7 +150,7 @@ in {
       (lib.optionalString isLinux "eval $(${lib.getExe pkgs.keychain} --eval --nogui --quiet)")
     ];
     localVariables = {
-      PS1 = "%B%F{grey}:%f%b ";
+      PS1 = "%F{blue}%f ";
     };
     shellAliases = shellAliases (lib.getExe pkgs.zsh);
     syntaxHighlighting.enable = true;

@@ -25,7 +25,7 @@ __delay_rprompt_git_repo() {
 # Creates the right prompt based on the current working directory.
 __delay_rprompt() {
   # First segment: time.
-  echo -n " %F{black}%F{grey}%K{black} %* %k%F{black}"
+  echo -n " %F{black}%f%K{black} %* %k%F{black}"
 
   # Second segment: working directory or space.
   {
