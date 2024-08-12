@@ -39,7 +39,6 @@ in {
         "vlc"
       ]
       ++ (lib.optionals (!isCorpManaged) [
-        "chromium"
         "protonvpn"
         "transmission"
       ]);
