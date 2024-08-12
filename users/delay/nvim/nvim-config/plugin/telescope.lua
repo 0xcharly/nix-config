@@ -84,20 +84,6 @@ local function fuzzy_grep_current_file_type()
   grep_current_file_type(fuzzy_grep)
 end
 
--- vim.keymap.set('n', '<Leader>f', pickers.find_files)
--- vim.keymap.set('n', '<Leader><Space>', project_files, { desc = 'telescope: project files git' })
--- vim.keymap.set('n', '<Leader>b', buffers)
--- vim.keymap.set('n', '<Leader>j', pickers.jumplist)
--- vim.keymap.set('n', '<Leader>h', pickers.highlights)
--- vim.keymap.set('n', '<Leader>s', pickers.lsp_document_symbols)
--- vim.keymap.set('n', '<Leader>S', pickers.lsp_dynamic_workspace_symbols)
--- vim.keymap.set('n', '<Leader>d', pickers.diagnostics)
--- vim.keymap.set('n', '<Leader>/', pickers.find_files)
--- vim.keymap.set('n', '<Leader>?', pickers.help_tags)
--- vim.keymap.set('n', '<Leader>tm', pickers.man_pages)
--- vim.keymap.set('n', '<Leader>*', pickers.grep_string)
--- vim.keymap.set('n', '<Leader>g', pickers.live_grep)
-
 vim.keymap.set('n', '<Leader>ts', pickers.live_grep, { desc = '[t]elescope: live grep (regex [s]earch)' })
 vim.keymap.set('n', '<C-g>', function()
   local conf = require('telescope.config').values
@@ -138,12 +124,6 @@ vim.keymap.set(
 vim.keymap.set('n', '<Leader>th', function()
   extensions.harpoon.marks()
 end, { desc = '[t]elescope: [h]arpoon marks' })
-vim.keymap.set('n', '<Leader>tn', function()
-  extensions.manix.manix()
-end, { desc = '[t]elescope: ma[n]ix' })
-vim.keymap.set('n', '<Leader>tN', function()
-  extensions.manix.manix { cword = true }
-end, { desc = '[t]elescope: ma[N]ix <cword>' })
 
 require('telescope').setup {
   defaults = {
@@ -159,10 +139,8 @@ require('telescope').setup {
     mappings = {
       n = {
         q = actions.close,
-        ['<C-t>'] = require('trouble.sources.telescope').open,
       },
       i = {
-        ['<C-t>'] = require('trouble.sources.telescope').open,
         ['<ESC>'] = actions.close,
         ['<C-x>'] = false,
         ['<C-q>'] = actions.send_to_qflist,

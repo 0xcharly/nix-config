@@ -30,7 +30,6 @@ cmp.setup {
   sources = {
     { name = 'nvim_lua' },
     { name = 'nvim_lsp' },
-    { name = 'nvim_ciderlsp' },
     { name = 'path' },
     { name = 'buffer', keyword_length = 3 },
   },
@@ -62,28 +61,6 @@ cmp.setup {
   window = {
     completion = cmp.config.window.bordered(),
     documentation = cmp.config.window.bordered(),
-  },
-  formatting = {
-    format = require('lspkind').cmp_format {
-      mode = 'symbol_text',
-      preset = 'codicons',
-      maxwidth = 50,
-      ellipsis_char = '…',
-      menu = {
-        buffer = ':buf:',
-        cmdline = ':cmd:',
-        cmdline_history = ':hist"',
-        cmp_git = ':git:',
-        nvim_ciderlsp = ':cid:',
-        nvim_lsp = ':lsp:',
-        nvim_lsp_document_symbol = ':lsp"',
-        nvim_lsp_signature_help = ':lsp"',
-        nvim_lua = ':lua:',
-        path = ':fs:',
-        rg = ':rg:',
-        tmux = ':tmux:',
-      },
-    },
   },
 }
 

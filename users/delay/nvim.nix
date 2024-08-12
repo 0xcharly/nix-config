@@ -22,35 +22,24 @@ in {
     pkgs = upkgs;
     plugins =
       (with upkgs.vimPlugins; [
-        auto-hlsearch-nvim
         catppuccin-nvim
-        dial-nvim
-        fidget-nvim
         gitsigns-nvim
         harpoon2
-        lspkind-nvim
         lualine-nvim
-        nvim-bqf
         nvim-lastplace
         nvim-surround
         nvim-treesitter.withAllGrammars
-        nvim-treesitter-textobjects
-        nvim-ts-context-commentstring
-        nvim-web-devicons
         oil-nvim
         plenary-nvim
         sqlite-lua
         telescope-fzf-native-nvim
         telescope-nvim
         todo-comments-nvim
-        trouble-nvim
-        which-key-nvim
         # nvim-cmp and plugins
         nvim-cmp
         cmp-buffer
         cmp-path
         cmp-cmdline
-        cmp-cmdline-history
         cmp-nvim-lua
         cmp-nvim-lsp
         cmp-nvim-lsp-document-symbol
@@ -58,9 +47,6 @@ in {
         cmp-rg
       ])
       ++ (lib.optionals (!isCorpManaged) [upkgs.vimPlugins.copilot-vim])
-      ++ (with upkgs; [
-        telescope-manix
-        rustaceanvim
-      ]);
+      ++ (with upkgs; [rustaceanvim]);
   };
 }

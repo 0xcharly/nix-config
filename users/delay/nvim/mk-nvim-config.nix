@@ -46,8 +46,7 @@ pkgs: {
     '';
 
     installPhase = ''
-      rsync -a --exclude=after --exclude=/init.lua $src/ $out/nvim
-      rsync -a after $out
+      rsync -a --exclude=/init.lua $src/ $out/nvim
     '';
   };
 

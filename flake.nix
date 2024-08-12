@@ -65,10 +65,6 @@
     # Alacritty Themes (includes Catppuccin).
     alacritty-theme.url = "github:alexghr/alacritty-theme.nix";
     # Neovim plugins, offered via flakes.
-    telescope-manix = {
-      url = "github:mrcjkb/telescope-manix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     rustaceanvim = {
       url = "github:mrcjkb/rustaceanvim";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -93,7 +89,6 @@
         final = false; # This config is extended by a private corp-specific one.
         overlays = [
           inputs.alacritty-theme.overlays.default
-          inputs.telescope-manix.overlays.default
           inputs.rustaceanvim.overlays.default
         ];
 
