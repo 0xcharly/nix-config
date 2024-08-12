@@ -29,23 +29,17 @@ in {
     casks =
       [
         "1password"
-        "1password-cli"
-        "discord"
-        "firefox"
         "firefox@developer-edition"
+        "little-snitch"
         #"monodraw"
-        "messenger"
         "mimestream"
-        "notion"
-        "notion-calendar"
-        "proton-mail"
         "prusaslicer"
         "raycast"
         "spotify"
         "vlc"
       ]
       ++ (lib.optionals (!isCorpManaged) [
-        "google-chrome"
+        "chromium"
         "protonvpn"
         "transmission"
       ]);
