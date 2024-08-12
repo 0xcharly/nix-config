@@ -62,6 +62,9 @@
       inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
     };
 
+    # 👻
+    ghostty.url = "git+ssh://git@github.com/ghostty-org/ghostty";
+
     # Alacritty Themes (includes Catppuccin).
     alacritty-theme.url = "github:alexghr/alacritty-theme.nix";
     # Neovim plugins, offered via flakes.
