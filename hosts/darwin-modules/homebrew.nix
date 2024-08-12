@@ -30,7 +30,6 @@ in {
       [
         "1password"
         "firefox@developer-edition"
-        "little-snitch"
         #"monodraw"
         "mimestream"
         "prusaslicer"
