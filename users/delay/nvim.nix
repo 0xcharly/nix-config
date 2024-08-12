@@ -28,7 +28,44 @@ in {
         lualine-nvim
         nvim-lastplace
         nvim-surround
-        nvim-treesitter.withAllGrammars
+        (nvim-treesitter.withPlugins (p:
+          with p; [
+            awk
+            bash
+            beancount
+            c
+            cmake
+            comment
+            cpp
+            css
+            csv
+            dart
+            devicetree
+            dhall
+            diff
+            dot
+            fish
+            gitcommit
+            gitignore
+            ini
+            java
+            json
+            just
+            kotlin
+            lua
+            make
+            markdown
+            markdown_inline
+            nix
+            objc
+            python
+            rust
+            ssh_config
+            starlark
+            toml
+            yaml
+            zig
+          ]))
         oil-nvim
         plenary-nvim
         sqlite-lua
