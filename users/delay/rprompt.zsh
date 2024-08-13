@@ -60,6 +60,7 @@ __delay_rprompt() {
 }
 
 setopt bash_rematch prompt_subst transient_rprompt
+ZLE_RPROMPT_INDENT=0
 precmd_prompt () {
   RPROMPT="$(__delay_rprompt)"
 }
