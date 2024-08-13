@@ -476,7 +476,7 @@
     "gen-luarc": {
       "inputs": {
         "flake-parts": "flake-parts_5",
-        "nixpkgs": "nixpkgs_6"
+        "nixpkgs": "nixpkgs_5"
       },
       "locked": {
         "lastModified": 1718922730,
@@ -517,7 +517,7 @@
       "inputs": {
         "flake-compat": "flake-compat_5",
         "gitignore": "gitignore_4",
-        "nixpkgs": "nixpkgs_7",
+        "nixpkgs": "nixpkgs_6",
         "nixpkgs-stable": "nixpkgs-stable_2"
       },
       "locked": {
@@ -858,7 +858,7 @@
         "flake-parts": "flake-parts_6",
         "git-hooks": "git-hooks",
         "neovim-nightly": "neovim-nightly",
-        "nixpkgs": "nixpkgs_9"
+        "nixpkgs": "nixpkgs_8"
       },
       "locked": {
         "lastModified": 1721971601,
@@ -881,7 +881,7 @@
         "git-hooks": "git-hooks_2",
         "hercules-ci-effects": "hercules-ci-effects",
         "neovim-src": "neovim-src",
-        "nixpkgs": "nixpkgs_8"
+        "nixpkgs": "nixpkgs_7"
       },
       "locked": {
         "lastModified": 1721885903,
@@ -916,22 +916,28 @@
     "nix-config-ghostty": {
       "inputs": {
         "ghostty": "ghostty",
-        "nixpkgs": "nixpkgs_4",
-        "nixpkgs-darwin": "nixpkgs-darwin",
-        "nixpkgs-unstable": "nixpkgs-unstable_2"
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "nixpkgs-darwin": [
+          "nixpkgs-darwin"
+        ],
+        "nixpkgs-unstable": [
+          "nixpkgs-unstable"
+        ]
       },
       "locked": {
-        "lastModified": 1723541776,
-        "narHash": "sha256-Bj/jnrUKUIS7yOE1k2dlVQcbH4Ab7Il9Dkk7CK6LpUo=",
+        "lastModified": 1723548361,
+        "narHash": "sha256-q+HiAEsGcpySj+aPD4PolLlrrju4xKkjNBdeRP6bYUQ=",
         "ref": "refs/heads/main",
-        "rev": "310eec6b12f33b2f51fa837365e2d7a36a923c82",
-        "revCount": 5,
+        "rev": "0004f8e4adc15627744a9125c00f03c75ecd252a",
+        "revCount": 8,
         "type": "git",
-        "url": "file:///Users/delay/code/github.com/0xcharly/nix-config-ghostty"
+        "url": "ssh://git@github.com/0xcharly/nix-config-ghostty"
       },
       "original": {
         "type": "git",
-        "url": "file:///Users/delay/code/github.com/0xcharly/nix-config-ghostty"
+        "url": "ssh://git@github.com/0xcharly/nix-config-ghostty"
       }
     },
     "nix-config-manager": {
@@ -1020,22 +1026,6 @@
       }
     },
     "nixpkgs-darwin": {
-      "locked": {
-        "lastModified": 1723474036,
-        "narHash": "sha256-uYUgXkccL1EoezUUVMOF0MazLK1YQags89rrCX2LKRw=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "8f4cb508c33212aa69ae22958d03c0ba9a906f5b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixpkgs-24.05-darwin",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs-darwin_2": {
       "locked": {
         "lastModified": 1720881915,
         "narHash": "sha256-uC/eDBJqbxuQzh0pYgbCtoCMjnKUFbJYkixeVDir5J8=",
@@ -1171,22 +1161,6 @@
     },
     "nixpkgs-unstable_2": {
       "locked": {
-        "lastModified": 1723320709,
-        "narHash": "sha256-DeKCsLQsS58D8TB/cTjXs2x8XMvsyv2JVxcF0Hu6pu8=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "e1d92cda6fd1bcec60e4938ce92fcee619eea793",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs-unstable_3": {
-      "locked": {
         "lastModified": 1718276985,
         "narHash": "sha256-u1fA0DYQYdeG+5kDm1bOoGcHtX0rtC7qs2YA2N1X++I=",
         "owner": "nixos",
@@ -1196,22 +1170,6 @@
       },
       "original": {
         "owner": "nixos",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_10": {
-      "locked": {
-        "lastModified": 1719082008,
-        "narHash": "sha256-jHJSUH619zBQ6WdC21fFAlDxHErKVDJ5fpN0Hgx4sjs=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "9693852a2070b398ee123a329e68f0dab5526681",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
         "ref": "nixpkgs-unstable",
         "repo": "nixpkgs",
         "type": "github"
@@ -1248,22 +1206,6 @@
     },
     "nixpkgs_4": {
       "locked": {
-        "lastModified": 1723400035,
-        "narHash": "sha256-WoKZDlBEdMhP+hjquBAh0BhUJbcH2+U8g2mHOr1mv8I=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "a731b45590a5169542990c36ffcde6cebd9a3356",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-24.05",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_5": {
-      "locked": {
         "lastModified": 1718208800,
         "narHash": "sha256-US1tAChvPxT52RV8GksWZS415tTS7PV42KTc2PNDBmc=",
         "owner": "nixos",
@@ -1278,7 +1220,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_6": {
+    "nixpkgs_5": {
       "locked": {
         "lastModified": 1718714799,
         "narHash": "sha256-FUZpz9rg3gL8NVPKbqU8ei1VkPLsTIfAJ2fdAf5qjak=",
@@ -1294,7 +1236,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_7": {
+    "nixpkgs_6": {
       "locked": {
         "lastModified": 1719082008,
         "narHash": "sha256-jHJSUH619zBQ6WdC21fFAlDxHErKVDJ5fpN0Hgx4sjs=",
@@ -1310,7 +1252,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_8": {
+    "nixpkgs_7": {
       "locked": {
         "lastModified": 1721782431,
         "narHash": "sha256-UNDpwjYxNXQet/g3mgRLsQ9zxrbm9j2JEvP4ijF3AWs=",
@@ -1326,7 +1268,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_9": {
+    "nixpkgs_8": {
       "locked": {
         "lastModified": 1721933792,
         "narHash": "sha256-zYVwABlQnxpbaHMfX6Wt9jhyQstFYwN2XjleOJV3VVg=",
@@ -1342,11 +1284,27 @@
         "type": "github"
       }
     },
+    "nixpkgs_9": {
+      "locked": {
+        "lastModified": 1719082008,
+        "narHash": "sha256-jHJSUH619zBQ6WdC21fFAlDxHErKVDJ5fpN0Hgx4sjs=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "9693852a2070b398ee123a329e68f0dab5526681",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "pre-commit-hooks": {
       "inputs": {
         "flake-compat": "flake-compat_8",
         "gitignore": "gitignore_6",
-        "nixpkgs": "nixpkgs_10",
+        "nixpkgs": "nixpkgs_9",
         "nixpkgs-stable": "nixpkgs-stable_3"
       },
       "locked": {
@@ -1375,9 +1333,9 @@
         "nix-config-ghostty": "nix-config-ghostty",
         "nix-config-manager": "nix-config-manager",
         "nix-index-database": "nix-index-database",
-        "nixpkgs": "nixpkgs_5",
-        "nixpkgs-darwin": "nixpkgs-darwin_2",
-        "nixpkgs-unstable": "nixpkgs-unstable_3",
+        "nixpkgs": "nixpkgs_4",
+        "nixpkgs-darwin": "nixpkgs-darwin",
+        "nixpkgs-unstable": "nixpkgs-unstable_2",
         "rustaceanvim": "rustaceanvim",
         "treefmt-nix": "treefmt-nix_2"
       }
