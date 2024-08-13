@@ -39,7 +39,7 @@ __delay_rprompt() {
     # Nix-shell (e.g. via direnv).
     nix_shell=$(__delay_rprompt_nix_shell)
     if [ -n "$nix_shell" ]; then
-      echo -en "%F{blue}%{\e[7m%}   $nix_shell %{\e[0m%}%F{blue}"
+      echo -en "%F{blue}%{\e[7m%} 󱄅  $nix_shell %{\e[0m%}%F{blue}"
       return
     fi
 
@@ -47,7 +47,7 @@ __delay_rprompt() {
     # the price of a call to `git` when unnecessary (e.g. in a CitC workspace).
     git_repo=$(__delay_rprompt_git_repo)
     if [ -n "$git_repo" ]; then
-      echo -en "%F{red}%{\e[7m%}   $git_repo %{\e[0m%}%F{red}"
+      echo -en "%F{red}%{\e[7m%} 󰊢  $git_repo %{\e[0m%}%F{red}"
       return
     fi
 
