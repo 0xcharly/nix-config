@@ -63,7 +63,13 @@
     };
 
     # 👻
-    ghostty.url = "git+ssh://git@github.com/ghostty-org/ghostty";
+    # ghostty.url = "git+ssh://git@github.com/ghostty-org/ghostty";
+    nix-config-ghostty = {
+      url = "git+ssh://git@github.com/0xcharly/nix-config-ghostty";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-darwin.follows = "nixpkgs-darwin";
+      inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
+    };
 
     # Alacritty Themes (includes Catppuccin).
     alacritty-theme.url = "github:alexghr/alacritty-theme.nix";

@@ -1,6 +1,7 @@
 {config-manager, ...}: {
   imports = with config-manager; [
     global.fonts
+    global.nix-client-config
     global.nix-path
 
     system.aarch64-darwin
