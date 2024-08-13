@@ -88,10 +88,7 @@ in {
   xdg = {
     enable = true;
     configFile = {
-      # TODO: rofi config.
-      # "rofi/config.rasi".text = builtins.readFile ./rofi;
-      # TODO: be patient…
-      #   "ghostty/config".text = builtins.readFile ./ghostty.linux;
+      "ghostty/config".text = builtins.readFile ./ghostty;
     };
   };
 
