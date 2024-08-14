@@ -44,6 +44,7 @@ in {
   # TODO: try pkgs.tailscale.
   home.packages =
     [
+      pkgs.ansifilter
       pkgs.bat
       pkgs.coreutils # To align platforms (i.e. GNU utils on macOS).
       pkgs.fd

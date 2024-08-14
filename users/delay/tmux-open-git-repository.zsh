@@ -82,7 +82,7 @@ tmux-open-git-repository() {
 
   # Use FZF to get user input.
   local gitget_root="$(eval realpath $(git config gitget.root))"
-  local cmd="${TMUX_OPEN_GIT_REPOSITORY_COMMAND:-"command git list -o flat |awk '{print \$1}' |xargs realpath -s --relative-to \"$gitget_root\" 2> /dev/null"}"
+  local cmd="${TMUX_OPEN_GIT_REPOSITORY_COMMAND:-"command git list -o flat |ansifilter |rg '^/' --color=never |awk '{print \$1}' |xargs realpath -s --relative-to \"$gitget_root\" 2> /dev/null"}"
   local repository="$(eval "$cmd" |
     FZF_DEFAULT_OPTS=$(__fzf_defaults "" "--reverse --bind=ctrl-r:toggle-sort --highlight-line ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} +m") \
     FZF_DEFAULT_OPTS_FILE='' $(__fzfcmd))"
