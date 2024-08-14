@@ -12,7 +12,7 @@ local expand_citc_uri = function(uri)
   local citc_space, _ = vim.fn.getcwd():match(citc_uri_pattern)
   local citc_space_prefix = '/google/src/cloud/' .. username .. '/' .. citc_space
 
-  if path:startswith('depot/') then
+  if path:startsWith('depot/') then
     path = path:sub(string.len('depot/'))
   else
     citc_space_prefix = citc_space_prefix .. 'google3/'
