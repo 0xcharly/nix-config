@@ -59,9 +59,8 @@ in {
       pkgs.fishPlugins.done
       pkgs.fishPlugins.fzf
       pkgs.fishPlugins.transient-fish
-
-      inputs.nix-config-ghostty.packages.${pkgs.system}.ghostty
     ]
+    ++ (lib.optionals hasWindowManager [pkgs.ghostty])
     ++ (lib.optionals (isLinux && hasWindowManager) [
       pkgs.firefox-devedition
       pkgs.rofi
