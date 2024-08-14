@@ -32,13 +32,13 @@ in {
       inherit enable;
       config = let
         fonts = {
-          names = ["IosevkaTerm Nerd Font" "FontAwesome6Free"];
+          names = ["Iosevka Term Curly" "FontAwesome6Free"];
           style = "Regular";
           size = 10.0;
         };
       in {
         modifier = "Mod4";
-        terminal = lib.getExe pkgs.alacritty;
+        terminal = lib.getExe pkgs.ghostty;
         startup = [
           {
             command = sway.config.terminal;

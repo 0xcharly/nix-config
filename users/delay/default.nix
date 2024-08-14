@@ -82,7 +82,7 @@ in {
     PAGER = "less -FirSwX";
     MANPAGER = "${lib.getExe nvim-pkg} +Man!";
     SHELL = lib.getExe pkgs.zsh;
-    TERMINAL = lib.getExe pkgs.alacritty;
+    TERMINAL = lib.getExe pkgs.ghostty;
   };
 
   xdg = {
