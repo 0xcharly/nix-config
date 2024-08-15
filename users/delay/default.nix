@@ -1,6 +1,5 @@
 {
   config,
-  inputs,
   lib,
   pkgs,
   ...
@@ -25,10 +24,11 @@
     });
 in {
   imports = [
-    ./nvim.nix
     ./scripts.nix
     ./x11.nix
     ./wayland.nix
+
+    {nixpkgs.overlays = [(final: prev: {final.nvim = prev.nix-config-nvim.default;})];}
   ];
 
   home.stateVersion = "24.05";
@@ -40,13 +40,13 @@ in {
   #---------------------------------------------------------------------
 
   # Packages I always want installed. Most packages I install using per-project
-  # flakes sourced with direnv and nix-shell, so this is not a huge list.
+  # flakes sourced with direnv and nix-shellalign, so this is not a huge list.
   # TODO: try pkgs.tailscale.
   home.packages =
     [
       pkgs.ansifilter
       pkgs.bat
-      pkgs.coreutils # To align platforms (i.e. GNU utils on macOS).
+      pkgs.coreutils # For consistency across platforms (i.e. GNU utils on macOS).
       pkgs.fd
       pkgs.gh
       pkgs.git-get
@@ -55,6 +55,8 @@ in {
       pkgs.manix
       pkgs.ripgrep
       pkgs.tree
+
+      pkgs.nvim
 
       pkgs.fishPlugins.done
       pkgs.fishPlugins.fzf
@@ -71,16 +73,14 @@ in {
   # Env vars and dotfiles
   #---------------------------------------------------------------------
 
-  home.sessionVariables = let
-    nvim-pkg = config.home.nvim-config.finalPackage;
-  in {
+  home.sessionVariables = {
     LANG = "en_US.UTF-8";
     LC_CTYPE = "en_US.UTF-8";
     LC_ALL = "en_US.UTF-8";
     BAT_THEME = "base16";
-    EDITOR = lib.getExe nvim-pkg;
+    EDITOR = lib.getExe pkgs.nvim;
     PAGER = "less -FirSwX";
-    MANPAGER = "${lib.getExe nvim-pkg} +Man!";
+    MANPAGER = "${lib.getExe pkgs.nvim} +Man!";
     SHELL = lib.getExe pkgs.zsh;
     TERMINAL = lib.getExe pkgs.ghostty;
   };

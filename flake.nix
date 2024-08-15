@@ -62,6 +62,9 @@
       inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
     };
 
+    # Neovim.
+    nix-config-nvim.url = "github:0xcharly/nix-config-nvim";
+
     # 👻
     # ghostty.url = "git+ssh://git@github.com/ghostty-org/ghostty";
     nix-config-ghostty = {
@@ -73,11 +76,6 @@
 
     # Alacritty Themes (includes Catppuccin).
     alacritty-theme.url = "github:alexghr/alacritty-theme.nix";
-    # Neovim plugins, offered via flakes.
-    rustaceanvim = {
-      url = "github:mrcjkb/rustaceanvim";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = inputs @ {flake-parts, ...}:
@@ -99,7 +97,7 @@
         overlays = [
           inputs.alacritty-theme.overlays.default
           inputs.nix-config-ghostty.overlays.default
-          inputs.rustaceanvim.overlays.default
+          inputs.nix-config-nvim.overlays.default
         ];
 
         # NOTE: automatically backing up existing files is currently unsupported
