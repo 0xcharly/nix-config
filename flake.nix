@@ -56,8 +56,7 @@
 
     # Personal config manager.
     nix-config-manager = {
-      url = "git+file:///Users/delay/code/github.com/0xcharly/nix-config-manager";
-      # url = "github:0xcharly/nix-config-manager";
+      url = "github:0xcharly/nix-config-manager";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-darwin.follows = "nixpkgs-darwin";
       inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";

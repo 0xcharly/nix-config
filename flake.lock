@@ -1034,15 +1034,15 @@
       "locked": {
         "lastModified": 1723704000,
         "narHash": "sha256-ZPtRNZC1kbvOJSDRtLbxkIuaR5Vz27Pdv8WA+GerpLg=",
-        "ref": "refs/heads/main",
+        "owner": "0xcharly",
+        "repo": "nix-config-manager",
         "rev": "9e36b99fdbc358f48dcd426642b4c7f3d05969ce",
-        "revCount": 33,
-        "type": "git",
-        "url": "file:///Users/delay/code/github.com/0xcharly/nix-config-manager"
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "file:///Users/delay/code/github.com/0xcharly/nix-config-manager"
+        "owner": "0xcharly",
+        "repo": "nix-config-manager",
+        "type": "github"
       }
     },
     "nix-config-nvim": {
