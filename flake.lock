@@ -1001,11 +1001,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1723637228,
-        "narHash": "sha256-84Bb2TV2zj/83oaU5TI9zTgFlfTIvE44x39xwdVC+ZM=",
+        "lastModified": 1723706503,
+        "narHash": "sha256-INn+jTwTMHHnNAvDb67SUW+9TJxcMWmlB/GmCAHOLkM=",
         "ref": "refs/heads/main",
-        "rev": "45cc14300d94a3252f7f85e7c27c81e7046be2a9",
-        "revCount": 10,
+        "rev": "4ebf23737cf4ce2c0aa7036521d89d0482e5f7ec",
+        "revCount": 11,
         "type": "git",
         "url": "ssh://git@github.com/0xcharly/nix-config-ghostty"
       },
