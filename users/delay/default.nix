@@ -28,7 +28,7 @@ in {
     ./x11.nix
     ./wayland.nix
 
-    {nixpkgs.overlays = [(final: prev: {final.nvim = prev.nix-config-nvim.default;})];}
+    {nixpkgs.overlays = [(final: prev: {nvim = prev.nix-config-nvim.default;})];}
   ];
 
   home.stateVersion = "24.05";
