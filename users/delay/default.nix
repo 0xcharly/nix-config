@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
   ...
@@ -28,7 +29,14 @@ in {
     ./x11.nix
     ./wayland.nix
 
-    {nixpkgs.overlays = [(final: prev: {nvim = prev.nix-config-nvim.default;})];}
+    {
+      nixpkgs.overlays = [
+        inputs.alacritty-theme.overlays.default
+        inputs.nix-config-ghostty.overlays.default
+        inputs.nix-config-nvim.overlays.default
+        (final: prev: {nvim = prev.nix-config-nvim.default;})
+      ];
+    }
   ];
 
   home.stateVersion = "24.05";
