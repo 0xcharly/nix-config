@@ -1,10 +1,15 @@
 {
   description = "Nix systems and configs for delay";
 
-  nixConfig = {
-    extra-substituters = ["https://0xcharly-nixos-config.cachix.org"];
-    extra-trusted-public-keys = ["0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU="];
-  };
+  outputs = inputs @ {flake-parts, ...}:
+    flake-parts.lib.mkFlake {inherit inputs;} {
+      imports = [
+        # ./hosts
+        ./parts
+      ];
+
+      systems = ["aarch64-darwin" "aarch64-linux" "x86_64-linux"];
+    };
 
   inputs = {
     # Pin our primary nixpkgs repositories. These are the main nixpkgs
@@ -78,41 +83,8 @@
     alacritty-theme.url = "github:alexghr/alacritty-theme.nix";
   };
 
-  outputs = inputs @ {flake-parts, ...}:
-    flake-parts.lib.mkFlake {inherit inputs;} {
-      imports = [
-        inputs.nix-config-manager.flakeModule
-        inputs.git-hooks-nix.flakeModule
-        inputs.treefmt-nix.flakeModule
-
-        ./flake/cmd-fmt.nix
-        ./flake/devshells.nix
-      ];
-
-      systems = ["aarch64-darwin" "aarch64-linux" "x86_64-linux"];
-
-      config-manager = {
-        root = ./.;
-        final = false; # This config is extended by a private corp-specific one.
-
-        # NOTE: automatically backing up existing files is currently unsupported
-        # for standalone home-manager setups.
-        # See https://github.com/nix-community/home-manager/issues/5649.
-        # Instead we pass `-b <backup-file-extension>` to `home-manager switch`.
-
-        # NOTE: the notion of "default" user when username is not specified
-        # anywhere in the config is currently unsupported.
-        # TODO: consider falling back to "default.nix" when username is not
-        # specified. Currently needs to support reading the actual username
-        # value from somewhere.
-        defaultUser = "delay";
-
-        # Home Manager only config for other Linux hosts.
-        # NOTE: because this section is used to define standalone home configs,
-        # it is not an appropriate place to put user-specific options (because
-        # these home-manager configuration options are also passed to systems).
-        # TODO: distinguish between system options and user options.
-        home.defaultSystem = "x86_64-linux";
-      };
-    };
+  nixConfig = {
+    extra-substituters = ["https://0xcharly-nixos-config.cachix.org"];
+    extra-trusted-public-keys = ["0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU="];
+  };
 }
