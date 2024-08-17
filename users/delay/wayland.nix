@@ -1,11 +1,11 @@
 {
-  config,
+  osConfig,
   lib,
   pkgs,
   ...
 }: let
   inherit (pkgs.stdenv) isLinux;
-  inherit (config.usrenv) compositor;
+  inherit (osConfig.usrenv) compositor;
   enable = isLinux && compositor == "wayland";
 in {
   programs.rofi = lib.mkIf enable {
