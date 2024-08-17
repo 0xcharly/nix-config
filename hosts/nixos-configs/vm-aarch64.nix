@@ -16,7 +16,7 @@
   disabledModules = ["virtualisation/vmware-guest.nix"];
 
   # Wayland crashes on VMWare Fusion.
-  settings.compositor = "x11";
+  usrenv.compositor = "x11";
 
   # Setup qemu so we can run x86_64 binaries
   boot.binfmt.emulatedSystems = ["x86_64-linux"];

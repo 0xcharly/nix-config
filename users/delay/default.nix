@@ -6,7 +6,7 @@
   ...
 }: let
   inherit (pkgs.stdenv) isDarwin isLinux;
-  inherit (config.settings) compositor isCorpManaged;
+  inherit (config.usrenv) compositor isCorpManaged;
 
   hasWindowManager = compositor != "headless";
 

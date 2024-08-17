@@ -6,9 +6,9 @@
 }: let
   inherit (lib) mkOption types;
   inherit (pkgs.stdenv) isDarwin;
-  cfg = config.settings;
+  cfg = config.usrenv;
 in {
-  options.settings = mkOption {
+  options.usrenv = mkOption {
     default = {};
     type = types.submodule {
       # Settings can be used to store any kind of value.
@@ -38,7 +38,7 @@ in {
 
   config.assertions = [
     {
-      assertion = !(isDarwin && cfg.compositor != "quartz");
+      assertion = isDarwin -> cfg.compositor == "quartz";
       message = "macOS only supports the `quartz` compositor.";
     }
   ];

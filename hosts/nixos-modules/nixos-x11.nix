@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  enable = config.settings.compositor == "x11";
+  enable = config.usrenv.compositor == "x11";
 in {
   # Windowing environment.
   services.xserver = {

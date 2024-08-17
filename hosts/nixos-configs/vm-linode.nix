@@ -5,7 +5,7 @@
   ];
 
   # No graphical environment.
-  settings.compositor = "headless";
+  usrenv.compositor = "headless";
 
   # Most of Linode’s default images have had systemd’s predictable interface
   # names disabled. Because of this, most of Linode’s networking guides assume

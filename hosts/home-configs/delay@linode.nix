@@ -1,6 +1,6 @@
 {
   # No graphical environment.
-  settings.compositor = "headless";
+  usrenv.compositor = "headless";
 
   home = rec {
     username = "delay";

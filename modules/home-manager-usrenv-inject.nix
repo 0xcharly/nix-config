@@ -5,5 +5,5 @@
   ...
 }: {
   # TODO: can this be done automatically?
-  home-manager.users.${host.user} = {inherit (config) settings;};
+  home-manager.users.${host.user} = {inherit (config) usrenv;};
 }
