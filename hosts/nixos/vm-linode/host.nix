@@ -1,11 +1,10 @@
-{config-manager, ...}: {
-  imports = with config-manager; [
-    system.vm-disks
-    system.vm-linode
+{
+  imports = [
+    ./fs.nix
   ];
 
   # No graphical environment.
-  usrenv.compositor = "headless";
+  modules.usrenv.compositor = "headless";
 
   # Most of Linode’s default images have had systemd’s predictable interface
   # names disabled. Because of this, most of Linode’s networking guides assume

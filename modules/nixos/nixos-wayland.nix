@@ -4,7 +4,7 @@
   pkgs,
   ...
 }: let
-  enable = config.usrenv.compositor == "wayland";
+  enable = config.modules.usrenv.compositor == "wayland";
 in {
   programs.sway = {inherit enable;};
   xdg.portal = lib.mkIf enable {

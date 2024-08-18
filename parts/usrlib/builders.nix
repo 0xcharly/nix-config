@@ -1,28 +1,22 @@
 {
   inputs,
   lib,
-  stdenv,
   ...
 }: let
-  inherit (inputs) self nixpkgs;
+  inherit (inputs) self nix-darwin nixpkgs nixpkgs-darwin;
+  inherit (self) usrlib;
   inherit (lib.attrsets) recursiveUpdate;
   inherit (lib.lists) singleton concatLists;
   inherit (lib.modules) mkDefault;
-  inherit (stdenv) isDarwin;
 
   # mkSystem is a convenient wrapper around either lib.nixosSystem or
   # lib.darwinSystem.
-  mkSystem = {
+  mkSystem = nixpkgs: systemBuilder: {
     withSystem,
     system,
     hostname,
     ...
-  } @ args: let
-    systemBuilder =
-      if isDarwin
-      then lib.darwinSystem
-      else lib.nixosSystem;
-  in
+  } @ args:
     withSystem system ({
       inputs',
       self',
@@ -31,8 +25,7 @@
       systemBuilder {
         # Arguments passed to all modules.
         specialArgs = recursiveUpdate {
-          inherit (self) keys;
-          inherit lib;
+          inherit lib usrlib;
           inherit inputs self inputs' self';
         } (args.specialArgs or {});
 
@@ -42,7 +35,7 @@
             networking.hostName = args.hostname;
             nixpkgs = {
               hostPlatform = mkDefault args.system;
-              flake.source = nixpkgs.outPath;
+              # TODO: flake.source = nixpkgs.outPath;
             };
           })
 
@@ -50,6 +43,30 @@
           (args.modules or [])
         ];
       });
+
+  mkStandaloneHome = {
+    withSystem,
+    system,
+    ...
+  } @ args:
+    withSystem system ({
+      inputs',
+      self',
+      ...
+    }:
+      inputs.home-manager.lib.homeManagerConfiguration {
+        # Arguments passed to all modules.
+        extraSpecialArgs = recursiveUpdate {
+          inherit lib usrlib;
+          inherit inputs self inputs' self';
+        } (args.extraSpecialArgs or {});
+
+        # Module list.
+        modules = args.modules or [];
+      });
+
+  mkDarwinSystem = mkSystem nixpkgs-darwin nix-darwin.lib.darwinSystem;
+  mkNixosSystem = mkSystem nixpkgs nixpkgs.lib.nixosSystem;
 in {
-  inherit mkSystem;
+  inherit mkDarwinSystem mkNixosSystem mkStandaloneHome;
 }

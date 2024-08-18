@@ -4,7 +4,7 @@
   outputs = inputs @ {flake-parts, ...}:
     flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [
-        # ./hosts
+        ./hosts
         ./parts
       ];
 
@@ -25,7 +25,7 @@
     };
 
     # macOS system configuration with Nix.
-    darwin = {
+    nix-darwin = {
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs-darwin";
     };

@@ -1,6 +1,6 @@
 {
   # No graphical environment.
-  usrenv.compositor = "headless";
+  modules.usrenv.compositor = "headless";
 
   home = rec {
     username = "delay";

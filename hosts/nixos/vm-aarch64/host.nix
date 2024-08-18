@@ -1,22 +1,15 @@
-{
-  config-manager,
-  pkgs,
-  ...
-}: {
-  imports = with config-manager; [
-    system.vm-disks
-    system.vmware-guest
-    system.nixos-compositor-common
-    system.nixos-x11
-    system.nixos-wayland
+{pkgs, ...}: {
+  imports = [
+    ./fs.nix
+    ./vmware-guest.nix
   ];
+
+  # Wayland crashes on VMWare Fusion.
+  modules.usrenv.compositor = "x11";
 
   # Disable the default module and import our override that works on aarch64.
   # TODO: revert when https://github.com/NixOS/nixpkgs/pull/326395 is stable.
   disabledModules = ["virtualisation/vmware-guest.nix"];
-
-  # Wayland crashes on VMWare Fusion.
-  usrenv.compositor = "x11";
 
   # Setup qemu so we can run x86_64 binaries
   boot.binfmt.emulatedSystems = ["x86_64-linux"];

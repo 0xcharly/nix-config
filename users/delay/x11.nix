@@ -5,7 +5,7 @@
   ...
 }: let
   inherit (pkgs.stdenv) isLinux;
-  inherit (osConfig.usrenv) compositor;
+  inherit (osConfig.modules.usrenv) compositor;
 
   enable = isLinux && compositor == "x11";
 in {

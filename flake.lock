@@ -56,26 +56,6 @@
     "darwin": {
       "inputs": {
         "nixpkgs": [
-          "nixpkgs-darwin"
-        ]
-      },
-      "locked": {
-        "lastModified": 1718440858,
-        "narHash": "sha256-iMVwdob8F6P6Ib+pnhMZqyvYI10ZxmvA885jjnEaO54=",
-        "owner": "LnL7",
-        "repo": "nix-darwin",
-        "rev": "58b905ea87674592aa84c37873e6c07bc3807aba",
-        "type": "github"
-      },
-      "original": {
-        "owner": "LnL7",
-        "repo": "nix-darwin",
-        "type": "github"
-      }
-    },
-    "darwin_2": {
-      "inputs": {
-        "nixpkgs": [
           "nix-config-manager",
           "nixpkgs-darwin"
         ]
@@ -746,7 +726,7 @@
     },
     "nix-config-manager": {
       "inputs": {
-        "darwin": "darwin_2",
+        "darwin": "darwin",
         "flake-parts": "flake-parts_4",
         "git-hooks-nix": "git-hooks-nix_3",
         "home-manager": "home-manager_2",
@@ -807,6 +787,26 @@
         "owner": "LnL7",
         "repo": "nix-darwin",
         "rev": "eac4f25028c1975a939c8f8fba95c12f8a25e01c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "LnL7",
+        "repo": "nix-darwin",
+        "type": "github"
+      }
+    },
+    "nix-darwin_2": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-darwin"
+        ]
+      },
+      "locked": {
+        "lastModified": 1723859949,
+        "narHash": "sha256-kiaGz4deGYKMjJPOji/JVvSP/eTefrIA3rAjOnOpXl4=",
+        "owner": "LnL7",
+        "repo": "nix-darwin",
+        "rev": "076b9a905af8a52b866c8db068d6da475839d97b",
         "type": "github"
       },
       "original": {
@@ -1047,7 +1047,6 @@
     "root": {
       "inputs": {
         "alacritty-theme": "alacritty-theme",
-        "darwin": "darwin",
         "disko": "disko",
         "flake-parts": "flake-parts_2",
         "git-hooks-nix": "git-hooks-nix",
@@ -1056,6 +1055,7 @@
         "nix-config-ghostty": "nix-config-ghostty",
         "nix-config-manager": "nix-config-manager",
         "nix-config-nvim": "nix-config-nvim",
+        "nix-darwin": "nix-darwin_2",
         "nix-index-database": "nix-index-database",
         "nixpkgs": "nixpkgs_6",
         "nixpkgs-darwin": "nixpkgs-darwin",

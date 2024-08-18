@@ -1,6 +1,6 @@
 {
+  config,
   inputs,
-  host,
   ...
 }: {
   # Nix-managed homebrew.
@@ -8,6 +8,6 @@
 
   nix-homebrew = {
     enable = true; # Install Homebrew under the default prefix.
-    inherit (host) user; # User owning the Homebrew prefix.
+    user = config.modules.system.mainUser; # User owning the Homebrew prefix.
   };
 }

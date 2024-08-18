@@ -6,9 +6,9 @@
   ...
 }: let
   inherit (pkgs.stdenv) isDarwin isLinux;
-  inherit (osConfig.usrenv) compositor isCorpManaged;
+  inherit (osConfig.modules.usrenv) isCorpManaged isHeadless;
 
-  hasWindowManager = compositor != "headless";
+  hasWindowManager = !isHeadless;
 
   shellAliases = shell:
     {
@@ -28,15 +28,6 @@ in {
     ./scripts.nix
     ./x11.nix
     ./wayland.nix
-
-    {
-      nixpkgs.overlays = [
-        inputs.alacritty-theme.overlays.default
-        inputs.nix-config-ghostty.overlays.default
-        inputs.nix-config-nvim.overlays.default
-        (final: prev: {nvim = prev.nix-config-nvim;})
-      ];
-    }
   ];
 
   home.stateVersion = "24.05";

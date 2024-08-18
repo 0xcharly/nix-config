@@ -5,7 +5,14 @@
   # `mkModuleTree` is used to recursively import all `module.nix` file in a
   # given directory, assuming the given directory to be the module root, where
   # rest of the modules are to be imported.
-  mkModuleTree = {
+  mkModuleTree = root:
+    filter (path: (baseNameOf path) == "module.nix") (
+      map toString (listFilesRecursive root)
+    );
+
+  # Same as `mkModuleTree'`, but allows filtering out paths specified in
+  # `ignoredPaths`.
+  mkModuleTree' = {
     root,
     ignoredPaths ? [],
   }:
@@ -17,5 +24,5 @@
       )
     );
 in {
-  inherit mkModuleTree;
+  inherit mkModuleTree mkModuleTree';
 }

@@ -1,14 +1,11 @@
-{
-  config-manager,
-  pkgs,
-  ...
-}: {
-  imports = with config-manager; [
-    global.nix-client-config
-    global.nix-path
-
-    system.nix-index
-    system.user-delay
+{pkgs, ...}: {
+  imports = [
+    ./fonts.nix
+    ./nix-index.nix
+    ./nixos-compositor-common.nix
+    ./nixos-wayland.nix
+    ./nixos-x11.nix
+    ./user-delay.nix
   ];
 
   # Be careful updating this.

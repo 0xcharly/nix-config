@@ -3,7 +3,7 @@
   lib,
   ...
 }: let
-  inherit (config.usrenv) isCorpManaged;
+  inherit (config.modules.usrenv) isCorpManaged;
 in {
   homebrew = {
     enable = true;

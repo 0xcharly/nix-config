@@ -4,33 +4,13 @@
   pkgs,
   ...
 }: let
-  inherit (builtins) elemAt;
-  inherit (lib.lists) optionals;
-  inherit (lib.modules) mkMerge;
   inherit (lib.options) mkOption;
-  inherit (lib.types) bool enum listOf str;
-  inherit (pkgs.stdenv) isDarwin;
+  inherit (lib.types) bool enum;
 
-  cfg = config.usrenv;
+  cfg = config.modules.usrenv;
 in {
-  options.usrenv = mkOption {
-    mainUser = mkOption {
-      type = enum config.modules.system.users;
-      default = elemAt config.modules.system.users 0;
-      description = ''
-        The username of the main user for your system.
-
-        In case of a multiple systems, this will be the user with priority in ordered lists and enabled options.
-      '';
-    };
-
-    users = mkOption {
-      type = listOf str;
-      default = ["delay"];
-      description = "A list of home-manager users on the system.";
-    };
-
-    options.isCorpManaged = mkOption {
+  options.modules.usrenv = {
+    isCorpManaged = mkOption {
       default = false;
       type = bool;
       description = ''
@@ -38,8 +18,8 @@ in {
       '';
     };
 
-    options.compositor = mkOption {
-      default = "headless";
+    compositor = mkOption {
+      default = "quartz";
       type = enum ["headless" "quartz" "x11" "wayland"];
       description = ''
         Which compositor to use for the graphical environment on Linux.
@@ -48,22 +28,21 @@ in {
         macOS only supports `quartz`.
       '';
     };
+
+    isHeadless = mkOption {
+      default = cfg.compositor == "headless";
+      type = bool;
+      readOnly = true;
+      description = ''
+        Graphical environment will not be installed on a headless host.
+      '';
+    };
   };
 
   config.assertions = [
     {
-      assertion = isDarwin -> cfg.compositor == "quartz";
+      assertion = pkgs.stdenv.isDarwin -> cfg.compositor == "quartz";
       message = "macOS only supports the `quartz` compositor.";
     }
-  ];
-
-  config.warnings = mkMerge [
-    (optionals (config.modules.system.users == []) [
-      ''
-        You have not added any users to be supported by your system. You may end up with an unbootable system!
-
-        Consider setting {option}`config.modules.system.users` in your configuration
-      ''
-    ])
   ];
 }
