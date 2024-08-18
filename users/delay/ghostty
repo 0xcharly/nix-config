@@ -9,8 +9,9 @@ background-opacity = 0.95
 background-blur-radius = 20
 window-padding-balance = true
 window-title-font-family = "Iosevka QuasiProportional"
-window-colorspace = display-p3
-#window-colorspace = srgb
+window-colorspace = srgb
 # This keybind doesn't seem to work?
 keybind = super+shift+comma=reload_config
 shell-integration-features = no-cursor,no-sudo,no-title
+confirm-close-surface = false
+quit-after-last-window-closed = true
