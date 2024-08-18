@@ -59,14 +59,6 @@
     # macOS only: Homebrew for Nix.
     homebrew.url = "github:zhaofengli-wip/nix-homebrew";
 
-    # Personal config manager.
-    nix-config-manager = {
-      url = "github:0xcharly/nix-config-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-darwin.follows = "nixpkgs-darwin";
-      inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
-    };
-
     # Neovim.
     nix-config-nvim.url = "github:0xcharly/nix-config-nvim";
 
