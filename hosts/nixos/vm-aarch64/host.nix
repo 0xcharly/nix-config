@@ -1,6 +1,7 @@
 {pkgs, ...}: {
   imports = [
     ./fs.nix
+    ./mounts.nix
     ./vmware-guest.nix
   ];
 
@@ -38,9 +39,6 @@
   security.sudo.wheelNeedsPassword = false;
 
   networking = {
-    # Define your hostname.
-    hostName = "vm-aarch64";
-
     # Interface names on M1, M3.
     interfaces.ens160.useDHCP = true; # NAT adapter.
 
@@ -51,8 +49,6 @@
 
   # Configure nixpkgs.
   nixpkgs = {
-    hostPlatform = "aarch64-linux";
-
     config = {
       # TODO: is this needed for anything? I'm already allowing unfree packages
       # on a per-case basis.
@@ -60,19 +56,5 @@
       # Lots of stuff that uses aarch64 that claims doesn't work, but actually works.
       allowUnsupportedSystem = true;
     };
-  };
-
-  # Share our host filesystem.
-  fileSystems."/host" = {
-    fsType = "fuse./run/current-system/sw/bin/vmhgfs-fuse";
-    device = ".host:/";
-    options = [
-      "umask=22"
-      "uid=1000"
-      "gid=1000"
-      "allow_other"
-      "auto_unmount"
-      "defaults"
-    ];
   };
 }

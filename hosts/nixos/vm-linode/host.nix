@@ -18,4 +18,33 @@
 
   # Reenable firewall on public machines.
   networking.firewall.enable = true;
+
+  boot.initrd.availableKernelModules = [
+    "ata_piix"
+    "mptspi"
+    "uhci_hcd"
+    "ehci_pci"
+    "sd_mod"
+    "sr_mod"
+    "nvme"
+  ];
+  boot.initrd.kernelModules = [];
+  boot.kernelModules = [];
+  boot.extraModulePackages = [];
+
+  # Enable LISH.
+  # https://www.linode.com/docs/guides/install-nixos-on-linode/#enable-lish
+  boot.kernelParams = ["console=ttyS0,19200n8"];
+  boot.loader.grub.extraConfig = ''
+    serial --speed=19200 --unit=0 --word=8 --parity=no --stop=1;
+    terminal_input serial;
+    terminal_output serial
+  '';
+
+  # Configure GRUB.
+  # https://www.linode.com/docs/guides/install-nixos-on-linode/#configure-grub
+  boot.loader.grub.device = "nodev";
+  boot.loader.grub.efiSupport = true;
+  boot.loader.grub.forceInstall = true;
+  boot.loader.timeout = 10;
 }
