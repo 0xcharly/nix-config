@@ -19,7 +19,7 @@
   home = systemsModulePath + /home; # standalone-specific modules.
   nixos = systemsModulePath + /nixos; # nixos-specific modules.
 
-  options = systemsModulePath + /options; # options for system configuration.
+  config = systemsModulePath + /config; # options for system configuration.
   shared = systemsModulePath + /shared; # shared modules across all hosts.
 
   # home-manager
@@ -52,7 +52,7 @@
 
   mkHost = host: builder: {
     system,
-    moduleTrees ? [options shared users],
+    moduleTrees ? [config shared users],
     roles ? [],
     extraModules ? [],
   } @ args': let

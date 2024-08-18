@@ -33,10 +33,7 @@
         modules = concatLists [
           (singleton {
             networking.hostName = args.hostname;
-            nixpkgs = {
-              hostPlatform = mkDefault args.system;
-              # TODO: flake.source = nixpkgs.outPath;
-            };
+            nixpkgs.hostPlatform = mkDefault args.system;
           })
 
           # Additional modules passed to the host.
