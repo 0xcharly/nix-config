@@ -68,6 +68,10 @@
 
   mkHostAttrs = hosts: builtins.foldl' recursiveUpdate {} hosts;
 in {
+  flake.lib = {
+    inherit darwin home nixos config shared users mkHost mkHostAttrs;
+  };
+
   flake.darwinConfigurations = let
     hm = inputs.home-manager.darwinModules.home-manager; # home-manager darwin module
   in
