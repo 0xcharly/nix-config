@@ -55,15 +55,17 @@
     moduleTrees ? [config shared users],
     roles ? [],
     extraModules ? [],
+    ...
   } @ args': let
     hostname = builtins.baseNameOf host;
   in {
-    ${hostname} = builder {
-      inherit hostname system withSystem;
-      modules = mkModulesForHost host {
-        inherit moduleTrees roles extraModules;
-      };
-    };
+    ${hostname} = builder (args'
+      // {
+        inherit hostname system withSystem;
+        modules = mkModulesForHost host {
+          inherit moduleTrees roles extraModules;
+        };
+      });
   };
 
   mkHostAttrs = hosts: builtins.foldl' recursiveUpdate {} hosts;

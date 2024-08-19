@@ -15,6 +15,7 @@
     withSystem,
     system,
     hostname,
+    injectInputs ? {},
     ...
   } @ args:
     withSystem system ({
@@ -26,14 +27,16 @@
         # Arguments passed to all modules.
         specialArgs = recursiveUpdate {
           inherit lib usrlib;
-          inherit inputs self inputs' self';
+          inherit self inputs' self';
+          # TODO: need to massage `inputs'`?
+          inputs = inputs // injectInputs;
         } (args.specialArgs or {});
 
         # Module list.
         modules = concatLists [
           (singleton {
-            networking.hostName = args.hostname;
-            nixpkgs.hostPlatform = mkDefault args.system;
+            networking.hostName = hostname;
+            nixpkgs.hostPlatform = mkDefault system;
           })
 
           # Additional modules passed to the host.
@@ -44,6 +47,7 @@
   mkStandaloneHome = {
     withSystem,
     system,
+    injectInputs ? {},
     ...
   } @ args:
     withSystem system ({
@@ -55,7 +59,9 @@
         # Arguments passed to all modules.
         extraSpecialArgs = recursiveUpdate {
           inherit lib usrlib;
-          inherit inputs self inputs' self';
+          inherit self inputs' self';
+          # TODO: need to massage `inputs'`?
+          inputs = inputs // injectInputs;
         } (args.extraSpecialArgs or {});
 
         # Module list.
