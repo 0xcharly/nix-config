@@ -41,6 +41,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives.serialization import (
     BestAvailableEncryption,
     Encoding,
+    NoEncryption,
     PrivateFormat,
     SSHPrivateKeyTypes,
     load_ssh_private_key,
@@ -109,6 +110,7 @@ class ReadSshPrivateKeyOptions(NamedTuple):
     dry_run: bool
     op_private_key_entry: OpPrivateKeyEntry
     output_file: Optional[IO[bytes]]
+    skip_passphrase: bool
     ask_for_passphrase: bool
     passphrase_op_vault_uri: VaultUri
 
@@ -164,6 +166,12 @@ def _parse_argv(argv: list[str]) -> argparse.Namespace:
         default=_DEFAULT_PRIVATE_KEY_PASSPHRASE_OP_VAULT_URI,
         help="1Password URI of the passphrase to use to encrypt the private key",
     )
+    group.add_argument(
+        "-s",
+        "--skip-passphrase",
+        action="store_true",
+        help="outputs the unencrypted key (WARNING: only do this is you know what you're doing)",
+    )
     return parser.parse_args(argv)
 
 
@@ -198,19 +206,23 @@ def _load_openssh_private_key(entry: OpPrivateKeyEntry) -> SSHPrivateKeyTypes:
 
 
 def _encode_and_encrypt_private_key(
-    entry: OpPrivateKeyEntry, key: SSHPrivateKeyTypes, passphrase: str
+    entry: OpPrivateKeyEntry, key: SSHPrivateKeyTypes, passphrase: Optional[str]
 ) -> bytes:
     if not isinstance(key, Ed25519PrivateKey):
         print(f'Warning: key "{entry.name}" is not ed25519', file=sys.stderr)
-    encoded_and_encrypted_private_key = key.private_bytes(
+    private_key = key.private_bytes(
         encoding=Encoding.PEM,
         format=PrivateFormat.OpenSSH,
-        encryption_algorithm=BestAvailableEncryption(passphrase),
+        encryption_algorithm=(
+            BestAvailableEncryption(passphrase) if passphrase else NoEncryption()
+        ),
     )
-    return encoded_and_encrypted_private_key
+    return private_key
 
 
-def _get_private_key_passphrase(options: ReadSshPrivateKeyOptions) -> str:
+def _get_private_key_passphrase(options: ReadSshPrivateKeyOptions) -> Optional[str]:
+    if options.skip_passphrase:
+        return None
     if options.ask_for_passphrase:
         return Prompt.ask("Enter your passphrase", password=True).encode("ascii")
     return _op_read_private_key_passphrase(options.passphrase_op_vault_uri)
@@ -240,6 +252,7 @@ def _command_read_ssh_private_key(args: argparse.Namespace):
         dry_run=args.dry_run,
         op_private_key_entry=args.private_key,
         output_file=args.output_file,
+        skip_passphrase=args.skip_passphrase,
         ask_for_passphrase=args.ask_for_passphrase,
         passphrase_op_vault_uri=args.passphrase_op_vault_uri,
     )

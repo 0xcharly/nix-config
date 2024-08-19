@@ -4,12 +4,22 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+set -x
+
 # Ensure that the script is passed a single argument.
 if test $# -ne 1; then
   >&2 echo "Illegal number of parameters: expected 1, got $#"
   >&2 echo "Usage: $0 <system-name>"
   exit 1
 fi
+
+# SSH config to use the correct key to fetch private GitHub repositories.
+install -D -m 400 <(cat <<'EOF'
+Host github.com
+  User git
+  IdentityFile ~/.ssh/github
+EOF
+) $HOME/.ssh/config
 
 NIX_OPTIONS="--option extra-experimental-features nix-command"
 NIX_OPTIONS+=" --option extra-experimental-features flakes"

@@ -63,7 +63,7 @@
     nix-config-nvim.url = "github:0xcharly/nix-config-nvim";
 
     # 👻
-    # ghostty.url = "git+ssh://git@github.com/ghostty-org/ghostty";
+    # ghostty.url = "github:ghostty-org/ghostty";
     nix-config-ghostty = {
       url = "git+ssh://git@github.com/0xcharly/nix-config-ghostty";
       inputs.nixpkgs.follows = "nixpkgs";
