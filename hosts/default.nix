@@ -50,11 +50,13 @@
       ]
     );
 
-  mkHost = host: builder: {
+  mkHost = {
+    host,
+    builder,
     system,
-    moduleTrees ? [config shared users],
-    roles ? [],
-    extraModules ? [],
+    moduleTrees,
+    roles,
+    extraModules,
     ...
   } @ args': let
     hostname = builtins.baseNameOf host;
@@ -68,50 +70,74 @@
       });
   };
 
-  mkHostAttrs = hosts: builtins.foldl' recursiveUpdate {} hosts;
-in {
-  flake.lib = {
-    inherit darwin home nixos config shared users mkHost mkHostAttrs;
-  };
-
-  flake.darwinConfigurations = let
+  mkDarwinHost = host: {
+    system ? "aarch64-darwin",
+    moduleTrees ? [],
+    roles ? [],
+    extraModules ? [],
+    ...
+  } @ args': let
     hm = inputs.home-manager.darwinModules.home-manager; # home-manager darwin module
   in
-    mkHostAttrs [
-      (mkHost ./darwin/mbp mkDarwinSystem {
-        system = "aarch64-darwin";
-        roles = [darwin];
-        extraModules = [hm];
-      })
+    mkHost (args'
+      // {
+        inherit host system;
+        builder = mkDarwinSystem;
+        moduleTrees = moduleTrees ++ [config shared users];
+        roles = roles ++ [darwin];
+        extraModules = extraModules ++ [hm];
+      });
 
-      (mkHost ./darwin/studio mkDarwinSystem {
-        system = "aarch64-darwin";
-        roles = [darwin];
-        extraModules = [hm];
-      })
-    ];
+  mkHomeHost = host: {
+    system ? "x86_64-linux",
+    moduleTrees ? [],
+    roles ? [],
+    extraModules ? [],
+    ...
+  } @ args':
+    mkHost (args'
+      // {
+        inherit host system extraModules;
+        builder = mkStandaloneHome;
+        moduleTrees = moduleTrees ++ [config shared users];
+        roles = roles ++ [home];
+      });
 
-  flake.homeConfigurations = mkHostAttrs [
-    (mkHost (./home + "/delay@linode") mkStandaloneHome {
-      system = "x86_64-linux";
-      roles = [home];
-    })
-  ];
-
-  flake.nixosConfigurations = let
+  mkNixosHost = host: {
+    system,
+    moduleTrees ? [],
+    roles ? [],
+    extraModules ? [],
+    ...
+  } @ args': let
     hm = inputs.home-manager.nixosModules.home-manager; # home-manager nixos module
   in
-    mkHostAttrs [
-      (mkHost ./nixos/vm-aarch64 mkNixosSystem {
-        system = "aarch64-linux";
-        roles = [nixos];
-        extraModules = [hm];
-      })
+    mkHost (args'
+      // {
+        inherit host system;
+        builder = mkNixosSystem;
+        moduleTrees = moduleTrees ++ [config shared users];
+        roles = roles ++ [nixos];
+        extraModules = extraModules ++ [hm];
+      });
 
-      (mkHost ./nixos/vm-linode mkNixosSystem {
-        system = "x86_64-linux";
-        roles = [nixos];
-        extraModules = [hm];
-      })
-    ];
+  mkHostAttrs = builtins.foldl' recursiveUpdate {};
+in {
+  flake.lib = {
+    inherit mkDarwinHost mkHomeHost mkNixosHost mkHostAttrs;
+  };
+
+  flake.darwinConfigurations = mkHostAttrs [
+    (mkDarwinHost ./darwin/mbp {})
+    (mkDarwinHost ./darwin/studio {})
+  ];
+
+  flake.homeConfigurations = mkHostAttrs [
+    (mkHomeHost (./home + "/delay@linode") {})
+  ];
+
+  flake.nixosConfigurations = mkHostAttrs [
+    (mkNixosHost ./nixos/vm-aarch64 {system = "aarch64-linux";})
+    (mkNixosHost ./nixos/vm-linode {system = "x86_64-linux";})
+  ];
 }
