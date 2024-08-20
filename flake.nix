@@ -73,6 +73,9 @@
 
     # Alacritty Themes (includes Catppuccin).
     alacritty-theme.url = "github:alexghr/alacritty-theme.nix";
+
+    # Other packages.
+    jujutsu.url = "github:martinvonz/jj";
   };
 
   nixConfig = {

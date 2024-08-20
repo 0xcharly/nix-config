@@ -103,9 +103,23 @@ in {
 
   xdg = {
     enable = true;
-    configFile = {
-      "ghostty/config".text = builtins.readFile ./ghostty;
-    };
+    configFile =
+      {
+        "ghostty/config".text = builtins.readFile ./ghostty;
+      }
+      // lib.optionalAttrs isLinux {
+        "jj/config.toml".source = ./jujutsu.toml;
+      };
+  };
+
+  home.file."Library/Application Support/jj/config.toml" = lib.optionalAttrs isDarwin {
+    text = lib.concatStringsSep "\n" [
+      (builtins.readFile ./jujutsu.toml)
+      ''
+        [signing.backends.ssh]
+        program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+      ''
+    ];
   };
 
   #---------------------------------------------------------------------
@@ -257,6 +271,10 @@ in {
       };
     };
   };
+
+  # Not using "settings" because the path is wrong on macOS at the time of
+  # writing this.
+  programs.jujutsu.enable = true;
 
   programs.tmux = {
     enable = true;
