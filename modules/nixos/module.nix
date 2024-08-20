@@ -1,6 +1,7 @@
 {pkgs, ...}: {
   imports = [
     ./fonts.nix
+    ./nix-client-config.nix
     ./nix-index.nix
     ./nixos-compositor-common.nix
     ./nixos-wayland.nix

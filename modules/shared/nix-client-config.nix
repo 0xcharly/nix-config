@@ -1,6 +1,6 @@
 {
   nix.settings = rec {
-    allowed-users = ["delay" "@admin" "@wheel"];
+    allowed-users = ["delay"];
     trusted-users = allowed-users;
 
     # Enable flakes.

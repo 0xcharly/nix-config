@@ -21,9 +21,12 @@
 
   config = systemsModulePath + /config; # options for system configuration.
   shared = systemsModulePath + /shared; # shared modules across all hosts.
+  # TODO: find a better name for modules that are for "non-hm-standalone" installs.
+  managed = systemsModulePath + /system; # shared modules across NixOS/darwin.
 
   # home-manager
   users = ../users; # home-manager configurations.
+  standalone = users + /standalone.nix;
 
   # mkModulesFor generates a list of modules imported by the host with the given
   # hostname. Do note that this needs to be called *in* the (darwin|nixos)System
@@ -83,12 +86,14 @@
       // {
         inherit host system;
         builder = mkDarwinSystem;
-        moduleTrees = moduleTrees ++ [config shared users];
+        moduleTrees = moduleTrees ++ [config managed shared users];
         roles = roles ++ [darwin];
         extraModules = extraModules ++ [hm];
       });
 
   mkHomeHost = host: {
+    # TODO: use and propagate instead of hardcoding it in `standalone.nix`.
+    username ? "delay",
     system ? "x86_64-linux",
     moduleTrees ? [],
     roles ? [],
@@ -97,10 +102,11 @@
   } @ args':
     mkHost (args'
       // {
-        inherit host system extraModules;
+        inherit host system;
         builder = mkStandaloneHome;
-        moduleTrees = moduleTrees ++ [config shared users];
+        moduleTrees = moduleTrees ++ [config shared];
         roles = roles ++ [home];
+        extraModules = extraModules ++ [(import standalone username)];
       });
 
   mkNixosHost = host: {
@@ -116,7 +122,7 @@
       // {
         inherit host system;
         builder = mkNixosSystem;
-        moduleTrees = moduleTrees ++ [config shared users];
+        moduleTrees = moduleTrees ++ [config managed shared users];
         roles = roles ++ [nixos];
         extraModules = extraModules ++ [hm];
       });

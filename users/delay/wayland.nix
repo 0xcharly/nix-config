@@ -1,11 +1,14 @@
 {
-  osConfig,
   lib,
   pkgs,
   ...
-}: let
+} @ args: let
+  config =
+    if args ? osConfig
+    then args.osConfig
+    else args.config;
   inherit (pkgs.stdenv) isLinux;
-  inherit (osConfig.modules.usrenv) compositor;
+  inherit (config.modules.usrenv) compositor;
 
   enable = isLinux && compositor == "wayland";
 in {

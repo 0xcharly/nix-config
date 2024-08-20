@@ -1,12 +1,14 @@
 {
-  osConfig,
-  inputs,
   lib,
   pkgs,
   ...
-}: let
+} @ args: let
+  config =
+    if args ? osConfig
+    then args.osConfig
+    else args.config;
   inherit (pkgs.stdenv) isDarwin isLinux;
-  inherit (osConfig.modules.usrenv) isCorpManaged isHeadless;
+  inherit (config.modules.usrenv) isCorpManaged isHeadless;
 
   hasWindowManager = !isHeadless;
 
@@ -84,17 +86,20 @@ in {
   # Env vars and dotfiles
   #---------------------------------------------------------------------
 
-  home.sessionVariables = {
-    LANG = "en_US.UTF-8";
-    LC_CTYPE = "en_US.UTF-8";
-    LC_ALL = "en_US.UTF-8";
-    BAT_THEME = "base16";
-    EDITOR = lib.getExe pkgs.nvim;
-    PAGER = "less -FirSwX";
-    MANPAGER = "${lib.getExe pkgs.nvim} +Man!";
-    SHELL = lib.getExe pkgs.zsh;
-    TERMINAL = lib.getExe pkgs.ghostty;
-  };
+  home.sessionVariables =
+    {
+      LANG = "en_US.UTF-8";
+      LC_CTYPE = "en_US.UTF-8";
+      LC_ALL = "en_US.UTF-8";
+      BAT_THEME = "base16";
+      EDITOR = lib.getExe pkgs.nvim;
+      PAGER = "less -FirSwX";
+      MANPAGER = "${lib.getExe pkgs.nvim} +Man!";
+      SHELL = lib.getExe pkgs.zsh;
+    }
+    // lib.optionalAttrs hasWindowManager {
+      TERMINAL = lib.getExe pkgs.ghostty;
+    };
 
   xdg = {
     enable = true;

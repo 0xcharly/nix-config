@@ -3,6 +3,7 @@
     ./aarch64-darwin.nix
     ./homebrew.nix
     ./macos.nix
+    ./nix-client-config.nix
     ./nix-homebrew.nix
     ./nix-index.nix
     ./unfree.nix

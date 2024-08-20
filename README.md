@@ -250,3 +250,20 @@ Once `home-manager` is installed, successive incremental changes are applied wit
 ```shell
 home-manager switch --flake .
 ```
+
+### Nix client configuration
+
+Note that some attributes in `~/.config/nix/nix.conf` are ignored in standalone
+mode, namely `trusted-users`, which resuls in many warnings:
+
+```
+warning: ignoring untrusted substituter 'https://<prefix>.cachix.org', you are not a trusted user.
+Run `man nix.conf` for more information on the `substituters` configuration option.
+```
+
+A workaround is to add the current user to the `trusted-users` list directly in
+the system configuration file `/etc/nix/nix.conf`:
+
+```shell
+sudo echo "trusted-users = $(whoami)" >> /etc/nix/nix.conf
+```

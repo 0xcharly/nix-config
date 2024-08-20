@@ -58,11 +58,14 @@
       inputs.home-manager.lib.homeManagerConfiguration {
         # Arguments passed to all modules.
         extraSpecialArgs = recursiveUpdate {
-          inherit lib usrlib;
+          inherit usrlib;
           inherit self inputs' self';
           # TODO: need to massage `inputs'`?
           inputs = inputs // injectInputs;
         } (args.extraSpecialArgs or {});
+
+        # Explicit `pkgs` argument for standalone home-manager installs.
+        pkgs = inputs'.nixpkgs.legacyPackages;
 
         # Module list.
         modules = args.modules or [];

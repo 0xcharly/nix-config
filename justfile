@@ -29,7 +29,7 @@ switch:
     if test (grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"
       set REBUILD_COMMAND "sudo nixos-rebuild"
     else
-      set REBUILD_COMMAND "home-manager"
+      set REBUILD_COMMAND "home-manager switch -b hm.bak"
     end
     eval $REBUILD_COMMAND {{ rebuildOptions }} switch --flake .
 
@@ -38,11 +38,8 @@ switch:
 test:
     #! /usr/bin/env fish
     if test (grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"
-      set REBUILD_COMMAND "sudo nixos-rebuild"
-    else
-      set REBUILD_COMMAND "home-manager"
+      sudo nixos-rebuild {{ rebuildOptions }} test --flake .
     end
-    eval $REBUILD_COMMAND {{ rebuildOptions }} test --flake .
 
 [doc('Update the given flake input')]
 [macos]
