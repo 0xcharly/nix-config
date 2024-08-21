@@ -5,25 +5,6 @@
 }: let
   inherit (pkgs.stdenv) isDarwin;
 
-  writePython312 = pkgs.writers.makePythonWriter pkgs.python312 pkgs.python312Packages pkgs.buildPackages.python312Packages;
-  writePython312Bin = name: writePython312 "/bin/${name}";
-
-  sekrets = writePython312Bin "sekrets" {
-    libraries = with pkgs.python312Packages; [
-      bcrypt
-      cryptography
-      rich
-    ];
-    flakeIgnore = ["E501"]; # Line length.
-  } (builtins.readFile ./bin/sekrets.py);
-  sekrets-wrapper = pkgs.writeShellApplication {
-    name = "sekrets";
-    runtimeInputs = [pkgs._1password];
-    text = ''
-      ${lib.getExe sekrets} "$@"
-    '';
-  };
-
   adb-scrcpy-pkg = pkgs.writeShellApplication {
     name = "adb-scrcpy";
     runtimeInputs = [pkgs.scrcpy];
@@ -44,7 +25,7 @@ in {
     ]
     ++ lib.optionals isDarwin [
       adb-scrcpy-pkg
-      sekrets-wrapper
+      pkgs.sekrets
     ];
 
   # Raycast expects script attributes to be listed at the top of the file,
