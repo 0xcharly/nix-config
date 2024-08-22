@@ -79,7 +79,7 @@ in rec {
           key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPf5EWFb/MW+1ZdQxDLZJWPrgrtibMcCmmKeCp+QMWBl";
         };
       }
-      (lib.optionals isDarwin {signing.backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";});
+      (lib.optionalAttrs isDarwin {signing.backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";});
   };
 
   # Jujutsu config path is wrong on macOS.
