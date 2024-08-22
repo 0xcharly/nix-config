@@ -7,7 +7,7 @@
   ...
 }: let
   inherit (self) inputs;
-  inherit (lib.modules) mkForce;
+  inherit (lib.modules) mkDefault mkForce;
   inherit (lib.attrsets) genAttrs;
 in {
   home-manager = {
@@ -51,6 +51,10 @@ in {
       {
         # Ensure that HM uses the same Nix package as the system.
         nix.package = mkForce config.nix.package;
+
+        # The state version indicates which default settings are in effect and
+        # will therefore help avoid breaking program configurations.
+        home.stateVersion = mkDefault "24.05";
 
         # Allow HM to manage itself when in standalone mode.
         # This makes the home-manager command available to users.

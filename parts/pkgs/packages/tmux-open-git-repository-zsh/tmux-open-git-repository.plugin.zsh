@@ -75,14 +75,14 @@ tmux-open-git-repository() {
 
   # Don't reimplement the functions from the fzf integration, just reuse them.
   if ! whence -w __fzfcmd >/dev/null || ! whence -w __fzf_defaults >/dev/null; then
-    >&2 echo "error: fzf ZSH integration not loaded"
+    >&2 echo "error: fzf ZSH integration not loaded (\`programs.fzf.enableZshIntegration = true\`)"
     zle redisplay
     return 1
   fi
 
   # Use FZF to get user input.
   local gitget_root="$(eval realpath $(git config gitget.root))"
-  local cmd="${TMUX_OPEN_GIT_REPOSITORY_COMMAND:-"command git list -o flat |ansifilter |rg '^/' --color=never |awk '{print \$1}' |xargs realpath -s --relative-to \"$gitget_root\" 2> /dev/null"}"
+  local cmd="${TMUX_OPEN_GIT_REPOSITORY_COMMAND:-"command git list -o flat |command ansifilter |rg '^/' --color=never |awk '{print \$1}' |xargs realpath -s --relative-to \"$gitget_root\" 2> /dev/null"}"
   local repository="$(eval "$cmd" |
     FZF_DEFAULT_OPTS=$(__fzf_defaults "" "--reverse --bind=ctrl-r:toggle-sort --highlight-line ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} +m") \
     FZF_DEFAULT_OPTS_FILE='' $(__fzfcmd))"
@@ -106,17 +106,17 @@ tmux-open-git-repository() {
   exec <&1
 
   # Check if the session exists already, or create it otherwise.
-  if ! tmux has-session -t "$sanitized_repository" 2>/dev/null; then
+  if ! command tmux has-session -t "$sanitized_repository" 2>/dev/null; then
     # Create a detached session that we'll join below.
-    tmux new-session -ds "$sanitized_repository" -c "$gitget_root/$repository"
+    command tmux new-session -ds "$sanitized_repository" -c "$gitget_root/$repository"
   fi
 
   if [ -z "${TMUX:-}" ]; then
     # If not running in a tmux client, attach to the session.
-    tmux attach-session -t "$sanitized_repository"
+    command tmux attach-session -t "$sanitized_repository"
   else
     # If already running in a tmux client, switch to the session.
-    tmux switch-client -t "$sanitized_repository"
+    command tmux switch-client -t "$sanitized_repository"
   fi
 
   local ret=$?
