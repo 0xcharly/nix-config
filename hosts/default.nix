@@ -92,7 +92,6 @@
       });
 
   mkHomeHost = host: {
-    # TODO: use and propagate instead of hardcoding it in `standalone.nix`.
     username ? "delay",
     system ? "x86_64-linux",
     moduleTrees ? [],
