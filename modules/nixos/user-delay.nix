@@ -6,7 +6,7 @@
     isNormalUser = true;
     home = "/home/delay";
     extraGroups = ["docker" "wheel"];
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
     # Create a hashed password with `nix-shell -p mkpasswd --run "mkpasswd -m yescrypt"`
     hashedPassword = "$y$j9T$6Obep7H1BnzgcBCOdY9hO/$tyLpdkxXnRPumeqlm43Uh4UPj1UQgymEiREPSr49ZR1";
     openssh.authorizedKeys.keys = [
