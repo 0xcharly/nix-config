@@ -4,12 +4,6 @@
   ...
 }: let
   inherit (pkgs.stdenv) isDarwin;
-
-  adb-scrcpy-pkg = pkgs.writeShellApplication {
-    name = "adb-scrcpy";
-    runtimeInputs = [pkgs.scrcpy];
-    text = builtins.readFile ./bin/adb-scrcpy.sh;
-  };
 in {
   home.packages =
     [
@@ -24,13 +18,12 @@ in {
       })
     ]
     ++ lib.optionals isDarwin [
-      adb-scrcpy-pkg
       pkgs.sekrets
     ];
 
   # Raycast expects script attributes to be listed at the top of the file,
   # so a simple wrapper does not work. This *needs* to be a symlink.
   xdg.configFile = lib.optionalAttrs isDarwin {
-    "raycast/bin/adb-scrcpy".source = lib.getExe adb-scrcpy-pkg;
+    "raycast/bin/scrcpy".source = lib.getExe pkgs.raycast-scrcpy;
   };
 }
