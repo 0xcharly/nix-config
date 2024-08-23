@@ -29,8 +29,8 @@
           inherit inputs' self';
 
           # TODO: need to massage `inputs'`?
-          inputs = inputs // args.inputs;
-          self = self // args.self;
+          inputs = recursiveUpdate inputs (args.inputs or {});
+          self = recursiveUpdate self (args.self or {});
         } (args.specialArgs or {});
 
         # Module list.
@@ -62,8 +62,8 @@
           inherit inputs' self';
 
           # TODO: need to massage `inputs'`?
-          inputs = inputs // (args.inputs or {});
-          self = self // (args.self or {});
+          inputs = recursiveUpdate inputs (args.inputs or {});
+          self = recursiveUpdate self (args.self or {});
         } (args.extraSpecialArgs or {});
 
         # Explicit `pkgs` argument for standalone home-manager installs.
