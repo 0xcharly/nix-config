@@ -8,7 +8,7 @@
 # To make use of this derivation, use:
 # ```
 #   programs.fzf.enableZshIntegration = true;
-#   programs.zsh.extraConfig = "source ${pkgs.tmux-open-git-repository-zsh}/share/zsh/plugins/tmux-open-git-repository-zsh/tmux-open-git-repository.plugin.zsh";
+#   programs.zsh.extraConfig = "source ${pkgs.tmux-open-git-repository-zsh}/share/zsh/plugins/tmux-open-git-repository/tmux-open-git-repository.plugin.zsh";
 # ```
 stdenv.mkDerivation {
   pname = "tmux-open-git-repository-zsh";
