@@ -115,5 +115,6 @@ in {
     pkgs.fishPlugins.done
     pkgs.fishPlugins.fzf
     pkgs.fishPlugins.transient-fish
+    pkgs.open-local-repository-fish
   ];
 }
