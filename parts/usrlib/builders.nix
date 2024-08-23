@@ -15,7 +15,6 @@
     withSystem,
     system,
     hostname,
-    injectInputs ? {},
     ...
   } @ args:
     withSystem system ({
@@ -27,9 +26,11 @@
         # Arguments passed to all modules.
         specialArgs = recursiveUpdate {
           inherit lib usrlib;
-          inherit self inputs' self';
+          inherit inputs' self';
+
           # TODO: need to massage `inputs'`?
-          inputs = inputs // injectInputs;
+          inputs = inputs // args.inputs;
+          self = self // args.self;
         } (args.specialArgs or {});
 
         # Module list.
@@ -47,7 +48,6 @@
   mkStandaloneHome = {
     withSystem,
     system,
-    injectInputs ? {},
     ...
   } @ args:
     withSystem system ({
@@ -59,9 +59,11 @@
         # Arguments passed to all modules.
         extraSpecialArgs = recursiveUpdate {
           inherit usrlib;
-          inherit self inputs' self';
+          inherit inputs' self';
+
           # TODO: need to massage `inputs'`?
-          inputs = inputs // injectInputs;
+          inputs = inputs // (args.inputs or {});
+          self = self // (args.self or {});
         } (args.extraSpecialArgs or {});
 
         # Explicit `pkgs` argument for standalone home-manager installs.
