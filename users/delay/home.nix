@@ -72,7 +72,7 @@ in rec {
           name = "Charly Delay";
         };
         template-aliases."format_timestamp(timestamp)" = "timestamp.ago()";
-        ui."default-command" = "log";
+        ui."default-command" = "status";
         signing = {
           sign-all = true;
           backend = "ssh";
