@@ -68,7 +68,7 @@ in rec {
     settings =
       lib.recursiveUpdate {
         user = {
-          email = "0x0@0xcharly.com";
+          email = "0@0xcharly.com";
           name = "Charly Delay";
         };
         template-aliases."format_timestamp(timestamp)" = "timestamp.ago()";
@@ -93,7 +93,7 @@ in rec {
   programs.git = {
     enable = true;
     userName = "Charly Delay";
-    userEmail = "0x0@0xcharly.com";
+    userEmail = "0@0xcharly.com";
     signing = {
       key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPf5EWFb/MW+1ZdQxDLZJWPrgrtibMcCmmKeCp+QMWBl";
       signByDefault = true;
