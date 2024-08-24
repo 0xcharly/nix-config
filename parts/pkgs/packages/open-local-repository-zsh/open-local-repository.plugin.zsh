@@ -115,10 +115,8 @@ open-local-repository() {
   # Check if the session exists already, or create it otherwise.
   if ! command tmux has-session -t "$sanitized_repository" 2>/dev/null; then
     # Create a detached session that we'll join below.
-    command tmux new-session -ds "$sanitized_repository"
-    command tmux send-keys -t "$sanitized_repository" "cd \"$repository\"" Enter
-    command tmux send-keys -t "$sanitized_repository" "clear" Enter
-    # command tmux send-keys -t "$sanitized_repository" "cd \"$gitget_root/$repository\"" Enter
+    command tmux new-session -ds "$sanitized_repository" -c "$repository"
+    # command tmux new-session -ds "$sanitized_repository" -c "$gitget_root/$repository"
   fi
 
   if [ -z "${TMUX:-}" ]; then
