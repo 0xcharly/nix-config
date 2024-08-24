@@ -2,6 +2,11 @@ function __open_local_repository -d 'List local repositories organized following
   set -l query (commandline)
   set -l gitget_root (eval realpath (git config gitget.root))
 
+  if ! test -d "$gitget_root"
+    echo "git-get root directory missing or not configured" >&2
+    return 1
+  end
+
   set -q OPEN_GIT_REPOSITORY_COMMAND
   or set -l OPEN_GIT_REPOSITORY_COMMAND "
     command git list -o flat \

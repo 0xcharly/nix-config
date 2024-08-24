@@ -80,8 +80,15 @@ open-local-repository() {
     return 1
   fi
 
-  # Use FZF to get user input.
+  # Get the root directory.
   local gitget_root="$(eval realpath $(git config gitget.root))"
+
+  if ! test -d "$gitget_root"; then
+    >&2 echo "git-get root directory missing or not configured"
+    return 1
+  fi
+
+  # Use FZF to get user input.
   local cmd="${TMUX_OPEN_GIT_REPOSITORY_COMMAND:-"command git list -o flat |command ansifilter |rg '^/' --color=never |awk '{print \$1}' |xargs realpath -s --relative-to \"$gitget_root\" 2> /dev/null"}"
   local repository="$(eval "$cmd" |
     FZF_DEFAULT_OPTS=$(__fzf_defaults "" "--reverse --bind=ctrl-r:toggle-sort --highlight-line ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} +m") \
