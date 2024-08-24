@@ -83,7 +83,14 @@ in {
     initExtra = lib.strings.concatStringsSep "\n" [
       ''
         setopt HIST_REDUCE_BLANKS
-        setopt INC_APPEND_HISTORY # Use `fc -RI` to reload history.
+
+        # See https://zsh.sourceforge.io/Doc/Release/Options.html
+        # If you find that you want more control over when commands get
+        # imported, you may wish to turn SHARE_HISTORY off, INC_APPEND_HISTORY
+        # or INC_APPEND_HISTORY_TIME (see above) on, and then manually import
+        # commands whenever you need them using ‘fc -RI’.
+        unsetopt SHARE_HISTORY
+        setopt INC_APPEND_HISTORY
       ''
       # Our own ZSH plugins.
       ''
