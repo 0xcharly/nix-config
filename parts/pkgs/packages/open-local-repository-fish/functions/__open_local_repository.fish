@@ -12,8 +12,7 @@ function __open_local_repository -d 'List local repositories organized following
     command git list -o flat \
     | command ansifilter \
     | command rg '^/' --color=never \
-    | command awk '{print \$1}' \
-    | xargs realpath -s --relative-to \"\$gitget_root\" 2> /dev/null"
+    | command awk '{print \$1}' 2> /dev/null"
 
   set -l FZF_DEFAULT_OPTS (__fzf_defaults "" "+m --reverse --bind=ctrl-r:toggle-sort --highlight-line \$FZF_CTRL_R_OPTS --query=\"\$query\"")
   eval "$OPEN_GIT_REPOSITORY_COMMAND | " (__fzfcmd) "$FZF_DEFAULT_OPTS" | read -l repository
@@ -31,6 +30,9 @@ function __open_local_repository -d 'List local repositories organized following
   if ! command tmux has-session -t "$sanitized_repository" 2>/dev/null
     # Create a detached session that we'll join below, creating the workspace if it doesn't exist.
     command tmux new-session -ds "$sanitized_repository" -c "$gitget_root/$repository"
+    command tmux send-keys -t "$sanitized_repository" "cd \"$repository\"" Enter
+    command tmux send-keys -t "$sanitized_repository" "clear" Enter
+    #command tmux send-keys -t "$sanitized_repository" "cd \"$gitget_root/$repository\"" Enter
   end
 
   if test -z "$TMUX"
