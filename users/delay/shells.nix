@@ -94,7 +94,7 @@ in {
       ''
       # Our own ZSH plugins.
       ''
-        source ${pkgs.tmux-open-git-repository-zsh}/share/zsh/plugins/tmux-open-git-repository/tmux-open-git-repository.plugin.zsh
+        source ${pkgs.open-local-repository-zsh}/share/zsh/plugins/open-local-repository/open-local-repository.plugin.zsh
       ''
       (builtins.readFile ./rprompt.zsh)
       (lib.optionalString isLinux "eval $(${lib.getExe pkgs.keychain} --eval --nogui --quiet)")

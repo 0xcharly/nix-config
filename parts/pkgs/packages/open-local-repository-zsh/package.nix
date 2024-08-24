@@ -8,17 +8,17 @@
 # To make use of this derivation, use:
 # ```
 #   programs.fzf.enableZshIntegration = true;
-#   programs.zsh.extraConfig = "source ${pkgs.tmux-open-git-repository-zsh}/share/zsh/plugins/tmux-open-git-repository/tmux-open-git-repository.plugin.zsh";
+#   programs.zsh.extraConfig = "source ${pkgs.open-local-repository-zsh}/share/zsh/plugins/open-local-repository/open-local-repository.plugin.zsh";
 # ```
 stdenv.mkDerivation {
-  pname = "tmux-open-git-repository-zsh";
+  pname = "open-local-repository-zsh";
   version = "2024-08-22";
 
   src = ./.;
 
   strictDeps = true;
   postPatch = ''
-    substituteInPlace tmux-open-git-repository.plugin.zsh \
+    substituteInPlace open-local-repository.plugin.zsh \
       --replace 'command ansifilter' 'command ${lib.getExe ansifilter}' \
       --replace 'command git' 'command ${lib.getExe git}' \
       --replace 'command tmux' 'command ${lib.getExe tmux}'
@@ -26,8 +26,8 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
-    install -Dm0644 tmux-open-git-repository.plugin.zsh \
-      $out/share/zsh/plugins/tmux-open-git-repository/tmux-open-git-repository.plugin.zsh
+    install -Dm0644 open-local-repository.plugin.zsh \
+      $out/share/zsh/plugins/open-local-repository/open-local-repository.plugin.zsh
   '';
 
   meta = with lib; {

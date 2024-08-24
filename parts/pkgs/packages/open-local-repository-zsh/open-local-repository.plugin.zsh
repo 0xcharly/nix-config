@@ -70,7 +70,7 @@ fi
 if [[ -o interactive ]]; then
 
 # Open git repositories.
-tmux-open-git-repository() {
+open-local-repository() {
   setopt localoptions pipefail no_aliases 2> /dev/null
 
   # Don't reimplement the functions from the fzf integration, just reuse them.
@@ -130,10 +130,10 @@ tmux-open-git-repository() {
   return $ret
 }
 
-zle     -N            tmux-open-git-repository
-bindkey -M emacs '^F' tmux-open-git-repository
-bindkey -M vicmd '^F' tmux-open-git-repository
-bindkey -M viins '^F' tmux-open-git-repository
+zle     -N            open-local-repository
+bindkey -M emacs '^F' open-local-repository
+bindkey -M vicmd '^F' open-local-repository
+bindkey -M viins '^F' open-local-repository
 
 fi # [[ -o interactive ]]
 

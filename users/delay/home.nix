@@ -25,7 +25,7 @@ in rec {
   home.packages =
     [
       pkgs.coreutils # For consistency across platforms (i.e. GNU utils on macOS).
-      pkgs.git-get # Used along with open-git-repository for checkouts management.
+      pkgs.git-get # Used along with open-local-repository for checkouts management.
       pkgs.tree
 
       # Our own package installed by overlay.
