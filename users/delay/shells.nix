@@ -110,7 +110,6 @@ in {
     enable = true;
     interactiveShellInit = lib.strings.concatStringsSep "\n" [
       (builtins.readFile ./config.fish)
-      "set -g SHELL ${lib.getExe pkgs.fish}"
       (lib.optionalString isLinux "eval (${lib.getExe pkgs.keychain} --eval --nogui --quiet)")
     ];
 

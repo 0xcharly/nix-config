@@ -25,7 +25,7 @@ in rec {
   home.packages =
     [
       pkgs.coreutils # For consistency across platforms (i.e. GNU utils on macOS).
-      pkgs.git-get # Used along with tmux-open-git-repository-zsh for checkouts management.
+      pkgs.git-get # Used along with open-git-repository for checkouts management.
       pkgs.tree
 
       # Our own package installed by overlay.
@@ -50,7 +50,7 @@ in rec {
       EDITOR = lib.getExe pkgs.nvim;
       MANPAGER = "${lib.getExe pkgs.nvim} +Man!";
       PAGER = "less -FirSwX";
-      SHELL = lib.getExe pkgs.zsh;
+      SHELL = lib.getExe pkgs.fish;
     }
     // lib.optionalAttrs hasWindowManager {
       TERMINAL = lib.getExe pkgs.ghostty;
