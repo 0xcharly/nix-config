@@ -3,6 +3,7 @@
   fishPlugins,
   ansifilter,
   git,
+  path-strip-prefix,
   ripgrep,
   tmux,
 }:
@@ -15,6 +16,7 @@ fishPlugins.buildFishPlugin {
     substituteInPlace functions/__open_local_repository.fish \
       --replace 'command ansifilter' 'command ${lib.getExe ansifilter}' \
       --replace 'command git' 'command ${lib.getExe git}' \
+      --replace 'command path-strip-prefix' 'command ${lib.getExe path-strip-prefix}' \
       --replace 'command rg' 'command ${lib.getExe ripgrep}' \
       --replace 'command tmux' 'command ${lib.getExe tmux}'
   '';

@@ -89,7 +89,7 @@ open-local-repository() {
   fi
 
   # Use FZF to get user input.
-  local cmd="${TMUX_OPEN_GIT_REPOSITORY_COMMAND:-"command git list -o flat |command ansifilter |command rg '^/' --color=never |command awk '{print \$1}' 2> /dev/null"}"
+  local cmd="${TMUX_OPEN_GIT_REPOSITORY_COMMAND:-"command git list -o flat |command ansifilter |command rg '^/' --color=never |command awk '{print \$1}' |command path-strip-prefix \"$gitget_root\" 2> /dev/null"}"
   local repository="$(eval "$cmd" |
     FZF_DEFAULT_OPTS=$(__fzf_defaults "" "--reverse --bind=ctrl-r:toggle-sort --highlight-line ${FZF_CTRL_R_OPTS-} --query=${(qqq)LBUFFER} +m") \
     FZF_DEFAULT_OPTS_FILE='' $(__fzfcmd))"
@@ -115,8 +115,7 @@ open-local-repository() {
   # Check if the session exists already, or create it otherwise.
   if ! command tmux has-session -t "$sanitized_repository" 2>/dev/null; then
     # Create a detached session that we'll join below.
-    command tmux new-session -ds "$sanitized_repository" -c "$repository"
-    # command tmux new-session -ds "$sanitized_repository" -c "$gitget_root/$repository"
+    command tmux new-session -ds "$sanitized_repository" -c "$gitget_root/$repository"
   fi
 
   if [ -z "${TMUX:-}" ]; then

@@ -3,6 +3,8 @@
   stdenv,
   ansifilter,
   git,
+  path-strip-prefix,
+  ripgrep,
   tmux,
 }:
 # To make use of this derivation, use:
@@ -21,6 +23,8 @@ stdenv.mkDerivation {
     substituteInPlace open-local-repository.plugin.zsh \
       --replace 'command ansifilter' 'command ${lib.getExe ansifilter}' \
       --replace 'command git' 'command ${lib.getExe git}' \
+      --replace 'command path-strip-prefix' 'command ${lib.getExe path-strip-prefix}' \
+      --replace 'command rg' 'command ${lib.getExe ripgrep}' \
       --replace 'command tmux' 'command ${lib.getExe tmux}'
   '';
   dontBuild = true;
