@@ -123,15 +123,12 @@ in rec {
 
   programs.tmux = {
     enable = true;
-    terminal = "tmux";
     aggressiveResize = true;
-    secureSocket = true;
-
-    clock24 = true;
     escapeTime = 0;
     historyLimit = 10000;
     keyMode = "vi";
     mouse = true;
+    secureSocket = true;
     sensibleOnTop = false;
 
     extraConfig = builtins.readFile ./tmux.conf;
