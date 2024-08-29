@@ -14,7 +14,8 @@ if test $# -ne 1; then
 fi
 
 # SSH config to use the correct key to fetch private GitHub repositories.
-install -D -m 400 <(cat <<'EOF'
+install -D -m 400 <(
+  cat <<'EOF'
 Host github.com
   User git
   IdentityFile ~/.ssh/github

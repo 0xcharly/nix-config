@@ -20,12 +20,8 @@
     devShells.default = upkgs.mkShell {
       packages =
         [
-          # Packages provided by flake-parts modules
-          config.treefmt.build.wrapper # Quick formatting tree-wide with `treefmt`
-
           upkgs.alejandra
           upkgs.cachix
-          upkgs.fish
           upkgs.jq
           upkgs.just
           upkgs.lua-language-server
@@ -36,8 +32,28 @@
         ++ (lib.optionals isDarwin [upkgs._1password]);
 
       # Set up pre-commit hooks when user enters the shell.
-      shellHook = ''
+      shellHook = let
+        recipes = {
+          fmt = {
+            text = ''${lib.getExe config.treefmt.build.wrapper}'';
+            doc = "Format all files in the repository";
+          };
+        };
+        commonJustfile = pkgs.writeTextFile {
+          name = "justfile.incl";
+          text =
+            lib.concatStringsSep "\n"
+            (lib.mapAttrsToList (name: recipe: ''
+                ${lib.concatStringsSep "\n" (builtins.map (tag: "[${tag}]") (recipe.tags or []))}
+                [doc("${recipe.doc}")]
+                ${name}:
+                    ${recipe.text}
+              '')
+              recipes);
+        };
+      in ''
         ${config.pre-commit.installationScript}
+        ln -sf ${builtins.toString commonJustfile} ./justfile.incl
       '';
 
       # Tell Direnv to shut up.

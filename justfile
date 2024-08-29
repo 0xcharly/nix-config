@@ -1,3 +1,5 @@
+import 'justfile.incl'
+
 set shell := ['fish', '-c']
 
 hostname := `hostname`
@@ -8,19 +10,10 @@ rebuildOptions := '--option accept-flake-config true --show-trace'
 default:
     @just --list
 
-[doc('Format all files in the repository')]
-fmt:
-    treefmt
-
 [doc("Rebuild the current darwin host's configuration")]
 [macos]
 switch:
     darwin-rebuild {{ rebuildOptions }} switch --flake .
-
-[doc("Rebuild the current darwin host's configuration")]
-[macos]
-test:
-    darwin-rebuild {{ rebuildOptions }} test --flake .
 
 [doc("Rebuild the current host's configuration")]
 [linux]
