@@ -2,22 +2,8 @@
   lib,
   pkgs,
   ...
-} @ args: let
+}: let
   inherit (pkgs.stdenv) isLinux;
-
-  shellAliases = shell:
-    {
-      # Shortcut to setup a nix-shell with `shell`. This lets you do something
-      # like `nixsh -p go` to get an environment with Go but use `shell` along
-      # with it.
-      nixsh = "nix-shell --run ${shell}";
-      devsh = "nix develop --command ${shell}";
-    }
-    // (lib.optionalAttrs isLinux {
-      # For consistency with macOS.
-      pbcopy = lib.getExe pkgs.xclip;
-      pbpaste = "${lib.getExe pkgs.xclip} -o";
-    });
 in {
   programs.bash.enable = true;
   programs.htop.enable = true;
@@ -78,7 +64,19 @@ in {
     ];
 
     functions.fish_mode_prompt = ""; # Disable prompt vi mode reporting.
-    shellAliases = shellAliases (lib.getExe pkgs.fish);
+    shellAliases =
+      {
+        # Shortcut to setup a nix-shell with `shell`. This lets you do something
+        # like `nixsh -p go` to get an environment with Go but use `shell` along
+        # with it.
+        nixsh = "nix-shell --run ${lib.getExe pkgs.fish}";
+        devsh = "nix develop --command ${lib.getExe pkgs.fish}";
+      }
+      // (lib.optionalAttrs isLinux {
+        # For consistency with macOS.
+        pbcopy = lib.getExe pkgs.xclip;
+        pbpaste = "${lib.getExe pkgs.xclip} -o";
+      });
   };
 
   home.packages = [
