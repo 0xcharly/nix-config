@@ -1,6 +1,6 @@
 {pkgs, ...}: {
-  # Since we're using ZSH as our shell.
-  programs.zsh.enable = true;
+  # Since we're using Fish as our shell.
+  programs.fish.enable = true;
 
   users.users.delay = {
     isNormalUser = true;
