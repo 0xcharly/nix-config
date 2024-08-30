@@ -1,4 +1,4 @@
-import 'justfile.incl'
+import '.justfile.incl'
 
 set shell := ['fish', '-c']
 

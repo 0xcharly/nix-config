@@ -1,5 +1,6 @@
 .DS_Store
 /result
 /.pre-commit-config.yaml
+/.justfile.incl
 .direnv/
 target/
