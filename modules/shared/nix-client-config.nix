@@ -22,4 +22,10 @@
       "0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU="
     ];
   };
+
+  # Do garbage collection weekly.
+  nix.gc = {
+    automatic = true;
+    options = "--delete-older-than 7d";
+  };
 }
