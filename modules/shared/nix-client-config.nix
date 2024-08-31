@@ -23,9 +23,6 @@
     ];
   };
 
-  # Do garbage collection weekly.
-  nix.gc = {
-    automatic = true;
-    options = "--delete-older-than 7d";
-  };
+  nix.gc.automatic = true; # Run garbage collection periodically. Default is weekly.
+  nix.optimise.automatic = true; # Optimise nix store regularly. Defaults to weekly.
 }
