@@ -57,7 +57,10 @@
     };
 
     # macOS only: Homebrew for Nix.
-    homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+    nix-homebrew = {
+      url = "github:zhaofengli/nix-homebrew";
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
+    };
 
     # Neovim.
     nix-config-nvim.url = "github:0xcharly/nix-config-nvim";

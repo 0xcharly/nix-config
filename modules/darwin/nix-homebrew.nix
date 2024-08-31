@@ -4,7 +4,7 @@
   ...
 }: {
   # Nix-managed homebrew.
-  imports = [inputs.homebrew.darwinModules.nix-homebrew];
+  imports = [inputs.nix-homebrew.darwinModules.nix-homebrew];
 
   nix-homebrew = {
     enable = true; # Install Homebrew under the default prefix.
