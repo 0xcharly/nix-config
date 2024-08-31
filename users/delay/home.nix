@@ -59,7 +59,27 @@ in rec {
   xdg = {
     enable = true;
     configFile = {
-      "ghostty/config".source = ./ghostty;
+      "ghostty/config".text =
+        lib.generators.toKeyValue {
+          listsAsDuplicateKeys = true;
+        } {
+          font-family = "mononoki";
+          font-size = 16;
+          theme = "catppuccin-mocha";
+          minimum-contrast = 1.1;
+          cursor-style = "block";
+          cursor-style-blink = false;
+          mouse-hide-while-typing = true;
+          background-opacity = 0.95;
+          unfocused-split-opacity = 1.0;
+          background-blur-radius = 20;
+          window-padding-balance = true;
+          title = "‎";
+          keybind = "super+shift+comma=reload_config";
+          shell-integration-features = "no-cursor,no-sudo,no-title";
+          confirm-close-surface = false;
+          quit-after-last-window-closed = true;
+        };
     };
   };
 
