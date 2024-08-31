@@ -1,5 +1,6 @@
 {inputs, ...}: {
   perSystem = {
+    inputs',
     config,
     lib,
     pkgs,
@@ -20,6 +21,8 @@
     devShells.default = upkgs.mkShell {
       packages =
         [
+          inputs'.agenix.packages.default # agenix CLI for secrets management
+
           upkgs.alejandra
           upkgs.cachix
           upkgs.jq

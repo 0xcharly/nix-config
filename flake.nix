@@ -76,6 +76,16 @@
 
     # Other packages.
     jujutsu.url = "github:martinvonz/jj";
+
+    # Secrets management
+    # NOTE: See comment in ./modules/shared/module.nix.
+    # Input is still referenced in devshells for future use/experimentation.
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+      inputs.darwin.follows = "nixpkgs-darwin";
+    };
   };
 
   nixConfig = {
