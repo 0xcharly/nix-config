@@ -18,10 +18,9 @@
           exportGlyphNames = false
         '';
       })
-      (nerdfonts.override {fonts = ["IosevkaTerm" "NerdFontsSymbolsOnly"];})
+      (nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})
       font-awesome_6
       material-design-icons
-      monaspace
       mononoki
       noto-fonts
       noto-fonts-cjk
