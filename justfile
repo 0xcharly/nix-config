@@ -71,3 +71,12 @@ cache:
     nix build ".#$CONFIG_PREFIX.{{ hostname }}.config.system.build.toplevel" --json \
       | jq -r '.[].outputs | to_entries[].value' \
       | cachix push 0xcharly-nixos-config
+
+# Generate ~/.config/nix/nix.conf and populate the access token for github.com
+# from 1Password.
+[doc('Generate ~/.config/nix/nix.conf')]
+[macos]
+generate-nix-conf:
+    install -D -m 400 (echo "access-tokens = github.com=$( \
+        op read 'op://Private/GitHub Fine-grained token for Nix/password' \
+    )" | psub) $HOME/.config/nix/nix.conf
