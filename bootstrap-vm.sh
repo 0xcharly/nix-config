@@ -19,6 +19,9 @@ install -D -m 400 <(
 Host github.com
   User git
   IdentityFile ~/.ssh/github
+  StrictHostKeyChecking no
+  PubkeyAuthentication yes
+  UserKnownHostsFile /dev/null
 EOF
 ) $HOME/.ssh/config
 

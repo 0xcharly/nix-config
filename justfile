@@ -96,13 +96,35 @@ generate-nix-conf:
 ssh_user := `whoami`
 ssh_port := '22'
 ssh_options := '-o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+pre_bootstrap_ssh_options := '-o PubkeyAuthentication=no -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 
-# Expects the guest OS to be fully installed.
+[doc('Install NixOS on a local VMWare Fusion virtual machine')]
+[group('bootstrap')]
+[macos]
+bootstrap-vm-aarch64 addr:
+    #! /usr/bin/env fish
+
+    # Copy the configuration to the VM and run the bootstrap script. The GitHub
+    # SSH key is copied over to fetch flake inputs that point to private GitHub
+    # repositories.
+
+    # NOTE: the `--skip-passphrase` option is suboptimal, but the key only lives
+    # in RAM until the install completes and the machine reboots.
+    # TODO: remove secret once Ghostty is public.
+    sekrets read-ssh-key -k github --skip-passphrase -o - \
+      | ssh {{ pre_bootstrap_ssh_options }} -p{{ ssh_port }} -lroot {{ addr }} \
+      'bash -c "install -D -m 400 <(dd) \$HOME/.ssh/github"'
+    tar -C {{ justfile_directory() }} -czf - parts/ hosts/ modules/ users/ flake.lock flake.nix bootstrap-vm.sh \
+      | ssh {{ pre_bootstrap_ssh_options }} -p{{ ssh_port }} -lroot {{ addr }} \
+      'mkdir -p /nix-config && tar -C /nix-config -xmzf - && nix-shell -p git --run "bash /nix-config/bootstrap-vm.sh vm-aarch64"'
+
 [doc('Copy secrets to the host')]
 [group('secrets')]
 [macos]
 ssh-copy-secrets host:
     #! /usr/bin/env fish
+
+    # Expects the guest OS to be fully installed.
     for key in github git-commit-signing
       sekrets read-ssh-key -k $key -o - \
           | ssh {{ ssh_options }} -p{{ ssh_port }} -l{{ ssh_user }} {{ host }} \
