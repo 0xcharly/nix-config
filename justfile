@@ -6,16 +6,19 @@ hostname := `hostname`
 rebuildOptions := '--option accept-flake-config true --show-trace'
 
 [doc('List all available commands')]
+[group('nix')]
 [private]
 default:
     @just --list
 
 [doc("Rebuild the current darwin host's configuration")]
+[group('nix')]
 [macos]
 switch:
     darwin-rebuild {{ rebuildOptions }} switch --flake .
 
 [doc("Rebuild the current host's configuration")]
+[group('nix')]
 [linux]
 switch:
     #! /usr/bin/env fish
@@ -27,6 +30,7 @@ switch:
     eval $REBUILD_COMMAND {{ rebuildOptions }} switch --flake .
 
 [doc("Rebuild the current host's configuration")]
+[group('nix')]
 [linux]
 test:
     #! /usr/bin/env fish
@@ -35,11 +39,13 @@ test:
     end
 
 [doc('Update the given flake input')]
+[group('nix')]
 [macos]
 update input:
   nix flake update {{ input }}
 
 [doc('Update the given flake input')]
+[group('nix')]
 [linux]
 update input:
   nix flake lock --update-input {{ input }}
@@ -49,6 +55,7 @@ update input:
 # This does not alter the current running system. Requires cachix authentication
 # to be configured out of band.
 [doc('Build the given configuration and push the results to the cache')]
+[group('nix')]
 [macos]
 cache:
     nix build '.#darwinConfigurations.{{ hostname }}.config.system.build.toplevel' --json \
@@ -60,6 +67,7 @@ cache:
 # This does not alter the current running system. Requires cachix authentication
 # to be configured out of band.
 [doc('Build the given configuration and push the results to the cache')]
+[group('nix')]
 [linux]
 cache:
     #! /usr/bin/env fish
@@ -75,8 +83,24 @@ cache:
 # Generate ~/.config/nix/nix.conf and populate the access token for github.com
 # from 1Password.
 [doc('Generate ~/.config/nix/nix.conf')]
+[group('secrets')]
 [macos]
 generate-nix-conf:
     install -D -m 400 (echo "access-tokens = github.com=$( \
         op read 'op://Private/GitHub Fine-grained token for Nix/password' \
     )" | psub) $HOME/.config/nix/nix.conf
+
+ssh_user := `whoami`
+ssh_port := '22'
+ssh_options := '-o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+
+# Expects the guest OS to be fully installed.
+[doc('Copy secrets to the host')]
+[group('secrets')]
+[macos]
+ssh-copy-secrets host:
+    for key in github git-commit-signing; do \
+        sekrets read-ssh-key -k $key -o - \
+            | ssh {{ ssh_options }} -p{{ ssh_port }} -l{{ ssh_user }} {{ host }} \
+            "bash -c \"install -D -m 400 <(dd) \$HOME/.ssh/$key\""; \
+    done

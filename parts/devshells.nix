@@ -48,6 +48,7 @@
             lib.concatStringsSep "\n"
             (lib.mapAttrsToList (name: recipe: ''
                 ${lib.concatStringsSep "\n" (builtins.map (tag: "[${tag}]") (recipe.tags or []))}
+                [group('devshell')]
                 [doc("${recipe.doc}")]
                 ${name}:
                     ${recipe.text}
