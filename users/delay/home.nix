@@ -1,4 +1,5 @@
 {
+  inputs,
   lib,
   pkgs,
   ...
@@ -9,6 +10,11 @@
     else args.config;
   inherit (pkgs.stdenv) isDarwin isLinux;
   inherit (config.modules.usrenv) isHeadless;
+
+  # Unstable package repository.
+  upkgs = import inputs.nixpkgs-unstable {
+    inherit (pkgs) system;
+  };
 
   hasWindowManager = !isHeadless;
 in rec {
@@ -85,6 +91,8 @@ in rec {
 
   programs.jujutsu = {
     enable = true;
+    # Install jujutsu from `nixpkgs-unstable`
+    package = upkgs.jujutsu;
     settings =
       lib.recursiveUpdate {
         user = {

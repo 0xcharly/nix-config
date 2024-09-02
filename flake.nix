@@ -74,9 +74,6 @@
       inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
     };
 
-    # Other packages.
-    jujutsu.url = "github:martinvonz/jj";
-
     # Secrets management
     # NOTE: See comment in ./modules/shared/module.nix.
     # Input is still referenced in devshells for future use/experimentation.
