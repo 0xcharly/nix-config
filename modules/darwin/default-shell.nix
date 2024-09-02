@@ -1,4 +1,8 @@
-{config, lib, ...}: let
+{
+  config,
+  lib,
+  ...
+}: let
   # Converts a valid argument to user.shell into a string that points to a shell
   # executable. Logic copied from nix-darwin/modules/system/shells.nix.
   shellPath = v:
@@ -22,7 +26,8 @@ in {
     echo "setting up users' shell..." >&2
 
     ${lib.concatMapStringsSep "\n" (v: ''
-      dscl . -create '/Users/${v.name}' UserShell ${lib.escapeShellArg (shellPath v.shell)}
-    '') createdUsers}
+        dscl . -create '/Users/${v.name}' UserShell ${lib.escapeShellArg (shellPath v.shell)}
+      '')
+      createdUsers}
   '';
 }

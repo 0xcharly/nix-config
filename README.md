@@ -31,7 +31,7 @@ three-finger swipe or use other keyboard shortcuts to activate that window.
 
 ### NixOS VM setup
 
->[!NOTE]
+> [!NOTE]
 >
 > This setup guide will cover VMware Fusion because that is the hypervisor I use
 > day to day.
@@ -51,14 +51,14 @@ Create a VMware Fusion VM with the following settings. My configurations are
 made for VMware Fusion so expect issues on other virtualization solutions
 without minor changes.
 
-* ISO: NixOS 24.05 or later.
-* Disk: SATA 150 GB+
-* CPU/Memory: I give at least half my cores and half my RAM (up to 32GB), as
+- ISO: NixOS 24.05 or later.
+- Disk: SATA 150 GB+
+- CPU/Memory: I give at least half my cores and half my RAM (up to 32GB), as
   much as you can.
-* Graphics: Full acceleration, full resolution, maximum graphics RAM.
-* Network: Shared with my Mac.
-* Remove sound card, remove video camera.
-* Profile: Disable almost all keybindings
+- Graphics: Full acceleration, full resolution, maximum graphics RAM.
+- Network: Shared with my Mac.
+- Remove sound card, remove video camera.
+- Profile: Disable almost all keybindings
 
 Boot the VM, and using the graphical console, change the root password to "root":
 
@@ -157,7 +157,7 @@ sudo nixos-rebuild switch --flake .
 
 ## macOS/Darwin
 
->[!WARNING]
+> [!WARNING]
 >
 > **Don't do this without reading the source.**
 > This repository is and always has been _my_ configurations. If you blindly run
@@ -213,7 +213,7 @@ Access.
 
 ## Nix on a Linux host (not NixOS)
 
->[!WARNING]
+> [!WARNING]
 >
 > **This configuration is untested**
 > This is currently a work-in-progress attempt at supporting Linux hosts on

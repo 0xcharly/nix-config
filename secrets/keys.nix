@@ -9,7 +9,6 @@ let
     skullkid = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICT2Px+IB0pL69ctFv1SesgFD3gfTHw9SibG5FpITj9u";
     studio = "";
   };
-
 in {
   # Augment the list passed as parameter with the user `delay`'s public key.
   # This key is always trusted and should always be available to decypher Age
