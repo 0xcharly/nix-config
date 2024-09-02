@@ -11,6 +11,10 @@
 
       programs = {
         alejandra.enable = true;
+        black.enable = true;
+        just.enable = true;
+        prettier.enable = true;
+        rustfmt.enable = true;
 
         shfmt = {
           enable = true;
