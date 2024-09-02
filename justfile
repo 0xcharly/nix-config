@@ -99,8 +99,9 @@ ssh_options := '-o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o S
 [group('secrets')]
 [macos]
 ssh-copy-secrets host:
-    for key in github git-commit-signing; do \
-        sekrets read-ssh-key -k $key -o - \
-            | ssh {{ ssh_options }} -p{{ ssh_port }} -l{{ ssh_user }} {{ host }} \
-            "bash -c \"install -D -m 400 <(dd) \$HOME/.ssh/$key\""; \
-    done
+    #! /usr/bin/env fish
+    for key in github git-commit-signing
+      sekrets read-ssh-key -k $key -o - \
+          | ssh {{ ssh_options }} -p{{ ssh_port }} -l{{ ssh_user }} {{ host }} \
+          "bash -c \"install -D -m 400 <(dd) \$HOME/.ssh/$key\""
+    end
