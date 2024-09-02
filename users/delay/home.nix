@@ -107,10 +107,12 @@ in rec {
   # Jujutsu config path is wrong on macOS.
   # Fixed in 24.11 (https://github.com/nix-community/home-manager/pull/5416).
   # TODO: delete this once 24.11 lands.
-  home.file."Library/Application Support/jj/config.toml".source = let
-    tomlFormat = pkgs.formats.toml {};
-  in
-    lib.mkIf isDarwin (tomlFormat.generate "jujutsu-config" programs.jujutsu.settings);
+  home.file = lib.optionalAttrs isDarwin {
+    "Library/Application Support/jj/config.toml".source = let
+      tomlFormat = pkgs.formats.toml {};
+    in
+      tomlFormat.generate "jujutsu-config" programs.jujutsu.settings;
+  };
 
   programs.git = {
     enable = true;
