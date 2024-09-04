@@ -2,8 +2,15 @@
   lib,
   pkgs,
   ...
-}: let
+} @ args: let
+  config =
+    if args ? osConfig
+    then args.osConfig
+    else args.config;
+  inherit (config.modules.usrenv) isHeadless;
   inherit (pkgs.stdenv) isLinux;
+
+  isLinuxDesktop = isLinux && !isHeadless;
 in {
   programs.bash.enable = true;
   programs.htop.enable = true;
@@ -47,7 +54,7 @@ in {
     catppuccin.enable = true;
     interactiveShellInit = lib.strings.concatStringsSep "\n" [
       (builtins.readFile ./config.fish)
-      (lib.optionalString isLinux "eval (${lib.getExe pkgs.keychain} --eval --nogui --quiet)")
+      (lib.optionalString isLinuxDesktop "eval (${lib.getExe pkgs.keychain} --eval --nogui --quiet)")
     ];
 
     functions.fish_mode_prompt = ""; # Disable prompt vi mode reporting.
@@ -59,7 +66,7 @@ in {
         nixsh = "nix-shell --run ${lib.getExe pkgs.fish}";
         devsh = "nix develop --command ${lib.getExe pkgs.fish}";
       }
-      // (lib.optionalAttrs isLinux {
+      // (lib.optionalAttrs isLinuxDesktop {
         # For consistency with macOS.
         pbcopy = lib.getExe pkgs.xclip;
         pbpaste = "${lib.getExe pkgs.xclip} -o";

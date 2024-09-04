@@ -146,6 +146,7 @@ in {
   ];
 
   flake.nixosConfigurations = mkHostAttrs [
+    (mkNixosHost ./nixos/asl {system = "aarch64-linux";})
     (mkNixosHost ./nixos/vm-aarch64 {system = "aarch64-linux";})
     (mkNixosHost ./nixos/vm-linode {system = "x86_64-linux";})
   ];

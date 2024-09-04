@@ -1,12 +1,14 @@
-{pkgs, ...}: {
+{config, ...}: let
+  inherit (config.modules.system.hosts) asl;
+in {
   imports = [
     ./fs.nix
     ./mounts.nix
     ./vmware-guest.nix
   ];
 
-  # Wayland crashes on VMWare Fusion.
-  modules.usrenv.compositor = "x11";
+  # Heasless system à la WSL.
+  modules.usrenv.compositor = "headless";
 
   # Disable the default module and import our override that works on aarch64.
   # NOTE: the PR has been merge to the unstable branch and should be available
@@ -19,9 +21,6 @@
 
   # This works through our custom module imported above.
   virtualisation.vmware.guest.enable = true;
-
-  # This is needed for the vmware user tools clipboard to work.
-  environment.systemPackages = [pkgs.gtkmm3];
 
   # Boot configuration.
   boot.initrd.availableKernelModules = ["uhci_hcd" "ahci" "xhci_pci" "nvme" "usbhid" "sr_mod"];
@@ -41,22 +40,19 @@
   security.sudo.wheelNeedsPassword = false;
 
   networking = {
-    # Interface names on M1, M3.
-    interfaces.ens160.useDHCP = true; # NAT adapter.
+    hostName = "asl";
+    # NAT adapter interface names on M1, M3.
+    interfaces.ens160 = {
+      useDHCP = false;
+      ipv4.addresses = [{inherit (asl.networking) address prefixLength;}];
+    };
+    inherit (asl.networking) defaultGateway nameservers;
 
     # Disable the firewall since we're in a VM and we want to make it
     # easy to visit stuff in here. We only use NAT networking anyways.
     firewall.enable = false;
   };
 
-  # Configure nixpkgs.
-  nixpkgs = {
-    config = {
-      # TODO: is this needed for anything? I'm already allowing unfree packages
-      # on a per-case basis.
-      allowUnfree = true;
-      # Lots of stuff that uses aarch64 that claims doesn't work, but actually works.
-      allowUnsupportedSystem = true;
-    };
-  };
+  # Lots of stuff that uses aarch64 that claims doesn't work, but actually works.
+  nixpkgs.config.allowUnsupportedSystem = true;
 }

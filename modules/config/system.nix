@@ -7,7 +7,7 @@
   inherit (lib.lists) optionals;
   inherit (lib.modules) mkMerge;
   inherit (lib.options) mkOption;
-  inherit (lib.types) enum listOf str;
+  inherit (lib.types) enum int listOf str;
 
   cfg = config.modules.system;
 in {
@@ -26,6 +26,36 @@ in {
       type = listOf str;
       default = ["delay"];
       description = "A list of home-manager users on the system.";
+    };
+
+    hosts = {
+      asl = {
+        networking = {
+          address = mkOption {
+            type = str;
+            default = "192.168.70.3";
+            description = "The local IPv4 address of the ASL virtual machine";
+          };
+          prefixLength = mkOption {
+            type = int;
+            default = 24;
+            description = ''
+              Subnet mask of the IPv4 address, specified as the number of
+              bits in the prefix.
+            '';
+          };
+          defaultGateway = mkOption {
+            type = str;
+            default = "192.168.70.2";
+            description = "The IPv4 address of the gateway used by the ASL virtual machine";
+          };
+          nameservers = mkOption {
+            type = listOf str;
+            default = ["192.168.70.2"];
+            description = "The list of nameservers used by the ASL virtual machine";
+          };
+        };
+      };
     };
   };
 

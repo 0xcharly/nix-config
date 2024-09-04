@@ -8,8 +8,8 @@
     if args ? osConfig
     then args.osConfig
     else args.config;
-  inherit (pkgs.stdenv) isDarwin isLinux;
   inherit (config.modules.usrenv) isHeadless;
+  inherit (pkgs.stdenv) isDarwin isLinux;
 
   # Unstable package repository.
   upkgs = import inputs.nixpkgs-unstable {
