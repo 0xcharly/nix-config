@@ -1,5 +1,11 @@
-{pkgs, ...}: {
+{
+  inputs,
+  pkgs,
+  ...
+}: {
   imports = [
+    inputs.catppuccin.nixosModules.catppuccin
+
     ./fonts.nix
     ./nix-client-config.nix
     ./nix-index.nix
@@ -26,6 +32,7 @@
   console = {
     font = "Lat2-Terminus16";
     keyMap = "us";
+    catppuccin.enable = true;
   };
 
   # Enable tailscale. We manually authenticate when we want with
