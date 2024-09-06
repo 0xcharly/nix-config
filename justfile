@@ -99,7 +99,7 @@ ssh_options := '-o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o S
 pre_bootstrap_ssh_options := '-o PubkeyAuthentication=no -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 
 [doc('Install NixOS on a local VMWare Fusion virtual machine')]
-[group('bootstrap')]
+[group('remotes')]
 [macos]
 bootstrap-vm-aarch64 addr:
     #! /usr/bin/env fish
@@ -119,7 +119,7 @@ bootstrap-vm-aarch64 addr:
       'mkdir -p /nix-config && tar -C /nix-config -xmzf - && nix-shell -p git --run "bash /nix-config/bootstrap-vm.sh vm-aarch64"'
 
 [doc('Install NixOS on a local VMWare Fusion virtual machine')]
-[group('bootstrap')]
+[group('remotes')]
 [macos]
 bootstrap-asl addr:
     #! /usr/bin/env fish
@@ -150,3 +150,8 @@ ssh-copy-secrets host:
           | ssh {{ ssh_options }} -p{{ ssh_port }} -l{{ ssh_user }} {{ host }} \
           "bash -c \"install -D -m 400 <(dd) \$HOME/.ssh/$key\""
     end
+
+[doc("Copy Ghostty's terminfo to a remote machine")]
+[group('remotes')]
+ssh-copy-ghostty-terminfo addr:
+  infocmp -x | ssh {{ addr }} -- tic -x -
