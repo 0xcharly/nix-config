@@ -32,7 +32,7 @@ in rec {
     [
       pkgs.coreutils # For consistency across platforms (i.e. GNU utils on macOS).
       pkgs.git-get # Used along with open-local-repository for checkouts management.
-      pkgs.libqualculate # Multi-purpose calculator on the command line.
+      pkgs.libqalculate # Multi-purpose calculator on the command line.
       pkgs.tree
 
       # Our own package installed by overlay.
