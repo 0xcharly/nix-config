@@ -65,6 +65,9 @@
     # Neovim.
     nix-config-nvim.url = "github:0xcharly/nix-config-nvim";
 
+    # Catppuccin all the things.
+    catppuccin.url = "github:catppuccin/nix";
+
     # 👻
     # ghostty.url = "github:ghostty-org/ghostty";
     nix-config-ghostty = {

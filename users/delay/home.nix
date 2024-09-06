@@ -19,6 +19,8 @@
   hasWindowManager = !isHeadless;
 in rec {
   imports = [
+    inputs.catppuccin.homeManagerModules.catppuccin
+
     ./scripts.nix
     ./shells.nix
     ./ssh.nix
@@ -62,6 +64,9 @@ in rec {
     // lib.optionalAttrs hasWindowManager {
       TERMINAL = lib.getExe pkgs.ghostty;
     };
+
+  # Configure catppuccin theme applied throughout the configuration.
+  catppuccin.flavor = "mocha";
 
   xdg = {
     enable = true;
@@ -134,7 +139,10 @@ in rec {
     ignores = [
       "/.direnv/"
     ];
-    delta.enable = true;
+    delta = {
+      enable = true;
+      catppuccin.enable = true;
+    };
     extraConfig = {
       branch.autosetuprebase = "always";
       color.ui = true;
@@ -163,6 +171,7 @@ in rec {
     mouse = true;
     secureSocket = true;
     sensibleOnTop = false;
+    catppuccin.enable = true;
 
     extraConfig = builtins.readFile ./tmux.conf;
   };
