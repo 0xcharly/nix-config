@@ -4,8 +4,6 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-set -x
-
 # Ensure that the script is passed a single argument.
 if test $# -ne 1; then
   >&2 echo "Illegal number of parameters: expected 1, got $#"
@@ -44,4 +42,15 @@ nixos-install $NIX_OPTIONS \
   --no-root-passwd $FLAKE_OPTIONS
 
 # Reboot into new system.
-reboot
+shutdown --reboot +1
+
+# Completion notice.
+echo -e "System installation \033[32;1mcomplete\033[0m. Rebooting in 1 minute."
+echo "After reboot, install Ghostty terminfo for best compatibility:"
+echo
+echo "  just ssh-copy-terminfo $SYSTEM_NAME"
+echo
+echo "じゃあね。"
+
+# We're done.
+exit 0

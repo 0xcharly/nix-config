@@ -98,10 +98,12 @@ ssh_port := '22'
 ssh_options := '-o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 pre_bootstrap_ssh_options := '-o PubkeyAuthentication=no -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 
+vm_name := "asl"
+
 [doc('Install NixOS on a local VMWare Fusion virtual machine')]
 [group('remotes')]
 [macos]
-bootstrap-vm-aarch64 addr:
+bootstrap-vm addr:
     #! /usr/bin/env fish
 
     # Copy the configuration to the VM and run the bootstrap script. The GitHub
@@ -114,29 +116,21 @@ bootstrap-vm-aarch64 addr:
     sekrets read-ssh-key -k github --skip-passphrase -o - \
       | ssh {{ pre_bootstrap_ssh_options }} -p{{ ssh_port }} -lroot {{ addr }} \
       'bash -c "install -D -m 400 <(dd) \$HOME/.ssh/github"'
+
+    # Copy over the relevant bits of the config under /nix-config, and execute
+    # the bootstrap script remotely.
     tar -C {{ justfile_directory() }} -czf - parts/ hosts/ modules/ users/ flake.lock flake.nix bootstrap-vm.sh \
       | ssh {{ pre_bootstrap_ssh_options }} -p{{ ssh_port }} -lroot {{ addr }} \
-      'mkdir -p /nix-config && tar -C /nix-config -xmzf - && nix-shell -p git --run "bash /nix-config/bootstrap-vm.sh vm-aarch64"'
+      'mkdir -p /nix-config && tar -C /nix-config -xmzf - && nix-shell -p git --run "bash /nix-config/bootstrap-vm.sh {{ vm_name }}"'
 
-[doc('Install NixOS on a local VMWare Fusion virtual machine')]
-[group('remotes')]
-[macos]
-bootstrap-asl addr:
-    #! /usr/bin/env fish
-
-    # Copy the configuration to the VM and run the bootstrap script. The GitHub
-    # SSH key is copied over to fetch flake inputs that point to private GitHub
-    # repositories.
-
-    # NOTE: the `--skip-passphrase` option is suboptimal, but the key only lives
-    # in RAM until the install completes and the machine reboots.
-    # TODO: remove secret once Ghostty is public.
-    sekrets read-ssh-key -k github --skip-passphrase -o - \
-      | ssh {{ pre_bootstrap_ssh_options }} -p{{ ssh_port }} -lroot {{ addr }} \
-      'bash -c "install -D -m 400 <(dd) \$HOME/.ssh/github"'
-    tar -C {{ justfile_directory() }} -czf - parts/ hosts/ modules/ users/ flake.lock flake.nix bootstrap-vm.sh \
-      | ssh {{ pre_bootstrap_ssh_options }} -p{{ ssh_port }} -lroot {{ addr }} \
-      'mkdir -p /nix-config && tar -C /nix-config -xmzf - && nix-shell -p git --run "bash /nix-config/bootstrap-vm.sh asl"'
+    # A host key-pair is regenerated after a successful installation.
+    # Remove any existing entry for given IP in ~/.ssh/known_hosts.
+    nix eval ".#nixosConfigurations.{{ vm_name }}.config.networking.interfaces" --apply "interfaces: let
+      inherit (builtins) attrValues concatLists map;
+    in concatLists (map (i: map (a: a.address) i.ipv4.addresses) (attrValues interfaces))" \
+      | jq --raw-output '.[]' | while read --list host
+      ssh-keygen -R $host 2> /dev/null
+    end
 
 [doc('Copy secrets to the host')]
 [group('secrets')]
@@ -151,7 +145,7 @@ ssh-copy-secrets host:
           "bash -c \"install -D -m 400 <(dd) \$HOME/.ssh/$key\""
     end
 
-[doc("Copy Ghostty's terminfo to a remote machine")]
+[doc("Copy terminal's terminfo to a remote machine")]
 [group('remotes')]
-ssh-copy-ghostty-terminfo addr:
-  infocmp -x | ssh {{ addr }} -- tic -x -
+ssh-copy-terminfo addr:
+  infocmp -x | ssh {{ ssh_options }} -p{{ ssh_port }} -l{{ ssh_user }} {{ addr }} -- tic -x -

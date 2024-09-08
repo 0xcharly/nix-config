@@ -44,6 +44,34 @@ three-finger swipe or use other keyboard shortcuts to activate that window.
 > restoring these:
 > [mitchellh/nixos-config](https://github.com/mitchellh/nixos-config).
 
+#### VMware Fusion NAT configuration
+
+This NixOS configuration expects a specific NAT subnet to be available for the
+VM networking configuration (specifically, `192.168.70.*`).
+
+To guarantee that VMware Fusion NAT configuration does match with expectations,
+double check the content of the following file, and edit it as necessary:
+
+- `/Library/Preferences/VMware\ Fusion/networking`
+
+Specifically, the value of `VNET_8_HOSTONLY_SUBNET`:
+
+```
+answer VNET_8_HOSTONLY_SUBNET 192.168.70.0
+```
+
+Stop all VMs and close VMware Fusion before editing this file. Once updated,
+restart VMware Fusion and verify that the content of these files match
+expectations:
+
+- `/Library/Preferences/VMware Fusion/vmnet8/dhcpd.conf`
+- `/Library/Preferences/VMware Fusion/vmnet8/nat.conf`
+
+See [this article](https://adis.ca/entry/2016/vmware-fusion-nat-and-static-ip/)
+to learn how to configure DHCPD for the NAT.
+
+#### VM Setup
+
 Download the ISO from [NixOS downloads](https://nixos.org/download/#nixos-iso).
 For Apple Silicon hardware, use the `aarch64` (64-bit ARM) images.
 
@@ -55,17 +83,20 @@ without minor changes.
 - Disk: SATA 150 GB+
 - CPU/Memory: I give at least half my cores and half my RAM (up to 32GB), as
   much as you can.
-- Graphics: Full acceleration, full resolution, maximum graphics RAM.
 - Network: Shared with my Mac.
 - Remove sound card, remove video camera.
 - Profile: Disable almost all keybindings
 
+Optionally, if the VM is intended to be used with a graphical session:
+
+- Graphics: Full acceleration, full resolution, maximum graphics RAM.
+
 Boot the VM, and using the graphical console, change the root password to "root":
 
-```shell
+```sh
 $ sudo su
 $ passwd
-# change to root
+# enter new password
 ```
 
 At this point, verify `/dev/sda` exists. This is the expected block device where
@@ -77,39 +108,44 @@ have to modify the `bootstrap-vm.sh` to use the proper block device paths.
 I always take a snapshot at this point, in case anything goes wrong, or simply
 to quickly go back to a blank slate. I usually call it "pre-bootstrap".
 
-Run `ifconfig` and get the IP address of the first device. It is probably
-`192.168.XXX.YYY`, but it can be anything. Pass this to the `Makefile` through
-the `NIXADDR` var (either by exporting it into your environment, or on the
-`make` command-line):
+Run `ifconfig` and get the local IP address of the first device. It should match
+`192.168.70.YYY` if you've followed the NAT configuration section. Pass this to
+the Justfile's bootstrap recipe as its parameter:
 
-```shell
-export NIXADDR=<VM ip address>
+```sh
+just bootstrap-vm 192.168.70.YYY
 ```
 
-The Makefile defaults to setting up a VM on an Apple Silicon processor (actively
-used on M1 and M3). If you are building for a different target, you must change
-`NIXNAME` (same as `NIXADDR`).
+The Justfile defaults to setting up the `asl` VM on an Apple Silicon processor.
+If you are installing a different configuration, you must change `vm_name`.
 
-```shell
-export NIXNAME=vm-aarch64
+```sh
+just --set vm_name vm-aarch64 bootstrap-vm 192.168.70.YYY
 ```
 
-Run the bootstrap target. This will install setup your partitions on the VM disk
-image, and install NixOS using this configuration:
+(`vm_name` must be one of the Flake-exported NixOS configurations.)
 
-```shell
-make vm/bootstrap
-```
+This will install setup your partitions on the VM disk image, and install NixOS
+using this configuration.
 
-If everything goes fine, the VM should reboot into a functioning OS with
-graphical environment.
+If everything goes fine, the VM should reboot into a functioning OS, optionally
+with graphical environment.
+
+#### VM flavors
+
+The Flake provides multiple NixOS configurations for setting up a VM on an Apple
+Silicon processor (actively used on M1 and M3), based on whether a graphical env
+is desired:
+
+- `asl`: headless system.
+- `vm-aarch64`: full-featured system with graphical environment.
 
 ### NixOS VM maintenance
 
 At this point, I almost never use terminals on macOS ever again. I clone this
 repository in the VM and I use `nixos-rebuild` to apply changes the system:
 
-```shell
+```sh
 sudo nixos-rebuild switch --flake .
 ```
 
@@ -118,42 +154,6 @@ sudo nixos-rebuild switch --flake .
 ### Linode VM setup
 
 // TODO
-
-Run `ifconfig` and get the IP address of the first device. It is probably
-`192.168.XXX.YYY`, but it can be anything. Pass this to the `Makefile` through
-the `NIXADDR` var (either by exporting it into your environment, or on the
-`make` command-line):
-
-```shell
-export NIXADDR=<VM ip address>
-```
-
-The Makefile defaults to setting up a VM on an Apple Silicon processor (actively
-used on M1 and M3). If you are building for a different target, you must change
-`NIXNAME` (same as `NIXADDR`).
-
-```shell
-export NIXNAME=vm-linode
-```
-
-Run the bootstrap target. This will install setup your partitions on the VM disk
-image, and install NixOS using this configuration:
-
-```shell
-make vm/bootstrap
-```
-
-If everything goes fine, the VM should reboot into a functioning headless
-system.
-
-### Linode VM maintenance
-
-At this point, I clone this repository on the remote and I use `nixos-rebuild`
-to apply changes the system:
-
-```shell
-sudo nixos-rebuild switch --flake .
-```
 
 ## macOS/Darwin
 
@@ -182,7 +182,7 @@ support installed.
 
 Once installed, clone this repo and bootstrap the `nix-darwin` installation:
 
-```shell
+```sh
 nix run nix-darwin -- switch --flake .
 ```
 
@@ -194,7 +194,7 @@ permissions changed, etc…). That's it.
 Once `nix-darwin` is installed, successive incremental changes are applied with
 `darwin-rebuild`:
 
-```shell
+```sh
 darwin-rebuild switch --flake .
 ```
 
@@ -235,7 +235,7 @@ support installed.
 
 Once installed, clone this repo and bootstrap the `home-manager` installation:
 
-```shell
+```sh
 nix run home-manager -- switch --flake .
 ```
 
@@ -247,7 +247,7 @@ permissions changed, etc…). That's it.
 Once `home-manager` is installed, successive incremental changes are applied with
 `home-manager`:
 
-```shell
+```sh
 home-manager switch --flake .
 ```
 
@@ -264,6 +264,6 @@ Run `man nix.conf` for more information on the `substituters` configuration opti
 A workaround is to add the current user to the `trusted-users` list directly in
 the system configuration file `/etc/nix/nix.conf`:
 
-```shell
+```sh
 sudo echo "trusted-users = $(whoami)" >> /etc/nix/nix.conf
 ```
