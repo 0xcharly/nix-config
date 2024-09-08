@@ -132,7 +132,7 @@ bootstrap-vm addr:
       ssh-keygen -R $host 2> /dev/null
     end
 
-[doc('Copy secrets to the host')]
+[doc('Copy secrets to remote host')]
 [group('secrets')]
 [macos]
 ssh-copy-secrets host:
@@ -144,6 +144,14 @@ ssh-copy-secrets host:
           | ssh {{ ssh_options }} -p{{ ssh_port }} -l{{ ssh_user }} {{ host }} \
           "bash -c \"install -D -m 400 <(dd) \$HOME/.ssh/$key\""
     end
+
+[doc('Copy Cachix authentication token to remote host')]
+[group('secrets')]
+[macos]
+ssh-init-cachix host:
+    op read 'op://Private/Cachix Auth Tokens/token' \
+        | ssh {{ ssh_options }} -p{{ ssh_port }} -l{{ ssh_user }} {{ host }} \
+        "nix-shell -p cachix --run 'cachix authtoken --stdin'"
 
 [doc("Copy terminal's terminfo to a remote machine")]
 [group('remotes')]
