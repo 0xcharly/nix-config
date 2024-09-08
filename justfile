@@ -97,7 +97,6 @@ ssh_user := `whoami`
 ssh_port := '22'
 ssh_options := '-o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 pre_bootstrap_ssh_options := '-o PubkeyAuthentication=no -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
-
 vm_name := "asl"
 
 [doc('Install NixOS on a local VMWare Fusion virtual machine')]
@@ -156,4 +155,4 @@ ssh-init-cachix host:
 [doc("Copy terminal's terminfo to a remote machine")]
 [group('remotes')]
 ssh-copy-terminfo addr:
-  infocmp -x | ssh {{ ssh_options }} -p{{ ssh_port }} -l{{ ssh_user }} {{ addr }} -- tic -x -
+    infocmp -x | ssh {{ ssh_options }} -p{{ ssh_port }} -l{{ ssh_user }} {{ addr }} -- tic -x -
