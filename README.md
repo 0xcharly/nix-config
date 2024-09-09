@@ -80,12 +80,11 @@ made for VMware Fusion so expect issues on other virtualization solutions
 without minor changes.
 
 - ISO: NixOS 24.05 or later.
-- Disk: SATA 150 GB+
-- CPU/Memory: I give at least half my cores and half my RAM (up to 32GB), as
-  much as you can.
+- Disk: SATA 150 GB+.
+- CPU/Memory: I give at least half my cores and half my RAM (up to 32GB).
 - Network: Shared with my Mac.
 - Remove sound card, remove video camera.
-- Profile: Disable almost all keybindings
+- Profile: Disable almost all keybindings.
 
 Optionally, if the VM is intended to be used with a graphical session:
 
@@ -125,8 +124,8 @@ just --set vm_name vm-aarch64 bootstrap-vm 192.168.70.YYY
 
 (`vm_name` must be one of the Flake-exported NixOS configurations.)
 
-This will install setup your partitions on the VM disk image, and install NixOS
-using this configuration.
+This will setup your partitions on the VM disk image (**erasing** all content
+first if necessary), and install NixOS using this configuration.
 
 If everything goes fine, the VM should reboot into a functioning OS, optionally
 with graphical environment.
@@ -142,11 +141,12 @@ is desired:
 
 ### NixOS VM maintenance
 
-At this point, I almost never use terminals on macOS ever again. I clone this
-repository in the VM and I use `nixos-rebuild` to apply changes the system:
+At this point, I either use the VM's window manager, or SSH to it from macOS. I
+clone this repository in the VM and I use `nixos-rebuild` to apply changes the
+system:
 
 ```sh
-sudo nixos-rebuild switch --flake .
+just switch
 ```
 
 ## Linode VM
@@ -160,8 +160,11 @@ sudo nixos-rebuild switch --flake .
 > [!WARNING]
 >
 > **Don't do this without reading the source.**
-> This repository is and always has been _my_ configurations. If you blindly run
-> this, your system may be changed in ways that you don't want.
+> This repository's configuration is heavily tuned to my preferences. If you
+> blindly run this, your system may be changed in ways that you don't want.
+>
+> Unlike NixOS, it is more troublesome to revert a the effect of nix-darwin,
+> since there's no snapshot to restore to.
 >
 > Read the source!
 
@@ -170,14 +173,14 @@ sudo nixos-rebuild switch --flake .
 I share some of my Nix configurations with my Mac host and use Nix to manage
 _most_ aspects of my macOS installation, too. This uses the
 [nix-darwin](https://github.com/LnL7/nix-darwin) project. I don't manage
-_everything_ with Nix yet, in particular I don't manage apps. I plan to migrate
-some of those in time. My system settings, Homebrew, etc. are however already
-managed by Nix.
+_everything_ with Nix yet, in particular I don't manage most of my GUI apps. I
+plan to migrate some of those in time. My system settings, Homebrew, etc. are
+however already managed by Nix.
 
 To utilize the Mac setup, first install Nix using some Nix installer.
 
 I use the [nix-installer](https://github.com/DeterminateSystems/nix-installer)
-by Determinate Systems.com. The point is just to get the `nix` CLI with flake
+by Determinate Systems. The point is just to get the `nix` CLI with flake
 support installed.
 
 Once installed, clone this repo and bootstrap the `nix-darwin` installation:
@@ -195,7 +198,7 @@ Once `nix-darwin` is installed, successive incremental changes are applied with
 `darwin-rebuild`:
 
 ```sh
-darwin-rebuild switch --flake .
+just switch
 ```
 
 ### Troubleshooting
@@ -215,7 +218,7 @@ Access.
 
 > [!WARNING]
 >
-> **This configuration is untested**
+> **This configuration is not properly tested**
 > This is currently a work-in-progress attempt at supporting Linux hosts on
 > which I can't install NixOS.
 
@@ -248,7 +251,7 @@ Once `home-manager` is installed, successive incremental changes are applied wit
 `home-manager`:
 
 ```sh
-home-manager switch --flake .
+just switch
 ```
 
 ### Nix client configuration
