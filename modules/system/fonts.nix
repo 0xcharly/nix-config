@@ -19,6 +19,7 @@
         '';
       })
       (nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})
+      cascadia-code
       font-awesome_6
       material-design-icons
       mononoki

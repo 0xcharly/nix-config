@@ -75,8 +75,8 @@ in rec {
         lib.generators.toKeyValue {
           listsAsDuplicateKeys = true;
         } {
-          font-family = "mononoki";
-          font-size = 16;
+          font-family = "Cascadia Code SemiLight";
+          font-size = 15;
           theme = "catppuccin-mocha";
           minimum-contrast = 1.1;
           cursor-style = "block";
@@ -97,7 +97,7 @@ in rec {
 
   programs.jujutsu = {
     enable = true;
-    # Install jujutsu from `nixpkgs-unstable`
+    # Install jujutsu from `nixpkgs-unstable`.
     package = upkgs.jujutsu;
     settings =
       lib.recursiveUpdate {
