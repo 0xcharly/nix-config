@@ -36,6 +36,7 @@ in rec {
       pkgs.git-get # Used along with open-local-repository for checkouts management.
       pkgs.libqalculate # Multi-purpose calculator on the command line.
       pkgs.tree
+      pkgs.yazi # File explorer that supports Kitty image protocol.
 
       # Our own package installed by overlay.
       # It's important to keep shadowing the original `pkgs.nvim` package
