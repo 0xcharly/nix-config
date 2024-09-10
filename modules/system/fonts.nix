@@ -20,12 +20,8 @@
       })
       (nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})
       cascadia-code
-      font-awesome_6
       material-design-icons
       mononoki
-      noto-fonts
-      noto-fonts-cjk
-      noto-fonts-emoji
     ];
   };
 }

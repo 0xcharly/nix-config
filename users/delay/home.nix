@@ -76,7 +76,7 @@ in rec {
         lib.generators.toKeyValue {
           listsAsDuplicateKeys = true;
         } {
-          font-family = "Cascadia Code SemiLight";
+          font-family = "mononoki";
           font-size = 14;
           theme = "catppuccin-mocha";
           minimum-contrast = 1.1;
