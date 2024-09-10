@@ -77,7 +77,7 @@ in rec {
           listsAsDuplicateKeys = true;
         } {
           font-family = "Cascadia Code SemiLight";
-          font-size = 15;
+          font-size = 14;
           theme = "catppuccin-mocha";
           minimum-contrast = 1.1;
           cursor-style = "block";
