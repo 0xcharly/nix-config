@@ -46,7 +46,7 @@ shutdown --reboot +1
 
 # Completion notice.
 echo -e "System installation \033[32;1mcomplete\033[0m. Rebooting in 1 minute."
-echo "After reboot, install Ghostty terminfo for best compatibility:"
+echo "After reboot, export your terminal's terminfo for best compatibility:"
 echo
 echo "  just ssh-copy-terminfo $SYSTEM_NAME"
 echo
