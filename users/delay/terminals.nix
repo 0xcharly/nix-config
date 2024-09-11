@@ -36,6 +36,7 @@ in {
           shell-integration-features = "no-cursor,no-sudo,no-title";
           confirm-close-surface = false;
           quit-after-last-window-closed = true;
+          auto-update = "off";
         };
     };
   };
