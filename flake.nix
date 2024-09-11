@@ -69,13 +69,8 @@
     catppuccin.url = "github:catppuccin/nix";
 
     # 👻
+    # TODO: uncomment when Ghostty is released publicly.
     # ghostty.url = "github:ghostty-org/ghostty";
-    nix-config-ghostty = {
-      url = "git+ssh://git@github.com/0xcharly/nix-config-ghostty";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-darwin.follows = "nixpkgs-darwin";
-      inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
-    };
 
     # Secrets management
     # NOTE: See comment in ./modules/shared/module.nix.

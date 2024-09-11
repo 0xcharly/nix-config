@@ -24,6 +24,7 @@ in rec {
     ./scripts.nix
     ./shells.nix
     ./ssh.nix
+    ./terminals.nix
     ./wayland.nix
     ./x11.nix
   ];
@@ -35,7 +36,7 @@ in rec {
       pkgs.coreutils # For consistency across platforms (i.e. GNU utils on macOS).
       pkgs.git-get # Used along with open-local-repository for checkouts management.
       pkgs.libqalculate # Multi-purpose calculator on the command line.
-      pkgs.tree
+      pkgs.tree # List the content of directories in a tree-like format.
       pkgs.yazi # File explorer that supports Kitty image protocol.
 
       # Our own package installed by overlay.
@@ -52,50 +53,18 @@ in rec {
       pkgs.rofi
     ];
 
-  home.sessionVariables =
-    {
-      LANG = "en_US.UTF-8";
-      LC_CTYPE = "en_US.UTF-8";
-      LC_ALL = "en_US.UTF-8";
-      EDITOR = lib.getExe pkgs.nvim;
-      MANPAGER = "${lib.getExe pkgs.nvim} +Man!";
-      PAGER = "less -FirSwX";
-      SHELL = lib.getExe pkgs.fish;
-    }
-    // lib.optionalAttrs hasWindowManager {
-      TERMINAL = lib.getExe pkgs.ghostty;
-    };
+  home.sessionVariables = {
+    LANG = "en_US.UTF-8";
+    LC_CTYPE = "en_US.UTF-8";
+    LC_ALL = "en_US.UTF-8";
+    EDITOR = lib.getExe pkgs.nvim;
+    MANPAGER = "${lib.getExe pkgs.nvim} +Man!";
+    PAGER = "less -FirSwX";
+    SHELL = lib.getExe pkgs.fish;
+  };
 
   # Configure catppuccin theme applied throughout the configuration.
   catppuccin.flavor = "mocha";
-
-  xdg = {
-    enable = true;
-    configFile = {
-      "ghostty/config".text =
-        lib.generators.toKeyValue {
-          listsAsDuplicateKeys = true;
-        } {
-          font-family = "Cascadia Code SemiLight";
-          font-feature = "ss19"; # Slashed 0.
-          font-size = 15;
-          theme = "catppuccin-mocha";
-          minimum-contrast = 1.1;
-          cursor-style = "block";
-          cursor-style-blink = false;
-          mouse-hide-while-typing = true;
-          background-opacity = 0.95;
-          unfocused-split-opacity = 1.0;
-          background-blur-radius = 20;
-          window-padding-balance = true;
-          title = "‎";
-          keybind = "super+shift+comma=reload_config";
-          shell-integration-features = "no-cursor,no-sudo,no-title";
-          confirm-close-surface = false;
-          quit-after-last-window-closed = true;
-        };
-    };
-  };
 
   programs.jujutsu = {
     enable = true;

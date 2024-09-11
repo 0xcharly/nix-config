@@ -11,18 +11,6 @@ if test $# -ne 1; then
   exit 1
 fi
 
-# SSH config to use the correct key to fetch private GitHub repositories.
-install -D -m 400 <(
-  cat <<'EOF'
-Host github.com
-  User git
-  IdentityFile ~/.ssh/github
-  StrictHostKeyChecking no
-  PubkeyAuthentication yes
-  UserKnownHostsFile /dev/null
-EOF
-) $HOME/.ssh/config
-
 NIX_OPTIONS="--option extra-experimental-features nix-command"
 NIX_OPTIONS+=" --option extra-experimental-features flakes"
 NIX_OPTIONS+=" --option accept-flake-config true"

@@ -105,16 +105,7 @@ vm_name := "asl"
 bootstrap-vm addr:
     #! /usr/bin/env fish
 
-    # Copy the configuration to the VM and run the bootstrap script. The GitHub
-    # SSH key is copied over to fetch flake inputs that point to private GitHub
-    # repositories.
-
-    # NOTE: the `--skip-passphrase` option is suboptimal, but the key only lives
-    # in RAM until the install completes and the machine reboots.
-    # TODO: remove secret once Ghostty is public.
-    sekrets read-ssh-key -k github --skip-passphrase -o - \
-      | ssh {{ pre_bootstrap_ssh_options }} -p{{ ssh_port }} -lroot {{ addr }} \
-      'bash -c "install -D -m 400 <(dd) \$HOME/.ssh/github"'
+    # Copy the configuration to the VM and run the bootstrap script.
 
     # Copy over the relevant bits of the config under /nix-config, and execute
     # the bootstrap script remotely.
