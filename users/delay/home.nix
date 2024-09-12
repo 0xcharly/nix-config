@@ -148,4 +148,9 @@ in rec {
 
     extraConfig = builtins.readFile ./tmux.conf;
   };
+
+  programs.zellij = {
+    enable = true;
+    catppuccin.enable = true;
+  };
 }
