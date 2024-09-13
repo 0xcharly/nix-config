@@ -34,6 +34,7 @@ in rec {
   home.packages =
     [
       pkgs.coreutils # For consistency across platforms (i.e. GNU utils on macOS).
+      pkgs.duf # Modern `df` alternative.
       pkgs.git-get # Used along with open-local-repository for checkouts management.
       pkgs.libqalculate # Multi-purpose calculator on the command line.
       pkgs.tree # List the content of directories in a tree-like format.
@@ -53,12 +54,12 @@ in rec {
       pkgs.rofi
     ];
 
-  home.sessionVariables = {
+  home.sessionVariables = rec {
     LANG = "en_US.UTF-8";
-    LC_CTYPE = "en_US.UTF-8";
-    LC_ALL = "en_US.UTF-8";
+    LC_CTYPE = LANG;
+    LC_ALL = LANG;
     EDITOR = lib.getExe pkgs.nvim;
-    MANPAGER = "${lib.getExe pkgs.nvim} +Man!";
+    MANPAGER = "${EDITOR} +Man!";
     PAGER = "less -FirSwX";
     SHELL = lib.getExe pkgs.fish;
   };
