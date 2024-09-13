@@ -28,17 +28,18 @@ function __open_local_repository -d 'List local repositories organized following
   commandline -f kill-whole-line repaint
 
   # Check if the session exists already, or create it otherwise.
-  if ! command tmux has-session -t "$sanitized_repository" 2>/dev/null
+  # Prefix the session name with an ‘=’ so that only an exact match is accepted.
+  if ! command tmux has-session -t "=$sanitized_repository" 2>/dev/null
     # Create a detached session that we'll join below, creating the workspace if it doesn't exist.
     command tmux new-session -ds "$sanitized_repository" -c "$gitget_root/$repository"
   end
 
   if test -z "$TMUX"
     # If we're not running in a tmux client, attach to the session.
-    command tmux attach-session -t "$sanitized_repository"
+    command tmux attach-session -t "=$sanitized_repository"
   else
     # If we're already running in a tmux client, just switch the client.
-    command tmux switch-client -t "$sanitized_repository"
+    command tmux switch-client -t "=$sanitized_repository"
   end
 
   return $status
