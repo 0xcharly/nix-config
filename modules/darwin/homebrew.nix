@@ -35,6 +35,7 @@ in {
 
         # Utilities.
         "raycast" # Mandatory Spotlight alternative.
+        "scroll-reverser" # Custom scroll directions for trackpad vs. mouse.
         "spotify" # Because the web version sucks.
       ]
       ++ (lib.optionals (!isCorpManaged) [
