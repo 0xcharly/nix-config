@@ -34,8 +34,8 @@ in {
         "orion"
 
         # Utilities.
-        "prusaslicer"
-        "raycast"
+        "raycast" # Mandatory Spotlight alternative.
+        "spotify" # Because the web version sucks.
       ]
       ++ (lib.optionals (!isCorpManaged) [
         # Don't install these on corp-managed hosts.

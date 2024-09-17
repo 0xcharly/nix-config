@@ -41,6 +41,11 @@
             text = ''${lib.getExe config.treefmt.build.wrapper}'';
             doc = "Format all files in the repository";
           };
+          brew-update = {
+            text = ''/opt/homebrew/bin/brew update and /opt/homebrew/bin/brew upgrade'';
+            doc = "Update Homebrew packages";
+            tag = ["macos"];
+          };
         };
         commonJustfile = pkgs.writeTextFile {
           name = "justfile.incl";
