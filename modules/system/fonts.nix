@@ -6,7 +6,6 @@
 }: {
   fonts = lib.mkIf (!config.modules.usrenv.isHeadless) {
     packages = with pkgs; [
-      (iosevka-bin.override {variant = "SGr-IosevkaTermCurly";})
       (iosevka.override {
         set = "QuasiProportional";
         privateBuildPlan = ''
@@ -19,9 +18,10 @@
         '';
       })
       (nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})
-      cascadia-code
       material-design-icons
       mononoki
+      noto-fonts-cjk-sans
+      pixel-code
     ];
   };
 }
