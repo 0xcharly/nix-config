@@ -20,8 +20,27 @@ in {
         lib.generators.toKeyValue {
           listsAsDuplicateKeys = true;
         } {
-          font-family = "mononoki";
-          font-size = 16;
+          font-family = ["Comic Code Ligatures" "mononoki" "Noto Sans Mono CJK JP"];
+          font-size = 14;
+          adjust-cell-height = "-15%"; # Comic Code is a little tall by default.
+          font-codepoint-map = let
+            # Based of https://stackoverflow.com/a/53807563.
+            # https://www.localizingjapan.com/blog/2012/01/20/regular-expressions-for-japanese-text/
+            codepoints = [
+              "U+3041-U+3096" # Hiragana
+              "U+30A0-U+30FF" # Katakana (full width)
+              "U+3400-U+4DB5,U+4E00-U+9FCB,U+F900-U+FA6A" # Kanji
+              "U+2E80-U+2FD5" # Kanji radicals
+              "U+FF5F-U+FF9F" # Katakana & Punctuation (half width)
+              "U+3000-U+303F" # Japanese symbols & Punctuation
+              "U+31F0-U+31FF,U+3220-U+3243,U+3280-U+337F" # Miscellaneous Japanese Symbols and Characters
+              "U+FF01-U+FF5E" # Alphanumeric and Punctuation (full width)
+            ];
+          in
+            lib.concatStringsSep "=" [
+              (lib.concatStringsSep "," codepoints)
+              "Noto Sans Mono CJK JP"
+            ];
           theme = "catppuccin-mocha";
           minimum-contrast = 1.1;
           cursor-style = "block";
