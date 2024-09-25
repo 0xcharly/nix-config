@@ -8,7 +8,7 @@
     if args ? osConfig
     then args.osConfig
     else args.config;
-  inherit (config.modules.usrenv) isHeadless;
+  inherit (config.modules.usrenv) isHeadless switcherApp;
   inherit (pkgs.stdenv) isDarwin isLinux;
 
   # Unstable package repository.
@@ -35,7 +35,7 @@ in rec {
     [
       pkgs.coreutils # For consistency across platforms (i.e. GNU utils on macOS).
       pkgs.duf # Modern `df` alternative.
-      pkgs.git-get # Used along with open-local-repository for checkouts management.
+      pkgs.git-get # Used along with fzf and terminal multiplexers for repository management.
       pkgs.libqalculate # Multi-purpose calculator on the command line.
       pkgs.tree # List the content of directories in a tree-like format.
       pkgs.yazi # File explorer that supports Kitty image protocol.
@@ -46,6 +46,10 @@ in rec {
       # all related integrations (e.g. MANPAGER) while being able to override it
       # at anytime (e.g. in the corp-specific flavor).
       pkgs.nvim
+    ]
+    ++ lib.optionals (switcherApp == "zellij") [
+      # TODO: remove once injected properly.
+      pkgs.zellij-select-repository
     ]
     ++ lib.optionals hasWindowManager [pkgs.ghostty]
     ++ lib.optionals isLinux [pkgs.valgrind]
@@ -61,7 +65,6 @@ in rec {
     EDITOR = lib.getExe pkgs.nvim;
     MANPAGER = "${EDITOR} +Man!";
     PAGER = "less -FirSwX";
-    SHELL = lib.getExe pkgs.fish;
   };
 
   # Configure catppuccin theme applied throughout the configuration.
@@ -153,5 +156,14 @@ in rec {
   programs.zellij = {
     enable = true;
     catppuccin.enable = true;
+    settings = {
+      scrollback_editor = lib.getExe pkgs.nvim;
+      keybinds.normal.bind = lib.mkIf (switcherApp == "zellij") {
+        _args = ["Ctrl f"];
+        Run = "zellij-select-repository";
+      };
+      ui.pane_frames.rounded_corners = true;
+      plugins.sessionizer._props = {location = "file:${lib.getExe pkgs.zellij-switch-repository}";};
+    };
   };
 }

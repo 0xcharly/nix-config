@@ -7,7 +7,7 @@
     if args ? osConfig
     then args.osConfig
     else args.config;
-  inherit (config.modules.usrenv) isHeadless;
+  inherit (config.modules.usrenv) isHeadless switcherApp;
   inherit (pkgs.stdenv) isLinux;
 
   isLinuxDesktop = isLinux && !isHeadless;
@@ -73,10 +73,15 @@ in {
       });
   };
 
+  programs.zellij.settings.default_shell = lib.getExe pkgs.fish;
+
+  home.sessionVariables.SHELL = lib.getExe pkgs.fish;
+
   home.packages = [
     pkgs.fishPlugins.done
     pkgs.fishPlugins.fzf
     pkgs.fishPlugins.transient-fish
+  ] ++ lib.optionals (switcherApp == "tmux") [
     pkgs.open-local-repository-fish
   ];
 }

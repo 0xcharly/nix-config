@@ -10,6 +10,9 @@ in {
   # Heasless system à la WSL.
   modules.usrenv.compositor = "headless";
 
+  # Use Zellij for repository management.
+  modules.usrenv.switcherApp = "zellij";
+
   # Disable the default module and import our override that works on aarch64.
   # NOTE: the PR has been merge to the unstable branch and should be available
   # in 24.11: https://github.com/NixOS/nixpkgs/pull/326395.

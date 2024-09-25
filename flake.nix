@@ -62,6 +62,12 @@
       inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
 
+    # Pure and reproducible packaging of binary distributed rust toolchains.
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
     # Neovim.
     nix-config-nvim.url = "github:0xcharly/nix-config-nvim";
 

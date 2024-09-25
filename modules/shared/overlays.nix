@@ -6,6 +6,7 @@
   nixpkgs.overlays = [
     self.overlays.default
     inputs.nix-config-nvim.overlays.default
+    inputs.rust-overlay.overlays.default
     (final: prev: {nvim = prev.nix-config-nvim;})
     # NOTE: I know, this is probably blasphemy. But hear me out…
     # I originally used a separate private repository that provided a flake that

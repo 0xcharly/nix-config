@@ -1,0 +1,9 @@
+[package]
+name = "zellij-switch-session"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+ansi_term = "0.12.1"
+rust-analyzer = "0.0.1"
+zellij-tile = "0.40.1"

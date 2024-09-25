@@ -37,6 +37,21 @@ in {
         Graphical environment will not be installed on a headless host.
       '';
     };
+
+    switcherApp = mkOption {
+      default = "tmux";
+      type = enum ["tmux" "zellij"];
+      description = ''
+        Which app to use for repository switching.
+
+        Repository switching has 2 implementations:
+          - TMUX based, which is stable
+          - Zellij base, which is experimental
+
+        This option allows for toggling the experimental Zellij integration
+        during its stabilization phase.
+      '';
+    };
   };
 
   config.assertions = [
