@@ -5,8 +5,8 @@
   ...
 }: {
   fonts = lib.mkIf (!config.modules.usrenv.isHeadless) {
-    packages = with pkgs; [
-      (iosevka.override {
+    packages = [
+      (pkgs.iosevka.override {
         set = "QuasiProportional";
         privateBuildPlan = ''
           [buildPlans.IosevkaQuasiProportional]
@@ -17,11 +17,12 @@
           exportGlyphNames = false
         '';
       })
-      (nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})
-      material-design-icons
-      mononoki
-      noto-fonts-cjk-sans
-      pixel-code
+      (pkgs.nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})
+      (pkgs.unfree-fonts.comic-code.override {ligatures = true;})
+      pkgs.material-design-icons
+      pkgs.mononoki
+      pkgs.noto-fonts-cjk-sans
+      pkgs.pixel-code
     ];
   };
 }

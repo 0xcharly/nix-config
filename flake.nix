@@ -71,6 +71,9 @@
     # Neovim.
     nix-config-nvim.url = "github:0xcharly/nix-config-nvim";
 
+    # Unfree fonts.
+    nix-config-fonts.url = "github:0xcharly/nix-config-fonts";
+
     # Catppuccin all the things.
     catppuccin.url = "github:catppuccin/nix";
 
