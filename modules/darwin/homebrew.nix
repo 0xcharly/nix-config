@@ -18,6 +18,7 @@ in {
     masApps =
       {
         "Amphetamine" = 937984704;
+        "ColorSlurp" = 1287239339;
         "Pixelmator Pro" = 1289583905;
       }
       // (lib.optionalAttrs (!isCorpManaged) {
