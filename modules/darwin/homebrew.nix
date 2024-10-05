@@ -38,6 +38,7 @@ in {
         "raycast" # Mandatory Spotlight alternative.
         "scroll-reverser" # Custom scroll directions for trackpad vs. mouse.
         "spotify" # Because the web version sucks.
+        "tidal" # Spotify alternative.
       ]
       ++ (lib.optionals (!isCorpManaged) [
         # Don't install these on corp-managed hosts.
