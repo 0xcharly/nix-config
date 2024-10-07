@@ -270,3 +270,21 @@ the system configuration file `/etc/nix/nix.conf`:
 ```sh
 sudo echo "trusted-users = $(whoami)" >> /etc/nix/nix.conf
 ```
+
+## Nix cheatsheet
+
+Some arbitrary collection of commands that have been useful in the past.
+
+### Add input to registry
+
+```sh
+nix registry add <input> <url>
+```
+
+### Repair Nix store
+
+```sh
+nix-store --verify --repair
+nix-store --gc
+nix-collect-garbage -d
+```
