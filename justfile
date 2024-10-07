@@ -43,7 +43,7 @@ test:
 [macos]
 update +inputs:
     GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.bareRepository GIT_CONFIG_VALUE_0=all \
-        for input in {{ inputs }}; nix flake update $input; end
+        for input in {{ inputs }}; nix flake update --flake . $input; end
 
 [doc('Update the given flake inputs')]
 [group('nix')]
