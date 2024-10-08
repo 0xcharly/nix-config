@@ -11,13 +11,13 @@ rebuildOptions := '--option accept-flake-config true --show-trace'
 default:
     @just --list
 
-[doc("Rebuild the current darwin host's configuration")]
+[doc("Rebuild the current darwin host's configuration and permanently switch to it")]
 [group('nix')]
 [macos]
 switch:
     darwin-rebuild {{ rebuildOptions }} switch --flake .
 
-[doc("Rebuild the current host's configuration")]
+[doc("Rebuild the current NixOS/HM host's configuration and permanently switch to it")]
 [group('nix')]
 [linux]
 switch:
@@ -29,7 +29,7 @@ switch:
     end
     eval $REBUILD_COMMAND {{ rebuildOptions }} switch --flake .
 
-[doc("Rebuild the current host's configuration")]
+[doc("Rebuild the current NixOS host's configuration and temporary switch to it")]
 [group('nix')]
 [linux]
 test:
@@ -147,5 +147,6 @@ ssh-init-cachix host:
 
 [doc("Copy terminal's terminfo to a remote machine")]
 [group('remotes')]
+[macos]
 ssh-copy-terminfo addr:
     infocmp -x | ssh {{ ssh_options }} -p{{ ssh_port }} -l{{ ssh_user }} {{ addr }} -- tic -x -
