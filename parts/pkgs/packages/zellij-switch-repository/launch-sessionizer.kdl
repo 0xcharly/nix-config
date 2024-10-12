@@ -1,0 +1,9 @@
+layout {
+  floating_panes {
+    pane {
+      plugin location="file:/Users/delay/code/github.com/0xcharly/nix-config/parts/pkgs/packages/zellij-switch-repository/target/wasm32-wasip1/release/zellij-switch-session.wasm" {
+        cwd "/Users/delay/code"
+      }
+    }
+  }
+}

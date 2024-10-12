@@ -8,6 +8,8 @@ pkgs.mkShell {
     libiconv
     # rust-analyzer
     # rustfmt
+
+    bacon
     watchexec
 
     nixd
@@ -16,6 +18,12 @@ pkgs.mkShell {
     # TODO: delete and repackage correctly.
     rustup
 
-    (callPackage ./package.nix {})
+    # TODO: pipe rust-toolchain down to this file.
+    # (callPackage ./package.nix {})
+
+    # Used to run `select.fish`.
+    ansifilter
+    coreutils
+    (callPackage ../path-strip-prefix/package.nix {})
   ];
 }

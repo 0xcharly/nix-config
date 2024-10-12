@@ -1,0 +1,37 @@
+keybinds {
+    normal {
+        bind "Ctrl w" {
+            Run "fish" "/Users/delay/code/github.com/0xcharly/nix-config/parts/pkgs/packages/zellij-switch-repository/select.fish" {
+                close_on_exit true
+                floating true
+                cwd "/Users/delay/code"
+            }
+        }
+    }
+    tmux {
+        bind "r" {
+            LaunchOrFocusPlugin "file:/Users/delay/code/github.com/0xcharly/nix-config/parts/pkgs/packages/zellij-switch-repository/target/wasm32-wasip1/release/zellij-switch-session.wasm" {
+                floating true
+                move_to_focused_tab true
+                cwd "/Users/delay/code"
+            }; // SwitchToMode "Locked";
+        }
+    }
+}
+layout {
+    pane size=1 borderless=true {
+        plugin location="zellij:tab-bar"
+    }
+    pane split_direction="vertical" {
+        pane command="fish"
+        pane {
+            pane command="fish"
+            pane expanded=true {
+                plugin location="file:/Users/delay/code/github.com/0xcharly/nix-config/parts/pkgs/packages/zellij-switch-repository/target/wasm32-wasip1/release/zellij-switch-session.wasm"
+            }
+        }
+    }
+    pane size=2 borderless=true {
+        plugin location="zellij:status-bar"
+    }
+}
