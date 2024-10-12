@@ -1,15 +1,10 @@
 {
   lib,
   writers,
-  ansifilter,
-  coreutils,
   git,
-  git-get,
-  path-strip-prefix,
-  ripgrep,
   zellij,
 }: let
-  runtimeInputs = [ansifilter coreutils git git-get path-strip-prefix ripgrep zellij];
+  runtimeInputs = [git zellij];
 in
   writers.writeFishBin "zellij-select-repository" (lib.concatStringsSep "\n" [
     ''

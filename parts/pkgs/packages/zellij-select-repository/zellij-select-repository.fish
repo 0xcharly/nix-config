@@ -19,11 +19,9 @@ end
 
 set -q OPEN_GIT_REPOSITORY_COMMAND
 or set -l OPEN_GIT_REPOSITORY_COMMAND "
-  command git list -o flat \
-  | command ansifilter \
-  | command rg '^/' --color=never \
-  | command awk '{print \$1}' \
-  | command path-strip-prefix \"$gitget_root\" 2> /dev/null \
+    command find $gitget_root -type d -name .git -exec dirname {} \; \
+  | command xargs realpath \
+  | string replace \"$gitget_root/\" \"\"
   | command fzf +m --bind=ctrl-r:toggle-sort --highlight-line"
 
 eval "$OPEN_GIT_REPOSITORY_COMMAND" | read -l repository

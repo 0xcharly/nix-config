@@ -9,11 +9,9 @@ function __open_local_repository -d 'List local repositories organized following
 
   set -q OPEN_GIT_REPOSITORY_COMMAND
   or set -l OPEN_GIT_REPOSITORY_COMMAND "
-    command git list -o flat \
-    | command ansifilter \
-    | command rg '^/' --color=never \
-    | command awk '{print \$1}' \
-    | command path-strip-prefix \"$gitget_root\" 2> /dev/null"
+      command find $gitget_root -type d -name .git -exec dirname {} \; \
+    | command xargs realpath \
+    | string replace \"$gitget_root/\" \"\""
 
   set -l FZF_DEFAULT_OPTS (__fzf_defaults "" "+m --reverse --bind=ctrl-r:toggle-sort --highlight-line \$FZF_CTRL_R_OPTS --query=\"\$query\"")
   eval "$OPEN_GIT_REPOSITORY_COMMAND | " (__fzfcmd) "$FZF_DEFAULT_OPTS" | read -l repository
