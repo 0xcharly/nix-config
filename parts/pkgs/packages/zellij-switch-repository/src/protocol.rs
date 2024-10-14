@@ -5,7 +5,9 @@ use std::path::PathBuf;
 use zellij_tile::prelude::*;
 
 pub struct Config {
+    pub root: Option<PathBuf>,
     pub layout: LayoutInfo,
+    pub switch_startegy: SwitchStrategy,
 }
 
 #[derive(Debug, Clone)]
@@ -33,7 +35,9 @@ impl Default for SwitchStrategy {
 impl Default for Config {
     fn default() -> Self {
         Self {
+            root: Default::default(),
             layout: LayoutInfo::BuiltIn("default".to_string()),
+            switch_startegy: Default::default(),
         }
     }
 }

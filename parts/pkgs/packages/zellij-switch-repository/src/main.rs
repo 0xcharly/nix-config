@@ -22,7 +22,6 @@ use workers::crawlers::FileSystemWorker;
 #[derive(Default)]
 struct State {
     config: Config,
-    switch_startegy: SwitchStrategy,
     /// Events queued until `PermissionType::RunCommands` is provided.
     queued_events: Vec<Event>,
     /// Commands queued until the current session's name is known.
@@ -61,7 +60,8 @@ impl ZellijPlugin for State {
             EventType::SessionUpdate,
         ]);
 
-        self.switch_startegy = match configuration.get("strategy").map(|s| s.as_str()) {
+        self.config.root = configuration.get("repositories_root").map(PathBuf::from);
+        self.config.switch_startegy = match configuration.get("strategy").map(|s| s.as_str()) {
             Some("replace") => SwitchStrategy::Replace,
             Some("create-new") => SwitchStrategy::CreateNew,
             _ => SwitchStrategy::Unknown,
@@ -344,7 +344,7 @@ impl State {
                 return false;
             }
 
-            // match self.switch_startegy {
+            // match self.config.switch_startegy {
             //     // Switch to the existing session, and leave the current one unchanged.
             //     SwitchStartegy::CreateNew => zellij_switch_session(session_name, cwd),
             //     SwitchStartegy::Replace | SwitchStartegy::Unknown => {
@@ -373,7 +373,7 @@ impl State {
             return Ok(false);
         }
 
-        let cwd = PathBuf::from("/Users/delay/code").join(relative_cwd);
+        let cwd = self.config.repositories_root.ok()?.join(relative_cwd);
         switch_session_with_layout(Some(&session_name), self.config.layout.clone(), Some(cwd));
 
         // TODO: kill previous session if it was started just to run this plugin.
