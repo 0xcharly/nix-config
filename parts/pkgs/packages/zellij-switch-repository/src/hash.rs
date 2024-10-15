@@ -33,7 +33,10 @@ pub fn get_session_name(path: &PathBuf) -> Result<String> {
 
     Ok(format!(
         "{}-{}",
-        hashed_path.chars().take(HASH_PREFIX_LENGTH).collect::<String>(),
+        hashed_path
+            .chars()
+            .take(HASH_PREFIX_LENGTH)
+            .collect::<String>(),
         fname
     ))
 }

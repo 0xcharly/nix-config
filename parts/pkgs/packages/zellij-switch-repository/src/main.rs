@@ -373,7 +373,12 @@ impl State {
             return Ok(false);
         }
 
-        let cwd = self.config.repositories_root.ok()?.join(relative_cwd);
+        let cwd = self
+            .config
+            .root
+            .as_ref()
+            .ok_or_else(|| anyhow!("No repositories root directory specified"))?
+            .join(relative_cwd);
         switch_session_with_layout(Some(&session_name), self.config.layout.clone(), Some(cwd));
 
         // TODO: kill previous session if it was started just to run this plugin.
