@@ -19,6 +19,7 @@ impl FileSystemWorker {
         // them back to the plugin one by one. However, this is "by design" and "temporary", and
         // the `list_repositories(…)` function will be updated to return an iterator instead.
         for repository in list_repositories(root, max_depth) {
+            // TODO: report errors to the user through the UI.
             post_message_to_plugin(PluginMessage::new_to_plugin(
                 &serialize(&FileSystemWorkerMessage::Crawl).unwrap(),
                 &serialize(&RepositoryCrawlerResponse { repository }).unwrap(),

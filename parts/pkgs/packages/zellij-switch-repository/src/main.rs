@@ -5,7 +5,6 @@
 /// a Zellij session with the target directory as CWD.
 /// Sessions are given a stable unique name to switch to an existing session if it exists instead
 /// of systematically creating new ones.
-
 use matcher::RepositoryMatcher;
 use protocol::{deserialize, serialize, Config};
 use ui::{Renderer, Rerender};
@@ -35,9 +34,9 @@ struct State {
     current_session_name: Option<String>,
     all_sessions_name: BTreeSet<String>,
 
-    // All permissions are required to perform our purpose.
+    // All permissions are required to fulfil our purpose.
     permissions_granted: bool,
-    // Events queued until `PermissionType::RunCommands` is provided.
+    // Events queued until the first `Event::SessionUpdate` is received.
     queued_events: Vec<Event>,
 
     // Matches the list of repositories against the user input. Keeps track of the user input.
@@ -127,6 +126,7 @@ impl State {
         // NOTE: The `PluginMessage::new_to_worker(…)`'s `worker_name` argument must match the
         // worker's namespace specified when registering the worker: to send messages to the worker
         // declared with `test_worker` namespace, pass `"test"` to `::new_to_worker(…)`.
+        // TODO: report errors to the user through the UI.
         post_message_to(PluginMessage::new_to_worker(
             "file_system", // Post to the `file_system_worker` namespace.
             &serialize(&FileSystemWorkerMessage::Crawl).unwrap(),
@@ -174,10 +174,15 @@ impl State {
                         && metadata.map(|m| m.is_dir).unwrap_or(false)
                 });
                 if has_dot_git_dir {
-                    let parent = paths.first().unwrap().0.parent().unwrap().to_path_buf();
-                    let parent = parent
+                    let parent = paths
+                        .first()
+                        .expect("`paths` is guaranteed to contain at least 1 child")
+                        .0
+                        .parent()
+                        .expect("`parent` is guaranteed to exist")
+                        .to_path_buf()
                         .strip_prefix(PathBuf::from("/host"))
-                        .unwrap()
+                        .expect("path is guaranteed to start with the above prefix")
                         .to_path_buf();
                     self.matcher.add_choice(parent);
                 } else {
