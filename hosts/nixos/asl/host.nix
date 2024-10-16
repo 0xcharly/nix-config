@@ -7,7 +7,7 @@ in {
     ./vmware-guest.nix
   ];
 
-  # Heasless system à la WSL.
+  # Headless system à la WSL.
   modules.usrenv.compositor = "headless";
 
   # Use Zellij for repository management.

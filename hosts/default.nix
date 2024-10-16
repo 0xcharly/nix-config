@@ -10,6 +10,9 @@
   inherit (inputs.nixpkgs.lib.attrsets) recursiveUpdate;
   inherit (inputs.nixpkgs.lib.lists) concatLists flatten singleton;
 
+  # Hardware compat for specific hardware, e.g. Raspberry Pi.
+  hw = inputs.nixos-hardware.nixosModules;
+
   # Specify root path for the modules. The concept is similar to modulesPath
   # that is found in nixpkgs, and is defined in case the modulePath changes
   # depth (i.e modules becomes nixos/modules).
@@ -149,5 +152,13 @@ in {
     (mkNixosHost ./nixos/asl {system = "aarch64-linux";})
     (mkNixosHost ./nixos/vm-aarch64 {system = "aarch64-linux";})
     (mkNixosHost ./nixos/vm-linode {system = "x86_64-linux";})
+    (mkNixosHost ./nixos/rip4 {
+      system = "aarch64-linux";
+      extraModules = [hw.raspberry-pi-4];
+    })
+    (mkNixosHost ./nixos/rip5 {
+      system = "aarch64-linux";
+      extraModules = [hw.raspberry-pi-5];
+    })
   ];
 }

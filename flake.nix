@@ -18,6 +18,9 @@
     nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-24.05-darwin";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
+    # Hardware-specific NixOS modules.
+    nixos-hardware.url = "github:nixos/nixos-hardware";
+
     # Manages home directory, dotfiles and base environment.
     home-manager = {
       url = "github:nix-community/home-manager/release-24.05";
