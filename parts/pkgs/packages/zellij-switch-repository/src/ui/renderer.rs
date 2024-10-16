@@ -1,6 +1,6 @@
 use crate::matcher::RepositoryMatcher;
 
-use super::{Frame, Renderer};
+use super::{Frame, Renderer, Rerender};
 
 impl Renderer {
     pub fn next_frame<'ui>(
@@ -20,28 +20,28 @@ impl Renderer {
         }
     }
 
-    pub fn on_user_input(&mut self, matcher: &RepositoryMatcher) -> bool {
+    pub fn on_user_input(&mut self, matcher: &RepositoryMatcher) -> Rerender {
         let previous_index = self.selected_index;
         self.selected_index = self.selected_index.clamp(0, matcher.matches.len() - 1);
-        previous_index != self.selected_index
+        (previous_index != self.selected_index).into()
     }
 
-    pub fn select_up(&mut self, matcher: &RepositoryMatcher) -> bool {
+    pub fn select_up(&mut self, matcher: &RepositoryMatcher) -> Rerender {
         let previous_index = self.selected_index;
         self.selected_index = self
             .selected_index
             .saturating_sub(1)
             .clamp(0, matcher.matches.len() - 1);
-        previous_index != self.selected_index
+        (previous_index != self.selected_index).into()
     }
 
-    pub fn select_down(&mut self, matcher: &RepositoryMatcher) -> bool {
+    pub fn select_down(&mut self, matcher: &RepositoryMatcher) -> Rerender {
         let previous_index = self.selected_index;
         self.selected_index = self
             .selected_index
             .saturating_add(1)
             .clamp(0, matcher.matches.len() - 1);
-        previous_index != self.selected_index
+        (previous_index != self.selected_index).into()
     }
 
     // TODO: improve that, and add support for remembering the selection if still available after

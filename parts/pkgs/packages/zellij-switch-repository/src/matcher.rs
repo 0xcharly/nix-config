@@ -4,7 +4,13 @@ use std::path::PathBuf;
 use fuzzy_matcher::skim::SkimMatcherV2;
 use fuzzy_matcher::FuzzyMatcher;
 
-use crate::model::Match;
+use crate::ui::Rerender;
+
+#[derive(PartialEq)]
+pub struct Match {
+    pub indices: Vec<usize>,
+    pub entry: String,
+}
 
 pub struct RepositoryMatcher {
     pub matches: Vec<Match>,
@@ -31,16 +37,17 @@ impl RepositoryMatcher {
         self.apply(/* force_render */ false);
     }
 
-    pub fn pop_char(&mut self) -> bool {
-        self.user_input.pop().is_some() && self.apply(/* force_render */ true)
+    pub fn remove_trailing_char(&mut self) -> Rerender {
+        Rerender::from(self.user_input.pop().is_some())
+            .and_then(|| self.apply(/* force_render */ true))
     }
 
-    pub fn on_user_input(&mut self, ch: char) -> bool {
+    pub fn on_user_input(&mut self, ch: char) -> Rerender {
         self.user_input.push(ch);
         self.apply(/* force_render */ true)
     }
 
-    pub fn clear_user_input(&mut self) -> bool {
+    pub fn clear_user_input(&mut self) -> Rerender {
         let is_empty = self.user_input().is_empty();
         self.user_input.clear();
         self.apply(/* force_render */ !is_empty)
@@ -51,11 +58,11 @@ impl RepositoryMatcher {
     }
 
     pub fn user_input(&self) -> &str {
-        self.user_input.as_str()
+        &self.user_input
     }
 
-    fn apply(&mut self, force_render: bool) -> bool {
-        let previous_matches = self.matches.drain(..).collect::<Vec<_>>();
+    fn apply(&mut self, force_render: bool) -> Rerender {
+        let previous_matches = std::mem::take(&mut self.matches);
 
         for choice in self.choices.iter().filter_map(|p| p.to_str()) {
             if let Some((_score, indices)) = self
@@ -69,12 +76,13 @@ impl RepositoryMatcher {
             }
         }
 
-        force_render
+        let rerender = force_render
             || self.matches.len() != previous_matches.len()
             || self
                 .matches
                 .iter()
                 .zip(&previous_matches)
-                .any(|(a, b)| a != b)
+                .any(|(a, b)| a != b);
+        rerender.into()
     }
 }
