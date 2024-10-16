@@ -18,6 +18,7 @@
         '';
       })
       (pkgs.nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})
+      (pkgs.unfree-fonts.comic-code.override {ligatures = false;})
       (pkgs.unfree-fonts.comic-code.override {ligatures = true;})
       pkgs.material-design-icons
       pkgs.mononoki
