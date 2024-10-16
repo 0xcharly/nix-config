@@ -1,4 +1,4 @@
-pub mod crawlers;
-pub mod protocol;
+pub(crate) mod crawlers;
+pub(crate) mod protocol;
 
 mod fs;

@@ -1,3 +1,11 @@
+/// Implementation of Prime's "sessionizer" script as a Zellij plugin.
+///
+/// This plugin scans the given root directory and yields a list of git repositories found under
+/// it. It displays this list in an interactive picker with fuzzy matching. On selection, it opens
+/// a Zellij session with the target directory as CWD.
+/// Sessions are given a stable unique name to switch to an existing session if it exists instead
+/// of systematically creating new ones.
+
 use matcher::RepositoryMatcher;
 use protocol::{deserialize, serialize, Config};
 use ui::{Renderer, Rerender};

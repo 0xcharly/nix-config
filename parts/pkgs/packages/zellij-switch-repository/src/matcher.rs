@@ -7,12 +7,12 @@ use fuzzy_matcher::FuzzyMatcher;
 use crate::ui::Rerender;
 
 #[derive(PartialEq)]
-pub struct Match {
+pub(crate) struct Match {
     pub indices: Vec<usize>,
     pub entry: String,
 }
 
-pub struct RepositoryMatcher {
+pub(crate) struct RepositoryMatcher {
     pub matches: Vec<Match>,
 
     choices: BTreeSet<PathBuf>,
@@ -76,13 +76,13 @@ impl RepositoryMatcher {
             }
         }
 
-        let rerender = force_render
+        let render = force_render
             || self.matches.len() != previous_matches.len()
             || self
                 .matches
                 .iter()
                 .zip(&previous_matches)
                 .any(|(a, b)| a != b);
-        rerender.into()
+        render.into()
     }
 }

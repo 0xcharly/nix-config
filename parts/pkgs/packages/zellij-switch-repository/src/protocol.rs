@@ -4,7 +4,7 @@ use std::path::PathBuf;
 
 use zellij_tile::prelude::*;
 
-pub struct Config {
+pub(crate) struct Config {
     pub root: Option<PathBuf>,
     pub layout: LayoutInfo,
 }
@@ -18,14 +18,15 @@ impl Default for Config {
     }
 }
 
-pub fn serialize<T>(value: &T) -> serde_json::Result<String>
+// TODO: unwrap the JSON-specific error to fully abstract away the serialization methods/format.
+pub(crate) fn serialize<T>(value: &T) -> Result<String>
 where
     T: ?Sized + Serialize,
 {
     serde_json::to_string(value)
 }
 
-pub fn deserialize<'a, T>(s: &'a str) -> Result<T>
+pub(crate) fn deserialize<'a, T>(s: &'a str) -> Result<T>
 where
     T: Deserialize<'a>,
 {

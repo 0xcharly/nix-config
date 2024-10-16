@@ -60,13 +60,12 @@ impl Display for Frame<'_> {
                 let fills = " ".repeat(self.cols.saturating_sub(2 + m.entry.len()));
                 writeln!(
                     f,
-                    "{}{}{}",
+                    "{}{styled_entry}{}",
                     self.styles.caret.paint("> "),
-                    styled_entry,
                     self.styles.selected.paint(&fills)
                 )?;
             } else {
-                writeln!(f, "  {}", styled_entry)?;
+                writeln!(f, "  {styled_entry}")?;
             }
         }
 

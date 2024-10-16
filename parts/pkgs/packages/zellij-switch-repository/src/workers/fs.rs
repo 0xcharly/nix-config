@@ -2,7 +2,8 @@ use std::collections::BTreeSet;
 use std::fs;
 use std::path::PathBuf;
 
-pub fn list_repositories(root: &PathBuf, max_depth: usize) -> BTreeSet<PathBuf> {
+// TODO: Change this to return an iterator instead so that early results are immediately visible.
+pub(crate) fn list_repositories(root: &PathBuf, max_depth: usize) -> BTreeSet<PathBuf> {
     let mut repositories = BTreeSet::new();
     let mut dirs_to_walk = Vec::new();
 
