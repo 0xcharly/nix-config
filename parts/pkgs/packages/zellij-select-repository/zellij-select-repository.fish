@@ -19,7 +19,7 @@ end
 
 set -q OPEN_GIT_REPOSITORY_COMMAND
 or set -l OPEN_GIT_REPOSITORY_COMMAND "
-    command find $gitget_root -type d -name .git -exec dirname {} \; \
+    command find $gitget_root -depth -maxdepth 4 -type d -name .git -prune -exec dirname {} \; \
   | command xargs realpath \
   | string replace \"$gitget_root/\" \"\"
   | command fzf +m --bind=ctrl-r:toggle-sort --highlight-line"
