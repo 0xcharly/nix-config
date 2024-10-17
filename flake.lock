@@ -520,11 +520,11 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1728896892,
-        "narHash": "sha256-e5WdDILl6W/ocKHVtvLWKWWMgYopJwiUO9ghDr/Zow4=",
+        "lastModified": 1729163752,
+        "narHash": "sha256-0ioMUxzgOXofXO74sCSqy/GtWdqvd9/I45jYiMwv7TE=",
         "owner": "0xcharly",
         "repo": "nix-config-nvim",
-        "rev": "779b28619cc0647686fc178f6adb408dcd5bee1d",
+        "rev": "09f8f2f80b4b5267df4ee9e25aae03a324f6bf12",
         "type": "github"
       },
       "original": {
@@ -611,6 +611,21 @@
       "original": {
         "owner": "nix-community",
         "repo": "nix-index-database",
+        "type": "github"
+      }
+    },
+    "nixos-hardware": {
+      "locked": {
+        "lastModified": 1728729581,
+        "narHash": "sha256-oazkQ/z7r43YkDLLQdMg8oIB3CwWNb+2ZrYOxtLEWTQ=",
+        "owner": "nixos",
+        "repo": "nixos-hardware",
+        "rev": "a8dd1b21995964b115b1e3ec639dd6ce24ab9806",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixos-hardware",
         "type": "github"
       }
     },
@@ -812,6 +827,7 @@
         "nix-darwin": "nix-darwin",
         "nix-homebrew": "nix-homebrew",
         "nix-index-database": "nix-index-database",
+        "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_5",
         "nixpkgs-darwin": "nixpkgs-darwin_2",
         "nixpkgs-unstable": "nixpkgs-unstable_2",
