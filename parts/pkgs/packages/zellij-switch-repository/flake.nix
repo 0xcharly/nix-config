@@ -36,7 +36,8 @@
 
               # Rust tools.
               bacon # Diagnostics
-              (rust-bin.fromRustupToolchainFile ./rust-toolchain.toml) # Toolchain
+              rust-analyzer # LSP
+              (pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml) # Toolchain
             ];
 
             formatter = treefmt.config.build.wrapper;
