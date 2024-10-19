@@ -12,6 +12,7 @@
 
   # Hardware compat for specific hardware, e.g. Raspberry Pi.
   hw = inputs.nixos-hardware.nixosModules;
+  raspberrySdImage = "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-raspberrypi.nix";
 
   # Specify root path for the modules. The concept is similar to modulesPath
   # that is found in nixpkgs, and is defined in case the modulePath changes
@@ -134,7 +135,7 @@
       });
 
   mkHostAttrs = builtins.foldl' recursiveUpdate {};
-in {
+in rec {
   flake.lib = {
     inherit mkDarwinHost mkHomeHost mkNixosHost mkHostAttrs;
   };
@@ -152,13 +153,18 @@ in {
     (mkNixosHost ./nixos/asl {system = "aarch64-linux";})
     (mkNixosHost ./nixos/vm-aarch64 {system = "aarch64-linux";})
     (mkNixosHost ./nixos/vm-linode {system = "x86_64-linux";})
-    (mkNixosHost ./nixos/rip4 {
+    (mkNixosHost ./nixos/rpi4 {
       system = "aarch64-linux";
-      extraModules = [hw.raspberry-pi-4];
+      extraModules = [raspberrySdImage hw.raspberry-pi-4];
     })
-    (mkNixosHost ./nixos/rip5 {
+    (mkNixosHost ./nixos/rpi5 {
       system = "aarch64-linux";
-      extraModules = [hw.raspberry-pi-5];
+      extraModules = [raspberrySdImage hw.raspberry-pi-5];
     })
   ];
+
+  flake.images = builtins.listToAttrs (builtins.map (name: {
+    inherit name;
+    value = flake.nixosConfigurations."${name}".config.system.build.sdImage;
+  }) ["rpi4" "rpi5"]);
 }

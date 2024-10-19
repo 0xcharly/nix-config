@@ -1,4 +1,4 @@
-{config, ...}: let
+{config, pkgs, ...}: let
   inherit (config.modules.system.hosts) asl;
 in {
   imports = [
@@ -30,6 +30,9 @@ in {
   boot.initrd.kernelModules = [];
   boot.kernelModules = [];
   boot.extraModulePackages = [];
+
+  # Be careful updating this.
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;

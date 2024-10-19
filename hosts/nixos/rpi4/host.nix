@@ -1,5 +1,5 @@
 {
-  imports = [./fs.nix];
+  imports = [];
 
   # Use a desktop environment.
   # TODO: consider switching to wayland.
@@ -14,7 +14,7 @@
   # Don't require password for sudo.
   security.sudo.wheelNeedsPassword = false;
 
-  networking.hostName = "rip5";
+  networking.hostName = "rpi4";
 
   # Lots of stuff that uses aarch64 that claims doesn't work, but actually works.
   nixpkgs.config.allowUnsupportedSystem = true;

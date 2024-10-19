@@ -1,4 +1,4 @@
-{
+{pkgs, ...}: {
   imports = [
     ./fs.nix
   ];
@@ -31,6 +31,9 @@
   boot.initrd.kernelModules = [];
   boot.kernelModules = [];
   boot.extraModulePackages = [];
+
+  # Be careful updating this.
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Enable LISH.
   # https://www.linode.com/docs/guides/install-nixos-on-linode/#enable-lish

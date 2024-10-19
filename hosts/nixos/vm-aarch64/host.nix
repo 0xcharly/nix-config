@@ -29,6 +29,9 @@
   boot.kernelModules = [];
   boot.extraModulePackages = [];
 
+  # Be careful updating this.
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
