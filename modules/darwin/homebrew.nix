@@ -25,12 +25,21 @@ in {
         # Xcode is installed out-of-band on corp devices.
         Xcode = 497799835;
       });
-    casks =
+    casks = let
+      no_quarantine = name: {
+        inherit name;
+        args.no_quarantine = true;
+      };
+    in
       [
         # Cross-platfroms password management.
         "1password"
 
         # Browsers.
+        # https://chromium.googlesource.com/chromium/src/+/main/docs/mac_arm64.md
+        (no_quarantine "chromium")
+        # https://librewolf.net/docs/faq/#why-is-librewolf-marked-as-broken
+        (no_quarantine "librewolf")
         "firefox@developer-edition"
         "orion"
 
