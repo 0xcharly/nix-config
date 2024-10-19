@@ -45,7 +45,7 @@ in {
           minimum-contrast = 1.1;
           cursor-style = "block";
           cursor-style-blink = false;
-          mouse-hide-while-typing = true;
+          mouse-hide-while-typing = false;
           background-opacity = 0.95;
           unfocused-split-opacity = 1.0;
           background-blur-radius = 20;
