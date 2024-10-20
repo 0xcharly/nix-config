@@ -21,6 +21,7 @@ in rec {
   imports = [
     inputs.catppuccin.homeManagerModules.catppuccin
 
+    ./browsers.nix
     ./fonts.nix
     ./scripts.nix
     ./shells.nix
