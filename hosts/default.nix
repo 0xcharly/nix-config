@@ -77,7 +77,7 @@
       });
   };
 
-  mkDarwinHost = host: {
+  mkDarwinHost = hostname: {
     system ? "aarch64-darwin",
     moduleTrees ? [],
     roles ? [],
@@ -89,14 +89,15 @@
   in
     mkHost (args'
       // {
-        inherit host system;
+        inherit system;
+        host = ./darwin/ + hostname;
         builder = mkDarwinSystem;
         moduleTrees = moduleTrees ++ [config managed shared users];
         roles = roles ++ [darwin];
         extraModules = extraModules ++ [age hm];
       });
 
-  mkHomeHost = host: {
+  mkHomeHost = hostname: {
     system,
     username ? "delay",
     moduleTrees ? [],
@@ -108,14 +109,15 @@
   in
     mkHost (args'
       // {
-        inherit host system;
+        inherit system;
+        host = ./home + "/delay@" + hostname;
         builder = mkStandaloneHome;
         moduleTrees = moduleTrees ++ [config shared];
         roles = roles ++ [home];
         extraModules = extraModules ++ [age (import standalone username)];
       });
 
-  mkNixosHost = host: {
+  mkNixosHost = hostname: {
     system,
     moduleTrees ? [],
     roles ? [],
@@ -127,7 +129,8 @@
   in
     mkHost (args'
       // {
-        inherit host system;
+        inherit system;
+        host = ./nixos/ + hostname;
         builder = mkNixosSystem;
         moduleTrees = moduleTrees ++ [config managed shared users];
         roles = roles ++ [nixos];
@@ -141,25 +144,25 @@ in rec {
   };
 
   flake.darwinConfigurations = mkHostAttrs [
-    (mkDarwinHost ./darwin/mbp {})
-    (mkDarwinHost ./darwin/studio {})
+    (mkDarwinHost "mbp" {})
+    (mkDarwinHost "studio" {})
   ];
 
   flake.homeConfigurations = mkHostAttrs [
-    (mkHomeHost (./home + "/delay@linode") {system = "x86_64-linux";})
-    (mkHomeHost ./home/rpi4 {system = "aarch64-linux";})
-    (mkHomeHost ./home/rpi5 {system = "aarch64-linux";})
+    (mkHomeHost "linode" {system = "x86_64-linux";})
+    (mkHomeHost "pi4" {system = "aarch64-linux";})
+    (mkHomeHost "pi5" {system = "aarch64-linux";})
   ];
 
   flake.nixosConfigurations = mkHostAttrs [
-    (mkNixosHost ./nixos/asl {system = "aarch64-linux";})
-    (mkNixosHost ./nixos/vm-aarch64 {system = "aarch64-linux";})
-    (mkNixosHost ./nixos/vm-linode {system = "x86_64-linux";})
-    (mkNixosHost ./nixos/rpi4 {
+    (mkNixosHost "asl" {system = "aarch64-linux";})
+    (mkNixosHost "vm-aarch64" {system = "aarch64-linux";})
+    (mkNixosHost "nixode" {system = "x86_64-linux";})
+    (mkNixosHost "rpi4" {
       system = "aarch64-linux";
       extraModules = [raspberrySdImage hw.raspberry-pi-4];
     })
-    (mkNixosHost ./nixos/rpi5 {
+    (mkNixosHost "rpi5" {
       system = "aarch64-linux";
       extraModules = [raspberrySdImage hw.raspberry-pi-5];
     })
