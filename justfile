@@ -124,6 +124,15 @@ bootstrap-vm addr:
       ssh-keygen -R $host 2> /dev/null
     end
 
+[doc('Copy ~/.config/nix/nix.conf to remote host')]
+[group('secrets')]
+[macos]
+ssh-generate-nix-conf host:
+    echo "access-tokens = github.com=$( \
+        op read 'op://Private/GitHub Fine-grained token for Nix/password' \
+    )" | ssh {{ ssh_options }} -p{{ ssh_port }} -l{{ ssh_user }} {{ host }} \
+         "bash -c \"install -D -m 400 <(dd) \$HOME/.config/nix/nix.conf\""
+
 [doc('Copy secrets to remote host')]
 [group('secrets')]
 [macos]

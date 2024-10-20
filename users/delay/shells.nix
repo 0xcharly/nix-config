@@ -77,11 +77,13 @@ in {
 
   home.sessionVariables.SHELL = lib.getExe pkgs.fish;
 
-  home.packages = [
-    pkgs.fishPlugins.done
-    pkgs.fishPlugins.fzf
-    pkgs.fishPlugins.transient-fish
-  ] ++ lib.optionals (switcherApp == "tmux") [
-    pkgs.open-local-repository-fish
-  ];
+  home.packages =
+    [
+      pkgs.fishPlugins.done
+      pkgs.fishPlugins.fzf
+      pkgs.fishPlugins.transient-fish
+    ]
+    ++ lib.optionals (switcherApp == "tmux") [
+      pkgs.open-local-repository-fish
+    ];
 }
