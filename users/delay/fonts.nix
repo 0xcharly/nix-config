@@ -8,7 +8,7 @@
     then args.osConfig
     else args.config;
 in {
-  font.fontconfig.enable = config.modules.usrenv.enableProfileFont;
+  fonts.fontconfig.enable = config.modules.usrenv.enableProfileFont;
 
   # TODO: reconcile with modules/systems/fonts.nix once verified that it works.
   home.packages = lib.mkIf config.modules.usrenv.enableProfileFont [
