@@ -83,6 +83,7 @@
     # 👻
     # TODO: uncomment when Ghostty is released publicly.
     # ghostty.url = "github:ghostty-org/ghostty";
+    nix-config-ghostty.url = "github:0xcharly/nix-config-ghostty";
 
     # Secrets management
     # NOTE: See comment in ./modules/shared/module.nix.
