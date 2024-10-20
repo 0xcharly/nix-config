@@ -134,6 +134,41 @@
         extraModules = extraModules ++ [age hm];
       });
 
+  mkNixosIso = host: {
+    system,
+    moduleTrees ? [],
+    roles ? [],
+    extraModules ? [],
+    ...
+  } @ args': let
+    hm = inputs.home-manager.nixosModules.home-manager; # home-manager nixos module
+
+    # Modules used to create a NixOS image.
+    isoModule = {
+      lib,
+      modulesPath,
+      ...
+    }: {
+      # TODO: move these into a proper role.
+      services.openssh.settings.PermitRootLogin = lib.mkForce "yes";
+      imports = [
+        # Base ISO content.
+        (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
+        # Provide an initial copy of the NixOS channel so that the user
+        # doesn't need to run "nix-channel --update" first.
+        (modulesPath + "/installer/cd-dvd/channel.nix")
+      ];
+    };
+  in
+    mkHost (args'
+      // {
+        inherit host system;
+        builder = mkNixosSystem;
+        moduleTrees = moduleTrees ++ [config managed shared users];
+        roles = roles ++ [nixos];
+        extraModules = extraModules ++ [hm isoModule];
+      });
+
   mkHostAttrs = builtins.foldl' recursiveUpdate {};
 in rec {
   flake.lib = {
@@ -155,6 +190,9 @@ in rec {
     ];
 
   flake.nixosConfigurations = mkHostAttrs [
+    (mkNixosIso ./iso/arm64 {system = "aarch64-linux";})
+    (mkNixosIso ./iso/x86 {system = "x86_64-linux";})
+
     (mkNixosHost ./nixos/asl {system = "aarch64-linux";})
     (mkNixosHost ./nixos/vm-aarch64 {system = "aarch64-linux";})
     (mkNixosHost ./nixos/nixode {system = "x86_64-linux";})
@@ -168,8 +206,12 @@ in rec {
     })
   ];
 
-  flake.images = builtins.listToAttrs (builtins.map (name: {
-    inherit name;
-    value = flake.nixosConfigurations."${name}".config.system.build.sdImage;
-  }) ["rpi4" "rpi5"]);
+  flake.images = builtins.listToAttrs ((builtins.map (name: {
+      inherit name;
+      value = flake.nixosConfigurations."${name}".config.system.build.isoImage;
+    }) ["arm64" "x86"])
+    ++ (builtins.map (name: {
+      inherit name;
+      value = flake.nixosConfigurations."${name}".config.system.build.sdImage;
+    }) ["rpi4" "rpi5"]));
 }
