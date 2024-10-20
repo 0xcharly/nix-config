@@ -38,6 +38,14 @@ in {
       '';
     };
 
+    enableProfileFont = mkOption {
+      default = false;
+      type = bool;
+      description = ''
+        Whether to install fonts via Home Manager.
+      '';
+    };
+
     switcherApp = mkOption {
       default = "tmux";
       type = enum ["tmux" "zellij"];
