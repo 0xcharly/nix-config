@@ -97,8 +97,8 @@
       });
 
   mkHomeHost = host: {
+    system,
     username ? "delay",
-    system ? "x86_64-linux",
     moduleTrees ? [],
     roles ? [],
     extraModules ? [],
@@ -146,7 +146,9 @@ in rec {
   ];
 
   flake.homeConfigurations = mkHostAttrs [
-    (mkHomeHost (./home + "/delay@linode") {})
+    (mkHomeHost (./home + "/delay@linode") {system = "x86_64-linux";})
+    (mkHomeHost ./home/rpi4 {system = "aarch64-linux";})
+    (mkHomeHost ./home/rpi5 {system = "aarch64-linux";})
   ];
 
   flake.nixosConfigurations = mkHostAttrs [
