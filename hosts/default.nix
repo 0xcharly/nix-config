@@ -90,7 +90,7 @@
     mkHost (args'
       // {
         inherit system;
-        host = ./darwin/ + hostname;
+        host = ./darwin + "/${hostname}";
         builder = mkDarwinSystem;
         moduleTrees = moduleTrees ++ [config managed shared users];
         roles = roles ++ [darwin];
@@ -110,7 +110,7 @@
     mkHost (args'
       // {
         inherit system;
-        host = ./home + "/delay@" + hostname;
+        host = ./home + "/delay@${hostname}";
         builder = mkStandaloneHome;
         moduleTrees = moduleTrees ++ [config shared];
         roles = roles ++ [home];
@@ -130,7 +130,7 @@
     mkHost (args'
       // {
         inherit system;
-        host = ./nixos/ + hostname;
+        host = ./nixos + "/${hostname}";
         builder = mkNixosSystem;
         moduleTrees = moduleTrees ++ [config managed shared users];
         roles = roles ++ [nixos];
