@@ -44,6 +44,7 @@ in {
         "orion"
 
         # Utilities.
+        "raspberry-pi-imager" # RPI bootloader & OS images.
         "raycast" # Mandatory Spotlight alternative.
         "scroll-reverser" # Custom scroll directions for trackpad vs. mouse.
         "spotify" # Because the web version sucks.
