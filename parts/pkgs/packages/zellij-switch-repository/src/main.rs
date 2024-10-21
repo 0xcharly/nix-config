@@ -41,7 +41,7 @@ struct State {
 
     // Matches the list of repositories against the user input. Keeps track of the user input.
     matcher: RepositoryMatcher,
-    // Handles drawing the list of results on the screen, as well as user selection.
+    // Handles drawing the list of results on the screen, as well as dealing with user selection.
     renderer: Renderer,
 }
 
@@ -55,8 +55,8 @@ impl ZellijPlugin for State {
     // Requests the required permissions and install asynchronous handlers to deal with requests
     // responses.
     fn load(&mut self, configuration: BTreeMap<String, String>) {
-        // [ChangeApplicationState] is required for logging to Zellij's log, and for switching
-        // session.
+        // [ChangeApplicationState] is required for logging to Zellij's log, for switching session,
+        // and for renaming panes.
         request_permission(&[
             PermissionType::ChangeApplicationState,
             PermissionType::ReadApplicationState,
@@ -72,8 +72,8 @@ impl ZellijPlugin for State {
         self.config.root = configuration.get("repositories_root").map(PathBuf::from);
 
         if self.permissions_granted {
-            // Start scanning immediatelly since permissions have already been granted.
-            self.start_async_root_scan();
+            // Initialize the plugin.
+            self.on_permissions_granted();
 
             // Hide the plugin window. It's just meant to be running in the background and
             // listening to focus events.
@@ -84,7 +84,7 @@ impl ZellijPlugin for State {
     fn update(&mut self, event: Event) -> bool {
         let rerender = if let Event::PermissionRequestResult(PermissionStatus::Granted) = event {
             self.permissions_granted = true;
-            self.start_async_root_scan();
+            self.on_permissions_granted();
             self.drain_events()
         } else if self.permissions_granted {
             self.handle_event(event)
@@ -103,6 +103,14 @@ impl ZellijPlugin for State {
 }
 
 impl State {
+    fn on_permissions_granted(&self) {
+        // Gives the plugin pane a less verbose name.
+        rename_plugin_pane(get_plugin_ids().plugin_id, ui::PANE_TITLE);
+
+        // Start scanning immediatelly since permissions have already been granted.
+        self.start_async_root_scan();
+    }
+
     fn start_async_root_scan(&self) {
         self.post_repository_crawler_task(PathBuf::from("/host"), /* max_depth */ 5)
     }
