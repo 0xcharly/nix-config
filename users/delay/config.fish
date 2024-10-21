@@ -38,44 +38,44 @@ function git_repo_get_name
   end
 end
 
-function fish_right_prompt
+function segment -a icon text color
   printf " "
-  set_color black
+  set_color normal; set_color $color
   printf ""
-  set_color normal; set_color grey --background black
-  printf " %s " (date '+%H:%M:%S')
-  set_color normal; set_color black
+  set_color $color --reverse
+  printf $icon
+  set_color normal; set_color $color
   printf ""
+  set_color normal; set_color black --reverse
+  printf ""
+  set_color normal; set_color grey --background black
+  printf " %s" $text
+  set_color normal; set_color black
+  printf ""
   set_color normal
+end
+
+function fish_right_prompt
+  # TODO: this doesn't work for some reason: $status is always 0…
+  set -l _status $status
+  if test $_status -ne 0
+    segment "󱖫 " $_status red
+  end
 
   set -l citc_space (citc_get_space_name)
   if test -n "$citc_space"
-    set_color magenta --reverse
-    printf "   %s " $citc_space
-    set_color normal
-    set_color magenta
+    segment " " $citc_space "cba6f7" # Mauve
   else
     set -l nix_shell (nix_shell_get_name)
     if test -n "$nix_shell"
-      set_color blue --reverse
-      printf " 󱄅  %s " $nix_shell
-      set_color normal
-      set_color blue
+      segment "󱄅 " $nix_shell "74c7ec" # Sapphire
     else
       set -l git_repo (git_repo_get_name)
       if test -n "$git_repo"
-        set_color red --reverse
-        printf " 󰊢  %s " $git_repo
-        set_color normal
-        set_color red
+        segment "󰊢 " $git_repo "eba0ac" # Maroon
       else
-        set_color green --reverse
-        printf " 󰉋  %s " (path basename $PWD)
-        set_color normal
-        set_color green
+        segment "󰉋 " (path basename $PWD) "94e2d5" # Teal
       end
     end
   end
-  printf ""
-  set_color normal
 end
