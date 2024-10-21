@@ -17,12 +17,16 @@ use std::{
     collections::{BTreeMap, BTreeSet},
     path::PathBuf,
 };
+
+#[cfg(not(feature = "zellij_fallback_fs_api"))]
 use workers::crawlers::FileSystemWorker;
 
 mod hash;
 mod matcher;
 mod protocol;
 mod ui;
+
+#[cfg(not(feature = "zellij_fallback_fs_api"))]
 mod workers;
 
 #[derive(Default)]
@@ -46,6 +50,7 @@ struct State {
 }
 
 register_plugin!(State);
+#[cfg(not(feature = "zellij_fallback_fs_api"))]
 register_worker!(FileSystemWorker, file_system_worker, FILE_SYSTEM_WORKER);
 
 impl ZellijPlugin for State {
@@ -63,6 +68,7 @@ impl ZellijPlugin for State {
         ]);
         subscribe(&[
             EventType::CustomMessage,
+            #[cfg(feature = "zellij_fallback_fs_api")]
             EventType::FileSystemUpdate,
             EventType::Key,
             EventType::PermissionRequestResult,
@@ -115,11 +121,8 @@ impl State {
         self.post_repository_crawler_task(PathBuf::from("/host"), /* max_depth */ 5)
     }
 
-    fn post_repository_crawler_task(&self, root: PathBuf, max_depth: usize) {
-        // TODO: add a compile-time toggle to use one approach or the other.
-        // For now, we're just running them both. They do the exact same thing, but all results are
-        // stored in a set which handles duplicates for us.
-
+    #[cfg(feature = "zellij_fallback_fs_api")]
+    fn post_repository_crawler_task(&self, root: PathBuf, _max_depth: usize) {
         // Scan the host folder with the async `scan_host_folder` API (workaround). This API posts
         // its results back to the plugin using the `Event::FileSystemUpdate` event (see
         // `State::handle_event(…)`).
@@ -127,7 +130,10 @@ impl State {
         // filesystem and get back a list of files. This is a workaround for the Zellij WASI
         // runtime being extremely slow. This API might be removed in the future.
         scan_host_folder(&root);
+    }
 
+    #[cfg(not(feature = "zellij_fallback_fs_api"))]
+    fn post_repository_crawler_task(&self, root: PathBuf, max_depth: usize) {
         // Scan the host folder using the FS worker (preferred).
         // This API posts its results back to the plugin using the `Event::CustomMessage` event
         // with a `FileSystemWorkerMessage::Crawl` message.
@@ -174,6 +180,7 @@ impl State {
                 }
                 _ => Rerender::No,
             },
+            #[cfg(feature = "zellij_fallback_fs_api")]
             Event::FileSystemUpdate(paths) => {
                 let has_dot_git_dir = paths.iter().any(|(path, metadata)| {
                     path.file_name()

@@ -8,7 +8,7 @@ mod frame;
 mod renderer;
 mod styles;
 
-pub const PANE_TITLE: &'static str = "Select a repository";
+pub const PANE_TITLE: &'static str = "Select a repository:";
 
 // TODO: figure out a better name.
 // TODO: consider adding a new `Force` option (which could be used to avoid special cases such as

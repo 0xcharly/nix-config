@@ -3,6 +3,9 @@ name = "zellij-switch-session"
 version = "0.1.0"
 edition = "2021"
 
+[features]
+zellij_fallback_fs_api = []
+
 [dependencies]
 ansi_term = "0.12.1"
 bstr = "1.10.0"
