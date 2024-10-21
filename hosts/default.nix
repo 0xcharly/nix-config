@@ -90,7 +90,7 @@
     mkHost (args'
       // {
         inherit system;
-        host = ./darwin + "/${hostname}";
+        host = ./darwin + hostname;
         builder = mkDarwinSystem;
         moduleTrees = moduleTrees ++ [config managed shared users];
         roles = roles ++ [darwin];
@@ -110,7 +110,7 @@
     mkHost (args'
       // {
         inherit system;
-        host = ./home + "/delay@${hostname}";
+        host = ./home + "/delay@${builtins.baseNameOf hostname}";
         builder = mkStandaloneHome;
         moduleTrees = moduleTrees ++ [config shared];
         roles = roles ++ [home];
@@ -130,7 +130,7 @@
     mkHost (args'
       // {
         inherit system;
-        host = ./nixos + "/${hostname}";
+        host = ./nixos + hostname;
         builder = mkNixosSystem;
         moduleTrees = moduleTrees ++ [config managed shared users];
         roles = roles ++ [nixos];
@@ -144,25 +144,25 @@ in rec {
   };
 
   flake.darwinConfigurations = mkHostAttrs [
-    (mkDarwinHost "mbp" {})
-    (mkDarwinHost "studio" {})
+    (mkDarwinHost /mbp {})
+    (mkDarwinHost /studio {})
   ];
 
   flake.homeConfigurations = mkHostAttrs [
-    (mkHomeHost "linode" {system = "x86_64-linux";})
-    (mkHomeHost "pi4" {system = "aarch64-linux";})
-    (mkHomeHost "pi5" {system = "aarch64-linux";})
+    (mkHomeHost /linode {system = "x86_64-linux";})
+    (mkHomeHost /pi4 {system = "aarch64-linux";})
+    (mkHomeHost /pi5 {system = "aarch64-linux";})
   ];
 
   flake.nixosConfigurations = mkHostAttrs [
-    (mkNixosHost "asl" {system = "aarch64-linux";})
-    (mkNixosHost "vm-aarch64" {system = "aarch64-linux";})
-    (mkNixosHost "nixode" {system = "x86_64-linux";})
-    (mkNixosHost "rpi4" {
+    (mkNixosHost /asl {system = "aarch64-linux";})
+    (mkNixosHost /vm-aarch64 {system = "aarch64-linux";})
+    (mkNixosHost /nixode {system = "x86_64-linux";})
+    (mkNixosHost /rpi4 {
       system = "aarch64-linux";
       extraModules = [raspberrySdImage hw.raspberry-pi-4];
     })
-    (mkNixosHost "rpi5" {
+    (mkNixosHost /rpi5 {
       system = "aarch64-linux";
       extraModules = [raspberrySdImage hw.raspberry-pi-5];
     })
