@@ -30,7 +30,7 @@ mod ui;
 mod workers;
 
 #[derive(Default)]
-struct State {
+struct SwitchRepositoryPlugin {
     config: Config,
 
     // We receive these via the `Event::SessionUdate` event. They are required for switching
@@ -49,11 +49,11 @@ struct State {
     renderer: Renderer,
 }
 
-register_plugin!(State);
+register_plugin!(SwitchRepositoryPlugin);
 #[cfg(not(feature = "zellij_fallback_fs_api"))]
 register_worker!(FileSystemWorker, file_system_worker, FILE_SYSTEM_WORKER);
 
-impl ZellijPlugin for State {
+impl ZellijPlugin for SwitchRepositoryPlugin {
     // Plugin entry point.
     //
     // Called by Zellij when the plugin is loaded into a session.
@@ -108,7 +108,7 @@ impl ZellijPlugin for State {
     }
 }
 
-impl State {
+impl SwitchRepositoryPlugin {
     fn on_permissions_granted(&self) {
         // Gives the plugin pane a less verbose name.
         rename_plugin_pane(get_plugin_ids().plugin_id, ui::PANE_TITLE);
