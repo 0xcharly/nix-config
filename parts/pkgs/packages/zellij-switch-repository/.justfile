@@ -15,5 +15,5 @@ dev:
 launch:
     zellij --layout share/launch-sessionizer.kdl
 
-build flavor="":
+build *flavor="":
   cargo build --target=wasm32-wasip1 {{ flavor }}

@@ -1,17 +1,18 @@
-use serde::{Deserialize, Serialize};
-use serde_json::Result;
+/// Abstracts away the serialization format and toolchain.
+use anyhow;
+use serde;
+use serde_json;
 
-// TODO: unwrap the JSON-specific error to fully abstract away the serialization methods/format.
-pub(crate) fn serialize<T>(value: &T) -> Result<String>
+pub(crate) fn serialize<T>(value: &T) -> anyhow::Result<String>
 where
-    T: ?Sized + Serialize,
+    T: ?Sized + serde::Serialize,
 {
-    serde_json::to_string(value)
+    Ok(serde_json::to_string(value)?)
 }
 
-pub(crate) fn deserialize<'a, T>(s: &'a str) -> Result<T>
+pub(crate) fn deserialize<'a, T>(s: &'a str) -> anyhow::Result<T>
 where
-    T: Deserialize<'a>,
+    T: serde::Deserialize<'a>,
 {
-    serde_json::from_str(s)
+    Ok(serde_json::from_str(s)?)
 }

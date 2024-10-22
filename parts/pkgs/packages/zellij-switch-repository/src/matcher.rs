@@ -4,7 +4,7 @@ use std::path::PathBuf;
 use fuzzy_matcher::skim::SkimMatcherV2;
 use fuzzy_matcher::FuzzyMatcher;
 
-use crate::plugin::Result;
+use crate::core::Result;
 use crate::ui::RenderStrategy;
 
 #[derive(PartialEq)]

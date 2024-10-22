@@ -1,29 +1,21 @@
-/// Implementation of Prime's "sessionizer" script as a Zellij plugin.
-///
-/// This plugin scans the given root directory and yields a list of git repositories found under
-/// it. It displays this list in an interactive picker with fuzzy matching. On selection, it opens
-/// a Zellij session with the target directory as CWD.
-/// Sessions are given a stable unique name to switch to an existing session if it exists instead
-/// of systematically creating new ones.
+use crate::core::{PluginError, Result};
 use crate::hash;
+#[cfg(not(feature = "zellij_fallback_fs_api"))]
 use crate::marshall::{deserialize, serialize};
 use crate::matcher::RepositoryMatcher;
 use crate::ui::{RenderStrategy, Renderer, PANE_TITLE};
+#[cfg(not(feature = "zellij_fallback_fs_api"))]
 use crate::workers::protocol::{
     FileSystemWorkerMessage, RepositoryCrawlerRequest, RepositoryCrawlerResponse,
 };
-use zellij_tile::prelude::*;
-
-use anyhow;
 
 use std::{
     collections::{BTreeMap, BTreeSet},
     path::PathBuf,
 };
+use zellij_tile::prelude::*;
 
-pub(crate) type Result = anyhow::Result<RenderStrategy>;
-
-pub(crate) struct Config {
+struct Config {
     pub root: Option<PathBuf>,
     pub layout: LayoutInfo,
 }
@@ -39,6 +31,8 @@ impl Default for Config {
 
 #[derive(Default)]
 pub(crate) struct SwitchRepositoryPlugin {
+    // Configuration passed to the plugin at initialization time (i.e. via a KDL configuration file
+    // of via the `--configuration` commandline switch.
     config: Config,
 
     // We receive these via the `Event::SessionUdate` event. They are required for switching
@@ -122,19 +116,21 @@ impl SwitchRepositoryPlugin {
     }
 
     fn on_permissions_granted(&self) {
-        // Gives the plugin pane a less verbose name.
+        // Give the plugin pane a less verbose name.
         rename_plugin_pane(get_plugin_ids().plugin_id, PANE_TITLE);
 
         // Start scanning immediatelly since permissions have already been granted.
-        self.start_async_root_scan();
+        if let Err(error) = self.start_async_root_scan() {
+            eprintln!("Failed to start repository scan: {error:?}");
+        }
     }
 
-    fn start_async_root_scan(&self) {
+    fn start_async_root_scan(&self) -> Result {
         self.post_repository_crawler_task(PathBuf::from("/host"), /* max_depth */ 5)
     }
 
     #[cfg(feature = "zellij_fallback_fs_api")]
-    fn post_repository_crawler_task(&self, root: PathBuf, _max_depth: usize) {
+    fn post_repository_crawler_task(&self, root: PathBuf, _max_depth: usize) -> Result {
         // Scan the host folder with the async `scan_host_folder` API (workaround). This API posts
         // its results back to the plugin using the `Event::FileSystemUpdate` event (see
         // `State::handle_event(…)`).
@@ -142,10 +138,12 @@ impl SwitchRepositoryPlugin {
         // filesystem and get back a list of files. This is a workaround for the Zellij WASI
         // runtime being extremely slow. This API might be removed in the future.
         scan_host_folder(&root);
+
+        Ok(RenderStrategy::SkipNextFrame)
     }
 
     #[cfg(not(feature = "zellij_fallback_fs_api"))]
-    fn post_repository_crawler_task(&self, root: PathBuf, max_depth: usize) {
+    fn post_repository_crawler_task(&self, root: PathBuf, max_depth: usize) -> Result {
         // Scan the host folder using the FS worker (preferred).
         // This API posts its results back to the plugin using the `Event::CustomMessage` event
         // with a `FileSystemWorkerMessage::Crawl` message.
@@ -155,16 +153,19 @@ impl SwitchRepositoryPlugin {
         // TODO: report errors to the user through the UI.
         post_message_to(PluginMessage::new_to_worker(
             "file_system", // Post to the `file_system_worker` namespace.
-            &serialize(&FileSystemWorkerMessage::Crawl).unwrap(),
-            &serialize(&RepositoryCrawlerRequest { root, max_depth }).unwrap(),
+            &serialize(&FileSystemWorkerMessage::Crawl)
+                .with_context(|| "serializing outbound message to `file_system` worker")?,
+            &serialize(&RepositoryCrawlerRequest { root, max_depth })
+                .with_context(|| "serializing outbound request to `file_system` worker")?,
         ));
+
+        Ok(RenderStrategy::SkipNextFrame)
     }
 
     fn drain_events(&mut self) -> Result {
         if self.queued_events.is_empty() {
             return Ok(RenderStrategy::SkipNextFrame);
         }
-        eprintln!("Draining {} events", self.queued_events.len());
         let queued_events = std::mem::take(&mut self.queued_events);
         queued_events
             .into_iter()
@@ -182,11 +183,11 @@ impl SwitchRepositoryPlugin {
                 close_self();
                 Ok(RenderStrategy::SkipNextFrame)
             }
+            #[cfg(not(feature = "zellij_fallback_fs_api"))]
             Event::CustomMessage(message, payload) => match deserialize(&message) {
                 Ok(FileSystemWorkerMessage::Crawl) => {
-                    let Ok(RepositoryCrawlerResponse { repository }) = deserialize(&payload) else {
-                        return Ok(RenderStrategy::SkipNextFrame);
-                    };
+                    let RepositoryCrawlerResponse { repository } = deserialize(&payload)
+                        .with_context(|| "deserializing response from `file_system` worker")?;
                     self.matcher.add_choice(repository);
                     Ok(RenderStrategy::DrawNextFrame)
                 }
@@ -226,15 +227,13 @@ impl SwitchRepositoryPlugin {
             }
             Event::SessionUpdate(sessions, _) => {
                 self.all_sessions_name = sessions
-                    .iter()
-                    .map(|session| {
-                        // TODO: There's a lot going on in this `::map(…)`, and a lot of
-                        // allocations. Can we do better?
+                    .into_iter()
+                    .inspect(|session| {
                         if session.is_current_session {
                             self.current_session_name = Some(session.name.clone());
                         }
-                        session.name.clone()
                     })
+                    .map(|session| session.name)
                     .collect();
                 Ok(RenderStrategy::SkipNextFrame)
             }
@@ -271,29 +270,39 @@ impl SwitchRepositoryPlugin {
     }
 
     fn safe_switch_session(&self, relative_cwd: PathBuf) -> Result {
-        let session_name = hash::get_session_name(&relative_cwd)?;
+        let session_name =
+            hash::get_session_name(&relative_cwd).with_context(|| "deriving the session name")?;
 
         // We have to wait for the `Event::SessionUpdate` event to get the list of existing
         // sessions as well as the name of the current session.
-        // TODO: queue up the "switch session" action if the current session name is still unknown
-        // at this point. Realistically, we should have received a `SessionUpdate` event before our
-        // crawler yields any result.
-        let current_session_name = self.current_session_name.as_ref().ok_or_else(|| {
-            anyhow!("internal error: failed to switch session: unknown current session name")
-        })?;
+        // NOTE: we _could_ queue up the "switch session" action if the current session name is
+        // still unknown at this point. However, realistically, we should have received a
+        // `SessionUpdate` event before our fs crawler yields any result. If we haven't something
+        // else is going terribly wrong.
+        let Some(current_session_name) = self.current_session_name.as_ref() else {
+            return Err(PluginError::SwitchSessionFailed {
+                session_name,
+                reason: "failed to switch session: unknown current session name",
+            }
+            .into());
+        };
 
         if *current_session_name == session_name {
-            // TODO: pass the error back to the UI for display.
-            eprintln!("already on target session: {session_name}");
-            return Ok(RenderStrategy::SkipNextFrame);
+            return Err(PluginError::SwitchSessionFailed {
+                session_name,
+                reason: "already on target session",
+            }
+            .into());
         }
 
-        let cwd = self
-            .config
-            .root
-            .as_ref()
-            .ok_or_else(|| anyhow!("No repositories root directory specified"))?
-            .join(relative_cwd);
+        let Some(cwd) = self.config.root.as_ref() else {
+            return Err(PluginError::ConfigurationError {
+                reason: "missing root directory declaration",
+            }
+            .into());
+        };
+
+        let cwd = cwd.join(relative_cwd);
         switch_session_with_layout(Some(&session_name), self.config.layout.clone(), Some(cwd));
 
         // TODO: kill previous session if it was started just to run this plugin.

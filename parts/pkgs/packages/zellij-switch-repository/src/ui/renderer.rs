@@ -1,7 +1,6 @@
-use crate::matcher::RepositoryMatcher;
-
-use crate::plugin::Result;
 use super::{Frame, Renderer};
+use crate::core::Result;
+use crate::matcher::RepositoryMatcher;
 
 impl Renderer {
     pub fn next_frame<'ui>(
