@@ -1,5 +1,5 @@
 use crate::{
-    protocol::{deserialize, serialize},
+    marshall::{deserialize, serialize},
     workers::protocol::{FileSystemWorkerMessage, RepositoryCrawlerResponse},
 };
 

@@ -8,6 +8,7 @@ zellij_fallback_fs_api = []
 
 [dependencies]
 ansi_term = "0.12.1"
+anyhow = "1.0"
 bstr = "1.10.0"
 data-encoding = "2.6.0"
 fuzzy-matcher = "0.3.7"

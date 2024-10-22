@@ -10,23 +10,22 @@ mod styles;
 
 pub const PANE_TITLE: &'static str = "Select a repository:";
 
-// TODO: figure out a better name.
 // TODO: consider adding a new `Force` option (which could be used to avoid special cases such as
 // in `RepositoryMatcher::apply(…)`)
 /// Whether the plugin should refresh its UI.
 /// If `Rerender::Yes`, then the plugin will notify Zellij that it needs to rerender itself, which
 /// will trigger a call to `State::render(…)`.
 #[derive(Copy, Clone)]
-pub(crate) enum Rerender {
-    Yes,
-    No,
+pub(crate) enum RenderStrategy {
+    DrawNextFrame,
+    SkipNextFrame,
 }
 
-impl Rerender {
+impl RenderStrategy {
     pub fn as_bool(&self) -> bool {
         match self {
-            Rerender::Yes => true,
-            Rerender::No => false,
+            RenderStrategy::DrawNextFrame => true,
+            RenderStrategy::SkipNextFrame => false,
         }
     }
 
@@ -53,37 +52,37 @@ impl Rerender {
     }
 }
 
-impl From<bool> for Rerender {
+impl From<bool> for RenderStrategy {
     fn from(value: bool) -> Self {
         match value {
-            true => Rerender::Yes,
-            false => Rerender::No,
+            true => Self::DrawNextFrame,
+            false => Self::SkipNextFrame,
         }
     }
 }
 
-impl BitAnd for Rerender {
-    type Output = Rerender;
+impl BitAnd for RenderStrategy {
+    type Output = RenderStrategy;
 
     fn bitand(self, rhs: Self) -> Self::Output {
         match (self, rhs) {
-            (Rerender::Yes, Rerender::Yes) => Rerender::Yes,
-            (Rerender::Yes, Rerender::No) => Rerender::No,
-            (Rerender::No, Rerender::Yes) => Rerender::No,
-            (Rerender::No, Rerender::No) => Rerender::No,
+            (Self::DrawNextFrame, Self::DrawNextFrame) => Self::DrawNextFrame,
+            (Self::DrawNextFrame, Self::SkipNextFrame) => Self::SkipNextFrame,
+            (Self::SkipNextFrame, Self::DrawNextFrame) => Self::SkipNextFrame,
+            (Self::SkipNextFrame, Self::SkipNextFrame) => Self::SkipNextFrame,
         }
     }
 }
 
-impl BitOr for Rerender {
-    type Output = Rerender;
+impl BitOr for RenderStrategy {
+    type Output = RenderStrategy;
 
     fn bitor(self, rhs: Self) -> Self::Output {
         match (self, rhs) {
-            (Rerender::Yes, Rerender::Yes) => Rerender::Yes,
-            (Rerender::Yes, Rerender::No) => Rerender::Yes,
-            (Rerender::No, Rerender::Yes) => Rerender::Yes,
-            (Rerender::No, Rerender::No) => Rerender::No,
+            (Self::DrawNextFrame, Self::DrawNextFrame) => Self::DrawNextFrame,
+            (Self::DrawNextFrame, Self::SkipNextFrame) => Self::DrawNextFrame,
+            (Self::SkipNextFrame, Self::DrawNextFrame) => Self::DrawNextFrame,
+            (Self::SkipNextFrame, Self::SkipNextFrame) => Self::SkipNextFrame,
         }
     }
 }

@@ -3754,6 +3754,7 @@ name = "zellij-switch-session"
 version = "0.1.0"
 dependencies = [
  "ansi_term",
+ "anyhow",
  "bstr",
  "data-encoding",
  "fuzzy-matcher",
