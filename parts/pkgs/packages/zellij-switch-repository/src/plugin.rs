@@ -15,40 +15,76 @@ use std::{
 };
 use zellij_tile::prelude::*;
 
-struct Config {
-    pub root: Option<PathBuf>,
-    pub layout: LayoutInfo,
-}
-
-impl Default for Config {
-    fn default() -> Self {
-        Self {
-            root: Default::default(),
-            layout: LayoutInfo::BuiltIn("default".to_string()),
-        }
-    }
-}
-
+/// The plugin state, to be registered against Zellij's API.
+///
+/// It contains the plugin's user configuration, as well as cached state used for operating
+/// purposes.
+///
+/// `current_session_name` and `all_sessions_name` must be known before switching to a other
+/// session. The rational is twofold:
+///
+///   - For esthetic purposes: Zellij fails to switch to the current session, and we can do a
+///     better job at reporting this error case ourselves.
+///   - For ergonomic purposes: to suppress the current directory from the list of candidates.
+///
+/// While these values can only be known after receiving an asynchronous `Event::SessionUpdate`
+/// event and can thus cause Zellij to error out if we're trying to switch to the current session
+/// before being able to verify that this is the case, in practice Zellij always sends such event
+/// much faster than our filesystem crawler returns results, and a fortiori much, much faster than
+/// our user can select any input. For this reason, we do not bother blocking waiting for these
+/// values and assume that they are always already available by the time the user validates their
+/// input.
+///
+/// On the other hand, `permissions_granted` keeps track of whether the plugin has the necessary
+/// permissions to run correctly, and this is directly gated by user input (review and validation
+/// request that it is OK to grant these permissions to a plugin). As such, we're queueing all
+/// events received before permissions were granted and process them only after that. Such queued
+/// events are stored in `queued_events`.
+///
+/// `matchers` and `renderer` handle the operating aspects of this plugin, respectively user input
+/// and plugin UI.
+///
+/// NOTE: it would be ideal if we could declare lifetimes bound to this structure, but these are
+/// unfortunately incompatible with the current Zellij API.
 #[derive(Default)]
 pub(crate) struct SwitchRepositoryPlugin {
-    // Configuration passed to the plugin at initialization time (i.e. via a KDL configuration file
-    // of via the `--configuration` commandline switch.
-    config: Config,
+    /// Configuration passed to the plugin at initialization time (i.e. via a KDL configuration file
+    /// of via the `--configuration` commandline switch.
+    config: SwitchRepositoryPluginConfig,
 
     // We receive these via the `Event::SessionUdate` event. They are required for switching
     // session (because Zellij does not appreciate switching to the current session).
+
+    /// The name of the session the plugin is running in.
     current_session_name: Option<String>,
+    /// The name of all sessions managed by the Zellij daemon serving the session the plugin is
+    /// running in.
     all_sessions_name: BTreeSet<String>,
 
-    // All permissions are required to fulfil our purpose.
+    /// All permissions are required to fulfil our purpose.
     permissions_granted: bool,
-    // Events queued until the first `Event::SessionUpdate` is received.
+    /// Events queued until the first `Event::SessionUpdate` is received.
     queued_events: Vec<Event>,
 
-    // Matches the list of repositories against the user input. Keeps track of the user input.
+    /// Matches the list of repositories against the user input. Keeps track of the user input.
     matcher: RepositoryMatcher,
-    // Handles drawing the list of results on the screen, as well as dealing with user selection.
+    /// Handles drawing the list of results on the screen, as well as dealing with user selection.
     renderer: Renderer,
+}
+
+// This structure mostly exists because `LayoutInfo` doesn't implement the `Default` trait.
+struct SwitchRepositoryPluginConfig {
+    root: Option<PathBuf>,
+    layout: LayoutInfo,
+}
+
+impl Default for SwitchRepositoryPluginConfig {
+    fn default() -> Self {
+        Self {
+            layout: LayoutInfo::BuiltIn("default".to_string()),
+            root: Default::default(),
+        }
+    }
 }
 
 impl ZellijPlugin for SwitchRepositoryPlugin {
@@ -76,7 +112,7 @@ impl ZellijPlugin for SwitchRepositoryPlugin {
         self.config.root = configuration.get("repositories_root").map(PathBuf::from);
 
         if self.permissions_granted {
-            // Initialize the plugin.
+            // Initialize the plugin immediatelly since permissions have already been granted.
             self.on_permissions_granted();
 
             // Hide the plugin window. It's just meant to be running in the background and
@@ -119,7 +155,10 @@ impl SwitchRepositoryPlugin {
         // Give the plugin pane a less verbose name.
         rename_plugin_pane(get_plugin_ids().plugin_id, PANE_TITLE);
 
-        // Start scanning immediatelly since permissions have already been granted.
+        // Start scanning the /host. The scan always happens asynchronously, and responses are
+        // posted back to the plugin through the `::update(…)` callback.
+        // The scanning method (either through a background plugin worker or via the Zellij API) is
+        // dictated by the `zellij_fallback_fs_api` feature flag.
         if let Err(error) = self.start_async_root_scan() {
             eprintln!("Failed to start repository scan: {error:?}");
         }
@@ -170,6 +209,7 @@ impl SwitchRepositoryPlugin {
         queued_events
             .into_iter()
             .map(|event| self.handle_event(event))
+            // TODO: what even is happening here? Find a way to simplify this if possible.
             .fold(Ok(RenderStrategy::SkipNextFrame), |a, b| Ok(a? | b?))
     }
 
@@ -180,19 +220,23 @@ impl SwitchRepositoryPlugin {
             }
             Event::PermissionRequestResult(PermissionStatus::Denied) => {
                 self.permissions_granted = false;
-                close_self();
-                Ok(RenderStrategy::SkipNextFrame)
+                Ok(self.terminate())
             }
             #[cfg(not(feature = "zellij_fallback_fs_api"))]
-            Event::CustomMessage(message, payload) => match deserialize(&message) {
-                Ok(FileSystemWorkerMessage::Crawl) => {
-                    let RepositoryCrawlerResponse { repository } = deserialize(&payload)
-                        .with_context(|| "deserializing response from `file_system` worker")?;
-                    self.matcher.add_choice(repository);
-                    Ok(RenderStrategy::DrawNextFrame)
-                }
-                _ => Ok(RenderStrategy::SkipNextFrame),
-            },
+            Event::CustomMessage(message, payload) => {
+                assert!(
+                    matches!(
+                        deserialize(&message)
+                            .with_context(|| "deserializing message from `file_system` worker")?,
+                        FileSystemWorkerMessage::Crawl
+                    ),
+                    "unsupported message received from own background worker"
+                );
+                let RepositoryCrawlerResponse { repository } = deserialize(&payload)
+                    .with_context(|| "deserializing response from `file_system` worker")?;
+                self.matcher.add_choice(repository);
+                Ok(RenderStrategy::DrawNextFrame)
+            }
             #[cfg(feature = "zellij_fallback_fs_api")]
             Event::FileSystemUpdate(paths) => {
                 let has_dot_git_dir = paths.iter().any(|(path, metadata)| {
@@ -281,7 +325,7 @@ impl SwitchRepositoryPlugin {
         let Some(current_session_name) = self.current_session_name.as_ref() else {
             return Err(PluginError::SwitchSessionFailed {
                 session_name,
-                reason: "failed to switch session: unknown current session name",
+                reason: "unknown current session name",
             }
             .into());
         };
@@ -315,7 +359,6 @@ impl SwitchRepositoryPlugin {
         //     kill_sessions(&[current_session_name]);
         // }
 
-        close_self();
-        Ok(RenderStrategy::DrawNextFrame)
+        Ok(self.terminate())
     }
 }
