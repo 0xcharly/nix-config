@@ -35,23 +35,23 @@ impl Default for RepositoryMatcher {
 impl RepositoryMatcher {
     pub fn add_choice(&mut self, choice: PathBuf) {
         self.choices.insert(choice);
-        self.apply(/* force_render */ false);
+        self.apply();
     }
 
     pub fn remove_trailing_char(&mut self) -> Result {
         Ok(RenderStrategy::from(self.user_input.pop().is_some())
-            .and_then(|| self.apply(/* force_render */ true)))
+            .and_then(|| self.apply() | RenderStrategy::DrawNextFrame))
     }
 
     pub fn on_user_input(&mut self, ch: char) -> Result {
         self.user_input.push(ch);
-        Ok(self.apply(/* force_render */ true))
+        Ok(self.apply() | RenderStrategy::DrawNextFrame)
     }
 
     pub fn clear_user_input(&mut self) -> Result {
         let is_empty = self.user_input().is_empty();
         self.user_input.clear();
-        Ok(self.apply(/* force_render */ !is_empty))
+        Ok(self.apply() | RenderStrategy::from(!is_empty))
     }
 
     pub fn choice_count(&self) -> usize {
@@ -62,7 +62,7 @@ impl RepositoryMatcher {
         &self.user_input
     }
 
-    fn apply(&mut self, force_render: bool) -> RenderStrategy {
+    fn apply(&mut self) -> RenderStrategy {
         let previous_matches = std::mem::take(&mut self.matches);
 
         for choice in self.choices.iter().filter_map(|p| p.to_str()) {
@@ -77,8 +77,7 @@ impl RepositoryMatcher {
             }
         }
 
-        let render = force_render
-            || self.matches.len() != previous_matches.len()
+        let render = self.matches.len() != previous_matches.len()
             || self
                 .matches
                 .iter()

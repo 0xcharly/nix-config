@@ -1,8 +1,8 @@
-use std::ops::{BitAnd, BitOr};
+use crate::core::Result;
+use crate::matcher::Match;
 
 use ansi_term::Style;
-
-use crate::matcher::Match;
+use std::ops::{BitAnd, BitOr};
 
 mod frame;
 mod renderer;
@@ -10,15 +10,20 @@ mod styles;
 
 pub const PANE_TITLE: &'static str = "Select a repository:";
 
-// TODO: consider adding a new `Force` option (which could be used to avoid special cases such as
-// in `RepositoryMatcher::apply(…)`)
 /// Whether the plugin should refresh its UI.
-/// If `Rerender::Yes`, then the plugin will notify Zellij that it needs to rerender itself, which
-/// will trigger a call to `State::render(…)`.
+///
+/// If [RenderStrategy::DrawNextFrame], then the plugin will notify Zellij that it needs to
+/// rerender itself, which will trigger a call to `SwitchRepositoryPlugin::render(…)`.
 #[derive(Copy, Clone)]
 pub(crate) enum RenderStrategy {
     DrawNextFrame,
     SkipNextFrame,
+}
+
+impl Default for RenderStrategy {
+    fn default() -> Self {
+        RenderStrategy::SkipNextFrame
+    }
 }
 
 impl RenderStrategy {
@@ -29,6 +34,7 @@ impl RenderStrategy {
         }
     }
 
+    /// Short-circuiting `&&` operator for [RenderStrategy].
     pub fn and_then<F>(&self, then_fn: F) -> Self
     where
         F: FnOnce() -> Self,
@@ -40,6 +46,7 @@ impl RenderStrategy {
         }
     }
 
+    /// Short-circuiting `||` operator for [RenderStrategy].
     pub fn or_else<F>(&self, else_fn: F) -> Self
     where
         F: FnOnce() -> Self,
@@ -65,12 +72,7 @@ impl BitAnd for RenderStrategy {
     type Output = RenderStrategy;
 
     fn bitand(self, rhs: Self) -> Self::Output {
-        match (self, rhs) {
-            (Self::DrawNextFrame, Self::DrawNextFrame) => Self::DrawNextFrame,
-            (Self::DrawNextFrame, Self::SkipNextFrame) => Self::SkipNextFrame,
-            (Self::SkipNextFrame, Self::DrawNextFrame) => Self::SkipNextFrame,
-            (Self::SkipNextFrame, Self::SkipNextFrame) => Self::SkipNextFrame,
-        }
+        (self.as_bool() & rhs.as_bool()).into()
     }
 }
 
@@ -78,11 +80,17 @@ impl BitOr for RenderStrategy {
     type Output = RenderStrategy;
 
     fn bitor(self, rhs: Self) -> Self::Output {
-        match (self, rhs) {
-            (Self::DrawNextFrame, Self::DrawNextFrame) => Self::DrawNextFrame,
-            (Self::DrawNextFrame, Self::SkipNextFrame) => Self::DrawNextFrame,
-            (Self::SkipNextFrame, Self::DrawNextFrame) => Self::DrawNextFrame,
-            (Self::SkipNextFrame, Self::SkipNextFrame) => Self::SkipNextFrame,
+        (self.as_bool() | rhs.as_bool()).into()
+    }
+}
+
+impl BitOr<Result> for RenderStrategy {
+    type Output = Result;
+
+    fn bitor(self, rhs: Result) -> Self::Output {
+        match rhs {
+            Ok(value) => Ok(self | value),
+            err => err,
         }
     }
 }
@@ -129,6 +137,9 @@ pub(crate) struct Renderer {
     selected_match: Option<Match>,
 }
 
+/// Represents a plugin UI frame of size [rows]×[cols].
+///
+/// Implements the [std::fmt::Display] trait to easily render it via Zellij's API.
 pub(crate) struct Frame<'ui> {
     rows: usize,
     cols: usize,

@@ -143,10 +143,9 @@ impl ZellijPlugin for SwitchRepositoryPlugin {
 
 impl SwitchRepositoryPlugin {
     fn process_result(&self, result: Result) -> bool {
-        // TODO: match error case and display error.
         match result {
-            Ok(RenderStrategy::DrawNextFrame) => true,
-            _ => false,
+            Ok(strategy) => strategy.as_bool(),
+            Err(_err) => todo!("display error on the UI"),
         }
     }
 
@@ -200,15 +199,16 @@ impl SwitchRepositoryPlugin {
         Ok(RenderStrategy::SkipNextFrame)
     }
 
+    /// Consumes as many of the queued events as possible, and returns either the final combined
+    /// [RenderStrategy] value, or the first error that occurred.
+    ///
+    /// If an error occurs, it is propagated back to the caller immediately (short-circuiting). All
+    /// remaining queued events are dropped.
     fn drain_events(&mut self) -> Result {
-        if self.event_queue.is_empty() {
-            return Ok(RenderStrategy::SkipNextFrame);
-        }
-        let event_queue = std::mem::take(&mut self.event_queue);
-        event_queue
+        std::mem::take(&mut self.event_queue)
             .into_iter()
             .map(|event| self.handle_event(event))
-            .conflate_results()
+            .try_consume()
     }
 
     fn handle_event(&mut self, event: Event) -> Result {

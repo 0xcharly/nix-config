@@ -1,8 +1,8 @@
-use std::iter::Map;
-
-use crate::ui;
 /// Declaration of the common types used across this plugin's implementation.
+use crate::ui;
+
 use anyhow;
+use std::iter::Map;
 use thiserror;
 
 /// The result of an event loop cycle. Contains either a rendering strategy that dictacts whether
@@ -31,31 +31,17 @@ pub(crate) enum InternalError {
     InvalidIndex(usize),
 }
 
-/// A trait for utility functions on `Result`.
-pub(crate) trait ResultOps {
-    fn combine(self, rhs: Self) -> Self;
-}
-
-impl ResultOps for Result {
-    /// Combine two [Result]s.
-    ///
-    /// Arguments passed to `combine` are eagerly evaluated.
-    fn combine(self, rhs: Self) -> Self {
-        match (self, rhs) {
-            (Ok(a), Ok(b)) => Ok(a | b),
-            // TODO: report errors to the UIs.
-            _ => Ok(ui::RenderStrategy::DrawNextFrame),
-        }
-    }
-}
-
-/// A trait for utility functions on `Result`'s iterators.
+/// A trait for utility functions on iterators of [Result].
 pub(crate) trait ResultIteratorOps: Iterator {
-    /// Reduces the [Result]s to a single one, by repeatedly folding them into each other.
+    /// An iterator method that reduces [Result]s as long as they represent a successful value,
+    /// producing a single, final value.
     ///
-    /// If the iterator is empty, returns `Ok(ui::RenderStrategy::SkipNextFrame)`, otherwise
-    /// returns the result of the reduction.
-    fn conflate_results(self: Self) -> Result
+    /// The reducing closure either returns successfully, with the value that the accumulator
+    /// should have for the next iteration, or it returns failure, with an error value that is
+    /// propagated back to the caller immediately (short-circuiting).
+    ///
+    /// If the iterator is empty, returns `Ok(Default::default())`.
+    fn try_consume(self: &mut Self) -> Result
     where
         Self: Sized;
 }
@@ -64,9 +50,7 @@ impl<I: Iterator, F> ResultIteratorOps for Map<I, F>
 where
     F: FnMut(I::Item) -> Result,
 {
-    fn conflate_results(self: Self) -> Result {
-        // NOTE: Consumes all elements to avoid skipping events.
-        self.reduce(|a, b| a.combine(b))
-            .unwrap_or(Ok(ui::RenderStrategy::SkipNextFrame))
+    fn try_consume(self: &mut Self) -> Result {
+        self.try_fold(Default::default(), std::ops::BitOr::bitor)
     }
 }
