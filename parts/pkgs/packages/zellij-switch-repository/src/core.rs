@@ -20,3 +20,11 @@ pub(crate) enum PluginError {
         reason: &'static str,
     },
 }
+
+#[derive(thiserror::Error, Debug)]
+pub(crate) enum InternalError {
+    #[error("unexpected plugin error: {0:?}")]
+    Unknown(#[from] anyhow::Error),
+    #[error("unexpected selected index: {0}")]
+    InvalidIndex(usize),
+}

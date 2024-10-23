@@ -1,4 +1,4 @@
-use crate::core::{PluginError, Result};
+use crate::core::{InternalError, PluginError, Result};
 use crate::hash;
 #[cfg(not(feature = "zellij_fallback_fs_api"))]
 use crate::marshall::{deserialize, serialize};
@@ -261,12 +261,11 @@ impl SwitchRepositoryPlugin {
     }
 
     fn submit(&mut self) -> Result {
-        Ok(self
-            .matcher
-            .matches
-            .get(self.renderer.get_selected_index())
-            .and_then(|m| self.safe_switch_session(PathBuf::from(&m.entry)).ok())
-            .unwrap_or(RenderStrategy::SkipNextFrame))
+        let index = self.renderer.get_selected_index();
+        let Some(selected) = self.matcher.matches.get(self.renderer.get_selected_index()) else {
+            return Err(InternalError::InvalidIndex(index).into());
+        };
+        self.safe_switch_session(PathBuf::from(&selected.entry))
     }
 
     fn safe_switch_session(&self, relative_cwd: PathBuf) -> Result {
