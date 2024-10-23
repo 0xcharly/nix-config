@@ -1,4 +1,4 @@
-use crate::core::{InternalError, PluginError, Result};
+use crate::core::{InternalError, PluginError, Result, ResultIteratorOps};
 use crate::hash;
 #[cfg(not(feature = "zellij_fallback_fs_api"))]
 use crate::marshall::{deserialize, serialize};
@@ -39,7 +39,7 @@ use zellij_tile::prelude::*;
 /// permissions to run correctly, and this is directly gated by user input (review and validation
 /// request that it is OK to grant these permissions to a plugin). As such, we're queueing all
 /// events received before permissions were granted and process them only after that. Such queued
-/// events are stored in `queued_events`.
+/// events are stored in `event_queue`.
 ///
 /// `matchers` and `renderer` handle the operating aspects of this plugin, respectively user input
 /// and plugin UI.
@@ -54,7 +54,6 @@ pub(crate) struct SwitchRepositoryPlugin {
 
     // We receive these via the `Event::SessionUdate` event. They are required for switching
     // session (because Zellij does not appreciate switching to the current session).
-
     /// The name of the session the plugin is running in.
     current_session_name: Option<String>,
     /// The name of all sessions managed by the Zellij daemon serving the session the plugin is
@@ -64,7 +63,7 @@ pub(crate) struct SwitchRepositoryPlugin {
     /// All permissions are required to fulfil our purpose.
     permissions_granted: bool,
     /// Events queued until the first `Event::SessionUpdate` is received.
-    queued_events: Vec<Event>,
+    event_queue: Vec<Event>,
 
     /// Matches the list of repositories against the user input. Keeps track of the user input.
     matcher: RepositoryMatcher,
@@ -74,8 +73,8 @@ pub(crate) struct SwitchRepositoryPlugin {
 
 // This structure mostly exists because `LayoutInfo` doesn't implement the `Default` trait.
 struct SwitchRepositoryPluginConfig {
-    root: Option<PathBuf>,
     layout: LayoutInfo,
+    root: Option<PathBuf>,
 }
 
 impl Default for SwitchRepositoryPluginConfig {
@@ -129,7 +128,7 @@ impl ZellijPlugin for SwitchRepositoryPlugin {
         } else if self.permissions_granted {
             self.handle_event(event)
         } else {
-            self.queued_events.push(event);
+            self.event_queue.push(event);
             Ok(RenderStrategy::SkipNextFrame)
         };
 
@@ -152,7 +151,7 @@ impl SwitchRepositoryPlugin {
     }
 
     fn on_permissions_granted(&self) {
-        // Give the plugin pane a less verbose name.
+        // Give the plugin pane a more concise name.
         rename_plugin_pane(get_plugin_ids().plugin_id, PANE_TITLE);
 
         // Start scanning the /host. The scan always happens asynchronously, and responses are
@@ -202,15 +201,14 @@ impl SwitchRepositoryPlugin {
     }
 
     fn drain_events(&mut self) -> Result {
-        if self.queued_events.is_empty() {
+        if self.event_queue.is_empty() {
             return Ok(RenderStrategy::SkipNextFrame);
         }
-        let queued_events = std::mem::take(&mut self.queued_events);
-        queued_events
+        let event_queue = std::mem::take(&mut self.event_queue);
+        event_queue
             .into_iter()
             .map(|event| self.handle_event(event))
-            // TODO: what even is happening here? Find a way to simplify this if possible.
-            .fold(Ok(RenderStrategy::SkipNextFrame), |a, b| Ok(a? | b?))
+            .conflate_results()
     }
 
     fn handle_event(&mut self, event: Event) -> Result {
