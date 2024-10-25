@@ -1,5 +1,5 @@
-use crate::{context::Context, core::Result};
 use crate::matcher::Match;
+use crate::{context::Context, core::Result};
 
 use ansi_term::Style;
 use std::ops::{BitAnd, BitOr};
