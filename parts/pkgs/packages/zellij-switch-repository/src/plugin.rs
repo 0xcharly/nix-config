@@ -1,3 +1,4 @@
+use crate::context;
 use crate::core::{InternalError, PluginError, Result, ResultIteratorOps};
 use crate::hash;
 #[cfg(not(feature = "zellij_fallback_fs_api"))]
@@ -9,6 +10,7 @@ use crate::workers::protocol::{
     FileSystemWorkerMessage, RepositoryCrawlerRequest, RepositoryCrawlerResponse,
 };
 
+use anyhow::Context;
 use std::{
     collections::{BTreeMap, BTreeSet},
     path::PathBuf,
@@ -65,6 +67,8 @@ pub(crate) struct SwitchRepositoryPlugin {
     /// Events queued until the first `Event::SessionUpdate` is received.
     event_queue: Vec<Event>,
 
+    /// The plugin context, that keeps track of some volatile state.
+    context: context::Context,
     /// Matches the list of repositories against the user input. Keeps track of the user input.
     matcher: RepositoryMatcher,
     /// Handles drawing the list of results on the screen, as well as dealing with user selection.
@@ -132,20 +136,25 @@ impl ZellijPlugin for SwitchRepositoryPlugin {
     }
 
     fn render(&mut self, rows: usize, cols: usize) {
-        let frame = self.renderer.next_frame(rows, cols, &self.matcher);
+        let frame = self.renderer.next_frame(rows, cols, &self.context, &self.matcher);
         println!("{}", frame);
     }
 }
 
 impl SwitchRepositoryPlugin {
-    fn process_result(&self, result: Result) -> bool {
+    fn process_result(&mut self, result: Result) -> bool {
+        self.context.log_error(PluginError::ConfigurationError { reason: "test error" });
         match result {
-            Ok(strategy) => strategy.as_bool(),
-            Err(_err) => todo!("display error on the UI"),
+            Ok(strategy) => strategy,
+            Err(error) => {
+                eprintln!("unexpected error: {error:?}");
+                self.context.log_error(PluginError::UnexpectedError(error.into()))
+            }
         }
+        .as_bool()
     }
 
-    fn on_permissions_granted(&self) {
+    fn on_permissions_granted(&mut self) -> RenderStrategy {
         // Give the plugin pane a more concise name.
         rename_plugin_pane(get_plugin_ids().plugin_id, PANE_TITLE);
 
@@ -154,8 +163,10 @@ impl SwitchRepositoryPlugin {
         // The scanning method (either through a background plugin worker or via the Zellij API) is
         // dictated by the `zellij_fallback_fs_api` feature flag.
         if let Err(error) = self.start_async_root_scan() {
-            // TODO: report errors to the user through the UI.
-            eprintln!("Failed to start repository scan: {error:?}");
+            self.context
+                .log_error(PluginError::FileSystemScanFailed(error))
+        } else {
+            RenderStrategy::SkipNextFrame
         }
     }
 
@@ -276,19 +287,31 @@ impl SwitchRepositoryPlugin {
                     .collect();
                 Ok(RenderStrategy::SkipNextFrame)
             }
-            Event::Key(Key::Up) => self.renderer.select_up(&self.matcher),
-            Event::Key(Key::Down) => self.renderer.select_down(&self.matcher),
-            Event::Key(Key::Ctrl('c')) => Ok(self.terminate()),
-            Event::Key(Key::Esc) => Ok(self
-                .matcher
-                .clear_user_input()?
-                .or_else(|| self.terminate())),
-            Event::Key(Key::Backspace) => self.matcher.remove_trailing_char(),
-            Event::Key(Key::Char('\n')) => self.submit(),
+            // Clear reported errors on all user inputs.
+            Event::Key(Key::Up) => {
+                self.context.clear_errors() | self.renderer.select_up(&self.matcher)
+            }
+            Event::Key(Key::Down) => {
+                self.context.clear_errors() | self.renderer.select_down(&self.matcher)
+            }
+            Event::Key(Key::Ctrl('c')) => self.terminate().into(),
+            Event::Key(Key::Esc) => {
+                self.context.clear_errors()
+                    | Ok(self
+                        .matcher
+                        .clear_user_input()?
+                        .or_else(|| self.terminate()))
+            }
+            Event::Key(Key::Backspace) => {
+                self.context.clear_errors() | self.matcher.remove_trailing_char()
+            }
+            Event::Key(Key::Char('\n')) => self.context.clear_errors() | self.submit(),
             Event::Key(Key::Char(ch)) => {
                 // NOTE: use the non-short-circuiting variant of the OR operator to force
                 // evaluation of the rhs.
-                Ok(self.matcher.on_user_input(ch)? | self.renderer.on_user_input(&self.matcher)?)
+                self.context.clear_errors()
+                    | Ok(self.matcher.on_user_input(ch)?
+                        | self.renderer.on_user_input(&self.matcher)?)
             }
             _ => Ok(RenderStrategy::SkipNextFrame),
         }
@@ -307,7 +330,7 @@ impl SwitchRepositoryPlugin {
         self.safe_switch_session(PathBuf::from(&selected.entry))
     }
 
-    fn safe_switch_session(&self, relative_cwd: PathBuf) -> Result {
+    fn safe_switch_session(&mut self, relative_cwd: PathBuf) -> Result {
         let session_name =
             hash::get_session_name(&relative_cwd).with_context(|| "deriving the session name")?;
 
@@ -318,28 +341,34 @@ impl SwitchRepositoryPlugin {
         // `SessionUpdate` event before our fs crawler yields any result. If we haven't something
         // else is going terribly wrong.
         let Some(current_session_name) = self.current_session_name.as_ref() else {
-            return Err(PluginError::SwitchSessionFailed {
-                session_name,
-                reason: "unknown current session name",
-            }
-            .into());
+            return self
+                .context
+                .log_error(PluginError::SwitchSessionFailed {
+                    session_name,
+                    reason: "unknown current session name",
+                })
+                .into();
         };
 
         // TODO: this class of error should be prevented by filtering the current session out of
         // the list, or by silently closing the plugin pane.
         if *current_session_name == session_name {
-            return Err(PluginError::SwitchSessionFailed {
-                session_name,
-                reason: "already on target session",
-            }
-            .into());
+            return self
+                .context
+                .log_error(PluginError::SwitchSessionFailed {
+                    session_name,
+                    reason: "already on target session",
+                })
+                .into();
         }
 
         let Some(cwd) = self.config.root.as_ref() else {
-            return Err(PluginError::ConfigurationError {
-                reason: "missing root directory declaration",
-            }
-            .into());
+            return self
+                .context
+                .log_error(PluginError::ConfigurationError {
+                    reason: "missing root directory declaration",
+                })
+                .into();
         };
 
         let cwd = cwd.join(relative_cwd);
@@ -356,6 +385,6 @@ impl SwitchRepositoryPlugin {
         //     kill_sessions(&[current_session_name]);
         // }
 
-        Ok(self.terminate())
+        self.terminate().into()
     }
 }

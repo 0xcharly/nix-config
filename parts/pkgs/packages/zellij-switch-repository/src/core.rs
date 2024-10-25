@@ -5,27 +5,34 @@ use anyhow;
 use std::iter::Map;
 use thiserror;
 
-/// The result of an event loop cycle. Contains either a rendering strategy that dictacts whether
-/// the UI should redraw itself and therefore request a redraw to the Zellij engine, or an error
-/// that should be displayed to the user (which always implies a UI redraw).
-pub(crate) type Result = anyhow::Result<ui::RenderStrategy>;
-
-// TODO: these errors should be reported back to the UI.
 /// These errors indicate either user error (e.g. configuration), or issues with the Zellij API.
-/// They should be recoverable and reported to the user.
+/// They should not crash the plugin and be reported to the user. They may or may not be
+/// recoverable.
+/// These are meant to be logged against the [crate::context::Context] to be reported to the user
+/// via the UI.
 #[derive(thiserror::Error, Debug)]
 pub(crate) enum PluginError {
-    #[error("invalid configuration: {reason}")]
+    #[error("An unexpected error happened and the SwitchRepository plugin may no longer be stable. Check the logs for more information.")]
+    UnexpectedError(#[from] anyhow::Error),
+    #[error("Failed to scan filesystem: {0:?}")]
+    FileSystemScanFailed(anyhow::Error),
+    #[error("Invalid configuration: {reason}")]
     ConfigurationError { reason: &'static str },
-    #[error("failed to switch to session {session_name:?}: {reason}")]
+    #[error("Failed to switch to session {session_name:?}: {reason}")]
     SwitchSessionFailed {
         session_name: String,
         reason: &'static str,
     },
 }
 
+/// The result of an event loop cycle. Contains either a rendering strategy that dictacts whether
+/// the UI should redraw itself and therefore request a redraw to the Zellij engine, or an error
+/// that should be displayed to the user (which always implies a UI redraw).
+pub(crate) type Result = anyhow::Result<ui::RenderStrategy, InternalError>;
+
 /// These errors report invalid internal state. They indicate an issue with the plugin's
 /// implementation and should probably be fatal.
+/// These are meant to be reported via this crate's [Result] type.
 #[derive(thiserror::Error, Debug)]
 pub(crate) enum InternalError {
     #[error("unexpected plugin error: {0:?}")]

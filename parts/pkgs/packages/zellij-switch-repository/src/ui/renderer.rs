@@ -1,4 +1,5 @@
 use super::{Frame, Renderer};
+use crate::context::Context;
 use crate::core::Result;
 use crate::matcher::RepositoryMatcher;
 
@@ -7,11 +8,13 @@ impl Renderer {
         &'ui self,
         rows: usize,
         cols: usize,
+        context: &'ui Context,
         matcher: &'ui RepositoryMatcher,
     ) -> Frame<'ui> {
         Frame {
             rows,
             cols,
+            context,
             styles: &self.styles,
             user_input: &matcher.user_input(),
             matched_results: &matcher.matches,

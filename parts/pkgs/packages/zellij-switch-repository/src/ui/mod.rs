@@ -1,4 +1,4 @@
-use crate::core::Result;
+use crate::{context::Context, core::Result};
 use crate::matcher::Match;
 
 use ansi_term::Style;
@@ -23,6 +23,12 @@ pub(crate) enum RenderStrategy {
 impl Default for RenderStrategy {
     fn default() -> Self {
         RenderStrategy::SkipNextFrame
+    }
+}
+
+impl From<RenderStrategy> for Result {
+    fn from(value: RenderStrategy) -> Self {
+        Ok(value)
     }
 }
 
@@ -95,11 +101,16 @@ impl BitOr<Result> for RenderStrategy {
     }
 }
 
+#[allow(dead_code)]
 pub(crate) struct Styles {
     pub none: Style,
     pub caret: Style,
     pub cursor: Style,
     pub prompt: Style,
+    pub label: Style,
+    pub error: Style,
+    pub warning: Style,
+    pub keycode: Style,
     pub separator: Style,
     pub matched: Style,
     pub selected: Style,
@@ -143,6 +154,7 @@ pub(crate) struct Renderer {
 pub(crate) struct Frame<'ui> {
     rows: usize,
     cols: usize,
+    context: &'ui Context,
     styles: &'ui Styles,
 
     user_input: &'ui str,

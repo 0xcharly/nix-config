@@ -7,6 +7,7 @@
 /// of systematically creating new ones.
 use zellij_tile::prelude::*;
 
+mod context;
 mod core;
 mod hash;
 #[cfg(not(feature = "zellij_fallback_fs_api"))]
