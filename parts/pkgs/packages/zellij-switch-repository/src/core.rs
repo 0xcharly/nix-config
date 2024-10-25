@@ -10,10 +10,11 @@ use thiserror;
 /// that should be displayed to the user (which always implies a UI redraw).
 pub(crate) type Result = anyhow::Result<ui::RenderStrategy>;
 
+// TODO: these errors should be reported back to the UI.
+/// These errors indicate either user error (e.g. configuration), or issues with the Zellij API.
+/// They should be recoverable and reported to the user.
 #[derive(thiserror::Error, Debug)]
 pub(crate) enum PluginError {
-    #[error("unexpected plugin error: {0:?}")]
-    Unknown(#[from] anyhow::Error),
     #[error("invalid configuration: {reason}")]
     ConfigurationError { reason: &'static str },
     #[error("failed to switch to session {session_name:?}: {reason}")]
@@ -23,6 +24,8 @@ pub(crate) enum PluginError {
     },
 }
 
+/// These errors report invalid internal state. They indicate an issue with the plugin's
+/// implementation and should probably be fatal.
 #[derive(thiserror::Error, Debug)]
 pub(crate) enum InternalError {
     #[error("unexpected plugin error: {0:?}")]

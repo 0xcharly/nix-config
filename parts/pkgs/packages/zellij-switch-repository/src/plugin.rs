@@ -325,6 +325,8 @@ impl SwitchRepositoryPlugin {
             .into());
         };
 
+        // TODO: this class of error should be prevented by filtering the current session out of
+        // the list, or by silently closing the plugin pane.
         if *current_session_name == session_name {
             return Err(PluginError::SwitchSessionFailed {
                 session_name,
