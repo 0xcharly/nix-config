@@ -113,10 +113,6 @@ impl ZellijPlugin for SwitchRepositoryPlugin {
         if self.permissions_granted {
             // Initialize the plugin immediatelly since permissions have already been granted.
             self.on_permissions_granted();
-
-            // Hide the plugin window. It's just meant to be running in the background and
-            // listening to focus events.
-            hide_self();
         }
     }
 
