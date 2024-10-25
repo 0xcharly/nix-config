@@ -125,7 +125,7 @@ impl ZellijPlugin for SwitchRepositoryPlugin {
             self.handle_event(event)
         } else {
             self.event_queue.push(event);
-            Ok(RenderStrategy::SkipNextFrame)
+            return false; // No need to update the UI.
         };
 
         self.process_result(result)
@@ -154,16 +154,18 @@ impl SwitchRepositoryPlugin {
         // The scanning method (either through a background plugin worker or via the Zellij API) is
         // dictated by the `zellij_fallback_fs_api` feature flag.
         if let Err(error) = self.start_async_root_scan() {
+            // TODO: report errors to the user through the UI.
             eprintln!("Failed to start repository scan: {error:?}");
         }
     }
 
-    fn start_async_root_scan(&self) -> Result {
+    fn start_async_root_scan(&self) -> anyhow::Result<()> {
+        // TODO: pass these arguments through plugin configuration.
         self.post_repository_crawler_task(PathBuf::from("/host"), /* max_depth */ 5)
     }
 
     #[cfg(feature = "zellij_fallback_fs_api")]
-    fn post_repository_crawler_task(&self, root: PathBuf, _max_depth: usize) -> Result {
+    fn post_repository_crawler_task(&self, root: PathBuf, _max_depth: usize) -> anyhow::Result<()> {
         // Scan the host folder with the async `scan_host_folder` API (workaround). This API posts
         // its results back to the plugin using the `Event::FileSystemUpdate` event (see
         // `State::handle_event(…)`).
@@ -172,18 +174,17 @@ impl SwitchRepositoryPlugin {
         // runtime being extremely slow. This API might be removed in the future.
         scan_host_folder(&root);
 
-        Ok(RenderStrategy::SkipNextFrame)
+        Ok(())
     }
 
     #[cfg(not(feature = "zellij_fallback_fs_api"))]
-    fn post_repository_crawler_task(&self, root: PathBuf, max_depth: usize) -> Result {
+    fn post_repository_crawler_task(&self, root: PathBuf, max_depth: usize) -> anyhow::Result<()> {
         // Scan the host folder using the FS worker (preferred).
         // This API posts its results back to the plugin using the `Event::CustomMessage` event
         // with a `FileSystemWorkerMessage::Crawl` message.
         // NOTE: The `PluginMessage::new_to_worker(…)`'s `worker_name` argument must match the
         // worker's namespace specified when registering the worker: to send messages to the worker
         // declared with `test_worker` namespace, pass `"test"` to `::new_to_worker(…)`.
-        // TODO: report errors to the user through the UI.
         post_message_to(PluginMessage::new_to_worker(
             "file_system", // Post to the `file_system_worker` namespace.
             &serialize(&FileSystemWorkerMessage::Crawl)
@@ -192,7 +193,7 @@ impl SwitchRepositoryPlugin {
                 .with_context(|| "serializing outbound request to `file_system` worker")?,
         ));
 
-        Ok(RenderStrategy::SkipNextFrame)
+        Ok(())
     }
 
     /// Consumes as many of the queued events as possible, and returns either the final combined
