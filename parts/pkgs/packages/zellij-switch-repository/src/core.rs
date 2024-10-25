@@ -28,7 +28,7 @@ pub(crate) enum InternalError {
     #[error("unexpected plugin error: {0:?}")]
     Unknown(#[from] anyhow::Error),
     #[error("unexpected selected index: {0}")]
-    InvalidIndex(usize),
+    SelectionIndexOutOfBounds(usize),
 }
 
 /// A trait for utility functions on iterators of [Result].

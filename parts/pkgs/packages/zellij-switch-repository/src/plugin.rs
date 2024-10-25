@@ -302,7 +302,7 @@ impl SwitchRepositoryPlugin {
     fn submit(&mut self) -> Result {
         let index = self.renderer.get_selected_index();
         let Some(selected) = self.matcher.matches.get(self.renderer.get_selected_index()) else {
-            return Err(InternalError::InvalidIndex(index).into());
+            return Err(InternalError::SelectionIndexOutOfBounds(index).into());
         };
         self.safe_switch_session(PathBuf::from(&selected.entry))
     }
