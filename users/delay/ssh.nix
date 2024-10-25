@@ -7,8 +7,8 @@
     if args ? osConfig
     then args.osConfig
     else args.config;
-  inherit (pkgs.stdenv) isDarwin isLinux;
-  inherit (config.modules.usrenv) isCorpManaged isHeadless;
+  inherit (pkgs.stdenv) isDarwin;
+  inherit (config.modules.usrenv) isCorpManaged isHeadless sshAgent;
 
   inherit (config.modules.system.hosts) asl;
 in {
@@ -16,10 +16,11 @@ in {
     # NOTE: most SSH servers use the default limit of 6 keys for authentication.
     # Once the server limit is reached, authentication will fail with "too many
     # authentication failures". reached, authentication will fail with "
+    use1PasswordSshAgent = isDarwin && (sshAgent == "1password");
     _1passwordAgentPathMacOS = "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
     _1passwordAgentOrKey = key:
-      lib.optionalAttrs isDarwin {IdentityAgent = "\"${_1passwordAgentPathMacOS}\"";}
-      // lib.optionalAttrs (isLinux && !isHeadless) {IdentityFile = "~/.ssh/${key}";};
+      lib.optionalAttrs use1PasswordSshAgent {IdentityAgent = "\"${_1passwordAgentPathMacOS}\"";}
+      // lib.optionalAttrs (!isHeadless) {IdentityFile = "~/.ssh/${key}";};
   in {
     enable = true;
     matchBlocks =

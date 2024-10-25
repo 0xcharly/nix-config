@@ -79,6 +79,7 @@ class OpPrivateKeyEntry(NamedTuple):
 
 _SUPPORTED_PRIVATE_KEYS = frozenset(
     (
+        OpPrivateKeyEntry("~/.ssh/bitbucket", "op://Private/Bitbucket SSH Key/private key"),
         OpPrivateKeyEntry(
             "~/.ssh/git-commit-signing",
             "op://Private/Git Commit Signing SSH Key/private key",

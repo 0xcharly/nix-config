@@ -95,6 +95,15 @@ generate-nix-conf:
         op read 'op://Private/GitHub Fine-grained token for Nix/password' \
     )" | psub) $HOME/.config/nix/nix.conf
 
+[doc('Copy secrets to local host')]
+[group('secrets')]
+[macos]
+copy-secrets:
+    #! /usr/bin/env fish
+    for key in bitbucket github git-commit-signing linode skullkid vm
+      install -D -m 400 (sekrets read-ssh-key -k $key -o - | psub) $HOME/.ssh/$key
+    end
+
 ssh_user := `whoami`
 ssh_port := '22'
 ssh_options := '-o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'

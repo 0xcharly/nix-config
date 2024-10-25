@@ -8,7 +8,7 @@
     if args ? osConfig
     then args.osConfig
     else args.config;
-  inherit (config.modules.usrenv) isHeadless switcherApp;
+  inherit (config.modules.usrenv) isHeadless sshAgent switcherApp;
   inherit (pkgs.stdenv) isDarwin isLinux;
 
   # Unstable package repository.
@@ -17,6 +17,7 @@
   };
 
   hasWindowManager = !isHeadless;
+  use1PasswordSshAgent = isDarwin && (sshAgent == "1password");
 in rec {
   imports = [
     inputs.catppuccin.homeManagerModules.catppuccin
@@ -93,7 +94,7 @@ in rec {
           key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPf5EWFb/MW+1ZdQxDLZJWPrgrtibMcCmmKeCp+QMWBl";
         };
       }
-      (lib.optionalAttrs isDarwin {signing.backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";});
+      (lib.optionalAttrs use1PasswordSshAgent {signing.backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";});
   };
 
   # Jujutsu config path is wrong on macOS.
@@ -130,7 +131,7 @@ in rec {
       branch.sort = "-committerdate";
       gpg = {
         format = "ssh";
-        ssh.program = lib.mkIf isDarwin "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+        ssh.program = lib.mkIf use1PasswordSshAgent "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
       };
       commit.gpgsign = true;
       gitget = {
