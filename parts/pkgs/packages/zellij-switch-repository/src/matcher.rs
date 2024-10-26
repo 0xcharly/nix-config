@@ -4,7 +4,7 @@ use std::path::PathBuf;
 use fuzzy_matcher::skim::SkimMatcherV2;
 use fuzzy_matcher::FuzzyMatcher;
 
-use crate::core::{PluginUpdateLoop, Result};
+use crate::core::PluginUpdateLoop;
 
 #[derive(PartialEq)]
 pub(crate) struct Match {
@@ -37,20 +37,22 @@ impl RepositoryMatcher {
         self.apply();
     }
 
-    pub fn remove_trailing_char(&mut self) -> Result {
-        Ok(PluginUpdateLoop::from(self.user_input.pop().is_some())
-            .and_then(|| self.apply() | PluginUpdateLoop::MarkDirty))
+    pub fn remove_trailing_char(&mut self) -> PluginUpdateLoop {
+        PluginUpdateLoop::from(self.user_input.pop().is_some())
+            .and_then(|| self.apply() | PluginUpdateLoop::MarkDirty)
     }
 
-    pub fn on_user_input(&mut self, ch: char) -> Result {
+    pub fn on_user_input(&mut self, ch: char) -> PluginUpdateLoop {
         self.user_input.push(ch);
-        Ok(self.apply() | PluginUpdateLoop::MarkDirty)
+        // Force update since the user input changed (even if the list of results may not have as a
+        // result).
+        self.apply() | PluginUpdateLoop::MarkDirty
     }
 
-    pub fn clear_user_input(&mut self) -> Result {
+    pub fn clear_user_input(&mut self) -> PluginUpdateLoop {
         let is_empty = self.user_input().is_empty();
         self.user_input.clear();
-        Ok(self.apply() | PluginUpdateLoop::from(!is_empty))
+        self.apply() | PluginUpdateLoop::from(!is_empty)
     }
 
     pub fn choice_count(&self) -> usize {

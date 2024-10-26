@@ -290,6 +290,8 @@ impl SwitchRepositoryPlugin {
                 Ok(PluginUpdateLoop::NoUpdates)
             }
             // Clear reported errors on all user inputs.
+            // NOTE: use the non-short-circuiting variant of the OR operator to force
+            // evaluation of the rhs.
             Event::Key(Key::Up) => {
                 self.context.clear_errors() | self.renderer.select_up(&self.matcher)
             }
@@ -297,23 +299,16 @@ impl SwitchRepositoryPlugin {
                 self.context.clear_errors() | self.renderer.select_down(&self.matcher)
             }
             Event::Key(Key::Ctrl('c')) => self.terminate().into(),
-            Event::Key(Key::Esc) => {
-                self.context.clear_errors()
-                    | Ok(self
-                        .matcher
-                        .clear_user_input()?
-                        .or_else(|| self.terminate()))
-            }
+            Event::Key(Key::Esc) => Ok(self.context.clear_errors()
+                | self.matcher.clear_user_input().or_else(|| self.terminate())),
             Event::Key(Key::Backspace) => {
-                self.context.clear_errors() | self.matcher.remove_trailing_char()
+                Ok(self.context.clear_errors() | self.matcher.remove_trailing_char())
             }
             Event::Key(Key::Char('\n')) => self.context.clear_errors() | self.submit(),
             Event::Key(Key::Char(ch)) => {
-                // NOTE: use the non-short-circuiting variant of the OR operator to force
-                // evaluation of the rhs.
                 self.context.clear_errors()
-                    | Ok(self.matcher.on_user_input(ch)?
-                        | self.renderer.on_user_input(&self.matcher)?)
+                    | self.matcher.on_user_input(ch)
+                    | self.renderer.on_user_input(&self.matcher)
             }
             _ => Ok(PluginUpdateLoop::NoUpdates),
         }
