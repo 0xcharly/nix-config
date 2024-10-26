@@ -1,4 +1,7 @@
-use super::Frame;
+use super::{
+    styles::{ControlBar, ControlSegment},
+    Frame,
+};
 use std::fmt::{Display, Formatter, Result};
 
 const SEARCH_PREFIX: &'static str = ">";
@@ -12,127 +15,97 @@ const SEARCH_PREFIX: &'static str = ">";
 ///     - Status line
 const CHROME_LINE_COUNT: usize = 4;
 
-// TODO: deal with lack of horizontal space (truncate and/or ellipsize).
+const CONTROL_BAR: ControlBar = ControlBar {
+    segments: [
+        ControlSegment {
+            control: "↓↑",
+            label: "Navigate between entries",
+        },
+        ControlSegment {
+            control: "ENTER",
+            label: "Select entry",
+        },
+        ControlSegment {
+            control: "ESC",
+            label: "Clear input",
+        },
+    ],
+};
+
+// TODO: deal with narrow panes / reduced horizontal space (truncate and/or ellipsize).
 
 impl<'ui> Frame<'ui> {
+    fn fmt_pane_too_small(&self, f: &mut Formatter<'_>) -> Result {
+        self.styles.fmt_pane_too_small(f)
+    }
+
     fn fmt_user_input(&self, f: &mut Formatter<'_>) -> Result {
-        writeln!(
-            f,
-            "{} {}{}",
-            self.styles.prompt.paint(SEARCH_PREFIX),
-            self.user_input,
-            self.styles.cursor.paint(" ")
-        )
+        self.styles
+            .fmt_user_input(f, &SEARCH_PREFIX, &self.user_input)
     }
 
-    fn fmt_stats(&self, f: &mut Formatter<'_>) -> Result {
-        let stats = format!(
-            "  {}/{}",
+    fn fmt_user_input_divider(&self, f: &mut Formatter<'_>) -> Result {
+        self.styles.fmt_user_input_divider(
+            f,
             self.matched_results.len(),
-            self.total_result_count
-        );
-        let fills = "─".repeat(self.cols.saturating_sub(stats.len() + 3));
-
-        writeln!(
-            f,
-            "{} {}",
-            self.styles.separator.paint(stats),
-            self.styles.separator.paint(fills)
+            self.total_result_count,
+            self.cols,
         )
     }
 
-    fn fmt_tips(&self, f: &mut Formatter<'_>) -> Result {
-        writeln!(
+    fn fmt_matched_results(&self, f: &mut Formatter<'_>) -> Result {
+        self.styles.fmt_matched_results(
             f,
-            "<{}> {} / <{}> {} / <{}> {}",
-            self.styles.keycode.paint("↓↑"),
-            self.styles.label.paint("Navigate between entries"),
-            self.styles.keycode.paint("ENTER"),
-            self.styles.label.paint("Select entry"),
-            self.styles.keycode.paint("ESC"),
-            self.styles.label.paint("Clear input"),
+            &self.matched_results,
+            self.selection_index,
+            self.rows.saturating_sub(CHROME_LINE_COUNT),
         )
+    }
+
+    fn fmt_spacer(&self, f: &mut Formatter<'_>) -> Result {
+        for _ in 0..self
+            .rows
+            .saturating_sub(self.matched_results.len() + CHROME_LINE_COUNT)
+        {
+            writeln!(f)?;
+        }
+
+        Ok(())
+    }
+
+    fn fmt_control_bar(&self, f: &mut Formatter<'_>) -> Result {
+        self.styles.fmt_control_bar(f, &CONTROL_BAR)
     }
 
     /// Prints errors, if any.
     /// Since this is the last line, skip the final newline.
-    fn fmt_errors(&self, f: &mut Formatter<'_>) -> Result {
-        let Some(first_error) = self.context.errors().first() else {
-            return Ok(());
-        };
-
-        write!(f, "{}: ", self.styles.error.paint("Error"))?;
-
-        if self.context.errors().len() == 1 {
-            write!(f, "{first_error}")
-        } else {
-            write!(
-                f,
-                "{first_error}, and {} others",
-                self.context.errors().len() - 1
-            )
-        }
+    fn fmt_status_bar(&self, f: &mut Formatter<'_>) -> Result {
+        self.styles.fmt_status_bar(f, &self.context)
     }
 }
 
 impl Display for Frame<'_> {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        // Bail immediately if we don't have the space to render the bare minimum UI.
+        // Bail immediately if we don't have the space to render the bare minimum UI, which
+        // consists of the chrome and at least 1 row of results.
         if self.rows < CHROME_LINE_COUNT + 1 {
-            writeln!(f, "{}", self.styles.error.paint("Plugin pane is too small"))?;
-            return Ok(());
+            return self.fmt_pane_too_small(f);
         }
 
         // Header.
         self.fmt_user_input(f)?;
-        self.fmt_stats(f)?;
+        self.fmt_user_input_divider(f)?;
 
         // Body.
-        let mut ch_buf = [0; 2];
-        for (index, m) in self
-            .matched_results
-            .iter()
-            .take(self.rows.saturating_sub(4))
-            .enumerate()
-        {
-            let is_selected = index == self.selection_index;
-            let styled_entry = m
-                .entry
-                .char_indices()
-                .map(|(idx, ch)| {
-                    let style = match (m.indices.contains(&idx), is_selected) {
-                        (true, true) => self.styles.selected_and_matched,
-                        (false, true) => self.styles.selected,
-                        (true, false) => self.styles.matched,
-                        _ => self.styles.none,
-                    };
-                    style.paint(ch.encode_utf8(&mut ch_buf) as &str).to_string()
-                })
-                .collect::<String>();
-            if index == self.selection_index {
-                let fills = " ".repeat(self.cols.saturating_sub(2 + m.entry.len()));
-                writeln!(
-                    f,
-                    "{}{styled_entry}{}",
-                    self.styles.caret.paint("> "),
-                    self.styles.selected.paint(&fills)
-                )?;
-            } else {
-                writeln!(f, "  {styled_entry}")?;
-            }
-        }
+        self.fmt_matched_results(f)?;
 
-        // Spacer.
-        for _ in 0..self
-            .rows
-            .saturating_sub(self.matched_results.len() + CHROME_LINE_COUNT + 1)
-        {
-            writeln!(f)?;
-        }
+        // Spacer: if there's less results than available lines for display, fill up the pane with
+        // padding down to the footer.
+        self.fmt_spacer(f)?;
 
         // Footer.
-        self.fmt_tips(f)?;
-        self.fmt_errors(f)?;
+        self.fmt_control_bar(f)?;
+        self.fmt_status_bar(f)?;
 
         Ok(())
     }

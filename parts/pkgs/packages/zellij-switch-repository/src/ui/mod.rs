@@ -1,8 +1,8 @@
 use crate::matcher::Match;
 use crate::{context::Context, core::Result};
 
-use ansi_term::Style;
 use std::ops::{BitAnd, BitOr};
+use styles::Styles;
 
 mod frame;
 mod renderer;
@@ -99,22 +99,6 @@ impl BitOr<Result> for RenderStrategy {
             err => err,
         }
     }
-}
-
-#[allow(dead_code)]
-pub(crate) struct Styles {
-    pub none: Style,
-    pub caret: Style,
-    pub cursor: Style,
-    pub prompt: Style,
-    pub label: Style,
-    pub error: Style,
-    pub warning: Style,
-    pub keycode: Style,
-    pub separator: Style,
-    pub matched: Style,
-    pub selected: Style,
-    pub selected_and_matched: Style,
 }
 
 #[derive(Default)]

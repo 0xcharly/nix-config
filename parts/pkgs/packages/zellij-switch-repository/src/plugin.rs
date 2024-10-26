@@ -139,15 +139,12 @@ impl ZellijPlugin for SwitchRepositoryPlugin {
         let frame = self
             .renderer
             .next_frame(rows, cols, &self.context, &self.matcher);
-        println!("{}", frame);
+        print!("{}", frame);
     }
 }
 
 impl SwitchRepositoryPlugin {
     fn process_result(&mut self, result: Result) -> bool {
-        self.context.log_error(PluginError::ConfigurationError {
-            reason: "test error",
-        });
         match result {
             Ok(strategy) => strategy,
             Err(error) => {
