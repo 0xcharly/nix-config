@@ -1,10 +1,10 @@
 use crate::context;
-use crate::core::{InternalError, PluginError, Result, ResultIteratorOps};
+use crate::core::{InternalError, PluginError, PluginUpdateLoop, Result, ResultIterator};
 use crate::hash;
 #[cfg(not(feature = "zellij_fallback_fs_api"))]
 use crate::marshall::{deserialize, serialize};
 use crate::matcher::RepositoryMatcher;
-use crate::ui::{RenderStrategy, Renderer, PANE_TITLE};
+use crate::ui::{Renderer, PANE_TITLE};
 #[cfg(not(feature = "zellij_fallback_fs_api"))]
 use crate::workers::protocol::{
     FileSystemWorkerMessage, RepositoryCrawlerRequest, RepositoryCrawlerResponse,
@@ -156,7 +156,7 @@ impl SwitchRepositoryPlugin {
         .as_bool()
     }
 
-    fn on_permissions_granted(&mut self) -> RenderStrategy {
+    fn on_permissions_granted(&mut self) -> PluginUpdateLoop {
         // Give the plugin pane a more concise name.
         rename_plugin_pane(get_plugin_ids().plugin_id, PANE_TITLE);
 
@@ -168,7 +168,7 @@ impl SwitchRepositoryPlugin {
             self.context
                 .log_error(PluginError::FileSystemScanFailed(error))
         } else {
-            RenderStrategy::SkipNextFrame
+            PluginUpdateLoop::NoUpdates
         }
     }
 
@@ -243,7 +243,7 @@ impl SwitchRepositoryPlugin {
                 let RepositoryCrawlerResponse { repository } = deserialize(&payload)
                     .with_context(|| "deserializing response from `file_system` worker")?;
                 self.matcher.add_choice(repository);
-                Ok(RenderStrategy::DrawNextFrame)
+                Ok(PluginUpdateLoop::MarkDirty)
             }
             #[cfg(feature = "zellij_fallback_fs_api")]
             Event::FileSystemUpdate(paths) => {
@@ -287,7 +287,7 @@ impl SwitchRepositoryPlugin {
                     })
                     .map(|session| session.name)
                     .collect();
-                Ok(RenderStrategy::SkipNextFrame)
+                Ok(PluginUpdateLoop::NoUpdates)
             }
             // Clear reported errors on all user inputs.
             Event::Key(Key::Up) => {
@@ -315,13 +315,13 @@ impl SwitchRepositoryPlugin {
                     | Ok(self.matcher.on_user_input(ch)?
                         | self.renderer.on_user_input(&self.matcher)?)
             }
-            _ => Ok(RenderStrategy::SkipNextFrame),
+            _ => Ok(PluginUpdateLoop::NoUpdates),
         }
     }
 
-    fn terminate(&self) -> RenderStrategy {
+    fn terminate(&self) -> PluginUpdateLoop {
         close_self();
-        RenderStrategy::SkipNextFrame
+        PluginUpdateLoop::NoUpdates
     }
 
     fn submit(&mut self) -> Result {

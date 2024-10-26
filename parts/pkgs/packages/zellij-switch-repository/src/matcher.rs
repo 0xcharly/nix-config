@@ -4,8 +4,7 @@ use std::path::PathBuf;
 use fuzzy_matcher::skim::SkimMatcherV2;
 use fuzzy_matcher::FuzzyMatcher;
 
-use crate::core::Result;
-use crate::ui::RenderStrategy;
+use crate::core::{PluginUpdateLoop, Result};
 
 #[derive(PartialEq)]
 pub(crate) struct Match {
@@ -39,19 +38,19 @@ impl RepositoryMatcher {
     }
 
     pub fn remove_trailing_char(&mut self) -> Result {
-        Ok(RenderStrategy::from(self.user_input.pop().is_some())
-            .and_then(|| self.apply() | RenderStrategy::DrawNextFrame))
+        Ok(PluginUpdateLoop::from(self.user_input.pop().is_some())
+            .and_then(|| self.apply() | PluginUpdateLoop::MarkDirty))
     }
 
     pub fn on_user_input(&mut self, ch: char) -> Result {
         self.user_input.push(ch);
-        Ok(self.apply() | RenderStrategy::DrawNextFrame)
+        Ok(self.apply() | PluginUpdateLoop::MarkDirty)
     }
 
     pub fn clear_user_input(&mut self) -> Result {
         let is_empty = self.user_input().is_empty();
         self.user_input.clear();
-        Ok(self.apply() | RenderStrategy::from(!is_empty))
+        Ok(self.apply() | PluginUpdateLoop::from(!is_empty))
     }
 
     pub fn choice_count(&self) -> usize {
@@ -62,7 +61,7 @@ impl RepositoryMatcher {
         &self.user_input
     }
 
-    fn apply(&mut self) -> RenderStrategy {
+    fn apply(&mut self) -> PluginUpdateLoop {
         let previous_matches = std::mem::take(&mut self.matches);
 
         for choice in self.choices.iter().filter_map(|p| p.to_str()) {
