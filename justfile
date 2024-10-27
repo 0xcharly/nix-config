@@ -26,11 +26,10 @@ switch:
 switch:
     #! /usr/bin/env fish
     if test (grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"
-      set REBUILD_COMMAND "sudo nixos-rebuild"
+      sudo nixos-rebuild {{ rebuildOptions }} switch --flake .
     else
-      set REBUILD_COMMAND "home-manager switch -b hm.bak"
+      home-manager {{ rebuildOptions }} switch -b hm.bak --flake .
     end
-    eval $REBUILD_COMMAND {{ rebuildOptions }} switch --flake .
 
 [doc("Rebuild the current NixOS host's configuration and temporary switch to it")]
 [group('nix')]
