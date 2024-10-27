@@ -1,0 +1,17 @@
+keys:
+  - &user_delay age13j49fp8pdgqgz72q3gjhh7xshawj5cuy84q77p2c66e944w4kvgs906qhs
+  - &darwin_studio age1wztmvm2z0u0rmlkzwuwghqyfr97u5ly7kjqzf6nj7lttwm9r7ejqvzju7y
+  - &home_linode age1uj44alkruye3eh6sph8rygjupmvgg26f3snxpelhuuxr4d6w7edqzwj2u4
+creation_rules:
+  - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
+    key_groups:
+    - age:
+      - *user_delay
+      - *darwin_studio
+      - *home_linode
+  - path_regex: secrets/github/[^/]+\.(yaml|json|env|ini)$
+    key_groups:
+    - age:
+      - *user_delay
+      - *darwin_studio
+      - *home_linode

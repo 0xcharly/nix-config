@@ -31,6 +31,8 @@
           upkgs.markdownlint-cli
           upkgs.nixd
           upkgs.prettierd
+          upkgs.sops
+          upkgs.ssh-to-age
           upkgs.stylua
         ]
         ++ (lib.optionals isDarwin [upkgs._1password]);

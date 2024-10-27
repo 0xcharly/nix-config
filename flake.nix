@@ -33,9 +33,26 @@
       inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
 
+    # Filesystem management.
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Secrets management.
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # NOTE: See comment in ./modules/shared/module.nix.
+    # Input is still referenced in devshells for future use/experimentation.
+
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+      inputs.darwin.follows = "nixpkgs-darwin";
     };
 
     # We use flake parts to organize our configurations.
@@ -84,16 +101,6 @@
     # TODO: uncomment when Ghostty is released publicly.
     # ghostty.url = "github:ghostty-org/ghostty";
     nix-config-ghostty.url = "github:0xcharly/nix-config-ghostty";
-
-    # Secrets management
-    # NOTE: See comment in ./modules/shared/module.nix.
-    # Input is still referenced in devshells for future use/experimentation.
-    agenix = {
-      url = "github:ryantm/agenix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-      inputs.darwin.follows = "nixpkgs-darwin";
-    };
   };
 
   nixConfig = {
