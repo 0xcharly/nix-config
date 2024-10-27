@@ -24,6 +24,7 @@ in rec {
 
     ./browsers.nix
     ./fonts.nix
+    ./nix-client-config.nix
     ./scripts.nix
     ./shells.nix
     ./ssh.nix

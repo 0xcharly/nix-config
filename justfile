@@ -90,10 +90,10 @@ cache:
 [doc('Generate ~/.config/nix/nix.conf')]
 [group('secrets')]
 [macos]
-generate-nix-conf:
+generate-access-tokens-conf:
     install -D -m 400 (echo "access-tokens = github.com=$( \
         op read 'op://Private/GitHub Fine-grained token for Nix/password' \
-    )" | psub) $HOME/.config/nix/nix.conf
+    )" | psub) $HOME/.config/nix/access-tokens.conf
 
 [doc('Copy secrets to local host')]
 [group('secrets')]
@@ -136,11 +136,11 @@ bootstrap-vm addr:
 [doc('Copy ~/.config/nix/nix.conf to remote host')]
 [group('secrets')]
 [macos]
-ssh-generate-nix-conf host:
+ssh-generate-access-tokens-conf host:
     echo "access-tokens = github.com=$( \
         op read 'op://Private/GitHub Fine-grained token for Nix/password' \
     )" | ssh {{ ssh_options }} -p{{ ssh_port }} -l{{ ssh_user }} {{ host }} \
-         "bash -c \"install -D -m 400 <(dd) \$HOME/.config/nix/nix.conf\""
+         "bash -c \"install -D -m 400 <(dd) \$HOME/.config/nix/access-tokens.conf\""
 
 [doc('Copy secrets to remote host')]
 [group('secrets')]
