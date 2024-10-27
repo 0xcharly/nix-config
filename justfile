@@ -1,5 +1,8 @@
 import '.justfile.incl'
 
+set dotenv-load
+set dotenv-required
+
 set shell := ['fish', '-c']
 
 hostname := `hostname`
@@ -42,15 +45,13 @@ test:
 [group('nix')]
 [macos]
 update +inputs:
-    GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.bareRepository GIT_CONFIG_VALUE_0=all \
-        for input in {{ inputs }}; nix flake update --flake . $input; end
+    for input in {{ inputs }}; nix flake update --flake . $input; end
 
 [doc('Update the given flake inputs')]
 [group('nix')]
 [linux]
 update +inputs:
-    GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=safe.bareRepository GIT_CONFIG_VALUE_0=all \
-        for input in {{ inputs }}; nix flake lock --update-input $input; end
+    for input in {{ inputs }}; nix flake lock --update-input $input; end
 
 # Builds the current darwin host's configuration and caches the results.
 #
