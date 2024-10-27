@@ -25,21 +25,13 @@ in {
         # Xcode is installed out-of-band on corp devices.
         Xcode = 497799835;
       });
-    casks = let
-      no_quarantine = name: {
-        inherit name;
-        args.no_quarantine = true;
-      };
-    in
-      [
+    casks = [
         # Cross-platfroms password management.
         "1password"
 
         # Browsers.
-        # https://chromium.googlesource.com/chromium/src/+/main/docs/mac_arm64.md
-        (no_quarantine "chromium")
+        "brave"
         "firefox@developer-edition"
-        "google-chrome"
         "orion"
 
         # Utilities.
