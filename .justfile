@@ -91,7 +91,7 @@ cache:
 [group('secrets')]
 [macos]
 generate-access-tokens-conf:
-    install -D -m 400 (echo "access-tokens = github.com=$( \
+    install -D -m 400 (echo "extra-access-tokens = github.com=$( \
         op read 'op://Private/GitHub Fine-grained token for Nix/password' \
     )" | psub) $HOME/.config/nix/access-tokens.conf
 
@@ -137,7 +137,7 @@ bootstrap-vm addr:
 [group('secrets')]
 [macos]
 ssh-generate-access-tokens-conf host:
-    echo "access-tokens = github.com=$( \
+    echo "extra-access-tokens = github.com=$( \
         op read 'op://Private/GitHub Fine-grained token for Nix/password' \
     )" | ssh {{ ssh_options }} -p{{ ssh_port }} -l{{ ssh_user }} {{ host }} \
          "bash -c \"install -D -m 400 <(dd) \$HOME/.config/nix/access-tokens.conf\""
