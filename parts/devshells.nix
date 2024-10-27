@@ -30,6 +30,7 @@
           upkgs.lua-language-server
           upkgs.markdownlint-cli
           upkgs.nixd
+          upkgs.prettierd
           upkgs.stylua
         ]
         ++ (lib.optionals isDarwin [upkgs._1password]);
