@@ -4,7 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [features]
+default = ["zellij_run_command_api"]
 zellij_fallback_fs_api = []
+zellij_run_command_api = []
 
 [dependencies]
 ansi_term = "0.12.1"

@@ -1,11 +1,11 @@
 use crate::context;
 use crate::core::{InternalError, PluginError, PluginUpdateLoop, Result, ResultIterator};
 use crate::hash;
-#[cfg(not(feature = "zellij_fallback_fs_api"))]
+#[cfg(not(any(feature = "zellij_fallback_fs_api", feature = "zellij_run_command_api")))]
 use crate::marshall::{deserialize, serialize};
 use crate::matcher::RepositoryMatcher;
 use crate::ui::{Renderer, PANE_TITLE};
-#[cfg(not(feature = "zellij_fallback_fs_api"))]
+#[cfg(not(any(feature = "zellij_fallback_fs_api", feature = "zellij_run_command_api")))]
 use crate::workers::protocol::{
     FileSystemWorkerMessage, RepositoryCrawlerRequest, RepositoryCrawlerResponse,
 };
@@ -79,6 +79,16 @@ pub(crate) struct SwitchRepositoryPlugin {
 struct SwitchRepositoryPluginConfig {
     layout: LayoutInfo,
     root: Option<PathBuf>,
+    list_directories_command: Option<PathBuf>,
+}
+
+impl SwitchRepositoryPluginConfig {
+    fn load(&mut self, configuration: &BTreeMap<String, String>) {
+        self.root = configuration.get("repositories_root").map(PathBuf::from);
+        self.list_directories_command = configuration
+            .get("get_directory_list_command")
+            .map(PathBuf::from);
+    }
 }
 
 impl Default for SwitchRepositoryPluginConfig {
@@ -86,6 +96,7 @@ impl Default for SwitchRepositoryPluginConfig {
         Self {
             layout: LayoutInfo::BuiltIn("default".to_string()),
             root: Default::default(),
+            list_directories_command: Default::default(),
         }
     }
 }
@@ -102,6 +113,8 @@ impl ZellijPlugin for SwitchRepositoryPlugin {
         request_permission(&[
             PermissionType::ChangeApplicationState,
             PermissionType::ReadApplicationState,
+            #[cfg(feature = "zellij_run_command_api")]
+            PermissionType::RunCommands,
         ]);
         subscribe(&[
             EventType::CustomMessage,
@@ -109,10 +122,12 @@ impl ZellijPlugin for SwitchRepositoryPlugin {
             EventType::FileSystemUpdate,
             EventType::Key,
             EventType::PermissionRequestResult,
+            #[cfg(feature = "zellij_run_command_api")]
+            EventType::RunCommandResult,
             EventType::SessionUpdate,
         ]);
 
-        self.config.root = configuration.get("repositories_root").map(PathBuf::from);
+        self.config.load(&configuration);
 
         if self.permissions_granted {
             // Initialize the plugin immediatelly since permissions have already been granted.
@@ -177,20 +192,7 @@ impl SwitchRepositoryPlugin {
         self.post_repository_crawler_task(PathBuf::from("/host"), /* max_depth */ 5)
     }
 
-    #[cfg(feature = "zellij_fallback_fs_api")]
-    fn post_repository_crawler_task(&self, root: PathBuf, _max_depth: usize) -> anyhow::Result<()> {
-        // Scan the host folder with the async `scan_host_folder` API (workaround). This API posts
-        // its results back to the plugin using the `Event::FileSystemUpdate` event (see
-        // `State::handle_event(…)`).
-        // NOTE: This API  is a stop-gap method that allows plugins to scan a folder on the /host
-        // filesystem and get back a list of files. This is a workaround for the Zellij WASI
-        // runtime being extremely slow. This API might be removed in the future.
-        scan_host_folder(&root);
-
-        Ok(())
-    }
-
-    #[cfg(not(feature = "zellij_fallback_fs_api"))]
+    #[cfg(not(any(feature = "zellij_fallback_fs_api", feature = "zellij_run_command_api")))]
     fn post_repository_crawler_task(&self, root: PathBuf, max_depth: usize) -> anyhow::Result<()> {
         // Scan the host folder using the FS worker (preferred).
         // This API posts its results back to the plugin using the `Event::CustomMessage` event
@@ -209,6 +211,43 @@ impl SwitchRepositoryPlugin {
         Ok(())
     }
 
+    #[cfg(feature = "zellij_fallback_fs_api")]
+    fn post_repository_crawler_task(&self, root: PathBuf, _max_depth: usize) -> anyhow::Result<()> {
+        // Scan the host folder with the async `scan_host_folder` API (workaround). This API posts
+        // its results back to the plugin using the `Event::FileSystemUpdate` event (see
+        // `State::handle_event(…)`).
+        // NOTE: This API  is a stop-gap method that allows plugins to scan a folder on the /host
+        // filesystem and get back a list of files. This is a workaround for the Zellij WASI
+        // runtime being extremely slow. This API might be removed in the future.
+        scan_host_folder(&root);
+
+        Ok(())
+    }
+
+    #[cfg(feature = "zellij_run_command_api")]
+    fn post_repository_crawler_task(
+        &self,
+        _root: PathBuf,
+        _max_depth: usize,
+    ) -> anyhow::Result<()> {
+        let Some(command) = &self.config.list_directories_command else {
+            return Err(PluginError::ConfigurationError {
+                reason: "missing `list_directories_command`",
+            }
+            .into());
+        };
+
+        let Some(command) = command.to_str() else {
+            return Err(PluginError::FileSystemScanFailed(anyhow!(
+                "failed to decode `list_directories_command`"
+            ))
+            .into());
+        };
+        run_command(&[&command], BTreeMap::new());
+
+        Ok(())
+    }
+
     /// Consumes as many of the queued events as possible, and returns either the final combined
     /// [RenderStrategy] value, or the first error that occurred.
     ///
@@ -221,6 +260,99 @@ impl SwitchRepositoryPlugin {
             .try_consume()
     }
 
+    #[cfg(not(any(feature = "zellij_fallback_fs_api", feature = "zellij_run_command_api")))]
+    fn handle_custom_message(&mut self, message: String, payload: String) {
+        assert!(
+            matches!(
+                deserialize(&message)
+                    .with_context(|| "deserializing message from `file_system` worker")?,
+                FileSystemWorkerMessage::Crawl
+            ),
+            "unsupported message received from own background worker"
+        );
+        let RepositoryCrawlerResponse { repository } = deserialize(&payload)
+            .with_context(|| "deserializing response from `file_system` worker")?;
+        self.matcher.add_choice(repository);
+
+        Ok(PluginUpdateLoop::MarkDirty)
+    }
+
+    #[cfg(feature = "zellij_fallback_fs_api")]
+    fn handle_filesystem_update(&mut self, paths: Vec<(PathBuf, Option<FileMetadata>)>) {
+        let has_dot_git_dir = paths.iter().any(|(path, metadata)| {
+            path.file_name()
+                .map(|fname| fname.to_str() == Some(".git"))
+                .unwrap_or(false)
+                && metadata.map(|m| m.is_dir).unwrap_or(false)
+        });
+        if has_dot_git_dir {
+            let parent = paths
+                .first()
+                .expect("`paths` is guaranteed to contain at least 1 child")
+                .0
+                .parent()
+                .expect("`parent` is guaranteed to exist")
+                .to_path_buf()
+                .strip_prefix(PathBuf::from("/host"))
+                .expect("path is guaranteed to start with the above prefix")
+                .to_path_buf();
+            self.matcher.add_choice(parent);
+        } else {
+            paths
+                .iter()
+                .filter_map(|(path, metadata)| {
+                    metadata
+                        .map(|m| if m.is_dir { Some(path) } else { None })
+                        .unwrap_or_default()
+                })
+                .for_each(scan_host_folder);
+        }
+
+        Ok(has_dot_git_dir.into())
+    }
+
+    #[cfg(feature = "zellij_run_command_api")]
+    fn handle_list_directories_command_result(
+        &mut self,
+        exitcode: Option<i32>,
+        stdout: Vec<u8>,
+        stderr: Vec<u8>,
+    ) -> Result {
+        let Some(exitcode) = exitcode else {
+            return self
+                .context
+                .log_error(PluginError::FileSystemScanFailed(anyhow!(
+                    "`list_directories_command` failed without exitcode (killed by signal?): {stderr:?}"
+                )))
+                .into();
+        };
+        if exitcode != 0 {
+            return self
+                .context
+                .log_error(PluginError::FileSystemScanFailed(anyhow!(
+                    "`list_directories_command` failed with exitcode {exitcode}"
+                )))
+                .into();
+        }
+
+        let Ok(stdout) = String::from_utf8(stdout)
+            .map_err(|non_utf8| String::from_utf8_lossy(non_utf8.as_bytes()).into_owned())
+        else {
+            return self
+                .context
+                .log_error(PluginError::FileSystemScanFailed(anyhow!(
+                    "failed to decode `list_directories_command`'s output"
+                )))
+                .into();
+        };
+        stdout
+            .lines()
+            .map(PathBuf::from)
+            .for_each(|path| self.matcher.add_choice(path));
+
+        Ok(PluginUpdateLoop::MarkDirty)
+    }
+
     fn handle_event(&mut self, event: Event) -> Result {
         match event {
             Event::PermissionRequestResult(PermissionStatus::Granted) => {
@@ -230,52 +362,16 @@ impl SwitchRepositoryPlugin {
                 self.permissions_granted = false;
                 Ok(self.terminate())
             }
-            #[cfg(not(feature = "zellij_fallback_fs_api"))]
-            Event::CustomMessage(message, payload) => {
-                assert!(
-                    matches!(
-                        deserialize(&message)
-                            .with_context(|| "deserializing message from `file_system` worker")?,
-                        FileSystemWorkerMessage::Crawl
-                    ),
-                    "unsupported message received from own background worker"
-                );
-                let RepositoryCrawlerResponse { repository } = deserialize(&payload)
-                    .with_context(|| "deserializing response from `file_system` worker")?;
-                self.matcher.add_choice(repository);
-                Ok(PluginUpdateLoop::MarkDirty)
-            }
+            #[cfg(not(any(
+                feature = "zellij_fallback_fs_api",
+                feature = "zellij_run_command_api"
+            )))]
+            Event::CustomMessage(message, payload) => self.handle_custom_message(message, payload),
             #[cfg(feature = "zellij_fallback_fs_api")]
-            Event::FileSystemUpdate(paths) => {
-                let has_dot_git_dir = paths.iter().any(|(path, metadata)| {
-                    path.file_name()
-                        .map(|fname| fname.to_str() == Some(".git"))
-                        .unwrap_or(false)
-                        && metadata.map(|m| m.is_dir).unwrap_or(false)
-                });
-                if has_dot_git_dir {
-                    let parent = paths
-                        .first()
-                        .expect("`paths` is guaranteed to contain at least 1 child")
-                        .0
-                        .parent()
-                        .expect("`parent` is guaranteed to exist")
-                        .to_path_buf()
-                        .strip_prefix(PathBuf::from("/host"))
-                        .expect("path is guaranteed to start with the above prefix")
-                        .to_path_buf();
-                    self.matcher.add_choice(parent);
-                } else {
-                    paths
-                        .iter()
-                        .filter_map(|(path, metadata)| {
-                            metadata
-                                .map(|m| if m.is_dir { Some(path) } else { None })
-                                .unwrap_or_default()
-                        })
-                        .for_each(scan_host_folder);
-                }
-                Ok(has_dot_git_dir.into())
+            Event::FileSystemUpdate(paths) => self.handle_filesystem_update(paths),
+            #[cfg(feature = "zellij_run_command_api")]
+            Event::RunCommandResult(exitcode, stdout, stderr, _context) => {
+                self.handle_list_directories_command_result(exitcode, stdout, stderr)
             }
             Event::SessionUpdate(sessions, _) => {
                 self.all_sessions_name = sessions
