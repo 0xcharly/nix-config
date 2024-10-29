@@ -11,5 +11,6 @@
 # @raycast.description Attemps to mirror currently plugged in device with scrcpy
 # @raycast.author Charly Delay
 
-scrcpy -b 64M -t -w --disable-screensaver --keyboard=uhid &
+
+scrcpy --video-bit-rate 64M --show-touches --stay-awake --disable-screensaver &
 disown
