@@ -11,6 +11,6 @@
 # @raycast.description Attemps to mirror currently plugged in device with scrcpy
 # @raycast.author Charly Delay
 
-
 scrcpy --video-bit-rate 64M --show-touches --stay-awake --disable-screensaver &
 disown
+sleep 2 # Gives the script enough time to properly disown `scrcpy`.

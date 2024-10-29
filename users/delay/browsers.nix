@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-} @ args: let
+{pkgs, ...} @ args: let
   config =
     if args ? osConfig
     then args.osConfig
