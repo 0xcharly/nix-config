@@ -30,7 +30,7 @@ in {
         "1password"
 
         # Browsers.
-        "brave"
+        "brave-browser"
         "firefox@developer-edition"
         "orion"
 
