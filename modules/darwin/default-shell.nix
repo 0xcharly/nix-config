@@ -22,6 +22,8 @@ in {
   # arbitrary user-defined activation scripts.
   #   https://github.com/LnL7/nix-darwin/issues/663
   # https://github.com/LnL7/nix-darwin/blob/cf297a8d/modules/system/activation-scripts.nix#L60
+  # NOTE: This has been fixed in https://github.com/LnL7/nix-darwin/pull/1120.
+  # TODO: Cleanup after migrating to 24.11.
   system.activationScripts.users.text = lib.mkIf (cfg.knownUsers == []) ''
     echo "setting up users' shell..." >&2
 
