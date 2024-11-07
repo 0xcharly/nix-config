@@ -60,8 +60,8 @@ in {
     functions.fish_mode_prompt = ""; # Disable prompt vi mode reporting.
     shellAliases =
       {
-        # Shortcut to setup a nix-shell with `shell`. This lets you do something
-        # like `nixsh -p go` to get an environment with Go but use `shell` along
+        # Shortcut to setup a nix-shell with `fish`. This lets you do something
+        # like `nixsh -p go` to get an environment with Go but use `fish` along
         # with it.
         nixsh = "nix-shell --run ${lib.getExe pkgs.fish}";
         devsh = "nix develop --command ${lib.getExe pkgs.fish}";
@@ -79,7 +79,6 @@ in {
 
   home.packages =
     [
-      pkgs.fishPlugins.done
       pkgs.fishPlugins.fzf
       pkgs.fishPlugins.transient-fish
     ]

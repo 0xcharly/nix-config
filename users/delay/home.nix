@@ -16,6 +16,8 @@
     inherit (pkgs) system;
   };
 
+  homeDirectory = config.users.users.delay.home;
+  codeDirectory = homeDirectory + "/code";
   hasWindowManager = !isHeadless;
   use1PasswordSshAgent = isDarwin && (sshAgent == "1password");
 in rec {
@@ -136,7 +138,7 @@ in rec {
       };
       commit.gpgsign = true;
       gitget = {
-        root = "~/code";
+        root = codeDirectory;
         host = "github.com";
       };
     };
@@ -165,7 +167,16 @@ in rec {
       scrollback_editor = lib.getExe pkgs.nvim;
       keybinds.normal.bind = lib.mkIf (switcherApp == "zellij") {
         _args = ["Ctrl f"];
-        Run = "zellij-select-repository";
+        MessagePlugin = {
+          _args = ["sessionizer"];
+          launch_new = true; # Always launch a new instance. This guarantees that CWD is correctly updated.
+          skip_cache = false; # Don't skip compilation cache.
+          floating = true; # Always float the plugin window.
+
+          cwd = codeDirectory;
+          scan_root = codeDirectory;
+          list_paths_command = "${pkgs.zellij-switch-repository}/bin/find-git-repositories";
+        };
       };
       ui.pane_frames.rounded_corners = true;
       plugins.sessionizer._props = {location = "file:${lib.getExe pkgs.zellij-switch-repository}";};

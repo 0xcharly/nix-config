@@ -48,20 +48,26 @@ in
     ];
 
     buildPhase = ''
-      cargo build --manifest-path ${src + "/Cargo.toml"} --release --target=wasm32-wasip1
-      cargo build --manifest-path ${src + "/find-git-repositories/Cargo.toml"} --release
+      runHook preBuild
+      cargo build --manifest-path ./Cargo.toml --release --target=wasm32-wasip1
+      cargo build --manifest-path ./find-git-repositories/Cargo.toml --release
+      runHook postBuild
     '';
 
     installPhase =
       ''
-        cargo install --path $src --root $out --target=wasm32-wasip1
-        cargo install --path $src/find-git-repositories --root $out
+        runHook preInstall
+        cargo install --frozen --path . --root "$out" --target=wasm32-wasip1
+        cargo install --frozen --path ./find-git-repositories --root "$out"
       ''
       + lib.optionalString optimize ''
         wasm-opt \
-          -Oz $out/bin/${name}.wasm \
-          -o $out/bin/${name}.wasm \
+          -Oz "$out/bin/${name}.wasm" \
+          -o "$out/bin/${name}.wasm" \
           --enable-bulk-memory
+      ''
+      + ''
+        runHook postInstall
       '';
     doCheck = false;
 
