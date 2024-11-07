@@ -1,8 +1,6 @@
 use crate::context;
 use crate::core::{InternalError, PluginError, PluginUpdateLoop, Result, ResultIterator};
 use crate::hash;
-#[cfg(not(any(feature = "zellij_fallback_fs_api", feature = "zellij_run_command_api")))]
-use crate::marshall::{deserialize, serialize};
 use crate::matcher::RepositoryMatcher;
 use crate::ui::{Renderer, PANE_TITLE};
 #[cfg(not(any(feature = "zellij_fallback_fs_api", feature = "zellij_run_command_api")))]
@@ -82,11 +80,16 @@ struct SwitchRepositoryPluginConfig {
     list_directories_command: Option<PathBuf>,
 }
 
+const DIRECTORIES_SCANNER_ROOT_OPTION: &'static str = "scan_root";
+const LIST_DIRECTORIES_COMMAND_OPTION: &'static str = "list_paths_command";
+
 impl SwitchRepositoryPluginConfig {
     fn load(&mut self, configuration: &BTreeMap<String, String>) {
-        self.root = configuration.get("repositories_root").map(PathBuf::from);
+        self.root = configuration
+            .get(DIRECTORIES_SCANNER_ROOT_OPTION)
+            .map(PathBuf::from);
         self.list_directories_command = configuration
-            .get("get_directory_list_command")
+            .get(LIST_DIRECTORIES_COMMAND_OPTION)
             .map(PathBuf::from);
     }
 }
@@ -194,6 +197,8 @@ impl SwitchRepositoryPlugin {
 
     #[cfg(not(any(feature = "zellij_fallback_fs_api", feature = "zellij_run_command_api")))]
     fn post_repository_crawler_task(&self, root: PathBuf, max_depth: usize) -> anyhow::Result<()> {
+        use crate::marshall_plugin::serialize;
+
         // Scan the host folder using the FS worker (preferred).
         // This API posts its results back to the plugin using the `Event::CustomMessage` event
         // with a `FileSystemWorkerMessage::Crawl` message.
@@ -216,7 +221,7 @@ impl SwitchRepositoryPlugin {
         // Scan the host folder with the async `scan_host_folder` API (workaround). This API posts
         // its results back to the plugin using the `Event::FileSystemUpdate` event (see
         // `State::handle_event(…)`).
-        // NOTE: This API  is a stop-gap method that allows plugins to scan a folder on the /host
+        // NOTE: This API is a stop-gap method that allows plugins to scan a folder on the /host
         // filesystem and get back a list of files. This is a workaround for the Zellij WASI
         // runtime being extremely slow. This API might be removed in the future.
         scan_host_folder(&root);
@@ -236,14 +241,27 @@ impl SwitchRepositoryPlugin {
             }
             .into());
         };
-
         let Some(command) = command.to_str() else {
-            return Err(PluginError::FileSystemScanFailed(anyhow!(
-                "failed to decode `list_directories_command`"
-            ))
+            return Err(PluginError::ConfigurationError {
+                reason: "failed to decode `list_directories_command`",
+            }
             .into());
         };
-        run_command(&[&command], BTreeMap::new());
+
+        let Some(root) = &self.config.root else {
+            return Err(PluginError::ConfigurationError {
+                reason: "missing `scan_root`",
+            }
+            .into());
+        };
+        let Some(root) = root.to_str() else {
+            return Err(PluginError::ConfigurationError {
+                reason: "failed to decode `scan_root` path",
+            }
+            .into());
+        };
+
+        run_command(&[&command, root], BTreeMap::new());
 
         Ok(())
     }
@@ -262,6 +280,7 @@ impl SwitchRepositoryPlugin {
 
     #[cfg(not(any(feature = "zellij_fallback_fs_api", feature = "zellij_run_command_api")))]
     fn handle_custom_message(&mut self, message: String, payload: String) {
+        use crate::marshall_plugin::deserialize;
         assert!(
             matches!(
                 deserialize(&message)
@@ -318,6 +337,8 @@ impl SwitchRepositoryPlugin {
         stdout: Vec<u8>,
         stderr: Vec<u8>,
     ) -> Result {
+        use crate::marshall_command;
+
         let Some(exitcode) = exitcode else {
             return self
                 .context
@@ -335,9 +356,9 @@ impl SwitchRepositoryPlugin {
                 .into();
         }
 
-        let Ok(stdout) = String::from_utf8(stdout)
-            .map_err(|non_utf8| String::from_utf8_lossy(non_utf8.as_bytes()).into_owned())
-        else {
+        // Expect the results to be passed through stdout as a RMP-serialized [BTreeSet<PathBuf>]
+        // structure.
+        let Ok(paths) = marshall_command::deserialize::<BTreeSet<PathBuf>>(&stdout) else {
             return self
                 .context
                 .log_error(PluginError::FileSystemScanFailed(anyhow!(
@@ -345,10 +366,10 @@ impl SwitchRepositoryPlugin {
                 )))
                 .into();
         };
-        stdout
-            .lines()
-            .map(PathBuf::from)
-            .for_each(|path| self.matcher.add_choice(path));
+
+        for path in paths {
+            self.matcher.add_choice(path);
+        }
 
         Ok(PluginUpdateLoop::MarkDirty)
     }

@@ -48,23 +48,20 @@ in
     ];
 
     buildPhase = ''
-      cargo build --package ${name} --release --target=wasm32-wasip1
-      mkdir -p $out/bin;
+      cargo build --manifest-path ${src + "/Cargo.toml"} --release --target=wasm32-wasip1
+      cargo build --manifest-path ${src + "/find-git-repositories/Cargo.toml"} --release
     '';
 
     installPhase =
-      if optimize
-      then ''
+      ''
+        cargo install --path $src --root $out --target=wasm32-wasip1
+        cargo install --path $src/find-git-repositories --root $out
+      ''
+      + lib.optionalString optimize ''
         wasm-opt \
-          -Oz target/wasm32-wasip1/release/${name}.wasm \
+          -Oz $out/bin/${name}.wasm \
           -o $out/bin/${name}.wasm \
           --enable-bulk-memory
-        # substituteInPlace dev.kdl --replace 'file:target/wasm32-wasip1/debug/${name}.wasm' "${placeholder "out"}"
-        # mkdir -p $out/share;
-        # cp dev.kdl $out/share/${name}.kdl
-      ''
-      else ''
-        mv target/wasm32-wasip1/release/${name}.wasm $out/bin/${name}.wasm
       '';
     doCheck = false;
 

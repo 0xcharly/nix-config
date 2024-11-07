@@ -10,12 +10,14 @@ use zellij_tile::prelude::*;
 mod context;
 mod core;
 mod hash;
-#[cfg(not(feature = "zellij_fallback_fs_api"))]
-mod marshall;
+#[cfg(feature = "zellij_run_command_api")]
+mod marshall_command;
+#[cfg(not(any(feature = "zellij_fallback_fs_api", feature = "zellij_run_command_api")))]
+mod marshall_plugin;
 mod matcher;
 mod plugin;
 mod ui;
-#[cfg(not(feature = "zellij_fallback_fs_api"))]
+#[cfg(not(any(feature = "zellij_fallback_fs_api", feature = "zellij_run_command_api")))]
 mod workers;
 
 // Registers the plugin against the Zellij API.
@@ -29,7 +31,7 @@ register_plugin!(plugin::SwitchRepositoryPlugin);
 // to using the regular WASI runtime. Enable feature `zellij_fallback_fs_api` to switch to Zellij's
 // custom (and supposedly temporary) API.
 // See https://zellij.dev/documentation/plugin-api-commands#scan_host_folder.
-#[cfg(not(feature = "zellij_fallback_fs_api"))]
+#[cfg(not(any(feature = "zellij_fallback_fs_api", feature = "zellij_run_command_api")))]
 register_worker!(
     workers::crawlers::FileSystemWorker,
     file_system_worker,
