@@ -8,12 +8,12 @@
   optimize ? true,
 }: let
   src = ./.;
-  cargoTOML = builtins.fromTOML (builtins.readFile (src + "/Cargo.toml"));
+  cargoTOML = builtins.fromTOML (builtins.readFile (src + /Cargo.toml));
   inherit (cargoTOML.package) version name;
 
   cargoLock = {
     lockFile = builtins.path {
-      path = src + "/Cargo.lock";
+      path = src + /Cargo.lock;
       name = "Cargo.lock";
     };
     allowBuiltinFetchGit = true;
