@@ -2,8 +2,9 @@ use crate::context;
 use crate::core::{InternalError, PluginError, PluginUpdateLoop, Result, ResultIterator};
 use crate::hash;
 use crate::matcher::RepositoryMatcher;
+use crate::protocol::{PathFinderPluginCommand, PathFinderPluginConfig};
 use crate::ui::{Renderer, PANE_TITLE};
-#[cfg(not(any(feature = "zellij_fallback_fs_api", feature = "zellij_run_command_api")))]
+#[cfg(not(feature = "zellij_fallback_fs_api"))]
 use crate::workers::protocol::{
     FileSystemWorkerMessage, RepositoryCrawlerRequest, RepositoryCrawlerResponse,
 };
@@ -47,10 +48,10 @@ use zellij_tile::prelude::*;
 /// NOTE: it would be ideal if we could declare lifetimes bound to this structure, but these are
 /// unfortunately incompatible with the current Zellij API.
 #[derive(Default)]
-pub(crate) struct SwitchRepositoryPlugin {
+pub(crate) struct PathFinderPlugin {
     /// Configuration passed to the plugin at initialization time (i.e. via a KDL configuration file
     /// of via the `--configuration` commandline switch.
-    config: SwitchRepositoryPluginConfig,
+    config: PathFinderPluginConfig,
 
     // We receive these via the `Event::SessionUdate` event. They are required for switching
     // session (because Zellij does not appreciate switching to the current session).
@@ -73,38 +74,7 @@ pub(crate) struct SwitchRepositoryPlugin {
     renderer: Renderer,
 }
 
-// This structure mostly exists because `LayoutInfo` doesn't implement the `Default` trait.
-struct SwitchRepositoryPluginConfig {
-    layout: LayoutInfo,
-    root: Option<PathBuf>,
-    list_directories_command: Option<PathBuf>,
-}
-
-const DIRECTORIES_SCANNER_ROOT_OPTION: &'static str = "scan_root";
-const LIST_DIRECTORIES_COMMAND_OPTION: &'static str = "list_paths_command";
-
-impl SwitchRepositoryPluginConfig {
-    fn load(&mut self, configuration: &BTreeMap<String, String>) {
-        self.root = configuration
-            .get(DIRECTORIES_SCANNER_ROOT_OPTION)
-            .map(PathBuf::from);
-        self.list_directories_command = configuration
-            .get(LIST_DIRECTORIES_COMMAND_OPTION)
-            .map(PathBuf::from);
-    }
-}
-
-impl Default for SwitchRepositoryPluginConfig {
-    fn default() -> Self {
-        Self {
-            layout: LayoutInfo::BuiltIn("default".to_string()),
-            root: Default::default(),
-            list_directories_command: Default::default(),
-        }
-    }
-}
-
-impl ZellijPlugin for SwitchRepositoryPlugin {
+impl ZellijPlugin for PathFinderPlugin {
     // Plugin entry point.
     //
     // Called by Zellij when the plugin is loaded into a session.
@@ -153,6 +123,12 @@ impl ZellijPlugin for SwitchRepositoryPlugin {
         self.process_result(result)
     }
 
+    fn pipe(&mut self, message: PipeMessage) -> bool {
+        let result = self.handle_pipe_message(message);
+
+        self.process_result(result)
+    }
+
     fn render(&mut self, rows: usize, cols: usize) {
         let frame = self
             .renderer
@@ -161,7 +137,7 @@ impl ZellijPlugin for SwitchRepositoryPlugin {
     }
 }
 
-impl SwitchRepositoryPlugin {
+impl PathFinderPlugin {
     fn process_result(&mut self, result: Result) -> bool {
         match result {
             Ok(strategy) => strategy,
@@ -178,16 +154,37 @@ impl SwitchRepositoryPlugin {
         // Give the plugin pane a more concise name.
         rename_plugin_pane(get_plugin_ids().plugin_id, PANE_TITLE);
 
-        // Start scanning the /host. The scan always happens asynchronously, and responses are
-        // posted back to the plugin through the `::update(…)` callback.
-        // The scanning method (either through a background plugin worker or via the Zellij API) is
-        // dictated by the `zellij_fallback_fs_api` feature flag.
-        if let Err(error) = self.start_async_root_scan() {
-            self.context
-                .log_error(PluginError::FileSystemScanFailed(error))
-        } else {
-            PluginUpdateLoop::NoUpdates
+        PluginUpdateLoop::NoUpdates
+    }
+
+    // TODO: consider adding activity feedback (e.g. spinner) to the UI while waiting for the
+    // results.
+    fn handle_pipe_message(&mut self, message: PipeMessage) -> Result {
+        let result = match message.into() {
+            // Start scanning the /host. The scan always happens asynchronously, and responses are
+            // posted back to the plugin through the `::update(…)` callback.
+            // The scanning method (either through a background plugin worker or via the Zellij API) is
+            // dictated by the `zellij_fallback_fs_api` feature flag.
+            PathFinderPluginCommand::ScanRepositoryRoot => self.start_async_root_scan(),
+
+            // Run an external command to get the list of path. While the command execution is
+            // asynchronous from the plugin point of view, the results are sent back to the plugin
+            // only when the command terminates, which can take an unbounded amount of time.
+            PathFinderPluginCommand::RunExternalProgram(program) => {
+                self.run_external_pathfinder_command(program)
+            }
+            PathFinderPluginCommand::PluginCommandError(error) => {
+                return Ok(self.context.log_error(error))
+            }
+        };
+
+        if let Err(error) = result {
+            return Ok(self
+                .context
+                .log_error(PluginError::FileSystemScanFailed(error)));
         }
+
+        Ok(PluginUpdateLoop::MarkDirty)
     }
 
     fn start_async_root_scan(&self) -> anyhow::Result<()> {
@@ -195,7 +192,7 @@ impl SwitchRepositoryPlugin {
         self.post_repository_crawler_task(PathBuf::from("/host"), /* max_depth */ 5)
     }
 
-    #[cfg(not(any(feature = "zellij_fallback_fs_api", feature = "zellij_run_command_api")))]
+    #[cfg(not(feature = "zellij_fallback_fs_api"))]
     fn post_repository_crawler_task(&self, root: PathBuf, max_depth: usize) -> anyhow::Result<()> {
         use crate::marshall_plugin::serialize;
 
@@ -230,38 +227,15 @@ impl SwitchRepositoryPlugin {
     }
 
     #[cfg(feature = "zellij_run_command_api")]
-    fn post_repository_crawler_task(
-        &self,
-        _root: PathBuf,
-        _max_depth: usize,
-    ) -> anyhow::Result<()> {
-        let Some(command) = &self.config.list_directories_command else {
-            return Err(PluginError::ConfigurationError {
-                reason: "missing `list_directories_command`",
-            }
-            .into());
-        };
-        let Some(command) = command.to_str() else {
-            return Err(PluginError::ConfigurationError {
-                reason: "failed to decode `list_directories_command`",
-            }
+    fn run_external_pathfinder_command(&self, program: PathBuf) -> anyhow::Result<()> {
+        let Some(command) = program.to_str() else {
+            return Err(PluginError::InvalidPipeMessagePayloadError(format!(
+                "failed to decode `{program:?}`"
+            ))
             .into());
         };
 
-        let Some(root) = &self.config.root else {
-            return Err(PluginError::ConfigurationError {
-                reason: "missing `scan_root`",
-            }
-            .into());
-        };
-        let Some(root) = root.to_str() else {
-            return Err(PluginError::ConfigurationError {
-                reason: "failed to decode `scan_root` path",
-            }
-            .into());
-        };
-
-        run_command(&[&command, root], BTreeMap::new());
+        run_command(&[&command], BTreeMap::new());
 
         Ok(())
     }
@@ -278,8 +252,8 @@ impl SwitchRepositoryPlugin {
             .try_consume()
     }
 
-    #[cfg(not(any(feature = "zellij_fallback_fs_api", feature = "zellij_run_command_api")))]
-    fn handle_custom_message(&mut self, message: String, payload: String) {
+    #[cfg(not(feature = "zellij_fallback_fs_api"))]
+    fn handle_custom_message(&mut self, message: String, payload: String) -> Result {
         use crate::marshall_plugin::deserialize;
         assert!(
             matches!(
@@ -331,7 +305,7 @@ impl SwitchRepositoryPlugin {
     }
 
     #[cfg(feature = "zellij_run_command_api")]
-    fn handle_list_directories_command_result(
+    fn handle_external_pathfinder_command_result(
         &mut self,
         exitcode: Option<i32>,
         stdout: Vec<u8>,
@@ -343,7 +317,7 @@ impl SwitchRepositoryPlugin {
             return self
                 .context
                 .log_error(PluginError::FileSystemScanFailed(anyhow!(
-                    "`list_directories_command` failed without exitcode (killed by signal?): {stderr:?}"
+                    "`external_pathfinder_command` failed without exitcode (killed by signal?): {stderr:?}"
                 )))
                 .into();
         };
@@ -351,7 +325,7 @@ impl SwitchRepositoryPlugin {
             return self
                 .context
                 .log_error(PluginError::FileSystemScanFailed(anyhow!(
-                    "`list_directories_command` failed with exitcode {exitcode}"
+                    "`external_pathfinder_command` failed with exitcode {exitcode}"
                 )))
                 .into();
         }
@@ -362,7 +336,7 @@ impl SwitchRepositoryPlugin {
             return self
                 .context
                 .log_error(PluginError::FileSystemScanFailed(anyhow!(
-                    "failed to decode `list_directories_command`'s output"
+                    "failed to decode `external_pathfinder_command`'s output"
                 )))
                 .into();
         };
@@ -383,16 +357,13 @@ impl SwitchRepositoryPlugin {
                 self.permissions_granted = false;
                 Ok(self.terminate())
             }
-            #[cfg(not(any(
-                feature = "zellij_fallback_fs_api",
-                feature = "zellij_run_command_api"
-            )))]
+            #[cfg(not(feature = "zellij_fallback_fs_api",))]
             Event::CustomMessage(message, payload) => self.handle_custom_message(message, payload),
             #[cfg(feature = "zellij_fallback_fs_api")]
             Event::FileSystemUpdate(paths) => self.handle_filesystem_update(paths),
             #[cfg(feature = "zellij_run_command_api")]
             Event::RunCommandResult(exitcode, stdout, stderr, _context) => {
-                self.handle_list_directories_command_result(exitcode, stdout, stderr)
+                self.handle_external_pathfinder_command_result(exitcode, stdout, stderr)
             }
             Event::SessionUpdate(sessions, _) => {
                 self.all_sessions_name = sessions
@@ -471,21 +442,12 @@ impl SwitchRepositoryPlugin {
                 .context
                 .log_error(PluginError::SwitchSessionFailed {
                     session_name,
-                    reason: "already on target session",
+                    reason: "already on target session: {}",
                 })
                 .into();
         }
 
-        let Some(cwd) = self.config.root.as_ref() else {
-            return self
-                .context
-                .log_error(PluginError::ConfigurationError {
-                    reason: "missing root directory declaration",
-                })
-                .into();
-        };
-
-        let cwd = cwd.join(relative_cwd);
+        let cwd = get_plugin_ids().initial_cwd.join(relative_cwd);
         switch_session_with_layout(Some(&session_name), self.config.layout.clone(), Some(cwd));
 
         // TODO: kill previous session if it was started just to run this plugin.

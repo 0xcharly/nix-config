@@ -1,15 +1,23 @@
+default_mode "locked"
+
+ui {
+    pane_frames {
+        hide_session_name true
+    }
+}
+
 layout {
     pane size=1 borderless=true {
         plugin location="zellij:tab-bar"
     }
     pane split_direction="vertical" {
-        pane edit="src/main.rs"
-        pane {
-            pane command="bacon"
-            pane command="fish"
+        pane size="120" {
+            pane command="bacon" name="diagnostics"
+            pane command="fish" name="shell"
         }
+        pane focus=true name="editor" edit="src/main.rs"
     }
-    pane size=2 borderless=true {
+    pane size=1 borderless=true {
         plugin location="zellij:status-bar"
     }
 }

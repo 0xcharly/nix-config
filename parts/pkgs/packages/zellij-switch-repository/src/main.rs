@@ -12,16 +12,17 @@ mod core;
 mod hash;
 #[cfg(feature = "zellij_run_command_api")]
 mod marshall_command;
-#[cfg(not(any(feature = "zellij_fallback_fs_api", feature = "zellij_run_command_api")))]
+#[cfg(not(feature = "zellij_fallback_fs_api"))]
 mod marshall_plugin;
 mod matcher;
 mod plugin;
+mod protocol;
 mod ui;
-#[cfg(not(any(feature = "zellij_fallback_fs_api", feature = "zellij_run_command_api")))]
+#[cfg(not(feature = "zellij_fallback_fs_api"))]
 mod workers;
 
 // Registers the plugin against the Zellij API.
-register_plugin!(plugin::SwitchRepositoryPlugin);
+register_plugin!(plugin::PathFinderPlugin);
 
 // Registers the background FS crawler worker against the Zellij API.
 // This worker uses the regular WASI FS API to look for repositories.
@@ -31,7 +32,7 @@ register_plugin!(plugin::SwitchRepositoryPlugin);
 // to using the regular WASI runtime. Enable feature `zellij_fallback_fs_api` to switch to Zellij's
 // custom (and supposedly temporary) API.
 // See https://zellij.dev/documentation/plugin-api-commands#scan_host_folder.
-#[cfg(not(any(feature = "zellij_fallback_fs_api", feature = "zellij_run_command_api")))]
+#[cfg(not(feature = "zellij_fallback_fs_api"))]
 register_worker!(
     workers::crawlers::FileSystemWorker,
     file_system_worker,

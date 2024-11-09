@@ -1,5 +1,5 @@
 [package]
-name = "zellij-switch-session"
+name = "zellij-pathfinder"
 version = "0.1.0"
 edition = "2021"
 
@@ -23,9 +23,6 @@ sha1 = "0.10.6"
 sha2 = "0.10.8"
 thiserror = "1.0"
 zellij-tile = "0.40.1"
-
-# [dependencies.find-git-repositories]
-# path = "find-git-repositories"
 
 [workspace]
 members = ["find-git-repositories"]

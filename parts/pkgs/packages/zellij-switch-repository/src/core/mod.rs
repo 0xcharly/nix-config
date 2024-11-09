@@ -17,7 +17,13 @@ pub(crate) enum PluginError {
     #[error("Failed to scan filesystem: {0:?}")]
     FileSystemScanFailed(anyhow::Error),
     #[error("Invalid configuration: {reason}")]
-    ConfigurationError { reason: &'static str },
+    ConfigurationError { reason: String },
+    #[error("Unknown pipe message `{0}`")]
+    UnknownPipeMessageError(String),
+    #[error("Missing pipe message payload for `{0}`")]
+    MissingPipeMessagePayloadError(String),
+    #[error("Invalid pipe message payload: `{0}`")]
+    InvalidPipeMessagePayloadError(String),
     #[error("Failed to switch to session {session_name:?}: {reason}")]
     SwitchSessionFailed {
         session_name: String,
@@ -29,6 +35,7 @@ pub(crate) enum PluginError {
 ///
 /// If [PluginUpdateLoop::MarkDirty], then the plugin will notify Zellij that it needs to rerender
 /// itself, which will trigger a call to `SwitchRepositoryPlugin::render(…)`.
+// TODO: Consider adding `ShowPane`, `ClearPane`, `ClosePane` and `Terminate`.
 #[derive(Copy, Clone)]
 pub(crate) enum PluginUpdateLoop {
     MarkDirty,

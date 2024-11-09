@@ -7,7 +7,7 @@ mod frame;
 mod renderer;
 mod styles;
 
-pub const PANE_TITLE: &'static str = "Select a repository:";
+pub const PANE_TITLE: &'static str = "Select a directory:";
 
 #[derive(Default)]
 pub(crate) struct Renderer {

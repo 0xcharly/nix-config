@@ -174,8 +174,10 @@ in rec {
           floating = true; # Always float the plugin window.
 
           cwd = codeDirectory;
-          scan_root = codeDirectory;
-          list_paths_command = "${pkgs.zellij-switch-repository}/bin/find-git-repositories";
+          name = "scan_repository_root";
+
+          # scan_root = codeDirectory;
+          # list_paths_command = "${pkgs.zellij-switch-repository}/bin/find-git-repositories";
         };
       };
       ui.pane_frames.rounded_corners = true;
