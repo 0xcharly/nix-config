@@ -164,7 +164,17 @@ in rec {
     enable = true;
     catppuccin.enable = true;
     settings = {
+      default_mode = "locked";
       scrollback_editor = lib.getExe pkgs.nvim;
+      keybinds = {
+        "unbind \"Ctrl g\"" = {};
+        "shared_except \"locked\"" = {
+          "bind \"Ctrl Space\"" = {"SwitchToMode \"locked\"" = {};};
+        };
+        locked = {
+          "bind \"Ctrl Space\"" = {"SwitchToMode \"normal\"" = {};};
+        };
+      };
       keybinds.normal.bind = lib.mkIf (switcherApp == "zellij") {
         _args = ["Ctrl f"];
         MessagePlugin = {
@@ -180,7 +190,10 @@ in rec {
           # list_paths_command = "${pkgs.zellij-switch-repository}/bin/find-git-repositories";
         };
       };
-      ui.pane_frames.rounded_corners = true;
+      ui.pane_frames = {
+        rounded_corners = true;
+        hide_session_name = true;
+      };
       plugins.sessionizer._props = {location = "file:${lib.getExe pkgs.zellij-switch-repository}";};
     };
   };
