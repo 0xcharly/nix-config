@@ -174,6 +174,12 @@ in rec {
         locked = {
           "bind \"Ctrl Space\"" = {"SwitchToMode \"normal\"" = {};};
         };
+        tmux = {
+          "bind \"h\"" = { "GoToTab 1" = {}; };
+          "bind \"j\"" = { "GoToTab 2" = {}; };
+          "bind \"k\"" = { "GoToTab 3" = {}; };
+          "bind \"l\"" = { "GoToTab 4" = {}; };
+        };
       };
       keybinds.normal.bind = lib.mkIf (switcherApp == "zellij") {
         _args = ["Ctrl f"];
