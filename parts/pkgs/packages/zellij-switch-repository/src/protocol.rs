@@ -10,6 +10,8 @@ pub(super) struct PathFinderPluginConfig {
     pub(super) caller_cwd: Option<PathBuf>,
     pub(super) pathfinder_root: Option<PathBuf>,
     pub(super) external_pathfinder_command: Option<PathBuf>,
+
+    pub(super) bootstrap: bool,
 }
 
 // Configuration.
@@ -19,6 +21,8 @@ const ZELLIJ_CALLER_CURRENT_WORKING_DIR: &'static str = "caller_cwd";
 const ZELLIJ_PLUGIN_CURRENT_WORKING_DIR: &'static str = "cwd";
 const REPOSITORY_PATHFINDER_ROOT_OPTION: &'static str = "repository_pathfinder_root";
 const EXTERNAL_PATHFINDER_COMMAND_OPTION: &'static str = "pathfinder_command";
+
+const BOOTSTRAP_OPTION: &'static str = "bootstrap";
 
 impl PathFinderPluginConfig {
     pub(super) fn load(&mut self, configuration: &BTreeMap<String, String>) {
@@ -34,6 +38,10 @@ impl PathFinderPluginConfig {
         self.external_pathfinder_command = configuration
             .get(EXTERNAL_PATHFINDER_COMMAND_OPTION)
             .map(PathBuf::from);
+
+        self.bootstrap = configuration
+            .get(BOOTSTRAP_OPTION)
+            .map_or(false, |val| val.parse().unwrap());
     }
 }
 
@@ -45,6 +53,7 @@ impl Default for PathFinderPluginConfig {
             caller_cwd: Default::default(),
             pathfinder_root: Default::default(),
             external_pathfinder_command: Default::default(),
+            bootstrap: Default::default(),
         }
     }
 }

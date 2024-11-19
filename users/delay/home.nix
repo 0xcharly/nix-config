@@ -173,16 +173,16 @@ in rec {
           "bind \"Ctrl Space\"" = {"SwitchToMode \"normal\"" = {};};
         };
         tmux = {
-          "bind \"h\"" = { "GoToTab 1" = {}; };
-          "bind \"j\"" = { "GoToTab 2" = {}; };
-          "bind \"k\"" = { "GoToTab 3" = {}; };
-          "bind \"l\"" = { "GoToTab 4" = {}; };
+          "bind \"h\"" = {"GoToTab 1" = {};};
+          "bind \"j\"" = {"GoToTab 2" = {};};
+          "bind \"k\"" = {"GoToTab 3" = {};};
+          "bind \"l\"" = {"GoToTab 4" = {};};
         };
       };
       keybinds.normal.bind = lib.mkIf (switcherApp == "zellij") {
         _args = ["Ctrl f"];
         MessagePlugin = {
-          _args = ["sessionizer"];
+          _args = ["pathfinder"];
           launch_new = true; # Always launch a new instance. This guarantees that CWD is correctly updated.
           skip_cache = false; # Don't skip compilation cache.
           floating = true; # Always float the plugin window.
@@ -198,7 +198,7 @@ in rec {
         rounded_corners = true;
         hide_session_name = true;
       };
-      plugins.sessionizer._props = {location = "file:${lib.getExe pkgs.zellij-switch-repository}";};
+      plugins.pathfinder._props = {location = "file:${lib.getExe pkgs.zellij-switch-repository}";};
     };
   };
 }

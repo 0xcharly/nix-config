@@ -11,6 +11,9 @@
   inherit (pkgs.stdenv) isLinux;
 
   isLinuxDesktop = isLinux && !isHeadless;
+
+  homeDirectory = config.users.users.delay.home;
+  codeDirectory = homeDirectory + "/code";
 in {
   programs.bash.enable = true;
   programs.htop.enable = true;
@@ -40,7 +43,7 @@ in {
     enable = true;
     # enableFishIntegration = true; # read-only; always enabled.
     nix-direnv.enable = true;
-    config.whitelist.prefix = ["~/code/"];
+    config.whitelist.prefix = [codeDirectory];
   };
 
   programs.fzf = {
@@ -55,9 +58,36 @@ in {
     interactiveShellInit = lib.strings.concatStringsSep "\n" [
       (builtins.readFile ./config.fish)
       (lib.optionalString isLinuxDesktop "eval (${lib.getExe pkgs.keychain} --eval --nogui --quiet)")
+      (lib.optionalString (switcherApp == "zellij") ''
+        bind           \cf '__zellij_pathfinder'
+        bind -M insert \cf '__zellij_pathfinder'
+      '')
     ];
 
-    functions.fish_mode_prompt = ""; # Disable prompt vi mode reporting.
+    functions = {
+      fish_mode_prompt = ""; # Disable prompt vi mode reporting.
+      __zellij_pathfinder = let
+        launch_pathfinder = pkgs.writeTextFile {
+          name = "launch-pathfinder.kdl";
+          text = ''
+            layout {
+              floating_panes {
+                pane {
+                  plugin location="pathfinder" {
+                    cwd "${codeDirectory}"
+                    bootstrap true
+                  }
+                }
+              }
+            }
+          '';
+        };
+      in ''
+        if test -z $ZELLIJ
+          command zellij -s bootstrap --layout ${launch_pathfinder} options --default-cwd ${codeDirectory}
+        end
+      '';
+    };
     shellAliases =
       {
         # Shortcut to setup a nix-shell with `fish`. This lets you do something

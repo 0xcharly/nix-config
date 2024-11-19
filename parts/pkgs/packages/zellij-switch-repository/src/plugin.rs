@@ -154,6 +154,15 @@ impl PathFinderPlugin {
         // Give the plugin pane a more concise name.
         rename_plugin_pane(get_plugin_ids().plugin_id, PANE_TITLE);
 
+        if self.config.bootstrap {
+            return if let Err(error) = self.start_async_root_scan() {
+                self.context
+                    .log_error(PluginError::FileSystemScanFailed(error))
+            } else {
+                PluginUpdateLoop::MarkDirty
+            };
+        }
+
         PluginUpdateLoop::NoUpdates
     }
 
