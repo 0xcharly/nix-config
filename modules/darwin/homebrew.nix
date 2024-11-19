@@ -32,28 +32,26 @@ in {
       };
     in
       [
-        # Cross-platfroms password management.
+        # Cross-platforms password management.
         "1password"
         "proton-pass"
 
         # Browsers.
         (no_quarantine "eloston-chromium") # Ungoogled Chromium.
-        "brave-browser"
-        "firefox@developer-edition"
-        "orion"
+        "firefox@developer-edition" # Firefox, for isolates.
 
         # Utilities.
-        "raspberry-pi-imager" # RPI bootloader & OS images.
         "raycast" # Mandatory Spotlight alternative.
         "scroll-reverser" # Custom scroll directions for trackpad vs. mouse.
         "spotify" # Because the web version sucks.
         "tidal" # Spotify alternative.
-        "vlc" # Media player.
       ]
       ++ (lib.optionals (!isCorpManaged) [
         # Don't install these on corp-managed hosts.
-        "protonvpn"
+        "protonvpn" # Private network.
+        "raspberry-pi-imager" # RPI bootloader & OS images.
         "transmission"
+        "vlc" # Media player.
       ]);
   };
 }
