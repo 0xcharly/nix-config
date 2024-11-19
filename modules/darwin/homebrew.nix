@@ -34,6 +34,7 @@ in {
       [
         # Cross-platfroms password management.
         "1password"
+        "proton-pass"
 
         # Browsers.
         (no_quarantine "eloston-chromium") # Ungoogled Chromium.
