@@ -25,11 +25,18 @@ in {
         # Xcode is installed out-of-band on corp devices.
         Xcode = 497799835;
       });
-    casks = [
+    casks = let
+      no_quarantine = name: {
+        inherit name;
+        args.no_quarantine = true;
+      };
+    in
+      [
         # Cross-platfroms password management.
         "1password"
 
         # Browsers.
+        (no_quarantine "eloston-chromium") # Ungoogled Chromium.
         "brave-browser"
         "firefox@developer-edition"
         "orion"
@@ -40,6 +47,7 @@ in {
         "scroll-reverser" # Custom scroll directions for trackpad vs. mouse.
         "spotify" # Because the web version sucks.
         "tidal" # Spotify alternative.
+        "vlc" # Media player.
       ]
       ++ (lib.optionals (!isCorpManaged) [
         # Don't install these on corp-managed hosts.

@@ -63,6 +63,7 @@ in rec {
       pkgs.chromium
       pkgs.firefox-devedition
       pkgs.rofi
+      pkgs.ungoogled-chromium
     ];
 
   home.sessionVariables = rec {
