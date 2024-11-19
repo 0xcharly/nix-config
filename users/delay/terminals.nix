@@ -45,6 +45,7 @@ in {
               name = "tft.glsl";
               text = builtins.readFile ./tft.glsl;
             };
+            custom-shader-animation = false;
             theme = "catppuccin-mocha";
             cursor-style = "block";
             cursor-style-blink = false;
