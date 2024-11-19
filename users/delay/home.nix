@@ -60,7 +60,6 @@ in rec {
     ++ lib.optionals hasWindowManager [pkgs.ghostty]
     ++ lib.optionals isLinux [pkgs.valgrind]
     ++ lib.optionals (isLinux && hasWindowManager) [
-      pkgs.chromium
       pkgs.firefox-devedition
       pkgs.rofi
       pkgs.ungoogled-chromium
