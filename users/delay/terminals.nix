@@ -41,6 +41,10 @@ in {
               gen-font-codepoint-map = family: codepoints: lib.concatStringsSep "=" [codepoints family];
             in
               lib.mapAttrsToList gen-font-codepoint-map codepoints-map;
+            custom-shader = pkgs.writeTextFile {
+              name = "tft.glsl";
+              text = builtins.readFile ./tft.glsl;
+            };
             theme = "catppuccin-mocha";
             cursor-style = "block";
             cursor-style-blink = false;
