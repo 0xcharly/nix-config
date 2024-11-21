@@ -166,6 +166,22 @@ in rec {
       scrollback_editor = lib.getExe pkgs.nvim;
       keybinds = {
         "unbind \"Ctrl g\"" = {};
+        shared = {
+          "bind \"Ctrl f\"" = lib.mkIf (switcherApp == "zellij") {
+            MessagePlugin = {
+              _args = ["pathfinder"];
+              launch_new = true; # Always launch a new instance. This guarantees that CWD is correctly updated.
+              skip_cache = false; # Don't skip compilation cache.
+              floating = true; # Always float the plugin window.
+
+              cwd = codeDirectory;
+              name = "scan_repository_root";
+
+              # scan_root = codeDirectory;
+              # list_paths_command = "${pkgs.zellij-switch-repository}/bin/find-git-repositories";
+            };
+          };
+        };
         "shared_except \"locked\"" = {
           "bind \"Ctrl Space\"" = {"SwitchToMode \"locked\"" = {};};
         };
@@ -177,21 +193,6 @@ in rec {
           "bind \"j\"" = {"GoToTab 2" = {};};
           "bind \"k\"" = {"GoToTab 3" = {};};
           "bind \"l\"" = {"GoToTab 4" = {};};
-        };
-      };
-      keybinds.normal.bind = lib.mkIf (switcherApp == "zellij") {
-        _args = ["Ctrl f"];
-        MessagePlugin = {
-          _args = ["pathfinder"];
-          launch_new = true; # Always launch a new instance. This guarantees that CWD is correctly updated.
-          skip_cache = false; # Don't skip compilation cache.
-          floating = true; # Always float the plugin window.
-
-          cwd = codeDirectory;
-          name = "scan_repository_root";
-
-          # scan_root = codeDirectory;
-          # list_paths_command = "${pkgs.zellij-switch-repository}/bin/find-git-repositories";
         };
       };
       ui.pane_frames = {
