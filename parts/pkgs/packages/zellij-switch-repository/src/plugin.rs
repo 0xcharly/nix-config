@@ -413,6 +413,7 @@ impl PathFinderPlugin {
 
     fn terminate(&self) -> PluginUpdateLoop {
         close_self();
+
         PluginUpdateLoop::NoUpdates
     }
 
@@ -456,19 +457,18 @@ impl PathFinderPlugin {
                 .into();
         }
 
+        // NOTE: We should have 2 options at this point:
+        // - take over current session (rename and change cwd): not currently possible due to the
+        //   lack of a Zellij API to change the cwd of a session.
+        // - switch session and kill previous one: uses a `bootstrap` flag passed at creation to
+        //   infer that this session was created only to run the plugin.
+
         let cwd = get_plugin_ids().initial_cwd.join(relative_cwd);
         switch_session_with_layout(Some(&session_name), self.config.layout.clone(), Some(cwd));
 
-        // TODO: kill previous session if it was started just to run this plugin.
-        // We should have 2 options in such case:
-        //   - take over current session (rename and change cwd): impossible because there's no API
-        //     to change the cwd of a session.
-        //   - switch session and kill previous one: defaulting to this, but need to find a way to
-        //     pipe down the info about current session (i.e. whether it's temporary).
-        //
-        // if !self.all_sessions_name.contains(&session_name) {
-        //     kill_sessions(&[current_session_name]);
-        // }
+        if self.config.bootstrap {
+            kill_sessions(&[current_session_name]);
+        }
 
         self.terminate().into()
     }

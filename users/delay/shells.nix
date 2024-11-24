@@ -84,7 +84,7 @@ in {
         };
       in ''
         if test -z $ZELLIJ
-          command zellij -s bootstrap --layout ${launch_pathfinder} options --default-cwd ${codeDirectory}
+          command zellij --layout ${launch_pathfinder} options --default-cwd ${codeDirectory}
         end
       '';
     };
