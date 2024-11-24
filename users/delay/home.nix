@@ -167,6 +167,7 @@ in rec {
       keybinds = {
         "unbind \"Ctrl g\"" = {};
         shared = {
+          "bind \"Ctrl b\"" = {"SwitchToMode \"tmux\"" = {};};
           "bind \"Ctrl f\"" = lib.mkIf (switcherApp == "zellij") {
             MessagePlugin = {
               _args = ["pathfinder"];
@@ -189,10 +190,10 @@ in rec {
           "bind \"Ctrl Space\"" = {"SwitchToMode \"normal\"" = {};};
         };
         tmux = {
-          "bind \"h\"" = {"GoToTab 1" = {};};
-          "bind \"j\"" = {"GoToTab 2" = {};};
-          "bind \"k\"" = {"GoToTab 3" = {};};
-          "bind \"l\"" = {"GoToTab 4" = {};};
+          "bind \"h\"" = {"GoToTab 1" = {}; "SwitchToMode \"locked\"" = {};};
+          "bind \"j\"" = {"GoToTab 2" = {}; "SwitchToMode \"locked\"" = {};};
+          "bind \"k\"" = {"GoToTab 3" = {}; "SwitchToMode \"locked\"" = {};};
+          "bind \"l\"" = {"GoToTab 4" = {}; "SwitchToMode \"locked\"" = {};};
         };
       };
       ui.pane_frames = {
