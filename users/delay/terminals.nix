@@ -41,17 +41,18 @@ in {
               gen-font-codepoint-map = family: codepoints: lib.concatStringsSep "=" [codepoints family];
             in
               lib.mapAttrsToList gen-font-codepoint-map codepoints-map;
-            custom-shader = pkgs.writeTextFile {
-              name = "custom-shader.glsl";
-              text = builtins.readFile ./ghostty/bloom.glsl;
-            };
-            custom-shader-animation = false;
+            # custom-shader = pkgs.writeTextFile {
+            #   name = "custom-shader.glsl";
+            #   text = builtins.readFile ./ghostty/bloom.glsl;
+            # };
+            # custom-shader-animation = false;
             theme = "catppuccin-mocha";
+            title = " ";
+            macos-titlebar-proxy-icon = "hidden";
             cursor-style = "block";
             cursor-style-blink = false;
             mouse-hide-while-typing = false;
             window-padding-balance = true;
-            title = "";
             keybind = "super+shift+comma=reload_config";
             shell-integration-features = "no-cursor,no-sudo,no-title";
             confirm-close-surface = false;
