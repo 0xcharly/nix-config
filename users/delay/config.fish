@@ -4,9 +4,14 @@ set -g fish_term24bit 1 # Enable true color support.
 fish_vi_key_bindings # Enable vi bindings.
 
 function fish_prompt
+  # Print the prompt.
   set_color --bold blue
   printf "_ "
   set_color normal
+
+  # Reset vi mode to insert.
+  set fish_bind_mode insert
+  commandline -f repaint-mode
 end
 
 function transient_prompt_func
