@@ -46,7 +46,9 @@ in {
             #   text = builtins.readFile ./ghostty/bloom.glsl;
             # };
             # custom-shader-animation = false;
-            theme = "NvimDark";
+            theme = "catppuccin-mocha";
+            background = "#1d1f21";
+            selection-background = "#212a37";
             title = " ";
             macos-titlebar-proxy-icon = "hidden";
             cursor-style = "block";
