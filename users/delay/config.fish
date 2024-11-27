@@ -8,16 +8,16 @@ function fish_prompt
   set_color --bold blue
   printf "_ "
   set_color normal
-
-  # Reset vi mode to insert.
-  set fish_bind_mode insert
-  commandline -f repaint-mode
 end
 
 function transient_prompt_func
   set_color --bold brgrey
   printf ">: "
   set_color normal
+
+  # Reset vi mode to insert.
+  set fish_bind_mode insert
+  commandline -f repaint-mode
 end
 
 # TODO: move this to corp-machines only.
