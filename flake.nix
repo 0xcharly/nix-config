@@ -14,8 +14,8 @@
   inputs = {
     # Pin our primary nixpkgs repositories. These are the main nixpkgs
     # repositories we'll use for our configurations.
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
-    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-24.05-darwin";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
+    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-24.11-darwin";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     # Hardware-specific NixOS modules.
@@ -23,7 +23,7 @@
 
     # Manages home directory, dotfiles and base environment.
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.05";
+      url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -83,10 +83,7 @@
     };
 
     # Pure and reproducible packaging of binary distributed rust toolchains.
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
+    rust-overlay.url = "github:oxalica/rust-overlay";
 
     # Neovim.
     nix-config-nvim.url = "github:0xcharly/nix-config-nvim";

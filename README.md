@@ -79,7 +79,7 @@ Create a VMware Fusion VM with the following settings. My configurations are
 made for VMware Fusion so expect issues on other virtualization solutions
 without minor changes.
 
-- ISO: NixOS 24.05 or later.
+- ISO: NixOS 24.11 or later.
 - Disk: SATA 150 GB+.
 - CPU/Memory: I give at least half my cores and half my RAM (up to 32GB).
 - Network: Shared with my Mac.

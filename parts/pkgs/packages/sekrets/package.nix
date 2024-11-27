@@ -16,7 +16,7 @@
 in
   pkgs.writeShellApplication {
     name = "sekrets";
-    runtimeInputs = [pkgs._1password];
+    runtimeInputs = [pkgs._1password-cli];
     text = ''
       ${lib.getExe sekrets} "$@"
     '';

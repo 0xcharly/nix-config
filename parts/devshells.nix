@@ -35,7 +35,7 @@
           upkgs.ssh-to-age
           upkgs.stylua
         ]
-        ++ (lib.optionals isDarwin [upkgs._1password]);
+        ++ (lib.optionals isDarwin [upkgs._1password-cli]);
 
       # Set up pre-commit hooks when user enters the shell.
       shellHook = let
