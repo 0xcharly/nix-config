@@ -45,7 +45,7 @@
   environment.systemPackages = with pkgs; [
     gnumake
     killall
-    rxvt_unicode
+    rxvt-unicode-unwrapped
   ];
 
   # Enable the OpenSSH daemon.
