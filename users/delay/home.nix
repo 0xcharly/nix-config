@@ -20,7 +20,7 @@
   codeDirectory = homeDirectory + "/code";
   hasWindowManager = !isHeadless;
   use1PasswordSshAgent = isDarwin && (sshAgent == "1password");
-in rec {
+in {
   imports = [
     inputs.catppuccin.homeManagerModules.catppuccin
 
@@ -96,16 +96,6 @@ in rec {
         };
       }
       (lib.optionalAttrs use1PasswordSshAgent {signing.backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";});
-  };
-
-  # Jujutsu config path is wrong on macOS.
-  # Fixed in 24.11 (https://github.com/nix-community/home-manager/pull/5416).
-  # TODO: delete this once 24.11 lands.
-  home.file = lib.optionalAttrs isDarwin {
-    "Library/Application Support/jj/config.toml".source = let
-      tomlFormat = pkgs.formats.toml {};
-    in
-      tomlFormat.generate "jujutsu-config" programs.jujutsu.settings;
   };
 
   programs.git = {
@@ -190,10 +180,22 @@ in rec {
           "bind \"Ctrl Space\"" = {"SwitchToMode \"normal\"" = {};};
         };
         tmux = {
-          "bind \"h\"" = {"GoToTab 1" = {}; "SwitchToMode \"locked\"" = {};};
-          "bind \"j\"" = {"GoToTab 2" = {}; "SwitchToMode \"locked\"" = {};};
-          "bind \"k\"" = {"GoToTab 3" = {}; "SwitchToMode \"locked\"" = {};};
-          "bind \"l\"" = {"GoToTab 4" = {}; "SwitchToMode \"locked\"" = {};};
+          "bind \"h\"" = {
+            "GoToTab 1" = {};
+            "SwitchToMode \"locked\"" = {};
+          };
+          "bind \"j\"" = {
+            "GoToTab 2" = {};
+            "SwitchToMode \"locked\"" = {};
+          };
+          "bind \"k\"" = {
+            "GoToTab 3" = {};
+            "SwitchToMode \"locked\"" = {};
+          };
+          "bind \"l\"" = {
+            "GoToTab 4" = {};
+            "SwitchToMode \"locked\"" = {};
+          };
         };
       };
       ui.pane_frames = {
