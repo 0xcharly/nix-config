@@ -25,7 +25,9 @@ impl Renderer {
 
     pub fn on_user_input(&mut self, matcher: &RepositoryMatcher) -> Result {
         let previous_index = self.selected_index;
-        self.selected_index = self.selected_index.clamp(0, matcher.matches.len() - 1);
+        self.selected_index = self
+            .selected_index
+            .clamp(0, matcher.matches.len().saturating_sub(1));
         Ok((previous_index != self.selected_index).into())
     }
 
@@ -34,7 +36,7 @@ impl Renderer {
         self.selected_index = self
             .selected_index
             .saturating_sub(1)
-            .clamp(0, matcher.matches.len() - 1);
+            .clamp(0, matcher.matches.len().saturating_sub(1));
         Ok((previous_index != self.selected_index).into())
     }
 
@@ -43,7 +45,7 @@ impl Renderer {
         self.selected_index = self
             .selected_index
             .saturating_add(1)
-            .clamp(0, matcher.matches.len() - 1);
+            .clamp(0, matcher.matches.len().saturating_sub(1));
         Ok((previous_index != self.selected_index).into())
     }
 

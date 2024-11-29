@@ -389,24 +389,31 @@ impl PathFinderPlugin {
             // Clear reported errors on all user inputs.
             // NOTE: use the non-short-circuiting variant of the OR operator to force
             // evaluation of the rhs.
-            Event::Key(Key::Up) => {
-                self.context.clear_errors() | self.renderer.select_up(&self.matcher)
-            }
-            Event::Key(Key::Down) => {
-                self.context.clear_errors() | self.renderer.select_down(&self.matcher)
-            }
-            Event::Key(Key::Ctrl('c')) => self.terminate().into(),
-            Event::Key(Key::Esc) => Ok(self.context.clear_errors()
-                | self.matcher.clear_user_input().or_else(|| self.terminate())),
-            Event::Key(Key::Backspace) => {
-                Ok(self.context.clear_errors() | self.matcher.remove_trailing_char())
-            }
-            Event::Key(Key::Char('\n')) => self.context.clear_errors() | self.submit(),
-            Event::Key(Key::Char(ch)) => {
-                self.context.clear_errors()
-                    | self.matcher.on_user_input(ch)
-                    | self.renderer.on_user_input(&self.matcher)
-            }
+            Event::Key(key) => match key.bare_key {
+                BareKey::Enter if key.has_no_modifiers() => {
+                    self.context.clear_errors() | self.submit()
+                }
+                BareKey::Up if key.has_no_modifiers() => {
+                    self.context.clear_errors() | self.renderer.select_up(&self.matcher)
+                }
+                BareKey::Down if key.has_no_modifiers() => {
+                    self.context.clear_errors() | self.renderer.select_down(&self.matcher)
+                }
+                BareKey::Esc if key.has_no_modifiers() => Ok(self.context.clear_errors()
+                    | self.matcher.clear_user_input().or_else(|| self.terminate())),
+                BareKey::Backspace if key.has_no_modifiers() => {
+                    Ok(self.context.clear_errors() | self.matcher.remove_trailing_char())
+                }
+                BareKey::Char('c') if key.has_modifiers(&[KeyModifier::Ctrl]) => {
+                    self.terminate().into()
+                }
+                BareKey::Char(ch) if key.has_no_modifiers() => {
+                    self.context.clear_errors()
+                        | self.matcher.on_user_input(ch)
+                        | self.renderer.on_user_input(&self.matcher)
+                }
+                _ => Ok(PluginUpdateLoop::NoUpdates),
+            },
             _ => Ok(PluginUpdateLoop::NoUpdates),
         }
     }
