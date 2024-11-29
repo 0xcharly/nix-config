@@ -7,7 +7,7 @@
     if args ? osConfig
     then args.osConfig
     else args.config;
-  inherit (config.modules.usrenv) isHeadless switcherApp;
+  inherit (config.modules.usrenv) isHeadless;
   inherit (pkgs.stdenv) isLinux;
 
   isLinuxDesktop = isLinux && !isHeadless;
@@ -58,36 +58,9 @@ in {
     interactiveShellInit = lib.strings.concatStringsSep "\n" [
       (builtins.readFile ./config.fish)
       (lib.optionalString isLinuxDesktop "eval (${lib.getExe pkgs.keychain} --eval --nogui --quiet)")
-      (lib.optionalString (switcherApp == "zellij") ''
-        bind           \cf '__zellij_pathfinder'
-        bind -M insert \cf '__zellij_pathfinder'
-      '')
     ];
 
-    functions = {
-      fish_mode_prompt = ""; # Disable prompt vi mode reporting.
-      __zellij_pathfinder = let
-        launch_pathfinder = pkgs.writeTextFile {
-          name = "launch-pathfinder.kdl";
-          text = ''
-            layout {
-              floating_panes {
-                pane {
-                  plugin location="pathfinder" {
-                    cwd "${codeDirectory}"
-                    bootstrap true
-                  }
-                }
-              }
-            }
-          '';
-        };
-      in ''
-        if test -z $ZELLIJ
-          command zellij --layout ${launch_pathfinder} options --default-cwd ${codeDirectory}
-        end
-      '';
-    };
+    functions.fish_mode_prompt = ""; # Disable prompt vi mode reporting.
     shellAliases =
       {
         # Shortcut to setup a nix-shell with `fish`. This lets you do something
@@ -107,12 +80,8 @@ in {
 
   home.sessionVariables.SHELL = lib.getExe pkgs.fish;
 
-  home.packages =
-    [
-      pkgs.fishPlugins.fzf
-      pkgs.fishPlugins.transient-fish
-    ]
-    ++ lib.optionals (switcherApp == "tmux") [
-      pkgs.open-local-repository-fish
-    ];
+  home.packages = [
+    pkgs.fishPlugins.fzf
+    pkgs.fishPlugins.transient-fish
+  ];
 }

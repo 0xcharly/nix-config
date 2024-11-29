@@ -8,29 +8,23 @@
     if args ? osConfig
     then args.osConfig
     else args.config;
-  inherit (config.modules.usrenv) isHeadless sshAgent switcherApp;
-  inherit (pkgs.stdenv) isDarwin isLinux;
+  inherit (config.modules.usrenv) isHeadless;
+  inherit (pkgs.stdenv) isLinux;
 
-  # Unstable package repository.
-  upkgs = import inputs.nixpkgs-unstable {
-    inherit (pkgs) system;
-  };
-
-  homeDirectory = config.users.users.delay.home;
-  codeDirectory = homeDirectory + "/code";
   hasWindowManager = !isHeadless;
-  use1PasswordSshAgent = isDarwin && (sshAgent == "1password");
 in {
   imports = [
     inputs.catppuccin.homeManagerModules.catppuccin
 
     ./browsers.nix
     ./fonts.nix
+    ./multiplexers.nix
     ./nix-client-config.nix
     ./scripts.nix
     ./shells.nix
     ./ssh.nix
     ./terminals.nix
+    ./vcs.nix
     ./wayland.nix
     ./x11.nix
   ];
@@ -53,10 +47,6 @@ in {
       # at anytime (e.g. in the corp-specific flavor).
       pkgs.nvim
     ]
-    ++ lib.optionals (switcherApp == "zellij") [
-      # TODO: remove once injected properly.
-      pkgs.zellij-select-repository
-    ]
     ++ lib.optionals hasWindowManager [pkgs.ghostty]
     ++ lib.optionals isLinux [pkgs.valgrind]
     ++ lib.optionals (isLinux && hasWindowManager) [
@@ -74,135 +64,4 @@ in {
 
   # Configure catppuccin theme applied throughout the configuration.
   catppuccin.flavor = "mocha";
-
-  programs.jujutsu = {
-    enable = true;
-    # Install jujutsu from `nixpkgs-unstable`.
-    package = upkgs.jujutsu;
-    settings =
-      lib.recursiveUpdate {
-        user = {
-          email = "0@0xcharly.com";
-          name = "Charly Delay";
-        };
-        template-aliases."format_timestamp(timestamp)" = "timestamp.ago()";
-        ui."default-command" = "status";
-        ui.pager = lib.getExe pkgs.delta;
-        ui.diff.format = "git";
-        signing = {
-          sign-all = true;
-          backend = "ssh";
-          key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPf5EWFb/MW+1ZdQxDLZJWPrgrtibMcCmmKeCp+QMWBl";
-        };
-      }
-      (lib.optionalAttrs use1PasswordSshAgent {signing.backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";});
-  };
-
-  programs.git = {
-    enable = true;
-    userName = "Charly Delay";
-    userEmail = "0@0xcharly.com";
-    signing = {
-      key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPf5EWFb/MW+1ZdQxDLZJWPrgrtibMcCmmKeCp+QMWBl";
-      signByDefault = true;
-    };
-    ignores = [
-      "/.direnv/"
-    ];
-    delta = {
-      enable = true;
-      catppuccin.enable = true;
-    };
-    extraConfig = {
-      branch.autosetuprebase = "always";
-      color.ui = true;
-      github.user = "0xcharly";
-      push.default = "tracking";
-      init.defaultBranch = "main";
-      branch.sort = "-committerdate";
-      gpg = {
-        format = "ssh";
-        ssh.program = lib.mkIf use1PasswordSshAgent "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
-      };
-      commit.gpgsign = true;
-      gitget = {
-        root = codeDirectory;
-        host = "github.com";
-      };
-    };
-  };
-
-  programs.tmux = {
-    enable = true;
-    aggressiveResize = true;
-    escapeTime = 0;
-    historyLimit = 10000;
-    keyMode = "vi";
-    mouse = true;
-    secureSocket = true;
-    sensibleOnTop = false;
-    # Do not force catppuccin theme here since it sets the "default" value to a
-    # solid color, which doesn't play well with translucent terminal background.
-    catppuccin.enable = false;
-
-    extraConfig = builtins.readFile ./tmux.conf;
-  };
-
-  programs.zellij = {
-    enable = true;
-    catppuccin.enable = true;
-    settings = {
-      default_mode = "locked";
-      scrollback_editor = lib.getExe pkgs.nvim;
-      keybinds = {
-        "unbind \"Ctrl g\"" = {};
-        shared = {
-          "bind \"Ctrl b\"" = {"SwitchToMode \"tmux\"" = {};};
-          "bind \"Ctrl f\"" = lib.mkIf (switcherApp == "zellij") {
-            MessagePlugin = {
-              _args = ["pathfinder"];
-              launch_new = true; # Always launch a new instance. This guarantees that CWD is correctly updated.
-              skip_cache = false; # Don't skip compilation cache.
-              floating = true; # Always float the plugin window.
-
-              cwd = codeDirectory;
-              name = "scan_repository_root";
-
-              # scan_root = codeDirectory;
-              # list_paths_command = "${pkgs.zellij-switch-repository}/bin/find-git-repositories";
-            };
-          };
-        };
-        "shared_except \"locked\"" = {
-          "bind \"Ctrl Space\"" = {"SwitchToMode \"locked\"" = {};};
-        };
-        locked = {
-          "bind \"Ctrl Space\"" = {"SwitchToMode \"normal\"" = {};};
-        };
-        tmux = {
-          "bind \"h\"" = {
-            "GoToTab 1" = {};
-            "SwitchToMode \"locked\"" = {};
-          };
-          "bind \"j\"" = {
-            "GoToTab 2" = {};
-            "SwitchToMode \"locked\"" = {};
-          };
-          "bind \"k\"" = {
-            "GoToTab 3" = {};
-            "SwitchToMode \"locked\"" = {};
-          };
-          "bind \"l\"" = {
-            "GoToTab 4" = {};
-            "SwitchToMode \"locked\"" = {};
-          };
-        };
-      };
-      ui.pane_frames = {
-        rounded_corners = true;
-        hide_session_name = true;
-      };
-      plugins.pathfinder._props = {location = "file:${lib.getExe pkgs.zellij-switch-repository}";};
-    };
-  };
 }
