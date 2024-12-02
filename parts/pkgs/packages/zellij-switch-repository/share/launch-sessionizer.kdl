@@ -3,10 +3,7 @@ layout {
     pane {
       plugin location="file:/Users/delay/code/github.com/0xcharly/nix-config/parts/pkgs/packages/zellij-switch-repository/target/wasm32-wasip1/debug/zellij-pathfinder.wasm" {
         cwd "/Users/delay/code"
-				floating true
-				launch_new true
-				name "scan_repository_root"
-				skip_cache true
+        startup_message_name "scan_repository_root"
       }
     }
   }

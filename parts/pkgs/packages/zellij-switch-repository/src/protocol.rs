@@ -7,10 +7,10 @@ use zellij_tile::{
 };
 
 // This structure mostly exists because `LayoutInfo` doesn't implement the `Default` trait.
+#[derive(Debug)]
 pub(super) struct PathFinderPluginConfig {
     pub(super) layout: LayoutInfo,
     pub(super) cwd: Option<PathBuf>,
-    pub(super) caller_cwd: Option<PathBuf>,
     pub(super) pathfinder_root: Option<PathBuf>,
     pub(super) external_pathfinder_command: Option<PathBuf>,
 
@@ -24,7 +24,6 @@ pub(super) struct PathFinderPluginConfig {
 // Configuration.
 
 /// See https://zellij.dev/documentation/plugin-aliases.html?highlight=caller#a-note-about-cwd.
-const ZELLIJ_CALLER_CURRENT_WORKING_DIR: &'static str = "caller_cwd";
 const ZELLIJ_PLUGIN_CURRENT_WORKING_DIR: &'static str = "cwd";
 const REPOSITORY_PATHFINDER_ROOT_OPTION: &'static str = "repository_pathfinder_root";
 const EXTERNAL_PATHFINDER_COMMAND_OPTION: &'static str = "pathfinder_command";
@@ -33,9 +32,6 @@ impl PathFinderPluginConfig {
     pub(super) fn load(&mut self, configuration: &BTreeMap<String, String>) {
         self.cwd = configuration
             .get(ZELLIJ_PLUGIN_CURRENT_WORKING_DIR)
-            .map(PathBuf::from);
-        self.caller_cwd = configuration
-            .get(ZELLIJ_CALLER_CURRENT_WORKING_DIR)
             .map(PathBuf::from);
         self.pathfinder_root = configuration
             .get(REPOSITORY_PATHFINDER_ROOT_OPTION)
@@ -49,13 +45,17 @@ impl PathFinderPluginConfig {
     }
 }
 
+/// `name` is a reserved key: https://github.com/zellij-org/zellij/pull/2727.
+const STARTUP_MESSAGE_NAME: &'static str = "startup_message_name";
+const STARTUP_MESSAGE_PAYLOAD: &'static str = "startup_message_payload";
+
 /// Synthesize a [PipeMessage] from the plugin config.
 /// Returns `None` if `configuration` does not contain a `name` key.
 fn synthesize_pipe_message(configuration: &BTreeMap<String, String>) -> Option<PipeMessage> {
-    configuration.get("name").map(|name| PipeMessage {
+    configuration.get(STARTUP_MESSAGE_NAME).map(|name| PipeMessage {
         source: PipeSource::Plugin(get_plugin_ids().plugin_id),
         name: name.to_owned(),
-        payload: configuration.get("payload").map(|p| p.to_owned()),
+        payload: configuration.get(STARTUP_MESSAGE_PAYLOAD).map(|p| p.to_owned()),
         args: Default::default(),
         is_private: true,
     })
@@ -66,7 +66,6 @@ impl Default for PathFinderPluginConfig {
         Self {
             layout: LayoutInfo::BuiltIn("default".to_string()),
             cwd: Default::default(),
-            caller_cwd: Default::default(),
             pathfinder_root: Default::default(),
             external_pathfinder_command: Default::default(),
             pipe_message: Default::default(),

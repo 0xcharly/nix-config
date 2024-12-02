@@ -235,7 +235,7 @@ in {
               pane {
                 plugin location="pathfinder" {
                   cwd "${codeDirectory}"
-                  name "scan_repository_root"
+                  startup_message_name "scan_repository_root"
                 }
               }
             }

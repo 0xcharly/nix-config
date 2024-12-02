@@ -160,20 +160,20 @@ impl PathFinderPlugin {
     // TODO: consider adding activity feedback (e.g. spinner) to the UI while waiting for the
     // results.
     fn handle_pipe_message(&mut self, message: PipeMessage) -> PluginUpdateLoop {
+        use PathFinderPluginCommand::*;
         let result = match message.into() {
             // Start scanning the /host. The scan always happens asynchronously, and responses are
             // posted back to the plugin through the `::update(…)` callback.
             // The scanning method (either through a background plugin worker or via the Zellij API) is
             // dictated by the `zellij_fallback_fs_api` feature flag.
-            PathFinderPluginCommand::ScanRepositoryRoot => self.start_async_root_scan(),
+            ScanRepositoryRoot => self.start_async_root_scan(),
 
             // Run an external command to get the list of path. While the command execution is
             // asynchronous from the plugin point of view, the results are sent back to the plugin
             // only when the command terminates, which can take an unbounded amount of time.
-            PathFinderPluginCommand::RunExternalProgram(program) => {
-                self.run_external_pathfinder_command(program)
-            }
-            PathFinderPluginCommand::PluginCommandError(error) => Err(error.into()),
+            RunExternalProgram(program) => self.run_external_pathfinder_command(program),
+
+            PluginCommandError(error) => Err(error.into()),
         };
 
         match result {
