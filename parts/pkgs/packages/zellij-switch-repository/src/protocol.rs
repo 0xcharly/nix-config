@@ -1,7 +1,10 @@
 use crate::core::PluginError;
 
 use std::{collections::BTreeMap, path::PathBuf};
-use zellij_tile::prelude::{LayoutInfo, PipeMessage};
+use zellij_tile::{
+    prelude::{LayoutInfo, PipeMessage, PipeSource},
+    shim::get_plugin_ids,
+};
 
 // This structure mostly exists because `LayoutInfo` doesn't implement the `Default` trait.
 pub(super) struct PathFinderPluginConfig {
@@ -11,7 +14,11 @@ pub(super) struct PathFinderPluginConfig {
     pub(super) pathfinder_root: Option<PathBuf>,
     pub(super) external_pathfinder_command: Option<PathBuf>,
 
-    pub(super) bootstrap: bool,
+    /// Synthesized from the plugin startup configuration if it contains a `name` key.
+    pub(super) pipe_message: Option<PipeMessage>,
+    /// Whether to automatically kill the session after switching.
+    /// This is set to `true` in [PathFinderPluginConfig.load] if `pipe_message` is not `None`.
+    pub(super) kill_after_switch: bool,
 }
 
 // Configuration.
@@ -21,8 +28,6 @@ const ZELLIJ_CALLER_CURRENT_WORKING_DIR: &'static str = "caller_cwd";
 const ZELLIJ_PLUGIN_CURRENT_WORKING_DIR: &'static str = "cwd";
 const REPOSITORY_PATHFINDER_ROOT_OPTION: &'static str = "repository_pathfinder_root";
 const EXTERNAL_PATHFINDER_COMMAND_OPTION: &'static str = "pathfinder_command";
-
-const BOOTSTRAP_OPTION: &'static str = "bootstrap";
 
 impl PathFinderPluginConfig {
     pub(super) fn load(&mut self, configuration: &BTreeMap<String, String>) {
@@ -39,10 +44,21 @@ impl PathFinderPluginConfig {
             .get(EXTERNAL_PATHFINDER_COMMAND_OPTION)
             .map(PathBuf::from);
 
-        self.bootstrap = configuration
-            .get(BOOTSTRAP_OPTION)
-            .map_or(false, |val| val.parse().unwrap());
+        self.pipe_message = synthesize_pipe_message(configuration);
+        self.kill_after_switch = self.pipe_message.is_some();
     }
+}
+
+/// Synthesize a [PipeMessage] from the plugin config.
+/// Returns `None` if `configuration` does not contain a `name` key.
+fn synthesize_pipe_message(configuration: &BTreeMap<String, String>) -> Option<PipeMessage> {
+    configuration.get("name").map(|name| PipeMessage {
+        source: PipeSource::Plugin(get_plugin_ids().plugin_id),
+        name: name.to_owned(),
+        payload: configuration.get("payload").map(|p| p.to_owned()),
+        args: Default::default(),
+        is_private: true,
+    })
 }
 
 impl Default for PathFinderPluginConfig {
@@ -53,7 +69,8 @@ impl Default for PathFinderPluginConfig {
             caller_cwd: Default::default(),
             pathfinder_root: Default::default(),
             external_pathfinder_command: Default::default(),
-            bootstrap: Default::default(),
+            pipe_message: Default::default(),
+            kill_after_switch: false,
         }
     }
 }

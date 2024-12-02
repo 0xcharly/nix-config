@@ -1,6 +1,6 @@
 use super::core::Result;
 
-use std::collections::BTreeSet;
+use std::collections::BTreeMap;
 use std::fs;
 use std::path::PathBuf;
 
@@ -9,8 +9,11 @@ use std::path::PathBuf;
 /// NOTE: There's no point for this to return an iterator and progressively output matches as they
 /// are discovered since Zellij waits for the process to complete before returning all of its
 /// output to plugins.
-pub(super) fn list_repositories(root: &PathBuf, max_depth: usize) -> Result<BTreeSet<PathBuf>> {
-    let mut repositories = BTreeSet::new();
+pub(super) fn list_repositories(
+    root: &PathBuf,
+    max_depth: usize,
+) -> Result<BTreeMap<PathBuf, PathBuf>> {
+    let mut repositories = BTreeMap::new();
     let mut dirs_to_walk = Vec::new();
 
     let child_dirs = get_child_directories(root)?;
@@ -32,7 +35,13 @@ pub(super) fn list_repositories(root: &PathBuf, max_depth: usize) -> Result<BTre
                 .map(|fname| fname == ".git")
                 .unwrap_or(false)
             {
-                repositories.insert(parent);
+                repositories.insert(
+                    parent
+                        .strip_prefix(root)
+                        .expect("`parent` is built from `root`")
+                        .to_path_buf(),
+                    parent,
+                );
                 continue 'outer;
             }
         }

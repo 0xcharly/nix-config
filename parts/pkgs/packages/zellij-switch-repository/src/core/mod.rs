@@ -16,6 +16,7 @@ pub(crate) enum PluginError {
     UnexpectedError(#[from] anyhow::Error),
     #[error("Failed to scan filesystem: {0:?}")]
     FileSystemScanFailed(anyhow::Error),
+    #[allow(dead_code)]
     #[error("Invalid configuration: {reason}")]
     ConfigurationError { reason: String },
     #[error("Unknown pipe message `{0}`")]

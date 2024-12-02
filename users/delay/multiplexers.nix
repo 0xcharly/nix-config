@@ -213,9 +213,6 @@ in {
 
               cwd = codeDirectory;
               name = "scan_repository_root";
-
-              # scan_root = codeDirectory;
-              # list_paths_command = "${pkgs.zellij-switch-repository}/bin/find-git-repositories";
             };
           };
         };
@@ -238,7 +235,7 @@ in {
               pane {
                 plugin location="pathfinder" {
                   cwd "${codeDirectory}"
-                  bootstrap true
+                  name "scan_repository_root"
                 }
               }
             }

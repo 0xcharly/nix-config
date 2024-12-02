@@ -111,8 +111,7 @@ impl ZellijPlugin for PathFinderPlugin {
     fn update(&mut self, event: Event) -> bool {
         let result = if let Event::PermissionRequestResult(PermissionStatus::Granted) = event {
             self.permissions_granted = true;
-            self.on_permissions_granted();
-            self.drain_events()
+            self.on_permissions_granted() | self.drain_events()
         } else if self.permissions_granted {
             self.handle_event(event)
         } else {
@@ -124,9 +123,7 @@ impl ZellijPlugin for PathFinderPlugin {
     }
 
     fn pipe(&mut self, message: PipeMessage) -> bool {
-        let result = self.handle_pipe_message(message);
-
-        self.process_result(result)
+        self.handle_pipe_message(message).as_bool()
     }
 
     fn render(&mut self, rows: usize, cols: usize) {
@@ -154,21 +151,15 @@ impl PathFinderPlugin {
         // Give the plugin pane a more concise name.
         rename_plugin_pane(get_plugin_ids().plugin_id, PANE_TITLE);
 
-        if self.config.bootstrap {
-            return if let Err(error) = self.start_async_root_scan() {
-                self.context
-                    .log_error(PluginError::FileSystemScanFailed(error))
-            } else {
-                PluginUpdateLoop::MarkDirty
-            };
+        match self.config.pipe_message.take() {
+            Some(pipe_message) => self.handle_pipe_message(pipe_message),
+            None => PluginUpdateLoop::NoUpdates,
         }
-
-        PluginUpdateLoop::NoUpdates
     }
 
     // TODO: consider adding activity feedback (e.g. spinner) to the UI while waiting for the
     // results.
-    fn handle_pipe_message(&mut self, message: PipeMessage) -> Result {
+    fn handle_pipe_message(&mut self, message: PipeMessage) -> PluginUpdateLoop {
         let result = match message.into() {
             // Start scanning the /host. The scan always happens asynchronously, and responses are
             // posted back to the plugin through the `::update(…)` callback.
@@ -182,18 +173,17 @@ impl PathFinderPlugin {
             PathFinderPluginCommand::RunExternalProgram(program) => {
                 self.run_external_pathfinder_command(program)
             }
-            PathFinderPluginCommand::PluginCommandError(error) => {
-                return Ok(self.context.log_error(error))
-            }
+            PathFinderPluginCommand::PluginCommandError(error) => Err(error.into()),
         };
 
-        if let Err(error) = result {
-            return Ok(self
-                .context
-                .log_error(PluginError::FileSystemScanFailed(error)));
+        match result {
+            Ok(_) => PluginUpdateLoop::MarkDirty,
+            Err(error) => {
+                eprintln!("unexpected error: {error:?}");
+                self.context
+                    .log_error(PluginError::FileSystemScanFailed(error))
+            }
         }
-
-        Ok(PluginUpdateLoop::MarkDirty)
     }
 
     fn start_async_root_scan(&self) -> anyhow::Result<()> {
@@ -244,7 +234,17 @@ impl PathFinderPlugin {
             .into());
         };
 
-        run_command(&[&command], BTreeMap::new());
+        // Fail if the current working directory cannot be represented as an UTF8 string.
+        // TODO: consider supporting non-UTF8 path as a degraded experience.
+        let cwd = get_plugin_ids().initial_cwd;
+        let Some(root) = cwd.to_str() else {
+            return Err(PluginError::InvalidPipeMessagePayloadError(format!(
+                "failed to decode `{cwd:?}`"
+            ))
+            .into());
+        };
+
+        run_command(&[&command, root], BTreeMap::new());
 
         Ok(())
     }
@@ -339,9 +339,9 @@ impl PathFinderPlugin {
                 .into();
         }
 
-        // Expect the results to be passed through stdout as a RMP-serialized [BTreeSet<PathBuf>]
+        // Results must be passed through stdout as a RMP-serialized [BTreeMap<PathBuf, PathBuf>]
         // structure.
-        let Ok(paths) = marshall_command::deserialize::<BTreeSet<PathBuf>>(&stdout) else {
+        let Ok(paths) = marshall_command::deserialize::<BTreeMap<PathBuf, PathBuf>>(&stdout) else {
             return self
                 .context
                 .log_error(PluginError::FileSystemScanFailed(anyhow!(
@@ -350,7 +350,7 @@ impl PathFinderPlugin {
                 .into();
         };
 
-        for path in paths {
+        for (_label, path) in paths {
             self.matcher.add_choice(path);
         }
 
@@ -473,7 +473,7 @@ impl PathFinderPlugin {
         let cwd = get_plugin_ids().initial_cwd.join(relative_cwd);
         switch_session_with_layout(Some(&session_name), self.config.layout.clone(), Some(cwd));
 
-        if self.config.bootstrap {
+        if self.config.kill_after_switch {
             kill_sessions(&[current_session_name]);
         }
 
