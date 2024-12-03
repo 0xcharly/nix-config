@@ -10,7 +10,6 @@ use zellij_tile::{
 #[derive(Debug)]
 pub(super) struct PathFinderPluginConfig {
     pub(super) layout: LayoutInfo,
-    pub(super) cwd: Option<PathBuf>,
     pub(super) pathfinder_root: Option<PathBuf>,
     pub(super) external_pathfinder_command: Option<PathBuf>,
 
@@ -24,15 +23,11 @@ pub(super) struct PathFinderPluginConfig {
 // Configuration.
 
 /// See https://zellij.dev/documentation/plugin-aliases.html?highlight=caller#a-note-about-cwd.
-const ZELLIJ_PLUGIN_CURRENT_WORKING_DIR: &'static str = "cwd";
 const REPOSITORY_PATHFINDER_ROOT_OPTION: &'static str = "repository_pathfinder_root";
 const EXTERNAL_PATHFINDER_COMMAND_OPTION: &'static str = "pathfinder_command";
 
 impl PathFinderPluginConfig {
     pub(super) fn load(&mut self, configuration: &BTreeMap<String, String>) {
-        self.cwd = configuration
-            .get(ZELLIJ_PLUGIN_CURRENT_WORKING_DIR)
-            .map(PathBuf::from);
         self.pathfinder_root = configuration
             .get(REPOSITORY_PATHFINDER_ROOT_OPTION)
             .map(PathBuf::from);
@@ -45,7 +40,8 @@ impl PathFinderPluginConfig {
     }
 }
 
-/// `name` is a reserved key: https://github.com/zellij-org/zellij/pull/2727.
+/// `name` is a reserved key, among others:
+/// https://github.com/zellij-org/zellij/blob/afd4c644bc682df1bd9b06e575611aceb5e8c4a7/zellij-utils/src/input/layout.rs#L504-L516
 const STARTUP_MESSAGE_NAME: &'static str = "startup_message_name";
 const STARTUP_MESSAGE_PAYLOAD: &'static str = "startup_message_payload";
 
@@ -65,7 +61,6 @@ impl Default for PathFinderPluginConfig {
     fn default() -> Self {
         Self {
             layout: LayoutInfo::BuiltIn("default".to_string()),
-            cwd: Default::default(),
             pathfinder_root: Default::default(),
             external_pathfinder_command: Default::default(),
             pipe_message: Default::default(),
