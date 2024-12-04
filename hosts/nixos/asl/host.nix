@@ -8,7 +8,6 @@ in {
   imports = [
     ./fs.nix
     ./mounts.nix
-    ./vmware-guest.nix
   ];
 
   # Headless system à la WSL.
@@ -16,12 +15,6 @@ in {
 
   # Use Zellij for repository management.
   modules.usrenv.switcherApp = "zellij";
-
-  # Disable the default module and import our override that works on aarch64.
-  # NOTE: the PR has been merge to the unstable branch and should be available
-  # in 24.11: https://github.com/NixOS/nixpkgs/pull/326395.
-  # TODO: use builtin module after switching to 24.11.
-  disabledModules = ["virtualisation/vmware-guest.nix"];
 
   # Setup qemu so we can run x86_64 binaries.
   boot.binfmt.emulatedSystems = ["x86_64-linux"];
