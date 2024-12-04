@@ -50,7 +50,6 @@ in {
             background = "#1d1f21";
             selection-background = "#212a37";
             title = " ";
-            macos-titlebar-proxy-icon = "hidden";
             cursor-style = "block";
             cursor-style-blink = false;
             mouse-hide-while-typing = false;
@@ -63,6 +62,7 @@ in {
           }
           // (lib.optionalAttrs isDarwin {
             adjust-cell-height = "-15%"; # Comic Code is a little tall by default on macOS.
+            macos-titlebar-proxy-icon = "hidden";
           }));
     };
   };
