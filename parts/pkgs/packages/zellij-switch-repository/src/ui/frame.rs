@@ -19,15 +19,18 @@ const CONTROL_BAR: ControlBar = ControlBar {
     segments: [
         ControlSegment {
             control: "↓↑",
-            label: "Navigate between entries",
+            short_label: "Navigate",
+            full_label: "Navigate between entries",
         },
         ControlSegment {
             control: "ENTER",
-            label: "Select entry",
+            short_label: "Select",
+            full_label: "Select entry",
         },
         ControlSegment {
             control: "ESC",
-            label: "Clear input",
+            short_label: "Clear",
+            full_label: "Clear input",
         },
     ],
 };
@@ -59,6 +62,7 @@ impl<'ui> Frame<'ui> {
             &self.matched_results,
             self.selection_index,
             self.rows.saturating_sub(CHROME_LINE_COUNT),
+            self.cols,
         )
     }
 
@@ -74,7 +78,7 @@ impl<'ui> Frame<'ui> {
     }
 
     fn fmt_control_bar(&self, f: &mut Formatter<'_>) -> Result {
-        self.styles.fmt_control_bar(f, &CONTROL_BAR)
+        self.styles.fmt_control_bar(f, &CONTROL_BAR, self.cols)
     }
 
     /// Prints errors, if any.

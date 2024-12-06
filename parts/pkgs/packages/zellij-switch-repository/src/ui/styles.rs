@@ -1,4 +1,7 @@
 #![allow(dead_code)]
+// TODO: use std::iter::Itersperse when available.
+// https://doc.rust-lang.org/std/iter/struct.Intersperse.html
+#![allow(unstable_name_collisions)]
 
 use crate::{context::Context, matcher::Match};
 use std::fmt::{Formatter, Result};
@@ -21,6 +24,8 @@ pub(crate) struct Styles {
     matched: Style,
     selected: Style,
     selected_and_matched: Style,
+    ellipsized: Style,
+    selected_and_ellipsized: Style,
 
     control_background: Style,
     control_keycode: Style,
@@ -29,11 +34,84 @@ pub(crate) struct Styles {
 
 pub(crate) struct ControlSegment<'cs> {
     pub(crate) control: &'cs str,
-    pub(crate) label: &'cs str,
+    pub(crate) short_label: &'cs str,
+    pub(crate) full_label: &'cs str,
 }
 
 pub(crate) struct ControlBar<'cb> {
     pub(crate) segments: [ControlSegment<'cb>; 3],
+}
+
+impl ControlBar<'_> {
+    const SEGMENT_SEPARATOR: &'static str = " / ";
+
+    fn full_label_len(&self) -> usize {
+        self.segments
+            .iter()
+            .map(|segment| segment.control.chars().count() + segment.full_label.chars().count() + 3)
+            .intersperse(ControlBar::SEGMENT_SEPARATOR.len())
+            .sum()
+    }
+
+    fn short_label_len(&self) -> usize {
+        self.segments
+            .iter()
+            .map(|segment| {
+                segment.control.chars().count() + segment.short_label.chars().count() + 3
+            })
+            .intersperse(ControlBar::SEGMENT_SEPARATOR.len())
+            .sum()
+    }
+
+    fn render_separator(styles: &Styles) -> ANSIString<'_> {
+        styles
+            .control_background
+            .paint(ControlBar::SEGMENT_SEPARATOR)
+    }
+
+    fn render_full<'s>(&'s self, styles: &'s Styles) -> Vec<ANSIString<'s>> {
+        let segment_separators = vec![ControlBar::render_separator(styles)];
+
+        self.segments
+            .iter()
+            .map(|segment| {
+                vec![
+                    styles.control_background.paint("<"),
+                    styles.control_keycode.paint(segment.control),
+                    styles.control_background.paint("> "),
+                    styles.control_label.paint(segment.full_label),
+                ]
+            })
+            .intersperse(segment_separators)
+            .flatten()
+            .collect()
+    }
+
+    fn render_short<'s>(&'s self, styles: &'s Styles) -> Vec<ANSIString<'s>> {
+        let segment_separators = vec![ControlBar::render_separator(styles)];
+
+        self.segments
+            .iter()
+            .map(|segment| {
+                vec![
+                    styles.control_background.paint("<"),
+                    styles.control_keycode.paint(segment.control),
+                    styles.control_background.paint("> "),
+                    styles.control_label.paint(segment.short_label),
+                ]
+            })
+            .intersperse(segment_separators)
+            .flatten()
+            .collect()
+    }
+
+    fn render<'s>(&'s self, styles: &'s Styles, cols: usize) -> Option<Vec<ANSIString<'s>>> {
+        match cols {
+            _ if self.full_label_len() <= cols => Some(self.render_full(styles)),
+            _ if self.short_label_len() <= cols => Some(self.render_short(styles)),
+            _ => None,
+        }
+    }
 }
 
 const GREY: u8 = 0;
@@ -47,7 +125,7 @@ const WHITE: u8 = 7;
 
 /// The catppuccin "colorscheme" background.
 const CATPPUCCIN_SURFACE_0: Colour = RGB(49, 50, 68);
-const CATPPUCCIN_MANTLE: Colour = RGB(24, 24, 37);
+const GUNMETAL_BACKGROUND: Colour = RGB(29, 31, 33);
 
 impl Default for Styles {
     fn default() -> Self {
@@ -69,10 +147,12 @@ impl Default for Styles {
                 .underline()
                 .on(Fixed(GREY))
                 .bold(),
+            ellipsized: Style::new().dimmed(),
+            selected_and_ellipsized: Style::new().dimmed().on(CATPPUCCIN_SURFACE_0),
 
-            control_background: Style::new().on(CATPPUCCIN_MANTLE),
-            control_keycode: Style::new().fg(Fixed(GREEN)).on(CATPPUCCIN_MANTLE).bold(),
-            control_label: Style::new().on(CATPPUCCIN_MANTLE).bold(),
+            control_background: Style::new().on(GUNMETAL_BACKGROUND),
+            control_keycode: Style::new().fg(Fixed(GREEN)).on(GUNMETAL_BACKGROUND).bold(),
+            control_label: Style::new().on(GUNMETAL_BACKGROUND).bold(),
         }
     }
 }
@@ -123,10 +203,11 @@ impl Styles {
         matched_results: &Vec<Match>,
         selected_index: usize,
         rows: usize,
+        cols: usize,
     ) -> Result {
-        let mut ch_buf = [0u8; 2];
+        let mut ch_buf = [0u8; 4];
         for (index, m) in matched_results.iter().take(rows).enumerate() {
-            self.fmt_matched_line(f, &mut ch_buf, m, index == selected_index)?;
+            self.fmt_matched_line(f, &mut ch_buf, m, index == selected_index, cols)?;
         }
 
         Ok(())
@@ -135,13 +216,40 @@ impl Styles {
     fn fmt_matched_line(
         &self,
         f: &mut Formatter<'_>,
-        ch_buf: &mut [u8; 2],
+        ch_buf: &mut [u8; 4],
         m: &Match,
         is_selected: bool,
+        cols: usize,
     ) -> Result {
-        let styled_entry = m
-            .entry
+        let cols = cols.saturating_sub(2); // Take into account prefix.
+
+        if cols < 3 {
+            unreachable!("rendering function not adequate for narrow screens");
+        }
+
+        let (entry, offset) = if m.entry.len() > cols {
+            let ridx = cols.saturating_sub(1);
+            (
+                // m.entry = "abcdef"
+                //            012345
+                // cols = 5
+                // entry[:-4]
+                // entry   = "…cdef"
+                //             2345
+                slice_from_end(&m.entry, ridx.saturating_sub(1))
+                    .expect("entry contains at least `cols - 1` characters"),
+                m.entry.len().saturating_sub(cols - 1),
+            )
+        } else {
+            (m.entry.as_str(), 0)
+        };
+        // m.entry = "abcdef"
+        // entry   = "cdef"
+        let styled_entry = entry
             .char_indices()
+            // (0, entry[0]), (1, entry[1]), (2, entry[2]), …
+            .map(|(idx, ch)| (idx + offset, ch)) // Reframe indices.
+            // (offset, entry[0]), (offset + 1, entry[1]), (offset + 2, entry[2]), …
             .map(|(idx, ch)| {
                 let style = match (m.indices.contains(&idx), is_selected) {
                     (true, true) => self.selected_and_matched,
@@ -153,6 +261,19 @@ impl Styles {
             })
             .collect::<String>();
 
+        let styled_entry = if offset != 0 {
+            format!(
+                "{}{styled_entry}",
+                if is_selected {
+                    self.selected_and_ellipsized
+                } else {
+                    self.ellipsized
+                }
+                .paint("…")
+            )
+        } else {
+            styled_entry
+        };
         if is_selected {
             self.fmt_selected_line(f, &styled_entry)?;
         } else {
@@ -178,31 +299,16 @@ impl Styles {
         &self,
         f: &mut Formatter<'_>,
         control_bar: &ControlBar,
+        cols: usize,
     ) -> Result {
-        let segment_separators = vec![self.control_background.paint(" / ")];
-
-        // TODO: use std::iter::Itersperse when available.
-        // https://doc.rust-lang.org/std/iter/struct.Intersperse.html
-        #[allow(unstable_name_collisions)]
-        let segments: Vec<ANSIString<'_>> = control_bar
-            .segments
-            .iter()
-            .map(|segment| {
-                vec![
-                    self.control_background.paint("<"),
-                    self.control_keycode.paint(segment.control),
-                    self.control_background.paint("> "),
-                    self.control_label.paint(segment.label),
-                ]
-            })
-            .intersperse(segment_separators)
-            .flatten()
-            .collect();
+        let Some(segments) = control_bar.render(self, cols) else {
+            return Ok(());
+        };
 
         // Use ANSI escape sequences manually to fill out the line without repeating spaces.
         writeln!(
             f,
-            "{}\u{1b}[48;2;24;24;37m\u{1b}[0K",
+            "{}\u{1b}[48;2;29;31;33m\u{1b}[0K",
             ANSIStrings(&segments)
         )?;
         write!(f, "{}", RESET)
@@ -225,4 +331,8 @@ impl Styles {
             )
         }
     }
+}
+
+fn slice_from_end(s: &str, n: usize) -> Option<&str> {
+    s.char_indices().rev().nth(n).map(|(i, _)| &s[i..])
 }
