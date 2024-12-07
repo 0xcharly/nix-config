@@ -47,6 +47,12 @@ in {
         rounded_corners = true;
         hide_session_name = true;
       };
+      # Disable session resurrection. When a session is resurrected, Zellij
+      # attempts to rerun the last command (fortunately behind a "Press ENTER to
+      # run" banner). This is way too dangerous, but there's no way to disable
+      # just this behavior. In the meantime, session resurrection is disabled.
+      # https://zellij.dev/documentation/session-resurrection
+      session_serialization = false;
       plugins = {
         pathfinder._props = {
           location = "file:${lib.getExe pkgs.zellij-switch-repository}";
