@@ -287,7 +287,7 @@ impl Styles {
         writeln!(
             f,
             "{}{entry}\u{1b}[48;2;49;50;68m\u{1b}[0K",
-            self.caret.paint("> "),
+            self.caret.paint("▌ "),
         )?;
         write!(f, "{}", RESET)
     }
