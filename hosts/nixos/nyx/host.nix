@@ -3,6 +3,9 @@
     ./fs.nix
   ];
 
+  # See comment in modules/nixos/module.nix.
+  system.stateVersion = "24.11";
+
   # Wayland, finally?
   modules.usrenv.compositor = "wayland";
 

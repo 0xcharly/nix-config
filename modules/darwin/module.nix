@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{pkgs, lib, ...}: {
   imports = [
     ./aarch64-darwin.nix
     ./default-shell.nix
@@ -11,6 +11,16 @@
   ];
 
   modules.usrenv.compositor = "quartz";
+
+  # Akin to Home Manager's `stateVersion`, and NixOS' `system.stateVersion`, but
+  # it independent from releases (e.g. "24.11").
+  # This value determines the nix-darwin release from which the default settings
+  # for stateful data, like file locations and database versions on your system
+  # were taken. It‘s perfectly fine and recommended to leave this value at the
+  # release version of the first install of this system. Before changing this
+  # value read the documentation for this option.
+  # https://mynixos.com/nix-darwin/option/system.stateVersion
+  system.stateVersion = lib.mkDefault 5; # Did you read the comment?
 
   # We install Nix using a separate installer so we don't want nix-darwin
   # to manage it for us. This tells nix-darwin to just use whatever is running.
