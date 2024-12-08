@@ -28,7 +28,7 @@
             swap = {
               priority = 2;
               label = "swap";
-              start = "-106G"; # Size of RAM + square root of RAM. Required for hibernation.
+              start = "-38G"; # Size of RAM + square root of RAM. Required for hibernation.
               content.type = "swap";
             };
             nixos = {
