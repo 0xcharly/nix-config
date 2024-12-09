@@ -5,7 +5,6 @@
 }: {
   imports = [
     ./aarch64-darwin.nix
-    ./default-shell.nix
     ./homebrew.nix
     ./macos.nix
     ./nix-client-config.nix
