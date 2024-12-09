@@ -16,7 +16,7 @@
     inherit (pkgs) system;
   };
 
-  homeDirectory = config.users.users.delay.home;
+  homeDirectory = config.modules.system.users.delay.home;
   codeDirectory = homeDirectory + "/code";
   use1PasswordSshAgent = isDarwin && (sshAgent == "1password");
 in {
