@@ -16,7 +16,7 @@ username: {
 
       # The state version indicates which default settings are in effect and
       # will therefore help avoid breaking program configurations.
-      home.stateVersion = lib.modules.mkDefault "24.05";
+      home.stateVersion = lib.mkDefault "24.05";
 
       # Allow HM to manage itself when in standalone mode.
       # This makes the home-manager command available to users.

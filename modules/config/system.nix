@@ -1,20 +1,22 @@
 {
   config,
+  pkgs,
   lib,
   ...
 }: let
-  inherit (builtins) elemAt;
+  inherit (lib.attrsets) genAttrs;
   inherit (lib.lists) optionals;
   inherit (lib.modules) mkMerge;
   inherit (lib.options) mkOption;
-  inherit (lib.types) enum int listOf str;
+  inherit (lib.types) attrsOf enum int listOf str;
+  inherit (pkgs.stdenv) isDarwin;
 
   cfg = config.modules.system;
 in {
   options.modules.system = {
     mainUser = mkOption {
-      type = enum cfg.users;
-      default = elemAt cfg.users 0;
+      type = enum (builtins.attrNames cfg.users);
+      default = "delay";
       description = ''
         The username of the main user for your system.
 
@@ -23,8 +25,18 @@ in {
     };
 
     users = mkOption {
-      type = listOf str;
-      default = ["delay"];
+      # TODO: better typing.
+      type = attrsOf (attrsOf str);
+      default = let
+        mkUser = ldap: {
+          name = ldap;
+          home =
+            if isDarwin
+            then "/Users/${ldap}"
+            else "/home/${ldap}";
+        };
+      in
+        genAttrs ["delay"] mkUser;
       description = "A list of home-manager users on the system.";
     };
 

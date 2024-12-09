@@ -12,7 +12,7 @@
 
   isLinuxDesktop = isLinux && !isHeadless;
 
-  homeDirectory = config.users.users.delay.home;
+  homeDirectory = config.modules.system.users.delay.home;
   codeDirectory = homeDirectory + "/code";
 in {
   programs.bash.enable = true;

@@ -9,7 +9,7 @@
     else args.config;
   inherit (config.modules.usrenv) switcherApp;
 
-  homeDirectory = config.users.users.delay.home;
+  homeDirectory = config.modules.system.users.delay.home;
   codeDirectory = homeDirectory + "/code";
 in {
   home.packages =

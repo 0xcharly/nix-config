@@ -1,4 +1,8 @@
-{pkgs, lib, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   imports = [
     ./aarch64-darwin.nix
     ./default-shell.nix
@@ -8,6 +12,7 @@
     ./nix-homebrew.nix
     ./nix-index.nix
     ./unfree.nix
+    ./user-delay.nix
   ];
 
   modules.usrenv.compositor = "quartz";
@@ -40,12 +45,5 @@
     # End Nix
   '';
 
-  environment.shells = with pkgs; [bashInteractive fish];
-
-  # The user should already exist, but we need to set this up so Nix knows
-  # what our home directory is (https://github.com/LnL7/nix-darwin/issues/423).
-  users.users.delay = {
-    home = "/Users/delay";
-    shell = pkgs.fish;
-  };
+  environment.shells = with pkgs; [bashInteractive zsh fish];
 }
