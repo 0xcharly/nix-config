@@ -42,15 +42,8 @@ test:
 
 [doc('Update the given flake inputs')]
 [group('nix')]
-[macos]
 update +inputs:
     for input in {{ inputs }}; nix flake update --flake . $input; end
-
-[doc('Update the given flake inputs')]
-[group('nix')]
-[linux]
-update +inputs:
-    for input in {{ inputs }}; nix flake lock --update-input $input; end
 
 # Builds the current darwin host's configuration and caches the results.
 #
