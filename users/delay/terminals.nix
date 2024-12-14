@@ -61,7 +61,6 @@ in {
             auto-update = "off";
           }
           // (lib.optionalAttrs isDarwin {
-            adjust-cell-height = "-15%"; # Comic Code is a little tall by default on macOS.
             macos-titlebar-proxy-icon = "hidden";
           }));
     };
