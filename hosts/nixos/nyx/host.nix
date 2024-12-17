@@ -6,8 +6,8 @@
   # See comment in modules/nixos/module.nix.
   system.stateVersion = "24.11";
 
-  # Wayland, finally?
-  modules.usrenv.compositor = "wayland";
+  # TODO: Wayland, finally?
+  modules.usrenv.compositor = "x11";
 
   # Use Zellij for repository management.
   modules.usrenv.switcherApp = "zellij";
@@ -29,8 +29,7 @@
   security.sudo.wheelNeedsPassword = false;
 
   networking = {
-    # TODO: probably needs to be adjusted.
-    interfaces.ens160.useDHCP = true; # NAT adapter.
+    interfaces.enp115s0.useDHCP = true;
   };
 
   # Configure nixpkgs.

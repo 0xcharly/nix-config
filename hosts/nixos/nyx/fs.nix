@@ -6,8 +6,7 @@
   disko.devices = {
     disk = {
       SYSTEM = {
-        # TODO: probably needs to be adjusted.
-        device = "/dev/sda";
+        device = "/dev/nvme0n1";
         type = "disk";
         content = {
           type = "gpt";
@@ -28,7 +27,7 @@
             swap = {
               priority = 2;
               label = "swap";
-              start = "-38G"; # Size of RAM + square root of RAM. Required for hibernation.
+              start = "-72G"; # Size of RAM + square root of RAM. Required for hibernation.
               content.type = "swap";
             };
             nixos = {
