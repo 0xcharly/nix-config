@@ -106,29 +106,29 @@ const PATHFINDER_COMMAND_RUN_EXTERNAL_PROGRAM: &'static str = "run_external_prog
 pub(super) enum PathFinderPluginCommand {
     PluginCommandError(PluginError),
     ScanRepositoryRoot { max_depth: usize },
-    RunExternalProgram(PathBuf),
+    RunExternalProgram { program: PathBuf },
 }
 
 impl From<PipeMessage> for PathFinderPluginCommand {
     fn from(message: PipeMessage) -> Self {
-        use PathFinderPluginCommand::*;
-        use PluginError::MissingPipeMessagePayloadError;
-        use PluginError::UnknownPipeMessageError;
-
         match message.name.as_ref() {
             PATHFINDER_COMMAND_SCAN_REPOSITORY_ROOT => {
-                parse_scan_repository_root_payload(message.payload)
+                parse_scan_repository_root_payload(message.name, message.payload)
             }
-            PATHFINDER_COMMAND_RUN_EXTERNAL_PROGRAM => match message.payload {
-                Some(payload) => RunExternalProgram(PathBuf::from(payload)),
-                _ => PluginCommandError(MissingPipeMessagePayloadError(message.name)),
-            },
-            _ => PluginCommandError(UnknownPipeMessageError(message.name)),
+            PATHFINDER_COMMAND_RUN_EXTERNAL_PROGRAM => {
+                parse_run_external_program_payload(message.name, message.payload)
+            }
+            _ => PathFinderPluginCommand::PluginCommandError(PluginError::UnknownPipeMessageError(
+                message.name,
+            )),
         }
     }
 }
 
-fn parse_scan_repository_root_payload(payload: Option<String>) -> PathFinderPluginCommand {
+fn parse_scan_repository_root_payload(
+    name: String,
+    payload: Option<String>,
+) -> PathFinderPluginCommand {
     let Some(payload) = payload else {
         return PathFinderPluginCommand::ScanRepositoryRoot {
             max_depth: usize::MAX,
@@ -137,9 +137,24 @@ fn parse_scan_repository_root_payload(payload: Option<String>) -> PathFinderPlug
 
     let Ok(max_depth) = payload.parse::<usize>() else {
         return PathFinderPluginCommand::PluginCommandError(PluginError::ConfigurationError {
-            reason: format!("invalid usize value: {payload}"),
+            reason: format!("{name}: invalid usize value: {payload}"),
         });
     };
 
     PathFinderPluginCommand::ScanRepositoryRoot { max_depth }
+}
+
+fn parse_run_external_program_payload(
+    name: String,
+    payload: Option<String>,
+) -> PathFinderPluginCommand {
+    let Some(payload) = payload else {
+        return PathFinderPluginCommand::PluginCommandError(
+            PluginError::MissingPipeMessagePayloadError(name),
+        );
+    };
+
+    let program = PathBuf::from(payload);
+
+    PathFinderPluginCommand::RunExternalProgram { program }
 }

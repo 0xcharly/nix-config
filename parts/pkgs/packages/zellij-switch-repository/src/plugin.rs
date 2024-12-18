@@ -171,7 +171,7 @@ impl PathFinderPlugin {
             // Run an external command to get the list of path. While the command execution is
             // asynchronous from the plugin point of view, the results are sent back to the plugin
             // only when the command terminates, which can take an unbounded amount of time.
-            RunExternalProgram(program) => self.run_external_pathfinder_command(program),
+            RunExternalProgram{ program } => self.run_external_pathfinder_command(program),
 
             PluginCommandError(error) => Err(error.into()),
         };
