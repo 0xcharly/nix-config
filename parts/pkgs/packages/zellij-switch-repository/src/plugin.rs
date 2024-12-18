@@ -459,7 +459,7 @@ impl PathFinderPlugin {
                 .context
                 .log_error(PluginError::SwitchSessionFailed {
                     session_name,
-                    reason: "already on target session: {}",
+                    reason: "already on target session",
                 })
                 .into();
         }
