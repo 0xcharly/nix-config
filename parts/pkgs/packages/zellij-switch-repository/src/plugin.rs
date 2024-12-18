@@ -166,7 +166,7 @@ impl PathFinderPlugin {
             // posted back to the plugin through the `::update(…)` callback.
             // The scanning method (either through a background plugin worker or via the Zellij API) is
             // dictated by the `zellij_fallback_fs_api` feature flag.
-            ScanRepositoryRoot => self.start_async_root_scan(),
+            ScanRepositoryRoot { max_depth } => self.start_async_root_scan(max_depth),
 
             // Run an external command to get the list of path. While the command execution is
             // asynchronous from the plugin point of view, the results are sent back to the plugin
@@ -186,9 +186,9 @@ impl PathFinderPlugin {
         }
     }
 
-    fn start_async_root_scan(&self) -> anyhow::Result<()> {
+    fn start_async_root_scan(&self, max_depth: usize) -> anyhow::Result<()> {
         // TODO: pass these arguments through plugin configuration.
-        self.post_repository_crawler_task(PathBuf::from("/host"), /* max_depth */ 5)
+        self.post_repository_crawler_task(PathBuf::from("/host"), max_depth)
     }
 
     #[cfg(not(feature = "zellij_fallback_fs_api"))]

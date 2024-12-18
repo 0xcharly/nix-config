@@ -48,13 +48,17 @@ const STARTUP_MESSAGE_PAYLOAD: &'static str = "startup_message_payload";
 /// Synthesize a [PipeMessage] from the plugin config.
 /// Returns `None` if `configuration` does not contain a `name` key.
 fn synthesize_pipe_message(configuration: &BTreeMap<String, String>) -> Option<PipeMessage> {
-    configuration.get(STARTUP_MESSAGE_NAME).map(|name| PipeMessage {
-        source: PipeSource::Plugin(get_plugin_ids().plugin_id),
-        name: name.to_owned(),
-        payload: configuration.get(STARTUP_MESSAGE_PAYLOAD).map(|p| p.to_owned()),
-        args: Default::default(),
-        is_private: true,
-    })
+    configuration
+        .get(STARTUP_MESSAGE_NAME)
+        .map(|name| PipeMessage {
+            source: PipeSource::Plugin(get_plugin_ids().plugin_id),
+            name: name.to_owned(),
+            payload: configuration
+                .get(STARTUP_MESSAGE_PAYLOAD)
+                .map(|p| p.to_owned()),
+            args: Default::default(),
+            is_private: true,
+        })
 }
 
 impl Default for PathFinderPluginConfig {
@@ -101,7 +105,7 @@ const PATHFINDER_COMMAND_RUN_EXTERNAL_PROGRAM: &'static str = "run_external_prog
 #[derive(Debug)]
 pub(super) enum PathFinderPluginCommand {
     PluginCommandError(PluginError),
-    ScanRepositoryRoot,
+    ScanRepositoryRoot { max_depth: usize },
     RunExternalProgram(PathBuf),
 }
 
@@ -112,7 +116,9 @@ impl From<PipeMessage> for PathFinderPluginCommand {
         use PluginError::UnknownPipeMessageError;
 
         match message.name.as_ref() {
-            PATHFINDER_COMMAND_SCAN_REPOSITORY_ROOT => ScanRepositoryRoot,
+            PATHFINDER_COMMAND_SCAN_REPOSITORY_ROOT => {
+                parse_scan_repository_root_payload(message.payload)
+            }
             PATHFINDER_COMMAND_RUN_EXTERNAL_PROGRAM => match message.payload {
                 Some(payload) => RunExternalProgram(PathBuf::from(payload)),
                 _ => PluginCommandError(MissingPipeMessagePayloadError(message.name)),
@@ -120,4 +126,20 @@ impl From<PipeMessage> for PathFinderPluginCommand {
             _ => PluginCommandError(UnknownPipeMessageError(message.name)),
         }
     }
+}
+
+fn parse_scan_repository_root_payload(payload: Option<String>) -> PathFinderPluginCommand {
+    let Some(payload) = payload else {
+        return PathFinderPluginCommand::ScanRepositoryRoot {
+            max_depth: usize::MAX,
+        };
+    };
+
+    let Ok(max_depth) = payload.parse::<usize>() else {
+        return PathFinderPluginCommand::PluginCommandError(PluginError::ConfigurationError {
+            reason: format!("invalid usize value: {payload}"),
+        });
+    };
+
+    PathFinderPluginCommand::ScanRepositoryRoot { max_depth }
 }
