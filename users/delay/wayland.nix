@@ -75,6 +75,15 @@ in {
         inherit fonts;
         bars = [{inherit fonts;}];
       };
+      extraConfig = ''
+        input "type:keyboard" {
+          repeat_delay 200
+          repeat_rate 60
+        }
+        output DP-3 {
+          mode 3840x2160@239.991Hz
+        }
+      '';
     };
   };
 }

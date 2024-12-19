@@ -9,8 +9,13 @@ in {
   programs.chromium = {
     inherit enable;
     package = pkgs.ungoogled-chromium;
+    dictionaries = with pkgs; [
+      hunspellDictsChromium.en_US
+      hunspellDictsChromium.fr_FR
+    ];
     extensions = [
       {id = "aeblfdkhhhdcdjpifhhbdiojplfjncoa";} # 1Password
+      {id = "cdglnehniifkbagbbombnjghhcihifij";} # Kagi Search
       {id = "cjpalhdlnbpafiamejdnhcphjbkeiagm";} # uBlock Origin
     ];
   };

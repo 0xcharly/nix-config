@@ -29,8 +29,7 @@ in {
     windowManager.i3 = {inherit enable;};
   };
 
-  services.displayManager = {
-    inherit enable;
+  services.displayManager = lib.mkIf enable {
     defaultSession = "none+i3";
   };
 
