@@ -1,3 +1,4 @@
+use matcher::Choice;
 /// Implementation of ThePrimeagen's "sessionizer" script as a Zellij plugin.
 ///
 /// This plugin scans the given root directory and yields a list of git repositories found under

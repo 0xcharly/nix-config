@@ -1,7 +1,6 @@
-use crate::context;
-use crate::core::{InternalError, PluginError, PluginUpdateLoop, Result, ResultIterator};
+use crate::context::{Context, PathEntry};
+use crate::core::{PluginError, PluginUpdateLoop, Result, ResultIterator};
 use crate::hash;
-use crate::matcher::RepositoryMatcher;
 use crate::protocol::{PathFinderPluginCommand, PathFinderPluginConfig};
 use crate::ui::{Renderer, PANE_TITLE};
 #[cfg(not(feature = "zellij_fallback_fs_api"))]
@@ -9,7 +8,7 @@ use crate::workers::protocol::{
     FileSystemWorkerMessage, RepositoryCrawlerRequest, RepositoryCrawlerResponse,
 };
 
-use anyhow::Context;
+use anyhow::Context as _;
 use std::{
     collections::{BTreeMap, BTreeSet},
     path::PathBuf,
@@ -67,9 +66,7 @@ pub(crate) struct PathFinderPlugin {
     event_queue: Vec<Event>,
 
     /// The plugin context, that keeps track of some volatile state.
-    context: context::Context,
-    /// Matches the list of repositories against the user input. Keeps track of the user input.
-    matcher: RepositoryMatcher,
+    context: Context,
     /// Handles drawing the list of results on the screen, as well as dealing with user selection.
     renderer: Renderer,
 }
@@ -127,9 +124,7 @@ impl ZellijPlugin for PathFinderPlugin {
     }
 
     fn render(&mut self, rows: usize, cols: usize) {
-        let frame = self
-            .renderer
-            .next_frame(rows, cols, &self.context, &self.matcher);
+        let frame = self.renderer.next_frame(rows, cols, &self.context);
         print!("{frame}");
     }
 }
@@ -261,6 +256,10 @@ impl PathFinderPlugin {
             .try_consume()
     }
 
+    fn add_choice(&mut self, path: PathBuf) {
+        self.context.add_choice(path.into());
+    }
+
     #[cfg(not(feature = "zellij_fallback_fs_api"))]
     fn handle_custom_message(&mut self, message: String, payload: String) -> Result {
         use crate::marshall_plugin::deserialize;
@@ -274,7 +273,8 @@ impl PathFinderPlugin {
         );
         let RepositoryCrawlerResponse { repository } = deserialize(&payload)
             .with_context(|| "deserializing response from `file_system` worker")?;
-        self.matcher.add_choice(repository);
+
+        self.add_choice(repository);
 
         Ok(PluginUpdateLoop::MarkDirty)
     }
@@ -298,7 +298,8 @@ impl PathFinderPlugin {
                 .strip_prefix(PathBuf::from("/host"))
                 .expect("path is guaranteed to start with the above prefix")
                 .to_path_buf();
-            self.matcher.add_choice(parent);
+
+            self.add_choice(parent);
         } else {
             paths
                 .iter()
@@ -350,8 +351,8 @@ impl PathFinderPlugin {
                 .into();
         };
 
-        for (_label, path) in paths {
-            self.matcher.add_choice(path);
+        for (repr, path) in paths {
+            self.context.add_choice(PathEntry::new(repr, path));
         }
 
         Ok(PluginUpdateLoop::MarkDirty)
@@ -393,24 +394,21 @@ impl PathFinderPlugin {
                 BareKey::Enter if key.has_no_modifiers() => {
                     self.context.clear_errors() | self.submit()
                 }
-                BareKey::Up if key.has_no_modifiers() => {
-                    self.context.clear_errors() | self.renderer.select_up(&self.matcher)
-                }
-                BareKey::Down if key.has_no_modifiers() => {
-                    self.context.clear_errors() | self.renderer.select_down(&self.matcher)
-                }
-                BareKey::Esc if key.has_no_modifiers() => Ok(self.context.clear_errors()
-                    | self.matcher.clear_user_input().or_else(|| self.terminate())),
+                BareKey::Up if key.has_no_modifiers() => self.context.select_up().into(),
+                BareKey::Down if key.has_no_modifiers() => self.context.select_down().into(),
+                BareKey::Esc if key.has_no_modifiers() => self
+                    .context
+                    .clear_user_input()
+                    .or_else(|| self.terminate())
+                    .into(),
                 BareKey::Backspace if key.has_no_modifiers() => {
-                    Ok(self.context.clear_errors() | self.matcher.remove_trailing_char())
+                    self.context.remove_trailing_char().into()
                 }
                 BareKey::Char('c') if key.has_modifiers(&[KeyModifier::Ctrl]) => {
                     self.terminate().into()
                 }
                 BareKey::Char(ch) if key.has_no_modifiers() => {
-                    self.context.clear_errors()
-                        | self.matcher.on_user_input(ch)
-                        | self.renderer.on_user_input(&self.matcher)
+                    self.context.on_user_input(ch).into()
                 }
                 _ => Ok(PluginUpdateLoop::NoUpdates),
             },
@@ -425,11 +423,9 @@ impl PathFinderPlugin {
     }
 
     fn submit(&mut self) -> Result {
-        let index = self.renderer.get_selected_index();
-        let Some(selected) = self.matcher.matches.get(self.renderer.get_selected_index()) else {
-            return Err(InternalError::SelectionIndexOutOfBounds(index).into());
-        };
-        self.safe_switch_session(PathBuf::from(&selected.entry))
+        // TODO: can we return a reference here without keeping a mutable reference on `self`?
+        let selected = self.context.selected_match()?;
+        self.safe_switch_session(selected.path())
     }
 
     fn safe_switch_session(&mut self, relative_cwd: PathBuf) -> Result {

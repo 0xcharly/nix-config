@@ -227,7 +227,7 @@ impl Styles {
             unreachable!("rendering function not adequate for narrow screens");
         }
 
-        let (entry, offset) = if m.entry.len() > cols {
+        let (entry, offset) = if m.choice.len() > cols {
             let ridx = cols.saturating_sub(1);
             (
                 // m.entry = "abcdef"
@@ -236,12 +236,12 @@ impl Styles {
                 // entry[:-4]
                 // entry   = "…cdef"
                 //             2345
-                slice_from_end(&m.entry, ridx.saturating_sub(1))
+                slice_from_end(&m.choice, ridx.saturating_sub(1))
                     .expect("entry contains at least `cols - 1` characters"),
-                m.entry.len().saturating_sub(cols - 1),
+                m.choice.len().saturating_sub(cols - 1),
             )
         } else {
-            (m.entry.as_str(), 0)
+            (m.choice.as_str(), 0)
         };
         // m.entry = "abcdef"
         // entry   = "cdef"
