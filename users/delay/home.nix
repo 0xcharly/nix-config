@@ -17,6 +17,7 @@ in {
     inputs.catppuccin.homeManagerModules.catppuccin
 
     ./browsers.nix
+    ./desktop.nix
     ./fonts.nix
     ./multiplexers.nix
     ./nix-client-config.nix
@@ -48,10 +49,7 @@ in {
       pkgs.nvim
     ]
     ++ lib.optionals hasWindowManager [pkgs.ghostty]
-    ++ lib.optionals isLinux [pkgs.valgrind]
-    ++ lib.optionals (isLinux && hasWindowManager) [
-      pkgs.rofi
-    ];
+    ++ lib.optionals isLinux [pkgs.valgrind];
 
   home.sessionVariables = rec {
     LANG = "en_US.UTF-8";
