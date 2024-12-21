@@ -1485,11 +1485,11 @@
         "treefmt-nix": "treefmt-nix_6"
       },
       "locked": {
-        "lastModified": 1734783547,
-        "narHash": "sha256-If155gP7yPPkJYGE7uE+3ulCKYoxdU6Py3qw3sigy8Q=",
+        "lastModified": 1734787498,
+        "narHash": "sha256-qbAaJMsdsu9uon82a/QO1JqGc831KhDMfzvB49vwOmE=",
         "owner": "0xcharly",
         "repo": "zellij-prime-hopper",
-        "rev": "4fdb0391f0da3ce54026956aee3bb1a213599789",
+        "rev": "604f8d3f073a5d35f7bce2472d57087e5f4d4c29",
         "type": "github"
       },
       "original": {
