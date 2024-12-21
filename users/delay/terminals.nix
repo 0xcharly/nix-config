@@ -8,7 +8,7 @@
     then args.osConfig
     else args.config;
   inherit (config.modules.usrenv) isHeadless;
-  inherit (pkgs.stdenv) isDarwin;
+  inherit (pkgs.stdenv) isDarwin isLinux;
 
   hasWindowManager = !isHeadless;
 in {
@@ -60,9 +60,8 @@ in {
             quit-after-last-window-closed = true;
             auto-update = "off";
           }
-          // (lib.optionalAttrs isDarwin {
-            macos-titlebar-proxy-icon = "hidden";
-          }));
+          // (lib.optionalAttrs isLinux {gtk-titlebar = false;})
+          // (lib.optionalAttrs isDarwin {macos-titlebar-proxy-icon = "hidden";}));
     };
   };
 

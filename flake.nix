@@ -96,13 +96,21 @@
     # Unfree fonts.
     nix-config-fonts.url = "github:0xcharly/nix-config-fonts";
 
-    # Catppuccin all the things.
-    catppuccin.url = "github:catppuccin/nix";
-
     # 👻
     # TODO: uncomment when Ghostty is released publicly.
     # ghostty.url = "github:ghostty-org/ghostty";
     nix-config-ghostty.url = "github:0xcharly/nix-config-ghostty";
+
+    # Implementation of The Primeagen's sessionizer script in Zellij.
+    zellij-prime-hopper = {
+      url = "github:0xcharly/zellij-prime-hopper";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-darwin.follows = "nixpkgs-darwin";
+      inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
+    };
+
+    # Catppuccin all the things.
+    catppuccin.url = "github:catppuccin/nix";
   };
 
   nixConfig = {

@@ -12,8 +12,12 @@
 
   enable = isLinux && compositor == "wayland";
 in {
-  programs.rofi = lib.mkIf enable {
-    package = pkgs.rofi-wayland;
+  programs = lib.mkIf enable {
+    rofi.package = pkgs.rofi-wayland;
+    swaylock = {
+      enable = true;
+      catppuccin.enable = true;
+    };
   };
 
   home.packages = lib.optionals enable (with pkgs; [
@@ -35,6 +39,7 @@ in {
   wayland.windowManager = rec {
     sway = {
       inherit enable;
+      catppuccin.enable = true;
       config = let
         fonts = {
           names = ["Iosevka Term Curly" "FontAwesome6Free"];
@@ -45,10 +50,29 @@ in {
         modifier = "Mod4";
         terminal = lib.getExe pkgs.ghostty;
         defaultWorkspace = "workspace 3";
+        assigns = {
+          "0" = [{class = "^Firefox$";}];
+          "1" = [{class = "^Chromium$";}];
+        };
         startup = [
-          {command = "swaymsg 'workspace 1; exec firefox'";}
-          {command = "swaymsg 'workspace 2; exec chromium'";}
+          {command = lib.getExe args.config.programs.firefox.finalPackage;}
+          {command = lib.getExe args.config.programs.chromium.package;}
           {command = sway.config.terminal;}
+        ];
+        # floating.criteria = [
+        #   {
+        #     app_id = "firefox";
+        #     title = "^Picture-in-Picture$";
+        #   }
+        # ];
+        window.commands = [
+          {
+            command = "floating enable, sticky enable";
+            criteria = {
+              app_id = "firefox";
+              title = "^Picture-in-Picture$";
+            };
+          }
         ];
         keybindings = {
           "${sway.config.modifier}+Return" = "exec ${sway.config.terminal}";

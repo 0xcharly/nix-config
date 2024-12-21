@@ -16,6 +16,10 @@
   codeDirectory = homeDirectory + "/code";
 in {
   programs.bash.enable = true;
+  programs.btop = {
+    enable = true;
+    catppuccin.enable = true;
+  };
   programs.htop.enable = true;
 
   # `cat` replacement.

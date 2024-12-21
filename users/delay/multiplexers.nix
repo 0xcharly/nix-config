@@ -12,14 +12,9 @@
   homeDirectory = config.modules.system.users.delay.home;
   codeDirectory = homeDirectory + "/code";
 in {
-  home.packages =
-    lib.optionals (switcherApp == "zellij") [
-      # TODO: remove once injected properly.
-      pkgs.zellij-select-repository
-    ]
-    ++ lib.optionals (switcherApp == "tmux") [
-      pkgs.open-local-repository-fish
-    ];
+  home.packages = lib.optionals (switcherApp == "tmux") [
+    pkgs.open-local-repository-fish
+  ];
 
   programs.tmux = {
     enable = true;
@@ -54,8 +49,8 @@ in {
       # https://zellij.dev/documentation/session-resurrection
       session_serialization = false;
       plugins = {
-        pathfinder._props = {
-          location = "file:${lib.getExe pkgs.zellij-switch-repository}";
+        primehopper._props = {
+          location = "file:${lib.getExe pkgs.zellij-prime-hopper}";
         };
       };
 
@@ -212,7 +207,7 @@ in {
         shared = {
           "bind \"Ctrl b\"" = {"SwitchToMode \"tmux\"" = {};};
           "bind \"Ctrl f\"" = lib.mkIf (switcherApp == "zellij") {
-            "MessagePlugin \"pathfinder\"" = {
+            "MessagePlugin \"primehopper\"" = {
               launch_new = true; # Always launch a new instance. This guarantees that CWD is correctly updated.
               skip_cache = false; # Don't skip compilation cache.
               floating = true; # Always float the plugin window.
@@ -228,18 +223,18 @@ in {
 
   programs.fish = {
     interactiveShellInit = lib.optionalString (switcherApp == "zellij") ''
-      bind           \cf '__zellij_pathfinder'
-      bind -M insert \cf '__zellij_pathfinder'
+      bind           \cf '__zellij_primehopper'
+      bind -M insert \cf '__zellij_primehopper'
     '';
 
-    functions.__zellij_pathfinder = let
-      launch_pathfinder = pkgs.writeTextFile {
-        name = "launch-pathfinder.kdl";
+    functions.__zellij_primehopper = let
+      launch_primehopper = pkgs.writeTextFile {
+        name = "launch-primehopper.kdl";
         text = ''
           layout {
             floating_panes {
               pane {
-                plugin location="pathfinder" {
+                plugin location="primehopper" {
                   cwd "${codeDirectory}"
                   startup_message_name "scan_repository_root"
                 }
@@ -250,7 +245,7 @@ in {
       };
     in ''
       if test -z $ZELLIJ
-        command zellij --layout ${launch_pathfinder} options --default-cwd ${codeDirectory}
+        command zellij --layout ${launch_primehopper} options --default-cwd ${codeDirectory}
       end
     '';
   };
