@@ -51,8 +51,9 @@ in {
         terminal = lib.getExe pkgs.ghostty;
         defaultWorkspace = "workspace 3";
         assigns = {
-          "0" = [{class = "^Firefox$";}];
-          "1" = [{class = "^Chromium$";}];
+          "1" = [{app_id = "^firefox$";}];
+          "2" = [{app_id = "^chromium-browser$";}];
+          "5" = [{class = "^1Password$";}];
         };
         startup = [
           {command = lib.getExe args.config.programs.firefox.finalPackage;}
@@ -67,7 +68,7 @@ in {
         # ];
         window.commands = [
           {
-            command = "floating enable, sticky enable";
+            command = "floating enable, resize set 512 288, move absolute position 2555 30, sticky enable, border pixel 1";
             criteria = {
               app_id = "firefox";
               title = "^Picture-in-Picture$";
@@ -123,6 +124,8 @@ in {
         export GDK_DPI_SCALE=1.25
         export MOZ_ENABLE_WAYLAND=1
         export _JAVA_AWT_WM_NONREPARENTING=1
+        export XCURSOR="Catppuccin-Mocha-Dark-Cursors";
+        export XCURSOR_SIZE=64;
       '';
       wrapperFeatures = {
         base = true;
@@ -134,12 +137,10 @@ in {
 
   # Make cursor not tiny on HiDPI screens.
   home.pointerCursor = lib.mkIf enable {
-    name = "Vanilla-DMZ";
-    package = pkgs.vanilla-dmz;
+    name = "catppuccin-mocha-dark-cursors";
+    package = pkgs.catppuccin-cursors.mochaDark;
     size = 256;
-    x11 = {
-      enable = true;
-      defaultCursor = "Vanilla-DMZ";
-    };
+    gtk.enable = true;
+    x11.enable = true;
   };
 }

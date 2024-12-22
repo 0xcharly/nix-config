@@ -7,6 +7,7 @@
 }: {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
+    ./1password.nix
     ./fs.nix
     ./rgb.nix
   ];

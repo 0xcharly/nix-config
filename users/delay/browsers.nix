@@ -1,14 +1,20 @@
-{pkgs, ...} @ args: let
+{
+  pkgs,
+  lib,
+  ...
+} @ args: let
   config =
     if args ? osConfig
     then args.osConfig
     else args.config;
 
   enable = pkgs.stdenv.isLinux && !config.modules.usrenv.isHeadless;
+  isWayland = config.modules.usrenv.compositor == "wayland";
 in {
   programs.chromium = {
     inherit enable;
     package = pkgs.ungoogled-chromium;
+    commandLineArgs = lib.optionals isWayland ["--ozone-platform-hint=auto"];
     dictionaries = with pkgs; [
       hunspellDictsChromium.en_US
       hunspellDictsChromium.fr_FR
@@ -141,6 +147,9 @@ in {
 
       search = {
         default = "Kagi Search";
+        # Workaround to Firefox replacing `search.json.mozlz4` symlink.
+        # https://github.com/nix-community/home-manager/issues/3698
+        force = true;
         engines = {
           "Kagi Search" = {
             urls = [
@@ -188,6 +197,14 @@ in {
             updateInterval = 7 * 24 * 60 * 60 * 1000; # Weekly
             definedAliases = ["cs"];
           };
+
+          # Hide the rest, we don't need it.
+          "Google".metaData.hidden = true;
+          "Amazon.com".metaData.hidden = true;
+          "Amazon.co.uk".metaData.hidden = true;
+          "Bing".metaData.hidden = true;
+          "eBay".metaData.hidden = true;
+          "DuckDuckGo".metaData.hidden = true;
         };
       };
 

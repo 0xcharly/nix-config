@@ -46,6 +46,10 @@ Xft.lcdfilter: lcddefault
 *color7: #BAC2DE
 *color15: #A6ADC8
 
+! CURSOR
+!------------------------------------------------
+Xcursor.theme: Catppuccin-Mocha-Dark-Cursors
+
 ! URXVT
 !----------------------------------------------------------------------
 ! Colors
