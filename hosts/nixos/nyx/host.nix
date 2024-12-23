@@ -8,8 +8,10 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     ./1password.nix
+    ./age.nix
     ./fs.nix
     ./rgb.nix
+    ./sops.nix
   ];
 
   # See comment in modules/nixos/module.nix.

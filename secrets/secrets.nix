@@ -4,5 +4,6 @@ let
   inherit (key) mkTrustedPublicKeys;
   inherit (key) servers workstations;
 in {
-  "service/github-auth-token".publicKeys = mkTrustedPublicKeys (workstations ++ servers);
+  "service/cachix.dhall.age".publicKeys = mkTrustedPublicKeys (workstations ++ servers);
+  "service/nix-access-tokens.conf.age".publicKeys = mkTrustedPublicKeys (workstations ++ servers);
 }

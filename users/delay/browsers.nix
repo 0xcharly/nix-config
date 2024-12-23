@@ -1,20 +1,14 @@
-{
-  pkgs,
-  lib,
-  ...
-} @ args: let
+{pkgs, ...} @ args: let
   config =
     if args ? osConfig
     then args.osConfig
     else args.config;
 
   enable = pkgs.stdenv.isLinux && !config.modules.usrenv.isHeadless;
-  isWayland = config.modules.usrenv.compositor == "wayland";
 in {
   programs.chromium = {
     inherit enable;
     package = pkgs.ungoogled-chromium;
-    commandLineArgs = lib.optionals isWayland ["--ozone-platform-hint=auto"];
     dictionaries = with pkgs; [
       hunspellDictsChromium.en_US
       hunspellDictsChromium.fr_FR

@@ -1,13 +1,12 @@
 let
   users = {
-    delay = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB/bLz52u0dTFYTfJelVbXbU+VK7H4OXgre/8Mgx1+cq";
+    delay = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDCEnfq7QnNiGdyimKkEgEYuwT1xx0God9raxJ3Rimty";
   };
 
   machines = {
-    linode = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE/xP/0LQP88FKB3cQKuMvHCj53UiAMnV3rZFQiMsLkV";
-    mbp = "";
-    skullkid = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICT2Px+IB0pL69ctFv1SesgFD3gfTHw9SibG5FpITj9u";
-    studio = "";
+    linode = ""; # TODO: udpate after deploying the VM.
+    nyx = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJmofQEhKZ7TOhqDMBwBr/p7ffOq2caH43ea1w/AsKoS";
+    skullkid = ""; # TODO: udpate after deploying the NAS.
   };
 in {
   # Augment the list passed as parameter with the user `delay`'s public key.
@@ -16,6 +15,6 @@ in {
   mkTrustedPublicKeys = keys: keys ++ [users.delay];
 
   # Collections of hosts by role.
-  workstations = with machines; [mbp studio];
+  workstations = with machines; [nyx];
   servers = with machines; [linode skullkid];
 }

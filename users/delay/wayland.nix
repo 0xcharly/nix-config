@@ -13,6 +13,11 @@
   enable = isLinux && compositor == "wayland";
 in {
   programs = lib.mkIf enable {
+    chromium.commandLineArgs = [
+      "--enable-features=UseOzonePlatform"
+      "--ozone-platform-hint=auto"
+      "--ozone-platform=wayland"
+    ];
     rofi.package = pkgs.rofi-wayland;
     swaylock = {
       enable = true;
@@ -34,6 +39,12 @@ in {
     QT_QPA_PLATFORM = "wayland";
     SDL_VIDEODRIVER = "wayland";
     XDG_SESSION_TYPE = "wayland";
+  };
+
+  xdg.configFile = lib.mkIf enable {
+    "electron-flags.conf".text = ''
+      --enable-features=UseOzonePlatform --ozone-platform=wayland
+    '';
   };
 
   wayland.windowManager = rec {
@@ -78,11 +89,11 @@ in {
           # essentially fullscreen'd.
           {
             command = "border pixel 1";
-            criteria = { app_id = "^chromium-browser$"; };
+            criteria = {app_id = "^chromium-browser$";};
           }
           {
             command = "border pixel 1";
-            criteria = { app_id = "^firefox$"; };
+            criteria = {app_id = "^firefox$";};
           }
         ];
         keybindings = {
@@ -108,6 +119,7 @@ in {
           "${sway.config.modifier}+Shift+Down" = "move down";
           "${sway.config.modifier}+Shift+c" = "reload";
           "${sway.config.modifier}+Shift+r" = "restart";
+          "${sway.config.modifier}+Shift+q" = "kill";
         };
         inherit fonts;
         bars = [{inherit fonts;}];
