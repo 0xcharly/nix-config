@@ -74,6 +74,16 @@ in {
               title = "^Picture-in-Picture$";
             };
           }
+          # Remove title bar for browsers (redundant since I have them
+          # essentially fullscreen'd.
+          {
+            command = "border pixel 1";
+            criteria = { app_id = "^chromium-browser$"; };
+          }
+          {
+            command = "border pixel 1";
+            criteria = { app_id = "^firefox$"; };
+          }
         ];
         keybindings = {
           "${sway.config.modifier}+Return" = "exec ${sway.config.terminal}";
@@ -119,13 +129,13 @@ in {
         export XDG_CURRENT_DESKTOP=sway
         export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
         export QT_AUTO_SCREEN_SCALE_FACTOR=0
-        export QT_SCALE_FACTOR=1.25
-        export GDK_SCALE=1.25
-        export GDK_DPI_SCALE=1.25
+        export QT_SCALE_FACTOR=1
+        export GDK_SCALE=1
+        export GDK_DPI_SCALE=1
         export MOZ_ENABLE_WAYLAND=1
         export _JAVA_AWT_WM_NONREPARENTING=1
         export XCURSOR="Catppuccin-Mocha-Dark-Cursors";
-        export XCURSOR_SIZE=64;
+        export XCURSOR_SIZE=24;
       '';
       wrapperFeatures = {
         base = true;

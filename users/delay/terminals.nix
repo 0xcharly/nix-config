@@ -47,7 +47,7 @@ in {
             # };
             # custom-shader-animation = false;
             theme = "catppuccin-mocha";
-            background = "#1d1f21";
+            background = "#1d1f21"; # Gunmetal background (darker than Catppuccin Mocha)
             selection-background = "#212a37";
             title = " ";
             cursor-style = "block";

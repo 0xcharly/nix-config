@@ -40,13 +40,15 @@ in {
           forwardAgent = true;
         };
       }
-      // (lib.optionalAttrs (isDarwin && !isCorpManaged) {
+      // (lib.optionalAttrs (!isHeadless && !isCorpManaged) {
         # Home storage host.
-        "skullkid.local" = {
+        "skullkid" = {
           hostname = "192.168.86.43";
           extraOptions = _1passwordAgentOrKey "skullkid";
           forwardAgent = true;
         };
+      })
+      // (lib.optionalAttrs (isDarwin && !isCorpManaged) {
         # VMWare hosts.
         "192.168.*" = {
           extraOptions = _1passwordAgentOrKey "vm";
