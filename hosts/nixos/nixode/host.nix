@@ -14,7 +14,7 @@
   networking.usePredictableInterfaceNames = false;
 
   # Interface is this on Linode VMs.
-  networking.interfaces.eth0.useDHCP = true;
+  networking.interfaces.enp0s5.useDHCP = true;
 
   # Reenable firewall on public machines.
   networking.firewall.enable = true;

@@ -43,6 +43,7 @@
                     mountOptions = ["compress=zstd"];
                   };
                   "/nix" = {
+                    mountPoint = "/nix";
                     mountOptions = ["compress=zstd" "noatime"];
                   };
                 };
