@@ -48,36 +48,31 @@ in {
 
       # Check about:config for options.
       Preferences = let
-        lock-false = {
-          Value = false;
-          Status = "locked";
-        };
-        lock-true = {
-          Value = true;
+        lock = value: {
+          Value = value;
           Status = "locked";
         };
       in {
-        "browser.contentblocking.category" = {
-          Value = "strict";
-          Status = "locked";
-        };
-        "extensions.pocket.enabled" = lock-false;
-        "extensions.screenshots.disabled" = lock-true;
-        "browser.topsites.contile.enabled" = lock-false;
-        "browser.formfill.enable" = lock-false;
-        "browser.search.suggest.enabled" = lock-false;
-        "browser.search.suggest.enabled.private" = lock-false;
-        "browser.urlbar.suggest.searches" = lock-false;
-        "browser.urlbar.showSearchSuggestionsFirst" = lock-false;
-        "browser.newtabpage.activity-stream.feeds.section.topstories" = lock-false;
-        "browser.newtabpage.activity-stream.feeds.snippets" = lock-false;
-        "browser.newtabpage.activity-stream.section.highlights.includePocket" = lock-false;
-        "browser.newtabpage.activity-stream.section.highlights.includeBookmarks" = lock-false;
-        "browser.newtabpage.activity-stream.section.highlights.includeDownloads" = lock-false;
-        "browser.newtabpage.activity-stream.section.highlights.includeVisited" = lock-false;
-        "browser.newtabpage.activity-stream.showSponsored" = lock-false;
-        "browser.newtabpage.activity-stream.system.showSponsored" = lock-false;
-        "browser.newtabpage.activity-stream.showSponsoredTopSites" = lock-false;
+        "browser.contentblocking.category" = lock "strict";
+        "browser.formfill.enable" = lock false;
+        "browser.newtabpage.activity-stream.feeds.section.topstories" = lock false;
+        "browser.newtabpage.activity-stream.feeds.snippets" = lock false;
+        "browser.newtabpage.activity-stream.section.highlights.includeBookmarks" = lock false;
+        "browser.newtabpage.activity-stream.section.highlights.includeDownloads" = lock false;
+        "browser.newtabpage.activity-stream.section.highlights.includePocket" = lock false;
+        "browser.newtabpage.activity-stream.section.highlights.includeVisited" = lock false;
+        "browser.newtabpage.activity-stream.showSponsored" = lock false;
+        "browser.newtabpage.activity-stream.showSponsoredTopSites" = lock false;
+        "browser.newtabpage.activity-stream.system.showSponsored" = lock false;
+        "browser.search.suggest.enabled" = lock false;
+        "browser.search.suggest.enabled.private" = lock false;
+        "browser.startup.page" = lock 3;
+        "browser.topsites.contile.enabled" = lock false;
+        "browser.urlbar.showSearchSuggestionsFirst" = lock false;
+        "browser.urlbar.suggest.searches" = lock false;
+        "extensions.pocket.enabled" = lock false;
+        "extensions.screenshots.disabled" = lock true;
+        "extensions.update.enabled" = lock false;
       };
     };
     profiles.default = {
@@ -133,8 +128,16 @@ in {
         cookie-autodelete
         facebook-container
         multi-account-containers
+        # NOTE: The 1Password database is regularly corrupted on restart.
+        # The assumption is that the add-on is auto-updated when firefox is
+        # running and then overwrote by subsequent `nixos-rebuild switch`.
+        # Add-ons auto-update was disabled for this reason. This may cause other
+        # issues in the future where the browser extension version gets out of
+        # sync with the desktop client.
+        # The alternative would be to manually install this extension.
         onepassword-password-manager
         privacy-badger
+        proton-pass
         simple-translate
         ublock-origin
       ];

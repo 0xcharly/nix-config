@@ -18,7 +18,11 @@ in {
       "--ozone-platform-hint=auto"
       "--ozone-platform=wayland"
     ];
-    rofi.package = pkgs.rofi-wayland;
+    rofi = {
+      enable = true;
+      package = pkgs.rofi-wayland;
+      catppuccin.enable = true;
+    };
     swaylock = {
       enable = true;
       catppuccin.enable = true;
@@ -39,121 +43,141 @@ in {
     QT_QPA_PLATFORM = "wayland";
     SDL_VIDEODRIVER = "wayland";
     XDG_SESSION_TYPE = "wayland";
+
+    XDG_CURRENT_DESKTOP = "Hyprland";
+    XDG_SESSION_DESKTOP = "Hyprland";
+    QT_WAYLAND_DISABLE_WINDOWDECORATION = 1;
+    QT_AUTO_SCREEN_SCALE_FACTOR = 0;
+    QT_SCALE_FACTOR = 1;
+    GDK_SCALE = 1;
+    GDK_DPI_SCALE = 1;
+    MOZ_ENABLE_WAYLAND = 1;
+    _JAVA_AWT_WM_NONREPARENTING = 1;
+    XCURSOR = "Catppuccin-Mocha-Dark-Cursors";
+    XCURSOR_SIZE = 24;
   };
 
   xdg.configFile = lib.mkIf enable {
     "electron-flags.conf".text = ''
-      --enable-features=UseOzonePlatform --ozone-platform=wayland
+      --enable-features=UseOzonePlatform --ozone-platform-hint=auto --ozone-platform=wayland
     '';
   };
 
-  wayland.windowManager = rec {
-    sway = {
-      inherit enable;
-      catppuccin.enable = true;
-      config = let
-        fonts = {
-          names = ["Iosevka Term Curly" "FontAwesome6Free"];
-          style = "Regular";
-          size = 10.0;
-        };
-      in {
-        modifier = "Mod4";
-        terminal = lib.getExe pkgs.ghostty;
-        defaultWorkspace = "workspace 3";
-        assigns = {
-          "1" = [{app_id = "^firefox$";}];
-          "2" = [{app_id = "^chromium-browser$";}];
-          "5" = [{class = "^1Password$";}];
-        };
-        startup = [
-          {command = lib.getExe args.config.programs.firefox.finalPackage;}
-          {command = lib.getExe args.config.programs.chromium.package;}
-          {command = sway.config.terminal;}
-        ];
-        # floating.criteria = [
-        #   {
-        #     app_id = "firefox";
-        #     title = "^Picture-in-Picture$";
-        #   }
-        # ];
-        window.commands = [
-          {
-            command = "floating enable, resize set 512 288, move absolute position 2555 30, sticky enable, border pixel 1";
-            criteria = {
-              app_id = "firefox";
-              title = "^Picture-in-Picture$";
-            };
-          }
-          # Remove title bar for browsers (redundant since I have them
-          # essentially fullscreen'd.
-          {
-            command = "border pixel 1";
-            criteria = {app_id = "^chromium-browser$";};
-          }
-          {
-            command = "border pixel 1";
-            criteria = {app_id = "^firefox$";};
-          }
-        ];
-        keybindings = {
-          "${sway.config.modifier}+Return" = "exec ${sway.config.terminal}";
-          "${sway.config.modifier}+Space" = "exec ${lib.getExe pkgs.rofi} -show run";
-          "Mod1+1" = "workspace 1";
-          "Mod1+2" = "workspace 2";
-          "Mod1+3" = "workspace 3";
-          "Mod1+4" = "workspace 4";
-          "Mod1+5" = "workspace 5";
-          "Mod1+Shift+1" = "move container to workspace 1";
-          "Mod1+Shift+2" = "move container to workspace 2";
-          "Mod1+Shift+3" = "move container to workspace 3";
-          "Mod1+Shift+4" = "move container to workspace 4";
-          "Mod1+Shift+5" = "move container to workspace 5";
-          "${sway.config.modifier}+Left" = "focus left";
-          "${sway.config.modifier}+Right" = "focus right";
-          "${sway.config.modifier}+Up" = "focus up";
-          "${sway.config.modifier}+Down" = "focus down";
-          "${sway.config.modifier}+Shift+Left" = "move left";
-          "${sway.config.modifier}+Shift+Right" = "move right";
-          "${sway.config.modifier}+Shift+Up" = "move up";
-          "${sway.config.modifier}+Shift+Down" = "move down";
-          "${sway.config.modifier}+Shift+c" = "reload";
-          "${sway.config.modifier}+Shift+r" = "restart";
-          "${sway.config.modifier}+Shift+q" = "kill";
-        };
-        inherit fonts;
-        bars = [{inherit fonts;}];
-        input = {
-          "type:keyboard" = {
-            repeat_delay = "200";
-            repeat_rate = "60";
-          };
-        };
-        output = {
-          "DP-3" = {
-            mode = "3840x2160@239.991Hz";
-            scale = "1.25";
-          };
-        };
+  wayland.windowManager.hyprland = {
+    inherit enable;
+    catppuccin.enable = true;
+    systemd.variables = ["--all"];
+    settings = {
+      # Open apps on startup.
+      exec-once = [
+        "systemctl --user enable --now hyprpaper.service"
+        "[workspace 1] ${lib.getExe args.config.programs.firefox.finalPackage}"
+        "[workspace 2] ${lib.getExe args.config.programs.chromium.package}"
+        "[workspace 3] ${lib.getExe pkgs.ghostty}"
+      ];
+
+      # Monitor scaling.
+      monitor = "DP-3, 3840x2160@239.991Hz, 0x0, 1.25";
+      # Properly scale X11 applications (e.g. 1Password).
+      # Unscale XWayland
+      xwayland.force_zero_scaling = true;
+      # Toolkit-specific scale
+      env = [
+        "GDK_SCALE,1.25"
+        "GDK_DPI_SCALE,1.25"
+        "XCURSOR_SIZE,32"
+      ];
+
+      # Keyboard input setup.
+      input = {
+        kb_options = "ctrl:nocaps";
+        kb_layout = "us";
+        # kb_variant = "intl";
+        repeat_delay = 200;
+        repeat_rate = 60;
       };
-      extraSessionCommands = ''
-        export XDG_SESSION_TYPE=wayland
-        export XDG_CURRENT_DESKTOP=sway
-        export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
-        export QT_AUTO_SCREEN_SCALE_FACTOR=0
-        export QT_SCALE_FACTOR=1
-        export GDK_SCALE=1
-        export GDK_DPI_SCALE=1
-        export MOZ_ENABLE_WAYLAND=1
-        export _JAVA_AWT_WM_NONREPARENTING=1
-        export XCURSOR="Catppuccin-Mocha-Dark-Cursors";
-        export XCURSOR_SIZE=24;
-      '';
-      wrapperFeatures = {
-        base = true;
-        gtk = true;
+      general = {
+        border_size = 2;
+        gaps_in = 4;
+        gaps_out = 8;
+        "col.active_border" = "$red $maroon $peach $yellow $green $teal $sky $sapphire $blue $lavender 45deg";
+        "col.inactive_border" = "$overlay0";
       };
-      xwayland = true;
+      decoration.rounding = 8;
+      bezier = [
+        "user, 0.6, 0.5, 0.1, 1"
+        "user_dim, 0.3, 0.4, 0.6, 0.7"
+      ];
+      animations = {
+        enabled = true;
+        animation = [
+          # https://wiki.hyprland.org/Configuring/Animations/#animation-tree
+          # name, on/off, speed (100ms increments), curve, style
+          # borderangle loop requires Hyprland to push new frame at the
+          # monitor's refresh rate, which puts stress on CPU/GPU. Don't do
+          # this on a laptop.
+          "border,      1,    1,   user"
+          "borderangle, 1,    500, user,     loop"
+          "fade,        1,    1,   user"
+          "fadeDim,     1,    1,   user_dim"
+          "layers,      1,    1,   user,     popin 70%"
+          "windows,     1,    1,   user,     popin 70%"
+          "workspaces,  1,    2,   user,     slidefade 10%"
+        ];
+      };
+      # Keyboard bindings.
+      bind = [
+        "SUPER,       Return, exec, ${lib.getExe pkgs.ghostty}"
+        "SUPER,       Space,  exec, ${lib.getExe args.config.programs.rofi.package} -show drun"
+        "SUPER SHIFT, X,      killactive, "
+        "SUPER SHIFT, Q,      exit, "
+        "SUPER,       V,      togglefloating, "
+        "SUPER CTRL,  L,      exec, ${lib.getExe args.config.programs.swaylock.package}"
+
+        "SUPER,       left,   movefocus, l"
+        "SUPER,       right,  movefocus, r"
+        "SUPER,       up,     movefocus, u"
+        "SUPER,       down,   movefocus, d"
+        "ALT,         1,      workspace, 1"
+        "ALT,         2,      workspace, 2"
+        "ALT,         3,      workspace, 3"
+        "ALT,         4,      workspace, 4"
+        "ALT,         5,      workspace, 5"
+        "ALT SHIFT,   1,      movetoworkspace, 1"
+        "ALT SHIFT,   2,      movetoworkspace, 2"
+        "ALT SHIFT,   3,      movetoworkspace, 3"
+        "ALT SHIFT,   4,      movetoworkspace, 4"
+        "ALT SHIFT,   5,      movetoworkspace, 5"
+      ];
+      # Mouse bindings.
+      bindm = [
+        "SUPER, mouse:272, movewindow" # Left mouse button.
+        "SUPER, mouse:273, resizewindow" # Right mouse button.
+      ];
+      # Window rules.
+      windowrulev2 = [
+        "workspace 1, class:^firefox$"
+        "workspace 2, class:^chromium-browser$"
+        "workspace 5, class:^1Password$"
+        "float, class:^firefox$, title: ^Picture-in-Picture$"
+        "pin, class:^firefox$, title: ^Picture-in-Picture$"
+        "move 2550 10, class:^firefox$, title: ^Picture-in-Picture$"
+        "size 512 288, class:^firefox$, title: ^Picture-in-Picture$"
+      ];
+    };
+  };
+
+  # Wallpaper.
+  services.hyprpaper = lib.mkIf enable {
+    enable = true;
+    settings = let
+      wallpaper = ./wallpapers/anime-room.png;
+      wallpaper_path = toString wallpaper;
+    in {
+      ipc = true;
+      splash = false;
+      preload = [wallpaper_path];
+      wallpaper = [", ${wallpaper_path}"];
     };
   };
 
