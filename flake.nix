@@ -109,6 +109,13 @@
       inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
     };
 
+    hyprland.url = "github:hyprwm/Hyprland?submodules=1&ref=v0.45.2";
+
+    hy3 = {
+      url = "github:outfoxxed/hy3?ref=hl0.45.0";
+      inputs.hyprland.follows = "hyprland";
+    };
+
     # Catppuccin all the things.
     catppuccin.url = "github:catppuccin/nix";
   };
