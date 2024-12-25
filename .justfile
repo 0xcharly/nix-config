@@ -40,6 +40,13 @@ test:
       sudo nixos-rebuild {{ rebuildOptions }} test --flake .
     end
 
+[doc("Run Nix Store garbage collection")]
+[group('nix')]
+[linux]
+gc:
+    nix-collect-garbage --delete-older-than 7d
+    nix-collect-garbage -d
+
 [doc('Update the given flake inputs')]
 [group('nix')]
 update +inputs:
@@ -77,26 +84,6 @@ cache:
       | jq -r '.[].outputs | to_entries[].value' \
       | cachix push 0xcharly-nixos-config
 
-# Generate ~/.config/nix/nix.conf and populate the access token for github.com
-# from 1Password.
-
-[doc('Generate ~/.config/nix/nix.conf')]
-[group('secrets')]
-[macos]
-generate-access-tokens-conf:
-    install -D -m 400 (echo "extra-access-tokens = github.com=$( \
-        op read 'op://Private/GitHub Fine-grained token for Nix/password' \
-    )" | psub) $HOME/.config/nix/access-tokens.conf
-
-[doc('Copy secrets to local host')]
-[group('secrets')]
-[macos]
-copy-secrets:
-    #! /usr/bin/env fish
-    for key in bitbucket github git-commit-signing linode skullkid vm
-      install -D -m 400 (sekrets read-ssh-key -k $key -o - | psub) $HOME/.ssh/$key
-    end
-
 ssh_user := `whoami`
 ssh_port := '22'
 ssh_options := '-o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
@@ -125,36 +112,6 @@ bootstrap-vm addr:
       | jq --raw-output '.[]' | while read --list host
       ssh-keygen -R $host 2> /dev/null
     end
-
-[doc('Copy ~/.config/nix/nix.conf to remote host')]
-[group('secrets')]
-[macos]
-ssh-generate-access-tokens-conf host:
-    echo "extra-access-tokens = github.com=$( \
-        op read 'op://Private/GitHub Fine-grained token for Nix/password' \
-    )" | ssh {{ ssh_options }} -p{{ ssh_port }} -l{{ ssh_user }} {{ host }} \
-         "bash -c \"install -D -m 400 <(dd) \$HOME/.config/nix/access-tokens.conf\""
-
-[doc('Copy secrets to remote host')]
-[group('secrets')]
-[macos]
-ssh-copy-secrets host:
-    #! /usr/bin/env fish
-
-    # Expects the guest OS to be fully installed.
-    for key in github git-commit-signing
-      sekrets read-ssh-key -k $key -o - \
-          | ssh {{ ssh_options }} -p{{ ssh_port }} -l{{ ssh_user }} {{ host }} \
-          "bash -c \"install -D -m 400 <(dd) \$HOME/.ssh/$key\""
-    end
-
-[doc('Copy Cachix authentication token to remote host')]
-[group('secrets')]
-[macos]
-ssh-init-cachix host:
-    op read 'op://Private/Cachix Auth Tokens/token' \
-        | ssh {{ ssh_options }} -p{{ ssh_port }} -l{{ ssh_user }} {{ host }} \
-        "nix-shell -p cachix --run 'cachix authtoken --stdin'"
 
 [doc("Copy terminal's terminfo to a remote machine")]
 [group('remotes')]

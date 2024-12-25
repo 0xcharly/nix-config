@@ -90,6 +90,15 @@
     # Pure and reproducible packaging of binary distributed rust toolchains.
     rust-overlay.url = "github:oxalica/rust-overlay";
 
+    # Secrets management.
+    nix-config-secrets = {
+      url = "github:0xcharly/nix-config-secrets";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-darwin.follows = "nixpkgs-darwin";
+      inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
+      inputs.home-manager.follows = "home-manager";
+    };
+
     # Neovim.
     nix-config-nvim.url = "github:0xcharly/nix-config-nvim";
 
@@ -109,6 +118,7 @@
       inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
     };
 
+    # Hyprland and plugins.
     hyprland.url = "github:hyprwm/Hyprland?submodules=1&ref=v0.45.2";
 
     hy3 = {

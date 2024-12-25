@@ -8,7 +8,6 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     ./1password.nix
-    ./age.nix
     ./fs.nix
     ./hyprland.nix
     # This is currently doing nothing since the 24.11 version of OpenRGB (<1.0)
@@ -17,7 +16,7 @@
     # TODO: consider re-enabling this service in 25.05 or later when OpenRGB is
     # supporting more hardware.
     # ./rgb.nix
-    ./sops.nix
+    ./secrets.nix
   ];
 
   # See comment in modules/nixos/module.nix.
