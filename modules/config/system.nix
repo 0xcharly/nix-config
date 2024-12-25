@@ -8,7 +8,7 @@
   inherit (lib.lists) optionals;
   inherit (lib.modules) mkMerge;
   inherit (lib.options) mkOption;
-  inherit (lib.types) attrsOf enum int listOf str;
+  inherit (lib.types) attrsOf bool enum int listOf str;
   inherit (pkgs.stdenv) isDarwin;
 
   cfg = config.modules.system;
@@ -38,6 +38,14 @@ in {
       in
         genAttrs ["delay"] mkUser;
       description = "A list of home-manager users on the system.";
+    };
+
+    roles = {
+      workstation = mkOption {
+        type = bool;
+        default = false;
+        description = "True for local workstations.";
+      };
     };
 
     hosts = {

@@ -44,7 +44,7 @@ in {
       # Our own package installed by overlay.
       # It's important to keep shadowing the original `pkgs.nvim` package
       # instead of referring to our custom config via another name to maintain
-      # all related integrations (e.g. MANPAGER) while being able to override it
+      # all related integrations (e.g. EDITOR) while being able to override it
       # at anytime (e.g. in the corp-specific flavor).
       pkgs.nvim
     ]

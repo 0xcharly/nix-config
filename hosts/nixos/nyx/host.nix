@@ -28,6 +28,9 @@
   # Use Zellij for repository management.
   modules.usrenv.switcherApp = "zellij";
 
+  # Roles.
+  modules.system.roles.workstation = true;
+
   # Boot configuration.
   boot.initrd.availableKernelModules = ["ahci" "xhci_pci" "nvme" "usbhid" "sd_mod"];
   boot.initrd.kernelModules = [];

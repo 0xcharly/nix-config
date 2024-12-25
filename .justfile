@@ -83,6 +83,17 @@ cache:
       | jq -r '.[].outputs | to_entries[].value' \
       | cachix push 0xcharly-nixos-config
 
+[doc('Install NixOS on a remove Linode virtual machine')]
+[group('remotes')]
+[linux]
+deploy-linode addr:
+    # Build and deploy the new system to the remote machine!
+    nix run github:nix-community/nixos-anywhere -- --extra-files /tmp/linode_secrets --flake '.#linode' --target-host nixos@{{ addr }}
+    # A host key-pair is regenerated after a successful installation.
+    # Remove any existing entry for given IP in ~/.ssh/known_hosts.
+    ssh-keygen -R {{ addr }} 2> /dev/null
+    @just ssh-copy-terminfo {{ addr }}
+
 ssh_user := `whoami`
 ssh_port := '22'
 ssh_options := '-o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
@@ -114,6 +125,5 @@ bootstrap-vm addr:
 
 [doc("Copy terminal's terminfo to a remote machine")]
 [group('remotes')]
-[macos]
 ssh-copy-terminfo addr:
     infocmp -x | ssh {{ ssh_options }} -p{{ ssh_port }} -l{{ ssh_user }} {{ addr }} -- tic -x -
