@@ -45,7 +45,6 @@ test:
 [linux]
 gc:
     nix-collect-garbage --delete-older-than 7d
-    nix-collect-garbage -d
 
 [doc('Update the given flake inputs')]
 [group('nix')]
