@@ -35,11 +35,12 @@
               content = {
                 type = "btrfs";
                 subvolumes = {
-                  "/" = {
+                  "NIXOS" = {};
+                  "NIXOS/rootfs" = {
                     mountpoint = "/";
                     mountOptions = ["compress=zstd"];
                   };
-                  "/nix" = {
+                  "NIXOS/nix" = {
                     mountpoint = "/nix";
                     mountOptions = ["compress=zstd" "noatime"];
                   };
