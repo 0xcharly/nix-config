@@ -87,12 +87,7 @@ cache:
 [group('remotes')]
 [linux]
 deploy-linode addr:
-    # Build and deploy the new system to the remote machine!
-    nix run github:nix-community/nixos-anywhere -- --extra-files /tmp/linode_secrets --flake '.#linode' --target-host nixos@{{ addr }}
-    # A host key-pair is regenerated after a successful installation.
-    # Remove any existing entry for given IP in ~/.ssh/known_hosts.
-    ssh-keygen -R {{ addr }} 2> /dev/null
-    @just ssh-copy-terminfo {{ addr }}
+    bash {{ justfile_directory() }}/bin/deploy-linode.sh
 
 ssh_user := `whoami`
 ssh_port := '22'
@@ -110,9 +105,9 @@ bootstrap-vm addr:
 
     # Copy over the relevant bits of the config under /nix-config, and execute
     # the bootstrap script remotely.
-    tar -C {{ justfile_directory() }} -czf - parts/ hosts/ modules/ users/ flake.lock flake.nix bootstrap-vm.sh \
+    tar -C {{ justfile_directory() }} -czf - bin/ parts/ hosts/ modules/ users/ flake.lock flake.nix \
       | ssh {{ pre_bootstrap_ssh_options }} -p{{ ssh_port }} -lroot {{ addr }} \
-      'mkdir -p /nix-config && tar -C /nix-config -xmzf - && nix-shell -p git --run "bash /nix-config/bootstrap-vm.sh {{ vm_name }}"'
+      'mkdir -p /nix-config && tar -C /nix-config -xmzf - && nix-shell -p git --run "bash /nix-config/bin/bootstrap-vm.sh {{ vm_name }}"'
 
     # A host key-pair is regenerated after a successful installation.
     # Remove any existing entry for given IP in ~/.ssh/known_hosts.
