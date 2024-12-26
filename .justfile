@@ -86,7 +86,7 @@ cache:
 [group('remotes')]
 [linux]
 deploy-linode addr:
-    bash {{ justfile_directory() }}/bin/deploy-linode.sh
+    bash {{ justfile_directory() }}/bin/deploy-linode.sh {{ addr }}
 
 ssh_user := `whoami`
 ssh_port := '22'

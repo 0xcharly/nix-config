@@ -6,9 +6,17 @@
       device = "/dev/sda";
       type = "disk";
       content = {
-        type = "filesystem";
-        format = "ext4";
-        mountpoint = "/";
+        type = "btrfs";
+        subvolumes = {
+          "/" = {
+            mountpoint = "/";
+            mountOptions = ["compress=zstd"];
+          };
+          "/nix" = {
+            mountpoint = "/nix";
+            mountOptions = ["compress=zstd" "noatime"];
+          };
+        };
       };
     };
     sdb = {

@@ -56,7 +56,12 @@
   # No graphical environment.
   modules.usrenv.compositor = "headless";
 
+  # Use Zellij for repository management.
+  modules.usrenv.switcherApp = "zellij";
+
   networking = {
+    hostName = "linode";
+
     enableIPv6 = true;
     tempAddresses = "disabled";
 
@@ -118,7 +123,7 @@
 
         # Configure GRUB.
         # https://www.linode.com/docs/guides/install-nixos-on-linode/#configure-grub
-        device = "nodev";
+        device = "/dev/sda";
 
         # GRUB will complain about blocklists when trying to install grub on a
         # partition-less disk. This tells it to ignore the warning and carry on.
