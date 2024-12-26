@@ -26,8 +26,8 @@ trap cleanup EXIT
 install -d -m755 "$temp/etc/ssh"
 
 # Decrypt your private key from the password store and copy it to the temporary directory
-op read "op://Private/Linode ssh_host_ed25519_key/private key" > "$temp/etc/ssh/ssh_host_ed25519_key"
-op read "op://Private/Linode ssh_host_rsa_key/private key" > "$temp/etc/ssh/ssh_host_rsa_key"
+op read "op://Private/Linode ssh_host_ed25519_key/private key" >"$temp/etc/ssh/ssh_host_ed25519_key"
+op read "op://Private/Linode ssh_host_rsa_key/private key" >"$temp/etc/ssh/ssh_host_rsa_key"
 
 # Set the correct permissions so sshd will accept the key
 chmod 600 "$temp/etc/ssh/ssh_host_ed25519_key"
@@ -40,7 +40,7 @@ nix run github:nix-community/nixos-anywhere -- \
   --target-host "nixos@$REMOTE_ADDR"
 
 # Delete the temporary host keys created by the installation media.
-ssh-keygen -R "$REMOTE_ADDR" 2> /dev/null
+ssh-keygen -R "$REMOTE_ADDR" 2>/dev/null
 
 # Completion notice.
 echo -e "System installation \033[32;1mcomplete\033[0m. System rebooting."

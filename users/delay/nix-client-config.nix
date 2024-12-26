@@ -1,4 +1,9 @@
-{config, pkgs, lib, ...}: let
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
   isNixOS = pkgs.stdenv.isLinux && !(config.targets.genericLinux.enable or false);
 in {
   # Use a ! prefix to skip validation at build time (which fails since the file
