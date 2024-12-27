@@ -25,7 +25,7 @@
 #      - Helpers: distro and auto network helpers = off
 #      - Leave others on their defaults
 #    - Boot
-#      - Kernel: GRUB 2
+#      - Kernel: Direct Disk
 #      - /dev/sda -> NixOS
 #      - /dev/sdb -> Swap
 #      - Root device: /dev/sda
@@ -38,9 +38,11 @@
 # 6. Get public IP address (ipconfig from the machine or from Linode UI).
 #
 # 7. Remote install (from a x86_64-linux machine):
-#      nix run github:nix-community/nixos-anywhere -- --flake '.#linode' --target-host nixos@<ADDR>
+#      just deploy-linode <ADDR>
 #
 # 8. Reboot into "Boot" profile.
+#
+# 9. Resume (and complete) `deploy-linode` script.
 {
   pkgs,
   modulesPath,
@@ -86,7 +88,8 @@
     enable = true;
     openFirewall = true;
     settings = {
-      PermitRootLogin = "no";
+      # PermitRootLogin = pkgs.lib.mkForce "yes"; # TODO: change me (can we pass this dynamically during setup instead?)
+      PermitRootLogin = "no"; # TODO: change me (can we pass this dynamically during setup instead?)
       PasswordAuthentication = false;
     };
   };

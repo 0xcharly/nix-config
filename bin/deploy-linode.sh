@@ -50,8 +50,11 @@ echo -e "\033[33;1mImportant\033[0m: Reboot the system with the correct configur
 echo "Waiting for system reboot to deploy Home Manager for user \033[1m$USER\033[0m."
 read -n1 -rsp $'Press any key when the system is booted to continue or Ctrl+C to exit...\n'
 
+# TODO: temporarily enable root login and add ssh keys (via command line flags?)
+# TODO: change ~delay/.config permissions to delay:users.
+
 # Redeploy the system as user `$USER` to linn in Home Manager managed config.
-nixos-rebuild switch --flake .#linode --target-host "$USER@$REMOTE_ADDR"
+nixos-rebuild switch --flake .#linode --target-host "root@$REMOTE_ADDR"
 
 # Final completion notice.
 echo -e "Home Manager configuration \033[32;1mcomplete\033[0m."
