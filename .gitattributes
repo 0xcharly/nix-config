@@ -1,3 +1,2 @@
-.gitattributes !filter !diff
-secret/** filter=git-crypt diff=git-crypt
+.gitattributes !diff
 flake.lock -diff

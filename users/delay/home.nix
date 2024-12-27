@@ -3,15 +3,8 @@
   lib,
   pkgs,
   ...
-} @ args: let
-  config =
-    if args ? osConfig
-    then args.osConfig
-    else args.config;
-  inherit (config.modules.usrenv) isHeadless;
+}: let
   inherit (pkgs.stdenv) isLinux;
-
-  hasWindowManager = !isHeadless;
 in {
   imports = [
     inputs.catppuccin.homeManagerModules.catppuccin
@@ -48,7 +41,6 @@ in {
       # at anytime (e.g. in the corp-specific flavor).
       pkgs.nvim
     ]
-    ++ lib.optionals hasWindowManager [pkgs.ghostty]
     ++ lib.optionals isLinux [pkgs.valgrind];
 
   home.sessionVariables = rec {

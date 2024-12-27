@@ -1,4 +1,8 @@
-{pkgs, ...} @ args: let
+{
+  pkgs,
+  lib,
+  ...
+} @ args: let
   config =
     if args ? osConfig
     then args.osConfig
@@ -6,12 +10,15 @@
   inherit (pkgs.stdenv) isLinux;
   inherit (config.modules.usrenv) isHeadless;
 
-  enable = isLinux && !isHeadless;
+  isLinuxDesktop = isLinux && !isHeadless;
 in {
-  home.packages = [pkgs.vanilla-dmz];
+  home.packages = lib.mkIf isLinuxDesktop [
+    pkgs.element-desktop
+    pkgs.vanilla-dmz
+  ];
 
-  dconf = {
-    inherit enable;
+  dconf = lib.mkIf isLinuxDesktop {
+    enable = true;
     settings = {
       "org/gnome/desktop/interface" = {
         color-scheme = "prefer-dark";

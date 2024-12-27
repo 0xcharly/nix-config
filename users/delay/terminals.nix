@@ -12,9 +12,14 @@
 
   hasWindowManager = !isHeadless;
 in {
+  home.packages = lib.mkIf hasWindowManager [
+    pkgs.ghostty
+  ];
+
   # Ghostty configuration.
-  xdg.configFile = lib.mkIf hasWindowManager {
-    "ghostty/config".text =
+  xdg = lib.mkIf hasWindowManager {
+    enable = true;
+    configFile."ghostty/config".text =
       lib.generators.toKeyValue {
         listsAsDuplicateKeys = true;
       } ({

@@ -12,6 +12,7 @@
       programs = {
         alejandra.enable = true;
         black.enable = true;
+        fish.enable = true;
         just.enable = true;
         prettier.enable = true;
         rustfmt.enable = true;
@@ -22,6 +23,19 @@
           indent_size = 2; # set to 0 to use tabs
         };
       };
+
+      settings.global.excludes = [
+        "*.glsl"
+        "*.kdl"
+        "*.png"
+        "*.toml"
+        "*/Xresources"
+        "*/tmux.conf"
+        ".env"
+        ".envrc"
+        ".gitattributes"
+        "LICENSE"
+      ];
     };
   };
 }
