@@ -33,6 +33,8 @@ nixos-install $NIX_OPTIONS \
 shutdown --reboot +1
 
 # Completion notice.
+# TODO: remove the notice to copy terminfo in 25.05 when Ghostty's terminfo are
+# available in the stable channel.
 echo -e "System installation \033[32;1mcomplete\033[0m. Rebooting in 1 minute."
 echo "After reboot, export your terminal's terminfo for best compatibility:"
 echo

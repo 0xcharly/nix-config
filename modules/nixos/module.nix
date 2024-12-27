@@ -13,6 +13,7 @@
     ./nixos-compositor-common.nix
     ./nixos-wayland.nix
     ./nixos-x11.nix
+    ./terminfo.nix
     ./user-delay.nix
   ];
 
