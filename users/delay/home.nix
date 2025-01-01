@@ -1,10 +1,13 @@
 {
+  config,
   inputs,
   lib,
   pkgs,
   ...
 }: let
   inherit (pkgs.stdenv) isLinux;
+
+  isNixOS = pkgs.stdenv.isLinux && !(config.targets.genericLinux.enable or false);
 in {
   imports = [
     inputs.catppuccin.homeManagerModules.catppuccin
@@ -54,4 +57,8 @@ in {
 
   # Configure catppuccin theme applied throughout the configuration.
   catppuccin.flavor = "mocha";
+
+  xdg = lib.optionalAttrs isNixOS {
+    "cachix/cachix.dhall".source = config.age.secrets."services/cachix.dhall".path;
+  };
 }
