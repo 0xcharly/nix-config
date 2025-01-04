@@ -1,5 +1,6 @@
 {
   config,
+  osConfig,
   inputs,
   lib,
   pkgs,
@@ -58,7 +59,7 @@ in {
   # Configure catppuccin theme applied throughout the configuration.
   catppuccin.flavor = "mocha";
 
-  xdg = lib.optionalAttrs isNixOS {
-    "cachix/cachix.dhall".source = config.age.secrets."services/cachix.dhall".path;
+  xdg.configFile = lib.optionalAttrs isNixOS {
+    "cachix/cachix.dhall".source = config.lib.file.mkOutOfStoreSymlink osConfig.age.secrets."services/cachix.dhall".path;
   };
 }
