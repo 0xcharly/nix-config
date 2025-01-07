@@ -44,11 +44,11 @@ in {
             gen-font-codepoint-map = family: codepoints: lib.concatStringsSep "=" [codepoints family];
           in
             lib.mapAttrsToList gen-font-codepoint-map codepoints-map;
-          custom-shader = pkgs.writeTextFile {
-            name = "custom-shader.glsl";
-            text = builtins.readFile ./ghostty/glow-rgbsplit-twitchy.glsl;
-          };
-          custom-shader-animation = false;
+          # custom-shader = pkgs.writeTextFile {
+          #   name = "custom-shader.glsl";
+          #   text = builtins.readFile ./ghostty/glow-rgbsplit-twitchy.glsl;
+          # };
+          # custom-shader-animation = false;
           theme = "catppuccin-mocha";
           background = "#1d1f21"; # Gunmetal background (darker than Catppuccin Mocha)
           selection-background = "#212a37";
