@@ -237,7 +237,7 @@ in {
                 plugin location="primehopper" {
                   cwd "${codeDirectory}"
                   startup_message_name "scan_repository_root"
-                  startup_message_payload "5" # Max depth
+                  startup_message_payload "5"
                 }
               }
             }
