@@ -1,3 +1,3 @@
 {
-  environment.enableAllTerminfo =  true;
+  environment.enableAllTerminfo = true;
 }
