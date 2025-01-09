@@ -105,9 +105,6 @@
     # Unfree fonts.
     nix-config-fonts.url = "github:0xcharly/nix-config-fonts";
 
-    # 👻
-    ghostty.url = "github:ghostty-org/ghostty";
-
     # Implementation of The Primeagen's sessionizer script in Zellij.
     zellij-prime-hopper = {
       url = "github:0xcharly/zellij-prime-hopper";
