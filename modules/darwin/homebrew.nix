@@ -41,6 +41,7 @@ in {
         "firefox@developer-edition" # Firefox, for isolates.
 
         # Utilities.
+        "ghostty" # Terminal.
         "obsidian" # Note taking.
         "raycast" # Mandatory Spotlight alternative.
         "scroll-reverser" # Custom scroll directions for trackpad vs. mouse.

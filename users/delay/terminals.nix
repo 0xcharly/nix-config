@@ -12,7 +12,8 @@
 
   hasWindowManager = !isHeadless;
 in {
-  home.packages = lib.mkIf hasWindowManager [
+  home.packages = lib.mkIf (isLinux && hasWindowManager) [
+    # Ghostty is installed with Homebrew on macOS.
     pkgs.ghostty
   ];
 
