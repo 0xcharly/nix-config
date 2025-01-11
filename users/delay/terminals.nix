@@ -25,7 +25,6 @@ in {
         listsAsDuplicateKeys = true;
       } ({
           font-family = ["Comic Code Ligatures"];
-          font-size = 14;
           font-codepoint-map = let
             codepoints-map = {
               "mononoki" = "U+0040"; # @
@@ -82,8 +81,14 @@ in {
               "${mod}+plus=increase_font_size:1"
             ]);
         }
-        // (lib.optionalAttrs isLinux {gtk-titlebar = false;})
-        // (lib.optionalAttrs isDarwin {macos-titlebar-proxy-icon = "hidden";}));
+        // (lib.optionalAttrs isLinux {
+          gtk-titlebar = false;
+          font-size = 13;
+        })
+        // (lib.optionalAttrs isDarwin {
+          macos-titlebar-proxy-icon = "hidden";
+          font-size = 14;
+        }));
   };
 
   # Alacritty configuration.
