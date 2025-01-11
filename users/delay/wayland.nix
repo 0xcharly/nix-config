@@ -77,6 +77,8 @@ in rec {
         "[workspace 1] ${lib.getExe args.config.programs.firefox.finalPackage}"
         "[workspace 2] ${lib.getExe args.config.programs.chromium.package}"
         "[workspace 3] ${lib.getExe pkgs.ghostty}"
+        "[workspace 8] ${lib.getExe pkgs.obsidian}"
+        "[workspace 9] ${lib.getExe pkgs.tidal-wifi}"
       ];
 
       # Monitor scaling.
@@ -183,17 +185,32 @@ in rec {
         "ALT,         3,      workspace, 3"
         "ALT,         4,      workspace, 4"
         "ALT,         5,      workspace, 5"
+        "ALT,         6,      workspace, 6"
+        "ALT,         7,      workspace, 7"
+        "ALT,         8,      workspace, 8"
+        "ALT,         9,      workspace, 9"
+        "ALT,         0,      workspace, 10"
         "ALT SHIFT,   1,      hy3:movetoworkspace, 1"
         "ALT SHIFT,   2,      hy3:movetoworkspace, 2"
         "ALT SHIFT,   3,      hy3:movetoworkspace, 3"
         "ALT SHIFT,   4,      hy3:movetoworkspace, 4"
         "ALT SHIFT,   5,      hy3:movetoworkspace, 5"
+        "ALT SHIFT,   6,      hy3:movetoworkspace, 6"
+        "ALT SHIFT,   7,      hy3:movetoworkspace, 7"
+        "ALT SHIFT,   8,      hy3:movetoworkspace, 8"
+        "ALT SHIFT,   9,      hy3:movetoworkspace, 9"
+        "ALT SHIFT,   0,      hy3:movetoworkspace, 10"
 
         "SUPER CTRL,  1,      hy3:focustab, 1"
         "SUPER CTRL,  2,      hy3:focustab, 2"
         "SUPER CTRL,  3,      hy3:focustab, 3"
         "SUPER CTRL,  4,      hy3:focustab, 4"
         "SUPER CTRL,  5,      hy3:focustab, 5"
+        "SUPER CTRL,  6,      hy3:focustab, 6"
+        "SUPER CTRL,  7,      hy3:focustab, 7"
+        "SUPER CTRL,  8,      hy3:focustab, 8"
+        "SUPER CTRL,  9,      hy3:focustab, 9"
+        "SUPER CTRL,  0,      hy3:focustab, 10"
       ];
       # Mouse bindings.
       bindm = [
