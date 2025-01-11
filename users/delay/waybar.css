@@ -26,16 +26,14 @@ window#waybar {
 }
 
 tooltip {
-  padding: 16px;
   border: 2px solid @overlay0;
   border-radius: 8px;
-  background: alpha(@crust, 0.7);
-
-  color: @subtext0;
+  background: alpha(@crust, 0.8);
 }
 
 tooltip label {
   padding: 4px 8px;
+  color: @subtext0;
 }
 
 .modules-left {
