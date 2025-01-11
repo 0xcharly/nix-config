@@ -8,6 +8,7 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     ./1password.nix
+    ./audio.nix
     ./fs.nix
     ./hyprland.nix
     # This is currently doing nothing since the 24.11 version of OpenRGB (<1.0)
