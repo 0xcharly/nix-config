@@ -58,11 +58,29 @@ in {
           cursor-style-blink = false;
           mouse-hide-while-typing = false;
           window-padding-balance = true;
-          keybind = "super+shift+comma=reload_config";
           shell-integration-features = "no-cursor,no-sudo,no-title";
           confirm-close-surface = false;
           quit-after-last-window-closed = true;
           auto-update = "off";
+          keybind =
+            [
+              "clear"
+              "super+shift+comma=reload_config"
+              "shift+insert=paste_from_selection"
+            ]
+            ++ (let
+              mod =
+                if isDarwin
+                then "super"
+                else "ctrl";
+            in [
+              "${mod}+shift+c=copy_to_clipboard"
+              "${mod}+shift+v=paste_from_clipboard"
+              "${mod}+equal=increase_font_size:1"
+              "${mod}+minus=decrease_font_size:1"
+              "${mod}+zero=reset_font_size"
+              "${mod}+plus=increase_font_size:1"
+            ]);
         }
         // (lib.optionalAttrs isLinux {gtk-titlebar = false;})
         // (lib.optionalAttrs isDarwin {macos-titlebar-proxy-icon = "hidden";}));
