@@ -30,6 +30,14 @@ in rec {
       enable = true;
       catppuccin.enable = true;
     };
+    waybar = {
+      enable = true;
+      systemd.enable = true;
+      catppuccin.enable = true;
+
+      settings = builtins.fromJSON (builtins.readFile ./waybar.jsonc);
+      style = builtins.readFile ./waybar.css;
+    };
   };
 
   home.packages = lib.optionals enable (with pkgs; [
@@ -78,7 +86,7 @@ in rec {
         "[workspace 2] ${lib.getExe args.config.programs.chromium.package}"
         "[workspace 3] ${lib.getExe pkgs.ghostty}"
         "[workspace 8] ${lib.getExe pkgs.obsidian}"
-        "[workspace 9] ${lib.getExe pkgs.tidal-wifi}"
+        "[workspace 9] ${lib.getExe pkgs.tidal-hifi}"
       ];
 
       # Monitor scaling.

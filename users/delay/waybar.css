@@ -1,0 +1,103 @@
+@import "/nix/store/pnndixxiifidqwm4hxil4cr0l1f937v1-source/themes/mocha.css";
+
+@define-color active @blue;
+@define-color background @mantle;
+@define-color foreground @text;
+
+* {
+  font-size: 16px;
+  font-family: "Iosevka QuasiProportional";
+  min-width: 16px;
+  min-height: 0px;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  text-shadow: none;
+  padding: 0px;
+}
+
+window#waybar {
+  transition-property: background-color;
+  transition-duration: 0.2s;
+  border: 2px solid @overlay0;
+  border-radius: 8px;
+  background: @background;
+  background: alpha(@background, 0.7);
+}
+
+tooltip {
+  padding: 16px;
+  border: 2px solid @overlay0;
+  border-radius: 8px;
+  background: alpha(@crust, 0.7);
+
+  color: @subtext0;
+}
+
+tooltip label {
+  padding: 4px 8px;
+}
+
+.modules-left {
+  transition-property: background-color;
+  transition-duration: 0.2s;
+  margin: 8px;
+  background: alpha(@background, 0.4);
+}
+
+.modules-right {
+  margin: 8px;
+  background: alpha(@background, 0.4);
+}
+
+#workspaces {
+  margin: 0px 2px;
+  padding: 8px 0px 0px 0px;
+  border-radius: 8px;
+}
+
+#workspaces button {
+  padding: 4px;
+  transition-property: background-color;
+  transition-duration: 0.2s;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: @overlay0;
+}
+
+#workspaces button.urgent {
+  font-weight: bold;
+  color: @foreground;
+}
+
+#workspaces button.active {
+  background: alpha(@active, 0.4);
+  color: lighter(@active);
+}
+
+#clock {
+  color: @subtext0;
+  padding: 4px 2px 2px 2px;
+}
+
+@keyframes blink-active {
+  to {
+    background-color: @active;
+    color: @foreground;
+  }
+}
+
+@keyframes blink-red {
+  to {
+    background-color: @red;
+    color: @foreground;
+  }
+}
+
+@keyframes blink-yellow {
+  to {
+    background-color: @yellow;
+    color: @foreground;
+  }
+}

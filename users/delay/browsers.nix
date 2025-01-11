@@ -160,6 +160,7 @@ in {
             updateInterval = 7 * 24 * 60 * 60 * 1000; # Weekly
             definedAliases = ["k"];
           };
+
           "Nix Packages" = {
             urls = [
               {
@@ -179,6 +180,13 @@ in {
 
             icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
             definedAliases = ["@np"];
+          };
+
+          "Home Manager Options" = {
+            urls = [{template = "https://home-manager-options.extranix.com/?query={searchTerms}";}];
+            iconUpdateURL = "https://home-manager-options.extranix.com/images/favicon.png";
+            updateInterval = 7 * 24 * 60 * 60 * 1000; # Weekly
+            definedAliases = ["@hm"];
           };
 
           "NixOS Wiki" = {

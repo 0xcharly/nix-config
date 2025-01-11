@@ -1,0 +1,39 @@
+[
+  {
+    "layer": "top",
+    "margin": "8 5 8 5",
+    "modules-left": [
+      "hyprland/workspaces"
+    ],
+    "position": "left",
+    "reload_style_on_change": true,
+    "modules-right": [
+      "clock"
+    ],
+    "hyprland/workspaces": {
+      "all-outputs": true,
+      "persistent-workspaces": {
+        "*": 10
+      },
+      "format": "{icon}",
+      "format-icons": {
+        "1": "一",
+        "2": "二",
+        "3": "三",
+        "4": "四",
+        "5": "五",
+        "6": "六",
+        "7": "七",
+        "8": "八",
+        "9": "九",
+        "10": "十"
+      },
+      "on-click": "activate"
+    },
+    "clock": {
+      "format": "{:L%H\n%M}",
+      "tooltip-format": "{:L%Y %b %d (%a)}",
+      "locale": "ja_JP.UTF-8"
+    }
+  }
+]
