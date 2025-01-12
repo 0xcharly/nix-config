@@ -66,6 +66,8 @@ in {
               "clear"
               "super+shift+comma=reload_config"
               "shift+insert=paste_from_selection"
+              "ctrl+tab=next_tab"
+              "ctrl+shift+tab=previous_tab"
             ]
             ++ (let
               mod =
@@ -73,6 +75,8 @@ in {
                 then "super"
                 else "ctrl";
             in [
+              "${mod}+n=new_window"
+              "${mod}+t=new_tab"
               "${mod}+shift+c=copy_to_clipboard"
               "${mod}+shift+v=paste_from_clipboard"
               "${mod}+equal=increase_font_size:1"
