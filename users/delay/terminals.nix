@@ -83,7 +83,11 @@ in {
               "${mod}+minus=decrease_font_size:1"
               "${mod}+zero=reset_font_size"
               "${mod}+plus=increase_font_size:1"
-            ]);
+            ])
+            ++ lib.optionals isDarwin [
+              "super+c=copy_to_clipboard"
+              "super+v=paste_from_clipboard"
+            ];
         }
         // (lib.optionalAttrs isLinux {
           gtk-titlebar = false;
