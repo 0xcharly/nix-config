@@ -256,8 +256,11 @@ in rec {
   services.hyprpaper = lib.mkIf enable {
     enable = true;
     settings = let
-      wallpaper = ./wallpapers/anime-room.png;
-      wallpaper_path = toString wallpaper;
+      wallpaper = pkgs.fetchurl {
+        url = "https://static1.squarespace.com/static/5e949a92e17d55230cd1d44f/t/675d0533b4f3ee31d94658ed/1734149461556/Ink+Cloud+Mac.png";
+        hash = "sha256-aoWMydZtp4c59BUrdvewhs3O1QSvC4lZSqHzMRYSB9g=";
+      };
+      wallpaper_path = builtins.toString wallpaper;
     in {
       ipc = true;
       splash = false;
