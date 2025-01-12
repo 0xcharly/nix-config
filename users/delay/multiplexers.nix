@@ -34,7 +34,6 @@ in {
 
   programs.zellij = {
     enable = true;
-    catppuccin.enable = true;
     settings = {
       default_mode = "locked";
       scrollback_editor = lib.getExe pkgs.nvim;
@@ -49,10 +48,26 @@ in {
       # https://zellij.dev/documentation/session-resurrection
       session_serialization = false;
       plugins = {
-        primehopper._props = {
-          location = "file:${lib.getExe pkgs.zellij-prime-hopper}";
+        primehopper._props.location = "file:${lib.getExe pkgs.zellij-prime-hopper}";
+      };
+
+      themes = {
+        catppuccin-mocha-custom = {
+          "bg" = "#585b70"; # Surface2
+          "fg" = "#cdd6f4";
+          "red" = "#f38ba8";
+          "green" = "#94e2d5"; # Teal
+          "blue" = "#89b4fa";
+          "yellow" = "#f9e2af";
+          "magenta" = "#f5c2e7"; # Pink
+          "orange" = "#fab387"; # Peach
+          "cyan" = "#89dceb"; # Sky
+          "black" = "#181825"; # Mantle
+          "white" = "#cdd6f4";
         };
       };
+
+      theme = "catppuccin-mocha-custom";
 
       keybinds = let
         cmd = cmd: {"${cmd}" = {};};
