@@ -83,17 +83,12 @@
     roles ? [],
     extraModules ? [],
     ...
-  } @ args': let
-    age = inputs.agenix.darwinModules.default; # Age darwin module.
-    hm = inputs.home-manager.darwinModules.home-manager; # home-manager darwin module
-  in
-    mkHost (args'
+  } @ args': mkHost (args'
       // {
-        inherit host system;
+        inherit extraModules host system;
         builder = mkDarwinSystem;
         moduleTrees = moduleTrees ++ [config managed shared users];
         roles = roles ++ [darwin];
-        extraModules = extraModules ++ [age hm];
       });
 
   mkHomeHost = host: {
@@ -103,16 +98,13 @@
     roles ? [],
     extraModules ? [],
     ...
-  } @ args': let
-    age = inputs.agenix.homeManagerModules.default; # Age HM module.
-  in
-    mkHost (args'
+  } @ args': mkHost (args'
       // {
         inherit host system;
         builder = mkStandaloneHome;
         moduleTrees = moduleTrees ++ [config shared];
         roles = roles ++ [home];
-        extraModules = extraModules ++ [age (import standalone username)];
+        extraModules = extraModules ++ [(import standalone username)];
       });
 
   mkNixosHost = host: {
@@ -121,17 +113,12 @@
     roles ? [],
     extraModules ? [],
     ...
-  } @ args': let
-    age = inputs.agenix.nixosModules.default; # Age nixos module.
-    hm = inputs.home-manager.nixosModules.home-manager; # home-manager nixos module
-  in
-    mkHost (args'
+  } @ args': mkHost (args'
       // {
-        inherit host system;
+        inherit extraModules host system;
         builder = mkNixosSystem;
         moduleTrees = moduleTrees ++ [config managed shared users];
         roles = roles ++ [nixos];
-        extraModules = extraModules ++ [age hm];
       });
 
   mkNixosIso = host: {
@@ -141,8 +128,6 @@
     extraModules ? [],
     ...
   } @ args': let
-    hm = inputs.home-manager.nixosModules.home-manager; # home-manager nixos module
-
     # Modules used to create a NixOS image.
     isoModule = {
       lib,
@@ -166,7 +151,7 @@
         builder = mkNixosSystem;
         moduleTrees = moduleTrees ++ [config managed shared users];
         roles = roles ++ [nixos];
-        extraModules = extraModules ++ [hm isoModule];
+        extraModules = extraModules ++ [isoModule];
       });
 
   mkHostAttrs = builtins.foldl' recursiveUpdate {};

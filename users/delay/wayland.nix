@@ -268,13 +268,4 @@ in rec {
       wallpaper = [", ${wallpaper_path}"];
     };
   };
-
-  # Make cursor not tiny on HiDPI screens.
-  home.pointerCursor = lib.mkIf enable {
-    name = "catppuccin-mocha-dark-cursors";
-    package = pkgs.catppuccin-cursors.mochaDark;
-    size = 256;
-    gtk.enable = true;
-    x11.enable = true;
-  };
 }

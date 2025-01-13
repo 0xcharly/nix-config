@@ -1,9 +1,12 @@
 {
+  inputs,
   pkgs,
   lib,
   ...
 }: {
   imports = [
+    inputs.home-manager.darwinModules.home-manager
+
     ./aarch64-darwin.nix
     ./homebrew.nix
     ./macos.nix

@@ -17,7 +17,6 @@ in
       element-desktop
       obsidian
       tidal-hifi
-      vanilla-dmz
     ];
 
     services.flameshot.enable = true;
@@ -27,11 +26,15 @@ in
       settings = {
         "org/gnome/desktop/interface" = {
           color-scheme = "prefer-dark";
-          # Defaulting to Vanilla-DMZ because of a GTK4 bug that breaks the cursor rendering:
-          # https://bbs.archlinux.org/viewtopic.php?id=299624
-          cursor-theme = lib.mkForce "vanilla-dmz";
-          # cursor-theme = "catppuccin-mocha-dark-cursors";
-          # cursor-size = 24;
+          # font-name = "Iosevka Aile 12";
+          monospace-font-name = "Comic Code 12";
+          # document-font-name = "Iosevka Etoile 12";
+          cursor-theme = "BreezeX-RosePine-Linux";
+          gtk-theme = "rose-pine";
+          icon-theme = "rose-pine-icons";
+        };
+        "org/gtk/settings/file-chooser" = {
+          sort-directories-first = true;
         };
       };
     };
@@ -39,8 +42,20 @@ in
     gtk = {
       enable = true;
       theme = {
-        package = pkgs.qogir-theme;
-        name = "Qogir Dark";
+        package = pkgs.rose-pine-gtk-theme;
+        name = "rose-pine";
       };
+      iconTheme = {
+        package = pkgs.rose-pine-icon-theme;
+        name = "rose-pine-icons";
+      };
+    };
+
+    home.pointerCursor = {
+      name = "BreezeX-RosePine-Linux";
+      package = pkgs.rose-pine-cursor;
+      size = 32;
+      gtk.enable = true;
+      x11.enable = true;
     };
   }

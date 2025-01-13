@@ -121,6 +121,9 @@
       inputs.hyprland.follows = "hyprland";
     };
 
+    # Global theming.
+    stylix.url = "github:danth/stylix/release-24.11";
+
     # Catppuccin all the things.
     catppuccin.url = "github:catppuccin/nix";
   };

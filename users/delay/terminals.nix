@@ -98,42 +98,4 @@ in {
           font-size = 14;
         }));
   };
-
-  # Alacritty configuration.
-  programs.alacritty = lib.mkIf hasWindowManager {
-    enable = true;
-    catppuccin.enable = true;
-    settings = {
-      font = {
-        normal = {
-          family = "IosevkaTerm Nerd Font";
-          style = "Light";
-        };
-        bold = {
-          family = "IosevkaTerm Nerd Font";
-          style = "Medium";
-        };
-        size = 16;
-      };
-      keyboard.bindings = lib.optionals isDarwin [
-        {
-          key = "Tab";
-          mods = "Control";
-          action = "SelectNextTab";
-        }
-        {
-          key = "Tab";
-          mods = "Control|Shift";
-          action = "SelectPreviousTab";
-        }
-      ];
-      window = {
-        decorations = "Full";
-        padding = {
-          x = 4;
-          y = 4;
-        };
-      };
-    };
-  };
 }

@@ -5,7 +5,9 @@
   ...
 }: {
   imports = [
+    inputs.agenix.nixosModules.default
     inputs.catppuccin.nixosModules.catppuccin
+    inputs.home-manager.nixosModules.home-manager
 
     ./fonts.nix
     ./nix-client-config.nix

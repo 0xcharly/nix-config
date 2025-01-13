@@ -7,11 +7,17 @@
     if args ? osConfig
     then args.osConfig
     else args.config;
-in {
-  fonts.fontconfig.enable = config.modules.usrenv.enableProfileFont;
 
-  # TODO: reconcile with modules/systems/fonts.nix once verified that it works.
-  home.packages = lib.mkIf config.modules.usrenv.enableProfileFont [
+  enable = !config.modules.usrenv.isHeadless;
+in {
+  fonts.fontconfig = {
+    inherit enable;
+    defaultFonts = {
+      monospace = ["Comic Code Ligatures"];
+    };
+  };
+
+  home.packages = lib.mkIf enable [
     (pkgs.iosevka.override {
       set = "QuasiProportional";
       privateBuildPlan = ''
@@ -26,10 +32,10 @@ in {
     (pkgs.nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})
     (pkgs.unfree-fonts.comic-code.override {ligatures = false;})
     (pkgs.unfree-fonts.comic-code.override {ligatures = true;})
-    pkgs.maple-mono
+    # pkgs.maple-mono # Cute, cozy round font.
     pkgs.material-design-icons
-    pkgs.mononoki
-    pkgs.noto-fonts-cjk-sans
-    pkgs.pixel-code
+    pkgs.mononoki # Used for its @.
+    pkgs.noto-fonts-cjk-sans # CJK fonts.
+    # pkgs.pixel-code # Fun pixel font.
   ];
 }
