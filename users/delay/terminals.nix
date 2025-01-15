@@ -77,6 +77,7 @@ in {
             in [
               "${mod}+n=new_window"
               "${mod}+t=new_tab"
+              "${mod}+shift+w=close_surface"
               "${mod}+shift+c=copy_to_clipboard"
               "${mod}+shift+v=paste_from_clipboard"
               "${mod}+equal=increase_font_size:1"
