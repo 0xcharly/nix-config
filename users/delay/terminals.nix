@@ -49,9 +49,7 @@ in {
           #   text = builtins.readFile ./ghostty/glow-rgbsplit-twitchy.glsl;
           # };
           # custom-shader-animation = false;
-          theme = "catppuccin-mocha";
-          background = "#1d1f21"; # Gunmetal background (darker than Catppuccin Mocha)
-          selection-background = "#212a37";
+          theme = "NvimDark";
           title = " ";
           cursor-style = "block";
           cursor-style-blink = false;
