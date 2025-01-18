@@ -43,19 +43,21 @@ function git_repo_get_name
   end
 end
 
-function segment -a icon text color
+function segment -a icon text segment_fg segment_bg
+  set -l fg "d0d1d7"
+  set -l bg "313239"
   printf " "
-  set_color normal; set_color $color
+  set_color normal; set_color $segment_bg
   printf ""
-  set_color $color --reverse
+  set_color $segment_fg --background $segment_bg
   printf $icon
-  set_color normal; set_color $color
+  set_color normal; set_color $segment_bg
   printf ""
-  set_color normal; set_color black --reverse
+  set_color normal; set_color $bg --reverse
   printf ""
-  set_color normal; set_color grey --background black
+  set_color normal; set_color $fg --background $bg
   printf " %s" $text
-  set_color normal; set_color black
+  set_color normal; set_color $bg
   printf ""
   set_color normal
 end
@@ -69,17 +71,17 @@ function fish_right_prompt
 
   set -l citc_space (citc_get_space_name)
   if test -n "$citc_space"
-    segment " " $citc_space "cba6f7" # Mauve
+    segment " " $citc_space "cab4f4" "312b41" # Purple
   else
     set -l nix_shell (nix_shell_get_name)
     if test -n "$nix_shell"
-      segment "󱄅 " $nix_shell "74c7ec" # Sapphire
+      segment "󱄅 " $nix_shell "9fcdfe" "203147" # Blue
     else
       set -l git_repo (git_repo_get_name)
       if test -n "$git_repo"
-        segment "󰊢 " $git_repo "eba0ac" # Maroon
+        segment "󰊢 " $git_repo "fe9fa9" "41262e" # Red
       else
-        segment "󰉋 " (path basename $PWD) "94e2d5" # Teal
+        segment "󰉋 " (path basename $PWD) "aff3c0" "243c2e" # Green
       end
     end
   end

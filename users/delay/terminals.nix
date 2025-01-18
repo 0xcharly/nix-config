@@ -50,6 +50,29 @@ in {
           # };
           # custom-shader-animation = false;
           theme = "NvimDark";
+          background = "#151b23";
+          foreground = "#e1e8f4";
+          selection-background = "#45475a";
+          # selection-foreground = "";
+          cursor-color = "#fec49a";
+          palette = [
+            "0=#bac2de"
+            "1=#fe9aa4"
+            "2=#addba9"
+            "3=#f3dfb4"
+            "4=#95b7ef"
+            "5=#b4befe"
+            "6=#92d8d2"
+            "7=#e1e8f4"
+            "8=#7a8390"
+            "9=#fe818d"
+            "10=#8ed29c"
+            "11=#f1b48e"
+            "12=#89b5fa"
+            "13=#d0aff8"
+            "14=#71d1c7"
+            "15=#90a4bb"
+          ];
           title = " ";
           cursor-style = "block";
           cursor-style-blink = false;
@@ -73,8 +96,8 @@ in {
                 then "super"
                 else "ctrl";
             in [
-              "${mod}+n=new_window"
-              "${mod}+t=new_tab"
+              "${mod}+shift+n=new_window"
+              "${mod}+shift+t=new_tab"
               "${mod}+shift+w=close_surface"
               "${mod}+shift+c=copy_to_clipboard"
               "${mod}+shift+v=paste_from_clipboard"
@@ -90,6 +113,8 @@ in {
         }
         // (lib.optionalAttrs isLinux {
           gtk-titlebar = false;
+          adjust-cell-height = "15%";
+          adjust-font-baseline = "-15%";
           font-size = 13;
         })
         // (lib.optionalAttrs isDarwin {

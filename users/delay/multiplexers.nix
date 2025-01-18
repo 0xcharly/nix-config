@@ -52,22 +52,22 @@ in {
       };
 
       themes = {
-        catppuccin-mocha-custom = {
-          "bg" = "#14161b"; # Nvim default theme background.
-          "fg" = "#cdd6f4";
-          "red" = "#f38ba8";
-          "green" = "#94e2d5"; # Teal
-          "blue" = "#89b4fa";
-          "yellow" = "#f9e2af";
+        catppuccin-obsidian = {
+          "bg" = "#151b23"; # catppuccin-obsidian.
+          "fg" = "#e1e8f4";
+          "red" = "#fe9aa4";
+          "green" = "#92d8d2"; # Teal
+          "blue" = "#95b7ef";
+          "yellow" = "#f3dfb4";
           "magenta" = "#f5c2e7"; # Pink
           "orange" = "#fab387"; # Peach
           "cyan" = "#89dceb"; # Sky
-          "black" = "#14161b"; # Nvim default theme background.
+          "black" = "#151b23"; # catppuccin-obsidian background.
           "white" = "#cdd6f4";
         };
       };
 
-      theme = "catppuccin-mocha-custom";
+      theme = "catppuccin-obsidian";
 
       keybinds = let
         cmd = cmd: {"${cmd}" = {};};
