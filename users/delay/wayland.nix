@@ -44,6 +44,7 @@ in rec {
     grim # Screenshot functionality
     slurp # Screenshot functionality
     wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
+    wl-color-picker # Color picker
     wlr-randr # Utility to manage outputs of a Wayland compositor
   ]);
 
@@ -158,6 +159,7 @@ in rec {
         "SUPER SHIFT, Q,      exit, "
         "SUPER,       V,      togglefloating, "
         "SUPER CTRL,  L,      exec, ${lib.getExe args.config.programs.swaylock.package}"
+        "SUPER CTRL,  P,      exec, ${lib.getExe pkgs.wl-color-picker}"
 
         "SUPER,       d, hy3:makegroup,   h"
         "SUPER,       s, hy3:makegroup,   v"
