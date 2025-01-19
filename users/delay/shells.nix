@@ -52,6 +52,12 @@ in {
 
   programs.fzf = {
     enable = true;
+    # enableFishIntegration = true;
+    catppuccin.enable = true;
+  };
+
+  programs.skim = {
+    enable = true;
     enableFishIntegration = true;
     catppuccin.enable = true;
   };

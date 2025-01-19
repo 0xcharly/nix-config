@@ -37,6 +37,7 @@ in {
     settings = {
       default_mode = "locked";
       scrollback_editor = lib.getExe pkgs.nvim;
+      pane_frames = false;
       ui.pane_frames = {
         rounded_corners = true;
         hide_session_name = true;
