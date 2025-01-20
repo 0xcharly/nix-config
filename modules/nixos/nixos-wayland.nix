@@ -6,7 +6,6 @@
 }: let
   enable = config.modules.usrenv.compositor == "wayland";
 in {
-  programs.sway = {inherit enable;};
   xdg.portal = lib.mkIf enable {
     inherit enable;
     extraPortals = with pkgs; [
@@ -24,7 +23,7 @@ in {
         inherit enable;
         wayland.enable = true;
       };
-      defaultSession = "sway";
+      defaultSession = "hyprland";
     };
 
     libinput = {inherit enable;};
