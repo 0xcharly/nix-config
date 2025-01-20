@@ -2297,11 +2297,11 @@
         "treefmt-nix": "treefmt-nix_6"
       },
       "locked": {
-        "lastModified": 1735203973,
-        "narHash": "sha256-whncjDsA6yjS3NuujA3qPhAZUFMXSTS2HZ86ezdomeE=",
+        "lastModified": 1737336771,
+        "narHash": "sha256-NeYGoQP0AJC+QIe8sL1ypvk9gyDeokmPJT2d+TQ2CXo=",
         "owner": "0xcharly",
         "repo": "zellij-prime-hopper",
-        "rev": "9278e029849f6c6f0148383a479a6a45f5d87fbd",
+        "rev": "dfb99b07d527084fa68a18e9cafca152aaa0b543",
         "type": "github"
       },
       "original": {
