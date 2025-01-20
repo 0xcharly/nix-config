@@ -16,17 +16,11 @@
   codeDirectory = homeDirectory + "/code";
 in {
   programs.bash.enable = true;
-  programs.btop = {
-    enable = true;
-    catppuccin.enable = true;
-  };
+  programs.btop.enable = true;
   programs.htop.enable = true;
 
   # `cat` replacement.
-  programs.bat = {
-    enable = true;
-    catppuccin.enable = true;
-  };
+  programs.bat.enable = true;
 
   # `find` replacement.
   programs.fd.enable = true;
@@ -50,21 +44,15 @@ in {
     config.whitelist.prefix = [codeDirectory];
   };
 
-  programs.fzf = {
-    enable = true;
-    # enableFishIntegration = true;
-    catppuccin.enable = true;
-  };
+  programs.fzf.enable = true;
 
   programs.skim = {
     enable = true;
     enableFishIntegration = true;
-    catppuccin.enable = true;
   };
 
   programs.fish = {
     enable = true;
-    catppuccin.enable = true;
     interactiveShellInit = lib.strings.concatStringsSep "\n" [
       (builtins.readFile ./config.fish)
       (lib.optionalString isLinuxDesktop "eval (${lib.getExe pkgs.keychain} --eval --nogui --quiet)")

@@ -54,10 +54,7 @@ in {
     ignores = [
       "/.direnv/"
     ];
-    delta = {
-      enable = true;
-      catppuccin.enable = true;
-    };
+    delta.enable = true;
     extraConfig = {
       branch.autosetuprebase = "always";
       color.ui = true;

@@ -25,10 +25,6 @@ in {
     mouse = true;
     secureSocket = true;
     sensibleOnTop = false;
-    # Do not force catppuccin theme here since it sets the "default" value to a
-    # solid color, which doesn't play well with translucent terminal background.
-    catppuccin.enable = false;
-
     extraConfig = builtins.readFile ./tmux.conf;
   };
 

@@ -24,16 +24,11 @@ in rec {
     rofi = {
       enable = true;
       package = pkgs.rofi-wayland;
-      catppuccin.enable = true;
     };
-    swaylock = {
-      enable = true;
-      catppuccin.enable = true;
-    };
+    swaylock.enable = true;
     waybar = {
       enable = true;
       systemd.enable = true;
-      catppuccin.enable = true;
 
       settings = builtins.fromJSON (builtins.readFile ./waybar.jsonc);
       style = builtins.readFile ./waybar.css;
@@ -76,7 +71,6 @@ in rec {
 
   wayland.windowManager.hyprland = {
     inherit enable;
-    catppuccin.enable = true;
     systemd.variables = ["--all"];
     plugins = [inputs.hy3.packages."${pkgs.system}".hy3];
     settings = {
@@ -243,7 +237,6 @@ in rec {
   # Notifications.
   services.mako = lib.mkIf enable {
     enable = true;
-    catppuccin.enable = true;
     # Sets the border radius to -1 that of the hyprland windows since it's
     # offset by -1-1 pixels. This results in "parallel" rounding.
     borderRadius = wayland.windowManager.hyprland.settings.decoration.rounding - 1;

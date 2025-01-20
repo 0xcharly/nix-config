@@ -39,8 +39,8 @@
   console = {
     font = "Lat2-Terminus16";
     keyMap = "us";
-    catppuccin.enable = true;
   };
+  catppuccin.tty.enable = true;
 
   # Enable tailscale. We manually authenticate when we want with
   # "sudo tailscale up". If you don't use tailscale, you should comment

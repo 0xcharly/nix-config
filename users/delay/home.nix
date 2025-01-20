@@ -14,6 +14,7 @@ in {
     inputs.catppuccin.homeManagerModules.catppuccin
 
     ./browsers.nix
+    ./catppuccin.nix
     ./desktop.nix
     ./fonts.nix
     ./multiplexers.nix
