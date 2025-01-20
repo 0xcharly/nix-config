@@ -25,6 +25,7 @@ in {
         listsAsDuplicateKeys = true;
       } ({
           font-family = ["Comic Code Ligatures"];
+          font-size = 13;
           adjust-cell-height = "15%";
           adjust-font-baseline = "-15%";
           font-codepoint-map = let
@@ -113,13 +114,7 @@ in {
               "super+v=paste_from_clipboard"
             ];
         }
-        // (lib.optionalAttrs isLinux {
-          gtk-titlebar = false;
-          font-size = 13;
-        })
-        // (lib.optionalAttrs isDarwin {
-          macos-titlebar-proxy-icon = "hidden";
-          font-size = 14;
-        }));
+        // (lib.optionalAttrs isLinux {gtk-titlebar = false;})
+        // (lib.optionalAttrs isDarwin {macos-titlebar-proxy-icon = "hidden";}));
   };
 }
