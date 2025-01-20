@@ -25,6 +25,8 @@ in {
         listsAsDuplicateKeys = true;
       } ({
           font-family = ["Comic Code Ligatures"];
+          adjust-cell-height = "15%";
+          adjust-font-baseline = "-15%";
           font-codepoint-map = let
             codepoints-map = {
               "mononoki" = "U+0040"; # @
@@ -113,8 +115,6 @@ in {
         }
         // (lib.optionalAttrs isLinux {
           gtk-titlebar = false;
-          adjust-cell-height = "15%";
-          adjust-font-baseline = "-15%";
           font-size = 13;
         })
         // (lib.optionalAttrs isDarwin {
