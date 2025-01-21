@@ -52,6 +52,7 @@ in {
         # Don't install these on corp-managed hosts.
         "protonvpn" # Private network.
         "raspberry-pi-imager" # RPI bootloader & OS images.
+        "tailscale" # Personal VPN network.
         "transmission"
         "vlc" # Media player.
       ]);
