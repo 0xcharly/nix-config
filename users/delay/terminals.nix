@@ -52,10 +52,9 @@ in {
           #   text = builtins.readFile ./ghostty/glow-rgbsplit-twitchy.glsl;
           # };
           # custom-shader-animation = false;
-          theme = "NvimDark";
           background = "#151b23";
           foreground = "#e1e8f4";
-          selection-background = "#45475a";
+          selection-background = "#303747";
           # selection-foreground = "";
           cursor-color = "#fec49a";
           palette = [
