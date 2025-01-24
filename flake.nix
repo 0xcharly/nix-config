@@ -112,6 +112,9 @@
       inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
     };
 
+    # Jujutsu at HEAD.
+    jujutsu.url = "github:jj-vcs/jj";
+
     # Hyprland and plugins.
     hyprland.url = "github:hyprwm/Hyprland?submodules=1&ref=v0.45.2";
 
@@ -119,9 +122,6 @@
       url = "github:outfoxxed/hy3?ref=hl0.45.0";
       inputs.hyprland.follows = "hyprland";
     };
-
-    # Global theming.
-    stylix.url = "github:danth/stylix/release-24.11";
 
     # Catppuccin all the things.
     catppuccin.url = "github:catppuccin/nix";
