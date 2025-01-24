@@ -1,5 +1,5 @@
 {
-  inputs,
+  inputs',
   lib,
   pkgs,
   ...
@@ -11,19 +11,14 @@
   inherit (config.modules.usrenv) sshAgent;
   inherit (pkgs.stdenv) isDarwin;
 
-  # Unstable package repository.
-  upkgs = import inputs.nixpkgs-unstable {
-    inherit (pkgs) system;
-  };
-
   homeDirectory = config.modules.system.users.delay.home;
   codeDirectory = homeDirectory + "/code";
   use1PasswordSshAgent = isDarwin && (sshAgent == "1password");
 in {
   programs.jujutsu = {
     enable = true;
-    # Install jujutsu from `nixpkgs-unstable`.
-    package = upkgs.jujutsu;
+    # Install jujutsu from HEAD.
+    package = inputs'.jujutsu.packages.jujutsu;
     settings =
       lib.recursiveUpdate {
         user = {
@@ -34,6 +29,7 @@ in {
         ui."default-command" = "status";
         ui.pager = lib.getExe pkgs.delta;
         ui.diff.format = "git";
+        git.subprocess = true; # Shell out to `git` instead of libgit2.
         signing = {
           sign-all = true;
           backend = "ssh";
