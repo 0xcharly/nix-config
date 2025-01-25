@@ -24,6 +24,15 @@ in rec {
     rofi = {
       enable = true;
       package = pkgs.rofi-wayland;
+      plugins = [
+        (pkgs.rofi-calc.override {rofi-unwrapped = pkgs.rofi-wayland-unwrapped;})
+      ];
+      theme = {
+        "@theme" = builtins.path {
+          name = "catppuccin-obsidian.rasi";
+          path = pkgs.writeText "catppuccin-obsidian.rasi" (builtins.readFile ./rofi.rasi);
+        };
+      };
     };
     swaylock.enable = true;
     waybar = {
@@ -37,9 +46,10 @@ in rec {
 
   home.packages = lib.optionals enable (with pkgs; [
     grim # Screenshot functionality
+    hyprpicker # Command line color picker
     slurp # Screenshot functionality
     wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
-    wl-color-picker # Color picker
+    wl-color-picker # GUI color picker
     wlr-randr # Utility to manage outputs of a Wayland compositor
   ]);
 
@@ -148,7 +158,7 @@ in rec {
       # Keyboard bindings.
       bind = [
         "SUPER,       Return, exec, ${lib.getExe pkgs.ghostty}"
-        "SUPER,       Space,  exec, ${lib.getExe args.config.programs.rofi.package} -show drun"
+        "SUPER,       Space,  exec, pkill rofi || ${lib.getExe args.config.programs.rofi.finalPackage} -show combi"
         "SUPER SHIFT, X,      killactive, "
         "SUPER SHIFT, Q,      exit, "
         "SUPER,       V,      togglefloating, "

@@ -9,8 +9,10 @@ in {
   xdg.portal = lib.mkIf enable {
     inherit enable;
     extraPortals = with pkgs; [
-      xdg-desktop-portal-wlr
+      qt5.qtwayland
+      qt6.qtwayland
       xdg-desktop-portal-gtk
+      xdg-desktop-portal-wlr
     ];
   };
 

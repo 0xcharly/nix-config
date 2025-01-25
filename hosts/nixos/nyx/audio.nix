@@ -14,6 +14,7 @@
   environment.systemPackages = with pkgs; [
     pavucontrol
     plasma-pa
+    pulsemixer
     qjackctl
   ];
 }

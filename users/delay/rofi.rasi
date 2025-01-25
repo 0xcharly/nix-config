@@ -1,0 +1,139 @@
+@theme "default"
+
+* {
+    catppuccin-title: #d9e2e4;
+    catppuccin-cursorline: #303747;
+    catppuccin-surface-red: #41262e;
+    catppuccin-on-surface-red: #fe9fa9;
+    catppuccin-surface-orange: #433027;
+    catppuccin-on-surface-orange: #fec49a;
+    catppuccin-surface-yellow: #343637;
+    catppuccin-on-surface-yellow: #f9e1ae;
+    catppuccin-surface-green: #243c2e;
+    catppuccin-on-surface-green: #aff3c0;
+    catppuccin-surface-cyan: #233a48;
+    catppuccin-on-surface-cyan: #89dceb;
+    catppuccin-surface-blue: #203147;
+    catppuccin-on-surface-blue: #9fcdfe;
+    catppuccin-surface-purple: #312b41;
+    catppuccin-on-surface-purple: #cab4f4;
+
+    catppuccin-rosewater: #f5e0dc;
+    catppuccin-flamingo: #f2cdcd;
+    catppuccin-pink: #f5c2e7;
+    catppuccin-mauve: #d0aff8;
+    catppuccin-red: #fe9aa4;
+    catppuccin-maroon: #eba0ac;
+    catppuccin-peach: #f1b48e;
+    catppuccin-yellow: #e6dac1;
+    catppuccin-green: #addba9;
+    catppuccin-teal: #91d7d1;
+    catppuccin-sky: #95b7ef;
+    catppuccin-blue: #89b4fa;
+    catppuccin-lavender: #b4befe;
+    catppuccin-text: #e1e8f4;
+    catppuccin-subtext1: #bac2de;
+    catppuccin-subtext0: #8fa3bb;
+    catppuccin-overlay2: #7a8490;
+    catppuccin-overlay1: #454759;
+    catppuccin-overlay0: #23282f;
+    catppuccin-surface2: #1d2530;
+    catppuccin-surface1: #192029;
+    catppuccin-surface0: #1d1f21;
+    catppuccin-base: #151b23;
+    catppuccin-mantle: #11161d;
+    catppuccin-crust: #0b1215;
+
+    blue:                        var(catppuccin-blue);
+    red:                         var(catppuccin-red);
+    lightfg:                     var(catppuccin-subtext0);
+    lightbg:                     var(catppuccin-surface2);
+    background:                  var(catppuccin-surface1);
+    foreground:                  var(catppuccin-text);
+    selected-normal-foreground:  var(catppuccin-cursorline);
+
+    selected-active-foreground:  var(background);
+    separatorcolor:              var(foreground);
+    urgent-foreground:           var(red);
+    alternate-urgent-background: var(lightbg);
+    background-color:            transparent;
+    border-color:                var(foreground);
+    normal-background:           var(background);
+    selected-urgent-background:  var(red);
+    alternate-active-background: var(lightbg);
+    spacing:                     2;
+    alternate-normal-foreground: var(foreground);
+    urgent-background:           var(background);
+    active-foreground:           var(blue);
+    selected-active-background:  var(blue);
+    active-background:           var(background);
+    selected-normal-background:  var(lightfg);
+    alternate-normal-background: var(lightbg);
+    selected-urgent-foreground:  var(background);
+    normal-foreground:           var(foreground);
+    alternate-urgent-foreground: var(red);
+    alternate-active-foreground: var(blue);
+}
+
+configuration {
+    modes:                      [ combi, calc, filebrowser ];
+    combi-modes:                [ drun, run ];
+    combi-hide-mode-prefix:     false;
+    display-combi:              " ";
+    display-drun:               " ";
+    display-run:                " ";
+    display-calc:               "󱓉 ";
+    display-filebrowser:        " ";
+}
+
+window {
+  width: 56em;
+
+  padding: 5 2 5 5;
+  border: 2;
+  border-color: @catppuccin-lavender;
+  border-radius: 8px;
+}
+
+scrollbar {
+    handle-color: var(catppuccin-overlay1);
+}
+
+message {
+    padding: 1em 0.5em;
+    border: 0;
+    background-color: var(catppuccin-surface-blue);
+}
+
+textbox {
+    text-color: var(catppuccin-on-surface-blue);
+}
+
+listview {
+    padding: 0 0 0 2px;
+    border: 0;
+}
+
+inputbar {
+  padding: 0.5em 0.25em;
+}
+
+num-filtered-rows {
+    text-color: var(catppuccin-overlay2);
+}
+
+num-rows {
+    text-color: var(catppuccin-overlay2);
+}
+
+textbox-num-sep {
+    text-color: var(catppuccin-overlay2);
+}
+
+textbox-prompt-colon {
+    str: "";
+}
+
+element {
+  padding: 0.25em;
+}
