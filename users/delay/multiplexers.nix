@@ -7,27 +7,10 @@
     if args ? osConfig
     then args.osConfig
     else args.config;
-  inherit (config.modules.usrenv) switcherApp;
 
   homeDirectory = config.modules.system.users.delay.home;
   codeDirectory = homeDirectory + "/code";
 in {
-  home.packages = lib.optionals (switcherApp == "tmux") [
-    pkgs.open-local-repository-fish
-  ];
-
-  programs.tmux = {
-    enable = true;
-    aggressiveResize = true;
-    escapeTime = 0;
-    historyLimit = 10000;
-    keyMode = "vi";
-    mouse = true;
-    secureSocket = true;
-    sensibleOnTop = false;
-    extraConfig = builtins.readFile ./tmux.conf;
-  };
-
   programs.zellij = {
     enable = true;
     settings = {
@@ -50,7 +33,7 @@ in {
 
       themes = {
         catppuccin-obsidian = {
-          "bg" = "#151b23"; # catppuccin-obsidian.
+          "bg" = "#303747"; # Cursorline.
           "fg" = "#e1e8f4";
           "red" = "#fe9aa4";
           "green" = "#92d8d2"; # Teal
@@ -59,7 +42,7 @@ in {
           "magenta" = "#f5c2e7"; # Pink
           "orange" = "#fab387"; # Peach
           "cyan" = "#89dceb"; # Sky
-          "black" = "#151b23"; # catppuccin-obsidian background.
+          "black" = "#11161d"; # Mantle.
           "white" = "#cdd6f4";
         };
       };
@@ -77,8 +60,7 @@ in {
         _props.clear-defaults = true;
 
         locked = {
-          "bind \"Ctrl a\"" = cmd "SwitchToMode \"normal\"";
-          "bind \"Ctrl b\"" = cmd "SwitchToMode \"tmux\"";
+          "bind \"Ctrl b\"" = cmd "SwitchToMode \"normal\"";
         };
         "shared_except \"locked\" \"renametab\" \"renamepane\"" = {
           "bind \"Ctrl a\"" = cmd "SwitchToMode \"locked\"";
@@ -96,7 +78,7 @@ in {
         "shared_except \"locked\" \"entersearch\" \"renametab\" \"renamepane\" \"tab\"" = {
           "bind \"t\"" = cmd "SwitchToMode \"tab\"";
         };
-        "shared_except \"locked\" \"resize\" \"tab\" \"scroll\" \"prompt\" \"tmux\"" = {
+        "shared_except \"locked\" \"resize\" \"tab\" \"scroll\" \"prompt\"" = {
           "bind \"p\"" = cmd "SwitchToMode \"pane\"";
         };
         "renametab" = {
@@ -154,8 +136,7 @@ in {
           "bind \"x\"" = cmdAndLock "CloseTab";
         };
 
-        tmux = {
-          # TODO: Update zmk-config to stop using tmux mode and use tab mode instead.
+        normal = {
           "bind \"h\"" = cmdAndLock "GoToTab 1";
           "bind \"j\"" = cmdAndLock "GoToTab 2";
           "bind \"k\"" = cmdAndLock "GoToTab 3";
@@ -217,8 +198,8 @@ in {
         };
 
         shared = {
-          "bind \"Ctrl b\"" = {"SwitchToMode \"tmux\"" = {};};
-          "bind \"Ctrl f\"" = lib.mkIf (switcherApp == "zellij") {
+          "bind \"Ctrl b\"" = {"SwitchToMode \"normal\"" = {};};
+          "bind \"Ctrl f\"" = {
             "MessagePlugin \"primehopper\"" = {
               launch_new = true; # Always launch a new instance. This guarantees that CWD is correctly updated.
               skip_cache = false; # Don't skip compilation cache.
@@ -234,7 +215,7 @@ in {
   };
 
   programs.fish = {
-    interactiveShellInit = lib.optionalString (switcherApp == "zellij") ''
+    interactiveShellInit = ''
       bind           \cf '__zellij_primehopper'
       bind -M insert \cf '__zellij_primehopper'
     '';

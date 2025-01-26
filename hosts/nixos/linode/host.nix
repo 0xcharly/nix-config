@@ -58,9 +58,6 @@
   # No graphical environment.
   modules.usrenv.compositor = "headless";
 
-  # Use Zellij for repository management.
-  modules.usrenv.switcherApp = "zellij";
-
   networking = {
     hostName = "linode";
 

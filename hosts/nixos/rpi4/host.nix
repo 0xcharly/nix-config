@@ -5,9 +5,6 @@
   # TODO: consider switching to wayland.
   modules.usrenv.compositor = "x11";
 
-  # Use Zellij for repository management.
-  modules.usrenv.switcherApp = "zellij";
-
   # Setup qemu so we can run x86_64 binaries.
   boot.binfmt.emulatedSystems = ["x86_64-linux"];
 

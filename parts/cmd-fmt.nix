@@ -29,7 +29,6 @@
         "*.png"
         "*.toml"
         "*/Xresources"
-        "*/tmux.conf"
         ".env"
         ".envrc"
         ".gitattributes"

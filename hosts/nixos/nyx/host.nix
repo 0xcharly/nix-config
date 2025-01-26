@@ -26,9 +26,6 @@
   # Wayland, finally?
   modules.usrenv.compositor = "wayland";
 
-  # Use Zellij for repository management.
-  modules.usrenv.switcherApp = "zellij";
-
   # Roles.
   modules.system.roles.workstation = true;
 
