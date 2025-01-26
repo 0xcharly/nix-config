@@ -23,6 +23,7 @@
         [
           inputs'.agenix.packages.default # agenix CLI for secrets management
 
+          upkgs.age-plugin-yubikey
           upkgs.alejandra
           upkgs.cachix
           upkgs.jq
