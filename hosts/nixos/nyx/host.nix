@@ -18,6 +18,7 @@
     # supporting more hardware.
     # ./rgb.nix
     ./secrets.nix
+    ./tailscale.nix
   ];
 
   # See comment in modules/nixos/module.nix.
