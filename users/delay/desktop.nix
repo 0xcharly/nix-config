@@ -16,6 +16,7 @@ in
     home.packages = with pkgs; [
       element-desktop
       obsidian
+      proton-pass
       tidal-hifi
     ];
 
