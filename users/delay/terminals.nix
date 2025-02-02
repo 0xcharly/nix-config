@@ -76,7 +76,7 @@ in {
             "14=#71d1c7"
             "15=#90a4bb"
           ];
-          background-opacity = 0.9;
+          background-opacity = 0.95;
           # TODO: Replace with `background-blur = true` once Ghostty 1.2 lands.
           background-blur-radius = 20;
           title = " ";
