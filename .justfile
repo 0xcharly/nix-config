@@ -85,7 +85,7 @@ cache:
 [doc('Show Home Manager news')]
 [group('nix')]
 hm-news:
-  home-manager news --flake .
+    home-manager news --flake .
 
 [doc('Install NixOS on a remove Linode virtual machine')]
 [group('remotes')]
