@@ -59,19 +59,13 @@ in {
     ];
 
     functions.fish_mode_prompt = ""; # Disable prompt vi mode reporting.
-    shellAliases =
-      {
-        # Shortcut to setup a nix-shell with `fish`. This lets you do something
-        # like `nixsh -p go` to get an environment with Go but use `fish` along
-        # with it.
-        nixsh = "nix-shell --run ${lib.getExe pkgs.fish}";
-        devsh = "nix develop --command ${lib.getExe pkgs.fish}";
-      }
-      // (lib.optionalAttrs isLinuxDesktop {
-        # For consistency with macOS.
-        pbcopy = lib.getExe pkgs.xclip;
-        pbpaste = "${lib.getExe pkgs.xclip} -o";
-      });
+    shellAliases = {
+      # Shortcut to setup a nix-shell with `fish`. This lets you do something
+      # like `nixsh -p go` to get an environment with Go but use `fish` along
+      # with it.
+      nixsh = "nix-shell --run ${lib.getExe pkgs.fish}";
+      devsh = "nix develop --command ${lib.getExe pkgs.fish}";
+    };
   };
 
   programs.zellij.settings.default_shell = lib.getExe pkgs.fish;
