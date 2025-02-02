@@ -10,13 +10,19 @@ username: {
     # Additional configuration that should be set for any existing and future
     # users declared in this module. Any "shared" configuration between users
     # may be passed here.
-    {
+    rec {
       # Required to generate `~/.config/nix/nix.conf`.
       nix.package = pkgs.nix;
+
+      # Ensure Nix is in the path.
+      home.packages = [nix.package];
 
       # The state version indicates which default settings are in effect and
       # will therefore help avoid breaking program configurations.
       home.stateVersion = lib.mkDefault "24.05";
+
+      # I don't care about HM news.
+      news.display = "silent";
 
       # Allow HM to manage itself when in standalone mode.
       # This makes the home-manager command available to users.

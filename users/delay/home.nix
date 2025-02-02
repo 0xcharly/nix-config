@@ -8,6 +8,7 @@
 }: let
   inherit (pkgs.stdenv) isLinux;
 
+  isGenericLinux = pkgs.stdenv.isLinux && (config.targets.genericLinux.enable or false);
   isNixOS = pkgs.stdenv.isLinux && !(config.targets.genericLinux.enable or false);
 in {
   imports = [

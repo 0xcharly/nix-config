@@ -38,6 +38,15 @@ in {
       '';
     };
 
+    canBuildJujutsuUnstable = mkOption {
+      default = true;
+      type = bool;
+      description = ''
+        Whether the machine can build jujutsu HEAD from scratch.
+        Defaults to stable package otherwise.
+      '';
+    };
+
     enableProfileFont = mkOption {
       default = false;
       type = bool;

@@ -83,7 +83,8 @@
     roles ? [],
     extraModules ? [],
     ...
-  } @ args': mkHost (args'
+  } @ args':
+    mkHost (args'
       // {
         inherit extraModules host system;
         builder = mkDarwinSystem;
@@ -98,7 +99,8 @@
     roles ? [],
     extraModules ? [],
     ...
-  } @ args': mkHost (args'
+  } @ args':
+    mkHost (args'
       // {
         inherit host system;
         builder = mkStandaloneHome;
@@ -113,7 +115,8 @@
     roles ? [],
     extraModules ? [],
     ...
-  } @ args': mkHost (args'
+  } @ args':
+    mkHost (args'
       // {
         inherit extraModules host system;
         builder = mkNixosSystem;

@@ -82,6 +82,11 @@ cache:
       | jq -r '.[].outputs | to_entries[].value' \
       | cachix push 0xcharly-nixos-config
 
+[doc('Show Home Manager news')]
+[group('nix')]
+hm-news:
+  home-manager news --flake .
+
 [doc('Install NixOS on a remove Linode virtual machine')]
 [group('remotes')]
 [linux]

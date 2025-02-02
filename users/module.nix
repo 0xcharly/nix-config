@@ -56,6 +56,9 @@ in {
         # will therefore help avoid breaking program configurations.
         home.stateVersion = mkDefault "24.05";
 
+        # I don't care about HM news.
+        news.display = "silent";
+
         # Allow HM to manage itself when in standalone mode.
         # This makes the home-manager command available to users.
         programs.home-manager.enable = true;
