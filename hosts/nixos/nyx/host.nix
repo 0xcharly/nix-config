@@ -14,8 +14,8 @@
     # This is currently doing nothing since the 24.11 version of OpenRGB (<1.0)
     # does not support the host's hardware, and the CPU cooler's RGB is already
     # disabled in BIOS.
-    # TODO: consider re-enabling this service in 25.05 or later when OpenRGB is
-    # supporting more hardware.
+    # TODO(25.05): consider re-enabling this service in 25.05 or later when
+    # OpenRGB is supporting more hardware.
     # ./rgb.nix
     ./secrets.nix
     ./tailscale.nix
@@ -67,7 +67,5 @@
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
   # Configure nixpkgs.
-  # TODO: is this needed for anything? I'm already allowing unfree packages
-  # on a per-case basis.
   nixpkgs.config.allowUnfree = true;
 }

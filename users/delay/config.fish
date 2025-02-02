@@ -63,10 +63,11 @@ function segment -a icon text segment_fg segment_bg
 end
 
 function fish_right_prompt
-  # TODO: this doesn't work for some reason: $status is always 0…
-  set -l _status $status
+  # The transient.fish plugin overwrites $status and $pipestatus, but saves them
+  # in $transient_status and $transient_pipestatus, respectively.
+  set -l _status $transient_pipestatus[-1]
   if test $_status -ne 0
-    segment "󱖫 " $_status red
+    segment "󱖫 " $_status "fe9fa9" "41262e" # Red
   end
 
   set -l citc_space (citc_get_space_name)
@@ -79,7 +80,7 @@ function fish_right_prompt
     else
       set -l git_repo (git_repo_get_name)
       if test -n "$git_repo"
-        segment "󰊢 " $git_repo "fe9fa9" "41262e" # Red
+        segment "󰊢 " $git_repo "fec49a" "433027" # Orange
       else
         segment "󰉋 " (path basename $PWD) "aff3c0" "243c2e" # Green
       end

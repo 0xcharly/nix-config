@@ -8,7 +8,7 @@
   inherit (lib.lists) optionals;
   inherit (lib.modules) mkMerge;
   inherit (lib.options) mkOption;
-  inherit (lib.types) attrsOf bool enum int listOf str;
+  inherit (lib.types) attrsOf bool enum int listOf nullOr str submodule;
   inherit (pkgs.stdenv) isDarwin;
 
   cfg = config.modules.system;
@@ -24,21 +24,36 @@ in {
       '';
     };
 
-    users = mkOption {
-      # TODO: better typing.
-      type = attrsOf (attrsOf str);
-      default = let
-        mkUser = ldap: {
-          name = ldap;
-          home =
-            if isDarwin
-            then "/Users/${ldap}"
-            else "/home/${ldap}";
+    users = let
+      userModule = submodule {
+        options = {
+          name = mkOption {
+            type = str;
+            default = "nobody";
+            description = "The name of the user.";
+          };
+          home = mkOption {
+            type = str;
+            default = "/home/nobody";
+            description = "The home directory of the user.";
+          };
         };
-      in
-        genAttrs ["delay"] mkUser;
-      description = "A list of home-manager users on the system.";
-    };
+      };
+    in
+      mkOption {
+        type = nullOr (attrsOf userModule);
+        default = let
+          mkUser = username: {
+            name = username;
+            home =
+              if isDarwin
+              then "/Users/${username}"
+              else "/home/${username}";
+          };
+        in
+          genAttrs ["delay"] mkUser;
+        description = "A list of home-manager users on the system.";
+      };
 
     roles = {
       workstation = mkOption {

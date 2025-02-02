@@ -9,8 +9,6 @@
       settings = {
         hooks = {
           alejandra.enable = true;
-          # TODO: enable when the static analyzer can resolve the `vim` module.
-          # luacheck.enable = true;
           markdownlint = {
             enable = true;
             settings.configuration = {

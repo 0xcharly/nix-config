@@ -48,8 +48,6 @@
   # Configure nixpkgs.
   nixpkgs = {
     config = {
-      # TODO: is this needed for anything? I'm already allowing unfree packages
-      # on a per-case basis.
       allowUnfree = true;
       # Lots of stuff that uses aarch64 that claims doesn't work, but actually works.
       allowUnsupportedSystem = true;

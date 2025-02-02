@@ -85,8 +85,7 @@
     enable = true;
     openFirewall = true;
     settings = {
-      # PermitRootLogin = pkgs.lib.mkForce "yes"; # TODO: change me (can we pass this dynamically during setup instead?)
-      PermitRootLogin = "no"; # TODO: change me (can we pass this dynamically during setup instead?)
+      PermitRootLogin = pkgs.lib.mkForce "yes";
       PasswordAuthentication = false;
     };
   };

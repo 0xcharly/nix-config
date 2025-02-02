@@ -22,11 +22,11 @@
   darwin = systemsModulePath + /darwin; # darwin-specific modules.
   home = systemsModulePath + /home; # standalone-specific modules.
   nixos = systemsModulePath + /nixos; # nixos-specific modules.
+  iso = systemsModulePath + /iso; # nixos-specific modules for creating an ISO.
 
   config = systemsModulePath + /config; # options for system configuration.
   shared = systemsModulePath + /shared; # shared modules across all hosts.
-  # TODO: find a better name for modules that are for "non-hm-standalone" installs.
-  managed = systemsModulePath + /system; # shared modules across NixOS/darwin.
+  fullyManaged = systemsModulePath + /system; # shared modules across NixOS/darwin.
 
   # home-manager
   users = ../users; # home-manager configurations.
@@ -88,7 +88,7 @@
       // {
         inherit extraModules host system;
         builder = mkDarwinSystem;
-        moduleTrees = moduleTrees ++ [config managed shared users];
+        moduleTrees = moduleTrees ++ [config fullyManaged shared users];
         roles = roles ++ [darwin];
       });
 
@@ -120,7 +120,7 @@
       // {
         inherit extraModules host system;
         builder = mkNixosSystem;
-        moduleTrees = moduleTrees ++ [config managed shared users];
+        moduleTrees = moduleTrees ++ [config fullyManaged shared users];
         roles = roles ++ [nixos];
       });
 
@@ -130,31 +130,14 @@
     roles ? [],
     extraModules ? [],
     ...
-  } @ args': let
-    # Modules used to create a NixOS image.
-    isoModule = {
-      lib,
-      modulesPath,
-      ...
-    }: {
-      # TODO: move these into a proper role.
-      services.openssh.settings.PermitRootLogin = lib.mkForce "yes";
-      imports = [
-        # Base ISO content.
-        (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
-        # Provide an initial copy of the NixOS channel so that the user
-        # doesn't need to run "nix-channel --update" first.
-        (modulesPath + "/installer/cd-dvd/channel.nix")
-      ];
-    };
-  in
+  } @ args':
     mkHost (args'
       // {
         inherit host system;
         builder = mkNixosSystem;
-        moduleTrees = moduleTrees ++ [config managed shared users];
+        moduleTrees = moduleTrees ++ [config fullyManaged shared users];
         roles = roles ++ [nixos];
-        extraModules = extraModules ++ [isoModule];
+        extraModules = extraModules ++ [iso];
       });
 
   mkHostAttrs = builtins.foldl' recursiveUpdate {};

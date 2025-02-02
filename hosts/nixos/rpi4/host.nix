@@ -1,9 +1,8 @@
 {
   imports = [];
 
-  # Use a desktop environment.
-  # TODO: consider switching to wayland.
-  modules.usrenv.compositor = "x11";
+  # No desktop environment.
+  modules.usrenv.compositor = "headless";
 
   # Setup qemu so we can run x86_64 binaries.
   boot.binfmt.emulatedSystems = ["x86_64-linux"];

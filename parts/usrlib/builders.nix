@@ -5,9 +5,21 @@
 }: let
   inherit (inputs) self nix-darwin nixpkgs nixpkgs-darwin;
   inherit (self) usrlib;
-  inherit (lib.attrsets) recursiveUpdate;
+  inherit (lib.attrsets) mapAttrs recursiveUpdate;
   inherit (lib.lists) singleton concatLists;
   inherit (lib.modules) mkDefault;
+
+  # Merge `inputs` into `inputs'` in the shape expected by flake-parts such that:
+  #
+  # inputs =  { a = { x86_64-linux = {...}; }; b = { x86_64-linux = {...}; }; };
+  # inputs' = { x = {...};; y = {...}; };
+  #
+  # mergeInputs' "x86_64-linux" inputs' inputs =
+  #   { a = {...}; b = {...}; x = {...}; y = {...}; };
+  mergeInputs' = system: inputs': inputs: let
+    systemMappedInputs = mapAttrs (name: value: inputs.${system}.${name}) inputs;
+  in
+    recursiveUpdate inputs' systemMappedInputs;
 
   # mkSystem is a convenient wrapper around either lib.nixosSystem or
   # lib.darwinSystem.
@@ -26,10 +38,10 @@
         # Arguments passed to all modules.
         specialArgs = recursiveUpdate {
           inherit lib usrlib;
-          inherit inputs' self';
+          inherit self';
 
-          # TODO: need to massage `inputs'`?
           inputs = recursiveUpdate inputs (args.inputs or {});
+          inputs' = mergeInputs' system inputs' (args.inputs or {});
           self = recursiveUpdate self (args.self or {});
         } (args.specialArgs or {});
 
@@ -58,11 +70,10 @@
       inputs.home-manager.lib.homeManagerConfiguration {
         # Arguments passed to all modules.
         extraSpecialArgs = recursiveUpdate {
-          inherit usrlib;
-          inherit inputs' self';
+          inherit self' usrlib;
 
-          # TODO: need to massage `inputs'`?
           inputs = recursiveUpdate inputs (args.inputs or {});
+          inputs' = mergeInputs' system inputs' (args.inputs or {});
           self = recursiveUpdate self (args.self or {});
         } (args.extraSpecialArgs or {});
 

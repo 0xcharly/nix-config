@@ -50,9 +50,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # NOTE: See comment in ./modules/shared/module.nix.
-    # Input is still referenced in devshells for future use/experimentation.
-
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -88,6 +85,9 @@
 
     # Pure and reproducible packaging of binary distributed rust toolchains.
     rust-overlay.url = "github:oxalica/rust-overlay";
+
+    # Shared NixOS configuration.
+    nix-config-lib.url = "github:0xcharly/nix-config-lib";
 
     # Secrets management.
     nix-config-secrets = {

@@ -48,11 +48,6 @@ in {
             gen-font-codepoint-map = family: codepoints: lib.concatStringsSep "=" [codepoints family];
           in
             lib.mapAttrsToList gen-font-codepoint-map codepoints-map;
-          # custom-shader = pkgs.writeTextFile {
-          #   name = "custom-shader.glsl";
-          #   text = builtins.readFile ./ghostty/glow-rgbsplit-twitchy.glsl;
-          # };
-          # custom-shader-animation = false;
           background = "#151b23";
           foreground = "#e1e8f4";
           selection-background = "#303747";
@@ -77,7 +72,7 @@ in {
             "15=#90a4bb"
           ];
           background-opacity = 0.95;
-          # TODO: Replace with `background-blur = true` once Ghostty 1.2 lands.
+          # TODO(25.05): Replace with `background-blur = true` once Ghostty 1.2 lands.
           background-blur-radius = 20;
           title = " ";
           cursor-style = "block";
