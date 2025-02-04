@@ -16,6 +16,7 @@
   codeDirectory = homeDirectory + "/code";
 in {
   programs.bash.enable = true;
+  programs.bottom.enable = true;
   programs.btop.enable = true;
   programs.htop.enable = true;
 
@@ -72,8 +73,10 @@ in {
 
   home.sessionVariables.SHELL = lib.getExe pkgs.fish;
 
-  home.packages = [
-    pkgs.fishPlugins.fzf
-    pkgs.fishPlugins.transient-fish
-  ];
+  home.packages =
+    [
+      pkgs.fishPlugins.fzf
+      pkgs.fishPlugins.transient-fish
+    ]
+    ++ lib.optionals isLinuxDesktop [pkgs.nvtop];
 }

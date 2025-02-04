@@ -1,6 +1,7 @@
 {
   catppuccin = {
     bat.enable = true;
+    bottom.enable = true;
     btop.enable = true;
     delta.enable = true;
     fish.enable = true;
