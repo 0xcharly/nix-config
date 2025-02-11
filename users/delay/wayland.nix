@@ -251,7 +251,7 @@ in rec {
     # offset by -1-1 pixels. This results in "parallel" rounding.
     borderRadius = wayland.windowManager.hyprland.settings.decoration.rounding - 1;
     borderSize = 2;
-    font = "Comic Code 12";
+    font = "Recursive Sans Casual Static 12";
     maxIconSize = 32;
     padding = "8";
     width = 512;

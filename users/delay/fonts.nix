@@ -13,25 +13,17 @@ in {
   fonts.fontconfig = {
     inherit enable;
     defaultFonts = {
-      monospace = ["Comic Code Ligatures"];
+      monospace = ["Recursive Mono Casual Static"];
+      sansSerif = ["Recursive Sans Casual Static"];
+      serif = ["Recursive Sans Linear Static"];
     };
   };
 
   home.packages = lib.mkIf enable [
-    (pkgs.iosevka.override {
-      set = "QuasiProportional";
-      privateBuildPlan = ''
-        [buildPlans.IosevkaQuasiProportional]
-        family = "Iosevka QuasiProportional"
-        spacing = "quasi-proportional"
-        serifs = "sans"
-        noCvSs = true
-        exportGlyphNames = false
-      '';
-    })
     (pkgs.nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})
     (pkgs.unfree-fonts.comic-code.override {ligatures = false;})
     (pkgs.unfree-fonts.comic-code.override {ligatures = true;})
+    pkgs.recursive # Variable font family for code & UI.
     # pkgs.maple-mono # Cute, cozy round font.
     pkgs.material-design-icons
     pkgs.mononoki # Used for its @.

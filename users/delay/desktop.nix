@@ -27,9 +27,9 @@ in
       settings = {
         "org/gnome/desktop/interface" = {
           color-scheme = "prefer-dark";
-          # font-name = "Iosevka Aile 12";
-          monospace-font-name = "Comic Code 12";
-          # document-font-name = "Iosevka Etoile 12";
+          font-name = "Recursive Sans Casual Static 12";
+          monospace-font-name = "Recursive Mono Casual Static 13";
+          document-font-name = "Recursive Sans Casual Static 12";
           cursor-theme = "BreezeX-RosePine-Linux";
           gtk-theme = "rose-pine";
           icon-theme = "rose-pine-icons";
