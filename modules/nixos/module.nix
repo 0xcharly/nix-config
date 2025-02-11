@@ -15,6 +15,7 @@
     ./nixos-compositor-common.nix
     ./nixos-wayland.nix
     ./nixos-x11.nix
+    ./protonvpn.nix
     ./terminfo.nix
     ./user-delay.nix
   ];
