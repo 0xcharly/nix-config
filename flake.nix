@@ -44,6 +44,28 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Weekly updated index: quickly locate nix packages with specific files.
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # macOS only: Homebrew for Nix.
+    nix-homebrew = {
+      url = "github:zhaofengli/nix-homebrew";
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
+    };
+
+    # Hyprland and plugins.
+    hyprland.url = "github:hyprwm/Hyprland?submodules=1&ref=v0.45.2";
+    hy3 = {
+      url = "github:outfoxxed/hy3?ref=hl0.45.0";
+      inputs.hyprland.follows = "hyprland";
+    };
+
+    # Catppuccin all the things.
+    catppuccin.url = "github:catppuccin/nix";
+
     # Secrets management.
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -71,23 +93,20 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Weekly updated index: quickly locate nix packages with specific files.
-    nix-index-database = {
-      url = "github:nix-community/nix-index-database";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # macOS only: Homebrew for Nix.
-    nix-homebrew = {
-      url = "github:zhaofengli/nix-homebrew";
-      inputs.nixpkgs.follows = "nixpkgs-darwin";
-    };
+    # Jujutsu at HEAD.
+    jujutsu.url = "github:jj-vcs/jj";
 
     # Pure and reproducible packaging of binary distributed rust toolchains.
     rust-overlay.url = "github:oxalica/rust-overlay";
 
+    # Unfree fonts.
+    nix-config-fonts.url = "github:0xcharly/nix-config-fonts";
+
     # Shared NixOS configuration.
     nix-config-lib.url = "github:0xcharly/nix-config-lib";
+
+    # Neovim.
+    nix-config-nvim.url = "github:0xcharly/nix-config-nvim";
 
     # Secrets management.
     nix-config-secrets = {
@@ -98,12 +117,6 @@
       inputs.home-manager.follows = "home-manager";
     };
 
-    # Neovim.
-    nix-config-nvim.url = "github:0xcharly/nix-config-nvim";
-
-    # Unfree fonts.
-    nix-config-fonts.url = "github:0xcharly/nix-config-fonts";
-
     # Implementation of The Primeagen's sessionizer script in Zellij.
     zellij-prime-hopper = {
       url = "github:0xcharly/zellij-prime-hopper";
@@ -111,20 +124,6 @@
       inputs.nixpkgs-darwin.follows = "nixpkgs-darwin";
       inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
     };
-
-    # Jujutsu at HEAD.
-    jujutsu.url = "github:jj-vcs/jj";
-
-    # Hyprland and plugins.
-    hyprland.url = "github:hyprwm/Hyprland?submodules=1&ref=v0.45.2";
-
-    hy3 = {
-      url = "github:outfoxxed/hy3?ref=hl0.45.0";
-      inputs.hyprland.follows = "hyprland";
-    };
-
-    # Catppuccin all the things.
-    catppuccin.url = "github:catppuccin/nix";
   };
 
   nixConfig = {

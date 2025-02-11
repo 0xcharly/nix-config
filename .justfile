@@ -50,6 +50,26 @@ gc:
 update +inputs:
     for input in {{ inputs }}; nix flake update --flake . $input; end
 
+[doc('Update all "distribution" inputs (nixpkgs, home-manager, disko, etc.)')]
+[group('nix')]
+distupdate:
+    @just update nixpkgs nixpkgs-darwin nixpkgs-unstable nur nixos-hardware home-manager nix-darwin disko nix-index-database nix-homebrew hyperland hy3 catppuccin
+
+[doc('Update all "toolchain" inputs (sops-nix, agenix, flake-parts, etc.)')]
+[group('nix')]
+update-toolchain:
+    @just update sops-nix agenix flake-parts git-hooks-nix treefmt-nix jujutsu rust-overlay
+
+[doc('Update all "config" inputs (nix-config-lib, nix-config-secrets, etc.)')]
+[group('nix')]
+update-nix-config:
+    @just update nix-config-fonts nix-config-lib nix-config-nvim nix-config-secrets zellij-prime-hopper
+
+[doc('Update all inputs')]
+[group('nix')]
+update-all:
+    nix flake update
+
 # Builds the current darwin host's configuration and caches the results.
 #
 # This does not alter the current running system. Requires cachix authentication
