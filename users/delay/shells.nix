@@ -78,5 +78,5 @@ in {
       pkgs.fishPlugins.fzf
       pkgs.fishPlugins.transient-fish
     ]
-    ++ lib.optionals isLinuxDesktop [pkgs.nvtop];
+    ++ lib.optionals isLinuxDesktop [pkgs.nvtopPackages.full];
 }
