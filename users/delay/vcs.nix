@@ -1,5 +1,5 @@
 {
-  inputs',
+  inputs,
   lib,
   pkgs,
   ...
@@ -8,7 +8,7 @@
     if args ? osConfig
     then args.osConfig
     else args.config;
-  inherit (config.modules.usrenv) canBuildJujutsuUnstable sshAgent;
+  inherit (config.modules.usrenv) sshAgent;
   inherit (pkgs.stdenv) isDarwin;
 
   homeDirectory = config.modules.system.users.delay.home;
@@ -17,11 +17,9 @@
 in {
   programs.jujutsu = {
     enable = true;
-    # Install jujutsu from HEAD if the machine can build it.
-    package =
-      if canBuildJujutsuUnstable
-      then inputs'.jujutsu.packages.jujutsu
-      else pkgs.jujutsu;
+    package = let
+      pkgs' = import inputs.nixpkgs-unstable {inherit (pkgs) system;};
+    in pkgs'.jujutsu;
     settings =
       lib.recursiveUpdate {
         user = {
