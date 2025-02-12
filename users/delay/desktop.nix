@@ -20,7 +20,17 @@ in
       tidal-hifi
     ];
 
+    # Screenshot tool.
     services.flameshot.enable = true;
+
+    # PDF viewer.
+    programs.zathura.enable = true;
+
+    xdg.mimeApps = {
+      defaultApplications = {
+        "application/pdf" = ["org.pwmt.zathura.desktop"];
+      };
+    };
 
     dconf = {
       enable = true;
@@ -49,6 +59,10 @@ in
       iconTheme = {
         package = pkgs.rose-pine-icon-theme;
         name = "rose-pine-icons";
+      };
+      font = {
+        name = "Recursive Sans Casual Static";
+        size = 12;
       };
     };
 

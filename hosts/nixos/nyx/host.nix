@@ -10,7 +10,6 @@
     ./1password.nix
     ./audio.nix
     ./fs.nix
-    ./hyprland.nix
     ./protonvpn.nix
     # This is currently doing nothing since the 24.11 version of OpenRGB (<1.0)
     # does not support the host's hardware, and the CPU cooler's RGB is already

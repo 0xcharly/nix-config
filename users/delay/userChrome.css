@@ -1,0 +1,39 @@
+/* Creates a more compact UI. */
+
+.tab-label,
+.urlbar-input-box > *,
+.urlbarView > *,
+#page-action-buttons > *,
+#tab-preview-panel > *,
+menupopup > *,
+panelmultiview > * {
+  font-size: 12px !important;
+}
+
+/*
+ * Makes tabs only 25px high rather than the default 29px, urlbar 26px instead
+ * of 32px default.
+ */
+:root {
+  --tab-min-height: 25px !important;
+  --tab-block-margin: 2px !important;
+  --newtab-margin: -2px 0 -2px -2px !important;
+  --toolbarbutton-inner-padding: 4px !important;
+  --urlbar-height: 26px !important;
+  --urlbar-min-height: 26px !important;
+}
+
+.tab-label-container {
+  #tabbrowser-tabs:not([secondarytext-unsupported], [orient=vertical]) & {
+    height: 2em !important;
+  }
+}
+
+.tab-throbber, .tab-icon-pending, .tab-icon-image, .tab-sharing-icon-overlay, .tab-icon-overlay {
+  height: 14px !important;
+  width: 14px !important;
+}
+
+.tab-secondary-label > label {
+  font-size: 8px !important;
+}
