@@ -28,7 +28,7 @@ in {
           font-family = ["Recursive Mono Casual Static"];
           font-size = 14;
           # https://www.recursive.design/assets/arrowtype-recursive-sansmono-specimen-230407.pdf
-          font-feature = ["dlig" "ss01" "ss02" "ss03" "ss04" "ss05" "ss06" "ss08" "ss11"];
+          font-feature = ["dlig"]; # "ss01" "ss02" "ss03" "ss04" "ss05" "ss06" "ss08" "ss11"];
           font-codepoint-map = let
             codepoints-map = {
               "mononoki" = "U+0040"; # @
