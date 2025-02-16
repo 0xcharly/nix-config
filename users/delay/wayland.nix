@@ -44,7 +44,6 @@
     _JAVA_AWT_WM_NONREPARENTING = 1;
 
     # IMPORTANT: Keep in sync with ./desktop.nix.
-    GTK_THEME = "rose-pine";
     XCURSOR_THEME = "BreezeX-RosePine-Linux";
     XCURSOR_SIZE = cursorSize;
   };
@@ -68,8 +67,6 @@ in
           };
         };
       };
-      swaylock.enable = true;
-      hyprlock.enable = true;
       waybar = {
         enable = true;
         systemd.enable = false;
@@ -86,6 +83,9 @@ in
       wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
       wl-color-picker # GUI color picker
       wlr-randr # Utility to manage outputs of a Wayland compositor
+
+      qt5.qtwayland
+      qt6.qtwayland
     ];
 
     xdg.configFile = {
@@ -101,7 +101,8 @@ in
     };
 
     wayland.windowManager.hyprland = {
-      inherit enable;
+      enable = true;
+      systemd.variables = ["--all"];
       # Set the Hyprland and XDPH packages to null to use the ones from the NixOS module
       # TODO(25.05): Enable this when the HM module is updated to use the new packages.
       # package = null;
@@ -180,11 +181,10 @@ in
         # Keyboard bindings.
         bind = [
           "SUPER,       Return, exec, uwsm app -- ${lib.getExe pkgs.ghostty}"
-          "SUPER,       Space,  exec, pkill rofi || ${lib.getExe args.config.programs.rofi.finalPackage} -show combi  -run-command \"uwsm app -- {cmd}\""
+          "SUPER,       Space,  exec, pkill rofi || ${lib.getExe args.config.programs.rofi.finalPackage} -show combi  -run-command \"uwsm app -- {cmd}\" -calc-command \"echo -n '{result}' | ${pkgs.wl-clipboard}/bin/wl-copy\""
           "SUPER SHIFT, X,      killactive, "
           "SUPER SHIFT, Q,      exec, uwsm app -- loginctl terminate-session \"$XDG_SESSION_ID\""
           "SUPER,       V,      togglefloating, "
-          "SUPER CTRL,  L,      exec, uwsm app -- ${lib.getExe args.config.programs.swaylock.package}"
           "SUPER CTRL,  P,      exec, uwsm app -- ${lib.getExe pkgs.wl-color-picker}"
 
           "SUPER,       d, hy3:makegroup,   h"

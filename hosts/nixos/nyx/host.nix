@@ -51,6 +51,9 @@
     interfaces.enp115s0.useDHCP = true;
   };
 
+  # Automount removable devices (used by udiskie).
+  services.udisks2.enable = true;
+
   services.xserver.videoDrivers = ["amdgpu" "modesetting"];
   hardware.graphics = {
     enable = true;

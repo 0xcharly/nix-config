@@ -93,9 +93,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Jujutsu at HEAD.
-    jujutsu.url = "github:jj-vcs/jj";
-
     # Pure and reproducible packaging of binary distributed rust toolchains.
     rust-overlay.url = "github:oxalica/rust-overlay";
 
@@ -127,7 +124,7 @@
   };
 
   nixConfig = {
-    extra-substituters = ["https://0xcharly-nixos-config.cachix.org"];
-    extra-trusted-public-keys = ["0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU="];
+    extra-substituters = [ "https://0xcharly-nixos-config.cachix.org" ];
+    extra-trusted-public-keys = [ "0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU=" ];
   };
 }

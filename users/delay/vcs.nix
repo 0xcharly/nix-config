@@ -1,5 +1,5 @@
 {
-  inputs,
+  inputs',
   lib,
   pkgs,
   ...
@@ -17,9 +17,7 @@
 in {
   programs.jujutsu = {
     enable = true;
-    package = let
-      pkgs' = import inputs.nixpkgs-unstable {inherit (pkgs) system;};
-    in pkgs'.jujutsu;
+    package = inputs'.nixpkgs-unstable.legacyPackages.jujutsu;
     settings =
       lib.recursiveUpdate {
         user = {

@@ -1,22 +1,11 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }: let
   enable = config.modules.usrenv.compositor == "wayland";
 in
   lib.mkIf enable {
-    xdg.portal = {
-      enable = true;
-      extraPortals = with pkgs; [
-        qt5.qtwayland
-        qt6.qtwayland
-        xdg-desktop-portal-gtk
-        xdg-desktop-portal-wlr
-      ];
-    };
-
     # Windowing environment.
     services = {
       xserver.displayManager.gdm = {
@@ -24,8 +13,7 @@ in
         wayland = true;
       };
       displayManager.defaultSession = "hyprland-uwsm";
-
-      libinput = {inherit enable;};
+      libinput.enable = true;
     };
 
     programs = {
@@ -33,7 +21,6 @@ in
         enable = true;
         withUWSM = true;
       };
-      hyprlock.enable = true;
       uwsm = {
         enable = true;
         waylandCompositors.hyprland = {

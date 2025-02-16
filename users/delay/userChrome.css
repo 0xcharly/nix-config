@@ -5,6 +5,7 @@
 .urlbarView > *,
 #page-action-buttons > *,
 #tab-preview-panel > *,
+#urlbar-search-mode-indicator > *,
 menupopup > *,
 panelmultiview > * {
   font-size: 12px !important;

@@ -15,16 +15,18 @@ in
   lib.mkIf isLinuxDesktop {
     home.packages = with pkgs; [
       element-desktop
+      nautilus
       obsidian
       proton-pass
       tidal-hifi
+      xfce.thunar
     ];
-
-    # Screenshot tool.
-    services.flameshot.enable = true;
 
     # PDF viewer.
     programs.zathura.enable = true;
+
+    # USB automount (requires udisks2 service enabled).
+    services.udiskie.enable = true;
 
     xdg.mimeApps = {
       defaultApplications = {
@@ -40,9 +42,6 @@ in
           font-name = "Recursive Sans Casual Static 12";
           monospace-font-name = "Recursive Mono Casual Static 13";
           document-font-name = "Recursive Sans Casual Static 12";
-          cursor-theme = "BreezeX-RosePine-Linux";
-          gtk-theme = "rose-pine";
-          icon-theme = "rose-pine-icons";
         };
         "org/gtk/settings/file-chooser" = {
           sort-directories-first = true;
@@ -52,17 +51,56 @@ in
 
     gtk = {
       enable = true;
-      theme = {
-        package = pkgs.rose-pine-gtk-theme;
-        name = "rose-pine";
-      };
+      # Adwaita should be the default, but setting it explicitly breaks it (i.e.
+      # force light-mode).
+      # theme.name = "Adwaita";
       iconTheme = {
-        package = pkgs.rose-pine-icon-theme;
-        name = "rose-pine-icons";
+        name = "Adwaita";
+        package = pkgs.adwaita-icon-theme;
       };
       font = {
         name = "Recursive Sans Casual Static";
         size = 12;
+      };
+      gtk2.extraConfig = ''
+        gtk-application-prefer-dark-theme=1
+      '';
+      gtk3.extraConfig = {
+        gtk-application-prefer-dark-theme = 1;
+      };
+      gtk4.extraConfig = {
+        gtk-application-prefer-dark-theme = 1;
+      };
+    };
+
+    xdg.configFile."gtk-4.0/settings.ini".text = ''
+      [AdwStyleManager]
+      color-scheme=ADW_COLOR_SCHEME_PREFER_DARK
+    '';
+
+    qt = {
+      enable = true;
+      platformTheme.name = "adwaita";
+      style = {
+        name = "adwaita-dark";
+        package = pkgs.adwaita-qt;
+      };
+    };
+
+    xdg.portal = {
+      enable = true;
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-gtk
+        xdg-desktop-portal-wlr
+        xdg-desktop-portal-hyprland
+      ];
+      config = {
+        common = {
+          default = ["gtk" "wlr"];
+        };
+        Hyprland = {
+          default = ["hyprland" "gtk" "wlr"];
+        };
       };
     };
 
