@@ -133,7 +133,7 @@ in
         input = {
           kb_options = "ctrl:nocaps";
           kb_layout = "us";
-          # kb_variant = "intl";
+          kb_variant = "mac";
           repeat_delay = 200;
           repeat_rate = 60;
         };
