@@ -32,9 +32,8 @@
 
   # Boot configuration.
   boot.initrd.availableKernelModules = ["ahci" "xhci_pci" "nvme" "usbhid" "sd_mod"];
-  boot.initrd.kernelModules = [];
-  boot.kernelModules = ["amdgpu" "kvm-amd"];
-  boot.kernelParams = ["amdgpu.admlevel=1"];
+  boot.initrd.kernelModules = ["amdgpu"];
+  boot.kernelModules = ["kvm-amd"];
   boot.extraModulePackages = [];
 
   # Be careful updating this.
@@ -54,7 +53,7 @@
   # Automount removable devices (used by udiskie).
   services.udisks2.enable = true;
 
-  services.xserver.videoDrivers = ["amdgpu" "modesetting"];
+  services.xserver.videoDrivers = ["modesetting"];
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
