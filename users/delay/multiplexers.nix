@@ -63,7 +63,7 @@ in {
           "bind \"Ctrl b\"" = cmd "SwitchToMode \"normal\"";
         };
         "shared_except \"locked\" \"renametab\" \"renamepane\"" = {
-          "bind \"Ctrl a\"" = cmd "SwitchToMode \"locked\"";
+          "bind \"Ctrl b\"" = cmd "SwitchToMode \"locked\"";
           "bind \"Ctrl q\"" = cmd "Quit";
         };
         "shared_except \"locked\" \"entersearch\"" = {
@@ -137,10 +137,6 @@ in {
         };
 
         normal = {
-          "bind \"h\"" = cmdAndLock "GoToTab 1";
-          "bind \"j\"" = cmdAndLock "GoToTab 2";
-          "bind \"k\"" = cmdAndLock "GoToTab 3";
-          "bind \"l\"" = cmdAndLock "GoToTab 4";
           "bind \"/\"" = cmd "SwitchToMode \"entersearch\"";
           "bind \"?\"" = cmd "SwitchToMode \"entersearch\"";
           "bind \"\\\"\"" = cmdAndLock "NewPane \"down\"";
