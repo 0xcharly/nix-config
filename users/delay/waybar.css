@@ -1,34 +1,37 @@
 @import "/nix/store/pnndixxiifidqwm4hxil4cr0l1f937v1-source/themes/mocha.css";
 
 @define-color active @blue;
-@define-color background @mantle;
-@define-color foreground @text;
+@define-color background @crust;
+@define-color border @overlay0;
+
+@define-color clock-foreground @subtext0;
+
+@define-color tooltip-border @overlay0;
+@define-color tooltip-background @mantle;
+
+@define-color workspace @surface0;
+@define-color workspace-active @overlay0;
+@define-color workspace-urgent @orange;
 
 * {
   font-size: 16px;
   font-family: "Recursive Sans Casual Static";
-  min-width: 16px;
-  min-height: 0px;
   border: none;
   border-radius: 0;
   box-shadow: none;
   text-shadow: none;
+  margin: 0px;
   padding: 0px;
 }
 
 window#waybar {
-  transition-property: background-color;
-  transition-duration: 0.2s;
-  border: 2px solid @overlay0;
-  border-radius: 8px;
-  background: @background;
-  background: alpha(@background, 0.7);
+  background: transparent;
 }
 
 tooltip {
-  border: 2px solid @overlay0;
+  border: 2px solid @tooltip-border;
   border-radius: 8px;
-  background: alpha(@crust, 0.8);
+  background: @crust;
 }
 
 tooltip label {
@@ -36,66 +39,44 @@ tooltip label {
   color: @subtext0;
 }
 
-.modules-left {
-  transition-property: background-color;
-  transition-duration: 0.2s;
-  margin: 8px;
-  background: alpha(@background, 0.4);
-}
-
-.modules-right {
-  margin: 8px;
-  background: alpha(@background, 0.4);
-}
-
-#workspaces {
-  margin: 0px 2px;
-  padding: 8px 0px 0px 0px;
+.modules-left, .modules-right {
+  border: 2px solid @border;
   border-radius: 8px;
+  background: @tooltip-background;
+  padding: 8px;
 }
 
 #workspaces button {
-  padding: 4px;
-  transition-property: background-color;
-  transition-duration: 0.2s;
-  background: transparent;
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
   color: @overlay0;
+  font-size: 0px;
+  min-width: 4px;
+  margin-bottom: 4px;
+
+  transition-property: background-color;
+  transition-duration: 0.1s;
+  background: @workspace;
+  min-height: 4px;
+}
+
+#workspaces button:last-child {
+  margin-bottom: 0px;
+}
+
+#workspaces button box {
+  min-width: 4px;
+  min-height: 4px;
 }
 
 #workspaces button.urgent {
-  font-weight: bold;
-  color: @foreground;
+  background-color: @workspace-urgent;
 }
 
 #workspaces button.active {
-  background: alpha(@active, 0.4);
-  color: lighter(@active);
+  background-color: @workspace-active;
 }
 
 #clock {
-  color: @subtext0;
-  padding: 4px 2px 2px 2px;
-}
-
-@keyframes blink-active {
-  to {
-    background-color: @active;
-    color: @foreground;
-  }
-}
-
-@keyframes blink-red {
-  to {
-    background-color: @red;
-    color: @foreground;
-  }
-}
-
-@keyframes blink-yellow {
-  to {
-    background-color: @yellow;
-    color: @foreground;
-  }
+  color: @clock-foreground;
 }

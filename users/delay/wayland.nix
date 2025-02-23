@@ -118,10 +118,10 @@ in
           "uwsm app -- systemctl --user enable --now hyprpaper.service"
           "uwsm app -- systemctl --user enable --now waybar.service"
           "[workspace 1] uwsm app -- ${lib.getExe args.config.programs.firefox.finalPackage}"
-          "[workspace 2] uwsm app -- ${lib.getExe args.config.programs.chromium.package}"
+        # "[workspace 2] uwsm app -- ${lib.getExe args.config.programs.chromium.package}"
           "[workspace 3] uwsm app -- ${lib.getExe pkgs.ghostty}"
           "[workspace 8] uwsm app -- ${lib.getExe pkgs.obsidian}"
-          "[workspace 9] uwsm app -- ${lib.getExe pkgs.tidal-hifi}"
+        # "[workspace 9] uwsm app -- ${lib.getExe pkgs.tidal-hifi}"
         ];
 
         # Monitor scaling.
