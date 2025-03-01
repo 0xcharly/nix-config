@@ -1,7 +1,5 @@
 {inputs, ...}: {
-  imports = [
-    inputs.treefmt-nix.flakeModule
-  ];
+  imports = [inputs.treefmt-nix.flakeModule];
 
   perSystem = {config, ...}: {
     formatter = config.treefmt.build.wrapper;

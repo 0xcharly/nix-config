@@ -52,12 +52,15 @@ in {
     enableFishIntegration = true;
   };
 
+  programs.keychain = {
+    enable = true;
+    keys = []; # TODO: Add keys.
+    enableFishIntegration = true;
+  };
+
   programs.fish = {
     enable = true;
-    interactiveShellInit = lib.strings.concatStringsSep "\n" [
-      (builtins.readFile ./config.fish)
-      (lib.optionalString isLinuxDesktop "eval (${lib.getExe pkgs.keychain} --eval --nogui --quiet)")
-    ];
+    interactiveShellInit = builtins.readFile ./config.fish;
 
     functions.fish_mode_prompt = ""; # Disable prompt vi mode reporting.
     shellAliases = {
@@ -65,7 +68,6 @@ in {
       # like `nixsh -p go` to get an environment with Go but use `fish` along
       # with it.
       nixsh = "nix-shell --run ${lib.getExe pkgs.fish}";
-      devsh = "nix develop --command ${lib.getExe pkgs.fish}";
     };
   };
 
