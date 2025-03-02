@@ -65,9 +65,10 @@ end
 function fish_right_prompt
   # The transient.fish plugin overwrites $status and $pipestatus, but saves them
   # in $transient_status and $transient_pipestatus, respectively.
+  # TODO: Somehow, this doesn't seem to work over SSH?
   set -l _status $transient_pipestatus[-1]
-  if test -z "$_status" || test "$_status" -ne 0
-    segment "󱖫 " $_status "fe9fa9" "41262e" # Red
+  if test -n "$_status" && test "$_status" != "0"
+    segment "󱖫 " "$_status" "fe9fa9" "41262e" # Red
   end
 
   set -l citc_space (citc_get_space_name)
