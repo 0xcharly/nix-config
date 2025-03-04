@@ -8,10 +8,10 @@
     then args.osConfig
     else args.config;
 
-  enable = !config.modules.usrenv.isHeadless;
+  enable = !config.modules.usrenv.installFonts;
 in {
-  fonts.fontconfig = {
-    inherit enable;
+  fonts.fontconfig = lib.mkIf enable {
+    enable = true;
     defaultFonts = {
       monospace = ["Recursive Mono Casual Static"];
       sansSerif = ["Recursive Sans Casual Static"];

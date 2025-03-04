@@ -38,8 +38,8 @@ in {
       '';
     };
 
-    enableProfileFont = mkOption {
-      default = false;
+    installFonts = mkOption {
+      default = !cfg.isHeadless;
       type = bool;
       description = ''
         Whether to install fonts via Home Manager.
