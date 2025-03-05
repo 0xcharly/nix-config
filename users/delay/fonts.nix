@@ -8,7 +8,7 @@
     then args.osConfig
     else args.config;
 
-  enable = !config.modules.usrenv.installFonts;
+  enable = config.modules.usrenv.installFonts;
 in {
   fonts.fontconfig = lib.mkIf enable {
     enable = true;
@@ -21,8 +21,8 @@ in {
 
   home.packages = lib.mkIf enable [
     (pkgs.nerdfonts.override {fonts = ["NerdFontsSymbolsOnly"];})
-    (pkgs.unfree-fonts.comic-code.override {ligatures = false;})
-    (pkgs.unfree-fonts.comic-code.override {ligatures = true;})
+    # (pkgs.unfree-fonts.comic-code.override {ligatures = false;})
+    # (pkgs.unfree-fonts.comic-code.override {ligatures = true;})
     pkgs.recursive # Variable font family for code & UI.
     # pkgs.maple-mono # Cute, cozy round font.
     pkgs.material-design-icons
