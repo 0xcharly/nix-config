@@ -9,6 +9,7 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     ./1password.nix
     ./audio.nix
+    ./chromium.nix
     ./fs.nix
     ./protonvpn.nix
     # This is currently doing nothing since the 24.11 version of OpenRGB (<1.0)

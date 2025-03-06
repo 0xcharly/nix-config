@@ -17,7 +17,6 @@
   dpiScale = 1.25;
   cursorSize = 32;
 
-  chromiumCommandLineArgs = ["--ozone-platform-hint=auto"];
   hyprlandSessionVariables = {};
   waylandSessionVariables = {
     NIXOS_OZONE_WL = 1;
@@ -53,7 +52,6 @@ in
   }
   // lib.mkIf enable rec {
     programs = {
-      chromium.commandLineArgs = chromiumCommandLineArgs;
       rofi = {
         enable = true;
         package = pkgs.rofi-wayland;
@@ -89,7 +87,7 @@ in
     ];
 
     xdg.configFile = {
-      "electron-flags.conf".text = lib.concatStringsSep " " chromiumCommandLineArgs;
+      "electron-flags.conf".text = lib.concatStringsSep " " ["--ozone-platform-hint=auto"];
 
       # For Hyprland UWSM enviroment settings
       "uwsm/env".text = lib.concatStringsSep "\n" (
