@@ -14,9 +14,9 @@
     (final: prev: {
       # Inject Copilot's plugin late so it can be excluded from the corporate
       # config.
-      nvim = prev.nix-config-nvim.override {
-        plugins = prev.plugins ++ [final.copilot-vim];
-      };
+      nvim = prev.nix-config-nvim.override (old: {
+        plugins = old.plugins ++ [final.vimPlugins.copilot-vim];
+      });
     })
   ];
 }
