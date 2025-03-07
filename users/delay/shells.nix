@@ -53,7 +53,7 @@ in {
   };
 
   programs.keychain = {
-    enable = isLinuxDesktop;
+    enable = lib.mkDefault true;
     keys = []; # TODO: Add keys.
     enableFishIntegration = true;
   };
