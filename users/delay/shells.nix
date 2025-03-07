@@ -53,7 +53,7 @@ in {
   };
 
   programs.keychain = {
-    enable = true;
+    enable = isLinuxDesktop;
     keys = []; # TODO: Add keys.
     enableFishIntegration = true;
   };
