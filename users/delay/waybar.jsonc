@@ -1,26 +1,50 @@
 [
   {
     "layer": "top",
-    "margin": "8 0 8 0",
+    "margin": "0 8 0 8",
     "modules-left": [
+      "pulseaudio"
+    ],
+    "modules-center": [
       "hyprland/workspaces"
     ],
-    "position": "left",
+    "position": "top",
     "reload_style_on_change": true,
     "modules-right": [
-      "clock"
+      "clock#date",
+      "clock#time"
     ],
+    "pulseaudio": {
+      "format": "{volume}% {icon}",
+      "format-bluetooth": "{volume}% {icon}",
+      "format-muted": "",
+      "format-icons": {
+        "headphone": "",
+        "default": ["", ""]
+      },
+      "scroll-step": 1,
+      "on-click": "pavucontrol",
+      "ignored-sinks": ["Easy Effects Sink"]
+    },
     "hyprland/workspaces": {
       "all-outputs": true,
       "persistent-workspaces": {
         "*": 10
       },
-      "format": "",
-      "on-click": "activate"
+      "format": "{icon}",
+      "on-click": "activate",
+      "format-icons": {
+        "active": "",
+        "default": "",
+        "empty": ""
+      }
     },
-    "clock": {
-      "format": "{:L%H\n%M}",
-      "tooltip-format": "{:L%Y %b %d (%a)}",
+    "clock#date": {
+      "format": "{:L%Y %b %Od日 (%a)}",
+      "locale": "ja_JP.UTF-8"
+    },
+    "clock#time": {
+      "format": "{:L%R}",
       "locale": "ja_JP.UTF-8"
     }
   }

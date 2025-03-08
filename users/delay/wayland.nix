@@ -118,7 +118,7 @@ in
           "[workspace 1] uwsm app -- ${lib.getExe args.config.programs.firefox.finalPackage}"
         # "[workspace 2] uwsm app -- ${lib.getExe args.config.programs.chromium.package}"
           "[workspace 3] uwsm app -- ${lib.getExe pkgs.ghostty}"
-          "[workspace 8] uwsm app -- ${lib.getExe pkgs.obsidian}"
+        # "[workspace 8] uwsm app -- ${lib.getExe pkgs.obsidian}"
         # "[workspace 9] uwsm app -- ${lib.getExe pkgs.tidal-hifi}"
         ];
 
@@ -256,6 +256,7 @@ in
           # "workspace 1, class:^firefox$"
           # "workspace 2, class:^chromium-browser$"
           # "workspace 5, class:^1Password$"
+          "float, class:^org.pulseaudio.pavucontrol$, title: ^Volume Control$"
           "float, class:^firefox$, title: ^Picture-in-Picture$"
           "pin, class:^firefox$, title: ^Picture-in-Picture$"
           "move 2550 10, class:^firefox$, title: ^Picture-in-Picture$"

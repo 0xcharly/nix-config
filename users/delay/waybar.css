@@ -1,13 +1,12 @@
 @import "/nix/store/pnndixxiifidqwm4hxil4cr0l1f937v1-source/themes/mocha.css";
 
-@define-color active @blue;
-@define-color background @crust;
-@define-color border @overlay0;
+@define-color hover @blue;
 
-@define-color clock-foreground @subtext0;
+@define-color module-foreground @subtext0;
+@define-color module-background @base;
 
 @define-color tooltip-border @overlay0;
-@define-color tooltip-background @mantle;
+@define-color tooltip-background @crust;
 
 @define-color workspace @surface0;
 @define-color workspace-active @overlay0;
@@ -25,13 +24,13 @@
 }
 
 window#waybar {
-  background: transparent;
+  all:unset;
 }
 
 tooltip {
   border: 2px solid @tooltip-border;
   border-radius: 8px;
-  background: @crust;
+  background: @tooltip-background;
 }
 
 tooltip label {
@@ -39,44 +38,43 @@ tooltip label {
   color: @subtext0;
 }
 
-.modules-left, .modules-right {
-  border: 2px solid @border;
-  border-radius: 8px;
-  background: @tooltip-background;
-  padding: 8px;
+/*.modules-left, .modules-right {*/
+#pulseaudio, #workspaces, #clock {
+  border-radius: 12px;
+  color: @module-foreground;
+  background: alpha(@module-background, .6);
+  padding: 4px 8px;
 }
 
 #workspaces button {
   border: none;
-  border-radius: 10px;
-  color: @overlay0;
-  font-size: 0px;
+  color: @workspace;
   min-width: 4px;
-  margin-bottom: 4px;
 
-  transition-property: background-color;
+  transition-property: color;
   transition-duration: 0.1s;
-  background: @workspace;
   min-height: 4px;
 }
 
-#workspaces button:last-child {
-  margin-bottom: 0px;
+#workspaces button:hover {
+  background: none;
+  color: @hover;
 }
 
 #workspaces button box {
   min-width: 4px;
   min-height: 4px;
+  padding: 0px 2px;
 }
 
 #workspaces button.urgent {
-  background-color: @workspace-urgent;
+  color: @workspace-urgent;
 }
 
 #workspaces button.active {
-  background-color: @workspace-active;
+  color: @workspace-active;
 }
 
-#clock {
-  color: @clock-foreground;
+#clock.date {
+  margin-right: 8px;
 }
