@@ -19,7 +19,7 @@ in {
     enable = true;
     package = let
       pkgs' = import inputs.nixpkgs-unstable {inherit (pkgs) system;};
-    in pkgs'.jujutsu;
+    in lib.mkDefault pkgs'.jujutsu;
     settings =
       lib.recursiveUpdate {
         user = {
