@@ -28,8 +28,6 @@ in {
         };
         template-aliases."format_timestamp(timestamp)" = "timestamp.ago()";
         ui."default-command" = "status";
-        ui.pager = lib.getExe pkgs.delta;
-        ui.diff.format = "git";
         git.subprocess = true; # Shell out to `git` instead of libgit2.
         signing = {
           sign-all = true;
