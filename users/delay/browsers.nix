@@ -6,6 +6,10 @@
 
   enable = pkgs.stdenv.isLinux && !config.modules.usrenv.isHeadless;
 in {
+  # Only used when full-page translation is needed, or if the target website
+  # _really_ wants an actual Google Chrome browser.
+  home.packages = [pkgs.google-chrome];
+
   programs.chromium = {
     inherit enable;
     package = pkgs.ungoogled-chromium;
