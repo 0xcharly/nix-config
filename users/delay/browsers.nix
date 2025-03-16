@@ -8,7 +8,16 @@
 in {
   # Only used when full-page translation is needed, or if the target website
   # _really_ wants an actual Google Chrome browser.
-  home.packages = [pkgs.google-chrome];
+  home.packages = let
+    google-chrome-for-jp-taxes = pkgs.google-chrome.override {
+      commandLineArgs = [
+        "--enable-features=VaapiVideoDecoder,VaapiIgnoreDriverChecks,DefaultANGLEVulkan,VulkanFromANGLE"
+        "--gpu-testing-vendor-id=0x1002"
+        "--gpu-testing-device-id=0x747e"
+        "--user-agent='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.2 Safari/605.1.15'"
+      ];
+    };
+  in [google-chrome-for-jp-taxes];
 
   programs.chromium = {
     inherit enable;
