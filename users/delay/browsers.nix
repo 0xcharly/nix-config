@@ -1,4 +1,8 @@
-{pkgs, ...} @ args: let
+{
+  lib,
+  pkgs,
+  ...
+} @ args: let
   config =
     if args ? osConfig
     then args.osConfig
@@ -8,7 +12,7 @@
 in {
   # Only used when full-page translation is needed, or if the target website
   # _really_ wants an actual Google Chrome browser.
-  home.packages = let
+  home.packages = lib.mkIf enable (let
     google-chrome-for-jp-taxes = pkgs.google-chrome.override {
       commandLineArgs = [
         "--enable-features=VaapiVideoDecoder,VaapiIgnoreDriverChecks,DefaultANGLEVulkan,VulkanFromANGLE"
@@ -17,7 +21,7 @@ in {
         "--user-agent='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.2 Safari/605.1.15'"
       ];
     };
-  in [google-chrome-for-jp-taxes];
+  in [google-chrome-for-jp-taxes]);
 
   programs.chromium = {
     inherit enable;
