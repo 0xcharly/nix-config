@@ -21,6 +21,7 @@ in {
       pkgs' = import inputs.nixpkgs-unstable {inherit (pkgs) system;};
     in
       lib.mkDefault pkgs'.jujutsu;
+    # TODO: look into using `settings.fix.tools`.
     settings =
       lib.recursiveUpdate {
         user = {
@@ -31,7 +32,7 @@ in {
         ui."default-command" = "status";
         git.subprocess = true; # Shell out to `git` instead of libgit2.
         signing = {
-          sign-all = true;
+          behavior = "own";
           backend = "ssh";
           key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPf5EWFb/MW+1ZdQxDLZJWPrgrtibMcCmmKeCp+QMWBl";
         };
