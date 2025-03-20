@@ -17,7 +17,6 @@ in {
     ./browsers.nix
     ./catppuccin.nix
     ./desktop.nix
-    ./flameshot.nix
     ./fonts.nix
     ./multiplexers.nix
     ./nix-client-config.nix

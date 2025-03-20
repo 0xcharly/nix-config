@@ -75,9 +75,14 @@ in
     };
 
     home.packages = with pkgs; [
-      grim # Screenshot functionality
+      # Screenshot toolchain.
+      grim # Fullscreen and window capture
+      slurp # Region capture
+      grimblast # High-level screenshot utility
+      swappy # Annotation tool
+
       hyprpicker # Command line color picker
-      slurp # Screenshot functionality
+      swayimg # Image viewer
       wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
       wl-color-picker # GUI color picker
       wlr-randr # Utility to manage outputs of a Wayland compositor
@@ -116,10 +121,10 @@ in
           "uwsm app -- systemctl --user enable --now hyprpaper.service"
           "uwsm app -- systemctl --user enable --now waybar.service"
           "[workspace 1] uwsm app -- ${lib.getExe args.config.programs.firefox.finalPackage}"
-        # "[workspace 2] uwsm app -- ${lib.getExe args.config.programs.chromium.package}"
+          # "[workspace 2] uwsm app -- ${lib.getExe args.config.programs.chromium.package}"
           "[workspace 3] uwsm app -- ${lib.getExe pkgs.ghostty}"
-        # "[workspace 8] uwsm app -- ${lib.getExe pkgs.obsidian}"
-        # "[workspace 9] uwsm app -- ${lib.getExe pkgs.tidal-hifi}"
+          # "[workspace 8] uwsm app -- ${lib.getExe pkgs.obsidian}"
+          # "[workspace 9] uwsm app -- ${lib.getExe pkgs.tidal-hifi}"
         ];
 
         # Monitor scaling.
@@ -183,7 +188,10 @@ in
           "SUPER SHIFT, X,      killactive, "
           "SUPER SHIFT, Q,      exec, uwsm app -- loginctl terminate-session \"$XDG_SESSION_ID\""
           "SUPER,       V,      togglefloating, "
-          "SUPER CTRL,  P,      exec, uwsm app -- ${lib.getExe pkgs.wl-color-picker}"
+          "SUPER CTRL,  C,      exec, uwsm app -- ${lib.getExe pkgs.wl-color-picker}"
+          "SUPER,       P,      exec, uwsm app -- ${lib.getExe pkgs.grimblast} --notify edit area"
+          "SUPER SHIFT, P,      exec, uwsm app -- ${lib.getExe pkgs.grimblast} --notify edit active"
+          "SUPER CTRL,  P,      exec, uwsm app -- ${lib.getExe pkgs.grimblast} --notify edit screen"
 
           "SUPER,       d, hy3:makegroup,   h"
           "SUPER,       s, hy3:makegroup,   v"
@@ -293,5 +301,29 @@ in
         preload = [wallpaper_path];
         wallpaper = [", ${wallpaper_path}"];
       };
+    };
+
+    home.sessionVariables = {
+      GRIMBLAST_EDITOR = "${lib.getExe pkgs.swappy} -f";
+    };
+
+    xdg.mimeApps.defaultApplications = {
+      "application/pdf" = ["zathura.desktop"];
+      "image/jpeg" = ["swayimg"];
+      "image/png" = ["swayimg"];
+      "image/gif" = ["swayimg"];
+      "image/webp" = ["swayimg"];
+      "image/bmp" = ["swayimg"];
+      "image/svg+xml" = ["swayimg"];
+      "image/avif" = ["swayimg"];
+      "image/heif" = ["swayimg"];
+      "image/tiff" = ["swayimg"];
+      "application/sixel" = ["swayimg"];
+      "image/openexr" = ["swayimg"];
+      "image/x-portable-anymap" = ["swayimg"];
+      "image/tga" = ["swayimg"];
+      "image/qoi" = ["swayimg"];
+      "image/dicom" = ["swayimg"];
+      "application/farbfeld" = ["swayimg"];
     };
   }
