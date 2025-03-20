@@ -259,7 +259,7 @@ in
           "float, class:^org.pulseaudio.pavucontrol$, title: ^Volume Control$"
           "float, class:^firefox$, title: ^Picture-in-Picture$"
           "pin, class:^firefox$, title: ^Picture-in-Picture$"
-          "move 2550 10, class:^firefox$, title: ^Picture-in-Picture$"
+          "move 2550 42, class:^firefox$, title: ^Picture-in-Picture$"
           "size 512 288, class:^firefox$, title: ^Picture-in-Picture$"
         ];
       };
