@@ -54,7 +54,8 @@ in {
     LC_CTYPE = LANG;
     LC_ALL = LANG;
     EDITOR = lib.getExe pkgs.nvim;
-    MANPAGER = "${EDITOR} +Man!";
+    VISUAL = EDITOR;
+    MANPAGER = "${lib.getExe pkgs.nvim} +Man!";
     PAGER = "less -FirSwX";
   };
 
