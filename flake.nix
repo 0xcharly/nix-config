@@ -62,6 +62,10 @@
       url = "github:outfoxxed/hy3?ref=hl0.45.0";
       inputs.hyprland.follows = "hyprland";
     };
+    hyprpanel = {
+      url = "github:jas-singhfsu/hyprpanel";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Catppuccin all the things.
     catppuccin.url = "github:catppuccin/nix";
@@ -124,7 +128,7 @@
   };
 
   nixConfig = {
-    extra-substituters = [ "https://0xcharly-nixos-config.cachix.org" ];
-    extra-trusted-public-keys = [ "0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU=" ];
+    extra-substituters = ["https://0xcharly-nixos-config.cachix.org"];
+    extra-trusted-public-keys = ["0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU="];
   };
 }

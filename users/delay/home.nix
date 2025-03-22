@@ -18,6 +18,7 @@ in {
     ./catppuccin.nix
     ./desktop.nix
     ./fonts.nix
+    ./hyprland.nix
     ./multiplexers.nix
     ./nix-client-config.nix
     ./scripts.nix
@@ -25,7 +26,6 @@ in {
     ./ssh.nix
     ./terminals.nix
     ./vcs.nix
-    ./wayland.nix
     ./x11.nix
   ];
 

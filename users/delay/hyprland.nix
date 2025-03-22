@@ -48,29 +48,23 @@
   };
 in
   {
-    imports = [inputs.hyprland.homeManagerModules.default];
+    imports = [
+      inputs.hyprland.homeManagerModules.default
+      inputs.hyprpanel.homeManagerModules.hyprpanel
+    ];
   }
-  // lib.mkIf enable rec {
-    programs = {
-      rofi = {
-        enable = true;
-        package = pkgs.rofi-wayland;
-        plugins = [
-          (pkgs.rofi-calc.override {rofi-unwrapped = pkgs.rofi-wayland-unwrapped;})
-        ];
-        theme = {
-          "@theme" = builtins.path {
-            name = "catppuccin-obsidian.rasi";
-            path = pkgs.writeText "catppuccin-obsidian.rasi" (builtins.readFile ./rofi.rasi);
-          };
+  // lib.mkIf enable {
+    programs.rofi = {
+      enable = true;
+      package = pkgs.rofi-wayland;
+      plugins = [
+        (pkgs.rofi-calc.override {rofi-unwrapped = pkgs.rofi-wayland-unwrapped;})
+      ];
+      theme = {
+        "@theme" = builtins.path {
+          name = "catppuccin-obsidian.rasi";
+          path = pkgs.writeText "catppuccin-obsidian.rasi" (builtins.readFile ./rofi.rasi);
         };
-      };
-      waybar = {
-        enable = true;
-        systemd.enable = false;
-
-        settings = builtins.fromJSON (builtins.readFile ./waybar.jsonc);
-        style = builtins.readFile ./waybar.css;
       };
     };
 
@@ -118,8 +112,8 @@ in
       settings = {
         # Open apps on startup.
         exec-once = [
+          "uwsm app -- systemctl --user enable --now hyprpanel.service"
           "uwsm app -- systemctl --user enable --now hyprpaper.service"
-          "uwsm app -- systemctl --user enable --now waybar.service"
           "[workspace 1] uwsm app -- ${lib.getExe args.config.programs.firefox.finalPackage}"
           # "[workspace 2] uwsm app -- ${lib.getExe args.config.programs.chromium.package}"
           "[workspace 3] uwsm app -- ${lib.getExe pkgs.ghostty}"
@@ -267,23 +261,10 @@ in
           "float, class:^org.pulseaudio.pavucontrol$, title: ^Volume Control$"
           "float, class:^firefox$, title: ^Picture-in-Picture$"
           "pin, class:^firefox$, title: ^Picture-in-Picture$"
-          "move 2550 42, class:^firefox$, title: ^Picture-in-Picture$"
+          "move 2550 56, class:^firefox$, title: ^Picture-in-Picture$"
           "size 512 288, class:^firefox$, title: ^Picture-in-Picture$"
         ];
       };
-    };
-
-    # Notifications.
-    services.mako = {
-      enable = true;
-      # Sets the border radius to -1 that of the hyprland windows since it's
-      # offset by -1-1 pixels. This results in "parallel" rounding.
-      borderRadius = wayland.windowManager.hyprland.settings.decoration.rounding - 1;
-      borderSize = 2;
-      font = "Recursive Sans Casual Static 12";
-      maxIconSize = 32;
-      padding = "8";
-      width = 512;
     };
 
     # Wallpaper.
@@ -291,8 +272,8 @@ in
       enable = true;
       settings = let
         wallpaper = pkgs.fetchurl {
-          url = "https://static1.squarespace.com/static/5e949a92e17d55230cd1d44f/t/675d0533b4f3ee31d94658ed/1734149461556/Ink+Cloud+Mac.png";
-          hash = "sha256-aoWMydZtp4c59BUrdvewhs3O1QSvC4lZSqHzMRYSB9g=";
+          url = "https://raw.githubusercontent.com/Jas-SinghFSU/Configs/refs/heads/master/Wallpapers/RosePine/astronaut_fields.jpg";
+          hash = "sha256-oWnTS7bSjSscl+m/Kr1W3L/6gsQlv8qtSkjtupvBnJU=";
         };
         wallpaper_path = builtins.toString wallpaper;
       in {
@@ -300,6 +281,83 @@ in
         splash = false;
         preload = [wallpaper_path];
         wallpaper = [", ${wallpaper_path}"];
+      };
+    };
+
+    programs.hyprpanel = {
+      enable = true;
+
+      # Add '/nix/store/.../hyprpanel' to your Hyprland config 'exec-once'.
+      hyprland.enable = true;
+
+      # Fix the overwrite issue with HyprPanel.
+      overwrite.enable = true;
+
+      # Import a theme from './themes/*.json'.
+      # Default: ""
+      theme = "catppuccin_mocha";
+
+      # Override the final config with an arbitrary set.
+      # Useful for overriding colors in your selected theme.
+      # Default: {}
+      override = {
+        # theme.bar.menus.text = "#123ABC";
+      };
+
+      # Configure bar layouts for monitors. See 'https://hyprpanel.com/configuration/panel.html'.
+      layout = {
+        "bar.layouts" = {
+          "0" = {
+            left = ["dashboard" "workspaces"];
+            middle = ["media"];
+            right = ["volume" "clock" "notifications"];
+          };
+        };
+      };
+
+      # Configure and theme almost all options from the GUI.
+      # See 'https://hyprpanel.com/configuration/settings.html'.
+      settings = {
+        theme.bar.buttons.enableBorders = true;
+        theme.bar.floating = true;
+        theme.bar.margin_bottom = "0em";
+        theme.bar.margin_sides = "3px";
+        theme.bar.margin_top = "8px";
+        bar.clock.format = "%Y年 %m月 %Od日 (%a) %R";
+        bar.clock.showIcon = false;
+        bar.launcher.autoDetectIcon = true;
+        bar.media.show_active_only = true;
+        bar.workspaces.monitorSpecific = false;
+        bar.workspaces.show_numbered = false;
+        bar.workspaces.spacing = 0.6;
+        bar.workspaces.workspaces = 10;
+
+        terminal = lib.getExe pkgs.ghostty;
+
+        menus.clock.time.hideSeconds = true;
+        menus.clock.time.military = true;
+        menus.clock.weather.key = config.age.secrets."services/weather-api.key".path;
+        menus.clock.weather.location = "Tokyo";
+        menus.clock.weather.unit = "metric";
+        menus.dashboard.directories.enabled = false;
+        menus.dashboard.shortcuts.left.shortcut1.command = "firefox";
+        menus.dashboard.shortcuts.left.shortcut1.icon = "󰈹";
+        menus.dashboard.shortcuts.left.shortcut2.command = "tidal-hifi";
+        menus.dashboard.shortcuts.left.shortcut2.icon = "󰎇";
+
+        theme.bar.buttons.clock.spacing = "0em";
+        theme.bar.buttons.padding_x = "0.6rem";
+        theme.bar.buttons.padding_y = "0.15rem";
+        theme.bar.buttons.radius = "0.6em";
+        theme.bar.buttons.workspaces.pill.active_width = "8em";
+        theme.bar.buttons.y_margins = "0em";
+        theme.bar.dropdownGap = "50px";
+        theme.bar.outer_spacing = "0em";
+        theme.bar.transparent = true;
+        theme.font = {
+          name = "Recursive Sans Casual Static";
+          size = "16px";
+        };
       };
     };
 
