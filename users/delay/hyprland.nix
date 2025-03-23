@@ -259,10 +259,10 @@ in
           # "workspace 2, class:^chromium-browser$"
           # "workspace 5, class:^1Password$"
           "float, class:^org.pulseaudio.pavucontrol$, title: ^Volume Control$"
-          "float, class:^firefox$, title: ^Picture-in-Picture$"
-          "pin, class:^firefox$, title: ^Picture-in-Picture$"
-          "move 2550 56, class:^firefox$, title: ^Picture-in-Picture$"
-          "size 512 288, class:^firefox$, title: ^Picture-in-Picture$"
+          "float, class:^(firefox|zen)$, title: ^Picture-in-Picture$"
+          "pin, class:^(firefox|zen)$, title: ^Picture-in-Picture$"
+          "move 2550 56, class:^(firefox|zen)$, title: ^Picture-in-Picture$"
+          "size 512 288, class:^(firefox|zen)$, title: ^Picture-in-Picture$"
         ];
       };
     };
