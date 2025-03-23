@@ -47,11 +47,6 @@ in {
 
   programs.fzf.enable = true;
 
-  programs.skim = {
-    enable = true;
-    enableFishIntegration = true;
-  };
-
   programs.keychain = {
     enable = lib.mkDefault true;
     keys = []; # TODO: Add keys.

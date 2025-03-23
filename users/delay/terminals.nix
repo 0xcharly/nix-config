@@ -1,7 +1,7 @@
 {
   inputs,
-  pkgs,
   lib,
+  pkgs,
   ...
 } @ args: let
   config =
@@ -78,6 +78,8 @@ in {
           cursor-style = "block";
           cursor-style-blink = false;
           mouse-hide-while-typing = false;
+          window-padding-x = 4;
+          window-padding-y = 4;
           window-padding-balance = true;
           shell-integration-features = "no-cursor,no-sudo,no-title";
           confirm-close-surface = false;

@@ -1,4 +1,5 @@
 {
+  inputs,
   lib,
   pkgs,
   ...
@@ -10,11 +11,34 @@
 
   homeDirectory = config.modules.system.users.delay.home;
   codeDirectory = homeDirectory + "/code";
+
+  zellijDevLayout = pkgs.writeTextFile {
+    name = "zellij-dev.kdl";
+    text = ''
+      layout {
+        default_tab_template {
+          children
+        }
+        tab name="editor" {
+          pane edit="."
+        }
+        tab name="shell" focus=true {
+          pane
+        }
+      }
+    '';
+  };
 in {
   programs.zellij = {
     enable = true;
+    package = let
+      pkgs' = import inputs.nixpkgs-unstable {inherit (pkgs) system;};
+    in
+      pkgs'.zellij;
     settings = {
+      default_layout = "compact";
       default_mode = "locked";
+      show_startup_tips = false;
       scrollback_editor = lib.getExe pkgs.nvim;
       pane_frames = false;
       ui.pane_frames = {
@@ -194,6 +218,10 @@ in {
         };
 
         shared = {
+          "bind \"Alt h\"" = cmdAndLock "GoToTab 1";
+          "bind \"Alt t\"" = cmdAndLock "GoToTab 2";
+          "bind \"Alt n\"" = cmdAndLock "GoToTab 3";
+          "bind \"Alt s\"" = cmdAndLock "GoToTab 4";
           "bind \"Ctrl b\"" = {"SwitchToMode \"normal\"" = {};};
           "bind \"Ctrl f\"" = {
             "MessagePlugin \"primehopper\"" = {
@@ -201,6 +229,7 @@ in {
               skip_cache = false; # Don't skip compilation cache.
               floating = true; # Always float the plugin window.
 
+              layout = "file:${zellijDevLayout}";
               cwd = codeDirectory;
               name = "scan_repository_root";
             };
@@ -224,6 +253,7 @@ in {
             floating_panes {
               pane {
                 plugin location="primehopper" {
+                  layout "file:${zellijDevLayout}"
                   cwd "${codeDirectory}"
                   startup_message_name "scan_repository_root"
                   startup_message_payload "5"
