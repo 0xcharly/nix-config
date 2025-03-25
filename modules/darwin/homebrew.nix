@@ -39,6 +39,7 @@ in {
         # Browsers.
         (no_quarantine "eloston-chromium") # Ungoogled Chromium.
         "firefox@developer-edition" # Firefox, for isolates.
+        "zen-browser" # Arc, but Firefox.
 
         # Utilities.
         "ghostty" # Terminal.
