@@ -4,13 +4,22 @@
   lib,
   pkgs,
   ...
-} @ args: let
+} @ args:
+{
+  imports = [
+    inputs.hyprland.homeManagerModules.default
+    inputs.hyprpanel.homeManagerModules.hyprpanel
+  ];
+}
+// (let
+  inherit (pkgs.stdenv) isLinux;
+  inherit (config.modules.usrenv) compositor;
+  isLinuxDesktop = isLinux && compositor == "wayland";
+
   config =
     if args ? osConfig
     then args.osConfig
     else args.config;
-  inherit (pkgs.stdenv) isLinux;
-  inherit (config.modules.usrenv) compositor;
 
   dpiScale = 1.25;
   cursorSize = 32;
@@ -45,13 +54,7 @@
     XCURSOR_SIZE = cursorSize;
   };
 in
-  {
-    imports = [
-      inputs.hyprland.homeManagerModules.default
-      inputs.hyprpanel.homeManagerModules.hyprpanel
-    ];
-  }
-  // lib.mkIf (isLinux && compositor == "wayland") {
+  lib.mkIf isLinuxDesktop {
     programs.rofi = {
       enable = true;
       package = pkgs.rofi-wayland;
@@ -382,4 +385,4 @@ in
       "image/dicom" = ["swayimg"];
       "application/farbfeld" = ["swayimg"];
     };
-  }
+  })
