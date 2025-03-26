@@ -12,9 +12,9 @@
   ];
 }
 // (let
-  inherit (pkgs.stdenv) isLinux;
+  # inherit (pkgs.stdenv) isLinux;
   inherit (config.modules.usrenv) compositor;
-  isLinuxDesktop = isLinux && compositor == "wayland";
+  isLinuxDesktop = compositor == "wayland";
 
   config =
     if args ? osConfig
