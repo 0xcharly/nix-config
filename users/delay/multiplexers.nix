@@ -20,7 +20,10 @@
           children
         }
         tab name="editor" {
-          pane edit="."
+          // Cannot use edit= otherwise the direnv is not be loaded before the
+          // editor is spawned and tools (LSP, etc…) are not available.
+          // pane edit="."
+          pane
         }
         tab name="shell" focus=true {
           pane
