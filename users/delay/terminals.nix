@@ -8,13 +8,13 @@
     if args ? osConfig
     then args.osConfig
     else args.config;
-  inherit (config.modules.usrenv) isHeadless;
+  inherit (config.modules.usrenv) isHeadless isLinuxDesktop;
   inherit (pkgs.stdenv) isDarwin isLinux;
 
   hasWindowManager = !isHeadless;
 in {
   # Ghostty is installed with Homebrew on macOS.
-  home.packages = lib.mkIf (isLinux && hasWindowManager) (let
+  home.packages = lib.mkIf isLinuxDesktop (let
     pkgs' = import inputs.nixpkgs-unstable {inherit (pkgs) system;};
   in [pkgs'.ghostty]);
 

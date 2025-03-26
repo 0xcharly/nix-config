@@ -12,9 +12,7 @@
   ];
 }
 // (let
-  # inherit (pkgs.stdenv) isLinux;
-  inherit (config.modules.usrenv) compositor;
-  isLinuxDesktop = compositor == "wayland";
+  inherit (config.modules.usrenv) isLinuxWaylandDesktop;
 
   config =
     if args ? osConfig
@@ -54,7 +52,7 @@
     XCURSOR_SIZE = cursorSize;
   };
 in
-  lib.mkIf isLinuxDesktop {
+  lib.mkIf isLinuxWaylandDesktop {
     programs.rofi = {
       enable = true;
       package = pkgs.rofi-wayland;

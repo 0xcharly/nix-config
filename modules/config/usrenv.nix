@@ -38,6 +38,33 @@ in {
       '';
     };
 
+    isLinuxDesktop = mkOption {
+      default = builtins.elem cfg.compositor ["x11" "wayland"];
+      type = bool;
+      readOnly = true;
+      description = ''
+        Linux host with a graphical environment.
+      '';
+    };
+
+    isLinuxWaylandDesktop = mkOption {
+      default = cfg.compositor == "wayland";
+      type = bool;
+      readOnly = true;
+      description = ''
+        Linux host with a Wayland graphical environment.
+      '';
+    };
+
+    isLinuxX11Desktop = mkOption {
+      default = cfg.compositor == "x11";
+      type = bool;
+      readOnly = true;
+      description = ''
+        Linux host with a X11/Xorg graphical environment.
+      '';
+    };
+
     installFonts = mkOption {
       default = !cfg.isHeadless;
       type = bool;
@@ -67,6 +94,10 @@ in {
     {
       assertion = pkgs.stdenv.isDarwin -> cfg.compositor == "quartz";
       message = "macOS only supports the `quartz` compositor.";
+    }
+    {
+      assertion = builtins.elem cfg.compositor ["x11" "wayland"] -> pkgs.stdenv.isLinux;
+      message = "`x11` and `wayland` are only supported on Linux.";
     }
   ];
 }

@@ -7,10 +7,7 @@
     if args ? osConfig
     then args.osConfig
     else args.config;
-  inherit (pkgs.stdenv) isLinux;
-  inherit (config.modules.usrenv) isHeadless;
-
-  isLinuxDesktop = isLinux && !isHeadless;
+  inherit (config.modules.usrenv) isLinuxDesktop;
 in
   lib.mkIf isLinuxDesktop {
     home.packages = with pkgs; [

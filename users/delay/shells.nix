@@ -7,10 +7,7 @@
     if args ? osConfig
     then args.osConfig
     else args.config;
-  inherit (config.modules.usrenv) isHeadless;
-  inherit (pkgs.stdenv) isLinux;
-
-  isLinuxDesktop = isLinux && !isHeadless;
+  inherit (config.modules.usrenv) isLinuxDesktop;
 
   homeDirectory = config.modules.system.users.delay.home;
   codeDirectory = homeDirectory + "/code";
