@@ -12,8 +12,6 @@
   inherit (pkgs.stdenv) isLinux;
   inherit (config.modules.usrenv) compositor;
 
-  enable = isLinux && compositor == "wayland";
-
   dpiScale = 1.25;
   cursorSize = 32;
 
@@ -53,7 +51,7 @@ in
       inputs.hyprpanel.homeManagerModules.hyprpanel
     ];
   }
-  // lib.mkIf enable {
+  // lib.mkIf (isLinux && compositor == "wayland") {
     programs.rofi = {
       enable = true;
       package = pkgs.rofi-wayland;
