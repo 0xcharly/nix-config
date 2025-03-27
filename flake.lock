@@ -2011,11 +2011,11 @@
         "treefmt-nix": "treefmt-nix_7"
       },
       "locked": {
-        "lastModified": 1742999891,
-        "narHash": "sha256-FceFcmVC2JhPAjHla3BFOtLdj7aYJLUURQSkp/rL63M=",
+        "lastModified": 1743037287,
+        "narHash": "sha256-SUdZqpfb+XP0yTEU7KilTCspB0WDrL52D8lFV1TFojM=",
         "owner": "0xcharly",
         "repo": "zellij-prime-hopper",
-        "rev": "9cf18f00293e7a5cd841427d3a67e7be92c25b81",
+        "rev": "e48a7393ac33981b6bc2a187c551f80536851f40",
         "type": "github"
       },
       "original": {
