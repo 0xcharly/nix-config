@@ -327,9 +327,11 @@ in
         bar.launcher.autoDetectIcon = true;
         bar.media.show_active_only = true;
         bar.workspaces.monitorSpecific = false;
-        bar.workspaces.show_numbered = false;
+        bar.workspaces.showWsIcons = true;
         bar.workspaces.spacing = 0.6;
-        bar.workspaces.workspaces = 10;
+        bar.workspaces.numbered_active_indicator = "highlight";
+        bar.workspaces.workspaceMask = true;
+        bar.workspaces.workspaces = 1;
 
         terminal = lib.getExe pkgs.ghostty;
 
@@ -357,6 +359,19 @@ in
           name = "Recursive Sans Casual Static";
           size = "16px";
         };
+      };
+
+      override = {
+        "bar.workspaces.workspaceIconMap.1" = "1";
+        "bar.workspaces.workspaceIconMap.2" = "2";
+        "bar.workspaces.workspaceIconMap.3" = "3";
+        "bar.workspaces.workspaceIconMap.4" = "4";
+        "bar.workspaces.workspaceIconMap.5" = "5";
+        "bar.workspaces.workspaceIconMap.6" = "6";
+        "bar.workspaces.workspaceIconMap.7" = "7";
+        "bar.workspaces.workspaceIconMap.8" = "8";
+        "bar.workspaces.workspaceIconMap.9" = "9";
+        "bar.workspaces.workspaceIconMap.10" = "0";
       };
     };
 
