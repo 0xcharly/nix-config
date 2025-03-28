@@ -20,6 +20,7 @@
     # OpenRGB is supporting more hardware.
     # ./rgb.nix
     ./secrets.nix
+    ./steam.nix
     ./tailscale.nix
   ];
 
