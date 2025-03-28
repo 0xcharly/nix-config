@@ -119,8 +119,17 @@
     };
 
     # Implementation of The Primeagen's sessionizer script in Zellij.
+    # TODO: move into `zellij-plugins`.
     zellij-prime-hopper = {
       url = "github:0xcharly/zellij-prime-hopper";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs-darwin.follows = "nixpkgs-darwin";
+      inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
+    };
+
+    # Implementation of The Primeagen's sessionizer script in Zellij.
+    zellij-plugins = {
+      url = "github:0xcharly/zellij-plugins";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.nixpkgs-darwin.follows = "nixpkgs-darwin";
       inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";

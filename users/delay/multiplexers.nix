@@ -12,26 +12,34 @@
   homeDirectory = config.modules.system.users.delay.home;
   codeDirectory = homeDirectory + "/code";
 
-  zellijDevLayout = pkgs.writeTextFile {
-    name = "zellij-dev.kdl";
+  zellijDefaultLayout = pkgs.writeTextFile {
+    name = "default-layout.kdl";
     text = ''
       layout {
         default_tab_template {
           children
+          pane size=1 borderless=true {
+            plugin location="ultra-compact-bar"
+          }
         }
-        tab name="editor" {
-          // Cannot use edit= otherwise the direnv is not be loaded before the
-          // editor is spawned and tools (LSP, etc…) are not available.
-          // pane edit="."
-          pane
-        }
-        tab name="shell" focus=true {
-          pane
-        }
+        tab
       }
     '';
   };
 in {
+    # Pre-approve own Zellij plugins.
+    home.file."${args.config.xdg.cacheHome}/zellij/permissions.kdl".text = ''
+      "${lib.getExe pkgs.zellij-prime-hopper}" {
+          ChangeApplicationState
+          ReadApplicationState
+          RunCommands
+      }
+      "${lib.getExe pkgs.zellij-plugins.ultra-compact-bar}" {
+          ChangeApplicationState
+          ReadApplicationState
+      }
+    '';
+
   programs.zellij = {
     enable = true;
     package = let
@@ -39,7 +47,7 @@ in {
     in
       pkgs'.zellij;
     settings = {
-      default_layout = "compact";
+      default_layout = "${zellijDefaultLayout}";
       default_mode = "locked";
       show_startup_tips = false;
       scrollback_editor = lib.getExe pkgs.nvim;
@@ -56,6 +64,7 @@ in {
       session_serialization = false;
       plugins = {
         primehopper._props.location = "file:${lib.getExe pkgs.zellij-prime-hopper}";
+        ultra-compact-bar._props.location = "file:${lib.getExe pkgs.zellij-plugins.ultra-compact-bar}";
       };
 
       themes = {
@@ -232,7 +241,7 @@ in {
               skip_cache = false; # Don't skip compilation cache.
               floating = true; # Always float the plugin window.
 
-              layout = "file:${zellijDevLayout}";
+              layout = "file:${zellijDefaultLayout}";
               cwd = codeDirectory;
               name = "scan_repository_root";
             };
@@ -256,7 +265,7 @@ in {
             floating_panes {
               pane {
                 plugin location="primehopper" {
-                  layout "file:${zellijDevLayout}"
+                  layout "file:${zellijDefaultLayout}"
                   cwd "${codeDirectory}"
                   startup_message_name "scan_repository_root"
                   startup_message_payload "5"
