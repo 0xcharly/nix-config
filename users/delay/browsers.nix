@@ -70,6 +70,7 @@ in
             Status = "locked";
           };
         in {
+          "gfx.webrender.all" = lock true; # Hardware acceleration.
           "browser.contentblocking.category" = lock "strict";
           "browser.formfill.enable" = lock false;
           "browser.newtabpage.activity-stream.feeds.section.topstories" = lock false;
@@ -103,34 +104,34 @@ in
             icon = "fingerprint";
             id = 1;
           };
-          alt = {
+          secondary = {
             color = "yellow";
             icon = "fingerprint";
             id = 2;
           };
+          spam = {
+            color = "orange";
+            icon = "fence";
+            id = 3;
+          };
           dev = {
             color = "toolbar";
             icon = "fingerprint";
-            id = 3;
+            id = 4;
+          };
+          entertainment = {
+            color = "purple";
+            icon = "cart";
+            id = 5;
           };
           shopping = {
             color = "pink";
             icon = "cart";
-            id = 4;
+            id = 6;
           };
           banking = {
             color = "green";
             icon = "dollar";
-            id = 5;
-          };
-          spam = {
-            color = "orange";
-            icon = "fence";
-            id = 6;
-          };
-          media = {
-            color = "purple";
-            icon = "cart";
             id = 7;
           };
           dangerous = {
