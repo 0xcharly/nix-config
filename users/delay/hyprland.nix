@@ -135,13 +135,13 @@ in
         };
         general = {
           layout = "hy3"; # Requires the hy3 plugin.
-          border_size = 2;
-          gaps_in = 4;
-          gaps_out = 8;
+          border_size = 1;
+          gaps_in = 2;
+          gaps_out = 4;
           "col.active_border" = "$red $maroon $peach $yellow $green $teal $sky $sapphire $blue $lavender 45deg";
           "col.inactive_border" = "$overlay0";
         };
-        decoration.rounding = 8;
+        decoration.rounding = 4;
         plugin.hy3 = {
           tabs = {
             height = 8;
@@ -166,7 +166,7 @@ in
             # monitor's refresh rate, which puts stress on CPU/GPU. Don't do
             # this on a laptop.
             "border,      1,    1,   user"
-            "borderangle, 1,    500, user,     loop"
+            # "borderangle, 1,    500, user,     loop"
             "fade,        1,    1,   user"
             "fadeDim,     1,    1,   user_dim"
             "layers,      1,    1,   user,     popin 70%"
@@ -260,7 +260,7 @@ in
           "float, class:^org.pulseaudio.pavucontrol$, title: ^Volume Control$"
           "float, class:^(firefox|zen)$, title: ^Picture-in-Picture$"
           "pin, class:^(firefox|zen)$, title: ^Picture-in-Picture$"
-          "move 2550 56, class:^(firefox|zen)$, title: ^Picture-in-Picture$"
+          "move 2554 34, class:^(firefox|zen)$, title: ^Picture-in-Picture$"
           "size 512 288, class:^(firefox|zen)$, title: ^Picture-in-Picture$"
         ];
       };
@@ -320,15 +320,16 @@ in
         theme.bar.buttons.enableBorders = true;
         theme.bar.floating = true;
         theme.bar.margin_bottom = "0em";
-        theme.bar.margin_sides = "3px";
-        theme.bar.margin_top = "8px";
+        theme.bar.margin_sides = "0em";
+        theme.bar.margin_top = "5px";
         bar.clock.format = "%Y年 %m月 %Od日 (%a) %R";
         bar.clock.showIcon = false;
         bar.launcher.autoDetectIcon = true;
         bar.media.show_active_only = true;
+        bar.media.truncation_size = 100;
         bar.workspaces.monitorSpecific = false;
         bar.workspaces.showWsIcons = true;
-        bar.workspaces.spacing = 0.6;
+        bar.workspaces.spacing = 0.2;
         bar.workspaces.numbered_active_indicator = "highlight";
         bar.workspaces.workspaceMask = true;
         bar.workspaces.workspaces = 1;
@@ -346,18 +347,21 @@ in
         menus.dashboard.shortcuts.left.shortcut2.command = "tidal-hifi";
         menus.dashboard.shortcuts.left.shortcut2.icon = "󰎇";
 
+        theme.bar.buttons.borderSize = "1px";
         theme.bar.buttons.clock.spacing = "0em";
-        theme.bar.buttons.padding_x = "0.6rem";
-        theme.bar.buttons.padding_y = "0.15rem";
-        theme.bar.buttons.radius = "0.6em";
-        theme.bar.buttons.workspaces.pill.active_width = "8em";
+        theme.bar.buttons.padding_x = "4px";
+        theme.bar.buttons.padding_y = "0px";
+        theme.bar.buttons.radius = "4px";
+        theme.bar.buttons.workspaces.fontSize = "1em";
+        theme.bar.buttons.workspaces.numbered_active_highlight_border = "0.3em";
+        theme.bar.buttons.workspaces.numbered_inactive_padding = "0.3em";
         theme.bar.buttons.y_margins = "0em";
-        theme.bar.dropdownGap = "50px";
+        theme.bar.dropdownGap = "28px";
         theme.bar.outer_spacing = "0em";
         theme.bar.transparent = true;
         theme.font = {
           name = "Recursive Sans Casual Static";
-          size = "16px";
+          size = "12px";
         };
       };
 

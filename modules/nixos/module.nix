@@ -13,7 +13,7 @@
     ./nix-client-config.nix
     ./nix-index.nix
     ./nixos-compositor-common.nix
-    ./nixos-wayland.nix
+    ./nixos-hyprland.nix
     ./nixos-x11.nix
     ./protonvpn.nix
     ./terminfo.nix
