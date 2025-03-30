@@ -39,7 +39,6 @@ in {
         # Browsers.
         (no_quarantine "eloston-chromium") # Ungoogled Chromium.
         "firefox@developer-edition" # Firefox, for isolates.
-        "zen-browser" # Arc, but Firefox.
 
         # Utilities.
         "ghostty" # Terminal.
@@ -52,7 +51,6 @@ in {
       ++ (lib.optionals (!isCorpManaged) [
         # Don't install these on corp-managed hosts.
         "protonvpn" # Private network.
-        "raspberry-pi-imager" # RPI bootloader & OS images.
         "tailscale" # Personal VPN network.
         "transmission"
         "vlc" # Media player.
