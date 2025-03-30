@@ -12,6 +12,7 @@ in
   lib.mkIf isLinuxDesktop {
     home.packages = with pkgs; [
       element-desktop
+      kicad
       localsend
       nautilus
       obsidian

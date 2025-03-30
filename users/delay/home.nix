@@ -16,11 +16,11 @@ in {
 
     ./browsers.nix
     ./catppuccin.nix
-    ./desktop.nix
     ./fonts.nix
     ./hyprland.nix
     ./multiplexers.nix
     ./nix-client-config.nix
+    ./nixos-desktop.nix
     ./scripts.nix
     ./shells.nix
     ./ssh.nix
