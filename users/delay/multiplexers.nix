@@ -9,6 +9,8 @@
     then args.osConfig
     else args.config;
 
+  inherit (pkgs.stdenv) isDarwin isLinux;
+
   homeDirectory = config.modules.system.users.delay.home;
   codeDirectory = homeDirectory + "/code";
 
@@ -27,8 +29,9 @@
     '';
   };
 in {
-    # Pre-approve own Zellij plugins.
-    home.file."${args.config.xdg.cacheHome}/zellij/permissions.kdl".text = ''
+  # Pre-approve own Zellij plugins.
+  home.file = let
+    permissions_kdl = ''
       "${lib.getExe pkgs.zellij-prime-hopper}" {
           ChangeApplicationState
           ReadApplicationState
@@ -39,6 +42,10 @@ in {
           ReadApplicationState
       }
     '';
+  in {
+    "${args.config.xdg.cacheHome}/zellij/permissions.kdl".text = lib.mkIf isLinux permissions_kdl;
+    "Library/Caches/org.Zellij-Contributors.Zellij/permissions.kdl".text = lib.mkIf isDarwin permissions_kdl;
+  };
 
   programs.zellij = {
     enable = true;
