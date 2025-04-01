@@ -31,20 +31,22 @@
 in {
   # Pre-approve own Zellij plugins.
   home.file = let
-    permissions_kdl = ''
-      "${lib.getExe pkgs.zellij-prime-hopper}" {
-          ChangeApplicationState
-          ReadApplicationState
-          RunCommands
-      }
-      "${lib.getExe pkgs.zellij-plugins.ultra-compact-bar}" {
-          ChangeApplicationState
-          ReadApplicationState
-      }
-    '';
+    permissions_kdl = {
+      text = ''
+        "${lib.getExe pkgs.zellij-prime-hopper}" {
+            ChangeApplicationState
+            ReadApplicationState
+            RunCommands
+        }
+        "${lib.getExe pkgs.zellij-plugins.ultra-compact-bar}" {
+            ChangeApplicationState
+            ReadApplicationState
+        }
+      '';
+    };
   in {
-    "${args.config.xdg.cacheHome}/zellij/permissions.kdl".text = lib.mkIf isLinux permissions_kdl;
-    "Library/Caches/org.Zellij-Contributors.Zellij/permissions.kdl".text = lib.mkIf isDarwin permissions_kdl;
+    "${args.config.xdg.cacheHome}/zellij/permissions.kdl" = lib.mkIf isLinux permissions_kdl;
+    "Library/Caches/org.Zellij-Contributors.Zellij/permissions.kdl" = lib.mkIf isDarwin permissions_kdl;
   };
 
   programs.zellij = {
