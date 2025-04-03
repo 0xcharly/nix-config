@@ -28,6 +28,23 @@
       }
     '';
   };
+
+  zellijDevLayout = pkgs.writeTextFile {
+    name = "default-layout.kdl";
+    text = ''
+      layout {
+        default_tab_template {
+          children
+          pane size=1 borderless=true {
+            plugin location="ultra-compact-bar"
+          }
+        }
+        tab name="editor"
+        tab name="shell"
+        tab name="supervisor"
+      }
+    '';
+  };
 in {
   # Pre-approve own Zellij plugins.
   home.file = let
@@ -100,31 +117,36 @@ in {
           "${cmd}" = {};
           "SwitchToMode \"${mode}\"" = {};
         };
+        cmdInMode = cmd: mode: {
+          "SwitchToMode \"${mode}\"" = {};
+          "${cmd}" = {};
+        };
         cmdAndLock = cmd: cmdAndSwitchToMode cmd "locked";
+        switchToMode = mode: cmd "SwitchToMode \"${mode}\"";
       in {
         _props.clear-defaults = true;
 
         locked = {
-          "bind \"Ctrl b\"" = cmd "SwitchToMode \"normal\"";
+          "bind \"Ctrl b\"" = switchToMode "normal";
         };
         "shared_except \"locked\" \"renametab\" \"renamepane\"" = {
-          "bind \"Ctrl b\"" = cmd "SwitchToMode \"locked\"";
+          "bind \"Ctrl b\"" = switchToMode "locked";
           "bind \"Ctrl q\"" = cmd "Quit";
         };
         "shared_except \"locked\" \"entersearch\"" = {
-          "bind \"enter\"" = cmd "SwitchToMode \"locked\"";
+          "bind \"enter\"" = switchToMode "locked";
         };
         "shared_except \"locked\" \"entersearch\" \"renametab\" \"renamepane\"" = {
-          "bind \"esc\"" = cmd "SwitchToMode \"locked\"";
+          "bind \"esc\"" = switchToMode "locked";
         };
         "shared_except \"locked\" \"entersearch\" \"renametab\" \"renamepane\" \"search\" \"session\"" = {
-          "bind \"o\"" = cmd "SwitchToMode \"session\"";
+          "bind \"s\"" = switchToMode "session";
         };
         "shared_except \"locked\" \"entersearch\" \"renametab\" \"renamepane\" \"tab\"" = {
-          "bind \"t\"" = cmd "SwitchToMode \"tab\"";
+          "bind \"t\"" = switchToMode "tab";
         };
         "shared_except \"locked\" \"resize\" \"tab\" \"scroll\" \"prompt\"" = {
-          "bind \"p\"" = cmd "SwitchToMode \"pane\"";
+          "bind \"p\"" = switchToMode "pane";
         };
         "renametab" = {
           "bind \"esc\"" = cmdAndSwitchToMode "UndoRenameTab" "tab";
@@ -133,7 +155,7 @@ in {
           "bind \"esc\"" = cmdAndSwitchToMode "UndoRenameTab" "pane";
         };
         "shared_among \"renametab\" \"renamepane\"" = {
-          "bind \"Ctrl c\"" = cmd "SwitchToMode \"locked\"";
+          "bind \"Ctrl c\"" = switchToMode "locked";
         };
         "shared_among \"normal\" \"locked\"" = {
           "bind \"Alt left\"" = cmd "MoveFocusOrTab \"left\"";
@@ -143,10 +165,8 @@ in {
         };
 
         pane = {
-          "bind \"r\"" = {
-            "SwitchToMode \"renamepane\"" = {};
-            "PaneNameInput 0" = {};
-          };
+          "bind \"esc\"" = switchToMode "normal";
+          "bind \"r\"" = cmdInMode "PaneNameInput 0" "renamepane";
           "bind \"f\"" = cmdAndLock "TogglePaneEmbedOrFloating";
           "bind \"Shift f\"" = cmdAndLock "ToggleFocusFullscreen";
           "bind \"n\"" = cmdAndLock "NewPane \"right\"";
@@ -155,10 +175,8 @@ in {
         };
 
         tab = {
-          "bind \"r\"" = {
-            "SwitchToMode \"renametab\"" = {};
-            "TabNameInput 0" = {};
-          };
+          "bind \"esc\"" = switchToMode "normal";
+          "bind \"r\"" = cmdInMode "PaneNameInput 0" "renamepane";
           "bind \"h\"" = cmd "GoToPreviousTab";
           "bind \"j\"" = cmd "GoToPreviousTab";
           "bind \"k\"" = cmd "GoToNextTab";
@@ -182,19 +200,10 @@ in {
         };
 
         normal = {
-          "bind \"/\"" = cmd "SwitchToMode \"entersearch\"";
-          "bind \"?\"" = cmd "SwitchToMode \"entersearch\"";
-          "bind \"\\\"\"" = cmdAndLock "NewPane \"down\"";
-          "bind \"%\"" = cmdAndLock "NewPane \"right\"";
-          "bind \"c\"" = cmdAndLock "NewTab";
+          "bind \"esc\"" = switchToMode "locked";
+          "bind \"/\"" = switchToMode "entersearch";
+          "bind \"?\"" = switchToMode "entersearch";
           "bind \"Ctrl b\"" = cmdAndLock "ToggleTab";
-          "bind \"w\"" = {
-            "LaunchOrFocusPlugin \"session-manager\"" = {
-              floating = true;
-              move_to_focused_tab = true;
-            };
-            "SwitchToMode \"locked\"" = {};
-          };
         };
 
         search = {
@@ -206,22 +215,20 @@ in {
         };
 
         entersearch = {
-          "bind \"Ctrl c\"" = cmd "SwitchToMode \"scroll\"";
-          "bind \"esc\"" = cmd "SwitchToMode \"scroll\"";
-          "bind \"enter\"" = cmd "SwitchToMode \"search\"";
+          "bind \"esc\"" = switchToMode "scroll";
+          "bind \"Ctrl c\"" = switchToMode "scroll";
+          "bind \"enter\"" = switchToMode "search";
         };
 
         scroll = {
+          "bind \"esc\"" = switchToMode "normal";
           "bind \"e\"" = cmdAndLock "EditScrollback";
-          "bind \"f\"" = {
-            "SwitchToMode \"entersearch\"" = {};
-            "SearchInput 0" = {};
-          };
+          "bind \"f\"" = cmdInMode "SearchInput 0" "entersearch";
         };
 
         session = {
+          "bind \"esc\"" = switchToMode "normal";
           "bind \"d\"" = cmd "Detach";
-          "bind \"o\"" = cmd "SwitchToMode \"normal\"";
           "bind \"p\"" = {
             "LaunchOrFocusPlugin \"plugin-manager\"" = {
               floating = true;
@@ -239,18 +246,18 @@ in {
         };
 
         shared = {
+          "bind \"Ctrl b\"" = switchToMode "normal";
           "bind \"Alt h\"" = cmdAndLock "GoToTab 1";
           "bind \"Alt t\"" = cmdAndLock "GoToTab 2";
           "bind \"Alt n\"" = cmdAndLock "GoToTab 3";
           "bind \"Alt s\"" = cmdAndLock "GoToTab 4";
-          "bind \"Ctrl b\"" = {"SwitchToMode \"normal\"" = {};};
           "bind \"Ctrl f\"" = {
             "MessagePlugin \"primehopper\"" = {
               launch_new = true; # Always launch a new instance. This guarantees that CWD is correctly updated.
               skip_cache = false; # Don't skip compilation cache.
               floating = true; # Always float the plugin window.
 
-              layout = "file:${zellijDefaultLayout}";
+              layout = "file:${zellijDevLayout}";
               cwd = codeDirectory;
               name = "scan_repository_root";
             };
@@ -274,7 +281,7 @@ in {
             floating_panes {
               pane {
                 plugin location="primehopper" {
-                  layout "file:${zellijDefaultLayout}"
+                  layout "file:${zellijDevLayout}"
                   cwd "${codeDirectory}"
                   startup_message_name "scan_repository_root"
                   startup_message_payload "5"
