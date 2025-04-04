@@ -195,6 +195,15 @@ in {
           "bind \"/\"" = switchToMode "entersearch";
           "bind \"?\"" = switchToMode "entersearch";
           "bind \"Ctrl b\"" = cmdAndLock "ToggleTab";
+          "bind \"1\"" = cmdAndLock "GoToTab 1";
+          "bind \"2\"" = cmdAndLock "GoToTab 2";
+          "bind \"3\"" = cmdAndLock "GoToTab 3";
+          "bind \"4\"" = cmdAndLock "GoToTab 4";
+          "bind \"5\"" = cmdAndLock "GoToTab 5";
+          "bind \"6\"" = cmdAndLock "GoToTab 6";
+          "bind \"7\"" = cmdAndLock "GoToTab 7";
+          "bind \"8\"" = cmdAndLock "GoToTab 8";
+          "bind \"9\"" = cmdAndLock "GoToTab 9";
         };
 
         search = {
@@ -242,15 +251,6 @@ in {
           "bind \"Alt t\"" = cmdAndLock "GoToTab 2";
           "bind \"Alt n\"" = cmdAndLock "GoToTab 3";
           "bind \"Alt s\"" = cmdAndLock "GoToTab 4";
-          "bind \"1\"" = cmdAndLock "GoToTab 1";
-          "bind \"2\"" = cmdAndLock "GoToTab 2";
-          "bind \"3\"" = cmdAndLock "GoToTab 3";
-          "bind \"4\"" = cmdAndLock "GoToTab 4";
-          "bind \"5\"" = cmdAndLock "GoToTab 5";
-          "bind \"6\"" = cmdAndLock "GoToTab 6";
-          "bind \"7\"" = cmdAndLock "GoToTab 7";
-          "bind \"8\"" = cmdAndLock "GoToTab 8";
-          "bind \"9\"" = cmdAndLock "GoToTab 9";
           "bind \"Ctrl f\"" = {
             "MessagePlugin \"primehopper\"" = {
               launch_new = true; # Always launch a new instance. This guarantees that CWD is correctly updated.
