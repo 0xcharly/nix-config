@@ -56,10 +56,54 @@ in {
       };
 
     roles = {
-      workstation = mkOption {
-        type = bool;
-        default = false;
-        description = "True for local workstations.";
+      nixos = {
+        amdCpu = mkOption {
+          type = bool;
+          default = false;
+          description = "True for machines with an AMD CPU.";
+        };
+
+        amdGpu = mkOption {
+          type = bool;
+          default = false;
+          description = "True for machines with an AMD GPU.";
+        };
+
+        intelGpu = mkOption {
+          type = bool;
+          default = false;
+          description = "True for machines with an Intel GPU.";
+        };
+
+        nas = mkOption {
+          type = bool;
+          default = false;
+          description = "True for local NAS machines.";
+        };
+
+        noRgb = mkOption {
+          type = bool;
+          default = false;
+          description = "Disables RGB lighting on the system.";
+        };
+
+        protonvpn = mkOption {
+          type = bool;
+          default = false;
+          description = "True for machines that should have a ProtonVPN interface.";
+        };
+
+        tailscaleNode = mkOption {
+          type = bool;
+          default = false;
+          description = "True for machines that should be part of the Tailscale network.";
+        };
+
+        workstation = mkOption {
+          type = bool;
+          default = false;
+          description = "True for local workstations.";
+        };
       };
     };
 
@@ -103,4 +147,12 @@ in {
       ''
     ])
   ];
+
+  config.assertions = let
+    inherit (config.modules.stdenv) isNixOS;
+  in
+    builtins.map (role: {
+      assertion = cfg.roles.nixos.${role} -> isNixOS;
+      message = "`system.roles.nixos.${role}` role is only supported on NixOS.";
+    }) (builtins.attrNames config.modules.system.roles.nixos);
 }

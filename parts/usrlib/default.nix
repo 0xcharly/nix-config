@@ -11,7 +11,7 @@ in {
     _module.args = {inherit usrlib;};
   };
 
-  # Also set `lib` as a flake output, which allows for it to be referenced outside
-  # the scope of this flake.
+  # Also set `usrlib` as a flake output, which allows for it to be referenced
+  # outside the scope of this flake.
   flake = {inherit usrlib;};
 }

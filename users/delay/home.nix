@@ -7,9 +7,7 @@
   ...
 }: let
   inherit (pkgs.stdenv) isLinux;
-
-  isGenericLinux = pkgs.stdenv.isLinux && (config.targets.genericLinux.enable or false);
-  isNixOS = pkgs.stdenv.isLinux && !(config.targets.genericLinux.enable or false);
+  inherit (osConfig.modules.stdenv) isNixOS;
 in {
   imports = [
     inputs.catppuccin.homeManagerModules.catppuccin

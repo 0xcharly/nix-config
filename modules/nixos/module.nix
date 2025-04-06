@@ -16,8 +16,12 @@
     ./nixos-hyprland.nix
     ./nixos-x11.nix
     ./protonvpn.nix
+    ./rgb.nix
+    ./secrets.nix
+    ./tailscale.nix
     ./terminfo.nix
     ./user-delay.nix
+    ./workstation.nix
   ];
 
   # Set your time zone.

@@ -5,24 +5,19 @@
 }: {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-    ./1password.nix
-    ./audio.nix
-    ./chromium.nix
     ./fs.nix
-    ./llm.nix
-    ./steam.nix
   ];
 
   # See comment in modules/nixos/module.nix.
   system.stateVersion = "24.11";
 
-  # Wayland, finally?
-  modules.usrenv.compositor = "wayland";
+  # Headless server.
+  modules.usrenv.compositor = "headless";
 
   # Roles.
   modules.system.roles.nixos = {
     amdCpu = true;
-    amdGpu = true;
+    intelGpu = true;
     noRgb = true;
     protonvpn = true;
     tailscaleNode = true;
@@ -35,7 +30,7 @@
   boot.kernelModules = [];
   boot.extraModulePackages = [];
 
-  # Be careful updating this.
+  # Be careful updating this. This must be compatible with the ZFS module.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Use the systemd-boot EFI boot loader.
