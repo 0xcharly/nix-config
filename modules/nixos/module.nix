@@ -15,9 +15,12 @@
     ./nixos-compositor-common.nix
     ./nixos-hyprland.nix
     ./nixos-x11.nix
+    ./openssh.nix
+    ./pixie.nix
     ./protonvpn.nix
     ./rgb.nix
     ./secrets.nix
+    ./reboot-to-ipxe.nix
     ./tailscale.nix
     ./terminfo.nix
     ./user-delay.nix
@@ -62,15 +65,6 @@
     killall
     rxvt-unicode-unwrapped
   ];
-
-  # Enable the OpenSSH daemon.
-  services.openssh = {
-    enable = true;
-    settings = {
-      PasswordAuthentication = lib.mkDefault true;
-      PermitRootLogin = "no";
-    };
-  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

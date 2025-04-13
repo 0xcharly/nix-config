@@ -81,6 +81,12 @@ in {
           description = "True for local NAS machines.";
         };
 
+        netboot = mkOption {
+          type = bool;
+          default = false;
+          description = "Whether the system is a netboot server.";
+        };
+
         noRgb = mkOption {
           type = bool;
           default = false;
@@ -91,6 +97,12 @@ in {
           type = bool;
           default = false;
           description = "True for machines that should have a ProtonVPN interface.";
+        };
+
+        rebootToIpxe = mkOption {
+          type = bool;
+          default = cfg.roles.nixos.nas;
+          description = "True for machines that should have a GRUB entry to reboot to iPXE.";
         };
 
         tailscaleNode = mkOption {
