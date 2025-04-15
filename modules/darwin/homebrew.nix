@@ -38,6 +38,7 @@ in {
         # Browsers.
         (no_quarantine "eloston-chromium") # Ungoogled Chromium.
         "firefox@developer-edition" # Firefox, for isolates.
+        "google-chrome" # When there's no alternatives.
 
         # Utilities.
         "ghostty" # Terminal.
