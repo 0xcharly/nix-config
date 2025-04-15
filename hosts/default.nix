@@ -168,6 +168,7 @@ in rec {
     (mkNixosHost ./nixos/vm-aarch64 {system = "aarch64-linux";})
     (mkNixosHost ./nixos/linode {system = "x86_64-linux";})
     (mkNixosHost ./nixos/nyx {system = "x86_64-linux";})
+    (mkNixosHost ./nixos/helios {system = "x86_64-linux";})
     (mkNixosHost ./nixos/rpi4 {
       system = "aarch64-linux";
       extraModules = [raspberrySdImage hw.raspberry-pi-4];
