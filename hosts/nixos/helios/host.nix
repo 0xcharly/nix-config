@@ -15,10 +15,11 @@
 
   # Roles.
   modules.system.roles.nixos = {
-    amdCpu = true;
+   amdCpu = true;
     intelGpu = true;
     nas = true;
     noRgb = true;
+    nas = true;
     protonvpn = true;
     tailscaleNode = true;
     workstation = true;
