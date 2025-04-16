@@ -71,17 +71,11 @@ in {
             "14=#71d1c7"
             "15=#90a4bb"
           ];
-          background-opacity = 0.95;
-          # TODO(25.05): Replace with `background-blur = true` once Ghostty 1.2 lands.
-          background-blur-radius = 20;
           title = " ";
-          cursor-style = "block";
-          cursor-style-blink = false;
-          mouse-hide-while-typing = false;
           window-padding-x = 4;
           window-padding-y = 4;
           window-padding-balance = true;
-          shell-integration-features = "no-cursor,no-sudo,no-title";
+          shell-integration-features = "no-cursor,no-title";
           confirm-close-surface = false;
           quit-after-last-window-closed = true;
           auto-update = "off";
@@ -99,9 +93,9 @@ in {
                 then "super"
                 else "ctrl";
             in [
-              "${mod}+shift+n=new_window"
-              "${mod}+shift+t=new_tab"
-              "${mod}+shift+w=close_surface"
+              "${mod}+n=new_window"
+              "${mod}+t=new_tab"
+              "${mod}+w=close_surface"
               "${mod}+shift+c=copy_to_clipboard"
               "${mod}+shift+v=paste_from_clipboard"
               "${mod}+equal=increase_font_size:1"
