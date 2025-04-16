@@ -34,7 +34,7 @@
 
     # macOS system configuration with Nix.
     nix-darwin = {
-      url = "github:LnL7/nix-darwin/nix-darwin-24.11";
+      url = "github:nix-darwin/nix-darwin/nix-darwin-24.11";
       inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
 
