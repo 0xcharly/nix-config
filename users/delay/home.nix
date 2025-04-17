@@ -1,13 +1,16 @@
 {
-  config,
-  osConfig,
   inputs,
   lib,
   pkgs,
   ...
-}: let
+} @ args: let
+  config =
+    if args ? osConfig
+    then args.osConfig
+    else args.config;
+
   inherit (pkgs.stdenv) isLinux;
-  inherit (osConfig.modules.stdenv) isNixOS;
+  inherit (config.modules.stdenv) isNixOS;
 in {
   imports = [
     inputs.catppuccin.homeManagerModules.catppuccin
