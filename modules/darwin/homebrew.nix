@@ -17,13 +17,12 @@ in {
     };
     masApps =
       {
-        "Amphetamine" = 937984704;
-        "ColorSlurp" = 1287239339;
-        "Pixelmator Pro" = 1289583905;
+        ColorSlurp = 1287239339;
       }
       // (lib.optionalAttrs (!isCorpManaged) {
-        # Xcode is installed out-of-band on corp devices.
-        Xcode = 497799835;
+        Amphetamine = 937984704;
+        "Pixelmator Pro" = 1289583905;
+        Xcode = 497799835; # Xcode is installed out-of-band on corp devices.
       });
     casks = let
       no_quarantine = name: {
