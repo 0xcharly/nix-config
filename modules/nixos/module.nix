@@ -17,6 +17,7 @@
     ./nixos-x11.nix
     ./openssh.nix
     ./pixie.nix
+    ./protonvpn-module.nix
     ./protonvpn.nix
     ./rgb.nix
     ./secrets.nix
