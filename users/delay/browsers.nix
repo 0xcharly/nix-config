@@ -7,7 +7,7 @@
     if args ? osConfig
     then args.osConfig
     else args.config;
-  inherit (config.modules.usrenv) isLinuxDesktop;
+  inherit (config.modules.usrenv) isCorpManaged isLinuxDesktop;
 in
   lib.mkIf isLinuxDesktop {
     # Only used when full-page translation is needed, or if the target website
@@ -21,10 +21,10 @@ in
           "--user-agent='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.2 Safari/605.1.15'"
         ];
       };
-    in [google-chrome-for-jp-taxes];
+    in lib.mkIf (!isCorpManaged) [google-chrome-for-jp-taxes];
 
     programs.chromium = {
-      enable = true;
+      enable = !isCorpManaged;
       package = pkgs.ungoogled-chromium;
       dictionaries = with pkgs; [
         hunspellDictsChromium.en_US
@@ -242,7 +242,7 @@ in
     };
 
     xdg.mimeApps = {
-      defaultApplications = {
+      defaultApplications = lib.mkIf (!isCorpManaged) {
         "x-scheme-handler/http" = ["firefox.desktop" "chromium.desktop"];
         "x-scheme-handler/https" = ["firefox.desktop" "chromium.desktop"];
         "text/html" = ["firefox.desktop"];
