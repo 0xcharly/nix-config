@@ -5,7 +5,6 @@
 }: {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-    ./fs.nix
   ];
 
   # See comment in modules/nixos/module.nix.
@@ -18,6 +17,7 @@
   modules.system.roles.nixos = {
     amdCpu = true;
     intelGpu = true;
+    nas = true;
     noRgb = true;
     protonvpn = true;
     tailscaleNode = true;

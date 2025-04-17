@@ -1,12 +1,12 @@
 {
+  config,
   inputs,
   lib,
-  config,
   ...
 }: {
   imports = [inputs.disko.nixosModules.disko];
 
-  disko.devices = {
+  disko.devices = lib.mkIf config.modules.system.roles.nixos.nas {
     disk = let
       raid1 = device: {
         type = "disk";

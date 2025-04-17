@@ -4,7 +4,7 @@
   pkgs,
   ...
 }:
-lib.mkIf (config.modules.system.roles.nixos.rebootToIpxe) {
+lib.mkIf config.modules.system.roles.nixos.rebootToIpxe {
   environment.shellAliases.reboot2PXE = "${pkgs.grub2}/bin/grub-editenv /boot/grub/grubenv set entry=ipxe && reboot";
   boot.loader = {
     efi.canTouchEfiVariables = true;
