@@ -22,10 +22,7 @@
   dpiScale = 1.25;
   cursorSize = 32;
 
-  uwsm-wrapper = cmd:
-    if false # isCorpManaged
-    then cmd
-    else "${lib.getExe pkgs.uwsm} app -- ${cmd}";
+  uwsm-wrapper = cmd: "${lib.getExe pkgs.uwsm} app -- ${cmd}";
 
   hyprlandSessionVariables = {};
   waylandSessionVariables = {
@@ -108,7 +105,7 @@ in
       # TODO(25.05): Enable this when the HM module is updated to use the new packages.
       # package = null;
       # portalPackage = null;
-      systemd.enable = isCorpManaged; # Managed by UWSM.
+      systemd.enable = false; # Managed by UWSM.
       # Layout plugin.
       plugins = [inputs'.hy3.packages.hy3];
       # Hyprland configuration.
