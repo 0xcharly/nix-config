@@ -183,7 +183,7 @@ in
           "SUPER,       Return, exec, ${uwsm-wrapper (lib.getExe pkgs.ghostty)}"
           "SUPER,       Space,  exec, pkill rofi || ${uwsm-wrapper (lib.getExe args.config.programs.rofi.finalPackage)} -show combi  -run-command \"${uwsm-wrapper "{cmd}"}\" -calc-command \"echo -n '{result}' | ${pkgs.wl-clipboard}/bin/wl-copy\""
           "SUPER SHIFT, X,      killactive, "
-          "SUPER SHIFT, Q,      exec, ${uwsm-wrapper (loginctl terminate-session \"$XDG_SESSION_ID\")}"
+          "SUPER SHIFT, Q,      exec, ${uwsm-wrapper (loginctl terminate-session "$XDG_SESSION_ID")}"
           "SUPER,       V,      togglefloating, "
           "SUPER,       F,      fullscreen, "
           "SUPER CTRL,  C,      exec, ${uwsm-wrapper (lib.getExe pkgs.wl-color-picker)}"
