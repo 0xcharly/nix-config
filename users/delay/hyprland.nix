@@ -23,7 +23,7 @@
   cursorSize = 32;
 
   uwsm-wrapper = cmd:
-    if isCorpManaged
+    if false # isCorpManaged
     then cmd
     else "${lib.getExe pkgs.uwsm} app -- ${cmd}";
 
