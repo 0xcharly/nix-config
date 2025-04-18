@@ -12,7 +12,7 @@
   ];
 }
 // (let
-  inherit (config.modules.usrenv) isLinuxWaylandDesktop;
+  inherit (config.modules.usrenv) isCorpManaged isLinuxWaylandDesktop;
 
   config =
     if args ? osConfig
@@ -110,7 +110,7 @@ in
       # Hyprland configuration.
       settings = {
         # Open apps on startup.
-        exec-once = [
+        exec-once = lib.mkIf (!isCorpManaged) [
           "uwsm app -- systemctl --user enable --now hyprpanel.service"
           "uwsm app -- systemctl --user enable --now hyprpaper.service"
           "[workspace 1] uwsm app -- ${lib.getExe args.config.programs.firefox.finalPackage}"
@@ -176,16 +176,16 @@ in
         };
         # Keyboard bindings.
         bind = [
-          "SUPER,       Return, exec, uwsm app -- ${lib.getExe pkgs.ghostty}"
-          "SUPER,       Space,  exec, pkill rofi || ${lib.getExe args.config.programs.rofi.finalPackage} -show combi  -run-command \"uwsm app -- {cmd}\" -calc-command \"echo -n '{result}' | ${pkgs.wl-clipboard}/bin/wl-copy\""
+          "SUPER,       Return, exec, ${lib.getExe pkgs.uwsm} app -- ${lib.getExe pkgs.ghostty}"
+          "SUPER,       Space,  exec, pkill rofi || ${lib.getExe args.config.programs.rofi.finalPackage} -show combi  -run-command \"${lib.getExe pkgs.uwsm} app -- {cmd}\" -calc-command \"echo -n '{result}' | ${pkgs.wl-clipboard}/bin/wl-copy\""
           "SUPER SHIFT, X,      killactive, "
-          "SUPER SHIFT, Q,      exec, uwsm app -- loginctl terminate-session \"$XDG_SESSION_ID\""
+          "SUPER SHIFT, Q,      exec, ${lib.getExe pkgs.uwsm} app -- loginctl terminate-session \"$XDG_SESSION_ID\""
           "SUPER,       V,      togglefloating, "
           "SUPER,       F,      fullscreen, "
-          "SUPER CTRL,  C,      exec, uwsm app -- ${lib.getExe pkgs.wl-color-picker}"
-          "SUPER,       P,      exec, uwsm app -- ${lib.getExe pkgs.grimblast} --notify edit area"
-          "SUPER SHIFT, P,      exec, uwsm app -- ${lib.getExe pkgs.grimblast} --notify edit active"
-          "SUPER CTRL,  P,      exec, uwsm app -- ${lib.getExe pkgs.grimblast} --notify edit screen"
+          "SUPER CTRL,  C,      exec, ${lib.getExe pkgs.uwsm} app -- ${lib.getExe pkgs.wl-color-picker}"
+          "SUPER,       P,      exec, ${lib.getExe pkgs.uwsm} app -- ${lib.getExe pkgs.grimblast} --notify edit area"
+          "SUPER SHIFT, P,      exec, ${lib.getExe pkgs.uwsm} app -- ${lib.getExe pkgs.grimblast} --notify edit active"
+          "SUPER CTRL,  P,      exec, ${lib.getExe pkgs.uwsm} app -- ${lib.getExe pkgs.grimblast} --notify edit screen"
 
           "SUPER,       D, hy3:makegroup,   h"
           "SUPER,       S, hy3:makegroup,   v"
