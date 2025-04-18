@@ -22,6 +22,11 @@
   dpiScale = 1.25;
   cursorSize = 32;
 
+  uwsm-wrapper = cmd:
+    if isCorpManaged
+    then cmd
+    else "${lib.getExe pkgs.uwsm} app -- ${cmd}";
+
   hyprlandSessionVariables = {};
   waylandSessionVariables = {
     NIXOS_OZONE_WL = 1;
@@ -103,21 +108,20 @@ in
       # TODO(25.05): Enable this when the HM module is updated to use the new packages.
       # package = null;
       # portalPackage = null;
-      # Managed by UWSM.
-      systemd.enable = false;
+      systemd.enable = isCorpManaged; # Managed by UWSM.
       # Layout plugin.
       plugins = [inputs'.hy3.packages.hy3];
       # Hyprland configuration.
       settings = {
         # Open apps on startup.
         exec-once = lib.mkIf (!isCorpManaged) [
-          "uwsm app -- systemctl --user enable --now hyprpanel.service"
-          "uwsm app -- systemctl --user enable --now hyprpaper.service"
-          "[workspace 1] uwsm app -- ${lib.getExe args.config.programs.firefox.finalPackage}"
-          # "[workspace 2] uwsm app -- ${lib.getExe args.config.programs.chromium.package}"
-          "[workspace 3] uwsm app -- ${lib.getExe pkgs.ghostty}"
-          # "[workspace 8] uwsm app -- ${lib.getExe pkgs.obsidian}"
-          # "[workspace 9] uwsm app -- ${lib.getExe pkgs.tidal-hifi}"
+          (uwsm-wrapper "systemctl --user enable --now hyprpanel.service")
+          (uwsm-wrapper "systemctl --user enable --now hyprpaper.service")
+          "[workspace 1] ${uwsm-wrapper (lib.getExe args.config.programs.firefox.finalPackage)}"
+          # "[workspace 2] ${uwsm-wrapper (lib.getExe args.config.programs.chromium.package)}"
+          "[workspace 3] ${uwsm-wrapper (lib.getExe pkgs.ghostty)}"
+          # "[workspace 8] ${uwsm-wrapper (lib.getExe pkgs.obsidian)}"
+          # "[workspace 9] ${uwsm-wrapper (lib.getExe pkgs.tidal-hifi)}"
         ];
 
         # Monitor scaling.
@@ -176,16 +180,16 @@ in
         };
         # Keyboard bindings.
         bind = [
-          "SUPER,       Return, exec, ${lib.getExe pkgs.uwsm} app -- ${lib.getExe pkgs.ghostty}"
-          "SUPER,       Space,  exec, pkill rofi || ${lib.getExe args.config.programs.rofi.finalPackage} -show combi  -run-command \"${lib.getExe pkgs.uwsm} app -- {cmd}\" -calc-command \"echo -n '{result}' | ${pkgs.wl-clipboard}/bin/wl-copy\""
+          "SUPER,       Return, exec, ${uwsm-wrapper (lib.getExe pkgs.ghostty)}"
+          "SUPER,       Space,  exec, pkill rofi || ${uwsm-wrapper (lib.getExe args.config.programs.rofi.finalPackage)} -show combi  -run-command \"${uwsm-wrapper "{cmd}"}\" -calc-command \"echo -n '{result}' | ${pkgs.wl-clipboard}/bin/wl-copy\""
           "SUPER SHIFT, X,      killactive, "
-          "SUPER SHIFT, Q,      exec, ${lib.getExe pkgs.uwsm} app -- loginctl terminate-session \"$XDG_SESSION_ID\""
+          "SUPER SHIFT, Q,      exec, ${uwsm-wrapper (loginctl terminate-session \"$XDG_SESSION_ID\")}"
           "SUPER,       V,      togglefloating, "
           "SUPER,       F,      fullscreen, "
-          "SUPER CTRL,  C,      exec, ${lib.getExe pkgs.uwsm} app -- ${lib.getExe pkgs.wl-color-picker}"
-          "SUPER,       P,      exec, ${lib.getExe pkgs.uwsm} app -- ${lib.getExe pkgs.grimblast} --notify edit area"
-          "SUPER SHIFT, P,      exec, ${lib.getExe pkgs.uwsm} app -- ${lib.getExe pkgs.grimblast} --notify edit active"
-          "SUPER CTRL,  P,      exec, ${lib.getExe pkgs.uwsm} app -- ${lib.getExe pkgs.grimblast} --notify edit screen"
+          "SUPER CTRL,  C,      exec, ${uwsm-wrapper (lib.getExe pkgs.wl-color-picker)}"
+          "SUPER,       P,      exec, ${uwsm-wrapper (lib.getExe pkgs.grimblast)} --notify edit area"
+          "SUPER SHIFT, P,      exec, ${uwsm-wrapper (lib.getExe pkgs.grimblast)} --notify edit active"
+          "SUPER CTRL,  P,      exec, ${uwsm-wrapper (lib.getExe pkgs.grimblast)} --notify edit screen"
 
           "SUPER,       D, hy3:makegroup,   h"
           "SUPER,       S, hy3:makegroup,   v"
