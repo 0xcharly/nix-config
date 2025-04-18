@@ -125,7 +125,7 @@ in
         ];
 
         # Monitor scaling.
-        monitor = "DP-3, 3840x2160@239.991Hz, 0x0, ${builtins.toString dpiScale}";
+        monitor = lib.mkDefault "DP-3, 3840x2160@239.991Hz, 0x0, ${builtins.toString dpiScale}";
         # Properly scale X11 applications (e.g. 1Password) by unscaling XWayland.
         xwayland.force_zero_scaling = true;
 
