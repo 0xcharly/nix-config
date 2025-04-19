@@ -197,6 +197,7 @@ in
             "SUPER,       Space,  exec, pkill rofi || ${uwsm-wrapper (lib.getExe args.config.programs.rofi.finalPackage)} -show combi  -run-command \"${uwsm-wrapper "{cmd}"}\" -calc-command \"echo -n '{result}' | ${pkgs.wl-clipboard}/bin/wl-copy\""
             "SUPER SHIFT, X,      killactive, "
             "SUPER SHIFT, Q,      exec, ${uwsm-wrapper "loginctl terminate-session \"$XDG_SESSION_ID\""}"
+            "SUPER SHIFT, L,      exec, ${uwsm-wrapper (lib.getExe pkgs.hyprlock)}"
             "SUPER,       V,      togglefloating, "
             "SUPER,       F,      fullscreen, "
             "SUPER CTRL,  C,      exec, ${uwsm-wrapper (lib.getExe pkgs.wl-color-picker)}"
@@ -250,6 +251,44 @@ in
         splash = false;
         preload = [wallpaper_path];
         wallpaper = [", ${wallpaper_path}"];
+      };
+    };
+
+    programs.hyprlock = {
+      enable = true;
+      settings = {
+        disable_loading_bar = true;
+        grace = 0;
+        hide_cursor = true;
+        no_fade_in = false;
+
+        background = [
+          {
+            path = "screenshot";
+            blur_passes = 3;
+            blur_size = 8;
+          }
+        ];
+
+        input-field = [
+          {
+            size = "512, 64";
+            position = "0, -128";
+            dots_center = true;
+            dots_size = 0.2;
+            dots_spacing = 0.4;
+            fade_on_empty = false;
+            font_color = "rgba(225, 232, 244, 1)";
+            inner_color = "rgba(29, 37, 48, 1)";
+            outer_color = "rgba(21, 27, 35, 1)";
+            check_color = "rgba(137, 180, 250, 1)";
+            fail_color = "rgba(254, 154, 164, 1)";
+            outline_thickness = 2;
+            placeholder_text = "<i><span foreground=\"##bac2deff\">Password…</span></i>";
+            shadow_passes = 2;
+            shadow_color = "rgba(21, 27, 35, 1)";
+          }
+        ];
       };
     };
 
