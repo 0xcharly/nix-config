@@ -23,6 +23,20 @@
   cursorSize = 32;
 
   uwsm-wrapper = cmd: "${lib.getExe pkgs.uwsm} app -- ${cmd}";
+  map-workspaces = mapFn:
+    builtins.map (x:
+      mapFn (toString x) (
+        if x == 0
+        then "10"
+        else (toString x)
+      )) (builtins.genList (x: x) 10);
+  map-movements = mapFn:
+    lib.attrsets.mapAttrsToList mapFn {
+      "left" = "l";
+      "right" = "r";
+      "up" = "u";
+      "down" = "d";
+    };
 
   hyprlandSessionVariables = {};
   waylandSessionVariables = {
@@ -86,16 +100,17 @@ in
       qt6.qtwayland
     ];
 
-    xdg.configFile = {
+    xdg.configFile = let
+      create-env = envvars:
+        lib.concatStringsSep "\n" (
+          lib.mapAttrsToList (key: value: "export ${key}=${builtins.toString value}") envvars
+        );
+    in {
       "electron-flags.conf".text = lib.concatStringsSep " " ["--ozone-platform-hint=auto"];
 
       # For Hyprland UWSM enviroment settings
-      "uwsm/env".text = lib.concatStringsSep "\n" (
-        lib.mapAttrsToList (key: value: "export ${key}=${builtins.toString value}") waylandSessionVariables
-      );
-      "uwsm/env-hyprland".text = lib.concatStringsSep "\n" (
-        lib.mapAttrsToList (key: value: "export ${key}=${builtins.toString value}") hyprlandSessionVariables
-      );
+      "uwsm/env".text = create-env waylandSessionVariables;
+      "uwsm/env-hyprland".text = create-env hyprlandSessionVariables;
     };
 
     wayland.windowManager.hyprland = {
@@ -176,79 +191,32 @@ in
           ];
         };
         # Keyboard bindings.
-        bind = [
-          "SUPER,       Return, exec, ${uwsm-wrapper (lib.getExe pkgs.ghostty)}"
-          "SUPER,       Space,  exec, pkill rofi || ${uwsm-wrapper (lib.getExe args.config.programs.rofi.finalPackage)} -show combi  -run-command \"${uwsm-wrapper "{cmd}"}\" -calc-command \"echo -n '{result}' | ${pkgs.wl-clipboard}/bin/wl-copy\""
-          "SUPER SHIFT, X,      killactive, "
-          "SUPER SHIFT, Q,      exec, ${uwsm-wrapper "loginctl terminate-session \"$XDG_SESSION_ID\""}"
-          "SUPER,       V,      togglefloating, "
-          "SUPER,       F,      fullscreen, "
-          "SUPER CTRL,  C,      exec, ${uwsm-wrapper (lib.getExe pkgs.wl-color-picker)}"
-          "SUPER,       P,      exec, ${uwsm-wrapper (lib.getExe pkgs.grimblast)} --notify edit area"
-          "SUPER SHIFT, P,      exec, ${uwsm-wrapper (lib.getExe pkgs.grimblast)} --notify edit active"
-          "SUPER CTRL,  P,      exec, ${uwsm-wrapper (lib.getExe pkgs.grimblast)} --notify edit screen"
+        bind =
+          [
+            "SUPER,       Return, exec, ${uwsm-wrapper (lib.getExe pkgs.ghostty)}"
+            "SUPER,       Space,  exec, pkill rofi || ${uwsm-wrapper (lib.getExe args.config.programs.rofi.finalPackage)} -show combi  -run-command \"${uwsm-wrapper "{cmd}"}\" -calc-command \"echo -n '{result}' | ${pkgs.wl-clipboard}/bin/wl-copy\""
+            "SUPER SHIFT, X,      killactive, "
+            "SUPER SHIFT, Q,      exec, ${uwsm-wrapper "loginctl terminate-session \"$XDG_SESSION_ID\""}"
+            "SUPER,       V,      togglefloating, "
+            "SUPER,       F,      fullscreen, "
+            "SUPER CTRL,  C,      exec, ${uwsm-wrapper (lib.getExe pkgs.wl-color-picker)}"
+            "SUPER,       P,      exec, ${uwsm-wrapper (lib.getExe pkgs.grimblast)} --notify edit area"
+            "SUPER SHIFT, P,      exec, ${uwsm-wrapper (lib.getExe pkgs.grimblast)} --notify edit active"
+            "SUPER CTRL,  P,      exec, ${uwsm-wrapper (lib.getExe pkgs.grimblast)} --notify edit screen"
 
-          "SUPER,       D, hy3:makegroup,   h"
-          "SUPER,       S, hy3:makegroup,   v"
-          "SUPER,       Z, hy3:makegroup,   tab"
-          "SUPER,       A, hy3:changefocus, raise"
-          "SUPER SHIFT, A, hy3:changefocus, lower"
-          "SUPER,       E, hy3:expand,      expand"
-          "SUPER SHIFT, E, hy3:expand,      base"
-          "SUPER,       R, hy3:changegroup, opposite"
-
-          "SUPER,       left,   hy3:movefocus, l"
-          "SUPER,       right,  hy3:movefocus, r"
-          "SUPER,       up,     hy3:movefocus, u"
-          "SUPER,       down,   hy3:movefocus, d"
-
-          "SUPER CTRL,  left,   hy3:movefocus, l, visible, nowrap"
-          "SUPER CTRL,  right,  hy3:movefocus, r, visible, nowrap"
-          "SUPER CTRL,  up,     hy3:movefocus, u, visible, nowrap"
-          "SUPER CTRL,  down,   hy3:movefocus, d, visible, nowrap"
-
-          "SUPER SHIFT, left,   hy3:movewindow, l, once"
-          "SUPER SHIFT, right,  hy3:movewindow, r, once"
-          "SUPER SHIFT, up,     hy3:movewindow, u, once"
-          "SUPER SHIFT, down,   hy3:movewindow, d, once"
-
-          "SUPER CTRL SHIFT,  left,   hy3:movefocus, l, once, visible"
-          "SUPER CTRL SHIFT,  right,  hy3:movefocus, r, once, visible"
-          "SUPER CTRL SHIFT,  up,     hy3:movefocus, u, once, visible"
-          "SUPER CTRL SHIFT,  down,   hy3:movefocus, d, once, visible"
-
-          "ALT,         1,      workspace, 1"
-          "ALT,         2,      workspace, 2"
-          "ALT,         3,      workspace, 3"
-          "ALT,         4,      workspace, 4"
-          "ALT,         5,      workspace, 5"
-          "ALT,         6,      workspace, 6"
-          "ALT,         7,      workspace, 7"
-          "ALT,         8,      workspace, 8"
-          "ALT,         9,      workspace, 9"
-          "ALT,         0,      workspace, 10"
-          "ALT SHIFT,   1,      hy3:movetoworkspace, 1"
-          "ALT SHIFT,   2,      hy3:movetoworkspace, 2"
-          "ALT SHIFT,   3,      hy3:movetoworkspace, 3"
-          "ALT SHIFT,   4,      hy3:movetoworkspace, 4"
-          "ALT SHIFT,   5,      hy3:movetoworkspace, 5"
-          "ALT SHIFT,   6,      hy3:movetoworkspace, 6"
-          "ALT SHIFT,   7,      hy3:movetoworkspace, 7"
-          "ALT SHIFT,   8,      hy3:movetoworkspace, 8"
-          "ALT SHIFT,   9,      hy3:movetoworkspace, 9"
-          "ALT SHIFT,   0,      hy3:movetoworkspace, 10"
-
-          "SUPER CTRL,  1,      hy3:focustab, 1"
-          "SUPER CTRL,  2,      hy3:focustab, 2"
-          "SUPER CTRL,  3,      hy3:focustab, 3"
-          "SUPER CTRL,  4,      hy3:focustab, 4"
-          "SUPER CTRL,  5,      hy3:focustab, 5"
-          "SUPER CTRL,  6,      hy3:focustab, 6"
-          "SUPER CTRL,  7,      hy3:focustab, 7"
-          "SUPER CTRL,  8,      hy3:focustab, 8"
-          "SUPER CTRL,  9,      hy3:focustab, 9"
-          "SUPER CTRL,  0,      hy3:focustab, 10"
-        ];
+            "SUPER,       D, hy3:makegroup,   h"
+            "SUPER,       S, hy3:makegroup,   v"
+            "SUPER,       Z, hy3:makegroup,   tab"
+            "SUPER,       A, hy3:changefocus, raise"
+            "SUPER SHIFT, A, hy3:changefocus, lower"
+            "SUPER,       E, hy3:expand,      expand"
+            "SUPER SHIFT, E, hy3:expand,      base"
+            "SUPER,       R, hy3:changegroup, opposite"
+          ]
+          ++ (map-movements (dir: key: "SUPER, ${dir}, hy3:movefocus, ${key}, wrap"))
+          ++ (map-movements (dir: key: "SUPER SHIFT, ${dir}, hy3:movewindow, ${key}, once"))
+          ++ (map-workspaces (no: repr: "ALT, ${no}, workspace, ${repr}"))
+          ++ (map-workspaces (no: repr: "ALT SHIFT, ${no}, hy3:movetoworkspace, ${repr}"));
         # Mouse bindings.
         bindm = [
           "SUPER, mouse:272, movewindow" # Left mouse button.
@@ -297,13 +265,6 @@ in
       # Import a theme from './themes/*.json'.
       # Default: ""
       theme = "catppuccin_mocha";
-
-      # Override the final config with an arbitrary set.
-      # Useful for overriding colors in your selected theme.
-      # Default: {}
-      override = {
-        # theme.bar.menus.text = "#123ABC";
-      };
 
       # Configure bar layouts for monitors. See 'https://hyprpanel.com/configuration/panel.html'.
       layout = {
@@ -367,18 +328,8 @@ in
         };
       };
 
-      override = {
-        "bar.workspaces.workspaceIconMap.1" = "1";
-        "bar.workspaces.workspaceIconMap.2" = "2";
-        "bar.workspaces.workspaceIconMap.3" = "3";
-        "bar.workspaces.workspaceIconMap.4" = "4";
-        "bar.workspaces.workspaceIconMap.5" = "5";
-        "bar.workspaces.workspaceIconMap.6" = "6";
-        "bar.workspaces.workspaceIconMap.7" = "7";
-        "bar.workspaces.workspaceIconMap.8" = "8";
-        "bar.workspaces.workspaceIconMap.9" = "9";
-        "bar.workspaces.workspaceIconMap.10" = "0";
-      };
+      # Override the final config with an arbitrary set.
+      override = lib.attrsets.mergeAttrsList (map-workspaces (no: repr: {"bar.workspaces.workspaceIconMap.${repr}" = no;}));
     };
 
     home.sessionVariables = {

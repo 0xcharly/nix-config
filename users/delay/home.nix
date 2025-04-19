@@ -65,6 +65,6 @@ in {
   catppuccin.flavor = "mocha";
 
   xdg.configFile = lib.optionalAttrs isNixOS {
-    "cachix/cachix.dhall".source = config.lib.file.mkOutOfStoreSymlink args.osConfig.age.secrets."services/cachix.dhall".path;
+    "cachix/cachix.dhall".source = args.config.lib.file.mkOutOfStoreSymlink args.osConfig.age.secrets."services/cachix.dhall".path;
   };
 }
