@@ -93,13 +93,15 @@ in {
             in [
               "${mod}+n=new_window"
               "${mod}+t=new_tab"
-              "${mod}+w=close_surface"
+              "${mod}+shift+w=close_surface"
               "${mod}+shift+c=copy_to_clipboard"
               "${mod}+shift+v=paste_from_clipboard"
               "${mod}+equal=increase_font_size:1"
               "${mod}+minus=decrease_font_size:1"
               "${mod}+zero=reset_font_size"
               "${mod}+plus=increase_font_size:1"
+              "${mod}+backspace=text:\\x17" # Delete word.
+              "${mod}+delete=text:\\x15" # Delete line.
             ])
             ++ lib.optionals isDarwin [
               "super+c=copy_to_clipboard"
