@@ -1,7 +1,7 @@
 {
-  inputs,
   lib,
   pkgs,
+  pkgs',
   ...
 } @ args: let
   config =
@@ -14,9 +14,7 @@
   hasWindowManager = !isHeadless;
 in {
   # Ghostty is installed with Homebrew on macOS.
-  home.packages = lib.mkIf isLinuxDesktop (let
-    pkgs' = import inputs.nixpkgs-unstable {inherit (pkgs) system;};
-  in [pkgs'.ghostty]);
+  home.packages = lib.mkIf isLinuxDesktop [pkgs'.ghostty];
 
   # Ghostty configuration.
   xdg = lib.mkIf hasWindowManager {

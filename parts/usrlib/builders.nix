@@ -32,6 +32,7 @@
     withSystem system ({
       inputs',
       self',
+      pkgs,
       ...
     }:
       systemBuilder {
@@ -42,6 +43,10 @@
 
           inputs = recursiveUpdate inputs (args.inputs or {});
           inputs' = mergeInputs' system inputs' (args.inputs or {});
+          pkgs' = import inputs.nixpkgs-unstable {
+            inherit system;
+            inherit (pkgs) config overlays;
+          };
           self = recursiveUpdate self (args.self or {});
         } (args.specialArgs or {});
 
@@ -65,6 +70,7 @@
     withSystem system ({
       inputs',
       self',
+      pkgs,
       ...
     }:
       inputs.home-manager.lib.homeManagerConfiguration {
@@ -74,6 +80,10 @@
 
           inputs = recursiveUpdate inputs (args.inputs or {});
           inputs' = mergeInputs' system inputs' (args.inputs or {});
+          pkgs' = import inputs.nixpkgs-unstable {
+            inherit system;
+            inherit (pkgs) config overlays;
+          };
           self = recursiveUpdate self (args.self or {});
         } (args.extraSpecialArgs or {});
 

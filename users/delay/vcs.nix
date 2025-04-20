@@ -1,7 +1,7 @@
 {
-  inputs,
   lib,
   pkgs,
+  pkgs',
   ...
 } @ args: let
   config =
@@ -17,10 +17,7 @@
 in {
   programs.jujutsu = {
     enable = true;
-    package = let
-      pkgs' = import inputs.nixpkgs-unstable {inherit (pkgs) system;};
-    in
-      lib.mkDefault pkgs'.jujutsu;
+    package = lib.mkDefault pkgs'.jujutsu;
     # TODO: look into using `settings.fix.tools`.
     settings =
       lib.recursiveUpdate {

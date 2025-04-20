@@ -1,7 +1,7 @@
 {
-  inputs,
   lib,
   pkgs,
+  pkgs',
   ...
 } @ args: let
   config =
@@ -68,10 +68,7 @@ in {
 
   programs.zellij = {
     enable = true;
-    package = let
-      pkgs' = import inputs.nixpkgs-unstable {inherit (pkgs) system;};
-    in
-      pkgs'.zellij;
+    package = pkgs'.zellij;
     settings = {
       default_layout = "${zellijDefaultLayout}";
       default_mode = "locked";
