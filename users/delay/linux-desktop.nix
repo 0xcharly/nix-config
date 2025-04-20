@@ -19,6 +19,7 @@ in
       kicad
       localsend
       nautilus
+      notion
       obsidian
       proton-pass
       tidal-hifi
