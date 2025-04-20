@@ -19,9 +19,9 @@ in {
     ./catppuccin.nix
     ./fonts.nix
     ./hyprland.nix
+    ./linux-desktop.nix
     ./multiplexers.nix
     ./nix-client-config.nix
-    ./nixos-desktop.nix
     ./scripts.nix
     ./shells.nix
     ./ssh.nix

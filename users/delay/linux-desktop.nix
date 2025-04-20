@@ -11,6 +11,10 @@
 in
   lib.mkIf isLinuxDesktop {
     home.packages = with pkgs; [
+      _1password-gui
+      beeper
+      cinny-desktop
+      discord
       element-desktop
       kicad
       localsend
