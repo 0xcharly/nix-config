@@ -258,10 +258,14 @@ in
     programs.hyprlock = {
       enable = true;
       settings = {
-        disable_loading_bar = true;
-        grace = 0;
-        hide_cursor = true;
-        no_fade_in = false;
+        general = [
+          {
+            disable_loading_bar = true;
+            grace = 0;
+            hide_cursor = true;
+            no_fade_in = false;
+          }
+        ];
 
         background = [
           {
@@ -274,7 +278,7 @@ in
         input-field = [
           {
             size = "512, 64";
-            position = "0, -128";
+            position = "0, 0";
             dots_center = true;
             dots_size = 0.2;
             dots_spacing = 0.4;
