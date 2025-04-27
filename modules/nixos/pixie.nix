@@ -2,6 +2,7 @@
   config,
   inputs,
   pkgs,
+  lib,
   ...
 }: let
   sys = inputs.nixpkgs.lib.nixosSystem {
@@ -41,23 +42,24 @@
   };
 
   inherit (sys.config.system) build;
-in {
-  services.pixiecore = {
-    enable = true;
-    openFirewall = true;
-    dhcpNoBind = true; # Use existing DHCP server.
+in
+  lib.mkIf config.modules.system.roles.nixos.pixiecore {
+    services.pixiecore = {
+      enable = true;
+      openFirewall = true;
+      dhcpNoBind = true; # Use existing DHCP server.
 
-    mode = "boot";
-    kernel = "${build.kernel}/bzImage";
-    initrd = "${build.netbootRamdisk}/initrd";
-    cmdLine = "init=${build.toplevel}/init loglevel=4 boot.shellOnFail";
-    debug = true;
-  };
+      mode = "boot";
+      kernel = "${build.kernel}/bzImage";
+      initrd = "${build.netbootRamdisk}/initrd";
+      cmdLine = "init=${build.toplevel}/init loglevel=4 boot.shellOnFail";
+      debug = true;
+    };
 
-  assertions = [
-    {
-      assertion = config.services.pixiecore.enable -> (pkgs.system == "x86_64-linux" && config.modules.stdenv.isNixOS);
-      message = "Pixiecore is only supported on x86_64-linux NixOS.";
-    }
-  ];
-}
+    assertions = [
+      {
+        assertion = config.services.pixiecore.enable -> (pkgs.system == "x86_64-linux" && config.modules.stdenv.isNixOS);
+        message = "Pixiecore is only supported on x86_64-linux NixOS.";
+      }
+    ];
+  }

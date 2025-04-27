@@ -113,6 +113,12 @@ hm-news:
 deploy-linode addr:
     bash {{ justfile_directory() }}/bin/deploy-linode.sh {{ addr }}
 
+[doc('Install NixOS on a NAS machine')]
+[group('remotes')]
+[linux]
+deploy-nas addr nas_hostname:
+    bash {{ justfile_directory() }}/bin/deploy-nas.sh {{ addr }} {{ nas_hostname }}
+
 ssh_user := `whoami`
 ssh_port := '22'
 ssh_options := '-o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'

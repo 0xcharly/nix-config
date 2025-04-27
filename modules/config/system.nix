@@ -75,12 +75,6 @@ in {
           description = "True for machines with an Intel GPU.";
         };
 
-        nas = mkOption {
-          type = bool;
-          default = false;
-          description = "True for local NAS machines.";
-        };
-
         netboot = mkOption {
           type = bool;
           default = false;
@@ -93,6 +87,12 @@ in {
           description = "Disables RGB lighting on the system.";
         };
 
+        pixiecore = mkOption {
+          type = bool;
+          default = false;
+          description = "True for machines that should expose a Pixiecore server.";
+        };
+
         protonvpn = mkOption {
           type = bool;
           default = false;
@@ -101,7 +101,7 @@ in {
 
         rebootToIpxe = mkOption {
           type = bool;
-          default = cfg.roles.nixos.nas;
+          default = cfg.roles.nas.enable;
           description = "True for machines that should have a GRUB entry to reboot to iPXE.";
         };
 
@@ -115,6 +115,28 @@ in {
           type = bool;
           default = false;
           description = "True for local workstations.";
+        };
+      };
+
+      nas = {
+        enable = mkOption {
+          type = bool;
+          default = false;
+          description = "Whether this machine is a NAS.";
+        };
+        drives = let
+          mkDriveOption = description: mkOption {
+            type = nullOr str;
+            default = null;
+            inherit description;
+          };
+        in {
+          nvme0 = mkDriveOption "The ID of the NVMe drive in slot 0 used for system partition RAID0.";
+          nvme1 = mkDriveOption "The ID of the NVMe drive in slot 1 used for system partition RAID0.";
+          sata0 = mkDriveOption "The ID of the SATA drive in slot 0 used for ZFS pool RAIDZ1.";
+          sata1 = mkDriveOption "The ID of the SATA drive in slot 1 used for ZFS pool RAIDZ1.";
+          sata2 = mkDriveOption "The ID of the SATA drive in slot 2 used for ZFS pool RAIDZ1.";
+          sata3 = mkDriveOption "The ID of the SATA drive in slot 3 used for ZFS pool RAIDZ1.";
         };
       };
     };
@@ -163,8 +185,28 @@ in {
   config.assertions = let
     inherit (config.modules.stdenv) isNixOS;
   in
-    builtins.map (role: {
-      assertion = cfg.roles.nixos.${role} -> isNixOS;
-      message = "`system.roles.nixos.${role}` role is only supported on NixOS.";
-    }) (builtins.attrNames config.modules.system.roles.nixos);
+    (
+      builtins.map (role: {
+        assertion = cfg.roles.nixos.${role} -> isNixOS;
+        message = "`system.roles.nixos.${role}` role is only supported on NixOS.";
+      }) (builtins.attrNames config.modules.system.roles.nixos)
+    )
+    ++ [
+      {
+        assertion = cfg.roles.nas.enable -> isNixOS;
+        message = "`system.roles.nas.enable` role is only supported on NixOS.";
+      }
+    ]
+    ++ (
+      builtins.map (drive: {
+        assertion = cfg.roles.nas.enable -> cfg.roles.nas.drives.${drive} != null;
+        message = "`system.roles.nas.drives.${drive}` must be set for NAS machines.";
+      }) (builtins.attrNames config.modules.system.roles.nas.drives)
+    )
+    ++ (
+      builtins.map (drive: {
+        assertion = (!cfg.roles.nas.enable) -> cfg.roles.nas.drives.${drive} == null;
+        message = "`system.roles.nas.enable` is true but `system.roles.nas.drives.${drive}` is not null.";
+      }) (builtins.attrNames config.modules.system.roles.nas.drives)
+    );
 }
