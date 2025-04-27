@@ -169,6 +169,7 @@ in {
           "bind \"n\"" = cmdAndLock "NewPane \"right\"";
           "bind \"Shift n\"" = cmdAndLock "NewPane \"down\"";
           "bind \"tab\"" = cmd "SwitchFocus";
+          "bind \"x\"" = cmdAndLock "CloseFocus";
         };
 
         tab = {
