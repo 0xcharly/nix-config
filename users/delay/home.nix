@@ -13,7 +13,7 @@
   inherit (config.modules.stdenv) isNixOS;
 in {
   imports = [
-    inputs.catppuccin.homeManagerModules.catppuccin
+    inputs.catppuccin.homeModules.catppuccin
 
     ./browsers.nix
     ./catppuccin.nix

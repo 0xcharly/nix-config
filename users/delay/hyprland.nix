@@ -306,24 +306,22 @@ in
       # Fix the overwrite issue with HyprPanel.
       overwrite.enable = true;
 
-      # Import a theme from './themes/*.json'.
-      # Default: ""
-      theme = "catppuccin_mocha";
-
-      # Configure bar layouts for monitors. See 'https://hyprpanel.com/configuration/panel.html'.
-      layout = {
-        "bar.layouts" = {
-          "0" = {
-            left = ["dashboard" "workspaces"];
-            middle = ["media"];
-            right = ["volume" "clock" "notifications"];
-          };
-        };
-      };
-
       # Configure and theme almost all options from the GUI.
+      # Configure bar layouts for monitors. See 'https://hyprpanel.com/configuration/panel.html'.
       # See 'https://hyprpanel.com/configuration/settings.html'.
       settings = {
+        layout = {
+          "bar.layouts" = {
+            "0" = {
+              left = ["dashboard" "workspaces"];
+              middle = ["media"];
+              right = ["volume" "clock" "notifications"];
+            };
+          };
+        };
+        # Import a theme from './themes/*.json'.
+        # Default: ""
+        theme.name = "catppuccin_mocha";
         theme.bar.buttons.enableBorders = true;
         theme.bar.floating = true;
         theme.bar.margin_bottom = "0em";
