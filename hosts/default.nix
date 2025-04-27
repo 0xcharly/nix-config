@@ -133,11 +133,10 @@
   } @ args':
     mkHost (args'
       // {
-        inherit host system;
+        inherit extraModules host system;
         builder = mkNixosSystem;
-        moduleTrees = moduleTrees ++ [config fullyManaged shared users];
-        roles = roles ++ [nixos];
-        extraModules = extraModules ++ [iso];
+        moduleTrees = moduleTrees ++ [config shared];
+        roles = roles ++ [iso];
       });
 
   mkHostAttrs = builtins.foldl' recursiveUpdate {};
@@ -164,6 +163,8 @@ in rec {
     (mkNixosIso ./iso/arm64 {system = "aarch64-linux";})
     (mkNixosIso ./iso/x64 {system = "x86_64-linux";})
 
+    (mkNixosIso ./iso/recovery {system = "x86_64-linux";})
+
     (mkNixosHost ./nixos/asl {system = "aarch64-linux";})
     (mkNixosHost ./nixos/vm-aarch64 {system = "aarch64-linux";})
     (mkNixosHost ./nixos/linode {system = "x86_64-linux";})
@@ -182,7 +183,7 @@ in rec {
   flake.images = builtins.listToAttrs ((builtins.map (name: {
       inherit name;
       value = flake.nixosConfigurations."${name}".config.system.build.isoImage;
-    }) ["arm64" "x64"])
+    }) ["arm64" "x64" "recovery"])
     ++ (builtins.map (name: {
       inherit name;
       value = flake.nixosConfigurations."${name}".config.system.build.sdImage;
