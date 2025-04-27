@@ -36,11 +36,11 @@ chmod 600 "$temp/etc/ssh/ssh_host_rsa_key"
 # Build and deploy the new system to the remote machine!
 nix run github:nix-community/nixos-anywhere -- \
   --extra-files "$temp" \
+  --ssh-options "PubkeyAuthentication=yes" \
+  --ssh-options "UserKnownHostsFile=/dev/null" \
+  --ssh-options "StrictHostKeyChecking=no" \
   --flake '.#linode' \
   --target-host "nixos@$REMOTE_ADDR"
-
-# Delete the temporary host keys created by the installation media.
-ssh-keygen -R "$REMOTE_ADDR" 2>/dev/null
 
 # System install completion notice.
 echo -e "System installation \033[32;1mcomplete\033[0m. System rebooting."
