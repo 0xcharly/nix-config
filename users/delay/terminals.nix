@@ -91,8 +91,8 @@ in {
                 then "super"
                 else "ctrl";
             in [
-              "${mod}+n=new_window"
-              "${mod}+t=new_tab"
+              "${mod}+shift+n=new_window" # Prevents conflicts with harpoon.
+              "${mod}+shift+t=new_tab" # Prevents conflicts with harpoon.
               "${mod}+shift+w=close_surface"
               "${mod}+shift+c=copy_to_clipboard"
               "${mod}+shift+v=paste_from_clipboard"
