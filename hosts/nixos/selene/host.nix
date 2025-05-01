@@ -53,7 +53,7 @@
   boot.loader.grub.enable = true;
 
   # Network config.
-  networking.interfaces.enp15s0.useDHCP = true;
+  networking.interfaces.enp11s0.useDHCP = true;
 
   # The primary use case is to ensure when using ZFS that a pool isn’t imported
   # accidentally on a wrong machine.
