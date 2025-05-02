@@ -41,6 +41,7 @@ in {
         "google-chrome" # When there's no alternatives.
 
         # Utilities.
+        "beeper" # Messaging.
         "ghostty" # Terminal.
         "obsidian" # Note taking.
         "raycast" # Mandatory Spotlight alternative.
