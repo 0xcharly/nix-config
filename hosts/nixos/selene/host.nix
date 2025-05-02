@@ -53,7 +53,16 @@
   boot.loader.grub.enable = true;
 
   # Network config.
-  networking.interfaces.enp11s0.useDHCP = true;
+  networking = {
+    interfaces.enp11s0.ipv4.addresses = [
+      {
+        address = "192.168.1.230";
+        prefixLength = 24;
+      }
+    ];
+    defaultGateway = "192.168.1.1";
+    nameservers = ["1.1.1.1" "8.8.8.8"];
+  };
 
   # The primary use case is to ensure when using ZFS that a pool isn’t imported
   # accidentally on a wrong machine.
