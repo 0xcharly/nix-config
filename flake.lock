@@ -1244,11 +1244,11 @@
         "treefmt-nix": "treefmt-nix_4"
       },
       "locked": {
-        "lastModified": 1745907238,
-        "narHash": "sha256-3AyjXo4yzN9/B8mf+3rBiA6hVRFtDzK9fCrlCjbdcw8=",
+        "lastModified": 1746277673,
+        "narHash": "sha256-TDj47/OotoG9F68kmFBPwpGwfasTx/2Eg0Pv/LEqTGE=",
         "owner": "0xcharly",
         "repo": "nix-config-secrets",
-        "rev": "00167218c52885b1977072145d4bc589969644e7",
+        "rev": "99245da8758bbd4a2c3299b5c45e3ba8d92aa183",
         "type": "github"
       },
       "original": {

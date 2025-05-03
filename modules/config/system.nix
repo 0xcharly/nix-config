@@ -8,7 +8,7 @@
   inherit (lib.lists) optionals;
   inherit (lib.modules) mkMerge;
   inherit (lib.options) mkOption;
-  inherit (lib.types) attrsOf bool enum int listOf nullOr str submodule;
+  inherit (lib.types) attrsOf bool enum nullOr str submodule;
   inherit (pkgs.stdenv) isDarwin;
 
   cfg = config.modules.system;
