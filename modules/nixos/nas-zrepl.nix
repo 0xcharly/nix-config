@@ -101,8 +101,8 @@ in
     };
 
     systemd.services.zrepl = {
-      after = ["network-online.target" "tailscaled.service"];
-      requires = ["network-online.target" "tailscaled.service"];
+      after = ["network-online.target" "tailscaled.service" "zfs-mount-tank.service"];
+      requires = ["network-online.target" "tailscaled.service" "zfs-mount-tank.service"];
       wants = ["tailscaled.service"];
     };
 
