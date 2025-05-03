@@ -25,12 +25,13 @@ in
       settings = {
         jobs = [
           # Sender.
-          (lib.optionalAttrs cfg.primary {
+          (lib.mkIf cfg.primary {
             name = "send";
             type = "push";
             connect = {
               type = "ssh+stdinserver";
               host = "selene.neko-danio.ts.net";
+              port = 22;
               user = "zrepl";
               identity_file = config.age.secrets."keys/zrepl_ed25519_key".path;
             };
@@ -58,28 +59,38 @@ in
             pruning = {
               keep_sender = [
                 {
-                  type = "grid";
-                  grid = "1x24h(keep=7)";
+                  type = "regex";
+                  regex = "^manual_.*";
                 }
                 {
-                  type = "last";
+                  type = "grid";
+                  grid = "1x24h(keep=7)";
+                  regex = "^zrepl_.*";
+                }
+                {
+                  type = "last_n";
                   count = 5;
                 }
               ];
               keep_receiver = [
                 {
-                  type = "grid";
-                  grid = "1x24h(keep=14)";
+                  type = "regex";
+                  regex = "^manual_.*";
                 }
                 {
-                  type = "last";
+                  type = "grid";
+                  grid = "1x24h(keep=14)";
+                  regex = "^zrepl_.*";
+                }
+                {
+                  type = "last_n";
                   count = 5;
                 }
               ];
             };
           })
           # Receiver(s).
-          (lib.optionalAttrs (!cfg.primary) {
+          (lib.mkIf (!cfg.primary) {
             name = "recv";
             type = "sink";
             serve.type = "stdinserver";
