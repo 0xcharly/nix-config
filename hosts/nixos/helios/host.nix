@@ -14,6 +14,7 @@
 
   modules.system.roles.nas = {
     enable = true;
+    primary = true;
     hostId = "a514e9b4";
     drives = {
       nvme0 = "/dev/disk/by-id/nvme-Samsung_SSD_980_500GB_S78GNL0XC07939J"; # Front NVMe

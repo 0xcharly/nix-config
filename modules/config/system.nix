@@ -112,6 +112,14 @@ in {
           default = false;
           description = "Whether this machine is a NAS.";
         };
+        primary = mkOption {
+          type = nullOr bool;
+          default = null;
+          description = ''
+            Whether this NAS is the source of truth for data a.k.a. "primary"
+            (true) or used for replication a.k.a. "redundancy" (false).
+          '';
+        };
         hostId = mkOption {
           type = nullOr str;
           default = null;
@@ -171,6 +179,10 @@ in {
       {
         assertion = cfg.roles.nas.enable -> cfg.roles.nas.hostId != null;
         message = "`system.roles.nas.hostId` must be set for NAS machines.";
+      }
+      {
+        assertion = cfg.roles.nas.enable -> cfg.roles.nas.primary != null;
+        message = "`system.roles.nas.primary` must be set for NAS machines.";
       }
     ]
     ++ (

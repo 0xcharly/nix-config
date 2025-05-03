@@ -11,6 +11,7 @@
     ./fonts.nix
     ./nas-fs.nix
     ./nas-system.nix
+    ./nas-zrepl.nix
     ./nix-client-config.nix
     ./nix-index.nix
     ./nixos-compositor-common.nix
