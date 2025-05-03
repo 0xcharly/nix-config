@@ -100,6 +100,12 @@ in
       };
     };
 
+    systemd.services.zrepl = {
+      after = ["network-online.target" "tailscaled.service"];
+      requires = ["network-online.target" "tailscaled.service"];
+      wants = ["tailscaled.service"];
+    };
+
     systemd.services.zreplZfsPermissions = {
       description = "Delegate ZFS permissions to the zrepl user";
       wantedBy = ["multi-user.target"];
@@ -111,15 +117,18 @@ in
             if cfg.primary
             then "send,receive,snapshot,hold,release,mount"
             else "receive,mount";
+          zreplZfsAllow = pkgs.writeShellApplication {
+            name = "zrepl-zfs-allow";
+            runtimeInputs = with pkgs; [zfs];
+            text = ''
+              for dataset in $(zfs list -H -o name -r tank); do
+                echo "Setting ZFS permissions for $dataset…"
+                zfs allow -u zrepl ${permissions} "$dataset"
+              done
+            '';
+          };
         in
-          pkgs.writeShellScript "zrepl-zfs-allow" ''
-            set -euo pipefail
-
-            for dataset in $(zfs list -H -o name -r tank); do
-              echo "Setting ZFS permissions for $dataset…"
-              ${pkgs.zfs}/bin/zfs allow -u zrepl ${permissions} $dataset
-            done
-          '';
+          lib.getExe zreplZfsAllow;
       };
     };
   }
