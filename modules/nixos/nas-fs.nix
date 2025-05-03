@@ -13,12 +13,6 @@
     MAILADDR root
   '';
 
-  boot.loader.grub = {
-    enable = true;
-    device = "nodev";
-    efiSupport = true;
-  };
-
   # The primary use case is to ensure when using ZFS that a pool isn’t imported
   # accidentally on a wrong machine.
   # https://search.nixos.org/options?channel=24.11&query=networking.hostId
