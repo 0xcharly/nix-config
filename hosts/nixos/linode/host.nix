@@ -52,7 +52,6 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
     ./fs.nix
-    ./secrets.nix
   ];
 
   # No graphical environment.

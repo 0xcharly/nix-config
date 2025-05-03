@@ -70,19 +70,6 @@
     # Catppuccin all the things.
     catppuccin.url = "github:catppuccin/nix";
 
-    # Secrets management.
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    agenix = {
-      url = "github:ryantm/agenix";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.home-manager.follows = "home-manager";
-      inputs.darwin.follows = "nixpkgs-darwin";
-    };
-
     # We use flake parts to organize our configurations.
     flake-parts = {
       url = "github:hercules-ci/flake-parts";

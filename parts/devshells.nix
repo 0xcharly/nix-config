@@ -1,6 +1,5 @@
 {inputs, ...}: {
   perSystem = {
-    inputs',
     config,
     lib,
     pkgs,
@@ -21,9 +20,6 @@
     devShells.default = upkgs.mkShell {
       packages =
         [
-          inputs'.agenix.packages.default # agenix CLI for secrets management
-
-          upkgs.age-plugin-yubikey
           upkgs.alejandra
           upkgs.cachix
           upkgs.jq
@@ -32,8 +28,6 @@
           upkgs.markdownlint-cli
           upkgs.nixd
           upkgs.prettierd
-          upkgs.sops
-          upkgs.ssh-to-age
           upkgs.stylua
         ]
         ++ (lib.optionals isDarwin [upkgs._1password-cli]);
