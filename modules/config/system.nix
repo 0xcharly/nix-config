@@ -87,22 +87,10 @@ in {
           description = "Disables RGB lighting on the system.";
         };
 
-        pixiecore = mkOption {
-          type = bool;
-          default = false;
-          description = "True for machines that should expose a Pixiecore server.";
-        };
-
         protonvpn = mkOption {
           type = bool;
           default = false;
           description = "True for machines that should have a ProtonVPN interface.";
-        };
-
-        rebootToIpxe = mkOption {
-          type = bool;
-          default = cfg.roles.nas.enable;
-          description = "True for machines that should have a GRUB entry to reboot to iPXE.";
         };
 
         tailscaleNode = mkOption {

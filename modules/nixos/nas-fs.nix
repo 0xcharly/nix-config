@@ -21,7 +21,32 @@
   environment.systemPackages = with pkgs; [zfs];
 
   boot.kernelModules = ["zfs"];
-  boot.supportedFilesystems = ["zfs"];
+  boot.supportedFilesystems = ["zfs" "btrfs"];
+
+  # Enable mdadm for software RAID
+  boot.initrd.supportedFilesystems = ["zfs" "btrfs"];
+  boot.initrd.availableKernelModules = ["raid1" "md_mod"];
+  boot.initrd.kernelModules = ["raid1"];
+
+  boot.loader = {
+    # Different systems may require a different one of the following two
+    # options. The first instructs Grub to install itself in an EFI standard
+    # location. And the second tells it to install somewhere custom, but
+    # mutate the EFI NVRAM so EFI knows where to find it. The former
+    # should work on any system. The latter allows you to share one ESP
+    # among multiple OSes, but doesn't work on a few systems (namely
+    # VirtualBox, which doesn't support persistent NVRAM).
+    #
+    # Just make sure to only have one of these enabled.
+    grub.efiInstallAsRemovable = true;
+    efi.canTouchEfiVariables = false;
+
+    grub = {
+      enable = true;
+      device = "nodev";
+      efiSupport = true;
+    };
+  };
 
   # Automatically mount the ZFS pool when agenix secrets are mounted.
   systemd.services.zfs-mount-tank = {

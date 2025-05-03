@@ -19,9 +19,6 @@ lib.mkIf config.modules.system.roles.nas.enable {
 
   # Boot configuration.
   boot.initrd.availableKernelModules = ["ahci" "xhci_pci" "nvme" "usbhid" "sd_mod"];
-  boot.initrd.kernelModules = [];
-  boot.kernelModules = [];
-  boot.extraModulePackages = [];
 
   # IMPORTANT NOTE: Carefully check the latest kernel version that is compatible
   # with the ZFS version in use.
@@ -32,9 +29,4 @@ lib.mkIf config.modules.system.roles.nas.enable {
   # https://discourse.nixos.org/t/zfs-latestcompatiblelinuxpackages-is-deprecated/52540
   # https://github.com/openzfs/zfs/releases
   boot.kernelPackages = pkgs.linuxPackages_6_12;
-  boot.loader.grub = {
-    enable = true;
-    device = "nodev";
-    efiSupport = true;
-  };
 }
