@@ -25,6 +25,7 @@
 
   modules.system.roles.nas = {
     enable = true;
+    hostId = "a514e9b4";
     drives = {
       nvme0 = "/dev/disk/by-id/nvme-Samsung_SSD_980_500GB_S78GNL0XC07939J"; # Front NVMe
       nvme1 = "/dev/disk/by-id/nvme-Samsung_SSD_980_500GB_S78GNL0X725101A"; # Back NVMe
@@ -56,9 +57,4 @@
 
   # Network config.
   networking.interfaces.enp15s0.useDHCP = true;
-
-  # The primary use case is to ensure when using ZFS that a pool isn’t imported
-  # accidentally on a wrong machine.
-  # https://search.nixos.org/options?channel=24.11&query=networking.hostId
-  networking.hostId = "a514e9b4"; # head -c4 /dev/urandom | od -A none -t x4
 }

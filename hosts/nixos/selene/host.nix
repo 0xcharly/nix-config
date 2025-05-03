@@ -23,6 +23,7 @@
 
   modules.system.roles.nas = {
     enable = true;
+    hostId = "af9964d6";
     drives = {
       nvme0 = "/dev/disk/by-id/nvme-Samsung_SSD_980_500GB_S78GNL0XC30952W"; # Front NVMe
       nvme1 = "/dev/disk/by-id/nvme-Samsung_SSD_980_500GB_S78GNL0XC30991Y"; # Back NVMe
@@ -63,9 +64,4 @@
     defaultGateway = "192.168.1.1";
     nameservers = ["1.1.1.1" "8.8.8.8"];
   };
-
-  # The primary use case is to ensure when using ZFS that a pool isn’t imported
-  # accidentally on a wrong machine.
-  # https://search.nixos.org/options?channel=24.11&query=networking.hostId
-  networking.hostId = "af9964d6"; # head -c4 /dev/urandom | od -A none -t x4
 }

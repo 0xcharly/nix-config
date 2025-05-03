@@ -19,6 +19,11 @@
     efiSupport = true;
   };
 
+  # The primary use case is to ensure when using ZFS that a pool isn’t imported
+  # accidentally on a wrong machine.
+  # https://search.nixos.org/options?channel=24.11&query=networking.hostId
+  networking.hostId = config.modules.system.roles.nas.hostId;
+
   environment.systemPackages = with pkgs; [zfs];
 
   boot.kernelModules = ["zfs"];
@@ -235,10 +240,10 @@
             };
           };
         in
-          lib.attrsets.mergeAttrsList [
+          lib.mergeAttrsList [
             (
               namespace "backups" (
-                lib.attrsets.mergeAttrsList (builtins.map mkBackupDataset ["ayako" "dad" "delay"])
+                lib.mergeAttrsList (builtins.map mkBackupDataset ["ayako" "dad" "delay"])
               )
             )
 

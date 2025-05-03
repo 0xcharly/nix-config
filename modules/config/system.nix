@@ -124,12 +124,26 @@ in {
           default = false;
           description = "Whether this machine is a NAS.";
         };
+        hostId = mkOption {
+          type = nullOr str;
+          default = null;
+          description = ''
+            The host ID of the NAS machine.
+
+            This is used to ensure that ZFS pools are not imported on the wrong machine.
+            The host ID is a 4-byte hexadecimal string, e.g. `12345678`.
+            You can generate a random host ID using the following command:
+
+              head -c4 /dev/urandom | od -A none -t x4
+          '';
+        };
         drives = let
-          mkDriveOption = description: mkOption {
-            type = nullOr str;
-            default = null;
-            inherit description;
-          };
+          mkDriveOption = description:
+            mkOption {
+              type = nullOr str;
+              default = null;
+              inherit description;
+            };
         in {
           nvme0 = mkDriveOption "The ID of the NVMe drive in slot 0 used for system partition RAID0.";
           nvme1 = mkDriveOption "The ID of the NVMe drive in slot 1 used for system partition RAID0.";
@@ -137,36 +151,6 @@ in {
           sata1 = mkDriveOption "The ID of the SATA drive in slot 1 used for ZFS pool RAIDZ1.";
           sata2 = mkDriveOption "The ID of the SATA drive in slot 2 used for ZFS pool RAIDZ1.";
           sata3 = mkDriveOption "The ID of the SATA drive in slot 3 used for ZFS pool RAIDZ1.";
-        };
-      };
-    };
-
-    hosts = {
-      asl = {
-        networking = {
-          address = mkOption {
-            type = str;
-            default = "192.168.70.3";
-            description = "The local IPv4 address of the ASL virtual machine";
-          };
-          prefixLength = mkOption {
-            type = int;
-            default = 24;
-            description = ''
-              Subnet mask of the IPv4 address, specified as the number of
-              bits in the prefix.
-            '';
-          };
-          defaultGateway = mkOption {
-            type = str;
-            default = "192.168.70.2";
-            description = "The IPv4 address of the gateway used by the ASL virtual machine";
-          };
-          nameservers = mkOption {
-            type = listOf str;
-            default = ["192.168.70.2"];
-            description = "The list of nameservers used by the ASL virtual machine";
-          };
         };
       };
     };
@@ -195,6 +179,10 @@ in {
       {
         assertion = cfg.roles.nas.enable -> isNixOS;
         message = "`system.roles.nas.enable` role is only supported on NixOS.";
+      }
+      {
+        assertion = cfg.roles.nas.enable -> cfg.roles.nas.hostId != null;
+        message = "`system.roles.nas.hostId` must be set for NAS machines.";
       }
     ]
     ++ (

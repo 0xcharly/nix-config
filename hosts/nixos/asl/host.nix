@@ -1,10 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}: let
-  inherit (config.modules.system.hosts) asl;
-in {
+{pkgs, ...}: {
   imports = [
     ./fs.nix
     ./mounts.nix
@@ -42,11 +36,14 @@ in {
   networking = {
     hostName = "asl";
     # NAT adapter interface names on M1, M3.
-    interfaces.ens160 = {
-      useDHCP = false;
-      ipv4.addresses = [{inherit (asl.networking) address prefixLength;}];
-    };
-    inherit (asl.networking) defaultGateway nameservers;
+    interfaces.ens160.ipv4.addresses = [
+      {
+        address = "192.168.70.3";
+        prefixLength = 24;
+      }
+    ];
+    defaultGateway = "192.168.70.2";
+    nameservers = ["192.168.70.2"];
 
     # Disable the firewall since we're in a VM and we want to make it
     # easy to visit stuff in here. We only use NAT networking anyways.
