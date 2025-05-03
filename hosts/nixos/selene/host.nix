@@ -18,7 +18,6 @@
     amdCpu = true;
     noRgb = true;
     tailscaleNode = true;
-    workstation = true;
   };
 
   modules.system.roles.nas = {

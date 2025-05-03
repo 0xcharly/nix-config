@@ -20,7 +20,6 @@
     noRgb = true;
     protonvpn = true;
     tailscaleNode = true;
-    workstation = true;
   };
 
   modules.system.roles.nas = {

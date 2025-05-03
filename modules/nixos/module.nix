@@ -10,6 +10,7 @@
 
     ./fonts.nix
     ./nas-fs.nix
+    ./nas-system.nix
     ./nix-client-config.nix
     ./nix-index.nix
     ./nixos-compositor-common.nix
