@@ -9,9 +9,9 @@
     inputs.home-manager.nixosModules.home-manager
 
     ./fonts.nix
+    ./nas-snapshots.nix
     ./nas-fs.nix
     ./nas-system.nix
-    ./nas-zrepl.nix
     ./nix-client-config.nix
     ./nix-index.nix
     ./nixos-compositor-common.nix
@@ -22,6 +22,7 @@
     ./protonvpn.nix
     ./rgb.nix
     ./secrets.nix
+    ./ssh.nix
     ./tailscale.nix
     ./terminfo.nix
     ./user-delay.nix

@@ -146,8 +146,8 @@
       drives = config.modules.system.roles.nas.drives;
     in {
       # System: these SSD are mirrored in RAID1.
-      disk0 = raid1 drives.nvme0; # Front NVMe
-      disk1 = raid1 drives.nvme1; # Back NVMe
+      disk0 = raid1 drives.nvme0; # NVMe 1
+      disk1 = raid1 drives.nvme1; # NVMe 2
       # Backup: these HDD are set up in RAIDZ1.
       data0 = zpool drives.sata0; # SATA 1
       data1 = zpool drives.sata1; # SATA 2
@@ -262,7 +262,10 @@
           lib.mergeAttrsList [
             (
               namespace "backups" (
-                lib.mergeAttrsList (builtins.map mkBackupDataset ["ayako" "dad" "delay"])
+                let
+                  datasets = ["ayako" "dad" "delay"];
+                in
+                  lib.mergeAttrsList (builtins.map mkBackupDataset datasets)
               )
             )
 

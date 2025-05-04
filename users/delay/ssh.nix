@@ -70,6 +70,7 @@ in {
   # Install known SSH keys for trusted hosts.
   home.file.".ssh/known_hosts.trusted".text = let
     knownHosts = {
+      # TODO: update Skullkid once migrated to NixOS and Tailscale.
       "172.105.192.143" = [
         "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBDKudRpK8c+opPGokE2f5Z7gd2yWTHRrA6p3/YayieSRTDOnmb4aR1Pmbz967KBeo+KYm+4R/d59p4mABKPztNU="
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE/xP/0LQP88FKB3cQKuMvHCj53UiAMnV3rZFQiMsLkV"

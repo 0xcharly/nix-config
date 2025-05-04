@@ -7,6 +7,13 @@
   cfg = config.modules.system.roles.nas;
 in
   lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = false;
+        message = "This module is WIP and should not be used until zrepl supports mirroring to the same datasets.";
+      }
+    ];
+
     users.users.zrepl = {
       isSystemUser = true;
       home = "/var/lib/zrepl";
