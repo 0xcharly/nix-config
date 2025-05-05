@@ -20,6 +20,8 @@ lib.mkIf config.modules.system.roles.nas.enable {
   # Boot configuration.
   boot.initrd.availableKernelModules = ["ahci" "xhci_pci" "nvme" "usbhid" "sd_mod"];
 
+  environment.systemPackages = with pkgs; [tmux];
+
   # IMPORTANT NOTE: Carefully check the latest kernel version that is compatible
   # with the ZFS version in use.
   # Compatible kernel versions are listed on the OpenZFS release page. Check
