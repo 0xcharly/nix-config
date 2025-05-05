@@ -5,6 +5,7 @@
   pkgs',
   self',
   self,
+  usrlib,
   ...
 }: let
   inherit (self) inputs;
@@ -30,7 +31,7 @@ in {
     # Additional specialArgs passed to Home Manager.
     # For reference, the config argument in system can be accessed in
     # home-manager through osConfig without us passing it here.
-    extraSpecialArgs = {inherit inputs' inputs pkgs' self' self;};
+    extraSpecialArgs = {inherit inputs' inputs pkgs' self' self usrlib;};
 
     # Per-user Home Manager configurations.
     # The function below generates an attribute set of users where users come

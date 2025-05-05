@@ -4,6 +4,7 @@
   usrlib = {
     builders = import ./builders.nix {inherit inputs lib;};
     modules = import ./modules.nix {inherit lib;};
+    ssh = import ./ssh.nix {inherit lib;};
   };
 in {
   perSystem = {
