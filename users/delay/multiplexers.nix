@@ -14,6 +14,16 @@ in {
     keyMode = "vi";
     mouse = true;
     sensibleOnTop = false;
+    plugins = [
+      {
+        plugin = pkgs.tmuxPlugins.fingers;
+        extraConfig = "set -g @plugin 'Morantron/tmux-fingers'";
+      }
+      {
+        plugin = pkgs.tmuxPlugins.yank;
+        extraConfig = "set -g @plugin 'tmux-plugins/tmux-yank'";
+      }
+    ];
     extraConfig = builtins.readFile ./tmux.conf;
   };
 }
