@@ -1,5 +1,6 @@
 {
   pkgs,
+  pkgs',
   lib,
   ...
 } @ args: let
@@ -10,20 +11,20 @@
   inherit (config.modules.usrenv) isLinuxDesktop;
 in
   lib.mkIf isLinuxDesktop {
-    home.packages = with pkgs; [
-      _1password-gui
-      beeper
-      cinny-desktop
-      discord
-      element-desktop
-      kicad
-      localsend
-      nautilus
-      obsidian
-      proton-pass
-      tidal-hifi
-      xfce.thunar
-    ];
+    home.packages = with pkgs;
+      [
+        kicad
+        localsend
+        nautilus
+        obsidian
+        tidal-hifi
+        xfce.thunar
+      ]
+      ++ (with pkgs'; [
+        _1password-gui
+        beeper
+        proton-pass
+      ]);
 
     # PDF viewer.
     programs.zathura.enable = true;

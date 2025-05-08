@@ -66,8 +66,25 @@ in {
     "Library/Caches/org.Zellij-Contributors.Zellij/permissions.kdl" = lib.mkIf isDarwin permissions_kdl;
   };
 
-  programs.zellij = {
+  home.packages = [
+    pkgs.tmux-open-git-repository-fish
+  ];
+
+  programs.tmux = {
     enable = true;
+    shell = lib.getExe pkgs.fish;
+    terminal = "xterm-ghostty";
+    aggressiveResize = true;
+    escapeTime = 0;
+    historyLimit = 100000;
+    keyMode = "vi";
+    mouse = true;
+    sensibleOnTop = false;
+    extraConfig = builtins.readFile ./tmux.conf;
+  };
+
+  programs.zellij = {
+    enable = false;
     package = pkgs'.zellij;
     settings = {
       default_layout = "${zellijDefaultLayout}";
@@ -265,7 +282,7 @@ in {
     };
   };
 
-  programs.fish = {
+  programs.fish = lib.mkIf false {
     interactiveShellInit = ''
       bind           \cf '__zellij_primehopper'
       bind -M insert \cf '__zellij_primehopper'

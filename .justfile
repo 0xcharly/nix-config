@@ -55,10 +55,15 @@ update +inputs:
 distupdate:
     @just update nixpkgs nixpkgs-darwin nixpkgs-unstable nur nixos-hardware home-manager nix-darwin disko nix-index-database nix-homebrew hyperland hy3 catppuccin
 
-[doc('Update all "toolchain" inputs (sops-nix, agenix, flake-parts, etc.)')]
+[doc('Update all "nixpkgs" inputs (nixpkgs, nixpkgs-darwin, nixpkgs-unstable, nur)')]
+[group('nix')]
+update-nixpkgs:
+    @just update nixpkgs nixpkgs-darwin nixpkgs-unstable nur
+
+[doc('Update all "toolchain" inputs (flake-parts, etc.)')]
 [group('nix')]
 update-toolchain:
-    @just update sops-nix agenix flake-parts git-hooks-nix treefmt-nix jujutsu rust-overlay
+    @just update flake-parts git-hooks-nix treefmt-nix rust-overlay
 
 [doc('Update all "config" inputs (nix-config-lib, nix-config-secrets, etc.)')]
 [group('nix')]
