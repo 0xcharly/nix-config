@@ -44,7 +44,7 @@ config.font_size = 16.0
 
 -- Theme: Catppuccin Obsidian.
 local catppuccinObsidian = wezterm.get_builtin_color_schemes()["Catppuccin Mocha"]
-catppuccinObsidian.background = "#151b23"
+catppuccinObsidian.background = "#11181c"
 catppuccinObsidian.foreground = "#e1e8f4"
 catppuccinObsidian.selection_bg = "#303747"
 catppuccinObsidian.selection_fg = "#e1e8f4"
@@ -73,16 +73,6 @@ config.color_schemes = {
 	["Catppuccin Obsidian"] = catppuccinObsidian,
 }
 config.color_scheme = "Catppuccin Obsidian"
-config.window_background_gradient = {
-	colors = {
-		"#151b23", -- Obsidian
-		"#11181c", -- Arsenic
-		"#161618", -- Jet Black
-		"#0c0c0c", -- Oil Black
-	},
-	-- Specifies a Linear gradient starting in the top left corner.
-	orientation = { Linear = { angle = -45.0 } },
-}
 config.bold_brightens_ansi_colors = false
 
 -- UI.

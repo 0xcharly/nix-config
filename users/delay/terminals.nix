@@ -46,7 +46,7 @@ in {
             gen-font-codepoint-map = family: codepoints: lib.concatStringsSep "=" [codepoints family];
           in
             lib.mapAttrsToList gen-font-codepoint-map codepoints-map;
-          background = "#151b23";
+          background = "#11181c";
           foreground = "#e1e8f4";
           selection-background = "#303747";
           selection-foreground = "#e1e8f4";
