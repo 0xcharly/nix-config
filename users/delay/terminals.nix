@@ -111,4 +111,9 @@ in {
         // (lib.optionalAttrs isLinux {gtk-titlebar = false;})
         // (lib.optionalAttrs isDarwin {macos-titlebar-proxy-icon = "hidden";}));
   };
+
+  programs.wezterm = {
+    enable = true;
+    extraConfig = builtins.readFile ./wezterm.lua;
+  };
 }

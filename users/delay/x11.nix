@@ -27,7 +27,7 @@ in
             };
           in {
             modifier = "Mod4";
-            terminal = lib.getExe pkgs.ghostty;
+            terminal = lib.getExe pkgs.wezterm;
             startup = [
               {
                 command = i3.config.terminal;

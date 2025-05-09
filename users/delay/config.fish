@@ -6,7 +6,7 @@ fish_vi_key_bindings # Enable vi bindings.
 function fish_prompt
   # Print the prompt.
   set_color --bold blue
-  printf "_ "
+  printf "▶_ "
   set_color normal
 end
 
