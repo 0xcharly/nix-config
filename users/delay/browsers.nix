@@ -235,7 +235,7 @@ in
         };
 
         # A somewhat more compact UI.
-        userChrome = builtins.readFile ./userChrome.css;
+        userChrome = builtins.readFile ./firefox/userChrome.css;
       };
     };
 

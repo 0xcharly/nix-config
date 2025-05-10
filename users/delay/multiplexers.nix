@@ -24,6 +24,6 @@ in {
         extraConfig = "set -g @plugin 'tmux-plugins/tmux-yank'";
       }
     ];
-    extraConfig = builtins.readFile ./tmux.conf;
+    extraConfig = builtins.readFile ./tmux/tmux.conf;
   };
 }

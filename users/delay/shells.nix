@@ -52,7 +52,7 @@ in {
 
   programs.fish = {
     enable = true;
-    interactiveShellInit = builtins.readFile ./config.fish;
+    interactiveShellInit = builtins.readFile ./fish/config.fish;
 
     functions.fish_mode_prompt = ""; # Disable prompt vi mode reporting.
     shellAliases = {

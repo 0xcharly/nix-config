@@ -11,7 +11,7 @@
 in
   lib.mkIf isLinuxX11Desktop {
     xresources = {
-      extraConfig = builtins.readFile ./Xresources;
+      extraConfig = builtins.readFile ./x11/Xresources;
     };
 
     xsession = {

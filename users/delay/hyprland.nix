@@ -78,7 +78,7 @@ in
       theme = {
         "@theme" = builtins.path {
           name = "catppuccin-obsidian.rasi";
-          path = pkgs.writeText "catppuccin-obsidian.rasi" (builtins.readFile ./rofi.rasi);
+          path = pkgs.writeText "catppuccin-obsidian.rasi" (builtins.readFile ./rofi/catppuccin-obsidian.rasi);
         };
       };
     };
