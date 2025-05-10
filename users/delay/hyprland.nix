@@ -106,7 +106,10 @@ in
           lib.mapAttrsToList (key: value: "export ${key}=${builtins.toString value}") envvars
         );
     in {
-      "electron-flags.conf".text = lib.concatStringsSep " " ["--ozone-platform-hint=auto"];
+      "electron-flags.conf".text = lib.concatStringsSep " " [
+        "--ozone-platform-hint=auto"
+        "--enable-features=VaapiVideoDecodeLinuxGL,VaapiVideoEncoder,Vulkan,VulkanFromANGLE,DefaultANGLEVulkan,VaapiIgnoreDriverChecks,VaapiVideoDecoder,PlatformHEVCDecoderSupport,UseMultiPlaneFormatForHardwareVideo"
+      ];
 
       # For Hyprland UWSM enviroment settings
       "uwsm/env".text = create-env waylandSessionVariables;
@@ -230,6 +233,12 @@ in
           # "workspace 5, class:^1Password$"
           "float, class:^thunar$, title: ^File Operation Progress$"
           "float, class:^org.pulseaudio.pavucontrol$, title: ^Volume Control$"
+          # Chrome's Picture-in-Picture.
+          "float, class:^$, title: ^Picture in picture$"
+          "pin, class:^$, title: ^Picture in picture$"
+          "move 2554 34, class:^$, title: ^Picture in picture$"
+          "size 512 288, class:^$, title: ^Picture in picture$"
+          # Firefox's Picture-in-Picture.
           "float, class:^(firefox|zen)$, title: ^Picture-in-Picture$"
           "pin, class:^(firefox|zen)$, title: ^Picture-in-Picture$"
           "move 2554 34, class:^(firefox|zen)$, title: ^Picture-in-Picture$"

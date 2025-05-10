@@ -4,10 +4,9 @@
       overrideCommandLineArgs = pkg:
         pkg.override {
           # Fix hardware acceleration detection by forcing the use of the discrete (AMD) GPU.
+          # https://nixos.wiki/wiki/Chromium
           commandLineArgs = [
-            "--enable-features=VaapiVideoDecoder,VaapiIgnoreDriverChecks,DefaultANGLEVulkan,VulkanFromANGLE"
-            "--gpu-testing-vendor-id=0x1002"
-            "--gpu-testing-device-id=0x747e"
+            "--enable-features=VaapiVideoDecodeLinuxGL,VaapiVideoEncoder,Vulkan,VulkanFromANGLE,DefaultANGLEVulkan,VaapiIgnoreDriverChecks,VaapiVideoDecoder,PlatformHEVCDecoderSupport,UseMultiPlaneFormatForHardwareVideo"
           ];
         };
     in {

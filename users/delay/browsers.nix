@@ -15,9 +15,7 @@ in
     home.packages = let
       google-chrome-for-jp-taxes = pkgs.google-chrome.override {
         commandLineArgs = [
-          "--enable-features=VaapiVideoDecoder,VaapiIgnoreDriverChecks,DefaultANGLEVulkan,VulkanFromANGLE"
-          "--gpu-testing-vendor-id=0x1002"
-          "--gpu-testing-device-id=0x747e"
+          "--enable-features=VaapiVideoDecodeLinuxGL,VaapiVideoEncoder,Vulkan,VulkanFromANGLE,DefaultANGLEVulkan,VaapiIgnoreDriverChecks,VaapiVideoDecoder,PlatformHEVCDecoderSupport,UseMultiPlaneFormatForHardwareVideo"
           "--user-agent='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.2 Safari/605.1.15'"
         ];
       };
@@ -243,11 +241,16 @@ in
 
     xdg.mimeApps = {
       defaultApplications = lib.mkIf (!isCorpManaged) {
-        "x-scheme-handler/http" = ["firefox.desktop" "chromium.desktop"];
-        "x-scheme-handler/https" = ["firefox.desktop" "chromium.desktop"];
-        "text/html" = ["firefox.desktop"];
-        "x-scheme-handler/about" = ["firefox.desktop"];
-        "x-scheme-handler/unknown" = ["firefox.desktop"];
+        "default-web-browser" = ["chromium.desktop"];
+        "text/html" = ["chromium.desktop"];
+        "text/xml" = ["chromium.desktop"];
+        "application/xhtml+xml" = ["chromium.desktop"];
+        "application/xhtml_xml" = ["chromium.desktop"];
+        "application/xml" = ["chromium.desktop"];
+        "x-scheme-handler/http" = ["chromium.desktop" "firefox.desktop"];
+        "x-scheme-handler/https" = ["chromium.desktop" "firefox.desktop"];
+        "x-scheme-handler/about" = ["chromium.desktop"];
+        "x-scheme-handler/unknown" = ["chromium.desktop"];
       };
     };
   }
