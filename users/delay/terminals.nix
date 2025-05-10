@@ -16,10 +16,11 @@ in {
   # Ghostty is installed with Homebrew on macOS.
   home.packages = lib.mkIf isLinuxDesktop [pkgs'.ghostty];
 
-  # Ghostty configuration.
-  xdg = lib.mkIf hasWindowManager {
+  xdg = {
     enable = true;
-    configFile."ghostty/config".text =
+
+    # Ghostty configuration.
+    configFile."ghostty/config".text = lib.mkIf hasWindowManager (
       lib.generators.toKeyValue {
         listsAsDuplicateKeys = true;
       } ({
@@ -109,11 +110,15 @@ in {
             ];
         }
         // (lib.optionalAttrs isLinux {gtk-titlebar = false;})
-        // (lib.optionalAttrs isDarwin {macos-titlebar-proxy-icon = "hidden";}));
+        // (lib.optionalAttrs isDarwin {macos-titlebar-proxy-icon = "hidden";}))
+    );
+
+    # Wezterm support files.
+    configFile."wezterm/git_sessionizer.lua".source = ./wezterm/git_sessionizer.lua;
   };
 
   programs.wezterm = {
     enable = true;
-    extraConfig = builtins.readFile ./wezterm.lua;
+    extraConfig = builtins.readFile ./wezterm/wezterm.lua;
   };
 }

@@ -134,7 +134,7 @@ in
           (uwsm-wrapper "systemctl --user enable --now hyprpaper.service")
           "[workspace 1] ${uwsm-wrapper (lib.getExe args.config.programs.firefox.finalPackage)}"
           # "[workspace 2] ${uwsm-wrapper (lib.getExe args.config.programs.chromium.package)}"
-          "[workspace 3] ${uwsm-wrapper (lib.getExe pkgs.wezterm)}"
+          "[workspace 3] ${uwsm-wrapper "${lib.getExe pkgs.wezterm} start --always-new-process"}"
           # "[workspace 8] ${uwsm-wrapper (lib.getExe pkgs.obsidian)}"
           # "[workspace 9] ${uwsm-wrapper (lib.getExe pkgs.tidal-hifi)}"
         ];
@@ -196,7 +196,7 @@ in
         # Keyboard bindings.
         bind =
           [
-            "SUPER,       Return, exec, ${uwsm-wrapper (lib.getExe pkgs.wezterm)}"
+            "SUPER,       Return, exec, ${uwsm-wrapper "${lib.getExe pkgs.wezterm} start --always-new-process"}"
             "SUPER,       Space,  exec, pkill rofi || ${uwsm-wrapper (lib.getExe args.config.programs.rofi.finalPackage)} -show combi  -run-command \"${uwsm-wrapper "{cmd}"}\" -calc-command \"echo -n '{result}' | ${pkgs.wl-clipboard}/bin/wl-copy\""
             "SUPER SHIFT, X,      killactive, "
             "SUPER SHIFT, Q,      exec, ${uwsm-wrapper "loginctl terminate-session \"$XDG_SESSION_ID\""}"
