@@ -25,6 +25,7 @@ in {
     ./scripts.nix
     ./shells.nix
     ./ssh.nix
+    ./systemd-timers.nix
     ./terminals.nix
     ./vcs.nix
     ./x11.nix
