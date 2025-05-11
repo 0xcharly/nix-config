@@ -31,6 +31,7 @@ in
       extensions = [
         {id = "aeblfdkhhhdcdjpifhhbdiojplfjncoa";} # 1Password
         {id = "cdglnehniifkbagbbombnjghhcihifij";} # Kagi Search
+        {id = "ghmbeldphafepmbegfdlkpapadhbakde";} # Proton Pass
         {id = "cjpalhdlnbpafiamejdnhcphjbkeiagm";} # uBlock Origin
       ];
     };
