@@ -1,6 +1,10 @@
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 
+local is_darwin = function()
+	return wezterm.target_triple:find("darwin") ~= nil
+end
+
 -- Font.
 local function create_font_config(font_opts)
 	local recursiveMono = {
@@ -105,11 +109,17 @@ config.enable_tab_bar = true
 config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = true
 config.window_padding = {
-  left = "4pt",
-  right = "4pt",
-  top = "4pt",
-  bottom = "4pt",
+	left = "4pt",
+	right = "4pt",
+	top = "4pt",
+	bottom = "4pt",
 }
+
+if is_darwin() then
+	config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
+  config.window_padding["top"] = "52px"
+end
+
 wezterm.on(
 	"format-tab-title",
 	---@diagnostic disable-next-line: unused-local
