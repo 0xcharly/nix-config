@@ -115,6 +115,7 @@ in {
     };
 
     # Wezterm support files.
+    configFile."wezterm/sessionizer.lua".source = ./wezterm/sessionizer.lua;
     configFile."wezterm/git_workspaces.lua".source = ./wezterm/git_workspaces.lua;
   };
 
