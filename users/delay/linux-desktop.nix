@@ -8,22 +8,23 @@
     if args ? osConfig
     then args.osConfig
     else args.config;
-  inherit (config.modules.usrenv) isLinuxDesktop;
+  inherit (config.modules.usrenv) isCorpManaged isLinuxDesktop;
 in
   lib.mkIf isLinuxDesktop {
-    home.packages = with pkgs;
+    home.packages =
       [
-        kicad
-        localsend
-        nautilus
-        obsidian
-        tidal-hifi
-        xfce.thunar
+        pkgs.nautilus
+        pkgs.obsidian
+        pkgs.tidal-hifi
+        pkgs.xfce.thunar
+
+        pkgs'._1password-gui
+        pkgs'.proton-pass
       ]
-      ++ (with pkgs'; [
-        _1password-gui
-        beeper
-        proton-pass
+      ++ (lib.optionals (!isCorpManaged) [
+        pkgs.kicad
+        pkgs.localsend
+        pkgs'.beeper
       ]);
 
     # PDF viewer.
