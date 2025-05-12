@@ -7,7 +7,7 @@
     if args ? osConfig
     then args.osConfig
     else args.config;
-  isNasPrimary = config.modules.system.roles.nas.primary;
+  isNasPrimary = config.modules.system.roles.nas.primary == true;
 in {
   systemd.user.timers."backup-beans" = lib.mkIf isNasPrimary {
     Unit.Description = "Backup financial information from remote";
