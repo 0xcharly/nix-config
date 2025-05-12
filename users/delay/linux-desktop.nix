@@ -14,7 +14,6 @@ in
     home.packages =
       [
         pkgs.nautilus
-        pkgs.obsidian
         pkgs.tidal-hifi
         pkgs.xfce.thunar
 
@@ -24,6 +23,7 @@ in
       ++ (lib.optionals (!isCorpManaged) [
         pkgs.kicad
         pkgs.localsend
+        pkgs.obsidian
         pkgs'.beeper
       ]);
 
