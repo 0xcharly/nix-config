@@ -12,7 +12,7 @@ end
 local function _list_workspaces(modules)
 	local workspaces = {}
 	for _, module in ipairs(modules) do
-		for _, workspace in module.list_workspaces() do
+		for _, workspace in ipairs(module.list_workspaces()) do
 			table.insert(workspaces, workspace)
 		end
 	end
