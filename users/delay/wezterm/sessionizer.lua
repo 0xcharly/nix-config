@@ -51,7 +51,7 @@ M.select = function(window, pane)
 				{ Foreground = { AnsiColor = "Blue" } },
 				{ Text = "▶ " },
 			}),
-			choices = _list_workspaces(M.modules),
+			choices = _list_workspaces(M._modules),
 		}),
 		pane
 	)

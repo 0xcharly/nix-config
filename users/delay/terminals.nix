@@ -121,6 +121,11 @@ in {
 
   programs.wezterm = {
     enable = true;
-    extraConfig = builtins.readFile ./wezterm/wezterm.lua;
+    extraConfig = lib.concatStringsSep "\n" [
+      ''
+        require("sessionizer").register(require("git_workspaces"))
+      ''
+      (builtins.readFile ./wezterm/wezterm.lua)
+    ];
   };
 }

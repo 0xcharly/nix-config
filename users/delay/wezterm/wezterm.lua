@@ -89,10 +89,8 @@ config.bold_brightens_ansi_colors = false
 -- Keybindings.
 config.leader = { key = "w", mods = "ALT", timeout_milliseconds = 1000 }
 
-local sessionizer = require("sessionizer")
-sessionizer.register(require("git_workspaces"))
 config.keys = {
-	{ key = "f", mods = "LEADER", action = wezterm.action_callback(sessionizer.select) },
+	{ key = "f", mods = "LEADER", action = wezterm.action_callback(require("sessionizer").select) },
 	{ key = "h", mods = "ALT", action = wezterm.action.ActivateTab(0) },
 	{ key = "t", mods = "ALT", action = wezterm.action.ActivateTab(1) },
 	{ key = "n", mods = "ALT", action = wezterm.action.ActivateTab(2) },
