@@ -13,6 +13,7 @@ in
   lib.mkIf isLinuxDesktop {
     home.packages =
       [
+        pkgs.obsidian
         pkgs.nautilus
         pkgs.tidal-hifi
         pkgs.xfce.thunar
@@ -23,7 +24,6 @@ in
       ++ (lib.optionals (!isCorpManaged) [
         pkgs.kicad
         pkgs.localsend
-        pkgs.obsidian
         pkgs'.beeper
       ]);
 

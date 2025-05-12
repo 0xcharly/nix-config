@@ -37,7 +37,7 @@ in
     };
 
     programs.firefox = {
-      enable = !isCorpManaged; # TODO(25.05): reactivate this when we don't need to build it locally.
+      enable = true;
       package = pkgs.firefox;
       languagePacks = ["en_US" "fr_FR"];
 
