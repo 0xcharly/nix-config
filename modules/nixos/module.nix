@@ -11,6 +11,7 @@
     ./fonts.nix
     ./nas-snapshots.nix
     ./nas-fs.nix
+    ./nas-samba.nix
     ./nas-system.nix
     ./nix-client-config.nix
     ./nix-index.nix
@@ -25,6 +26,7 @@
     ./ssh.nix
     ./tailscale.nix
     ./terminfo.nix
+    ./user-ayako.nix
     ./user-delay.nix
     ./workstation.nix
   ];

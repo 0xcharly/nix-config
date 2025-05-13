@@ -79,14 +79,14 @@
         # Create the directories for the ZFS datasets, with the correct permissions.
         # TODO: Consider creating groups as well (eg. `backups`?).
         ${pkgs.coreutils}/bin/install -d --mode 750 --owner delay --group users /tank/backups
-        ${pkgs.coreutils}/bin/install -d --mode 750 --owner delay --group users /tank/backups/ayako
+        ${pkgs.coreutils}/bin/install -d --mode 750 --owner ayako --group users /tank/backups/ayako
         ${pkgs.coreutils}/bin/install -d --mode 750 --owner delay --group users /tank/backups/dad
         ${pkgs.coreutils}/bin/install -d --mode 750 --owner delay --group users /tank/backups/delay
 
         # TODO: Create the `ayako` user and update permissions.
-        ${pkgs.coreutils}/bin/install -d --mode 750 --owner delay --group users /tank/ayako
-        ${pkgs.coreutils}/bin/install -d --mode 750 --owner delay --group users /tank/ayako/files
-        ${pkgs.coreutils}/bin/install -d --mode 750 --owner delay --group users /tank/ayako/media
+        ${pkgs.coreutils}/bin/install -d --mode 750 --owner ayako --group users /tank/ayako
+        ${pkgs.coreutils}/bin/install -d --mode 750 --owner ayako --group users /tank/ayako/files
+        ${pkgs.coreutils}/bin/install -d --mode 750 --owner ayako --group users /tank/ayako/media
 
         ${pkgs.coreutils}/bin/install -d --mode 750 --owner delay --group users /tank/delay
         ${pkgs.coreutils}/bin/install -d --mode 750 --owner delay --group users /tank/delay/beans
