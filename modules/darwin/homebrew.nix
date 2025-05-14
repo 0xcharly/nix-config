@@ -38,7 +38,6 @@ in {
         # Browsers.
         (no_quarantine "eloston-chromium") # Ungoogled Chromium.
         "firefox@developer-edition" # Firefox, for isolates.
-        "google-chrome" # When there's no alternatives.
 
         # Utilities.
         "beeper" # Messaging.
@@ -51,6 +50,7 @@ in {
       ]
       ++ (lib.optionals (!isCorpManaged) [
         # Don't install these on corp-managed hosts.
+        "google-chrome" # When there's no alternatives.
         "protonvpn" # Private network.
         "tailscale" # Personal VPN network.
         "transmission"
