@@ -102,6 +102,9 @@ config.keys = {
 	{ key = "x", mods = "LEADER", action = wezterm.action.CloseCurrentPane({ confirm = true }) },
 	{ key = "[", mods = "LEADER", action = wezterm.action.ActivateCopyMode },
 	{ key = "]", mods = "LEADER", action = wezterm.action.PasteFrom("PrimarySelection") },
+
+  -- Disable default keybindings.
+	{ key = "Enter", mods = "ALT", action = wezterm.action.DisableDefaultAssignment },
 }
 
 -- UI.
