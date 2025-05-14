@@ -28,7 +28,6 @@ in {
         template-aliases."format_timestamp(timestamp)" = "timestamp.ago()";
         ui."default-command" = "status";
         ui.editor = lib.getExe pkgs.nvim;
-        git.subprocess = true; # Shell out to `git` instead of libgit2.
         signing = {
           behavior = "own";
           backend = "ssh";
