@@ -91,10 +91,6 @@ config.leader = { key = "w", mods = "ALT", timeout_milliseconds = 1000 }
 
 config.keys = {
 	{ key = "f", mods = "LEADER", action = wezterm.action_callback(require("sessionizer").select) },
-	{ key = "h", mods = "ALT", action = wezterm.action.ActivateTab(0) },
-	{ key = "t", mods = "ALT", action = wezterm.action.ActivateTab(1) },
-	{ key = "n", mods = "ALT", action = wezterm.action.ActivateTab(2) },
-	{ key = "s", mods = "ALT", action = wezterm.action.ActivateTab(3) },
 	{ key = "d", mods = "LEADER", action = wezterm.action.DetachDomain("CurrentPaneDomain") },
 	{ key = '"', mods = "LEADER", action = wezterm.action.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
 	{ key = "%", mods = "LEADER", action = wezterm.action.SplitVertical({ domain = "CurrentPaneDomain" }) },
@@ -110,7 +106,8 @@ config.keys = {
 -- UI.
 config.enable_tab_bar = true
 config.use_fancy_tab_bar = false
-config.tab_bar_at_bottom = true
+config.tab_bar_at_bottom = false
+config.hide_tab_bar_if_only_one_tab = true
 config.window_padding = {
 	left = "4pt",
 	right = "4pt",
@@ -119,8 +116,7 @@ config.window_padding = {
 }
 
 if is_darwin() then
-	config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
-	config.window_padding["top"] = "52px"
+	config.window_decorations = "RESIZE"
 end
 
 wezterm.on(

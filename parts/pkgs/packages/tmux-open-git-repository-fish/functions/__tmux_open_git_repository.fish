@@ -1,5 +1,7 @@
 function __tmux_open_git_repository -d 'List local repositories organized following `git-get` organisation'
-  set -l query (commandline)
+  if status --is-interactive
+    set -l query (commandline)
+  end
   set -l gitget_root (eval realpath (git config gitget.root))
 
   if ! test -d "$gitget_root"
@@ -13,17 +15,21 @@ function __tmux_open_git_repository -d 'List local repositories organized follow
     | command xargs realpath \
     | string replace \"$gitget_root/\" \"\""
 
-  set -l fzf_opts (__fzf_defaults "" "+m --reverse --bind=ctrl-r:toggle-sort --highlight-line \$FZF_CTRL_R_OPTS --query=\"\$query\"")
+  set -l fzf_opts "$FZF_DEFAULT_OPTS +m --reverse --bind=ctrl-r:toggle-sort --highlight-line \$FZF_CTRL_R_OPTS --query=\"\$query\""
   eval "$OPEN_GIT_REPOSITORY_COMMAND | " (__fzfcmd) "$fzf_opts" | read -l repository
 
   if test -z "$repository"
-    commandline -f repaint
+    if status --is-interactive
+      commandline -f repaint
+    end
     return 0
   end
 
   set -l sanitized_repository (echo $repository |tr . _)
 
-  commandline -f kill-whole-line repaint
+  if status --is-interactive
+    commandline -f kill-whole-line repaint
+  end
 
   # Check if the session exists already, or create it otherwise.
   # Prefix the session name with an ‘=’ so that only an exact match is accepted.
