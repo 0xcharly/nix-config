@@ -231,18 +231,20 @@ in
           # "workspace 1, class:^firefox$"
           # "workspace 2, class:^chromium-browser$"
           # "workspace 5, class:^1Password$"
-          "float, class:^thunar$, title: ^File Operation Progress$"
-          "float, class:^org.pulseaudio.pavucontrol$, title: ^Volume Control$"
+          "float, class:^thunar$, title:^File Operation Progress$"
+          "float, class:^org.pulseaudio.pavucontrol$, title:^Volume Control$"
           # Chrome's Picture-in-Picture.
-          "float, class:^$, title: ^Picture in picture$"
-          "pin, class:^$, title: ^Picture in picture$"
-          "move 2554 34, class:^$, title: ^Picture in picture$"
-          "size 512 288, class:^$, title: ^Picture in picture$"
+          "float, class:^$, title:^Picture in picture$"
+          "pin, class:^$, title:^Picture in picture$"
+          "move 2554 34, class:^$, title:^Picture in picture$"
+          "size 512 288, class:^$, title:^Picture in picture$"
+          "keepaspectratio, class:^$, title:^Picture in picture$"
           # Firefox's Picture-in-Picture.
-          "float, class:^(firefox|zen)$, title: ^Picture-in-Picture$"
-          "pin, class:^(firefox|zen)$, title: ^Picture-in-Picture$"
-          "move 2554 34, class:^(firefox|zen)$, title: ^Picture-in-Picture$"
-          "size 512 288, class:^(firefox|zen)$, title: ^Picture-in-Picture$"
+          "float, class:^(firefox|zen)$, title:^Picture-in-Picture$"
+          "pin, class:^(firefox|zen)$, title:^Picture-in-Picture$"
+          "move 2554 34, class:^(firefox|zen)$, title:^Picture-in-Picture$"
+          "size 512 288, class:^(firefox|zen)$, title:^Picture-in-Picture$"
+          "keepaspectratio, class:^(firefox|zen)$, title:^Picture-in-Picture$"
         ];
       };
     };
