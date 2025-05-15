@@ -3,7 +3,7 @@
   lib,
   ...
 }:
-lib.mkIf config.modules.system.roles.nas.primary {
+lib.mkIf (config.modules.system.roles.nas.primary == true) {
   networking.firewall.enable = true;
   networking.firewall.allowPing = true;
 
