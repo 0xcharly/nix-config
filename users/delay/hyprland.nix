@@ -254,8 +254,36 @@ in
       enable = true;
       settings = let
         wallpaper = pkgs.fetchurl {
-          url = "https://raw.githubusercontent.com/Jas-SinghFSU/Configs/refs/heads/master/Wallpapers/RosePine/astronaut_fields.jpg";
-          hash = "sha256-oWnTS7bSjSscl+m/Kr1W3L/6gsQlv8qtSkjtupvBnJU=";
+          # url = "https://4kwallpapers.com/images/wallpapers/duality-doorway-3840x2160-22094.jpg";
+          # hash = "sha256-i8ER2prXODSNX3V1S1jZbStWxYFldDbAbj17OyHqJQA=";
+          # url = "https://4kwallpapers.com/images/wallpapers/palm-trees-3840x2160-18170.jpg";
+          # hash = "sha256-4A0wSYYTiK8aZwBDDxsYRJokJGC/Zu6dlVSfQtyo8Wg=";
+          # url = "https://4kwallpapers.com/images/wallpapers/biker-helmet-neon-3840x2160-15476.jpg";
+          # hash = "sha256-wZuzkAsp2T8Ay3SE2OagbA1+q+V4gJKmZQ2wRWOkIL8=";
+          # url = "https://4kwallpapers.com/images/wallpapers/drippy-smiley-3840x2160-11481.png";
+          # hash = "sha256-ngDPUMj0FW3kGBydFOOZuqpQICwVdh6OAz5wne1tAx8=";
+          # url = "https://4kwallpapers.com/images/wallpapers/houston-quotes-3840x2160-11107.png";
+          # hash = "sha256-obz2keeSe3f3v1X9xzBytfUi0RSjQLxrHbR2mIYFr0A=";
+          # url = "https://4kwallpapers.com/images/wallpapers/red-heart-pixel-art-3840x2160-15194.png";
+          # hash = "sha256-G+m6164/x4M8An/ZnqFLgqe82nbIsCfa+J5JsyeAnjU=";
+          # url = "https://4kwallpapers.com/images/wallpapers/jelly-bears-gummy-3840x2160-11036.jpg";
+          # hash = "sha256-sG4+YYLgbHqGKbRWFZWiHk98ximJhqJeysoToyxHlN0=";
+          # url = "https://4kwallpapers.com/images/wallpapers/tree-seasons-black-3840x2160-11116.png";
+          # hash = "sha256-H/OBDRf1g1g9ss48MorAs1PnY/6vwHdwZBI/TW6a4sE=";
+          # url = "https://4kwallpapers.com/images/wallpapers/daft-punk-helmet-dark-background-minimal-art-3840x2160-6112.jpg";
+          # hash = "sha256-MWSFB0FWiojMefl4qrAxDVgZohcUbL72QR/Is/EvdEE=";
+          # url = "https://4kwallpapers.com/images/wallpapers/light-night-forest-winter-foggy-dark-3840x2160-5431.jpg";
+          # hash = "sha256-HXU0axf5/gW5yfYamHlaPJNKfYkrpOziNYB74xauUa8=";
+          # url = "https://4kwallpapers.com/images/wallpapers/paper-art-origami-panoply-triangle-geometrical-multicolor-3840x2160-4724.jpg";
+          # hash = "sha256-3hZSHw+FhEQ0qro1Ju2L4aJtTh3iegLrqyfrlAgaYZU=";
+          # url = "https://4kwallpapers.com/images/wallpapers/kitsune-fox-spirit-3840x2160-10986.jpg";
+          # hash = "sha256-osz9snMW+grNy/Gy5bj3wf8+DDfGAaFgCZOF76fFiJI=";
+          # url = "https://4kwallpapers.com/images/wallpapers/halloween-pumpkins-3840x2160-11101.jpg";
+          # hash = "sha256-IcGNQsG4zidsqL1InsC/VZacDg3Q9WWzbyX/CCU2M3A=";
+          url = "https://4kwallpapers.com/images/wallpapers/rainbow-coffee-3840x2160-11110.png";
+          hash = "sha256-WSb9B/xPSwv5djkYZ46g7B8r6hujboeIqD2DmEN2KtY=";
+          # url = "https://4kwallpapers.com/images/wallpapers/gargantua-black-3840x2160-9621.jpg";
+          # hash = "sha256-FprHpbr4I/17Jem0Ik98ilsjUqvCAOii2gDKwhKbAdY=";
         };
         wallpaper_path = builtins.toString wallpaper;
       in {
@@ -365,11 +393,12 @@ in
 
         theme.bar.buttons.borderSize = "1px";
         theme.bar.buttons.clock.spacing = "0em";
-        theme.bar.buttons.padding_x = "4px";
+        theme.bar.buttons.padding_x = "8px";
         theme.bar.buttons.padding_y = "0px";
-        theme.bar.buttons.radius = "4px";
+        theme.bar.buttons.radius = "12px";
         theme.bar.buttons.workspaces.fontSize = "1em";
         theme.bar.buttons.workspaces.numbered_active_highlight_border = "0.3em";
+        theme.bar.buttons.workspaces.numbered_active_highlight_padding = "0.3em";
         theme.bar.buttons.workspaces.numbered_inactive_padding = "0.3em";
         theme.bar.buttons.y_margins = "0em";
         theme.bar.dropdownGap = "28px";
@@ -377,7 +406,7 @@ in
         theme.bar.transparent = true;
         theme.font = {
           name = "Recursive Sans Casual Static";
-          size = "12px";
+          size = "14px";
         };
       };
 
