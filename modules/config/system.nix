@@ -124,9 +124,9 @@ in {
           type = nullOr bool;
           readOnly = true;
           default =
-            if cfg.nas.primary == null
+            if cfg.roles.nas.primary == null
             then null
-            else !cfg.nas.primary;
+            else !cfg.roles.nas.primary;
           description = ''
             Whether this NAS is used for replication of data a.k.a. "replica"
             (true) or the source of truth a.k.a. "primary" (false).

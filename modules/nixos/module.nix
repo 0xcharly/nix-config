@@ -9,9 +9,10 @@
     inputs.home-manager.nixosModules.home-manager
 
     ./fonts.nix
-    ./nas-snapshots.nix
     ./nas-fs.nix
+    ./nas-replication.nix
     ./nas-samba.nix
+    ./nas-snapshots.nix
     ./nas-system.nix
     ./nix-client-config.nix
     ./nix-index.nix
