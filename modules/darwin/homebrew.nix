@@ -37,6 +37,7 @@ in {
 
         # Browsers.
         (no_quarantine "eloston-chromium") # Ungoogled Chromium.
+        (no_quarantine "librewolf") # Firefox, hardened.
         "firefox@developer-edition" # Firefox, for isolates.
 
         # Utilities.
