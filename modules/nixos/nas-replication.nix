@@ -20,11 +20,15 @@ in
       users."${username}" = {
         isSystemUser = true;
         home = "/var/lib/${username}";
-        shell = "/usr/sbin/nologin";
+        # NOTE: Can't restrict access because syncoid needs to run multiple commands.
+        # shell = "${pkgs.util-linux}/bin/nologin";
+        # shell = pkgs.bash;
+        useDefaultShell = true;
         createHome = true;
         inherit group;
         openssh.authorizedKeys.keys = lib.mkIf (usrlib.bool.isTrue cfg.replica) [
-          ''command="${pkgs.sanoid}/bin/syncoid",restrict ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIf1BY82EBfuIPmqzPhA0SXNRQ9z7zdCzE99TiqdjWmg''
+          ''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIf1BY82EBfuIPmqzPhA0SXNRQ9z7zdCzE99TiqdjWmg''
+          # ''command="${pkgs.sanoid}/bin/syncoid",restrict ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIf1BY82EBfuIPmqzPhA0SXNRQ9z7zdCzE99TiqdjWmg''
         ];
       };
 
@@ -33,6 +37,7 @@ in
 
     environment.systemPackages = with pkgs; [
       mbuffer # Syncoid optimization to smooth out network transfers.
+      lzop # Syncoid optimization to reduce bytes transfered.
       sanoid
     ];
 
@@ -48,7 +53,7 @@ in
             permissions =
               if (usrlib.bool.isTrue cfg.primary)
               then "send,receive,snapshot,hold,release,mount"
-              else "receive,mount";
+              else "receive,mount,create"; # TODO: remove `create` after initial setup.
             zfsAllow = pkgs.writeShellApplication {
               name = "${username}-zfs-allow";
               runtimeInputs = with pkgs; [zfs];
