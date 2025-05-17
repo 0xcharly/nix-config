@@ -1,18 +1,13 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }: let
   cfg = config.modules.system.roles.nas;
 in
-  lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      mbuffer
-      sanoid
-    ];
-
+  lib.mkIf (cfg.enable == true) {
     # https://github.com/jimsalterjrs/sanoid/wiki/Sanoid#options.
+    # https://github.com/jimsalterjrs/sanoid/wiki/Syncoid#snapshot-management-with-sanoid
     services.sanoid = {
       enable = true;
 
@@ -23,7 +18,7 @@ in
         monthly = 12;
         yearly = 2;
         autoprune = true;
-        autosnap = true;
+        autosnap = cfg.primary == true; # Only create snapshot on the primary.
       };
 
       # Snapshot retention policy for user files.
@@ -33,7 +28,7 @@ in
         monthly = 3;
         yearly = 0;
         autoprune = true;
-        autosnap = true;
+        autosnap = cfg.primary == true; # Only create snapshot on the primary.
       };
 
       datasets = let

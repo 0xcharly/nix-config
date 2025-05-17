@@ -10,7 +10,10 @@ in
     assertions = [
       {
         assertion = false;
-        message = "This module is WIP and should not be used until zrepl supports mirroring to the same datasets.";
+        message = ''
+          This module is WIP and should not be used until zrepl supports mirroring to the same datasets.
+          Current configuration lives in nas-snapshots and nas-replication modules.
+        '';
       }
     ];
 

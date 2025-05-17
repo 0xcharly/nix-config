@@ -117,7 +117,19 @@ in {
           default = null;
           description = ''
             Whether this NAS is the source of truth for data a.k.a. "primary"
-            (true) or used for replication a.k.a. "redundancy" (false).
+            (true) or used for replication a.k.a. "replica" (false).
+          '';
+        };
+        replica = mkOption {
+          type = nullOr bool;
+          readOnly = true;
+          default =
+            if cfg.nas.primary == null
+            then null
+            else !cfg.nas.primary;
+          description = ''
+            Whether this NAS is used for replication of data a.k.a. "replica"
+            (true) or the source of truth a.k.a. "primary" (false).
           '';
         };
         hostId = mkOption {
@@ -155,7 +167,8 @@ in {
   config.warnings = mkMerge [
     (optionals (config.modules.system.users == []) [
       ''
-        You have not added any users to be supported by your system. You may end up with an unbootable system!
+        You have not added any users to be supported by your system.
+        You may end up with an unbootable system!
 
         Consider setting {option}`config.modules.system.users` in your configuration
       ''
