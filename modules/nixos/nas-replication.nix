@@ -92,6 +92,9 @@ in
             target = "${username}@${targetTailscaleHostname}.neko-danio.ts.net:tank";
             recursive = true;
             extraArgs = [
+              "--sshoption IdentitiesOnly=yes"
+              "--sshoption PasswordAuthentication=no"
+              "--sshoption KbdInteractiveAuthentication=no"
               "--no-sync-snap" # Use existing snapshots instead of creating ephemeral ones.
               "--skip-parent"
             ];
