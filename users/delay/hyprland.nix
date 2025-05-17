@@ -41,6 +41,7 @@
   hyprlandSessionVariables = {};
   waylandSessionVariables = {
     NIXOS_OZONE_WL = 1;
+    ELECTRON_OZONE_PLATFORM_HINT = "auto";
 
     CLUTTER_BACKEND = "wayland";
     SDL_VIDEODRIVER = "wayland";
@@ -105,11 +106,15 @@ in
         lib.concatStringsSep "\n" (
           lib.mapAttrsToList (key: value: "export ${key}=${builtins.toString value}") envvars
         );
+      electronFlags = ''
+        --ozone-platform=wayland
+        --ozone-platform-hint=auto
+        --enable-features=UseOzonePlatform,VaapiVideoDecodeLinuxGL,VaapiVideoEncoder,Vulkan,VulkanFromANGLE,DefaultANGLEVulkan,VaapiIgnoreDriverChecks,VaapiVideoDecoder,PlatformHEVCDecoderSupport,UseMultiPlaneFormatForHardwareVideo
+      '';
     in {
-      "electron-flags.conf".text = lib.concatStringsSep " " [
-        "--ozone-platform-hint=auto"
-        "--enable-features=VaapiVideoDecodeLinuxGL,VaapiVideoEncoder,Vulkan,VulkanFromANGLE,DefaultANGLEVulkan,VaapiIgnoreDriverChecks,VaapiVideoDecoder,PlatformHEVCDecoderSupport,UseMultiPlaneFormatForHardwareVideo"
-      ];
+      "electron-flags.conf".text = electronFlags;
+      "electron12-flags.conf".text = electronFlags;
+      "electron32-flags.conf".text = electronFlags;
 
       # For Hyprland UWSM enviroment settings
       "uwsm/env".text = create-env waylandSessionVariables;

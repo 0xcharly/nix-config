@@ -68,12 +68,7 @@ in
       enable = true;
       package = pkgs.firefox;
       languagePacks = firefox-language-packs;
-      profiles =
-        firefox-profiles
-        // {
-          # A somewhat more compact UI.
-          default.userChrome = builtins.readFile ./firefox/userChrome.css;
-        };
+      profiles = firefox-profiles;
 
       # Check about:policies#documentation for options.
       policies = {
