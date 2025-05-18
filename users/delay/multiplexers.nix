@@ -7,7 +7,8 @@ in {
   programs.tmux = {
     enable = true;
     shell = pkgs.lib.getExe pkgs.fish;
-    terminal = "wezterm";
+    terminal = "xterm-ghostty";
+    # terminal = "wezterm";
     aggressiveResize = true;
     escapeTime = 0;
     historyLimit = 100000;
