@@ -1,15 +1,11 @@
 {
   inputs,
-  inputs',
   lib,
   pkgs,
   ...
 } @ args:
 {
-  imports = [
-    inputs.hyprland.homeManagerModules.default
-    inputs.hyprpanel.homeManagerModules.hyprpanel
-  ];
+  imports = [inputs.hyprpanel.homeManagerModules.hyprpanel];
 }
 // (let
   inherit (config.modules.usrenv) isCorpManaged isLinuxWaylandDesktop;
@@ -123,18 +119,35 @@ in
       "uwsm/env-hyprland".text = create-env hyprlandSessionVariables;
     };
 
+    xdg.portal.extraPortals = with pkgs; [
+      xdg-desktop-portal-wlr
+      xdg-desktop-portal-hyprland
+    ];
+
     wayland.windowManager.hyprland = {
       enable = true;
-      systemd.variables = ["--all"];
+
       # Set the Hyprland and XDPH packages to null to use the ones from the NixOS module
       # TODO(25.05): Enable this when the HM module is updated to use the new packages.
-      # package = null;
-      # portalPackage = null;
-      systemd.enable = false; # Managed by UWSM.
+      # package = if isNixOS then null else pkgs.hyprland;
+      # portalPackage = if isNixOS then null else pkgs.xdg-desktop-portal-hyprland;
+
+      systemd = {
+        enable = false; # Managed by UWSM.
+        variables = ["--all"];
+      };
+
       # Layout plugin.
-      plugins = [inputs'.hy3.packages.hy3];
+      plugins = [pkgs.hyprlandPlugins.hy3];
+
       # Hyprland configuration.
       settings = {
+        # TODO(25.05): Uncomment.
+        # ecosystem = {
+        #   no_update_news = true;
+        #   no_donation_nag = true;
+        # };
+
         # Open apps on startup.
         exec-once = lib.mkIf (!isCorpManaged) [
           (uwsm-wrapper "systemctl --user enable --now hyprpanel.service")
@@ -160,7 +173,7 @@ in
           repeat_rate = 60;
         };
         general = {
-          layout = "hy3"; # Requires the hy3 plugin.
+          # layout = "hy3"; # Requires the hy3 plugin.
           border_size = 1;
           gaps_in = 2;
           gaps_out = 4;
@@ -215,14 +228,14 @@ in
             "SUPER SHIFT, P,      exec, ${uwsm-wrapper (lib.getExe pkgs.grimblast)} --notify edit active"
             "SUPER CTRL,  P,      exec, ${uwsm-wrapper (lib.getExe pkgs.grimblast)} --notify edit screen"
 
-            "SUPER,       D, hy3:makegroup,   h"
-            "SUPER,       S, hy3:makegroup,   v"
-            "SUPER,       Z, hy3:makegroup,   tab"
-            "SUPER,       A, hy3:changefocus, raise"
-            "SUPER SHIFT, A, hy3:changefocus, lower"
-            "SUPER,       E, hy3:expand,      expand"
-            "SUPER SHIFT, E, hy3:expand,      base"
-            "SUPER,       R, hy3:changegroup, opposite"
+            "SUPER,       D,      hy3:makegroup,   h"
+            "SUPER,       S,      hy3:makegroup,   v"
+            "SUPER,       Z,      hy3:makegroup,   tab"
+            "SUPER,       A,      hy3:changefocus, raise"
+            "SUPER SHIFT, A,      hy3:changefocus, lower"
+            "SUPER,       E,      hy3:expand,      expand"
+            "SUPER SHIFT, E,      hy3:expand,      base"
+            "SUPER,       R,      hy3:changegroup, opposite"
           ]
           ++ (map-movements (dir: key: "SUPER, ${dir}, hy3:movefocus, ${key}, wrap"))
           ++ (map-movements (dir: key: "SUPER SHIFT, ${dir}, hy3:movewindow, ${key}, once"))
@@ -247,11 +260,11 @@ in
           "size 512 288, class:^$, title:^Picture in picture$"
           "keepaspectratio, class:^$, title:^Picture in picture$"
           # Firefox's Picture-in-Picture.
-          "float, class:^(firefox|zen)$, title:^Picture-in-Picture$"
-          "pin, class:^(firefox|zen)$, title:^Picture-in-Picture$"
-          "move 2554 38, class:^(firefox|zen)$, title:^Picture-in-Picture$"
-          "size 512 288, class:^(firefox|zen)$, title:^Picture-in-Picture$"
-          "keepaspectratio, class:^(firefox|zen)$, title:^Picture-in-Picture$"
+          "float, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
+          "pin, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
+          "move 2554 38, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
+          "size 512 288, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
+          "keepaspectratio, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
         ];
       };
     };
@@ -438,22 +451,23 @@ in
           "theme.bar.buttons.dashboard.border" = "#95b7ef";
           "theme.bar.buttons.dashboard.icon" = "#95b7ef";
           "theme.bar.buttons.media.background" = "#11181c";
+          "theme.bar.buttons.media.icon" = "#95b7ef";
           "theme.bar.buttons.media.text" = "#8fa3bb";
           "theme.bar.buttons.network.background" = "#11181c";
           "theme.bar.buttons.notifications.background" = "#11181c";
-          "theme.bar.buttons.notifications.icon" = "#b4befe";
+          "theme.bar.buttons.notifications.icon" = "#95b7ef";
           "theme.bar.buttons.systray.background" = "#11181c";
           "theme.bar.buttons.volume.background" = "#11181c";
-          "theme.bar.buttons.volume.icon" = "#f1b48e";
+          "theme.bar.buttons.volume.icon" = "#95b7ef";
           "theme.bar.buttons.volume.text" = "#8fa3bb";
           "theme.bar.buttons.windowtitle.background" = "#11181c";
+          "theme.bar.buttons.workspaces.active" = "#203147";
+          "theme.bar.buttons.workspaces.available" = "#8fa3bb";
           "theme.bar.buttons.workspaces.background" = "#11181c";
           "theme.bar.buttons.workspaces.border" = "#95b7ef";
-          "theme.bar.buttons.workspaces.available" = "#8fa3bb";
-          "theme.bar.buttons.workspaces.occupied" = "#bac2de";
           "theme.bar.buttons.workspaces.hover" = "#203147";
-          "theme.bar.buttons.workspaces.active" = "#203147";
           "theme.bar.buttons.workspaces.numbered_active_highlighted_text_color" = "#9fcdfe";
+          "theme.bar.buttons.workspaces.occupied" = "#bac2de";
           "theme.bar.menus.menu.notifications.height" = "48em";
         };
     };

@@ -8,24 +8,19 @@
     if args ? osConfig
     then args.osConfig
     else args.config;
-  inherit (config.modules.usrenv) isCorpManaged isLinuxDesktop;
+  inherit (config.modules.usrenv) isLinuxDesktop;
 in
   lib.mkIf isLinuxDesktop {
-    home.packages =
-      [
-        pkgs.obsidian
-        pkgs.nautilus
-        pkgs.tidal-hifi
-        pkgs.xfce.thunar
-
-        pkgs'._1password-gui
-        pkgs'.proton-pass
-      ]
-      ++ (lib.optionals (!isCorpManaged) [
-        pkgs.kicad
-        pkgs.localsend
-        pkgs'.beeper
-      ]);
+    home.packages = with pkgs; [
+      pkgs'._1password-gui
+      beeper
+      localsend
+      nautilus
+      obsidian
+      proton-pass
+      tidal-hifi
+      xfce.thunar
+    ];
 
     # PDF viewer.
     programs.zathura.enable = true;
@@ -96,8 +91,6 @@ in
       enable = true;
       extraPortals = with pkgs; [
         xdg-desktop-portal-gtk
-        xdg-desktop-portal-wlr
-        xdg-desktop-portal-hyprland
       ];
       config = {
         common = {

@@ -57,11 +57,6 @@
     };
 
     # Hyprland and plugins.
-    hyprland.url = "github:hyprwm/Hyprland?submodules=1&ref=v0.45.2";
-    hy3 = {
-      url = "github:outfoxxed/hy3?ref=hl0.45.0";
-      inputs.hyprland.follows = "hyprland";
-    };
     hyprpanel = {
       url = "github:jas-singhfsu/hyprpanel";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -84,9 +79,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Pure and reproducible packaging of binary distributed rust toolchains.
-    rust-overlay.url = "github:oxalica/rust-overlay";
-
     # Unfree fonts.
     nix-config-fonts.url = "github:0xcharly/nix-config-fonts";
 
@@ -104,27 +96,14 @@
       inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
       inputs.home-manager.follows = "home-manager";
     };
-
-    # Implementation of The Primeagen's sessionizer script in Zellij.
-    # TODO: move into `zellij-plugins`.
-    zellij-prime-hopper = {
-      url = "github:0xcharly/zellij-prime-hopper";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-darwin.follows = "nixpkgs-darwin";
-      inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
-    };
-
-    # Implementation of The Primeagen's sessionizer script in Zellij.
-    zellij-plugins = {
-      url = "github:0xcharly/zellij-plugins";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-darwin.follows = "nixpkgs-darwin";
-      inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
-    };
   };
 
   nixConfig = {
-    extra-substituters = ["https://0xcharly-nixos-config.cachix.org"];
-    extra-trusted-public-keys = ["0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU="];
+    extra-substituters = [
+      "https://0xcharly-nixos-config.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU="
+    ];
   };
 }

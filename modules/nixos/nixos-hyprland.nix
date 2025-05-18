@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 lib.mkIf config.modules.usrenv.isLinuxWaylandDesktop {
@@ -18,6 +19,8 @@ lib.mkIf config.modules.usrenv.isLinuxWaylandDesktop {
     hyprland = {
       enable = true;
       withUWSM = true;
+      package = pkgs.hyprland;
+      portalPackage = pkgs.xdg-desktop-portal-hyprland;
     };
     uwsm = {
       enable = true;

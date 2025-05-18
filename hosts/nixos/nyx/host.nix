@@ -7,7 +7,6 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     ./1password.nix
     ./audio.nix
-    ./chromium.nix
     ./fs.nix
     ./llm.nix
     ./steam.nix

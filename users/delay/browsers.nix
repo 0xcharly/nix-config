@@ -19,18 +19,22 @@ in
     # Only used when full-page translation is needed, or if the target website
     # _really_ wants an actual Google Chrome browser.
     home.packages = let
-      google-chrome-for-jp-taxes = pkgs.google-chrome.override {
+      google-chrome = pkgs.google-chrome.override {
         commandLineArgs = [
+          # Enable to automatically spoof the user agent to something the JP tax site accepts.
+          # "--user-agent='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.2 Safari/605.1.15'"
           "--enable-features=VaapiVideoDecodeLinuxGL,VaapiVideoEncoder,Vulkan,VulkanFromANGLE,DefaultANGLEVulkan,VaapiIgnoreDriverChecks,VaapiVideoDecoder,PlatformHEVCDecoderSupport,UseMultiPlaneFormatForHardwareVideo"
-          "--user-agent='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.2 Safari/605.1.15'"
         ];
       };
     in
-      lib.mkIf (!isCorpManaged) [google-chrome-for-jp-taxes];
+      lib.mkIf (!isCorpManaged) [google-chrome];
 
     programs.chromium = {
       enable = !isCorpManaged;
       package = pkgs.ungoogled-chromium;
+      commandLineArgs = [
+        "--enable-features=VaapiVideoDecodeLinuxGL,VaapiVideoEncoder,Vulkan,VulkanFromANGLE,DefaultANGLEVulkan,VaapiIgnoreDriverChecks,VaapiVideoDecoder,PlatformHEVCDecoderSupport,UseMultiPlaneFormatForHardwareVideo"
+      ];
       dictionaries = with pkgs; [
         hunspellDictsChromium.en_US
         hunspellDictsChromium.fr_FR
@@ -46,22 +50,7 @@ in
     programs.librewolf = {
       enable = true;
       languagePacks = firefox-language-packs;
-
-      settings = {
-        # https://librewolf.net/docs/faq/#what-are-the-most-common-downsides-of-rfp-resist-fingerprinting
-        "privacy.resistFingerprinting" = false;
-        "privacy.fingerprintingProtection" = true;
-        "privacy.fingerprintingProtection.overrides" = "+AllTargets,-CSSPrefersColorScheme";
-      };
-
       profiles = firefox-profiles;
-
-      # Check about:policies#documentation for options.
-      # Required for userChrome.
-      policies.Preferences."toolkit.legacyUserProfileCustomizations.stylesheets" = {
-        Value = true;
-        Status = "locked";
-      };
     };
 
     programs.firefox = {
@@ -126,16 +115,16 @@ in
 
     xdg.mimeApps = {
       defaultApplications = lib.mkIf (!isCorpManaged) {
-        "default-web-browser" = ["chromium.desktop"];
-        "text/html" = ["chromium.desktop"];
-        "text/xml" = ["chromium.desktop"];
-        "application/xhtml+xml" = ["chromium.desktop"];
-        "application/xhtml_xml" = ["chromium.desktop"];
-        "application/xml" = ["chromium.desktop"];
-        "x-scheme-handler/http" = ["chromium.desktop" "firefox.desktop"];
-        "x-scheme-handler/https" = ["chromium.desktop" "firefox.desktop"];
-        "x-scheme-handler/about" = ["chromium.desktop"];
-        "x-scheme-handler/unknown" = ["chromium.desktop"];
+        "default-web-browser" = ["google-chrome.desktop"];
+        "text/html" = ["google-chrome.desktop"];
+        "text/xml" = ["google-chrome.desktop"];
+        "application/xhtml+xml" = ["google-chrome.desktop"];
+        "application/xhtml_xml" = ["google-chrome.desktop"];
+        "application/xml" = ["google-chrome.desktop"];
+        "x-scheme-handler/http" = ["google-chrome.desktop" "firefox.desktop"];
+        "x-scheme-handler/https" = ["google-chrome.desktop" "firefox.desktop"];
+        "x-scheme-handler/about" = ["google-chrome.desktop"];
+        "x-scheme-handler/unknown" = ["google-chrome.desktop"];
       };
     };
   }
