@@ -173,7 +173,7 @@ in
           repeat_rate = 60;
         };
         general = {
-          # layout = "hy3"; # Requires the hy3 plugin.
+          layout = "hy3"; # Requires the hy3 plugin.
           border_size = 1;
           gaps_in = 2;
           gaps_out = 4;
