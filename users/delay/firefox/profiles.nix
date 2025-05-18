@@ -145,8 +145,5 @@
     settings = {
       "extensions.autoDisableScopes" = 0;
     };
-
-    # A somewhat more compact UI.
-    userChrome = builtins.readFile ./userChrome.css;
   };
 }

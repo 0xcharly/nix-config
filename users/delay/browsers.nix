@@ -108,7 +108,6 @@ in
           "extensions.pocket.enabled" = lock false;
           "extensions.screenshots.disabled" = lock true;
           "extensions.update.enabled" = lock false;
-          "toolkit.legacyUserProfileCustomizations.stylesheets" = lock true; # Required for userChrome.
         };
       };
     };
