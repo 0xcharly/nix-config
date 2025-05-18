@@ -79,11 +79,11 @@ configuration {
     modes:                      [ combi, calc, filebrowser ];
     combi-modes:                [ drun, run ];
     combi-hide-mode-prefix:     false;
-    display-combi:              " ";
-    display-drun:               " ";
-    display-run:                " ";
-    display-calc:               "󱓉 ";
-    display-filebrowser:        " ";
+    display-combi:              "  ";
+    display-drun:               "  ";
+    display-run:                "  ";
+    display-calc:               "󱓉  ";
+    display-filebrowser:        "  ";
 }
 
 window {

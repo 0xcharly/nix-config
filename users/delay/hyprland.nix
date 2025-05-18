@@ -15,7 +15,7 @@
     then args.osConfig
     else args.config;
 
-  dpiScale = 1.25;
+  dpiScale = 2;
   cursorSize = 32;
 
   uwsm-wrapper = cmd: "${lib.getExe pkgs.uwsm} app -- ${cmd}";
@@ -51,12 +51,14 @@
 
     QT_AUTO_SCREEN_SCALE_FACTOR = 1;
     QT_QPA_PLATFORM = "wayland;xcb";
-    QT_SCALE_FACTOR = dpiScale;
+    # QT_SCALE_FACTOR = dpiScale;
     QT_WAYLAND_DISABLE_WINDOWDECORATION = 1;
     QT_QPA_PLATFORMTHEME = "qt5ct";
 
     GDK_BACKEND = "wayland,x11,*";
-    GDK_DPI_SCALE = dpiScale;
+    # Setting GDK_DPI_SCALE changes the scale of Firefox (i.e. overscales it).
+    # GDK_DPI_SCALE = dpiScale;
+    # Setting GDK_SCALE changes the scale of 1Password.
     GDK_SCALE = dpiScale;
 
     MOZ_ENABLE_WAYLAND = 1;
@@ -256,7 +258,7 @@ in
           # Chrome's Picture-in-Picture.
           "float, class:^$, title:^Picture in picture$"
           "pin, class:^$, title:^Picture in picture$"
-          "move 2554 38, class:^$, title:^Picture in picture$"
+          "move 1403 35, class:^$, title:^Picture in picture$"
           "size 512 288, class:^$, title:^Picture in picture$"
           "keepaspectratio, class:^$, title:^Picture in picture$"
           # Firefox's Picture-in-Picture.
@@ -428,12 +430,12 @@ in
         theme.bar.buttons.workspaces.numbered_active_highlight_padding = "0.4em";
         theme.bar.buttons.workspaces.numbered_inactive_padding = "0.4em";
         theme.bar.buttons.y_margins = "0em";
-        theme.bar.dropdownGap = "32px";
+        theme.bar.dropdownGap = "28px";
         theme.bar.outer_spacing = "0em";
         theme.bar.transparent = true;
         theme.font = {
           name = "Recursive Sans Casual Static";
-          size = "14px";
+          size = "12px";
         };
       };
 
