@@ -41,7 +41,9 @@
   hyprlandSessionVariables = {};
   waylandSessionVariables = {
     NIXOS_OZONE_WL = 1;
-    ELECTRON_OZONE_PLATFORM_HINT = "auto";
+    # This forces the use of the Wayland backend for Electron, but we don't want
+    # 1Password to use Wayland just yet because copy/paste doesn't work.
+    # ELECTRON_OZONE_PLATFORM_HINT = "auto";
 
     CLUTTER_BACKEND = "wayland";
     SDL_VIDEODRIVER = "wayland";
@@ -241,13 +243,13 @@ in
           # Chrome's Picture-in-Picture.
           "float, class:^$, title:^Picture in picture$"
           "pin, class:^$, title:^Picture in picture$"
-          "move 2554 34, class:^$, title:^Picture in picture$"
+          "move 2554 38, class:^$, title:^Picture in picture$"
           "size 512 288, class:^$, title:^Picture in picture$"
           "keepaspectratio, class:^$, title:^Picture in picture$"
           # Firefox's Picture-in-Picture.
           "float, class:^(firefox|zen)$, title:^Picture-in-Picture$"
           "pin, class:^(firefox|zen)$, title:^Picture-in-Picture$"
-          "move 2554 34, class:^(firefox|zen)$, title:^Picture-in-Picture$"
+          "move 2554 38, class:^(firefox|zen)$, title:^Picture-in-Picture$"
           "size 512 288, class:^(firefox|zen)$, title:^Picture-in-Picture$"
           "keepaspectratio, class:^(firefox|zen)$, title:^Picture-in-Picture$"
         ];
@@ -366,7 +368,7 @@ in
         # Import a theme from './themes/*.json'.
         # Default: ""
         theme.name = "catppuccin_mocha";
-        theme.bar.buttons.enableBorders = true;
+        theme.bar.buttons.enableBorders = false;
         theme.bar.floating = true;
         theme.bar.margin_bottom = "0em";
         theme.bar.margin_sides = "0em";
@@ -390,23 +392,30 @@ in
         menus.clock.weather.key = config.age.secrets."services/weather-api.key".path;
         menus.clock.weather.location = "Tokyo";
         menus.clock.weather.unit = "metric";
+        menus.dashboard.controls.enabled = false;
         menus.dashboard.directories.enabled = false;
+        menus.dashboard.stats.enabled = false;
         menus.dashboard.shortcuts.left.shortcut1.command = "firefox";
         menus.dashboard.shortcuts.left.shortcut1.icon = "󰈹";
+        menus.dashboard.shortcuts.left.shortcut1.tooltip = "Firefox";
         menus.dashboard.shortcuts.left.shortcut2.command = "tidal-hifi";
         menus.dashboard.shortcuts.left.shortcut2.icon = "󰎇";
+        menus.dashboard.shortcuts.left.shortcut2.tooltip = "Tidal";
+        menus.dashboard.shortcuts.left.shortcut3.command = "chromium";
+        menus.dashboard.shortcuts.left.shortcut3.icon = "";
+        menus.dashboard.shortcuts.left.shortcut3.tooltip = "Chromium";
 
-        theme.bar.buttons.borderSize = "1px";
+        theme.bar.buttons.borderSize = "0px";
         theme.bar.buttons.clock.spacing = "0em";
         theme.bar.buttons.padding_x = "8px";
-        theme.bar.buttons.padding_y = "0px";
-        theme.bar.buttons.radius = "12px";
-        theme.bar.buttons.workspaces.fontSize = "1em";
+        theme.bar.buttons.padding_y = "1px";
+        theme.bar.buttons.radius = "8px";
+        theme.bar.buttons.workspaces.fontSize = "1.2em";
         theme.bar.buttons.workspaces.numbered_active_highlight_border = "0.3em";
-        theme.bar.buttons.workspaces.numbered_active_highlight_padding = "0.3em";
-        theme.bar.buttons.workspaces.numbered_inactive_padding = "0.3em";
+        theme.bar.buttons.workspaces.numbered_active_highlight_padding = "0.4em";
+        theme.bar.buttons.workspaces.numbered_inactive_padding = "0.4em";
         theme.bar.buttons.y_margins = "0em";
-        theme.bar.dropdownGap = "28px";
+        theme.bar.dropdownGap = "32px";
         theme.bar.outer_spacing = "0em";
         theme.bar.transparent = true;
         theme.font = {
@@ -416,7 +425,37 @@ in
       };
 
       # Override the final config with an arbitrary set.
-      override = lib.attrsets.mergeAttrsList (map-workspaces (no: repr: {"bar.workspaces.workspaceIconMap.${repr}" = no;}));
+      override =
+        lib.attrsets.mergeAttrsList (
+          map-workspaces (no: repr: {"bar.workspaces.workspaceIconMap.${repr}" = no;})
+        )
+        // {
+          "theme.bar.buttons.battery.background" = "#11181c";
+          "theme.bar.buttons.bluetooth.background" = "#11181c";
+          "theme.bar.buttons.clock.background" = "#11181c";
+          "theme.bar.buttons.clock.text" = "#8fa3bb";
+          "theme.bar.buttons.dashboard.background" = "#11181c";
+          "theme.bar.buttons.dashboard.border" = "#95b7ef";
+          "theme.bar.buttons.dashboard.icon" = "#95b7ef";
+          "theme.bar.buttons.media.background" = "#11181c";
+          "theme.bar.buttons.media.text" = "#8fa3bb";
+          "theme.bar.buttons.network.background" = "#11181c";
+          "theme.bar.buttons.notifications.background" = "#11181c";
+          "theme.bar.buttons.notifications.icon" = "#b4befe";
+          "theme.bar.buttons.systray.background" = "#11181c";
+          "theme.bar.buttons.volume.background" = "#11181c";
+          "theme.bar.buttons.volume.icon" = "#f1b48e";
+          "theme.bar.buttons.volume.text" = "#8fa3bb";
+          "theme.bar.buttons.windowtitle.background" = "#11181c";
+          "theme.bar.buttons.workspaces.background" = "#11181c";
+          "theme.bar.buttons.workspaces.border" = "#95b7ef";
+          "theme.bar.buttons.workspaces.available" = "#8fa3bb";
+          "theme.bar.buttons.workspaces.occupied" = "#bac2de";
+          "theme.bar.buttons.workspaces.hover" = "#203147";
+          "theme.bar.buttons.workspaces.active" = "#203147";
+          "theme.bar.buttons.workspaces.numbered_active_highlighted_text_color" = "#9fcdfe";
+          "theme.bar.menus.menu.notifications.height" = "48em";
+        };
     };
 
     home.sessionVariables = {
