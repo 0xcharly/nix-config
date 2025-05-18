@@ -8,6 +8,7 @@
     ./1password.nix
     ./audio.nix
     ./fs.nix
+    ./gdm.nix
     ./llm.nix
     ./steam.nix
   ];
