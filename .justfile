@@ -1,7 +1,3 @@
-import '.justfile.incl'
-
-set dotenv-load := true
-set dotenv-required := true
 set shell := ['fish', '-c']
 
 hostname := `hostname`

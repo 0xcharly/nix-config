@@ -13,7 +13,6 @@
     ./nix-client-config.nix
     ./nix-homebrew.nix
     ./nix-index.nix
-    ./unfree.nix
     ./user-delay.nix
   ];
 

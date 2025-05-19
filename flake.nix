@@ -70,20 +70,6 @@
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
-    git-hooks-nix = {
-      url = "github:cachix/git-hooks.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    treefmt-nix = {
-      url = "github:numtide/treefmt-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # Unfree fonts.
-    nix-config-fonts.url = "github:0xcharly/nix-config-fonts";
-
-    # Shared NixOS configuration.
-    nix-config-lib.url = "github:0xcharly/nix-config-lib";
 
     # Neovim.
     nix-config-nvim.url = "github:0xcharly/nix-config-nvim";

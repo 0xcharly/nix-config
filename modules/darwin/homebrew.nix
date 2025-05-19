@@ -33,6 +33,7 @@ in {
       [
         # Cross-platforms password management.
         "1password"
+        "1password-cli"
         "proton-pass"
 
         # Browsers.
