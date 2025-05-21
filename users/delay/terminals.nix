@@ -26,9 +26,29 @@ in {
           listsAsDuplicateKeys = true;
         } ({
             font-family = ["Recursive Mono Casual Static"];
-            font-size = 10;
+            font-size =
+              if isLinuxDesktop
+              then 10
+              else 14;
             # https://www.recursive.design/assets/arrowtype-recursive-sansmono-specimen-230407.pdf
-            font-feature = ["dlig"]; # "ss01" "ss02" "ss03" "ss04" "ss05" "ss06" "ss08" "ss11"];
+            font-feature = [
+              "calt"
+              "clig"
+              "dlig"
+              "liga"
+              # "ss01" # Single-story 'a'
+              # "ss02" # Single-story 'g'
+              "ss03" # Simplified 'f'
+              "ss04" # Simplified 'i'
+              "ss05" # Simplified 'l'
+              "ss06" # Simplified 'r'
+              # "ss07" # Simplified italic diagonals
+              # "ss08" # Simplified 'L' & 'Z'
+              # "ss09" # Simplified '6' & '9'
+              "ss10" # Dotted '0'
+              # "ss11" # Simplified '1'
+              "ss12" # Simplified '@'
+            ];
             font-codepoint-map = let
               codepoints-map = {
                 "mononoki" = "U+0040"; # @
@@ -115,12 +135,12 @@ in {
     };
 
     # Wezterm support files.
-    configFile."wezterm/sessionizer.lua".source = ./wezterm/sessionizer.lua;
-    configFile."wezterm/git_workspaces.lua".source = ./wezterm/git_workspaces.lua;
+    configFile."wezterm/sessionizer.lua" = lib.mkIf isLinux {source = ./wezterm/sessionizer.lua;};
+    configFile."wezterm/git_workspaces.lua" = lib.mkIf isLinux {source = ./wezterm/git_workspaces.lua;};
   };
 
   programs.wezterm = {
-    enable = true;
+    enable = isLinux;
     extraConfig = lib.concatStringsSep "\n" [
       ''
         require("sessionizer").register(require("git_workspaces"))

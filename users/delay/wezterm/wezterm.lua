@@ -44,7 +44,11 @@ local function create_font_config(font_opts)
 end
 
 config.font = create_font_config()
-config.font_size = 10.0
+if is_darwin() then
+	config.font_size = 14.0
+else
+	config.font_size = 10.0
+end
 
 -- Theme: Catppuccin Obsidian.
 local catppuccinObsidian = wezterm.get_builtin_color_schemes()["Catppuccin Mocha"]
@@ -99,7 +103,7 @@ config.keys = {
 	{ key = "[", mods = "LEADER", action = wezterm.action.ActivateCopyMode },
 	{ key = "]", mods = "LEADER", action = wezterm.action.PasteFrom("PrimarySelection") },
 
-  -- Disable default keybindings.
+	-- Disable default keybindings.
 	{ key = "Enter", mods = "ALT", action = wezterm.action.DisableDefaultAssignment },
 }
 
