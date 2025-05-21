@@ -44,7 +44,7 @@ local function create_font_config(font_opts)
 end
 
 config.font = create_font_config()
-config.font_size = 12.0
+config.font_size = 10.0
 
 -- Theme: Catppuccin Obsidian.
 local catppuccinObsidian = wezterm.get_builtin_color_schemes()["Catppuccin Mocha"]

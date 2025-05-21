@@ -26,7 +26,7 @@ in {
           listsAsDuplicateKeys = true;
         } ({
             font-family = ["Recursive Mono Casual Static"];
-            font-size = 12;
+            font-size = 10;
             # https://www.recursive.design/assets/arrowtype-recursive-sansmono-specimen-230407.pdf
             font-feature = ["dlig"]; # "ss01" "ss02" "ss03" "ss04" "ss05" "ss06" "ss08" "ss11"];
             font-codepoint-map = let
