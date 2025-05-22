@@ -1,5 +1,4 @@
 {
-  config,
   inputs,
   lib,
   pkgs,
@@ -10,8 +9,9 @@
   imports = [inputs.hyprpanel.homeManagerModules.hyprpanel];
 }
 // (let
-  inherit ((usrlib.config.getUserConfig args).modules.stdenv) isNixOS;
-  inherit ((usrlib.config.getUserConfig args).modules.usrenv) isCorpManaged isLinuxWaylandDesktop;
+  config = usrlib.hm.getUserConfig args;
+  inherit (config.modules.stdenv) isNixOS;
+  inherit (config.modules.usrenv) isCorpManaged isLinuxWaylandDesktop;
 
   dpiScale = 2;
   cursorSize = 32;

@@ -3,7 +3,7 @@
   usrlib,
   ...
 } @ args: let
-  inherit ((usrlib.config.getUserConfig args).modules.stdenv) isNixOS;
+  inherit ((usrlib.hm.getUserConfig args).modules.stdenv) isNixOS;
 in {
   xdg.configFile = lib.optionalAttrs isNixOS {
     "cachix/cachix.dhall".source =

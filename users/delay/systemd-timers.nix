@@ -1,11 +1,10 @@
 {
-  config,
   lib,
   pkgs,
   usrlib,
   ...
 } @ args: let
-  isNasPrimary = (usrlib.config.getUserConfig args).modules.system.roles.nas.primary == true;
+  isNasPrimary = (usrlib.hm.getUserConfig args).modules.system.roles.nas.primary == true;
 in {
   systemd.user.timers."backup-beans" = lib.mkIf isNasPrimary {
     Unit.Description = "Backup financial information from remote";
@@ -35,7 +34,7 @@ in {
       Type = "oneshot";
       IOSchedulingClass = "idle";
       ExecStart = let
-        backup-ssh-key = config.age.secrets."keys/beans_backup_ed25519_key".path;
+        backup-ssh-key = args.osConfig.age.secrets."keys/beans_backup_ed25519_key".path;
         backup-beans = pkgs.writeShellApplication {
           name = "backup-beans";
           runtimeInputs = with pkgs; [rsync openssh coreutils];

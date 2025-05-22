@@ -4,7 +4,7 @@
   usrlib,
   ...
 } @ args: let
-  inherit ((usrlib.config.getUserConfig args).modules.usrenv) installFonts;
+  inherit ((usrlib.hm.getUserConfig args).modules.usrenv) installFonts;
 in
   lib.mkIf installFonts {
     fonts.fontconfig = {

@@ -5,7 +5,7 @@
   ...
 } @ args: let
   inherit (pkgs.stdenv) isLinux;
-  inherit ((usrlib.config.getUserConfig args).modules.usrenv) isLinuxDesktop;
+  inherit ((usrlib.hm.getUserConfig args).modules.usrenv) isLinuxDesktop;
 in {
   imports = [
     ./browsers.nix

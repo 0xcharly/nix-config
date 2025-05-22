@@ -1,10 +1,10 @@
 {
   config,
-  pkgs,
   lib,
+  usrlib,
   ...
-}: let
-  isNixOS = pkgs.stdenv.isLinux && !(config.targets.genericLinux.enable or false);
+} @ args: let
+  inherit ((usrlib.hm.getUserConfig args).modules.stdenv) isNixOS;
 in {
   nixpkgs.config = {
     keep-derivations = true;
