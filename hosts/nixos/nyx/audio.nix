@@ -1,6 +1,6 @@
 {pkgs, ...}: {
-  hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
+
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -11,9 +11,11 @@
     jack.enable = true;
   };
 
+  services.pulseaudio.enable = false;
+
   environment.systemPackages = with pkgs; [
+    kdePackages.plasma-pa
     pavucontrol
-    plasma-pa
     pulsemixer
     qjackctl
   ];

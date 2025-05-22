@@ -50,7 +50,7 @@
     };
     containersForce = true;
     # See: https://github.com/nix-community/nur-combined/blob/master/repos/rycee/pkgs/firefox-addons/generated-firefox-addons.nix
-    extensions = with firefox-addons; [
+    extensions.packages = with firefox-addons; [
       clearurls
       consent-o-matic
       cookie-autodelete
@@ -85,7 +85,7 @@
               type = "application/x-suggestions+json";
             }
           ];
-          iconUpdateURL = "https://github.com/kagisearch/browser_extensions/blob/e65c723370a2ee3960120612d2d46f3c9bfb6d87/shared/icons/icon_32px.png?raw=true";
+          icon = "https://github.com/kagisearch/browser_extensions/blob/e65c723370a2ee3960120612d2d46f3c9bfb6d87/shared/icons/icon_32px.png?raw=true";
           updateInterval = 7 * 24 * 60 * 60 * 1000; # Weekly
           definedAliases = ["k"];
         };
@@ -113,32 +113,31 @@
 
         "Home Manager Options" = {
           urls = [{template = "https://home-manager-options.extranix.com/?query={searchTerms}";}];
-          iconUpdateURL = "https://home-manager-options.extranix.com/images/favicon.png";
+          icon = "https://home-manager-options.extranix.com/images/favicon.png";
           updateInterval = 7 * 24 * 60 * 60 * 1000; # Weekly
           definedAliases = ["@hm"];
         };
 
         "NixOS Wiki" = {
           urls = [{template = "https://wiki.nixos.org/w/index.php?search={searchTerms}";}];
-          iconUpdateURL = "https://wiki.nixos.org/favicon.png";
+          icon = "https://wiki.nixos.org/favicon.png";
           updateInterval = 24 * 60 * 60 * 1000; # Daily
           definedAliases = ["@nw"];
         };
 
         "GitHub Code Search" = {
           urls = [{template = "https://github.com/search?q={searchTerms}&type=code";}];
-          iconUpdateURL = "https://github.com/fluidicon.png";
+          icon = "https://github.com/fluidicon.png";
           updateInterval = 7 * 24 * 60 * 60 * 1000; # Weekly
           definedAliases = ["cs"];
         };
 
         # Hide the rest, we don't need it.
-        "Google".metaData.hidden = true;
-        "Amazon.com".metaData.hidden = true;
-        "Amazon.co.uk".metaData.hidden = true;
-        "Bing".metaData.hidden = true;
-        "eBay".metaData.hidden = true;
-        "DuckDuckGo".metaData.hidden = true;
+        "google".metaData.hidden = true;
+        "amazondotcom-us".metaData.hidden = true;
+        "bing".metaData.hidden = true;
+        "ebay".metaData.hidden = true;
+        "ddg".metaData.hidden = true;
       };
     };
 

@@ -14,8 +14,8 @@
   inputs = {
     # Pin our primary nixpkgs repositories. These are the main nixpkgs
     # repositories we'll use for our configurations.
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
-    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-24.11-darwin";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
     nur = {
@@ -28,13 +28,13 @@
 
     # Manages home directory, dotfiles and base environment.
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.11";
+      url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # macOS system configuration with Nix.
     nix-darwin = {
-      url = "github:nix-darwin/nix-darwin/nix-darwin-24.11";
+      url = "github:nix-darwin/nix-darwin/nix-darwin-25.05";
       inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
 

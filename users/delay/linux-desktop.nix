@@ -1,6 +1,5 @@
 {
   pkgs,
-  pkgs',
   lib,
   usrlib,
   ...
@@ -9,7 +8,7 @@
 in
   lib.mkIf isLinuxDesktop {
     home.packages = with pkgs; [
-      pkgs'._1password-gui
+      _1password-gui
       beeper
       localsend
       nautilus
@@ -78,19 +77,6 @@ in
       style = {
         name = "adwaita-dark";
         package = pkgs.adwaita-qt;
-      };
-    };
-
-    xdg.portal = {
-      enable = true;
-      extraPortals = with pkgs; [xdg-desktop-portal-gtk];
-      config = {
-        common = {
-          default = ["gtk" "wlr"];
-        };
-        Hyprland = {
-          default = ["hyprland" "gtk" "wlr"];
-        };
       };
     };
 

@@ -2,12 +2,11 @@
   config,
   lib,
   pkgs,
-  pkgs',
   ...
 }: {
   programs.jujutsu = {
     enable = true;
-    package = lib.mkDefault pkgs'.jujutsu;
+    package = lib.mkDefault pkgs.jujutsu;
     # TODO: look into using `settings.fix.tools`.
     settings = {
       user = {

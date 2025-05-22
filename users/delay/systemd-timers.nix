@@ -15,18 +15,6 @@ in {
     };
   };
 
-  # This setting ensures Home Manager uses `systemctl --user switch` during
-  # activation, which both:
-  #
-  # - Enables systemd user units (via symlinks)
-  # - Starts or restarts them as needed — including timers — without requiring
-  #   manual start or enable
-  #
-  # NOTE: The default for HM 24.11 is "suggest" or `false`, but this changed on
-  # `master` (and thus will be changed in 25.05) for "sd-switch" or `true`.
-  # TODO(25.05): Remove this as it is now the default.
-  systemd.user.startServices = "sd-switch";
-
   systemd.user.services."backup-beans" = lib.mkIf isNasPrimary {
     Unit.Description = "Backup financial information from remote";
     Install.WantedBy = ["default.target"];

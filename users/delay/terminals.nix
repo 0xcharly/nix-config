@@ -1,7 +1,6 @@
 {
   lib,
   pkgs,
-  pkgs',
   usrlib,
   ...
 } @ args: let
@@ -11,7 +10,7 @@
   hasWindowManager = !isHeadless;
 in {
   # Ghostty is installed with Homebrew on macOS.
-  home.packages = lib.mkIf isLinuxDesktop [pkgs'.ghostty];
+  home.packages = lib.mkIf isLinuxDesktop [pkgs.ghostty];
 
   # Ghostty configuration.
   xdg.enable = true;

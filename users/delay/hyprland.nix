@@ -135,10 +135,15 @@ in
     wayland.windowManager.hyprland = {
       enable = true;
 
-      # Set the Hyprland and XDPH packages to null to use the ones from the NixOS module
-      # TODO(25.05): Enable this when the HM module is updated to use the new packages.
-      # package = if isNixOS then null else pkgs.hyprland;
-      # portalPackage = if isNixOS then null else pkgs.xdg-desktop-portal-hyprland;
+      # Set the Hyprland and XDPH packages to null to use the ones from the NixOS module.
+      package =
+        if isNixOS
+        then null
+        else pkgs.hyprland;
+      portalPackage =
+        if isNixOS
+        then null
+        else pkgs.xdg-desktop-portal-hyprland;
 
       systemd = {
         enable = false; # Managed by UWSM.
@@ -146,15 +151,15 @@ in
       };
 
       # Layout plugin.
+      # TODO: revert once https://github.com/NixOS/nixpkgs/pull/408284 has been backported.
       plugins = [pkgs.hyprlandPlugins.hy3];
 
       # Hyprland configuration.
       settings = {
-        # TODO(25.05): Uncomment.
-        # ecosystem = {
-        #   no_update_news = true;
-        #   no_donation_nag = true;
-        # };
+        ecosystem = {
+          no_update_news = true;
+          no_donation_nag = true;
+        };
 
         # Open apps on startup.
         exec-once = lib.mkIf (!isCorpManaged) [
