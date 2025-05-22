@@ -356,6 +356,43 @@ in
       };
     };
 
+    services.hypridle = {
+      enable = true;
+      settings = let
+        hyprctl = "${pkgs.hyprland}/bin/hyprctl";
+        hyprlock = "${pkgs.hyprlock}/bin/hyprlock";
+        loginctl = "${pkgs.systemd}/bin/loginctl";
+        systemctl = "${pkgs.systemd}/bin/systemctl";
+
+        # Avoid starting multiple hyprlock instances.
+        lock = "${pkgs.procps}/bin/pidof ${hyprlock} || ${hyprlock}";
+      in {
+        general = {
+          lock_cmd = lock;
+          unlock_cmd = "pkill - USR1 ${hyprlock}";
+
+          before_sleep_cmd = "${loginctl} lock-session"; # lock before suspend.
+          after_sleep_cmd = "${hyprctl} dispatch dpms on"; # to avoid having to press a key twice to turn on the display.
+        };
+
+        listener = [
+          {
+            timeout = 600; # 10 minutes.
+            on-timeout = lock;
+          }
+          {
+            timeout = 900; # 15 minutes.
+            on-timeout = "${hyprctl} dispatch dpms off";
+            on-resume = "${hyprctl} dispatch dpms on";
+          }
+          {
+            timeout = 3600; # 1 hour.
+            on-timeout = "${systemctl} suspend";
+          }
+        ];
+      };
+    };
+
     programs.hyprpanel = {
       enable = true;
 
