@@ -1,6 +1,5 @@
 {
   lib,
-  pkgs,
   usrlib,
   ...
 } @ args: let
@@ -8,18 +7,13 @@
     if args ? osConfig
     then args.osConfig
     else args.config;
-  inherit (pkgs.stdenv) isDarwin;
-  inherit (config.modules.usrenv) isCorpManaged isHeadless sshAgent;
+  inherit (config.modules.usrenv) isCorpManaged isHeadless;
 in {
   programs.ssh = let
-    # NOTE: most SSH servers use the default limit of 6 keys for authentication.
-    # Once the server limit is reached, authentication will fail with "too many
-    # authentication failures".
-    use1PasswordSshAgent = isDarwin && (sshAgent == "1password");
-    _1passwordAgentPathMacOS = "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
-    _1passwordAgentOrKey = key:
-      lib.optionalAttrs use1PasswordSshAgent {IdentityAgent = "\"${_1passwordAgentPathMacOS}\"";}
-      // lib.optionalAttrs (!isHeadless) {IdentityFile = "~/.ssh/${key}";};
+    identityFile = key:
+      lib.optionalAttrs (!isHeadless) {
+        IdentityFile = "${config.home.homeDirectory}/.ssh/${key}";
+      };
   in {
     enable = true;
     matchBlocks =
@@ -27,18 +21,18 @@ in {
         # Public services.
         "bitbucket.org" = {
           user = "git";
-          extraOptions = _1passwordAgentOrKey "bitbucket";
+          extraOptions = identityFile "bitbucket";
         };
         "github.com" = {
           user = "git";
-          extraOptions = _1passwordAgentOrKey "github";
+          extraOptions = identityFile "github";
         };
       }
       // (lib.optionalAttrs isCorpManaged {
         # Personal hosts open to corp devices.
         linode = {
           hostname = "172.105.192.143";
-          extraOptions = _1passwordAgentOrKey "linode";
+          extraOptions = identityFile "linode";
           forwardAgent = true;
         };
       })
@@ -58,12 +52,12 @@ in {
         tailscaleNodesHostName
         // {
           "${tailscaleNodesMatchGroup}" = {
-            extraOptions = _1passwordAgentOrKey "tailscale";
+            extraOptions = identityFile "tailscale";
             forwardAgent = true;
           };
           skullkid = {
             hostname = "192.168.86.43";
-            extraOptions = _1passwordAgentOrKey "skullkid";
+            extraOptions = identityFile "skullkid";
             forwardAgent = true;
           };
         }));

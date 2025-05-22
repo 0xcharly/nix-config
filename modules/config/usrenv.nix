@@ -72,22 +72,6 @@ in {
         Whether to install fonts via Home Manager.
       '';
     };
-
-    sshAgent = mkOption {
-      default = "system";
-      type = enum ["system" "1password"];
-      description = ''
-        Which agent to use for SSH.
-
-        There's 2 agents available:
-          - The traditional ssh-agent: keys are stored under ~/.ssh
-          - 1Password: keys are stored within the app vault
-
-        This option allows for choosing between the 2 agents.
-
-        1Password is currently only supported on macOS.
-      '';
-    };
   };
 
   config.assertions = [

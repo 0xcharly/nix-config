@@ -20,13 +20,13 @@ in {
     ./multiplexers.nix
     ./nix-client-config.nix
     ./nixos.nix
+    ./raycast.nix
     ./scripts.nix
     ./shells.nix
     ./ssh.nix
     ./systemd-timers.nix
     ./terminals.nix
     ./vcs.nix
-    ./x11.nix
   ];
 
   # Packages I always want installed. Most packages I install using per-project

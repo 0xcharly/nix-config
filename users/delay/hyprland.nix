@@ -8,12 +8,12 @@
   imports = [inputs.hyprpanel.homeManagerModules.hyprpanel];
 }
 // (let
-  inherit (config.modules.usrenv) isCorpManaged isLinuxWaylandDesktop;
-
   config =
     if args ? osConfig
     then args.osConfig
     else args.config;
+
+  inherit (config.modules.usrenv) isCorpManaged isLinuxWaylandDesktop;
 
   dpiScale = 2;
   cursorSize = 32;
