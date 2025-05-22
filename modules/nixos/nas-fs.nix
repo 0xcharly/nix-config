@@ -71,7 +71,7 @@
         fi
 
         echo "Mounting ZFS datasets for /tank…"
-        # NOTE: the following mounts all datasets in the pool, not only tank.
+        # NOTE: The following mounts all datasets in the pool, not only tank.
         # Reconsider this if we add more pools.
         ${pkgs.zfs}/bin/zfs mount -a -l
 
@@ -83,7 +83,6 @@
         ${pkgs.coreutils}/bin/install -d --mode 750 --owner delay --group users /tank/backups/dad
         ${pkgs.coreutils}/bin/install -d --mode 750 --owner delay --group users /tank/backups/delay
 
-        # TODO: Create the `ayako` user and update permissions.
         ${pkgs.coreutils}/bin/install -d --mode 750 --owner ayako --group users /tank/ayako
         ${pkgs.coreutils}/bin/install -d --mode 750 --owner ayako --group users /tank/ayako/files
         ${pkgs.coreutils}/bin/install -d --mode 750 --owner ayako --group users /tank/ayako/media

@@ -18,7 +18,6 @@
     ./nix-index.nix
     ./nixos-compositor-common.nix
     ./nixos-hyprland.nix
-    ./nixos-x11.nix
     ./openssh.nix
     ./protonvpn-module.nix
     ./protonvpn.nix

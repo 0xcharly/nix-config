@@ -12,10 +12,10 @@ lib.mkIf config.modules.system.roles.nixos.amdGpu {
     enable = true;
     enable32Bit = true;
     extraPackages = with pkgs; [
-      vaapiVdpau
+      amdvlk
       libvdpau-va-gl
       mangohud
-      amdvlk
+      vaapiVdpau
     ];
     extraPackages32 = with pkgs; [mangohud];
   };

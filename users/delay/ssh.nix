@@ -5,11 +5,12 @@
   ...
 } @ args: let
   inherit ((usrlib.hm.getUserConfig args).modules.usrenv) isCorpManaged isHeadless;
+  home = config.home.homeDirectory;
 in {
   programs.ssh = let
     identityFile = key:
       lib.optionalAttrs (!isHeadless) {
-        IdentityFile = "${config.home.homeDirectory}/.ssh/${key}";
+        IdentityFile = "${home}/.ssh/${key}";
       };
   in {
     enable = true;
@@ -58,7 +59,7 @@ in {
             forwardAgent = true;
           };
         }));
-    userKnownHostsFile = "~/.ssh/known_hosts ~/.ssh/known_hosts.trusted";
+    userKnownHostsFile = "${home}/.ssh/known_hosts ${home}/.ssh/known_hosts.trusted";
   };
 
   # Install known SSH keys for trusted hosts.

@@ -19,7 +19,7 @@ in
   # This is currently doing nothing since the 24.11 version of OpenRGB (<1.0)
   # does not support the host's hardware, and the CPU cooler's RGB is already
   # disabled in BIOS.
-  # TODO(25.05): consider re-enabling this service in 25.05 or later when
+  # TODO(25.11): consider re-enabling this service in 25.11 or later when
   # OpenRGB is supporting more hardware.
   lib.mkIf (false && config.modules.system.roles.nixos.noRgb) {
     # NOTE: RAM support was most likely added in but will be available as part of 1.0:
