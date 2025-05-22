@@ -7,47 +7,29 @@
     if args ? osConfig
     then args.osConfig
     else args.config;
-  inherit (config.modules.usrenv) isLinuxDesktop;
-
-  homeDirectory = config.modules.system.users.delay.home;
-  codeDirectory = homeDirectory + "/code";
 in {
   programs.bash.enable = true;
   programs.bottom.enable = true;
   programs.btop.enable = true;
   programs.htop.enable = true;
-
-  # `cat` replacement.
-  programs.bat.enable = true;
-
-  # `find` replacement.
-  programs.fd.enable = true;
-
-  # `grep` replacement.
-  programs.ripgrep.enable = true;
-
-  # GitHub command-line integration.
-  programs.gh.enable = true;
-
-  # `ls` replacement.
-  programs.eza = {
-    enable = true;
-    enableFishIntegration = true;
-  };
+  programs.bat.enable = true; # `cat` replacement.
+  programs.fd.enable = true; # `find` replacement.
+  programs.ripgrep.enable = true; # `grep` replacement.
+  programs.gh.enable = true; # GitHub command-line integration.
+  programs.eza.enable = true; # `ls` replacement.
+  programs.fzf.enable = true;
 
   programs.direnv = {
     enable = true;
-    # enableFishIntegration = true; # read-only; always enabled.
     nix-direnv.enable = true;
-    config.whitelist.prefix = [codeDirectory];
+    config.whitelist.prefix = [
+      "${config.home.homeDirectory}/code"
+    ];
   };
-
-  programs.fzf.enable = true;
 
   programs.keychain = {
     enable = lib.mkDefault true;
     keys = []; # TODO: Add keys.
-    enableFishIntegration = true;
   };
 
   programs.fish = {
@@ -55,22 +37,19 @@ in {
     interactiveShellInit = builtins.readFile ./fish/config.fish;
 
     functions.fish_mode_prompt = ""; # Disable prompt vi mode reporting.
-    shellAliases = {
-      # Shortcut to setup a nix-shell with `fish`. This lets you do something
-      # like `nixsh -p go` to get an environment with Go but use `fish` along
-      # with it.
-      nixsh = "nix-shell --run ${lib.getExe pkgs.fish}";
-    };
+    # Shortcut to setup a nix-shell with `fish`. This lets you do something
+    # like `nixsh -p go` to get an environment with Go but use `fish` along
+    # with it.
+    shellAliases.nixsh = "nix-shell --run ${lib.getExe pkgs.fish}";
   };
-
-  programs.zellij.settings.default_shell = lib.getExe pkgs.fish;
+  programs.eza.enableFishIntegration = true;
+  programs.keychain.enableFishIntegration = true;
+  # programs.direnv.enableFishIntegration = true; # read-only; always enabled.
 
   home.sessionVariables.SHELL = lib.getExe pkgs.fish;
 
-  home.packages =
-    [
-      pkgs.fishPlugins.fzf
-      pkgs.fishPlugins.transient-fish
-    ]
-    ++ lib.optionals isLinuxDesktop [pkgs.nvtopPackages.full];
+  home.packages = [
+    pkgs.fishPlugins.fzf
+    pkgs.fishPlugins.transient-fish
+  ];
 }

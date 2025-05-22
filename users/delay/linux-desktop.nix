@@ -22,11 +22,8 @@ in
       xfce.thunar
     ];
 
-    # PDF viewer.
-    programs.zathura.enable = true;
-
-    # USB automount (requires udisks2 service enabled).
-    services.udiskie.enable = true;
+    services.udiskie.enable = true; # USB automount (requires udisks2 service enabled).
+    programs.zathura.enable = true; # PDF viewer.
 
     xdg.mimeApps = {
       defaultApplications = {
@@ -89,9 +86,7 @@ in
 
     xdg.portal = {
       enable = true;
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-gtk
-      ];
+      extraPortals = with pkgs; [xdg-desktop-portal-gtk];
       config = {
         common = {
           default = ["gtk" "wlr"];

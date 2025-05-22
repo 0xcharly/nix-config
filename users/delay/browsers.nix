@@ -16,8 +16,6 @@
   };
 in
   lib.mkIf isLinuxDesktop {
-    # Only used when full-page translation is needed, or if the target website
-    # _really_ wants an actual Google Chrome browser.
     home.packages = let
       google-chrome = pkgs.google-chrome.override {
         commandLineArgs = [

@@ -1,5 +1,4 @@
 {
-  inputs,
   lib,
   pkgs,
   ...
@@ -10,11 +9,9 @@
     else args.config;
 
   inherit (pkgs.stdenv) isLinux;
-  inherit (config.modules.stdenv) isNixOS;
+  inherit (config.modules.usrenv) isLinuxDesktop;
 in {
   imports = [
-    inputs.catppuccin.homeModules.catppuccin
-
     ./browsers.nix
     ./catppuccin.nix
     ./fonts.nix
@@ -22,6 +19,7 @@ in {
     ./linux-desktop.nix
     ./multiplexers.nix
     ./nix-client-config.nix
+    ./nixos.nix
     ./scripts.nix
     ./shells.nix
     ./ssh.nix
@@ -50,7 +48,8 @@ in {
       # at anytime (e.g. in the corp-specific flavor).
       nvim
     ]
-    ++ lib.optionals isLinux [pkgs.valgrind];
+    ++ lib.optionals isLinux [pkgs.valgrind]
+    ++ lib.optionals isLinuxDesktop [pkgs.nvtopPackages.full];
 
   home.sessionVariables = rec {
     LANG = "en_US.UTF-8";
@@ -60,12 +59,5 @@ in {
     VISUAL = EDITOR;
     MANPAGER = "${lib.getExe pkgs.nvim} +Man!";
     PAGER = "less -FirSwX";
-  };
-
-  # Configure catppuccin theme applied throughout the configuration.
-  catppuccin.flavor = "mocha";
-
-  xdg.configFile = lib.optionalAttrs isNixOS {
-    "cachix/cachix.dhall".source = args.config.lib.file.mkOutOfStoreSymlink args.osConfig.age.secrets."services/cachix.dhall".path;
   };
 }
