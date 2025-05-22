@@ -1,14 +1,10 @@
 {
+  config,
   lib,
   pkgs,
   pkgs',
   ...
-} @ args: let
-  config =
-    if args ? osConfig
-    then args.osConfig
-    else args.config;
-in {
+}: {
   programs.jujutsu = {
     enable = true;
     package = lib.mkDefault pkgs'.jujutsu;

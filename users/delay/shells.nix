@@ -1,13 +1,9 @@
 {
+  config,
   lib,
   pkgs,
   ...
-} @ args: let
-  config =
-    if args ? osConfig
-    then args.osConfig
-    else args.config;
-in {
+}: {
   programs.bash.enable = true;
   programs.bottom.enable = true;
   programs.btop.enable = true;

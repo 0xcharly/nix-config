@@ -1,13 +1,11 @@
 {
+  config,
   lib,
   pkgs,
+  usrlib,
   ...
 } @ args: let
-  config =
-    if args ? osConfig
-    then args.osConfig
-    else args.config;
-  isNasPrimary = config.modules.system.roles.nas.primary == true;
+  isNasPrimary = (usrlib.config.getUserConfig args).modules.system.roles.nas.primary == true;
 in {
   systemd.user.timers."backup-beans" = lib.mkIf isNasPrimary {
     Unit.Description = "Backup financial information from remote";

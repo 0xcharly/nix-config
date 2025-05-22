@@ -1,15 +1,11 @@
 {
   lib,
   pkgs,
+  usrlib,
   ...
 } @ args: let
-  config =
-    if args ? osConfig
-    then args.osConfig
-    else args.config;
-
   inherit (pkgs.stdenv) isLinux;
-  inherit (config.modules.usrenv) isLinuxDesktop;
+  inherit ((usrlib.config.getUserConfig args).modules.usrenv) isLinuxDesktop;
 in {
   imports = [
     ./browsers.nix

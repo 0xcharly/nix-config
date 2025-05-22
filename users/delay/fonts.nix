@@ -1,14 +1,12 @@
 {
   lib,
   pkgs,
+  usrlib,
   ...
 } @ args: let
-  config =
-    if args ? osConfig
-    then args.osConfig
-    else args.config;
+  inherit ((usrlib.config.getUserConfig args).modules.usrenv) installFonts;
 in
-  lib.mkIf config.modules.usrenv.installFonts {
+  lib.mkIf installFonts {
     fonts.fontconfig = {
       enable = true;
       defaultFonts = {

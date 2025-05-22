@@ -3,6 +3,7 @@
 
   usrlib = {
     builders = import ./builders.nix {inherit inputs lib;};
+    config = import ./config.nix;
     modules = import ./modules.nix {inherit lib;};
     ssh = import ./ssh.nix {inherit lib;};
   };

@@ -1,12 +1,9 @@
 {
+  config,
   pkgs,
   lib,
   ...
-} @ args: let
-  config =
-    if args ? osConfig
-    then args.osConfig
-    else args.config;
+}: let
   isNixOS = pkgs.stdenv.isLinux && !(config.targets.genericLinux.enable or false);
 in {
   nixpkgs.config = {

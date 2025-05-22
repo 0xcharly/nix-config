@@ -1,19 +1,17 @@
 {
+  config,
   inputs,
   lib,
   pkgs,
+  usrlib,
   ...
 } @ args:
 {
   imports = [inputs.hyprpanel.homeManagerModules.hyprpanel];
 }
 // (let
-  config =
-    if args ? osConfig
-    then args.osConfig
-    else args.config;
-
-  inherit (config.modules.usrenv) isCorpManaged isLinuxWaylandDesktop;
+  inherit ((usrlib.config.getUserConfig args).modules.stdenv) isNixOS;
+  inherit ((usrlib.config.getUserConfig args).modules.usrenv) isCorpManaged isLinuxWaylandDesktop;
 
   dpiScale = 2;
   cursorSize = 32;
@@ -404,9 +402,11 @@ in
 
         menus.clock.time.hideSeconds = true;
         menus.clock.time.military = true;
-        menus.clock.weather.key = config.age.secrets."services/weather-api.key".path;
-        menus.clock.weather.location = "Tokyo";
-        menus.clock.weather.unit = "metric";
+        menus.clock.weather = lib.mkIf isNixOS {
+          key = args.osConfig.age.secrets."services/weather-api.key".path;
+          location = "Tokyo";
+          unit = "metric";
+        };
         menus.dashboard.controls.enabled = false;
         menus.dashboard.directories.enabled = false;
         menus.dashboard.stats.enabled = false;

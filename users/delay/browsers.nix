@@ -1,13 +1,10 @@
 {
   lib,
   pkgs,
+  usrlib,
   ...
 } @ args: let
-  config =
-    if args ? osConfig
-    then args.osConfig
-    else args.config;
-  inherit (config.modules.usrenv) isCorpManaged isLinuxDesktop;
+  inherit ((usrlib.config.getUserConfig args).modules.usrenv) isCorpManaged isLinuxDesktop;
 
   firefox-language-packs = ["en_US" "fr_FR" "ja_JP"];
   firefox-profiles = import ./firefox/profiles.nix {

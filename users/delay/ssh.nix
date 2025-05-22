@@ -1,13 +1,10 @@
 {
+  config,
   lib,
   usrlib,
   ...
 } @ args: let
-  config =
-    if args ? osConfig
-    then args.osConfig
-    else args.config;
-  inherit (config.modules.usrenv) isCorpManaged isHeadless;
+  inherit ((usrlib.config.getUserConfig args).modules.usrenv) isCorpManaged isHeadless;
 in {
   programs.ssh = let
     identityFile = key:
