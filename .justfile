@@ -9,6 +9,11 @@ rebuildOptions := '--option accept-flake-config true --show-trace'
 default:
     @just --list
 
+[doc('Format all source files')]
+[group('dev')]
+fmt:
+    treefmt
+
 [doc("Rebuild the current darwin host's configuration and permanently switch to it")]
 [group('nix')]
 [macos]
