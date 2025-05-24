@@ -23,7 +23,7 @@ in {
           font-family = ["Recursive Mono Casual Static"];
           font-size =
             if isLinuxDesktop
-            then 10
+            then 12
             else 14;
           # https://www.recursive.design/assets/arrowtype-recursive-sansmono-specimen-230407.pdf
           font-feature = [

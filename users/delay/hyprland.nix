@@ -13,7 +13,7 @@
   inherit (config.modules.stdenv) isNixOS;
   inherit (config.modules.usrenv) isCorpManaged isLinuxWaylandDesktop;
 
-  dpiScale = 2;
+  dpiScale = 1.5;
   cursorSize = 32;
 
   uwsm-wrapper = cmd: "${lib.getExe pkgs.uwsm} app -- ${cmd}";
@@ -49,15 +49,23 @@
 
     QT_AUTO_SCREEN_SCALE_FACTOR = 1;
     QT_QPA_PLATFORM = "wayland;xcb";
+    # Should be managed automatically by the wayland compositor.
     # QT_SCALE_FACTOR = dpiScale;
     QT_WAYLAND_DISABLE_WINDOWDECORATION = 1;
-    QT_QPA_PLATFORMTHEME = "qt5ct";
+    QT_QPA_PLATFORMTHEME = "gtk3";
 
+    # Tells GTK (via GDK, its lower-level windowing layer) which windowing
+    # system backend to use when running GTK applications.
     GDK_BACKEND = "wayland,x11,*";
-    # Setting GDK_DPI_SCALE changes the scale of Firefox (i.e. overscales it).
-    # GDK_DPI_SCALE = dpiScale;
-    # Setting GDK_SCALE changes the scale of 1Password.
-    GDK_SCALE = dpiScale;
+
+    # Scales all UI elements (widgets, windows, etc.) by an _integer_ factor.
+    # Coarse scaling that affects layout size. Commonly used to double or triple
+    # the size of the UI on HiDPI screens.
+    GDK_SCALE = 2;
+
+    # Applies a fractional scaling factor to _text rendering_. It adjusts the
+    # size of fonts without changing the layout size of other UI elements.
+    GDK_DPI_SCALE = 0.5;
 
     MOZ_ENABLE_WAYLAND = 1;
     _JAVA_AWT_WM_NONREPARENTING = 1;
