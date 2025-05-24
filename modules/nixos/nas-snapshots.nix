@@ -1,11 +1,12 @@
 {
   config,
   lib,
+  usrlib,
   ...
 }: let
   cfg = config.modules.system.roles.nas;
 in
-  lib.mkIf (cfg.enable == true) {
+  lib.mkIf (usrlib.bool.isTrue cfg.enable) {
     # https://github.com/jimsalterjrs/sanoid/wiki/Sanoid#options.
     # https://github.com/jimsalterjrs/sanoid/wiki/Syncoid#snapshot-management-with-sanoid
     services.sanoid = {
@@ -18,7 +19,7 @@ in
         monthly = 12;
         yearly = 2;
         autoprune = true;
-        autosnap = cfg.primary == true; # Only create snapshot on the primary.
+        autosnap = usrlib.bool.isTrue cfg.primary; # Only create snapshot on the primary.
       };
 
       # Snapshot retention policy for user files.
@@ -28,7 +29,7 @@ in
         monthly = 3;
         yearly = 0;
         autoprune = true;
-        autosnap = cfg.primary == true; # Only create snapshot on the primary.
+        autosnap = usrlib.bool.isTrue cfg.primary; # Only create snapshot on the primary.
       };
 
       datasets = let

@@ -1,6 +1,3 @@
 {
-  getUserConfig = args:
-    if args ? osConfig
-    then args.osConfig
-    else args.config;
+  getUserConfig = args: args.osConfig or args.config;
 }

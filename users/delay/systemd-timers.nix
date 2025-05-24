@@ -4,7 +4,7 @@
   usrlib,
   ...
 } @ args: let
-  isNasPrimary = (usrlib.hm.getUserConfig args).modules.system.roles.nas.primary == true;
+  isNasPrimary = usrlib.bool.isTrue (usrlib.hm.getUserConfig args).modules.system.roles.nas.primary;
 in {
   systemd.user.timers."backup-beans" = lib.mkIf isNasPrimary {
     Unit.Description = "Backup financial information from remote";

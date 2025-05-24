@@ -76,61 +76,74 @@
   };
 in
   lib.mkIf isLinuxWaylandDesktop {
-    programs.rofi = {
-      enable = true;
-      package = pkgs.rofi-wayland;
-      plugins = [
-        (pkgs.rofi-calc.override {rofi-unwrapped = pkgs.rofi-wayland-unwrapped;})
+    home = {
+      packages = with pkgs; [
+        # Screenshot toolchain.
+        grim # Fullscreen and window capture
+        slurp # Region capture
+        grimblast # High-level screenshot utility
+        swappy # Annotation tool
+
+        hyprpicker # Command line color picker
+        swayimg # Image viewer
+        wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
+        wl-color-picker # GUI color picker
+        wlr-randr # Utility to manage outputs of a Wayland compositor
+
+        qt5.qtwayland
+        qt6.qtwayland
       ];
-      theme = {
-        "@theme" = builtins.path {
-          name = "catppuccin-obsidian.rasi";
-          path = pkgs.writeText "catppuccin-obsidian.rasi" (builtins.readFile ./rofi/catppuccin-obsidian.rasi);
-        };
+      sessionVariables = {
+        GRIMBLAST_EDITOR = "${lib.getExe pkgs.swappy} -f";
       };
     };
 
-    home.packages = with pkgs; [
-      # Screenshot toolchain.
-      grim # Fullscreen and window capture
-      slurp # Region capture
-      grimblast # High-level screenshot utility
-      swappy # Annotation tool
+    xdg = {
+      configFile = let
+        create-env = envvars:
+          lib.concatStringsSep "\n" (
+            lib.mapAttrsToList (key: value: "export ${key}=${builtins.toString value}") envvars
+          );
+        electronFlags = ''
+          --ozone-platform=wayland
+          --ozone-platform-hint=auto
+          --enable-features=UseOzonePlatform,VaapiVideoDecodeLinuxGL,VaapiVideoEncoder,Vulkan,VulkanFromANGLE,DefaultANGLEVulkan,VaapiIgnoreDriverChecks,VaapiVideoDecoder,PlatformHEVCDecoderSupport,UseMultiPlaneFormatForHardwareVideo
+        '';
+      in {
+        "electron-flags.conf".text = electronFlags;
+        "electron12-flags.conf".text = electronFlags;
+        "electron32-flags.conf".text = electronFlags;
 
-      hyprpicker # Command line color picker
-      swayimg # Image viewer
-      wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
-      wl-color-picker # GUI color picker
-      wlr-randr # Utility to manage outputs of a Wayland compositor
+        # For Hyprland UWSM enviroment settings
+        "uwsm/env".text = create-env waylandSessionVariables;
+        "uwsm/env-hyprland".text = create-env hyprlandSessionVariables;
+      };
 
-      qt5.qtwayland
-      qt6.qtwayland
-    ];
+      mimeApps.defaultApplications = {
+        "application/pdf" = ["zathura.desktop"];
+        "image/jpeg" = ["swayimg"];
+        "image/png" = ["swayimg"];
+        "image/gif" = ["swayimg"];
+        "image/webp" = ["swayimg"];
+        "image/bmp" = ["swayimg"];
+        "image/svg+xml" = ["swayimg"];
+        "image/avif" = ["swayimg"];
+        "image/heif" = ["swayimg"];
+        "image/tiff" = ["swayimg"];
+        "application/sixel" = ["swayimg"];
+        "image/openexr" = ["swayimg"];
+        "image/x-portable-anymap" = ["swayimg"];
+        "image/tga" = ["swayimg"];
+        "image/qoi" = ["swayimg"];
+        "image/dicom" = ["swayimg"];
+        "application/farbfeld" = ["swayimg"];
+      };
 
-    xdg.configFile = let
-      create-env = envvars:
-        lib.concatStringsSep "\n" (
-          lib.mapAttrsToList (key: value: "export ${key}=${builtins.toString value}") envvars
-        );
-      electronFlags = ''
-        --ozone-platform=wayland
-        --ozone-platform-hint=auto
-        --enable-features=UseOzonePlatform,VaapiVideoDecodeLinuxGL,VaapiVideoEncoder,Vulkan,VulkanFromANGLE,DefaultANGLEVulkan,VaapiIgnoreDriverChecks,VaapiVideoDecoder,PlatformHEVCDecoderSupport,UseMultiPlaneFormatForHardwareVideo
-      '';
-    in {
-      "electron-flags.conf".text = electronFlags;
-      "electron12-flags.conf".text = electronFlags;
-      "electron32-flags.conf".text = electronFlags;
-
-      # For Hyprland UWSM enviroment settings
-      "uwsm/env".text = create-env waylandSessionVariables;
-      "uwsm/env-hyprland".text = create-env hyprlandSessionVariables;
+      portal.extraPortals = with pkgs; [
+        xdg-desktop-portal-wlr
+        xdg-desktop-portal-hyprland
+      ];
     };
-
-    xdg.portal.extraPortals = with pkgs; [
-      xdg-desktop-portal-wlr
-      xdg-desktop-portal-hyprland
-    ];
 
     wayland.windowManager.hyprland = {
       enable = true;
@@ -269,13 +282,13 @@ in
           # Chrome's Picture-in-Picture.
           "float, class:^$, title:^Picture in picture$"
           "pin, class:^$, title:^Picture in picture$"
-          "move 1403 35, class:^$, title:^Picture in picture$"
+          "move 2043 35, class:^$, title:^Picture in picture$"
           "size 512 288, class:^$, title:^Picture in picture$"
           "keepaspectratio, class:^$, title:^Picture in picture$"
           # Firefox's Picture-in-Picture.
           "float, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
           "pin, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
-          "move 2554 38, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
+          "move 2043 35, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
           "size 512 288, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
           "keepaspectratio, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
         ];
@@ -327,45 +340,211 @@ in
       };
     };
 
-    programs.hyprlock = {
-      enable = true;
-      settings = {
-        general = [
-          {
-            disable_loading_bar = true;
-            grace = 0;
-            hide_cursor = true;
-            no_fade_in = false;
-          }
+    programs = {
+      rofi = {
+        enable = true;
+        package = pkgs.rofi-wayland;
+        plugins = [
+          (pkgs.rofi-calc.override {rofi-unwrapped = pkgs.rofi-wayland-unwrapped;})
         ];
+        theme = {
+          "@theme" = builtins.path {
+            name = "catppuccin-obsidian.rasi";
+            path = pkgs.writeText "catppuccin-obsidian.rasi" (builtins.readFile ./rofi/catppuccin-obsidian.rasi);
+          };
+        };
+      };
 
-        background = [
-          {
-            path = "screenshot";
-            blur_passes = 3;
-            blur_size = 8;
-          }
-        ];
+      hyprlock = {
+        enable = true;
+        settings = {
+          general = [
+            {
+              disable_loading_bar = true;
+              grace = 0;
+              hide_cursor = true;
+              no_fade_in = false;
+            }
+          ];
 
-        input-field = [
-          {
-            size = "512, 64";
-            position = "0, 0";
-            dots_center = true;
-            dots_size = 0.2;
-            dots_spacing = 0.4;
-            fade_on_empty = false;
-            font_color = "rgba(225, 232, 244, 1)";
-            inner_color = "rgba(29, 37, 48, 1)";
-            outer_color = "rgba(21, 27, 35, 1)";
-            check_color = "rgba(137, 180, 250, 1)";
-            fail_color = "rgba(254, 154, 164, 1)";
-            outline_thickness = 2;
-            placeholder_text = "<i><span foreground=\"##bac2deff\">Password…</span></i>";
-            shadow_passes = 2;
-            shadow_color = "rgba(21, 27, 35, 1)";
-          }
-        ];
+          background = [
+            {
+              path = "screenshot";
+              blur_passes = 3;
+              blur_size = 8;
+            }
+          ];
+
+          input-field = [
+            {
+              size = "512, 64";
+              position = "0, 0";
+              dots_center = true;
+              dots_size = 0.2;
+              dots_spacing = 0.4;
+              fade_on_empty = false;
+              font_color = "rgba(225, 232, 244, 1)";
+              inner_color = "rgba(29, 37, 48, 1)";
+              outer_color = "rgba(21, 27, 35, 1)";
+              check_color = "rgba(137, 180, 250, 1)";
+              fail_color = "rgba(254, 154, 164, 1)";
+              outline_thickness = 2;
+              placeholder_text = "<i><span foreground=\"##bac2deff\">Password…</span></i>";
+              shadow_passes = 2;
+              shadow_color = "rgba(21, 27, 35, 1)";
+            }
+          ];
+        };
+      };
+
+      hyprpanel = {
+        enable = true;
+
+        # Add '/nix/store/.../hyprpanel' to your Hyprland config 'exec-once'.
+        hyprland.enable = true;
+
+        # Fix the overwrite issue with HyprPanel.
+        overwrite.enable = true;
+
+        # Configure and theme almost all options from the GUI.
+        # Configure bar layouts for monitors. See 'https://hyprpanel.com/configuration/panel.html'.
+        # See 'https://hyprpanel.com/configuration/settings.html'.
+        settings = {
+          layout = {
+            "bar.layouts" = {
+              "0" = {
+                left = ["dashboard" "workspaces"];
+                middle = ["media"];
+                right = ["volume" "clock" "notifications"];
+              };
+            };
+          };
+          # Import a theme from './themes/*.json'.
+          # Default: ""
+          theme = {
+            name = "catppuccin_mocha";
+            font = {
+              name = "Recursive Sans Casual Static";
+              size = "12px";
+            };
+            bar = {
+              dropdownGap = "28px";
+              floating = true;
+              margin_bottom = "0em";
+              margin_sides = "0em";
+              margin_top = "5px";
+              outer_spacing = "0em";
+              transparent = true;
+
+              buttons = {
+                borderSize = "0px";
+                clock.spacing = "0em";
+                enableBorders = false;
+                padding_x = "8px";
+                padding_y = "1px";
+                radius = "8px";
+                y_margins = "0em";
+                workspaces = {
+                  fontSize = "1.2em";
+                  numbered_active_highlight_border = "0.3em";
+                  numbered_active_highlight_padding = "0.4em";
+                  numbered_inactive_padding = "0.4em";
+                };
+              };
+            };
+          };
+          bar = {
+            clock = {
+              format = "%Y年 %m月 %Od日 (%a) %R";
+              showIcon = false;
+            };
+            launcher.autoDetectIcon = true;
+            media = {
+              show_active_only = true;
+              truncation_size = 100;
+            };
+            workspaces = {
+              monitorSpecific = false;
+              showWsIcons = true;
+              spacing = 0.2;
+              numbered_active_indicator = "highlight";
+              workspaceMask = true;
+              workspaces = 1;
+            };
+          };
+
+          terminal = lib.getExe pkgs.ghostty;
+
+          menus = {
+            clock = {
+              time = {
+                hideSeconds = true;
+                military = true;
+              };
+              weather = lib.mkIf isNixOS {
+                key = args.osConfig.age.secrets."services/weather-api.key".path;
+                location = "Tokyo";
+                unit = "metric";
+              };
+            };
+            dashboard = {
+              controls.enabled = false;
+              directories.enabled = false;
+              stats.enabled = false;
+              shortcuts.left = {
+                shortcut1 = {
+                  command = "firefox";
+                  icon = "󰈹";
+                  tooltip = "Firefox";
+                };
+                shortcut2 = {
+                  command = "tidal-hifi";
+                  icon = "󰎇";
+                  tooltip = "Tidal";
+                };
+                shortcut3 = {
+                  command = "google-chrome";
+                  icon = "";
+                  tooltip = "Google Chrome";
+                };
+              };
+            };
+          };
+        };
+
+        # Override the final config with an arbitrary set.
+        override =
+          lib.attrsets.mergeAttrsList (
+            map-workspaces (no: repr: {"bar.workspaces.workspaceIconMap.${repr}" = no;})
+          )
+          // {
+            "theme.bar.buttons.battery.background" = "#11181c";
+            "theme.bar.buttons.bluetooth.background" = "#11181c";
+            "theme.bar.buttons.clock.background" = "#11181c";
+            "theme.bar.buttons.clock.text" = "#8fa3bb";
+            "theme.bar.buttons.dashboard.background" = "#11181c";
+            "theme.bar.buttons.dashboard.border" = "#95b7ef";
+            "theme.bar.buttons.dashboard.icon" = "#95b7ef";
+            "theme.bar.buttons.media.background" = "#11181c";
+            "theme.bar.buttons.media.icon" = "#95b7ef";
+            "theme.bar.buttons.media.text" = "#8fa3bb";
+            "theme.bar.buttons.network.background" = "#11181c";
+            "theme.bar.buttons.notifications.background" = "#11181c";
+            "theme.bar.buttons.notifications.icon" = "#95b7ef";
+            "theme.bar.buttons.systray.background" = "#11181c";
+            "theme.bar.buttons.volume.background" = "#11181c";
+            "theme.bar.buttons.volume.icon" = "#95b7ef";
+            "theme.bar.buttons.volume.text" = "#8fa3bb";
+            "theme.bar.buttons.windowtitle.background" = "#11181c";
+            "theme.bar.buttons.workspaces.active" = "#203147";
+            "theme.bar.buttons.workspaces.available" = "#8fa3bb";
+            "theme.bar.buttons.workspaces.background" = "#11181c";
+            "theme.bar.buttons.workspaces.border" = "#95b7ef";
+            "theme.bar.buttons.workspaces.hover" = "#203147";
+            "theme.bar.buttons.workspaces.numbered_active_highlighted_text_color" = "#9fcdfe";
+            "theme.bar.buttons.workspaces.occupied" = "#bac2de";
+            "theme.bar.menus.menu.notifications.height" = "48em";
+          };
       };
     };
 
@@ -404,147 +583,5 @@ in
           }
         ];
       };
-    };
-
-    programs.hyprpanel = {
-      enable = true;
-
-      # Add '/nix/store/.../hyprpanel' to your Hyprland config 'exec-once'.
-      hyprland.enable = true;
-
-      # Fix the overwrite issue with HyprPanel.
-      overwrite.enable = true;
-
-      # Configure and theme almost all options from the GUI.
-      # Configure bar layouts for monitors. See 'https://hyprpanel.com/configuration/panel.html'.
-      # See 'https://hyprpanel.com/configuration/settings.html'.
-      settings = {
-        layout = {
-          "bar.layouts" = {
-            "0" = {
-              left = ["dashboard" "workspaces"];
-              middle = ["media"];
-              right = ["volume" "clock" "notifications"];
-            };
-          };
-        };
-        # Import a theme from './themes/*.json'.
-        # Default: ""
-        theme.name = "catppuccin_mocha";
-        theme.bar.buttons.enableBorders = false;
-        theme.bar.floating = true;
-        theme.bar.margin_bottom = "0em";
-        theme.bar.margin_sides = "0em";
-        theme.bar.margin_top = "5px";
-        bar.clock.format = "%Y年 %m月 %Od日 (%a) %R";
-        bar.clock.showIcon = false;
-        bar.launcher.autoDetectIcon = true;
-        bar.media.show_active_only = true;
-        bar.media.truncation_size = 100;
-        bar.workspaces.monitorSpecific = false;
-        bar.workspaces.showWsIcons = true;
-        bar.workspaces.spacing = 0.2;
-        bar.workspaces.numbered_active_indicator = "highlight";
-        bar.workspaces.workspaceMask = true;
-        bar.workspaces.workspaces = 1;
-
-        terminal = lib.getExe pkgs.ghostty;
-
-        menus.clock.time.hideSeconds = true;
-        menus.clock.time.military = true;
-        menus.clock.weather = lib.mkIf isNixOS {
-          key = args.osConfig.age.secrets."services/weather-api.key".path;
-          location = "Tokyo";
-          unit = "metric";
-        };
-        menus.dashboard.controls.enabled = false;
-        menus.dashboard.directories.enabled = false;
-        menus.dashboard.stats.enabled = false;
-        menus.dashboard.shortcuts.left.shortcut1.command = "firefox";
-        menus.dashboard.shortcuts.left.shortcut1.icon = "󰈹";
-        menus.dashboard.shortcuts.left.shortcut1.tooltip = "Firefox";
-        menus.dashboard.shortcuts.left.shortcut2.command = "tidal-hifi";
-        menus.dashboard.shortcuts.left.shortcut2.icon = "󰎇";
-        menus.dashboard.shortcuts.left.shortcut2.tooltip = "Tidal";
-        menus.dashboard.shortcuts.left.shortcut3.command = "chromium";
-        menus.dashboard.shortcuts.left.shortcut3.icon = "";
-        menus.dashboard.shortcuts.left.shortcut3.tooltip = "Chromium";
-
-        theme.bar.buttons.borderSize = "0px";
-        theme.bar.buttons.clock.spacing = "0em";
-        theme.bar.buttons.padding_x = "8px";
-        theme.bar.buttons.padding_y = "1px";
-        theme.bar.buttons.radius = "8px";
-        theme.bar.buttons.workspaces.fontSize = "1.2em";
-        theme.bar.buttons.workspaces.numbered_active_highlight_border = "0.3em";
-        theme.bar.buttons.workspaces.numbered_active_highlight_padding = "0.4em";
-        theme.bar.buttons.workspaces.numbered_inactive_padding = "0.4em";
-        theme.bar.buttons.y_margins = "0em";
-        theme.bar.dropdownGap = "28px";
-        theme.bar.outer_spacing = "0em";
-        theme.bar.transparent = true;
-        theme.font = {
-          name = "Recursive Sans Casual Static";
-          size = "12px";
-        };
-      };
-
-      # Override the final config with an arbitrary set.
-      override =
-        lib.attrsets.mergeAttrsList (
-          map-workspaces (no: repr: {"bar.workspaces.workspaceIconMap.${repr}" = no;})
-        )
-        // {
-          "theme.bar.buttons.battery.background" = "#11181c";
-          "theme.bar.buttons.bluetooth.background" = "#11181c";
-          "theme.bar.buttons.clock.background" = "#11181c";
-          "theme.bar.buttons.clock.text" = "#8fa3bb";
-          "theme.bar.buttons.dashboard.background" = "#11181c";
-          "theme.bar.buttons.dashboard.border" = "#95b7ef";
-          "theme.bar.buttons.dashboard.icon" = "#95b7ef";
-          "theme.bar.buttons.media.background" = "#11181c";
-          "theme.bar.buttons.media.icon" = "#95b7ef";
-          "theme.bar.buttons.media.text" = "#8fa3bb";
-          "theme.bar.buttons.network.background" = "#11181c";
-          "theme.bar.buttons.notifications.background" = "#11181c";
-          "theme.bar.buttons.notifications.icon" = "#95b7ef";
-          "theme.bar.buttons.systray.background" = "#11181c";
-          "theme.bar.buttons.volume.background" = "#11181c";
-          "theme.bar.buttons.volume.icon" = "#95b7ef";
-          "theme.bar.buttons.volume.text" = "#8fa3bb";
-          "theme.bar.buttons.windowtitle.background" = "#11181c";
-          "theme.bar.buttons.workspaces.active" = "#203147";
-          "theme.bar.buttons.workspaces.available" = "#8fa3bb";
-          "theme.bar.buttons.workspaces.background" = "#11181c";
-          "theme.bar.buttons.workspaces.border" = "#95b7ef";
-          "theme.bar.buttons.workspaces.hover" = "#203147";
-          "theme.bar.buttons.workspaces.numbered_active_highlighted_text_color" = "#9fcdfe";
-          "theme.bar.buttons.workspaces.occupied" = "#bac2de";
-          "theme.bar.menus.menu.notifications.height" = "48em";
-        };
-    };
-
-    home.sessionVariables = {
-      GRIMBLAST_EDITOR = "${lib.getExe pkgs.swappy} -f";
-    };
-
-    xdg.mimeApps.defaultApplications = {
-      "application/pdf" = ["zathura.desktop"];
-      "image/jpeg" = ["swayimg"];
-      "image/png" = ["swayimg"];
-      "image/gif" = ["swayimg"];
-      "image/webp" = ["swayimg"];
-      "image/bmp" = ["swayimg"];
-      "image/svg+xml" = ["swayimg"];
-      "image/avif" = ["swayimg"];
-      "image/heif" = ["swayimg"];
-      "image/tiff" = ["swayimg"];
-      "application/sixel" = ["swayimg"];
-      "image/openexr" = ["swayimg"];
-      "image/x-portable-anymap" = ["swayimg"];
-      "image/tga" = ["swayimg"];
-      "image/qoi" = ["swayimg"];
-      "image/dicom" = ["swayimg"];
-      "application/farbfeld" = ["swayimg"];
     };
   })

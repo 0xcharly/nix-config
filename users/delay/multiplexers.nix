@@ -1,5 +1,4 @@
-{pkgs, ...}: let
-in {
+{pkgs, ...}: {
   home.packages = [pkgs.tmux-open-git-repository-fish];
 
   programs.tmux = {

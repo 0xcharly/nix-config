@@ -77,10 +77,12 @@
     # Secrets management.
     nix-config-secrets = {
       url = "github:0xcharly/nix-config-secrets";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.nixpkgs-darwin.follows = "nixpkgs-darwin";
-      inputs.nixpkgs-unstable.follows = "nixpkgs-unstable";
-      inputs.home-manager.follows = "home-manager";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        nixpkgs-darwin.follows = "nixpkgs-darwin";
+        nixpkgs-unstable.follows = "nixpkgs-unstable";
+        home-manager.follows = "home-manager";
+      };
     };
   };
 

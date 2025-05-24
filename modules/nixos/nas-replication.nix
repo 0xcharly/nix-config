@@ -7,22 +7,23 @@
   config,
   lib,
   pkgs,
+  usrlib,
   ...
 }: let
   cfg = config.modules.system.roles.nas;
   username = "syncoid";
   group = "syncoid";
 in
-  lib.mkIf (cfg.enable == true) {
+  lib.mkIf (usrlib.bool.isTrue cfg.enable) {
     # Create service user on the replicas (it is automatically created on the sender side).
-    users = lib.mkIf (cfg.replica == true) {
+    users = lib.mkIf (usrlib.bool.isTrue cfg.replica) {
       users."${username}" = {
         isSystemUser = true;
         home = "/var/lib/${username}";
         shell = "/usr/sbin/nologin";
         createHome = true;
         inherit group;
-        openssh.authorizedKeys.keys = lib.mkIf (cfg.replica == true) [
+        openssh.authorizedKeys.keys = lib.mkIf (usrlib.bool.isTrue cfg.replica) [
           ''command="${pkgs.sanoid}/bin/syncoid",restrict ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIf1BY82EBfuIPmqzPhA0SXNRQ9z7zdCzE99TiqdjWmg''
         ];
       };
@@ -35,7 +36,7 @@ in
       sanoid
     ];
 
-    systemd.services = lib.mkIf (cfg.replica == true) {
+    systemd.services = lib.mkIf (usrlib.bool.isTrue cfg.replica) {
       "${username}-zfs-permissions" = {
         description = "Delegate ZFS permissions to the `${username}` user";
         wantedBy = ["multi-user.target"];
@@ -45,7 +46,7 @@ in
           ExecStart = let
             # The condition below is never true, but kept for documentation purposes.
             permissions =
-              if (cfg.primary == true)
+              if (usrlib.bool.isTrue cfg.primary)
               then "send,receive,snapshot,hold,release,mount"
               else "receive,mount";
             zfsAllow = pkgs.writeShellApplication {

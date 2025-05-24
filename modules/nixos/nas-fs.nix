@@ -9,10 +9,6 @@
   imports = [inputs.disko.nixosModules.disko];
 }
 // lib.mkIf config.modules.system.roles.nas.enable {
-  boot.swraid.mdadmConf = ''
-    MAILADDR root
-  '';
-
   # The primary use case is to ensure when using ZFS that a pool isn’t imported
   # accidentally on a wrong machine.
   # https://search.nixos.org/options?channel=24.11&query=networking.hostId
@@ -20,31 +16,39 @@
 
   environment.systemPackages = with pkgs; [zfs];
 
-  boot.kernelModules = ["zfs"];
-  boot.supportedFilesystems = ["zfs" "btrfs"];
+  boot = {
+    swraid.mdadmConf = ''
+      MAILADDR root
+    '';
 
-  # Enable mdadm for software RAID
-  boot.initrd.supportedFilesystems = ["zfs" "btrfs"];
-  boot.initrd.availableKernelModules = ["raid1" "md_mod"];
-  boot.initrd.kernelModules = ["raid1"];
+    kernelModules = ["zfs"];
+    supportedFilesystems = ["zfs" "btrfs"];
 
-  boot.loader = {
-    # Different systems may require a different one of the following two
-    # options. The first instructs Grub to install itself in an EFI standard
-    # location. And the second tells it to install somewhere custom, but
-    # mutate the EFI NVRAM so EFI knows where to find it. The former
-    # should work on any system. The latter allows you to share one ESP
-    # among multiple OSes, but doesn't work on a few systems (namely
-    # VirtualBox, which doesn't support persistent NVRAM).
-    #
-    # Just make sure to only have one of these enabled.
-    grub.efiInstallAsRemovable = true;
-    efi.canTouchEfiVariables = false;
+    # Enable mdadm for software RAID
+    initrd = {
+      supportedFilesystems = ["zfs" "btrfs"];
+      availableKernelModules = ["raid1" "md_mod"];
+      kernelModules = ["raid1"];
+    };
 
-    grub = {
-      enable = true;
-      device = "nodev";
-      efiSupport = true;
+    loader = {
+      # Different systems may require a different one of the following two
+      # options. The first instructs Grub to install itself in an EFI standard
+      # location. And the second tells it to install somewhere custom, but
+      # mutate the EFI NVRAM so EFI knows where to find it. The former
+      # should work on any system. The latter allows you to share one ESP
+      # among multiple OSes, but doesn't work on a few systems (namely
+      # VirtualBox, which doesn't support persistent NVRAM).
+      #
+      # Just make sure to only have one of these enabled.
+      grub.efiInstallAsRemovable = true;
+      efi.canTouchEfiVariables = false;
+
+      grub = {
+        enable = true;
+        device = "nodev";
+        efiSupport = true;
+      };
     };
   };
 
@@ -142,7 +146,7 @@
         };
       };
 
-      drives = config.modules.system.roles.nas.drives;
+      inherit (config.modules.system.roles.nas) drives;
     in {
       # System: these SSD are mirrored in RAID1.
       disk0 = raid1 drives.nvme0; # NVMe 1
