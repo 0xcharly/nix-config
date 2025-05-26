@@ -549,7 +549,7 @@ in
     };
 
     services.hypridle = {
-      enable = true;
+      enable = lib.mkDefault true;
       settings = let
         hyprctl = "${pkgs.hyprland}/bin/hyprctl";
         hyprlock = "${pkgs.hyprlock}/bin/hyprlock";
