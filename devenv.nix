@@ -8,6 +8,8 @@
     jq
     just
 
+    alejandra
+
     # Formatters.
     (inputs.treefmt-nix.lib.mkWrapper pkgs (import ./treefmt.nix))
   ];

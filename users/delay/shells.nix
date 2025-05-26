@@ -16,14 +16,17 @@
     };
     eza.enableFishIntegration = true;
     keychain.enableFishIntegration = true;
-    # programs.direnv.enableFishIntegration = true; # read-only; always enabled.
+    # direnv.enableFishIntegration = true; # read-only; always enabled.
+    tmux.shell = lib.getExe pkgs.fish;
   };
 
   home = {
     sessionVariables.SHELL = lib.getExe pkgs.fish;
-    packages = [
-      pkgs.fishPlugins.fzf
-      pkgs.fishPlugins.transient-fish
+    packages = with pkgs; [
+      fishPlugins.fzf
+      fishPlugins.transient-fish
+
+      tmux-open-git-repository-fish
     ];
   };
 }

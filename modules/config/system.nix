@@ -3,7 +3,7 @@
   pkgs,
   lib,
   ...
-}: let
+} @ args: let
   inherit (lib.attrsets) genAttrs;
   inherit (lib.lists) optionals;
   inherit (lib.modules) mkMerge;
@@ -176,7 +176,7 @@ in {
   ];
 
   config.assertions = let
-    inherit (config.modules.stdenv) isNixOS;
+    isNixOS = pkgs.stdenv.isLinux && config ? system.build;
   in
     (
       builtins.map (role: {

@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   lib,
   pkgs,
@@ -9,9 +10,8 @@
   imports = [inputs.hyprpanel.homeManagerModules.hyprpanel];
 }
 // (let
-  config = usrlib.hm.getUserConfig args;
-  inherit (config.modules.stdenv) isNixOS;
-  inherit (config.modules.usrenv) isCorpManaged isLinuxWaylandDesktop;
+  isNixOS = pkgs.stdenv.isLinux && config ? system.build;
+  inherit ((usrlib.hm.getUserConfig args).modules.usrenv) isCorpManaged isLinuxWaylandDesktop;
 
   dpiScale = 1.5;
   cursorSize = 32;
@@ -243,7 +243,7 @@ in
         bind =
           [
             "SUPER,       Return, exec, ${uwsm-wrapper (lib.getExe pkgs.ghostty)}"
-            "SUPER,       Space,  exec, pkill rofi || ${uwsm-wrapper (lib.getExe args.config.programs.rofi.finalPackage)} -show combi  -run-command \"${uwsm-wrapper "{cmd}"}\" -calc-command \"echo -n '{result}' | ${pkgs.wl-clipboard}/bin/wl-copy\""
+            "SUPER,       Space,  exec, pkill rofi || ${uwsm-wrapper (lib.getExe config.programs.rofi.finalPackage)} -show combi  -run-command \"${uwsm-wrapper "{cmd}"}\" -calc-command \"echo -n '{result}' | ${pkgs.wl-clipboard}/bin/wl-copy\""
             "SUPER SHIFT, X,      killactive, "
             "SUPER SHIFT, Q,      exec, ${uwsm-wrapper "loginctl terminate-session \"$XDG_SESSION_ID\""}"
             "SUPER SHIFT, L,      exec, ${uwsm-wrapper (lib.getExe pkgs.hyprlock)}"

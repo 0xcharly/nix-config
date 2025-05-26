@@ -10,7 +10,6 @@
     ./hyprland.nix
     ./linux-desktop.nix
     ./multiplexers.nix
-    ./nix-client-config.nix
     ./nixos.nix
     ./packages.nix
     ./raycast.nix
