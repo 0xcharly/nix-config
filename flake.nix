@@ -51,10 +51,7 @@
     };
 
     # macOS only: Homebrew for Nix.
-    nix-homebrew = {
-      url = "github:zhaofengli/nix-homebrew";
-      inputs.nixpkgs.follows = "nixpkgs-darwin";
-    };
+    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
 
     # Hyprland and plugins.
     hyprpanel = {
