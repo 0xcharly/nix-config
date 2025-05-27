@@ -1,6 +1,6 @@
 {
   # Enable the `sudo` touch ID prompt.
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
 
   system = {
     defaults = {

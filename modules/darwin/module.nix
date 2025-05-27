@@ -28,12 +28,8 @@
   # https://mynixos.com/nix-darwin/option/system.stateVersion
   system.stateVersion = lib.mkDefault 5; # Did you read the comment?
 
-  # We install Nix using a separate installer so we don't want nix-darwin
-  # to manage it for us. This tells nix-darwin to just use whatever is running.
-  nix.useDaemon = true;
-
-  # Auto upgrade nix package and the daemon service.
-  services.nix-daemon.enable = true;
+  # TODO: documentation.
+  system.primaryUser = "delay";
 
   # Fish is the default shell on Mac and we want to make sure that we're
   # configuring the rc correctly with nix-darwin paths.
