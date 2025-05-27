@@ -18,7 +18,7 @@ fmt:
 [group('nix')]
 [macos]
 switch:
-    darwin-rebuild {{ rebuildOptions }} switch --flake .
+    sudo darwin-rebuild {{ rebuildOptions }} switch --flake .
 
 [doc("Rebuild the current NixOS/HM host's configuration and permanently switch to it")]
 [group('nix')]
