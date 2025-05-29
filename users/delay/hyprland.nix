@@ -146,7 +146,7 @@ in
     };
 
     wayland.windowManager.hyprland = {
-      enable = true;
+      enable = lib.mkDefault true;
 
       # Set the Hyprland and XDPH packages to null to use the ones from the NixOS module.
       package =
@@ -297,7 +297,7 @@ in
 
     # Wallpaper.
     services.hyprpaper = {
-      enable = true;
+      enable = lib.mkDefault true;
       settings = let
         wallpaper = pkgs.fetchurl {
           # url = "https://4kwallpapers.com/images/wallpapers/duality-doorway-3840x2160-22094.jpg";
@@ -356,7 +356,7 @@ in
       };
 
       hyprlock = {
-        enable = true;
+        enable = lib.mkDefault true;
         settings = {
           general = [
             {
@@ -398,7 +398,7 @@ in
       };
 
       hyprpanel = {
-        enable = true;
+        enable = lib.mkDefault true;
 
         # Add '/nix/store/.../hyprpanel' to your Hyprland config 'exec-once'.
         hyprland.enable = true;
