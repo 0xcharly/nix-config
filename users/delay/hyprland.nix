@@ -10,7 +10,7 @@
   imports = [inputs.hyprpanel.homeManagerModules.hyprpanel];
 }
 // (let
-  isNixOS = pkgs.stdenv.isLinux && config ? system.build;
+  inherit (config) isNixOS;
   inherit ((usrlib.hm.getUserConfig args).modules.usrenv) isCorpManaged isLinuxWaylandDesktop;
 
   dpiScale = 1.5;

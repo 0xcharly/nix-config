@@ -5,6 +5,18 @@ username: {
 }: {
   # For-user Home Manager configurations.
   imports = [
+    {
+      options.isNixOS = lib.options.mkOption {
+        type = lib.types.bool;
+        default = false;
+        readOnly = true;
+        description = ''
+          A flag allowing to distinguish between HM running on NixOS and
+          standalone HM setups.
+        '';
+      };
+    }
+
     ./${username}/home.nix
 
     # Additional configuration that should be set for any existing and future
