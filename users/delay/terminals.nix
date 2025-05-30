@@ -12,7 +12,7 @@ in {
   # Ghostty is installed with Homebrew on macOS.
   home.packages = lib.mkIf isLinuxDesktop [pkgs.ghostty];
 
-  programs.tmux.terminal = "xterm-ghostty";
+  programs.tmux.terminal = lib.mkDefault "xterm-ghostty";
 
   # Ghostty configuration.
   xdg.enable = true;
