@@ -47,7 +47,6 @@ in {
           ];
           font-codepoint-map = let
             codepoints-map = {
-              "mononoki" = "U+0040"; # @
               "Noto Sans Mono CJK JP" = lib.concatStringsSep "," [
                 # Based off https://stackoverflow.com/a/53807563.
                 # https://www.localizingjapan.com/blog/2012/01/20/regular-expressions-for-japanese-text/
