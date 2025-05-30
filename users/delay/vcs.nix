@@ -2,8 +2,11 @@
   config,
   lib,
   pkgs,
+  usrlib,
   ...
-}: {
+} @ args: let
+  inherit ((usrlib.hm.getUserConfig args).modules.usrenv) isCorpManaged isLinuxDesktop;
+in {
   programs.jujutsu = {
     enable = true;
     package = lib.mkDefault pkgs.jujutsu;
@@ -16,7 +19,11 @@
       template-aliases."format_timestamp(timestamp)" = "timestamp.ago()";
       ui = {
         "default-command" = "status";
-        diff.tool = [(lib.getExe pkgs.difftastic) "--color=always" "$left" "$right"];
+        diff = lib.mkIf (!isCorpManaged || !isLinuxDesktop) {
+          # TODO(25.11): Deprecated config: ui.diff.tool is renamed to ui.diff-formatter
+          tool = [(lib.getExe pkgs.difftastic) "--color=always" "$left" "$right"];
+        };
+        diff-formatter = [(lib.getExe pkgs.difftastic) "--color=always" "$left" "$right"];
         editor = lib.getExe pkgs.nvim;
       };
       signing = {
