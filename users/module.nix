@@ -2,6 +2,7 @@
   config,
   inputs',
   lib,
+  pkgs,
   pkgs',
   self',
   self,
@@ -53,7 +54,7 @@ in {
       {
         options.isNixOS = lib.options.mkOption {
           type = lib.types.bool;
-          default = true;
+          default = pkgs.stdenv.isLinux;
           readOnly = true;
           description = ''
             A flag allowing to distinguish between HM running on NixOS and
