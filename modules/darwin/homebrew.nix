@@ -17,11 +17,10 @@ in {
     };
     masApps =
       {
+        Amphetamine = 937984704;
         ColorSlurp = 1287239339;
       }
       // (lib.optionalAttrs (!isCorpManaged) {
-        Amphetamine = 937984704;
-        "Pixelmator Pro" = 1289583905;
         Xcode = 497799835; # Xcode is installed out-of-band on corp devices.
       });
     casks = let
@@ -37,18 +36,14 @@ in {
         "proton-pass"
 
         # Browsers.
-        (no_quarantine "eloston-chromium") # Ungoogled Chromium.
-        (no_quarantine "librewolf") # Firefox, hardened.
         "firefox@developer-edition" # Firefox, for isolates.
 
         # Utilities.
         "beeper" # Messaging.
         "ghostty" # Terminal.
-        "obsidian" # Note taking.
         "raycast" # Mandatory Spotlight alternative.
-        "scroll-reverser" # Custom scroll directions for trackpad vs. mouse.
-        "spotify" # Because the web version sucks.
         "tidal" # Spotify alternative.
+        "vlc" # Media player.
       ]
       ++ (lib.optionals (!isCorpManaged) [
         # Don't install these on corp-managed hosts.
@@ -56,7 +51,6 @@ in {
         "protonvpn" # Private network.
         "tailscale" # Personal VPN network.
         "transmission"
-        "vlc" # Media player.
       ]);
   };
 }

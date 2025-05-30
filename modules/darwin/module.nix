@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   pkgs,
   lib,
@@ -29,7 +30,7 @@
   system.stateVersion = lib.mkDefault 5; # Did you read the comment?
 
   # TODO: documentation.
-  system.primaryUser = "delay";
+  system.primaryUser = config.modules.system.mainUser;
 
   # Fish is the default shell on Mac and we want to make sure that we're
   # configuring the rc correctly with nix-darwin paths.
