@@ -7,7 +7,6 @@
     ./browsers.nix
     ./catppuccin.nix
     ./fonts.nix
-    ./hyprland.nix
     ./linux-desktop.nix
     ./multiplexers.nix
     ./nixos.nix
@@ -19,6 +18,8 @@
     ./systemd-timers.nix
     ./terminals.nix
     ./vcs.nix
+    ./wayland.nix
+    ./wayland-hyprland.nix
   ];
 
   home.sessionVariables = let
