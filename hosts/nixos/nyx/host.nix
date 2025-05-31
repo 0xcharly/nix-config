@@ -19,6 +19,9 @@
   # Wayland, finally?
   modules.usrenv.compositor = "wayland";
 
+  # Access tier.
+  modules.system.security.accessTier = "highly-privileged";
+
   # Roles.
   modules.system.roles.nixos = {
     amdCpu = true;

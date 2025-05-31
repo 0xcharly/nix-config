@@ -3,6 +3,9 @@
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
+  # Access tier.
+  modules.system.security.accessTier = "trusted";
+
   # Roles.
   modules.system.roles.nixos = {
     amdCpu = true;

@@ -160,9 +160,6 @@ in rec {
     ];
 
   flake.nixosConfigurations = mkHostAttrs [
-    (mkNixosIso ./iso/arm64 {system = "aarch64-linux";})
-    (mkNixosIso ./iso/x64 {system = "x86_64-linux";})
-
     (mkNixosIso ./iso/recovery {system = "x86_64-linux";})
 
     (mkNixosHost ./nixos/asl {system = "aarch64-linux";})
@@ -184,7 +181,7 @@ in rec {
   flake.images = builtins.listToAttrs ((builtins.map (name: {
       inherit name;
       value = flake.nixosConfigurations."${name}".config.system.build.isoImage;
-    }) ["arm64" "x64" "recovery"])
+    }) ["recovery"])
     ++ (builtins.map (name: {
       inherit name;
       value = flake.nixosConfigurations."${name}".config.system.build.sdImage;

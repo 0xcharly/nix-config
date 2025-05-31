@@ -33,12 +33,9 @@ in {
   programs = {
     bash.enable = true;
     bottom.enable = true;
-    btop.enable = true;
-    htop.enable = true;
     bat.enable = true; # `cat` replacement.
     fd.enable = true; # `find` replacement.
     ripgrep.enable = true; # `grep` replacement.
-    gh.enable = true; # GitHub command-line integration.
     eza.enable = true; # `ls` replacement.
     fzf.enable = true;
 

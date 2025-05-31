@@ -37,7 +37,7 @@ in {
               --exclude=".git" \
               --delete \
               --rsh "ssh -l delay -F /dev/null -o IdentitiesOnly=yes -o IdentityFile=${backup-ssh-key} -o PasswordAuthentication=no" \
-              linode.neko-danio.ts.net: /tank/delay/beans/
+              linode-arch.neko-danio.ts.net: /tank/delay/beans/
           '';
         };
       in

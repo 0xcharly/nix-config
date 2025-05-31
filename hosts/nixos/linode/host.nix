@@ -1,15 +1,12 @@
 # (Derived from https://www.linode.com/docs/guides/install-nixos-on-linode/)
 #
 # 1. Create three (3) disk images:
-#    - Installer: 1024mb (ext4)
-#    - Swap: 512mb (swap)
-#    - NixOS: rest (ext4)
+#    - Installer: 2048mb (raw)
+#    - NixOS: rest (raw)
 #
 # 2. Boot in rescue mode with:
 #    - /dev/sda -> Installer
-#    # (optional)
-#    - /dev/sdb -> Swap
-#    - /dev/sdc -> NixOS
+#    - /dev/sdb -> NixOS
 #
 # 3. Once booted into Finnix (step 2):
 #      update-ca-certificates
@@ -19,15 +16,13 @@
 #    - Installer
 #      - Kernel: Direct Disk
 #      - /dev/sda -> NixOS
-#      - /dev/sdb -> Swap
-#      - /dev/sdc -> Installer
-#      - Root device: /dev/sdc
+#      - /dev/sdb -> Installer
+#      - Root device: /dev/sdb
 #      - Helpers: distro and auto network helpers = off
 #      - Leave others on their defaults
 #    - Boot
 #      - Kernel: Direct Disk
 #      - /dev/sda -> NixOS
-#      - /dev/sdb -> Swap
 #      - Root device: /dev/sda
 #      - Helpers: distro and auto network helpers = off
 #      - Leave others on their defaults
@@ -41,8 +36,6 @@
 #      just deploy-linode <ADDR>
 #
 # 8. Reboot into "Boot" profile.
-#
-# 9. Resume (and complete) `deploy-linode` script.
 {
   pkgs,
   modulesPath,
@@ -54,8 +47,20 @@
     ./fs.nix
   ];
 
+  # See comment in modules/nixos/module.nix.
+  system.stateVersion = "25.05";
+
   # No graphical environment.
   modules.usrenv.compositor = "headless";
+
+  # Access tier.
+  modules.system.security.accessTier = "basic";
+
+  # Roles.
+  modules.system.roles.nixos = {
+    tailscaleNode = true;
+    tailscalePublicNode = true;
+  };
 
   networking = {
     hostName = "linode";
@@ -80,56 +85,29 @@
     firewall.enable = true;
   };
 
-  services.openssh = {
-    enable = true;
-    openFirewall = true;
-    settings = {
-      PermitRootLogin = pkgs.lib.mkForce "yes";
-      PasswordAuthentication = false;
-    };
-  };
-
-  users.users.delay.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKZCryAJK8VIlg5MjGcvBwma20oMzirFDoB3nINV5Bks"
-  ];
-
   boot = {
     initrd = {
       availableKernelModules = ["virtio_pci" "virtio_scsi" "ahci" "sd_mod"];
-      kernelModules = [];
+      supportedFilesystems = ["btrfs"];
     };
-    kernelModules = [];
-    extraModulePackages = [];
 
-    # Be careful updating this.
-    kernelPackages = pkgs.linuxPackages_latest;
-
-    # Enable LISH.
-    # https://www.linode.com/docs/guides/install-nixos-on-linode/#enable-lish
-    kernelParams = ["console=ttyS0,19200n8"];
+    kernelPackages = pkgs.linuxPackages_latest; # Be careful updating this.
+    kernelParams = ["console=ttyS0,19200n8"]; # Enable LISH.
 
     loader = {
       timeout = 10;
       grub = {
         enable = true;
-        # Needed for LISH.
+        device = "nodev";
+        forceInstall = true;
+
+        # LISH config.
         extraConfig = ''
           serial --speed=19200 --unit=0 --word=8 --parity=no --stop=1;
           terminal_input serial;
           terminal_output serial
         '';
-
-        # Configure GRUB.
-        # https://www.linode.com/docs/guides/install-nixos-on-linode/#configure-grub
-        device = "/dev/sda";
-
-        # GRUB will complain about blocklists when trying to install grub on a
-        # partition-less disk. This tells it to ignore the warning and carry on.
-        forceInstall = true;
       };
-      # Disable globals
-      efi.canTouchEfiVariables = false;
-      systemd-boot.enable = false;
     };
   };
 

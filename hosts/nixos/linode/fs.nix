@@ -1,31 +1,39 @@
 {inputs, ...}: {
   imports = [inputs.disko.nixosModules.disko];
 
-  disko.devices.disk = {
-    sda = {
-      device = "/dev/sda";
-      type = "disk";
-      content = {
-        type = "btrfs";
-        subvolumes = {
-          "/" = {
-            mountpoint = "/";
-            mountOptions = ["compress=zstd"];
-          };
-          "/nix" = {
-            mountpoint = "/nix";
-            mountOptions = ["compress=zstd" "noatime"];
+  disko.devices.disk.SYSTEM = {
+    device = "/dev/sda";
+    type = "disk";
+    content = {
+      type = "gpt";
+      partitions = {
+        boot = {
+          size = "1M";
+          type = "EF02"; # BIOS boot partition (for GRUB in BIOS mode)
+        };
+        swap = {
+          label = "swap";
+          start = "-1G";
+          content.type = "swap";
+        };
+        nixos = {
+          label = "nixos";
+          size = "100%";
+          content = {
+            type = "btrfs";
+            subvolumes = {
+              "NIXOS" = {};
+              "NIXOS/rootfs" = {
+                mountpoint = "/";
+                mountOptions = ["compress=zstd"];
+              };
+              "NIXOS/nix" = {
+                mountpoint = "/nix";
+                mountOptions = ["compress=zstd" "noatime"];
+              };
+            };
           };
         };
-      };
-    };
-    sdb = {
-      device = "/dev/sdb";
-      type = "disk";
-      content = {
-        type = "swap";
-        randomEncryption = true;
-        resumeDevice = true;
       };
     };
   };

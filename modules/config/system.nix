@@ -55,6 +55,33 @@ in {
         description = "A list of home-manager users on the system.";
       };
 
+    security = {
+      accessTier = mkOption {
+        type = enum ["untrusted" "basic" "trusted" "highly-privileged"];
+        default = "untrusted";
+        description = "The machine's access tier.";
+      };
+
+      isBasicAccessTier = mkOption {
+        type = bool;
+        readOnly = true;
+        default = cfg.security.accessTier == "basic" || cfg.security.isTrustedAccessTier;
+        description = "True for basic access tier machines.";
+      };
+      isTrustedAccessTier = mkOption {
+        type = bool;
+        readOnly = true;
+        default = cfg.security.accessTier == "trusted" || cfg.security.isHighlyPrivilegedAccessTier;
+        description = "True for trusted access tier machines.";
+      };
+      isHighlyPrivilegedAccessTier = mkOption {
+        type = bool;
+        readOnly = true;
+        default = cfg.security.accessTier == "highly-privileged";
+        description = "True for highly privileged access tier machines.";
+      };
+    };
+
     roles = {
       nixos = {
         amdCpu = mkOption {
@@ -95,8 +122,14 @@ in {
 
         tailscaleNode = mkOption {
           type = bool;
-          default = false;
+          default = cfg.roles.nixos.tailscalePublicNode;
           description = "True for machines that should be part of the Tailscale network.";
+        };
+
+        tailscalePublicNode = mkOption {
+          type = bool;
+          default = false;
+          description = "True for machines part of the Tailscale network and publicly accessible.";
         };
 
         workstation = mkOption {
@@ -184,6 +217,26 @@ in {
         message = "`system.roles.nixos.${role}` role is only supported on NixOS.";
       }) (builtins.attrNames config.modules.system.roles.nixos)
     )
+    ++ [
+      {
+        assertion = cfg.security.accessTier == "basic" -> isNixOS;
+        message = "Non-NixOS machines are do not meet the mimimum requirements for Basic Access";
+      }
+      {
+        assertion = cfg.security.accessTier == "trusted" -> isNixOS;
+        message = "Non-NixOS machines are do not meet the mimimum requirements for Trusted Access";
+      }
+      {
+        assertion = cfg.security.accessTier == "highly-privileged" -> isNixOS;
+        message = "Non-NixOS machines are do not meet the mimimum requirements for Highly Privileged Access";
+      }
+    ]
+    ++ [
+      {
+        assertion = cfg.roles.nixos.tailscalePublicNode -> cfg.roles.nixos.tailscaleNode;
+        message = "`system.roles.nixos.tailscalePublicNode` requires `system.roles.nixos.tailscaleNode`";
+      }
+    ]
     ++ [
       {
         assertion = cfg.roles.nas.enable -> isNixOS;
