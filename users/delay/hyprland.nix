@@ -13,7 +13,7 @@
   inherit (config) isNixOS;
   inherit ((usrlib.hm.getUserConfig args).modules.usrenv) isCorpManaged isLinuxWaylandDesktop;
 
-  dpiScale = 1.5;
+  dpiScale = 1.25;
   cursorSize = 32;
 
   uwsm-wrapper = cmd: "${lib.getExe pkgs.uwsm} app -- ${cmd}";
@@ -236,7 +236,7 @@ in
             "fadeDim,     1,    1,   user_dim"
             "layers,      1,    1,   user,     popin 70%"
             "windows,     1,    1,   user,     popin 70%"
-            "workspaces,  1,    2,   user,     slidefade 10%"
+            "workspaces,  0,    2,   user,     slidefade 10%"
           ];
         };
         # Keyboard bindings.

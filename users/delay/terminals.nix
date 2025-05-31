@@ -22,10 +22,7 @@ in {
         listsAsDuplicateKeys = true;
       } ({
           font-family = ["Recursive Mono Casual Static"];
-          font-size =
-            if isLinuxDesktop
-            then 12
-            else 14;
+          font-size = 14;
           # https://www.recursive.design/assets/arrowtype-recursive-sansmono-specimen-230407.pdf
           font-feature = [
             "calt"
