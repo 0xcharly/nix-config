@@ -97,14 +97,14 @@ cache:
 [doc('Build the given configuration and push the results to the cache')]
 [group('nix')]
 [linux]
-cache:
+cache config=hostname:
     #! /usr/bin/env fish
     if test (grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"
       set CONFIG_PREFIX "nixosConfigurations"
     else
       set CONFIG_PREFIX "homeConfigurations"
     end
-    nix build ".#$CONFIG_PREFIX.{{ hostname }}.config.system.build.toplevel" --json \
+    nix build ".#$CONFIG_PREFIX.{{ config }}.config.system.build.toplevel" --json \
       | jq -r '.[].outputs | to_entries[].value' \
       | cachix push 0xcharly-nixos-config
 
