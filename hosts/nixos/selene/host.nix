@@ -3,14 +3,14 @@
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-  # Access tier.
-  modules.system.security.accessTier = "trusted";
-
-  # Roles.
-  modules.system.roles.nixos = {
-    amdCpu = true;
-    noRgb = true;
-    tailscaleNode = true;
+  # System config.
+  modules.system = {
+    security.accessTier = "trusted";
+    networking.tailscaleNode = true;
+    roles.nixos = {
+      amdCpu = true;
+      noRgb = true;
+    };
   };
 
   modules.system.roles.nas = {

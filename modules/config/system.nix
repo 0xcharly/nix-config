@@ -82,6 +82,20 @@ in {
       };
     };
 
+    networking = {
+      tailscaleNode = mkOption {
+        type = bool;
+        default = cfg.networking.tailscalePublicNode;
+        description = "True for machines that should be part of the Tailscale network.";
+      };
+
+      tailscalePublicNode = mkOption {
+        type = bool;
+        default = false;
+        description = "True for machines part of the Tailscale network and publicly accessible.";
+      };
+    };
+
     roles = {
       nixos = {
         amdCpu = mkOption {
@@ -118,18 +132,6 @@ in {
           type = bool;
           default = false;
           description = "True for machines that should have a ProtonVPN interface.";
-        };
-
-        tailscaleNode = mkOption {
-          type = bool;
-          default = cfg.roles.nixos.tailscalePublicNode;
-          description = "True for machines that should be part of the Tailscale network.";
-        };
-
-        tailscalePublicNode = mkOption {
-          type = bool;
-          default = false;
-          description = "True for machines part of the Tailscale network and publicly accessible.";
         };
 
         workstation = mkOption {
@@ -233,8 +235,8 @@ in {
     ]
     ++ [
       {
-        assertion = cfg.roles.nixos.tailscalePublicNode -> cfg.roles.nixos.tailscaleNode;
-        message = "`system.roles.nixos.tailscalePublicNode` requires `system.roles.nixos.tailscaleNode`";
+        assertion = cfg.networking.tailscalePublicNode -> cfg.networking.tailscaleNode;
+        message = "`system.networking.tailscalePublicNode` requires `system.roles.nixos.tailscaleNode`";
       }
     ]
     ++ [

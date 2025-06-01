@@ -19,17 +19,17 @@
   # Wayland, finally?
   modules.usrenv.compositor = "wayland";
 
-  # Access tier.
-  modules.system.security.accessTier = "highly-privileged";
-
-  # Roles.
-  modules.system.roles.nixos = {
-    amdCpu = true;
-    amdGpu = true;
-    noRgb = true;
-    protonvpn = true;
-    tailscaleNode = true;
-    workstation = true;
+  # System config.
+  modules.system = {
+    security.accessTier = "highly-privileged";
+    networkign.tailscaleNode = true;
+    roles.nixos = {
+      amdCpu = true;
+      amdGpu = true;
+      noRgb = true;
+      protonvpn = true;
+      workstation = true;
+    };
   };
 
   # Boot configuration.

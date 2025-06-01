@@ -57,7 +57,7 @@ in {
 
       declareTailscaleNetworkHosts = mkOption {
         type = bool;
-        default = cfg.system.roles.nixos.tailscaleNode;
+        default = cfg.system.networking.tailscaleNode;
         readOnly = true;
         description = ''
           Declares all Tailscale network nodes (accessible from within the

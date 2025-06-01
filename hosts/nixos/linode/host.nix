@@ -108,13 +108,13 @@
   # No graphical environment.
   modules.usrenv.compositor = "headless";
 
-  # Access tier.
-  modules.system.security.accessTier = "basic";
-
-  # Roles.
-  modules.system.roles.nixos = {
-    tailscaleNode = true;
-    tailscalePublicNode = true;
+  # System config.
+  modules.system = {
+    security.accessTier = "basic";
+    networking = {
+      tailscaleNode = true;
+      tailscalePublicNode = true;
+    };
   };
 
   networking = {
