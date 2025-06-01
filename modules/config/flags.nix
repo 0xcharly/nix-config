@@ -11,6 +11,22 @@
   cfg = config.modules;
 in {
   options.modules.flags = {
+    jujutsu = {
+      deprecatedUiDiffTool = mkOption {
+        type = bool;
+        default = !cfg.usrenv.isCorpManaged || !cfg.usrenv.isLinuxDesktop;
+        readOnly = true;
+        description = ''
+          Creates ui.diff.tool Jujutsu config.
+
+          Deprecated Jujutsu config: ui.diff.tool is renamed to
+          ui.diff-formatter in newer versions.
+
+          # TODO(25.11): Remove deprecated config.
+        '';
+      };
+    };
+
     ssh = {
       installBasicAccessKeys = mkOption {
         type = bool;

@@ -5,7 +5,7 @@
   usrlib,
   ...
 } @ args: let
-  inherit ((usrlib.hm.getUserConfig args).modules.usrenv) isCorpManaged isLinuxDesktop;
+  inherit ((usrlib.hm.getUserConfig args).modules) flags;
 in {
   programs.jujutsu = {
     enable = true;
@@ -17,15 +17,16 @@ in {
         email = "0@0xcharly.com";
       };
       template-aliases."format_timestamp(timestamp)" = "timestamp.ago()";
-      ui = {
-        "default-command" = "status";
-        diff = lib.mkIf (!isCorpManaged || !isLinuxDesktop) {
+      ui =
+        {
+          "default-command" = "status";
+          diff-formatter = [(lib.getExe pkgs.difftastic) "--color=always" "$left" "$right"];
+          editor = lib.getExe pkgs.nvim;
+        }
+        // lib.optionalAttrs flags.jujutsu.deprecatedUiDiffTool {
           # TODO(25.11): Deprecated config: ui.diff.tool is renamed to ui.diff-formatter
-          tool = [(lib.getExe pkgs.difftastic) "--color=always" "$left" "$right"];
+          diff.tool = config.programs.jujutsu.settings.ui.diff-formatter;
         };
-        diff-formatter = [(lib.getExe pkgs.difftastic) "--color=always" "$left" "$right"];
-        editor = lib.getExe pkgs.nvim;
-      };
       signing = {
         behavior = "own";
         backend = "ssh";
