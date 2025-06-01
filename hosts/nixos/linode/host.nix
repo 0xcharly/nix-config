@@ -115,6 +115,7 @@
       tailscaleNode = true;
       tailscalePublicNode = true;
     };
+    roles.beans.sourceOfTruth = true;
   };
 
   networking = {

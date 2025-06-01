@@ -97,6 +97,18 @@ in {
     };
 
     roles = {
+      beans = {
+        # TODO: figure out a better schema.
+        sourceOfTruth = mkOption {
+          type = bool;
+          default = false;
+          description = ''
+            True for the machine that is the source of truth for bean files
+            (i.e. on which beans are edited).
+          '';
+        };
+      };
+
       nixos = {
         amdCpu = mkOption {
           type = bool;

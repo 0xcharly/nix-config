@@ -1,12 +1,10 @@
 {
   config,
-  pkgs,
   lib,
   ...
 }: let
   inherit (lib.options) mkOption;
-  inherit (lib.types) attrsOf bool enum listOf nullOr str submodule;
-  inherit (pkgs.stdenv) isDarwin;
+  inherit (lib.types) bool listOf str;
 
   cfg = config.modules;
 in {
@@ -72,6 +70,16 @@ in {
         description = ''
           Declares all Tailscale entry nodes (accessible from outside the
           network) in the SSH config.
+        '';
+      };
+
+      authorizeBeansBackupCommand = mkOption {
+        type = bool;
+        default = cfg.system.roles.beans.sourceOfTruth;
+        readOnly = true;
+        description = ''
+          Adds an entry to the authorized_keys file to allow backing up bean
+          files.
         '';
       };
     };
