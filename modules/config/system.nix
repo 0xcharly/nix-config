@@ -236,7 +236,7 @@ in {
     ++ [
       {
         assertion = cfg.networking.tailscalePublicNode -> cfg.networking.tailscaleNode;
-        message = "`system.networking.tailscalePublicNode` requires `system.roles.nixos.tailscaleNode`";
+        message = "`system.networking.tailscalePublicNode` requires `system.networking.tailscaleNode`";
       }
     ]
     ++ [

@@ -22,7 +22,7 @@
   # System config.
   modules.system = {
     security.accessTier = "highly-privileged";
-    networkign.tailscaleNode = true;
+    networking.tailscaleNode = true;
     roles.nixos = {
       amdCpu = true;
       amdGpu = true;

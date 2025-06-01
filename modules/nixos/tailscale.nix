@@ -3,7 +3,7 @@
   lib,
   ...
 }:
-lib.mkIf config.modules.system.roles.nixos.tailscaleNode {
+lib.mkIf config.modules.system.networking.tailscaleNode {
   services.tailscale = {
     enable = true;
     authKeyFile = config.age.secrets."services/tailscale-preauth.key".path;
