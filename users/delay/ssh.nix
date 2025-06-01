@@ -4,15 +4,11 @@
   usrlib,
   ...
 } @ args: let
-  inherit ((usrlib.hm.getUserConfig args).modules.usrenv) isCorpManaged isHeadless;
-  inherit ((usrlib.hm.getUserConfig args).modules.system.security) isBasicAccessTier isTrustedAccessTier;
+  inherit ((usrlib.hm.getUserConfig args).modules) flags;
   home = config.home.homeDirectory;
 in {
   programs.ssh = let
-    identityFile = key:
-      lib.optionalAttrs (!isHeadless) {
-        IdentityFile = "${home}/.ssh/${key}";
-      };
+    identityFile = key: {IdentityFile = "${home}/.ssh/${key}";};
   in {
     enable = true;
     matchBlocks =
@@ -27,50 +23,46 @@ in {
           extraOptions = identityFile "github";
         };
       }
-      // (lib.optionalAttrs isCorpManaged {
-        # Personal hosts open to corp devices.
+      // (lib.optionalAttrs flags.ssh.declareTailscaleEntryNodeHosts {
+        # Tailscale nodes accessible from the public internet.
         linode = {
           hostname = "2600:3c18::2000:a4ff:fe80:d6d4";
           extraOptions = identityFile "tailscale-public";
-          forwardAgent = true;
         };
+        # TODO: decommission this node.
         linode-arch = {
           hostname = "2400:8902::f03c:92ff:fea6:366e";
           extraOptions = identityFile "linode";
-          forwardAgent = true;
         };
       })
-      // (lib.optionalAttrs (!isCorpManaged) (let
+      // (lib.optionalAttrs flags.ssh.declareTailscaleNetworkHosts (let
         # Tailscale nodes. Add all NixOS nodes to this list.
-        tailscaleNodes = ["linode" "linode-arch" "nyx" "helios" "selene"];
         tailscaleNodesMatchGroup = builtins.concatStringsSep " " (
-          (lib.singleton "*.neko-danio.ts.net") ++ tailscaleNodes
+          (lib.singleton "*.${flags.tailscale.tailnetName}") ++ flags.tailscale.allNodes
         );
         tailscaleNodesHostName = lib.attrsets.mergeAttrsList (
           builtins.map (host: {
-            "${host}" = {hostname = "${host}.neko-danio.ts.net";};
+            "${host}" = {hostname = "${host}.${flags.tailscale.tailnetName}";};
           })
-          tailscaleNodes
+          flags.tailscale.allNodes
         );
       in
         tailscaleNodesHostName
         // {
           "${tailscaleNodesMatchGroup}" = {
             extraOptions = identityFile "tailscale";
-            forwardAgent = true;
           };
           skullkid = {
             hostname = "192.168.86.43";
             extraOptions = identityFile "skullkid";
-            forwardAgent = true;
           };
         }));
     userKnownHostsFile = "${home}/.ssh/known_hosts ${home}/.ssh/known_hosts.trusted";
   };
 
-  # Install known SSH keys for trusted hosts.
   home.file =
     {
+      # Install known SSH keys for trusted hosts.
       ".ssh/known_hosts.trusted".text = let
         extraKnownHosts = {
           # TODO: update Skullkid once migrated to NixOS and Tailscale.
@@ -84,16 +76,10 @@ in {
         usrlib.ssh.genKnownHostsFile {inherit extraKnownHosts;};
     }
     # TODO: add trusted tier version of these.
-    // lib.optionalAttrs (isBasicAccessTier && !isTrustedAccessTier) (let
+    // lib.optionalAttrs flags.ssh.installBasicAccessKeys (let
       mkSshKeySymLink = key: {
         ".ssh/${key}".source = args.config.lib.file.mkOutOfStoreSymlink args.osConfig.age.secrets."keys/basic-access/${key}_ed25519_key".path;
       };
     in
-      lib.mergeAttrsList (
-        builtins.map mkSshKeySymLink [
-          "github"
-          "git_commit_signing"
-          "tailscale"
-        ]
-      ));
+      lib.mergeAttrsList (builtins.map mkSshKeySymLink flags.ssh.basicAccessKeys));
 }
