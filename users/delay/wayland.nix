@@ -38,7 +38,7 @@
 
     # Applies a fractional scaling factor to _text rendering_. It adjusts the
     # size of fonts without changing the layout size of other UI elements.
-    GDK_DPI_SCALE = 0.5;
+    GDK_DPI_SCALE = 1;
 
     MOZ_ENABLE_WAYLAND = 1;
     _JAVA_AWT_WM_NONREPARENTING = 1;
