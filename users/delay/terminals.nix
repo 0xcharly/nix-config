@@ -64,7 +64,7 @@ in {
           foreground = "#e1e8f4";
           selection-background = "#303747";
           selection-foreground = "#e1e8f4";
-          cursor-color = "#fec49a";
+          cursor-color = "#bac2de";
           palette = [
             "0=#bac2de"
             "1=#fe9aa4"
