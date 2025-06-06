@@ -77,16 +77,18 @@ in
           lib.concatStringsSep "\n" (
             lib.mapAttrsToList (key: value: "export ${key}=${builtins.toString value}") envvars
           );
-        electronFlags = ''
+        chromiumFlags = ''
           --ozone-platform=wayland
           --ozone-platform-hint=auto
           --enable-features=UseOzonePlatform,VaapiVideoDecodeLinuxGL,VaapiVideoEncoder,Vulkan,VulkanFromANGLE,DefaultANGLEVulkan,VaapiIgnoreDriverChecks,VaapiVideoDecoder,PlatformHEVCDecoderSupport,UseMultiPlaneFormatForHardwareVideo
           --enable-features=NativeNotifications
         '';
       in {
-        "electron-flags.conf".text = electronFlags;
-        "electron12-flags.conf".text = electronFlags;
-        "electron32-flags.conf".text = electronFlags;
+        "chrome-flags.conf".text = chromiumFlags;
+        "chromium-flags.conf".text = chromiumFlags;
+        "electron-flags.conf".text = chromiumFlags;
+        "electron12-flags.conf".text = chromiumFlags;
+        "electron32-flags.conf".text = chromiumFlags;
 
         # For Hyprland UWSM enviroment settings
         "uwsm/env".text = create-env waylandSessionVariables;
