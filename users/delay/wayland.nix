@@ -81,6 +81,7 @@ in
           --ozone-platform=wayland
           --ozone-platform-hint=auto
           --enable-features=UseOzonePlatform,VaapiVideoDecodeLinuxGL,VaapiVideoEncoder,Vulkan,VulkanFromANGLE,DefaultANGLEVulkan,VaapiIgnoreDriverChecks,VaapiVideoDecoder,PlatformHEVCDecoderSupport,UseMultiPlaneFormatForHardwareVideo
+          --enable-features=NativeNotifications
         '';
       in {
         "electron-flags.conf".text = electronFlags;
