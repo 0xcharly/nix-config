@@ -50,30 +50,27 @@
 #    - /dev/sda -> SYSTEM
 #
 # 4. Use `parted` to resize the root partition.
-#   - It's possible that the swap partition, while being labeled #2, is actually
-#     physically _after_ the root partition
+#   a. It's possible that parted offers to fix the GPT automatically:
 #
 #     ```
-#     Device        Start      End  Sectors Size Type
-#     /dev/sda1      2048     4095     2048   1M BIOS boot
-#     /dev/sda2  46100480 48199679  2099200   1G Linux swap
-#     /dev/sda3      4096 46100479 46096384  22G Linux filesystem
+#     (parted) print
+#     Warning: Not all of the space available to /dev/sda appears to be used, you can
+#     fix the GPT to use all of the space (an extra 4194304 blocks) or continue with
+#     the current setting?
+#     Fix/Ignore? Fix
+#     Model: QEMU QEMU HARDDISK (scsi)
+#     Disk /dev/sda: 26.8GB
+#     Sector size (logical/physical): 512B/512B
+#     Partition Table: gpt
+#     Disk Flags:
 #
-#     Partition table entries are not in disk order.
+#     Number  Start   End     Size    File system  Name              Flags
+#      1      1049kB  2097kB  1049kB               disk-SYSTEM-boot  bios_grub
+#      2      2097kB  24.7GB  24.7GB  btrfs        nixos
 #     ```
 #
-#     If that's the case:
-#
-#     - Delete the swap partition:
-#       (parted) rm 2
-#
-#     - Resize the root partition:
-#       (parted) resizepart 3 -1GiB
-#
-#     - Recreate the swap partition:
-#       (parted) mkpart swap linux-swap -1GiB 100%
-#       (parted) name 2 swap
-#       (parted) set 2 swap on
+#   b. Resize the root partition:
+#       (parted) resizepart 2 100%
 #
 # 5. Reboot into the system:
 #   a. Verify that BTRFS sees the slack:

@@ -11,11 +11,6 @@
           size = "1M";
           type = "EF02"; # BIOS boot partition (for GRUB in BIOS mode)
         };
-        swap = {
-          label = "swap";
-          start = "-1G";
-          content.type = "swap";
-        };
         nixos = {
           label = "nixos";
           size = "100%";
@@ -30,6 +25,10 @@
               "NIXOS/nix" = {
                 mountpoint = "/nix";
                 mountOptions = ["compress=zstd" "noatime"];
+              };
+              "NIXOS/swap" = {
+                mountpoint = "/.swapvol";
+                swap.swapfile.size = "2G";
               };
             };
           };
