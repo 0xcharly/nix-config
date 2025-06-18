@@ -20,9 +20,9 @@ in {
         Amphetamine = 937984704;
         ColorSlurp = 1287239339;
       }
-      // (lib.optionalAttrs (!isCorpManaged) {
+      // lib.optionalAttrs (!isCorpManaged) {
         Xcode = 497799835; # Xcode is installed out-of-band on corp devices.
-      });
+      };
     casks = let
       no_quarantine = name: {
         inherit name;
@@ -45,12 +45,12 @@ in {
         "tidal" # Spotify alternative.
         "vlc" # Media player.
       ]
-      ++ (lib.optionals (!isCorpManaged) [
+      ++ lib.optionals (!isCorpManaged) [
         # Don't install these on corp-managed hosts.
         "google-chrome" # When there's no alternatives.
         "protonvpn" # Private network.
         "tailscale" # Personal VPN network.
         "transmission"
-      ]);
+      ];
   };
 }

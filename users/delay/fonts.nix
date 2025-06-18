@@ -16,10 +16,10 @@ in
       };
     };
 
-    home.packages = [
-      pkgs.material-design-icons
-      pkgs.nerd-fonts.symbols-only
-      pkgs.noto-fonts-cjk-sans # CJK fonts.
-      pkgs.recursive # Variable font family for code & UI.
+    home.packages = with pkgs; [
+      material-design-icons
+      nerd-fonts.symbols-only
+      noto-fonts-cjk-sans # CJK fonts.
+      recursive # Variable font family for code & UI.
     ];
   }

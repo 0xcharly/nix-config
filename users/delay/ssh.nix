@@ -9,7 +9,7 @@
   home = config.home.homeDirectory;
 in {
   programs.ssh = let
-    identityFile = key: {IdentityFile = "${home}/.ssh/${key}";};
+    mkIdentityFile = key: {IdentityFile = "${home}/.ssh/${key}";};
   in {
     enable = true;
     matchBlocks =
@@ -17,26 +17,26 @@ in {
         # Public services.
         "bitbucket.org" = {
           user = "git";
-          extraOptions = identityFile "bitbucket";
+          extraOptions = mkIdentityFile "bitbucket";
         };
         "github.com" = {
           user = "git";
-          extraOptions = identityFile "github";
+          extraOptions = mkIdentityFile "github";
         };
       }
-      // (lib.optionalAttrs flags.ssh.declareTailscaleEntryNodeHosts {
+      // lib.optionalAttrs flags.ssh.declareTailscaleEntryNodeHosts {
         # Tailscale nodes accessible from the public internet.
         linode = {
           hostname = "2600:3c18::2000:a4ff:fe80:d6d4";
-          extraOptions = identityFile "tailscale-public";
+          extraOptions = mkIdentityFile "tailscale-public";
         };
         # TODO: decommission this node.
         linode-arch = {
           hostname = "2400:8902::f03c:92ff:fea6:366e";
-          extraOptions = identityFile "linode";
+          extraOptions = mkIdentityFile "linode";
         };
-      })
-      // (lib.optionalAttrs flags.ssh.declareTailscaleNetworkHosts (let
+      }
+      // lib.optionalAttrs flags.ssh.declareTailscaleNetworkHosts (let
         # Tailscale nodes. Add all NixOS nodes to this list.
         tailscaleNodesMatchGroup = builtins.concatStringsSep " " (
           (lib.singleton "*.${flags.tailscale.tailnetName}") ++ flags.tailscale.allNodes
@@ -51,13 +51,13 @@ in {
         tailscaleNodesHostName
         // {
           "${tailscaleNodesMatchGroup}" = {
-            extraOptions = identityFile "tailscale";
+            extraOptions = mkIdentityFile "tailscale";
           };
           skullkid = {
             hostname = "192.168.86.43";
-            extraOptions = identityFile "skullkid";
+            extraOptions = mkIdentityFile "skullkid";
           };
-        }));
+        });
     userKnownHostsFile = "${home}/.ssh/known_hosts ${home}/.ssh/known_hosts.trusted";
   };
 

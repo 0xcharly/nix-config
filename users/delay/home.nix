@@ -12,7 +12,6 @@
     ./nixos.nix
     ./packages.nix
     ./raycast.nix
-    ./scripts.nix
     ./shells.nix
     ./ssh.nix
     ./systemd-timers.nix

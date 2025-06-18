@@ -10,11 +10,10 @@ in {
   programs.jujutsu = {
     enable = true;
     package = lib.mkDefault pkgs.jujutsu;
-    # TODO: look into using `settings.fix.tools`.
     settings = {
       user = {
-        name = "Charly Delay";
-        email = "0@0xcharly.com";
+        name = config.programs.git.userName;
+        email = config.programs.git.userEmail;
       };
       template-aliases."format_timestamp(timestamp)" = "timestamp.ago()";
       ui =
@@ -30,7 +29,7 @@ in {
       signing = {
         behavior = "own";
         backend = "ssh";
-        key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPf5EWFb/MW+1ZdQxDLZJWPrgrtibMcCmmKeCp+QMWBl";
+        key = config.programs.git.signing.key;
       };
     };
   };

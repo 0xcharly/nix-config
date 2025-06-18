@@ -39,7 +39,7 @@ in {
     systemd.enable = false;
 
     # Layout plugin.
-    plugins = [pkgs.hyprlandPlugins.hy3];
+    plugins = with pkgs.hyprlandPlugins; [hy3];
 
     # Hyprland configuration.
     settings = {

@@ -8,7 +8,7 @@
         ./parts
       ];
 
-      systems = ["aarch64-darwin" "aarch64-linux" "x86_64-linux"];
+      systems = ["aarch64-darwin" "x86_64-linux"];
     };
 
   inputs = {
@@ -17,14 +17,6 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-
-    nur = {
-      url = "github:nix-community/NUR";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # Hardware-specific NixOS modules.
-    nixos-hardware.url = "github:nixos/nixos-hardware";
 
     # Manages home directory, dotfiles and base environment.
     home-manager = {

@@ -1,3 +1,0 @@
-{
-  modules.usrenv.compositor = "headless";
-}

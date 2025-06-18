@@ -15,12 +15,10 @@ in {
   programs.tmux.terminal = lib.mkDefault "xterm-ghostty";
 
   # Ghostty configuration.
-  xdg.enable = true;
-  xdg.configFile."ghostty/config" = lib.mkIf hasWindowManager {
-    text =
-      lib.generators.toKeyValue {
-        listsAsDuplicateKeys = true;
-      } ({
+  xdg = lib.mkIf hasWindowManager {
+    enable = true;
+    configFile."ghostty/config" = {
+      text = usrlib.ghostty.mkConfig ({
           font-family = ["Recursive Mono Casual Static"];
           font-size = 14;
           # https://www.recursive.design/assets/arrowtype-recursive-sansmono-specimen-230407.pdf
@@ -122,7 +120,8 @@ in {
               "super+v=paste_from_clipboard"
             ];
         }
-        // (lib.optionalAttrs isLinux {gtk-titlebar = false;})
-        // (lib.optionalAttrs isDarwin {macos-titlebar-proxy-icon = "hidden";}));
+        // lib.optionalAttrs isLinux {gtk-titlebar = false;}
+        // lib.optionalAttrs isDarwin {macos-titlebar-proxy-icon = "hidden";});
+    };
   };
 }

@@ -54,7 +54,7 @@ update +inputs:
 [doc('Update all "distribution" inputs (nixpkgs, home-manager, disko, etc.)')]
 [group('nix')]
 distupdate:
-    @just update nixpkgs nixpkgs-darwin nixpkgs-unstable nur nixos-hardware home-manager nix-darwin disko nix-index-database nix-homebrew hyperland hy3 catppuccin
+    @just update nixpkgs nixpkgs-darwin nixpkgs-unstable home-manager nix-darwin disko nix-index-database nix-homebrew hyperland hy3 catppuccin
 
 [doc('Update all "nixpkgs" inputs (nixpkgs, nixpkgs-darwin, nixpkgs-unstable, nur)')]
 [group('nix')]

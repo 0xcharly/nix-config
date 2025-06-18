@@ -4,6 +4,7 @@
   usrlib = {
     bool = import ./bool.nix;
     builders = import ./builders.nix {inherit inputs lib;};
+    ghostty = import ./ghostty.nix {inherit lib;};
     hm = import ./hm.nix;
     modules = import ./modules.nix {inherit lib;};
     ssh = import ./ssh.nix {inherit lib;};

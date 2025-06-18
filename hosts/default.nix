@@ -10,10 +10,6 @@
   inherit (inputs.nixpkgs.lib.attrsets) recursiveUpdate;
   inherit (inputs.nixpkgs.lib.lists) concatLists flatten singleton;
 
-  # Hardware compat for specific hardware, e.g. Raspberry Pi.
-  hw = inputs.nixos-hardware.nixosModules;
-  raspberrySdImage = "${inputs.nixpkgs}/nixos/modules/installer/sd-card/sd-image-raspberrypi.nix";
-
   # Specify root path for the modules. The concept is similar to modulesPath
   # that is found in nixpkgs, and is defined in case the modulePath changes
   # depth (i.e modules becomes nixos/modules).
@@ -78,7 +74,6 @@
   };
 
   mkDarwinHost = host: {
-    system ? "aarch64-darwin",
     moduleTrees ? [],
     roles ? [],
     extraModules ? [],
@@ -86,15 +81,14 @@
   } @ args':
     mkHost (args'
       // {
-        inherit extraModules host system;
+        inherit extraModules host;
+        system = "aarch64-darwin";
         builder = mkDarwinSystem;
         moduleTrees = moduleTrees ++ [config fullyManaged shared users];
         roles = roles ++ [darwin];
       });
 
   mkHomeHost = host: {
-    system,
-    username ? "delay",
     moduleTrees ? [],
     roles ? [],
     extraModules ? [],
@@ -102,15 +96,15 @@
   } @ args':
     mkHost (args'
       // {
-        inherit host system;
+        inherit host;
+        system = "x86_64-linux";
         builder = mkStandaloneHome;
         moduleTrees = moduleTrees ++ [config shared];
         roles = roles ++ [home];
-        extraModules = extraModules ++ [(import standalone username)];
+        extraModules = extraModules ++ [(import standalone "delay")];
       });
 
   mkNixosHost = host: {
-    system,
     moduleTrees ? [],
     roles ? [],
     extraModules ? [],
@@ -118,14 +112,14 @@
   } @ args':
     mkHost (args'
       // {
-        inherit extraModules host system;
+        inherit extraModules host;
+        system = "x86_64-linux";
         builder = mkNixosSystem;
         moduleTrees = moduleTrees ++ [config fullyManaged shared users];
         roles = roles ++ [nixos];
       });
 
   mkNixosIso = host: {
-    system,
     moduleTrees ? [],
     roles ? [],
     extraModules ? [],
@@ -133,57 +127,33 @@
   } @ args':
     mkHost (args'
       // {
-        inherit extraModules host system;
+        inherit extraModules host;
+        system = "x86_64-linux";
         builder = mkNixosSystem;
         moduleTrees = moduleTrees ++ [config shared];
         roles = roles ++ [iso];
       });
 
   mkHostAttrs = builtins.foldl' recursiveUpdate {};
-in rec {
+in {
   flake.lib = {
-    inherit mkDarwinHost mkHomeHost mkNixosHost mkHostAttrs;
+    inherit mkDarwinHost mkHomeHost mkHostAttrs;
   };
 
   flake.darwinConfigurations = mkHostAttrs [
     (mkDarwinHost ./darwin/mbp {})
-    (mkDarwinHost ./darwin/studio {})
   ];
 
-  flake.homeConfigurations = let
-    host = hostname: ./home + "/delay@${hostname}";
-  in
-    mkHostAttrs [
-      (mkHomeHost (host "linode") {system = "x86_64-linux";})
-      (mkHomeHost (host "pi4") {system = "aarch64-linux";})
-      (mkHomeHost (host "pi5") {system = "aarch64-linux";})
-    ];
+  flake.homeConfigurations = mkHostAttrs [
+    (mkHomeHost (./home + "/delay@linode") {})
+  ];
 
   flake.nixosConfigurations = mkHostAttrs [
-    (mkNixosIso ./iso/recovery {system = "x86_64-linux";})
+    (mkNixosIso ./iso/recovery {})
 
-    (mkNixosHost ./nixos/asl {system = "aarch64-linux";})
-    (mkNixosHost ./nixos/vm-aarch64 {system = "aarch64-linux";})
-    (mkNixosHost ./nixos/linode {system = "x86_64-linux";})
-    (mkNixosHost ./nixos/nyx {system = "x86_64-linux";})
-    (mkNixosHost ./nixos/helios {system = "x86_64-linux";})
-    (mkNixosHost ./nixos/selene {system = "x86_64-linux";})
-    (mkNixosHost ./nixos/rpi4 {
-      system = "aarch64-linux";
-      extraModules = [raspberrySdImage hw.raspberry-pi-4];
-    })
-    (mkNixosHost ./nixos/rpi5 {
-      system = "aarch64-linux";
-      extraModules = [raspberrySdImage hw.raspberry-pi-5];
-    })
+    (mkNixosHost ./nixos/linode {})
+    (mkNixosHost ./nixos/nyx {})
+    (mkNixosHost ./nixos/helios {})
+    (mkNixosHost ./nixos/selene {})
   ];
-
-  flake.images = builtins.listToAttrs ((builtins.map (name: {
-      inherit name;
-      value = flake.nixosConfigurations."${name}".config.system.build.isoImage;
-    }) ["recovery"])
-    ++ (builtins.map (name: {
-      inherit name;
-      value = flake.nixosConfigurations."${name}".config.system.build.sdImage;
-    }) ["rpi4" "rpi5"]));
 }
