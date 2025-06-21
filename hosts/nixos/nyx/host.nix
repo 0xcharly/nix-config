@@ -6,6 +6,7 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     ./1password.nix
+    ./android.nix
     ./audio.nix
     ./fs.nix
     ./gdm.nix
