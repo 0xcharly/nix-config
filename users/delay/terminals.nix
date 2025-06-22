@@ -19,27 +19,10 @@ in {
     enable = true;
     configFile."ghostty/config" = {
       text = usrlib.ghostty.mkConfig ({
-          font-family = ["Recursive Mono Casual Static"];
-          font-size = 14;
+          font-family = ["Comic Code"];
+          font-size = 13;
           # https://www.recursive.design/assets/arrowtype-recursive-sansmono-specimen-230407.pdf
-          font-feature = [
-            "calt"
-            "clig"
-            "dlig"
-            "liga"
-            # "ss01" # Single-story 'a'
-            # "ss02" # Single-story 'g'
-            "ss03" # Simplified 'f'
-            "ss04" # Simplified 'i'
-            "ss05" # Simplified 'l'
-            "ss06" # Simplified 'r'
-            # "ss07" # Simplified italic diagonals
-            # "ss08" # Simplified 'L' & 'Z'
-            # "ss09" # Simplified '6' & '9'
-            "ss10" # Dotted '0'
-            # "ss11" # Simplified '1'
-            "ss12" # Simplified '@'
-          ];
+          font-feature = ["calt" "clig" "dlig" "liga"];
           font-codepoint-map = let
             codepoints-map = {
               "Noto Sans Mono CJK JP" = lib.concatStringsSep "," [

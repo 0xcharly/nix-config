@@ -60,8 +60,8 @@
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
 
-    # Neovim.
-    nix-config-nvim.url = "github:0xcharly/nix-config-nvim";
+    nix-config-fonts.url = "github:0xcharly/nix-config-fonts"; # Unfree fonts.
+    nix-config-nvim.url = "github:0xcharly/nix-config-nvim"; # Neovim.
 
     # Secrets management.
     nix-config-secrets = {
