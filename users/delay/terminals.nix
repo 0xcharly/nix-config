@@ -19,7 +19,7 @@ in {
     enable = true;
     configFile."ghostty/config" = {
       text = usrlib.ghostty.mkConfig ({
-          font-family = ["Comic Code"];
+          font-family = ["Comic Code Ligatures"];
           font-size = 13;
           # https://www.recursive.design/assets/arrowtype-recursive-sansmono-specimen-230407.pdf
           font-feature = ["calt" "clig" "dlig" "liga"];
