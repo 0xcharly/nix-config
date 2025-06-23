@@ -21,6 +21,7 @@ in
       nerd-fonts.symbols-only
       noto-fonts-cjk-sans # CJK fonts.
       recursive # Variable font family for code & UI.
+      unfree-fonts.comic-code
       (unfree-fonts.comic-code.override {ligatures = true;})
     ];
   }
