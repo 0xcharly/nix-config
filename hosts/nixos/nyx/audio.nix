@@ -10,7 +10,7 @@
     extraConfig.pipewire.adjust-sample-rate = {
       "context.properties" = {
         "default.clock.rate" = 192000;
-        "defautlt.allowed-rates" = [192000 48000 44100];
+        "default.clock.allowed-rates" = [192000 96000 48000 44100];
         "default.clock.quantum" = 4096;
         "default.clock.min-quantum" = 512;
         "default.clock.max-quantum" = 8192;
