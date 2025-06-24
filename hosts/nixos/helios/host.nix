@@ -7,7 +7,7 @@
   modules.system = {
     security.accessTier = "trusted";
     networking.tailscaleNode = true;
-    modules.system.roles.nixos = {
+    roles.nixos = {
       amdCpu = true;
       intelGpu = true;
       noRgb = true;
