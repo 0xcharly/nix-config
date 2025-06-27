@@ -18,6 +18,11 @@
     nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Manages home directory, dotfiles and base environment.
     home-manager = {
       url = "github:nix-community/home-manager/release-25.05";
