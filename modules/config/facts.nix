@@ -1,6 +1,6 @@
 {lib, ...}: let
   inherit (lib.options) mkOption;
-  inherit (lib.types) listOf str;
+  inherit (lib.types) listOf nullOr str;
 in {
   options.node.facts = {
     tailscale = {

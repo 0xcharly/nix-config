@@ -6,7 +6,7 @@
 }: let
   cfg = config.modules.system.roles.nas;
 in
-  lib.mkIf (usrlib.bool.isTrue cfg.enable) {
+  lib.mkIf cfg.enable {
     # https://github.com/jimsalterjrs/sanoid/wiki/Sanoid#options.
     # https://github.com/jimsalterjrs/sanoid/wiki/Syncoid#snapshot-management-with-sanoid
     services.sanoid = {

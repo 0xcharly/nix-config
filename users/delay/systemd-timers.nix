@@ -32,8 +32,6 @@ in {
           runtimeInputs = with pkgs; [rsync openssh coreutils];
           # The `beans/` directory is not mentioned explicitly because it is
           # configured on the receiver's end via `rrsync -ro ~/beans`.
-          # TODO: added the directory back, but this should be needed…
-          # Am I using the wrong key?
           text = ''
             rsync -avz --stats --progress \
               --exclude=".direnv" \

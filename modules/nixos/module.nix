@@ -10,6 +10,7 @@
 
     ./beans.nix
     ./coredns.nix
+    ./fail2ban.nix
     ./fonts.nix
     ./golink.nix
     ./nas-fs.nix
@@ -26,11 +27,13 @@
     ./protonvpn.nix
     ./rgb.nix
     ./secrets.nix
+    ./smtp.nix
     ./ssh.nix
     ./tailscale.nix
     ./terminfo.nix
     ./user-ayako.nix
     ./user-delay.nix
+    ./vaultwarden.nix
     ./workstation.nix
   ];
 

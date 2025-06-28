@@ -86,20 +86,26 @@
             echo "Fixing permissions for /tank…"
             # Create the directories for the ZFS datasets, with the correct permissions.
             # TODO: Consider creating groups as well (eg. `backups`?).
+
+            # Set root folder world-traversable.
             install -d --mode 750 --owner delay --group users /tank/backups
-            install -d --mode 750 --owner ayako --group users /tank/backups/ayako
-            install -d --mode 750 --owner delay --group users /tank/backups/dad
-            install -d --mode 750 --owner delay --group users /tank/backups/delay
+            install -d --mode 750 --owner ayako --group ayako /tank/backups/ayako
+            install -d --mode 750 --owner delay --group delay /tank/backups/dad
+            install -d --mode 750 --owner delay --group delay /tank/backups/delay
             install -d --mode 750 --owner delay --group users /tank/backups/services
 
+            # Set root folder world-traversable.
             install -d --mode 750 --owner ayako --group users /tank/ayako
-            install -d --mode 750 --owner ayako --group users /tank/ayako/files
+            install -d --mode 750 --owner ayako --group ayako /tank/ayako/files
             install -d --mode 750 --owner ayako --group users /tank/ayako/media
 
+            # Set root folder world-traversable.
             install -d --mode 750 --owner delay --group users /tank/delay
-            install -d --mode 750 --owner delay --group users /tank/delay/beans
-            install -d --mode 750 --owner delay --group users /tank/delay/files
+            install -d --mode 750 --owner delay --group delay /tank/delay/beans
+            install -d --mode 750 --owner delay --group delay /tank/delay/files
             install -d --mode 750 --owner delay --group users /tank/delay/media
+            install -d --mode 750 --owner delay --group delay /tank/delay/notes
+            install -d --mode 750 --owner vaultwarden --group delay /tank/delay/vault
           '';
         };
       in
@@ -279,6 +285,8 @@
               beans = mkGenericDataset "delay/beans";
               files = mkGenericDataset "delay/files";
               media = mkMediaDataset "delay/media";
+              notes = mkGenericDataset "delay/notes";
+              vault = mkGenericDataset "delay/vault";
             })
 
             (namespace "ayako" {

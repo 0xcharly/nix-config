@@ -16,6 +16,7 @@
 
   # System config.
   node.facts.tailscale.tailscaleIP = "100.85.79.53";
+
   modules.system = {
     security.accessTier = "trusted";
     services.serve = {

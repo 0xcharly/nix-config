@@ -14,7 +14,7 @@
   username = "syncoid";
   group = "syncoid";
 in
-  lib.mkIf (usrlib.bool.isTrue cfg.enable) {
+  lib.mkIf cfg.enable {
     # Create service user on the replicas (it is automatically created on the sender side).
     users = lib.mkIf (usrlib.bool.isTrue cfg.replica) {
       users."${username}" = {
