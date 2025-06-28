@@ -50,11 +50,14 @@ rsync -rv --no-p --no-g --no-o --stats --progress \
 # Create the directory where sshd expects to find the host keys.
 install -d -m755 "$extra_system_files/etc/ssh"
 
+# Export SSH keys in the correct format.
+OP_READ_OPTS="?ssh-format=openssh"
+
 # Decrypt our private keys from the password store and copy them to the temporary directory.
 op read "op://Private/${TARGET_HOST^} ssh_host_ed25519_key/public key" >"$extra_system_files/etc/ssh/ssh_host_ed25519_key.pub"
-op read "op://Private/${TARGET_HOST^} ssh_host_ed25519_key/private key" >"$extra_system_files/etc/ssh/ssh_host_ed25519_key"
+op read "op://Private/${TARGET_HOST^} ssh_host_ed25519_key/private key$OP_READ_OPTS" >"$extra_system_files/etc/ssh/ssh_host_ed25519_key"
 op read "op://Private/${TARGET_HOST^} ssh_host_rsa_key/public key" >"$extra_system_files/etc/ssh/ssh_host_rsa_key.pub"
-op read "op://Private/${TARGET_HOST^} ssh_host_rsa_key/private key" >"$extra_system_files/etc/ssh/ssh_host_rsa_key"
+op read "op://Private/${TARGET_HOST^} ssh_host_rsa_key/private key$OP_READ_OPTS" >"$extra_system_files/etc/ssh/ssh_host_rsa_key"
 
 # Set the correct permissions so sshd will accept the key.
 chmod 600 "$extra_system_files/etc/ssh/ssh_host_ed25519_key.pub"

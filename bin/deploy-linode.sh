@@ -25,11 +25,14 @@ trap cleanup EXIT
 # Create the directory where sshd expects to find the host keys
 install -d -m755 "$extra_system_files/etc/ssh"
 
+# Export SSH keys in the correct format.
+OP_READ_OPTS="?ssh-format=openssh"
+
 # Decrypt your private key from the password store and copy it to the temporary directory
 op read "op://Private/Linode ssh_host_ed25519_key/public key" >"$extra_system_files/etc/ssh/ssh_host_ed25519_key.pub"
-op read "op://Private/Linode ssh_host_ed25519_key/private key" >"$extra_system_files/etc/ssh/ssh_host_ed25519_key"
+op read "op://Private/Linode ssh_host_ed25519_key/private key$OP_READ_OPTS" >"$extra_system_files/etc/ssh/ssh_host_ed25519_key"
 op read "op://Private/Linode ssh_host_rsa_key/public key" >"$extra_system_files/etc/ssh/ssh_host_rsa_key.pub"
-op read "op://Private/Linode ssh_host_rsa_key/private key" >"$extra_system_files/etc/ssh/ssh_host_rsa_key"
+op read "op://Private/Linode ssh_host_rsa_key/private key$OP_READ_OPTS" >"$extra_system_files/etc/ssh/ssh_host_rsa_key"
 
 # Set the correct permissions so sshd will accept the key
 chmod 600 "$extra_system_files/etc/ssh/ssh_host_ed25519_key.pub"
