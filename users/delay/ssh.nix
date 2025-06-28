@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   usrlib,
   ...
 } @ args: let
@@ -75,12 +74,6 @@ in {
         };
       in
         usrlib.ssh.genKnownHostsFile {inherit extraKnownHosts;};
-    }
-    # Authorize backups of beans file.
-    // lib.optionalAttrs flags.ssh.authorizeBeansBackupCommand {
-      ".ssh/authorized_keys".text = ''
-        command="${lib.getExe pkgs.rrsync} -ro ${home}/beans",restrict ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGa3cDgdhUeqAP2Bmnew2/SfC6HiXslIUpyHQ8HsUUZO beans-backup
-      '';
     }
     # TODO: add trusted tier version of these.
     // lib.optionalAttrs flags.ssh.installBasicAccessKeys (let

@@ -96,6 +96,7 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
+    ./beans-backup.nix
     ./fs.nix
   ];
 
