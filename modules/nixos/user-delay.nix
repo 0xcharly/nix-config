@@ -12,6 +12,6 @@
     extraGroups = ["docker" "wheel"];
     shell = pkgs.fish;
     # Create a hashed password with `nix-shell -p mkpasswd --run "mkpasswd -m yescrypt"`
-    hashedPassword = "$y$j9T$TrN/LFDpdc5kkHZc6bkyV1$b4TqAfjBY2xuwmAUHVbco.cyI43JzOjs1dXt5ey3c.3";
+    hashedPasswordFile = config.age.secrets."passwd/delay".path;
   };
 }
