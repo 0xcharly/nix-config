@@ -93,17 +93,19 @@ in
     };
 
     xdg.mimeApps = lib.mkIf (!isCorpManaged) {
-      defaultApplications = {
-        "default-web-browser" = ["google-chrome.desktop"];
-        "text/html" = ["google-chrome.desktop"];
-        "text/xml" = ["google-chrome.desktop"];
-        "application/xhtml+xml" = ["google-chrome.desktop"];
-        "application/xhtml_xml" = ["google-chrome.desktop"];
-        "application/xml" = ["google-chrome.desktop"];
-        "x-scheme-handler/http" = ["google-chrome.desktop"];
-        "x-scheme-handler/https" = ["google-chrome.desktop"];
-        "x-scheme-handler/about" = ["google-chrome.desktop"];
-        "x-scheme-handler/unknown" = ["google-chrome.desktop"];
+      defaultApplications = let
+        browserList = ["firefox.desktop" "google-chrome.desktop"];
+      in {
+        "default-web-browser" = browserList;
+        "text/html" = browserList;
+        "text/xml" = browserList;
+        "application/xhtml+xml" = browserList;
+        "application/xhtml_xml" = browserList;
+        "application/xml" = browserList;
+        "x-scheme-handler/http" = browserList;
+        "x-scheme-handler/https" = browserList;
+        "x-scheme-handler/about" = browserList;
+        "x-scheme-handler/unknown" = browserList;
       };
     };
   }
