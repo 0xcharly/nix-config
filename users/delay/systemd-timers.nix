@@ -26,10 +26,8 @@ in {
         backup-beans = pkgs.writeShellApplication {
           name = "backup-beans";
           runtimeInputs = with pkgs; [rsync openssh coreutils];
-          # The `beancount/` directory is excluded because it is configured on
-          # the receiver's end via `rrsync -ro ~/beancount`.
-          # TODO: convert the receiver to NixOS so this config can be checked in
-          # and kept in sync.
+          # The `beans/` directory is not mentioned explicitly because it is
+          # configured on the receiver's end via `rrsync -ro ~/beans`.
           text = ''
             rsync -avz --stats --progress \
               --exclude="lost+found" \
@@ -37,7 +35,7 @@ in {
               --exclude=".git" \
               --delete \
               --rsh "ssh -l delay -F /dev/null -o IdentitiesOnly=yes -o IdentityFile=${backup-ssh-key} -o PasswordAuthentication=no" \
-              linode-arch.neko-danio.ts.net: /tank/delay/beans/
+              linode.neko-danio.ts.net: /tank/delay/beans/
           '';
         };
       in
