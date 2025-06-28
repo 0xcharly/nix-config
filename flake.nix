@@ -50,12 +50,6 @@
     # macOS only: Homebrew for Nix.
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
 
-    # Hyprland and plugins.
-    hyprpanel = {
-      url = "github:jas-singhfsu/hyprpanel";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # Catppuccin all the things.
     catppuccin.url = "github:catppuccin/nix";
 

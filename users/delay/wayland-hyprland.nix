@@ -23,8 +23,6 @@
       "down" = "d";
     };
 in {
-  imports = [inputs.hyprpanel.homeManagerModules.hyprpanel];
-
   wayland.windowManager.hyprland = let
     uwsm-wrapper = cmd: "${lib.getExe pkgs.uwsm} app -- ${cmd}";
   in {
@@ -50,7 +48,7 @@ in {
 
       # Open apps on startup.
       exec-once = [
-        (uwsm-wrapper "systemctl --user enable --now hyprpanel.service")
+        # (uwsm-wrapper "systemctl --user enable --now hyprpanel.service")
         (uwsm-wrapper "systemctl --user enable --now hyprpaper.service")
         "[workspace 1] ${uwsm-wrapper (lib.getExe pkgs.google-chrome)}"
         "[workspace 3] ${uwsm-wrapper (lib.getExe pkgs.ghostty)}"
@@ -257,29 +255,41 @@ in {
     hyprpanel = {
       enable = lib.mkDefault config.wayland.windowManager.hyprland.enable;
 
-      # Add '/nix/store/.../hyprpanel' to your Hyprland config 'exec-once'.
-      hyprland.enable = true;
-
-      # Fix the overwrite issue with HyprPanel.
-      overwrite.enable = true;
-
       # Configure and theme almost all options from the GUI.
       # Configure bar layouts for monitors. See 'https://hyprpanel.com/configuration/panel.html'.
       # See 'https://hyprpanel.com/configuration/settings.html'.
       settings = {
         scalingPriority = "hyprland";
-
-        layout = {
-          "bar.layouts" = {
-            "0" = {
+        bar = {
+          layouts = {
+            "*" = {
               left = ["dashboard" "workspaces"];
               middle = ["media"];
               right = ["volume" "clock" "notifications"];
             };
           };
+          clock = {
+            format = "%Y年 %m月 %Od日 (%a) %R";
+            showIcon = false;
+          };
+          launcher.autoDetectIcon = true;
+          media = {
+            show_active_only = true;
+            truncation_size = 100;
+          };
+          workspaces = {
+            monitorSpecific = false;
+            showWsIcons = true;
+            spacing = 0.2;
+            numbered_active_indicator = "highlight";
+            workspaceMask = true;
+            workspaces = 1;
+            workspaceIconMap = lib.attrsets.mergeAttrsList (
+              map-workspaces (no: repr: {repr = no;})
+            );
+          };
         };
-        # Import a theme from './themes/*.json'.
-        # Default: ""
+
         theme = {
           name = "catppuccin_mocha";
           font = {
@@ -297,38 +307,54 @@ in {
 
             buttons = {
               borderSize = "0px";
-              clock.spacing = "0em";
+              clock = {
+                spacing = "0em";
+                background = "#11181c";
+                text = "#8fa3bb";
+              };
               enableBorders = false;
               padding_x = "8px";
               padding_y = "1px";
               radius = "8px";
               y_margins = "0em";
+              battery.background = "#11181c";
+              bluetooth.background = "#11181c";
+              dashboard = {
+                background = "#11181c";
+                border = "#95b7ef";
+                icon = "#95b7ef";
+              };
+              media = {
+                background = "#11181c";
+                icon = "#95b7ef";
+                text = "#8fa3bb";
+              };
+              network.background = "#11181c";
+              notifications = {
+                background = "#11181c";
+                icon = "#95b7ef";
+              };
+              volume = {
+                background = "#11181c";
+                icon = "#95b7ef";
+                text = "#8fa3bb";
+              };
+              windowtitle.background = "#11181c";
               workspaces = {
                 fontSize = "1.2em";
                 numbered_active_highlight_border = "0.3em";
                 numbered_active_highlight_padding = "0.4em";
                 numbered_inactive_padding = "0.4em";
+                active = "#203147";
+                available = "#8fa3bb";
+                background = "#11181c";
+                border = "#95b7ef";
+                hover = "#203147";
+                numbered_active_highlighted_text_color = "#9fcdfe";
+                occupied = "#bac2de";
               };
             };
-          };
-        };
-        bar = {
-          clock = {
-            format = "%Y年 %m月 %Od日 (%a) %R";
-            showIcon = false;
-          };
-          launcher.autoDetectIcon = true;
-          media = {
-            show_active_only = true;
-            truncation_size = 100;
-          };
-          workspaces = {
-            monitorSpecific = false;
-            showWsIcons = true;
-            spacing = 0.2;
-            numbered_active_indicator = "highlight";
-            workspaceMask = true;
-            workspaces = 1;
+            menus.menu.notifications.height = "48em";
           };
         };
 
@@ -370,40 +396,6 @@ in {
           };
         };
       };
-
-      # Override the final config with an arbitrary set.
-      override =
-        lib.attrsets.mergeAttrsList (
-          map-workspaces (no: repr: {"bar.workspaces.workspaceIconMap.${repr}" = no;})
-        )
-        // {
-          "theme.bar.buttons.battery.background" = "#11181c";
-          "theme.bar.buttons.bluetooth.background" = "#11181c";
-          "theme.bar.buttons.clock.background" = "#11181c";
-          "theme.bar.buttons.clock.text" = "#8fa3bb";
-          "theme.bar.buttons.dashboard.background" = "#11181c";
-          "theme.bar.buttons.dashboard.border" = "#95b7ef";
-          "theme.bar.buttons.dashboard.icon" = "#95b7ef";
-          "theme.bar.buttons.media.background" = "#11181c";
-          "theme.bar.buttons.media.icon" = "#95b7ef";
-          "theme.bar.buttons.media.text" = "#8fa3bb";
-          "theme.bar.buttons.network.background" = "#11181c";
-          "theme.bar.buttons.notifications.background" = "#11181c";
-          "theme.bar.buttons.notifications.icon" = "#95b7ef";
-          "theme.bar.buttons.systray.background" = "#11181c";
-          "theme.bar.buttons.volume.background" = "#11181c";
-          "theme.bar.buttons.volume.icon" = "#95b7ef";
-          "theme.bar.buttons.volume.text" = "#8fa3bb";
-          "theme.bar.buttons.windowtitle.background" = "#11181c";
-          "theme.bar.buttons.workspaces.active" = "#203147";
-          "theme.bar.buttons.workspaces.available" = "#8fa3bb";
-          "theme.bar.buttons.workspaces.background" = "#11181c";
-          "theme.bar.buttons.workspaces.border" = "#95b7ef";
-          "theme.bar.buttons.workspaces.hover" = "#203147";
-          "theme.bar.buttons.workspaces.numbered_active_highlighted_text_color" = "#9fcdfe";
-          "theme.bar.buttons.workspaces.occupied" = "#bac2de";
-          "theme.bar.menus.menu.notifications.height" = "48em";
-        };
     };
   };
 
