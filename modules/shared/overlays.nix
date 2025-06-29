@@ -5,6 +5,7 @@
 }: {
   nixpkgs.overlays = [
     self.overlays.default
+    inputs.ghostty.overlays.default
     inputs.hyprpanel.overlay
 
     # Override `pkgs.nvim` with custom distro.

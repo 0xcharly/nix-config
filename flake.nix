@@ -50,6 +50,9 @@
     # macOS only: Homebrew for Nix.
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
 
+    # Ghostty terminal.
+    ghostty.url = "github:ghostty-org/ghostty";
+
     # Hyprland and plugins.
     hyprpanel = {
       url = "github:jas-singhfsu/hyprpanel";
