@@ -61,17 +61,7 @@
 
     nix-config-fonts.url = "github:0xcharly/nix-config-fonts"; # Unfree fonts.
     nix-config-nvim.url = "github:0xcharly/nix-config-nvim"; # Neovim.
-
-    # Secrets management.
-    nix-config-secrets = {
-      url = "github:0xcharly/nix-config-secrets";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        nixpkgs-darwin.follows = "nixpkgs-darwin";
-        nixpkgs-unstable.follows = "nixpkgs-unstable";
-        home-manager.follows = "home-manager";
-      };
-    };
+    nix-config-secrets.url = "github:0xcharly/nix-config-secrets"; # Secrets management.
   };
 
   nixConfig = {
