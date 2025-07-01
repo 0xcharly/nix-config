@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  pkgs',
   usrlib,
   ...
 } @ args: let
@@ -13,7 +14,7 @@ in {
   home.packages = with pkgs;
     [
       coreutils # For consistency across platforms (i.e. GNU utils on macOS).
-      devenv # For managing development environments.
+      # devenv # For managing development environments.
       duf # Modern `df` alternative.
       git-get # Used along with fzf and terminal multiplexers for repository management.
       libqalculate # Multi-purpose calculator on the command line.
@@ -27,6 +28,7 @@ in {
       # at anytime (e.g. in the corp-specific flavor).
       nvim
     ]
+    ++ [pkgs'.devenv] # TODO: revert to using the stable version once fixed.
     ++ lib.optionals isLinux [pkgs.valgrind]
     ++ lib.optionals isLinuxDesktop [pkgs.nvtopPackages.full];
 
