@@ -10,6 +10,7 @@ in
     home.packages = with pkgs; [
       _1password-gui
       beeper
+      bitwarden
       localsend
       nautilus
       obsidian
