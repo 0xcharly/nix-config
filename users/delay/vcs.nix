@@ -28,11 +28,7 @@ in {
           # TODO(25.11): Deprecated config: ui.diff.tool is renamed to ui.diff-formatter
           diff.tool = config.programs.jujutsu.settings.ui.diff-formatter;
         };
-      merge-tools.mergiraf = {
-        program = lib.getExe pkgs.mergiraf;
-        merge-args = ["merge" "$base" "$left" "$right" "-o" "$output" "-l" "$marker_length" "--fast"];
-        merge-conflict-exit-codes = [1];
-      };
+      merge-tools.mergiraf.program = lib.getExe pkgs.mergiraf;
       signing = {
         behavior = "own";
         backend = "ssh";
