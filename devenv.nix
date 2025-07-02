@@ -1,6 +1,7 @@
 {
   inputs,
   pkgs,
+  lib,
   ...
 }: {
   packages = with pkgs; [
@@ -9,11 +10,21 @@
     just
 
     alejandra
-
-    # Formatters.
-    (inputs.treefmt-nix.lib.mkWrapper pkgs (import ./treefmt.nix))
   ];
 
   languages.nix.enable = true;
   languages.nix.lsp.package = pkgs.nixd;
+
+  scripts.fmt.exec = let
+    fmt-opts = {
+      projectRootFile = "flake.lock";
+      programs = {
+        alejandra.enable = true;
+        prettier.enable = true;
+        shfmt.enable = false;
+      };
+    };
+    fmt = inputs.treefmt-nix.lib.mkWrapper pkgs fmt-opts;
+  in
+    lib.getExe fmt;
 }
