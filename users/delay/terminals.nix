@@ -103,7 +103,10 @@ in {
               "super+v=paste_from_clipboard"
             ];
         }
-        // lib.optionalAttrs isLinux {gtk-titlebar = false;}
+        // lib.optionalAttrs isLinux {
+          gtk-single-instance = true;
+          gtk-titlebar = false;
+        }
         // lib.optionalAttrs isDarwin {macos-titlebar-proxy-icon = "hidden";});
     };
   };
