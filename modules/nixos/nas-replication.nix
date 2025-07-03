@@ -53,7 +53,7 @@ in
             permissions =
               if (usrlib.bool.isTrue cfg.primary)
               then "send,receive,snapshot,hold,release,mount"
-              else "receive,mount,create"; # TODO: remove `create` after initial setup.
+              else "atime,compression,create,keylocation,mount,mountpoint,receive,recordsize,snapshot,userprop"; # TODO: remove `create` after initial setup.
             zfsAllow = pkgs.writeShellApplication {
               name = "${username}-zfs-allow";
               runtimeInputs = with pkgs; [zfs];
