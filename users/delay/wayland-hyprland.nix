@@ -134,8 +134,8 @@ in {
         ]
         ++ (map-movements (dir: key: "SUPER, ${dir}, hy3:movefocus, ${key}, wrap"))
         ++ (map-movements (dir: key: "SUPER SHIFT, ${dir}, hy3:movewindow, ${key}, once"))
-        ++ (map-workspaces (no: repr: "ALT, ${no}, workspace, ${repr}"))
-        ++ (map-workspaces (no: repr: "ALT SHIFT, ${no}, hy3:movetoworkspace, ${repr}"));
+        ++ (map-workspaces (no: repr: "SUPER, ${no}, workspace, ${repr}"))
+        ++ (map-workspaces (no: repr: "SUPER SHIFT, ${no}, hy3:movetoworkspace, ${repr}"));
       # Mouse bindings.
       bindm = [
         "SUPER, mouse:272, movewindow" # Left mouse button.
