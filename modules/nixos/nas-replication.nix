@@ -22,7 +22,6 @@ in
         home = "/var/lib/${username}";
         # NOTE: Can't restrict access because syncoid needs to run multiple commands.
         # shell = "${pkgs.util-linux}/bin/nologin";
-        # shell = pkgs.bash;
         useDefaultShell = true;
         createHome = true;
         inherit group;

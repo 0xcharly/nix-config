@@ -111,7 +111,7 @@ in {
       bind =
         [
           "SUPER,       Return, exec, ${uwsm-wrapper (lib.getExe pkgs.ghostty)}"
-          "SUPER,       Space,  exec, pkill rofi || ${uwsm-wrapper (lib.getExe config.programs.rofi.finalPackage)} -show combi  -run-command \"${uwsm-wrapper "{cmd}"}\" -calc-command \"echo -n '{result}' | ${pkgs.wl-clipboard}/bin/wl-copy\""
+          "SUPER,       Space,  exec, pkill rofi || ${uwsm-wrapper (lib.getExe config.programs.rofi.finalPackage)} -show combi  -run-command \"${uwsm-wrapper "{cmd}"}\" -calc-command \"echo -n '{result}' | ${lib.getExe' pkgs.wl-clipboard "wl-copy"}\""
           "SUPER SHIFT, X,      killactive, "
           "SUPER SHIFT, Q,      exec, ${uwsm-wrapper "loginctl terminate-session \"$XDG_SESSION_ID\""}"
           "SUPER SHIFT, L,      exec, ${uwsm-wrapper (lib.getExe pkgs.hyprlock)}"
@@ -396,13 +396,13 @@ in {
   services.hypridle = {
     enable = lib.mkDefault config.wayland.windowManager.hyprland.enable;
     settings = let
-      hyprctl = "${pkgs.hyprland}/bin/hyprctl";
-      hyprlock = "${pkgs.hyprlock}/bin/hyprlock";
-      loginctl = "${pkgs.systemd}/bin/loginctl";
-      systemctl = "${pkgs.systemd}/bin/systemctl";
+      hyprctl = lib.getExe' pkgs.hyprland "hyprctl";
+      hyprlock = lib.getExe pkgs.hyprlock;
+      loginctl = lib.getExe' pkgs.systemd "loginctl";
+      systemctl = lib.getExe' pkgs.systemd "systemctl";
 
       # Avoid starting multiple hyprlock instances.
-      lock = "${pkgs.procps}/bin/pidof ${hyprlock} || ${hyprlock}";
+      lock = "${lib.getExe' pkgs.procps "pidof"} ${hyprlock} || ${hyprlock}";
     in {
       general = {
         lock_cmd = lock;

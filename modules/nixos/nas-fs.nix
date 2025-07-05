@@ -64,38 +64,45 @@
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
-      ExecStart = pkgs.writeShellScript "mount-tank" ''
-        set -euo pipefail
+      ExecStart = let
+        mount-tank = pkgs.writeShellApplication {
+          name = "mount-tank";
+          runtimeInputs = with pkgs; [coreutils zfs];
+          text = ''
+            set -euo pipefail
 
-        if ! ${pkgs.zfs}/bin/zpool list tank >/dev/null 2>&1; then
-          echo "Importing ZFS pool 'tank'…"
-          ${pkgs.zfs}/bin/zpool import tank
-        else
-          echo "ZFS pool 'tank' is already online."
-        fi
+            if ! zpool list tank >/dev/null 2>&1; then
+              echo "Importing ZFS pool 'tank'…"
+              zpool import tank
+            else
+              echo "ZFS pool 'tank' is already online."
+            fi
 
-        echo "Mounting ZFS datasets for /tank…"
-        # NOTE: The following mounts all datasets in the pool, not only tank.
-        # Reconsider this if we add more pools.
-        ${pkgs.zfs}/bin/zfs mount -a -l
+            echo "Mounting ZFS datasets for /tank…"
+            # NOTE: The following mounts all datasets in the pool, not only tank.
+            # Reconsider this if we add more pools.
+            zfs mount -a -l
 
-        echo "Fixing permissions for /tank…"
-        # Create the directories for the ZFS datasets, with the correct permissions.
-        # TODO: Consider creating groups as well (eg. `backups`?).
-        ${pkgs.coreutils}/bin/install -d --mode 750 --owner delay --group users /tank/backups
-        ${pkgs.coreutils}/bin/install -d --mode 750 --owner ayako --group users /tank/backups/ayako
-        ${pkgs.coreutils}/bin/install -d --mode 750 --owner delay --group users /tank/backups/dad
-        ${pkgs.coreutils}/bin/install -d --mode 750 --owner delay --group users /tank/backups/delay
+            echo "Fixing permissions for /tank…"
+            # Create the directories for the ZFS datasets, with the correct permissions.
+            # TODO: Consider creating groups as well (eg. `backups`?).
+            install -d --mode 750 --owner delay --group users /tank/backups
+            install -d --mode 750 --owner ayako --group users /tank/backups/ayako
+            install -d --mode 750 --owner delay --group users /tank/backups/dad
+            install -d --mode 750 --owner delay --group users /tank/backups/delay
 
-        ${pkgs.coreutils}/bin/install -d --mode 750 --owner ayako --group users /tank/ayako
-        ${pkgs.coreutils}/bin/install -d --mode 750 --owner ayako --group users /tank/ayako/files
-        ${pkgs.coreutils}/bin/install -d --mode 750 --owner ayako --group users /tank/ayako/media
+            install -d --mode 750 --owner ayako --group users /tank/ayako
+            install -d --mode 750 --owner ayako --group users /tank/ayako/files
+            install -d --mode 750 --owner ayako --group users /tank/ayako/media
 
-        ${pkgs.coreutils}/bin/install -d --mode 750 --owner delay --group users /tank/delay
-        ${pkgs.coreutils}/bin/install -d --mode 750 --owner delay --group users /tank/delay/beans
-        ${pkgs.coreutils}/bin/install -d --mode 750 --owner delay --group users /tank/delay/files
-        ${pkgs.coreutils}/bin/install -d --mode 750 --owner delay --group users /tank/delay/media
-      '';
+            install -d --mode 750 --owner delay --group users /tank/delay
+            install -d --mode 750 --owner delay --group users /tank/delay/beans
+            install -d --mode 750 --owner delay --group users /tank/delay/files
+            install -d --mode 750 --owner delay --group users /tank/delay/media
+          '';
+        };
+      in
+        lib.getExe mount-tank;
     };
   };
 
