@@ -49,7 +49,7 @@ in {
         # Don't install these on corp-managed hosts.
         "google-chrome" # When there's no alternatives.
         "protonvpn" # Private network.
-        "tailscale" # Personal VPN network.
+        "tailscale-app" # Personal VPN network.
         "transmission"
       ];
   };

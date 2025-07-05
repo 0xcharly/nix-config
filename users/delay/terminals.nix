@@ -17,6 +17,10 @@ in {
   # Ghostty configuration.
   programs.ghostty = {
     enable = hasWindowManager;
+    package =
+      if isLinux
+      then pkgs.ghostty
+      else null;
     enableBashIntegration = true;
     enableZshIntegration = true;
     enableFishIntegration = true;
