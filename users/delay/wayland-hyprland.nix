@@ -118,9 +118,9 @@ in {
           "SUPER,       V,      togglefloating, "
           "SUPER,       F,      fullscreen, "
           "SUPER CTRL,  C,      exec, ${uwsm-wrapper (lib.getExe pkgs.wl-color-picker)}"
-          "SUPER,       P,      exec, ${uwsm-wrapper (lib.getExe pkgs.grimblast)} --notify edit area"
-          "SUPER SHIFT, P,      exec, ${uwsm-wrapper (lib.getExe pkgs.grimblast)} --notify edit active"
-          "SUPER CTRL,  P,      exec, ${uwsm-wrapper (lib.getExe pkgs.grimblast)} --notify edit screen"
+          "SUPER,       P,      exec, ${uwsm-wrapper (lib.getExe pkgs.grimblast)} edit area"
+          "SUPER SHIFT, P,      exec, ${uwsm-wrapper (lib.getExe pkgs.grimblast)} edit active"
+          "SUPER CTRL,  P,      exec, ${uwsm-wrapper (lib.getExe pkgs.grimblast)} edit screen"
 
           "SUPER,       D,      hy3:makegroup,   h"
           "SUPER,       S,      hy3:makegroup,   v"
@@ -264,7 +264,7 @@ in {
             "*" = {
               left = ["dashboard" "workspaces"];
               middle = ["media"];
-              right = ["volume" "clock" "notifications"];
+              right = ["volume" "clock"];
             };
           };
           clock = {
@@ -329,10 +329,6 @@ in {
                 text = "#8fa3bb";
               };
               network.background = "#11181c";
-              notifications = {
-                background = "#11181c";
-                icon = "#95b7ef";
-              };
               volume = {
                 background = "#11181c";
                 icon = "#95b7ef";
@@ -353,7 +349,6 @@ in {
                 occupied = "#bac2de";
               };
             };
-            menus.menu.notifications.height = "48em";
           };
         };
 
