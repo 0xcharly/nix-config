@@ -82,7 +82,21 @@ in {
       };
     };
 
+    monitoring = {
+      statusServer = mkOption {
+        type = bool;
+        default = false;
+        description = "If true, host aggregates statuses from across the internal network.";
+      };
+    };
+
     networking = {
+      dnsServer = mkOption {
+        type = bool;
+        default = false;
+        description = "If true, host spins up a DNS server.";
+      };
+
       tailscaleNode = mkOption {
         type = bool;
         default = cfg.networking.tailscalePublicNode;

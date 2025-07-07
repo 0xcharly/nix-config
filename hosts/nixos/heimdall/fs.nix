@@ -11,7 +11,6 @@
           priority = 1;
           label = "boot";
           type = "EF00"; # UEFI
-          # type = "EF02"; # Grub MBR
           start = "1M";
           end = "512M";
           content = {
@@ -23,7 +22,7 @@
         swap = {
           priority = 2;
           label = "swap";
-          start = "-72G"; # Size of RAM + square root of RAM. Required for hibernation.
+          start = "-64G"; # Size of RAM.
           content.type = "swap";
         };
         nixos = {
@@ -33,11 +32,12 @@
           content = {
             type = "btrfs";
             subvolumes = {
-              "/" = {
+              "NIXOS" = {};
+              "NIXOS/rootfs" = {
                 mountpoint = "/";
                 mountOptions = ["compress=zstd"];
               };
-              "/nix" = {
+              "NIXOS/nix" = {
                 mountpoint = "/nix";
                 mountOptions = ["compress=zstd" "noatime"];
               };

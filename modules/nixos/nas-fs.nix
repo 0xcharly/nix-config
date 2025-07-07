@@ -184,7 +184,7 @@
           partitions = {
             swap = {
               label = "swap";
-              start = "-38G"; # Size of RAM + square root of RAM. Required for hibernation.
+              start = "-38G"; # Size of RAM + square root of RAM.
               content.type = "swap";
             };
             nixos = {
