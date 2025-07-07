@@ -27,7 +27,7 @@
 
   # Setup root to accept our SSH key.
   users.users.root.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOthTpNSA6sSEV6398UlRWm7H7O3S6cq/mkOgqKJ7PF3 recovery-iso"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOthTpNSA6sSEV6398UlRWm7H7O3S6cq/mkOgqKJ7PF3 provisioning"
   ];
 
   environment.systemPackages = with pkgs; [

@@ -6,7 +6,7 @@
 } @ args: let
   isNasPrimary = usrlib.bool.isTrue (usrlib.hm.getUserConfig args).modules.system.roles.nas.primary;
 in {
-  systemd.user.timers."backup-beans" = lib.mkIf isNasPrimary {
+  systemd.user.timers.backup-beans = lib.mkIf isNasPrimary {
     Unit.Description = "Backup financial information from remote";
     Install.WantedBy = ["timers.target"];
     Timer = {
@@ -15,7 +15,7 @@ in {
     };
   };
 
-  systemd.user.services."backup-beans" = lib.mkIf isNasPrimary {
+  systemd.user.services.backup-beans = lib.mkIf isNasPrimary {
     Unit.Description = "Backup financial information from remote";
     Install.WantedBy = ["default.target"];
     Service = {
@@ -23,6 +23,7 @@ in {
       IOSchedulingClass = "idle";
       ExecStart = let
         backup-ssh-key = args.osConfig.age.secrets."keys/beans_backup_ed25519_key".path;
+        backup-ssh-options = "-o IdentitiesOnly=yes -o IdentityFile=${backup-ssh-key} -o PasswordAuthentication=no";
         backup-beans = pkgs.writeShellApplication {
           name = "backup-beans";
           runtimeInputs = with pkgs; [rsync openssh coreutils];
@@ -34,7 +35,7 @@ in {
               --exclude=".direnv" \
               --exclude=".git" \
               --delete \
-              --rsh "ssh -l delay -F /dev/null -o IdentitiesOnly=yes -o IdentityFile=${backup-ssh-key} -o PasswordAuthentication=no" \
+              --rsh "ssh -l delay -F /dev/null ${backup-ssh-options}" \
               linode.neko-danio.ts.net: /tank/delay/beans/
           '';
         };

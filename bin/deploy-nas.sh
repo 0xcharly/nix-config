@@ -44,7 +44,7 @@ op read "$NAS_VAULT_PATH/delay/media" >"$temp_setup_secrets/run/agenix/zfs/tank/
 
 # Copy the secrets to the host machine.
 rsync -rv --no-p --no-g --no-o --stats --progress \
-  -e "ssh -lroot -o IdentityFile=~/.ssh/recovery-iso -o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" \
+  -e "ssh -lroot -o IdentityFile=/run/agenix/keys/trusted-access/provisioning_ed25519_key -o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" \
   "$temp_setup_secrets/" "root@$REMOTE_ADDR:/"
 
 # Create the directory where sshd expects to find the host keys.
@@ -71,7 +71,7 @@ chmod 600 "$extra_system_files/etc/ssh/ssh_host_rsa_key"
 nix run github:nix-community/nixos-anywhere -- \
   --disko-mode disko \
   --extra-files "$extra_system_files" \
-  --ssh-option "IdentityFile=~/.ssh/recovery-iso" \
+  --ssh-option "IdentityFile=/run/agenix/keys/trusted-access/provisioning_ed25519_key" \
   --ssh-option "PubkeyAuthentication=yes" \
   --ssh-option "UserKnownHostsFile=/dev/null" \
   --ssh-option "StrictHostKeyChecking=no" \
