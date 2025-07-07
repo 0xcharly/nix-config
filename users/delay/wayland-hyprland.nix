@@ -74,7 +74,12 @@ in {
         "col.active_border" = "$red $maroon $peach $yellow $green $teal $sky $sapphire $blue $lavender 45deg";
         "col.inactive_border" = "$overlay0";
       };
-      decoration.rounding = 4;
+      decoration.rounding = 8;
+      misc = {
+        background_color = "0x0b1215";
+        disable_hyprland_logo = true;
+        force_default_wallpaper = 0;
+      };
       plugin.hy3 = {
         tabs = {
           height = 8;
@@ -160,51 +165,6 @@ in {
         "size 512 288, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
         "keepaspectratio, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
       ];
-    };
-  };
-
-  # Wallpaper.
-  services.hyprpaper = {
-    enable = lib.mkDefault config.wayland.windowManager.hyprland.enable;
-    settings = let
-      wallpaper = pkgs.fetchurl {
-        # url = "https://4kwallpapers.com/images/wallpapers/duality-doorway-3840x2160-22094.jpg";
-        # hash = "sha256-i8ER2prXODSNX3V1S1jZbStWxYFldDbAbj17OyHqJQA=";
-        # url = "https://4kwallpapers.com/images/wallpapers/palm-trees-3840x2160-18170.jpg";
-        # hash = "sha256-4A0wSYYTiK8aZwBDDxsYRJokJGC/Zu6dlVSfQtyo8Wg=";
-        # url = "https://4kwallpapers.com/images/wallpapers/biker-helmet-neon-3840x2160-15476.jpg";
-        # hash = "sha256-wZuzkAsp2T8Ay3SE2OagbA1+q+V4gJKmZQ2wRWOkIL8=";
-        # url = "https://4kwallpapers.com/images/wallpapers/drippy-smiley-3840x2160-11481.png";
-        # hash = "sha256-ngDPUMj0FW3kGBydFOOZuqpQICwVdh6OAz5wne1tAx8=";
-        # url = "https://4kwallpapers.com/images/wallpapers/houston-quotes-3840x2160-11107.png";
-        # hash = "sha256-obz2keeSe3f3v1X9xzBytfUi0RSjQLxrHbR2mIYFr0A=";
-        # url = "https://4kwallpapers.com/images/wallpapers/red-heart-pixel-art-3840x2160-15194.png";
-        # hash = "sha256-G+m6164/x4M8An/ZnqFLgqe82nbIsCfa+J5JsyeAnjU=";
-        # url = "https://4kwallpapers.com/images/wallpapers/jelly-bears-gummy-3840x2160-11036.jpg";
-        # hash = "sha256-sG4+YYLgbHqGKbRWFZWiHk98ximJhqJeysoToyxHlN0=";
-        # url = "https://4kwallpapers.com/images/wallpapers/tree-seasons-black-3840x2160-11116.png";
-        # hash = "sha256-H/OBDRf1g1g9ss48MorAs1PnY/6vwHdwZBI/TW6a4sE=";
-        # url = "https://4kwallpapers.com/images/wallpapers/daft-punk-helmet-dark-background-minimal-art-3840x2160-6112.jpg";
-        # hash = "sha256-MWSFB0FWiojMefl4qrAxDVgZohcUbL72QR/Is/EvdEE=";
-        # url = "https://4kwallpapers.com/images/wallpapers/light-night-forest-winter-foggy-dark-3840x2160-5431.jpg";
-        # hash = "sha256-HXU0axf5/gW5yfYamHlaPJNKfYkrpOziNYB74xauUa8=";
-        # url = "https://4kwallpapers.com/images/wallpapers/paper-art-origami-panoply-triangle-geometrical-multicolor-3840x2160-4724.jpg";
-        # hash = "sha256-3hZSHw+FhEQ0qro1Ju2L4aJtTh3iegLrqyfrlAgaYZU=";
-        # url = "https://4kwallpapers.com/images/wallpapers/kitsune-fox-spirit-3840x2160-10986.jpg";
-        # hash = "sha256-osz9snMW+grNy/Gy5bj3wf8+DDfGAaFgCZOF76fFiJI=";
-        # url = "https://4kwallpapers.com/images/wallpapers/halloween-pumpkins-3840x2160-11101.jpg";
-        # hash = "sha256-IcGNQsG4zidsqL1InsC/VZacDg3Q9WWzbyX/CCU2M3A=";
-        url = "https://4kwallpapers.com/images/wallpapers/rainbow-coffee-3840x2160-11110.png";
-        hash = "sha256-WSb9B/xPSwv5djkYZ46g7B8r6hujboeIqD2DmEN2KtY=";
-        # url = "https://4kwallpapers.com/images/wallpapers/gargantua-black-3840x2160-9621.jpg";
-        # hash = "sha256-FprHpbr4I/17Jem0Ik98ilsjUqvCAOii2gDKwhKbAdY=";
-      };
-      wallpaper_path = builtins.toString wallpaper;
-    in {
-      ipc = true;
-      splash = false;
-      preload = [wallpaper_path];
-      wallpaper = [", ${wallpaper_path}"];
     };
   };
 
@@ -295,7 +255,11 @@ in {
             name = "Recursive Sans Casual Static";
             size = "12px";
           };
-          bar = {
+          bar = let
+            moduleAccent = "#95b7ef";
+            moduleBg = "#192029";
+            moduleFg = "#8fa3bb";
+          in {
             dropdownGap = "28px";
             floating = true;
             margin_bottom = "0em";
@@ -308,42 +272,42 @@ in {
               borderSize = "0px";
               clock = {
                 spacing = "0em";
-                background = "#11181c";
-                text = "#8fa3bb";
+                background = moduleBg;
+                text = moduleFg;
               };
               enableBorders = false;
               padding_x = "8px";
               padding_y = "1px";
               radius = "8px";
               y_margins = "0em";
-              battery.background = "#11181c";
-              bluetooth.background = "#11181c";
+              battery.background = moduleBg;
+              bluetooth.background = moduleBg;
               dashboard = {
-                background = "#11181c";
-                border = "#95b7ef";
-                icon = "#95b7ef";
+                background = moduleBg;
+                border = moduleAccent;
+                icon = moduleAccent;
               };
               media = {
-                background = "#11181c";
-                icon = "#95b7ef";
-                text = "#8fa3bb";
+                background = moduleBg;
+                icon = moduleAccent;
+                text = moduleFg;
               };
-              network.background = "#11181c";
+              network.background = moduleBg;
               volume = {
-                background = "#11181c";
-                icon = "#95b7ef";
-                text = "#8fa3bb";
+                background = moduleBg;
+                icon = moduleAccent;
+                text = moduleFg;
               };
-              windowtitle.background = "#11181c";
+              windowtitle.background = moduleBg;
               workspaces = {
                 fontSize = "1.2em";
                 numbered_active_highlight_border = "0.3em";
                 numbered_active_highlight_padding = "0.4em";
                 numbered_inactive_padding = "0.4em";
                 active = "#203147";
-                available = "#8fa3bb";
-                background = "#11181c";
-                border = "#95b7ef";
+                available = moduleFg;
+                background = moduleBg;
+                border = moduleAccent;
                 hover = "#203147";
                 numbered_active_highlighted_text_color = "#9fcdfe";
                 occupied = "#bac2de";
