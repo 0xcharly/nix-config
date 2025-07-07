@@ -17,14 +17,15 @@
   # System config.
   modules.system = {
     security.accessTier = "trusted";
-    monitoring.statusServer = true;
-    networking = {
-      dnsServer = true;
-      tailscaleNode = true;
+    services.serve = {
+      dns = true;
+      golink = true;
+      status = true;
     };
+    networking.tailscaleNode = true;
     roles.nixos = {
       amdCpu = true;
-      protonvpn = true;
+      amdGpu = true;
     };
   };
 
@@ -45,5 +46,5 @@
   };
 
   # Network config.
-  networking.interfaces.enp15s0.useDHCP = true;
+  networking.interfaces.enp196s0.useDHCP = true;
 }

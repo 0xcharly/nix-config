@@ -125,6 +125,12 @@ deploy-linode addr:
 deploy-nas addr nas_hostname:
     bash {{ justfile_directory() }}/bin/deploy-nas.sh {{ addr }} {{ nas_hostname }}
 
+[doc('Install NixOS on a remote machine')]
+[group('remotes')]
+[linux]
+deploy-nixos addr hostname:
+    bash {{ justfile_directory() }}/bin/deploy-nixos.sh {{ addr }} {{ hostname }}
+
 ssh_user := `whoami`
 ssh_port := '22'
 ssh_options := '-o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'

@@ -97,7 +97,7 @@ in {
 
       allNodes = mkOption {
         type = listOf str;
-        default = ["linode" "linode-arch" "nyx" "helios" "selene"];
+        default = ["heimdall" "linode" "linode-arch" "nyx" "helios" "selene"];
         readOnly = true;
         description = ''
           The list of all hosts part of the tailnet.

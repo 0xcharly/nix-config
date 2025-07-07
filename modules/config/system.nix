@@ -82,21 +82,29 @@ in {
       };
     };
 
-    monitoring = {
-      statusServer = mkOption {
-        type = bool;
-        default = false;
-        description = "If true, host aggregates statuses from across the internal network.";
+    services = {
+      serve = {
+        dns = mkOption {
+          type = bool;
+          default = false;
+          description = "If true, host spins up a DNS server.";
+        };
+
+        golink = mkOption {
+          type = bool;
+          default = false;
+          description = "If true, host spins up a go/link server.";
+        };
+
+        status = mkOption {
+          type = bool;
+          default = false;
+          description = "If true, host aggregates statuses from across the internal network.";
+        };
       };
     };
 
     networking = {
-      dnsServer = mkOption {
-        type = bool;
-        default = false;
-        description = "If true, host spins up a DNS server.";
-      };
-
       tailscaleNode = mkOption {
         type = bool;
         default = cfg.networking.tailscalePublicNode;

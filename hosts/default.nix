@@ -151,6 +151,7 @@ in {
   flake.nixosConfigurations = mkHostAttrs [
     (mkNixosIso ./iso/recovery {})
 
+    (mkNixosHost ./nixos/heimdall {})
     (mkNixosHost ./nixos/linode {})
     (mkNixosHost ./nixos/nyx {})
     (mkNixosHost ./nixos/helios {})
