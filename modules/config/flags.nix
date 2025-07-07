@@ -28,10 +28,22 @@ in {
     ssh = {
       installBasicAccessKeys = mkOption {
         type = bool;
-        default = cfg.system.security.isBasicAccessTier && !cfg.system.security.isTrustedAccessTier;
+        default =
+          cfg.system.security.isBasicAccessTier
+          && !cfg.system.security.isTrustedAccessTier
+          && !cfg.system.security.isHighlyPrivilegedAccessTier;
         readOnly = true;
         description = ''
           Installs the Basic Access Tier machines' SSH keys.
+        '';
+      };
+
+      installTrustedAccessKeys = mkOption {
+        type = bool;
+        default = cfg.system.security.isTrustedAccessTier;
+        readOnly = true;
+        description = ''
+          Installs the Trusted Access Tier machines' SSH keys.
         '';
       };
 
@@ -49,6 +61,23 @@ in {
 
           For a given `key`:
             - Encrypted key path must be `keys/basic-access/{key}_ed25519_key`
+            - Key will be symlinked to `~/.ssh/{key}`
+        '';
+      };
+
+      trustedAccessKeys = mkOption {
+        type = listOf str;
+        default = [
+          "github"
+          "git_commit_signing"
+          "tailscale"
+        ];
+        readOnly = true;
+        description = ''
+          The list of SSH keys to install on hosts with Trusted Access or above.
+
+          For a given `key`:
+            - Encrypted key path must be `keys/trusted-access/{key}_ed25519_key`
             - Key will be symlinked to `~/.ssh/{key}`
         '';
       };

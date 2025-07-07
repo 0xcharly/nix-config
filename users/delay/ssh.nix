@@ -75,11 +75,16 @@ in {
       in
         usrlib.ssh.genKnownHostsFile {inherit extraKnownHosts;};
     }
-    # TODO: add trusted tier version of these.
     // lib.optionalAttrs flags.ssh.installBasicAccessKeys (let
       mkSshKeySymLink = key: {
         ".ssh/${key}".source = args.config.lib.file.mkOutOfStoreSymlink args.osConfig.age.secrets."keys/basic-access/${key}_ed25519_key".path;
       };
     in
-      lib.mergeAttrsList (builtins.map mkSshKeySymLink flags.ssh.basicAccessKeys));
+      lib.mergeAttrsList (builtins.map mkSshKeySymLink flags.ssh.basicAccessKeys))
+    // lib.optionalAttrs flags.ssh.installTrustedAccessKeys (let
+      mkSshKeySymLink = key: {
+        ".ssh/${key}".source = args.config.lib.file.mkOutOfStoreSymlink args.osConfig.age.secrets."keys/trusted-access/${key}_ed25519_key".path;
+      };
+    in
+      lib.mergeAttrsList (builtins.map mkSshKeySymLink flags.ssh.trustedAccessKeys));
 }
