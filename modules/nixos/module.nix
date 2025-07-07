@@ -9,6 +9,7 @@
     inputs.home-manager.nixosModules.home-manager
 
     ./fonts.nix
+    ./golink.nix
     ./nas-fs.nix
     ./nas-replication.nix
     ./nas-samba.nix

@@ -90,6 +90,7 @@
             install -d --mode 750 --owner ayako --group users /tank/backups/ayako
             install -d --mode 750 --owner delay --group users /tank/backups/dad
             install -d --mode 750 --owner delay --group users /tank/backups/delay
+            install -d --mode 750 --owner delay --group users /tank/backups/services
 
             install -d --mode 750 --owner ayako --group users /tank/ayako
             install -d --mode 750 --owner ayako --group users /tank/ayako/files
@@ -268,16 +269,11 @@
               keylocation = "file://${config.age.secrets."zfs/tank/${mountpoint}.key".path}";
             };
           };
+
+          mkBackupDatasets = datasets: lib.mergeAttrsList (builtins.map mkBackupDataset datasets);
         in
           lib.mergeAttrsList [
-            (
-              namespace "backups" (
-                let
-                  datasets = ["ayako" "dad" "delay"];
-                in
-                  lib.mergeAttrsList (builtins.map mkBackupDataset datasets)
-              )
-            )
+            (namespace "backups" (mkBackupDatasets ["ayako" "dad" "delay" "services"]))
 
             (namespace "delay" {
               beans = mkGenericDataset "delay/beans";

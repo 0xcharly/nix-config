@@ -47,6 +47,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # go/link service.
+    golink.url = "github:tailscale/golink";
+
     # macOS only: Homebrew for Nix.
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
 
