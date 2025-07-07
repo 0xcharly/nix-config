@@ -304,11 +304,11 @@
         "nixpkgs": "nixpkgs_6"
       },
       "locked": {
-        "lastModified": 1751894304,
-        "narHash": "sha256-0jxRPDwksdc7iSbj6fINzpoxuECF5LOIv+HV9qZ+paU=",
+        "lastModified": 1751895681,
+        "narHash": "sha256-Vt+U8to4j9DSVTNr4JdBG04iJWQ55qMIwx9X16hmImU=",
         "owner": "0xcharly",
         "repo": "nix-config-secrets",
-        "rev": "d502b4902c6a79efae9f26a6b51ea63eac8b9eab",
+        "rev": "82f31c426a9648606575b1c0035382b69230665c",
         "type": "github"
       },
       "original": {
