@@ -26,6 +26,7 @@
     ./secrets.nix
     ./ssh.nix
     ./tailscale.nix
+    ./terminfo.nix
     ./user-ayako.nix
     ./user-delay.nix
     ./workstation.nix
