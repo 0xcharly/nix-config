@@ -47,8 +47,6 @@ in {
 
       # Open apps on startup.
       exec-once = [
-        # (uwsm-wrapper "systemctl --user enable --now hyprpanel.service")
-        (uwsm-wrapper "systemctl --user enable --now hyprpaper.service")
         "[workspace 1] ${uwsm-wrapper (lib.getExe pkgs.google-chrome)}"
         "[workspace 3] ${uwsm-wrapper (lib.getExe pkgs.ghostty)}"
       ];
@@ -333,24 +331,8 @@ in {
           dashboard = {
             controls.enabled = false;
             directories.enabled = false;
+            shortcuts.enabled = false;
             stats.enabled = false;
-            shortcuts.left = {
-              shortcut1 = {
-                command = "firefox";
-                icon = "󰈹";
-                tooltip = "Firefox";
-              };
-              shortcut2 = {
-                command = "tidal-hifi";
-                icon = "󰎇";
-                tooltip = "Tidal";
-              };
-              shortcut3 = {
-                command = "google-chrome";
-                icon = "";
-                tooltip = "Google Chrome";
-              };
-            };
           };
         };
       };
