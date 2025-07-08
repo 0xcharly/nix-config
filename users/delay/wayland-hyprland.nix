@@ -220,7 +220,7 @@ in {
         bar = {
           layouts = {
             "*" = {
-              left = ["dashboard" "workspaces"];
+              left = ["workspaces"];
               middle = ["media"];
               right = ["volume" "clock"];
             };
@@ -322,17 +322,7 @@ in {
               hideSeconds = true;
               military = true;
             };
-            weather = {
-              key = args.osConfig.age.secrets."services/weather-api.key".path;
-              location = "Tokyo";
-              unit = "metric";
-            };
-          };
-          dashboard = {
-            controls.enabled = false;
-            directories.enabled = false;
-            shortcuts.enabled = false;
-            stats.enabled = false;
+            weather.enabled = false;
           };
         };
       };
