@@ -55,7 +55,7 @@ in {
     settings =
       {
         font-family = ["Comic Code Ligatures"];
-        font-size = 13;
+        font-size = 12;
         # https://www.recursive.design/assets/arrowtype-recursive-sansmono-specimen-230407.pdf
         font-feature = ["calt" "clig" "dlig" "liga"];
         font-codepoint-map = let
