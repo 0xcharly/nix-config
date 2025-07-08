@@ -4,7 +4,8 @@
   usrlib,
   ...
 } @ args: let
-  isNasPrimary = usrlib.bool.isTrue (usrlib.hm.getUserConfig args).modules.system.roles.nas.primary;
+  cfg = (usrlib.hm.getUserConfig args).modules.system;
+  isNasPrimary = usrlib.bool.isTrue cfg.roles.nas.primary;
 in {
   systemd.user.timers.backup-beans = lib.mkIf isNasPrimary {
     Unit.Description = "Backup financial information from remote";
@@ -22,6 +23,7 @@ in {
       Type = "oneshot";
       IOSchedulingClass = "idle";
       ExecStart = let
+        remoteHost = "${cfg.beans.sourceOfTruthHostName}.neko-danio.ts.net";
         backup-ssh-key = args.osConfig.age.secrets."keys/beans_backup_ed25519_key".path;
         backup-ssh-options = "-o IdentitiesOnly=yes -o IdentityFile=${backup-ssh-key} -o PasswordAuthentication=no";
         backup-beans = pkgs.writeShellApplication {
@@ -29,14 +31,18 @@ in {
           runtimeInputs = with pkgs; [rsync openssh coreutils];
           # The `beans/` directory is not mentioned explicitly because it is
           # configured on the receiver's end via `rrsync -ro ~/beans`.
+          # TODO: added the directory back, but this should be needed…
+          # Am I using the wrong key?
           text = ''
             rsync -avz --stats --progress \
-              --exclude="lost+found" \
               --exclude=".direnv" \
+              --exclude=".envrc" \
               --exclude=".git" \
+              --exclude="flake.nix" \
+              --exclude="flake.lock" \
               --delete \
-              --rsh "ssh -l delay -F /dev/null ${backup-ssh-options}" \
-              linode.neko-danio.ts.net: /tank/delay/beans/
+              --rsh "ssh -l ${cfg.beans.user} -F /dev/null ${backup-ssh-options}" \
+              ${remoteHost}.neko-danio.ts.net:${cfg.beans.dataDir}/ /tank/delay/beans/
           '';
         };
       in

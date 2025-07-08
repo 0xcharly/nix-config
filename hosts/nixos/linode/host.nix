@@ -96,7 +96,6 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
-    ./beans-backup.nix
     ./fs.nix
   ];
 
@@ -113,12 +112,9 @@
       tailscaleNode = true;
       tailscalePublicNode = true;
     };
-    roles.beans.sourceOfTruth = true;
   };
 
   networking = {
-    hostName = "linode";
-
     enableIPv6 = true;
     tempAddresses = "disabled";
 

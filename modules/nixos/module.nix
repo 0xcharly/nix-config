@@ -8,6 +8,7 @@
     inputs.catppuccin.nixosModules.catppuccin
     inputs.home-manager.nixosModules.home-manager
 
+    ./beans.nix
     ./fonts.nix
     ./golink.nix
     ./nas-fs.nix

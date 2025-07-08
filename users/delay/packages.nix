@@ -6,6 +6,8 @@
   ...
 } @ args: let
   inherit (pkgs.stdenv) isLinux;
+  inherit ((usrlib.hm.getUserConfig args).modules) flags;
+  inherit ((usrlib.hm.getUserConfig args).modules.system) beans;
   inherit ((usrlib.hm.getUserConfig args).modules.usrenv) isLinuxDesktop;
 in {
   # Packages I always want installed. Most packages I install using per-project
@@ -42,14 +44,20 @@ in {
     direnv = {
       enable = true;
       nix-direnv.enable = true;
-      config.whitelist.prefix = [
-        "${config.home.homeDirectory}/code"
-      ];
+      config.whitelist.prefix =
+        [
+          "${config.home.homeDirectory}/code"
+        ]
+        # TODO: make this a flag instead.
+        ++ lib.optionals beans.sourceOfTruth ["${config.home.homeDirectory}/beans"];
     };
 
     keychain = {
       enable = lib.mkDefault true;
-      keys = []; # TODO: Add keys.
+      enableFishIntegration = true;
+      keys = lib.optionals flags.ssh.installTrustedAccessKeys [
+        "${config.home.homeDirectory}/.ssh/git_commit_signing"
+      ];
     };
   };
 }

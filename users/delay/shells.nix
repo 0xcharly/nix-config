@@ -14,6 +14,7 @@
       # with it.
       shellAliases.nixsh = "nix-shell --run ${lib.getExe pkgs.fish}";
     };
+    # TODO: consider using home.shell.enableFishIntegration instead.
     eza.enableFishIntegration = true;
     keychain.enableFishIntegration = true;
     # direnv.enableFishIntegration = true; # read-only; always enabled.

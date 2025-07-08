@@ -116,21 +116,60 @@ in {
         default = false;
         description = "True for machines part of the Tailscale network and publicly accessible.";
       };
+
+      tailscaleSSH = mkOption {
+        type = bool;
+        default = false; # cfg.networking.tailscaleNode;
+        description = ''
+          If true, the machine will be configured to use Tailscale SSH.
+          Forbidden on macOS hosts.
+        '';
+      };
+    };
+
+    beans = {
+      user = mkOption {
+        type = str;
+        default = "delay";
+        readOnly = true;
+        description = ''
+          The local user that owns the beans.
+        '';
+      };
+
+      dataDir = mkOption {
+        type = str;
+        default = "beans";
+        readOnly = true;
+        description = ''
+          The path relative to the user's home directory in which the beans are
+          stored.
+
+          Do NOT add a trailing slash.
+        '';
+      };
+
+      sourceOfTruthHostName = mkOption {
+        type = nullOr str;
+        default = "heimdall";
+        readOnly = true;
+        description = ''
+          The hostname of the source of truth for the beans files.
+        '';
+      };
+
+      sourceOfTruth = mkOption {
+        type = bool;
+        default = config.networking.hostName == cfg.beans.sourceOfTruthHostName;
+        readOnly = true;
+        description = ''
+          True for the machine that is the source of truth for bean files
+          (i.e. on which beans are edited).
+        '';
+      };
     };
 
     roles = {
-      beans = {
-        # TODO: figure out a better schema.
-        sourceOfTruth = mkOption {
-          type = bool;
-          default = false;
-          description = ''
-            True for the machine that is the source of truth for bean files
-            (i.e. on which beans are edited).
-          '';
-        };
-      };
-
       nixos = {
         amdCpu = mkOption {
           type = bool;
@@ -271,6 +310,10 @@ in {
       {
         assertion = cfg.networking.tailscalePublicNode -> cfg.networking.tailscaleNode;
         message = "`system.networking.tailscalePublicNode` requires `system.networking.tailscaleNode`";
+      }
+      {
+        assertion = cfg.networking.tailscaleSSH -> isNixOS;
+        message = "Tailscale SSH is only supported on NixOS.";
       }
     ]
     ++ [

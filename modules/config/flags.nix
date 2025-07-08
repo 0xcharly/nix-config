@@ -104,7 +104,7 @@ in {
 
       authorizeBeansBackupCommand = mkOption {
         type = bool;
-        default = cfg.system.roles.beans.sourceOfTruth;
+        default = cfg.system.beans.sourceOfTruth;
         readOnly = true;
         description = ''
           Adds an entry to the authorized_keys file to allow backing up bean

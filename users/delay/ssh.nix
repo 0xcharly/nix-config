@@ -29,34 +29,12 @@ in {
           hostname = "2600:3c18::2000:a4ff:fe80:d6d4";
           extraOptions = mkIdentityFile "tailscale-public";
         };
-        # TODO: decommission this node.
-        linode-arch = {
-          hostname = "2400:8902::f03c:92ff:fea6:366e";
-          extraOptions = mkIdentityFile "linode";
+        # TODO: Convert to NixOS and join the tailnet.
+        skullkid = {
+          hostname = "192.168.86.43";
+          extraOptions = mkIdentityFile "skullkid";
         };
-      }
-      // lib.optionalAttrs flags.ssh.declareTailscaleNetworkHosts (let
-        # Tailscale nodes. Add all NixOS nodes to this list.
-        tailscaleNodesMatchGroup = builtins.concatStringsSep " " (
-          (lib.singleton "*.${flags.tailscale.tailnetName}") ++ flags.tailscale.allNodes
-        );
-        tailscaleNodesHostName = lib.attrsets.mergeAttrsList (
-          builtins.map (host: {
-            "${host}" = {hostname = "${host}.${flags.tailscale.tailnetName}";};
-          })
-          flags.tailscale.allNodes
-        );
-      in
-        tailscaleNodesHostName
-        // {
-          "${tailscaleNodesMatchGroup}" = {
-            extraOptions = mkIdentityFile "tailscale";
-          };
-          skullkid = {
-            hostname = "192.168.86.43";
-            extraOptions = mkIdentityFile "skullkid";
-          };
-        });
+      };
     userKnownHostsFile = "${home}/.ssh/known_hosts ${home}/.ssh/known_hosts.trusted";
   };
 
