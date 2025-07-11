@@ -19,9 +19,12 @@
     keychain.enableFishIntegration = true;
     # direnv.enableFishIntegration = true; # read-only; always enabled.
     tmux.shell = lib.getExe pkgs.fish;
+
+    nushell.enable = true;
   };
 
   home = {
+    shell.enableNushellIntegration = true;
     sessionVariables.SHELL = lib.getExe pkgs.fish;
     packages = with pkgs; [
       fishPlugins.fzf
