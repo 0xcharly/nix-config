@@ -56,7 +56,8 @@ in {
       enable = lib.mkDefault true;
       enableFishIntegration = true;
       keys = lib.optionals flags.ssh.installTrustedAccessKeys [
-        "${config.home.homeDirectory}/.ssh/git_commit_signing"
+        # TODO: Add the public key to avoid the warning printed on login.
+        # "${config.home.homeDirectory}/.ssh/git_commit_signing"
       ];
     };
   };

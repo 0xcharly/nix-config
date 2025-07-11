@@ -20,7 +20,7 @@ in {
       extraGroups = ["tailscale"];
       openssh.authorizedKeys.keys = [
         # Authorize backups of go/link data dir.
-        ''command="${lib.getExe pkgs.rrsync} -ro ${config.services.golink.dataDir}" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGa3cDgdhUeqAP2Bmnew2/SfC6HiXslIUpyHQ8HsUUZO golink-backup''
+        ''command="${lib.getExe pkgs.rrsync} -ro ${config.services.golink.dataDir}/" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGa3cDgdhUeqAP2Bmnew2/SfC6HiXslIUpyHQ8HsUUZO golink-backup''
       ];
     };
   };
