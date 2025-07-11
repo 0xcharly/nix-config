@@ -23,11 +23,11 @@
     nushell = {
       enable = true;
       environmentVariables = {
-        PROMPT_COMMAND = lib.hm.nushell.mkNushellInline ''{|| $"(ansi blue_bold)▶_(ansi reset) "}'';
+        PROMPT_COMMAND = lib.hm.nushell.mkNushellInline ''{ || $"(ansi blue_bold)▶_(ansi reset) " }'';
         PROMPT_COMMAND_RIGHT = "";
         PROMPT_INDICATOR_VI_INSERT = "";
         PROMPT_INDICATOR_VI_NORMAL = "";
-        TRANSIENT_PROMPT_COMMAND = lib.hm.nushell.mkNushellInline ''{|| $"(ansi dark_gray_bold)>:(ansi reset) "}'';
+        TRANSIENT_PROMPT_COMMAND = lib.hm.nushell.mkNushellInline ''{ || $"(ansi dark_gray_bold)>:(ansi reset) " }'';
       };
       settings = {
         buffer_editor = lib.getExe pkgs.nvim;
