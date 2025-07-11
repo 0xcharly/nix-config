@@ -17,7 +17,6 @@
     ./nas-snapshots.nix
     ./nas-system.nix
     ./nix-client-config.nix
-    ./nix-index.nix
     ./nixos-compositor-common.nix
     ./nixos-hyprland.nix
     ./openssh.nix
@@ -67,6 +66,9 @@
     killall
     rxvt-unicode-unwrapped
   ];
+
+  # Don't need to wait 1+s on a typo.
+  programs.command-not-found.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

@@ -13,7 +13,6 @@
     ./macos.nix
     ./nix-client-config.nix
     ./nix-homebrew.nix
-    ./nix-index.nix
     ./user-delay.nix
   ];
 

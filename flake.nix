@@ -14,9 +14,9 @@
   inputs = {
     # Pin our primary nixpkgs repositories. These are the main nixpkgs
     # repositories we'll use for our configurations.
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
     nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
     nur = {
       url = "github:nix-community/NUR";
@@ -36,16 +36,7 @@
     };
 
     # Filesystem management.
-    disko = {
-      url = "github:nix-community/disko";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # Weekly updated index: quickly locate nix packages with specific files.
-    nix-index-database = {
-      url = "github:nix-community/nix-index-database";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    disko.url = "github:nix-community/disko";
 
     # go/link service.
     golink.url = "github:tailscale/golink";
