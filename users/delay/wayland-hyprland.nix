@@ -153,14 +153,14 @@ in {
         # Chrome's Picture-in-Picture.
         "float, class:^$, title:^Picture in picture$"
         "pin, class:^$, title:^Picture in picture$"
-        "move 2554 33, class:^$, title:^Picture in picture$"
-        "size 512 288, class:^$, title:^Picture in picture$"
+        "move 2426 120, class:^$, title:^Picture in picture$"
+        "size 640 360, class:^$, title:^Picture in picture$"
         "keepaspectratio, class:^$, title:^Picture in picture$"
         # Firefox's Picture-in-Picture.
         "float, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
         "pin, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
-        "move 2554 33, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
-        "size 512 288, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
+        "move 2426 120, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
+        "size 640 360, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
         "keepaspectratio, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
       ];
     };
