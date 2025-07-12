@@ -101,6 +101,12 @@ in {
           default = false;
           description = "If true, host aggregates statuses from across the internal network.";
         };
+
+        vaultwarden = mkOption {
+          type = bool;
+          default = false;
+          description = "If true, host spins up a vaultwarden server.";
+        };
       };
     };
 
@@ -292,6 +298,7 @@ in {
         message = "`system.roles.nixos.${role}` role is only supported on NixOS.";
       }) (builtins.attrNames config.modules.system.roles.nixos)
     )
+    # Security config validation.
     ++ [
       {
         assertion = cfg.security.accessTier == "basic" -> isNixOS;
@@ -306,6 +313,7 @@ in {
         message = "Non-NixOS machines are do not meet the mimimum requirements for Highly Privileged Access";
       }
     ]
+    # Networking config validation.
     ++ [
       {
         assertion = cfg.networking.tailscalePublicNode -> cfg.networking.tailscaleNode;
@@ -316,6 +324,7 @@ in {
         message = "Tailscale SSH is only supported on NixOS.";
       }
     ]
+    # NAS config validation.
     ++ [
       {
         assertion = cfg.roles.nas.enable -> isNixOS;

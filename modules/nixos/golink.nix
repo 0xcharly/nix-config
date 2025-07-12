@@ -51,7 +51,7 @@ in {
           text = ''
             rsync -avz --stats --progress --delete \
               --rsh "ssh -l ${config.services.golink.user} -F /dev/null ${backup-ssh-options}" \
-              heimdall.neko-danio.ts.net: /tank/backups/services/golink/
+              heimdall.${config.node.facts.tailscale.tailnetName}: /tank/backups/services/golink/
           '';
         };
       in

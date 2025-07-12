@@ -15,12 +15,14 @@
   modules.usrenv.compositor = "headless";
 
   # System config.
+  node.facts.tailscale.tailscaleIP = "100.85.79.53";
   modules.system = {
     security.accessTier = "trusted";
     services.serve = {
       dns = true;
       golink = true;
       status = true;
+      vaultwarden = true;
     };
     networking.tailscaleNode = true;
     roles.nixos = {

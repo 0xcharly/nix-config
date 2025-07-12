@@ -9,6 +9,7 @@
     inputs.home-manager.nixosModules.home-manager
 
     ./beans.nix
+    ./coredns.nix
     ./fonts.nix
     ./golink.nix
     ./nas-fs.nix

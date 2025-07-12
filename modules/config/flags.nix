@@ -112,26 +112,5 @@ in {
         '';
       };
     };
-
-    tailscale = {
-      tailnetName = mkOption {
-        type = str;
-        default = "neko-danio.ts.net";
-        readOnly = true;
-        description = ''
-          Unique name is used when registering DNS entries, sharing your device
-          to other tailnets, and issuing TLS certificates.
-        '';
-      };
-
-      allNodes = mkOption {
-        type = listOf str;
-        default = ["heimdall" "linode" "linode-arch" "nyx" "helios" "selene"];
-        readOnly = true;
-        description = ''
-          The list of all hosts part of the tailnet.
-        '';
-      };
-    };
   };
 }

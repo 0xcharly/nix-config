@@ -88,7 +88,7 @@ in
         mkReplicationCommand = targetTailscaleHostname: {
           "replicate-all-datasets-${targetTailscaleHostname}" = {
             source = "tank";
-            target = "${username}@${targetTailscaleHostname}.neko-danio.ts.net:tank";
+            target = "${username}@${targetTailscaleHostname}.${config.node.facts.tailscale.tailnetName}:tank";
             recursive = true;
             extraArgs = [
               "--sshoption IdentitiesOnly=yes"

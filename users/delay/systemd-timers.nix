@@ -4,7 +4,8 @@
   usrlib,
   ...
 } @ args: let
-  cfg = (usrlib.hm.getUserConfig args).modules.system;
+  config = usrlib.hm.getUserConfig args;
+  cfg = config.modules.system;
   isNasPrimary = usrlib.bool.isTrue cfg.roles.nas.primary;
 in {
   systemd.user.timers.backup-beans = lib.mkIf isNasPrimary {
@@ -23,7 +24,7 @@ in {
       Type = "oneshot";
       IOSchedulingClass = "idle";
       ExecStart = let
-        remoteHost = "${cfg.beans.sourceOfTruthHostName}.neko-danio.ts.net";
+        remoteHost = "${cfg.beans.sourceOfTruthHostName}.${config.node.facts.tailscale.tailnetName}";
         backup-ssh-key = args.osConfig.age.secrets."keys/beans_backup_ed25519_key".path;
         backup-ssh-options = "-o IdentitiesOnly=yes -o IdentityFile=${backup-ssh-key} -o PasswordAuthentication=no";
         backup-beans = pkgs.writeShellApplication {
@@ -42,7 +43,7 @@ in {
               --exclude="flake.lock" \
               --delete \
               --rsh "ssh -l ${cfg.beans.user} -F /dev/null ${backup-ssh-options}" \
-              ${remoteHost}.neko-danio.ts.net:${cfg.beans.dataDir}/ /tank/delay/beans/
+              ${remoteHost}: /tank/delay/beans/
           '';
         };
       in
