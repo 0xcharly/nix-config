@@ -4,11 +4,18 @@
 in {
   options.node.facts = {
     tailscale = {
-      tailscaleIP = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
+      tailscaleIPv4 = lib.mkOption {
+        type = nullOr lib.types.str;
         default = null;
         example = "100.101.102.103";
-        description = "Tailscale IP of the node";
+        description = "Tailscale IPv4 of the node";
+      };
+
+      tailscaleIPv6 = lib.mkOption {
+        type = nullOr lib.types.str;
+        default = null;
+        example = "2001:db8::1";
+        description = "Tailscale IPv6 of the node";
       };
 
       tailnetName = mkOption {

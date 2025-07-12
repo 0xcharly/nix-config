@@ -1,3 +1,6 @@
+# Config derived from:
+#   - https://willnorris.com/2023/tailscale-custom-domain/
+#   - https://garrido.io/notes/tailscale-nextdns-custom-domains/
 {
   config,
   lib,
@@ -6,8 +9,8 @@
   ...
 }: let
   tailscaleInterface = config.services.tailscale.interfaceName;
-  inherit (config.node.facts.tailscale) tailscaleIP tailnetName;
-  zoneFile = pkgs.replaceVars ./dns/qyrnl.com {inherit tailnetName tailscaleIP;};
+  inherit (config.node.facts.tailscale) tailscaleIPv4 tailscaleIPv6 tailnetName;
+  zoneFile = pkgs.replaceVars ./dns/qyrnl.com {inherit tailnetName tailscaleIPv4 tailscaleIPv6;};
 in
   lib.mkIf config.modules.system.services.serve.dns {
     services.coredns = {
@@ -33,6 +36,7 @@ in
         }
       '';
     };
+
     systemd.services.coredns = {
       after = [
         "tailscaled.service"

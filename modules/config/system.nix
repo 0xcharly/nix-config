@@ -84,6 +84,12 @@ in {
 
     services = {
       serve = {
+        atuin = mkOption {
+          type = bool;
+          default = false;
+          description = "If true, host spins up an Atuin server.";
+        };
+
         dns = mkOption {
           type = bool;
           default = false;
@@ -94,6 +100,15 @@ in {
           type = bool;
           default = false;
           description = "If true, host spins up a go/link server.";
+        };
+
+        reverseProxy = mkOption {
+          type = bool;
+          default = false;
+          description = ''
+            If true, host serves services from across the internal network
+            behind a reverse proxy.
+          '';
         };
 
         status = mkOption {

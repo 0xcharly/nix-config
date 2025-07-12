@@ -15,13 +15,17 @@
   modules.usrenv.compositor = "headless";
 
   # System config.
-  node.facts.tailscale.tailscaleIP = "100.85.79.53";
+  node.facts.tailscale = {
+    tailscaleIPv4 = "100.85.79.53";
+    tailscaleIPv6 = "fd7a:115c:a1e0::4036:4f35";
+  };
 
   modules.system = {
     security.accessTier = "trusted";
     services.serve = {
       dns = true;
       golink = true;
+      reverseProxy = true;
       status = true;
       vaultwarden = true;
     };

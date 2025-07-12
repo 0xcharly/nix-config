@@ -9,6 +9,7 @@
     inputs.home-manager.nixosModules.home-manager
 
     ./beans.nix
+    ./caddy.nix
     ./coredns.nix
     ./fail2ban.nix
     ./fonts.nix
