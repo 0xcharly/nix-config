@@ -25,16 +25,23 @@ in
               dns gandi {env.GANDIV5_PERSONAL_ACCESS_TOKEN}
             }
         '';
-        "vault.qyrnl.com" = lib.mkIf cfg.vaultwarden {
-          extraConfig = ''
-            import ts_host
-            reverse_proxy localhost:${toString config.services.vaultwarden.config.ROCKET_PORT}
-          '';
-        };
         "atuin.qyrnl.com" = lib.mkIf cfg.atuin {
           extraConfig = ''
             import ts_host
             reverse_proxy localhost:${toString config.services.atuin.port}
+          '';
+        };
+        # TODO: define Jellyfin's host and port somewhere else.
+        "jellyfin.qyrnl.com" = lib.mkIf cfg.atuin {
+          extraConfig = ''
+            import ts_host
+            reverse_proxy helios.neko-danio.ts.net:8096
+          '';
+        };
+        "vault.qyrnl.com" = lib.mkIf cfg.vaultwarden {
+          extraConfig = ''
+            import ts_host
+            reverse_proxy localhost:${toString config.services.vaultwarden.config.ROCKET_PORT}
           '';
         };
       };
