@@ -16,6 +16,7 @@
     ./fonts.nix
     ./golink.nix
     ./jellyfin.nix
+    ./immich.nix
     ./nas-fs.nix
     ./nas-replication.nix
     ./nas-samba.nix

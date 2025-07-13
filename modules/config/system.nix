@@ -87,7 +87,11 @@ in {
         atuin = mkOption {
           type = bool;
           default = false;
-          description = "If true, host spins up an Atuin server.";
+          description = ''
+            If true, host spins up an Atuin server.
+
+            https://atuin.sh
+          '';
         };
 
         dns = mkOption {
@@ -99,13 +103,31 @@ in {
         golink = mkOption {
           type = bool;
           default = false;
-          description = "If true, host spins up a go/link server.";
+          description = ''
+            If true, host spins up a go/link server.
+
+            https://github.com/tailscale/golink
+          '';
+        };
+
+        immich = mkOption {
+          type = bool;
+          default = false;
+          description = ''
+            If true, host spins up an Immich server.
+
+            https://immich.app
+          '';
         };
 
         jellyfin = mkOption {
           type = bool;
           default = false;
-          description = "If true, host spins up a jellyfin server.";
+          description = ''
+            If true, host spins up a jellyfin server.
+
+            https://jellyfin.org
+          '';
         };
 
         reverseProxy = mkOption {
@@ -134,7 +156,11 @@ in {
         vaultwarden = mkOption {
           type = bool;
           default = false;
-          description = "If true, host spins up a vaultwarden server.";
+          description = ''
+            If true, host spins up a vaultwarden server.
+
+            https://www.vaultwarden.net
+          '';
         };
       };
     };

@@ -88,24 +88,25 @@
             # TODO: Consider creating groups as well (eg. `backups`?).
 
             # Set root folder world-traversable.
-            install -d --mode 750 --owner delay --group users /tank/backups
-            install -d --mode 750 --owner ayako --group ayako /tank/backups/ayako
-            install -d --mode 750 --owner delay --group delay /tank/backups/dad
-            install -d --mode 750 --owner delay --group delay /tank/backups/delay
-            install -d --mode 750 --owner delay --group users /tank/backups/services
+            install -d --mode 751 --owner delay --group users /tank/backups
+            install -d --mode 751 --owner ayako --group ayako /tank/backups/ayako
+            install -d --mode 751 --owner delay --group delay /tank/backups/dad
+            install -d --mode 751 --owner delay --group delay /tank/backups/delay
+            install -d --mode 751 --owner delay --group users /tank/backups/services
 
             # Set root folder world-traversable.
-            install -d --mode 750 --owner ayako --group users /tank/ayako
-            install -d --mode 750 --owner ayako --group ayako /tank/ayako/files
-            install -d --mode 750 --owner ayako --group users /tank/ayako/media
+            install -d --mode 751 --owner ayako --group users /tank/ayako
+            install -d --mode 751 --owner ayako --group ayako /tank/ayako/files
+            install -d --mode 751 --owner ayako --group users /tank/ayako/media
 
             # Set root folder world-traversable.
-            install -d --mode 750 --owner delay --group users /tank/delay
-            install -d --mode 750 --owner delay --group delay /tank/delay/beans
-            install -d --mode 750 --owner delay --group delay /tank/delay/files
-            install -d --mode 750 --owner delay --group users /tank/delay/media
-            install -d --mode 750 --owner delay --group delay /tank/delay/notes
-            install -d --mode 750 --owner vaultwarden --group delay /tank/delay/vault
+            install -d --mode 751 --owner delay --group users /tank/delay
+            install -d --mode 771 --owner delay --group immich /tank/delay/album
+            install -d --mode 751 --owner delay --group delay /tank/delay/beans
+            install -d --mode 751 --owner delay --group delay /tank/delay/files
+            install -d --mode 751 --owner delay --group jellyfin /tank/delay/media
+            install -d --mode 751 --owner delay --group delay /tank/delay/notes
+            install -d --mode 751 --owner delay --group delay /tank/delay/vault
           '';
         };
       in
@@ -251,6 +252,18 @@
             };
           };
           # A dataset for regular files. Better suited for small files.
+          mkAlbumDataset = mountpoint: {
+            type = "zfs_fs";
+            options = {
+              mountpoint = "/tank/${mountpoint}";
+              compression = "zstd"; # Better compression for text and PDFs.
+              recordsize = "1M"; # Larger blocks improve performance for large sequential files.
+              encryption = "aes-256-gcm";
+              keyformat = "passphrase";
+              keylocation = "file://${config.age.secrets."zfs/tank/${mountpoint}.key".path}";
+            };
+          };
+          # A dataset for regular files. Better suited for small files.
           mkGenericDataset = mountpoint: {
             type = "zfs_fs";
             options = {
@@ -282,6 +295,7 @@
             (namespace "backups" (mkBackupDatasets ["ayako" "dad" "delay" "services"]))
 
             (namespace "delay" {
+              album = mkAlbumDataset "delay/album";
               beans = mkGenericDataset "delay/beans";
               files = mkGenericDataset "delay/files";
               media = mkMediaDataset "delay/media";
