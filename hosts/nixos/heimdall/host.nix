@@ -23,6 +23,7 @@
   modules.system = {
     security.accessTier = "trusted";
     services.serve = {
+      atuin = true;
       dns = true;
       golink = true;
       reverseProxy = true;

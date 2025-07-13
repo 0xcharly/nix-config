@@ -34,7 +34,7 @@ in
         "atuin.qyrnl.com" = lib.mkIf cfg.atuin {
           extraConfig = ''
             import ts_host
-            reverse_proxy localhost:8888
+            reverse_proxy localhost:${toString config.services.atuin.port}
           '';
         };
       };

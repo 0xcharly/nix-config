@@ -8,6 +8,7 @@
     inputs.catppuccin.nixosModules.catppuccin
     inputs.home-manager.nixosModules.home-manager
 
+    ./atuin.nix
     ./beans.nix
     ./caddy.nix
     ./coredns.nix
