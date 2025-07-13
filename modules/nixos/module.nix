@@ -15,6 +15,7 @@
     ./fail2ban.nix
     ./fonts.nix
     ./golink.nix
+    ./jellyfin.nix
     ./nas-fs.nix
     ./nas-replication.nix
     ./nas-samba.nix

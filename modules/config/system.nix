@@ -102,6 +102,12 @@ in {
           description = "If true, host spins up a go/link server.";
         };
 
+        jellyfin = mkOption {
+          type = bool;
+          default = false;
+          description = "If true, host spins up a jellyfin server.";
+        };
+
         reverseProxy = mkOption {
           type = bool;
           default = false;

@@ -6,6 +6,7 @@
   # System config.
   modules.system = {
     security.accessTier = "trusted";
+    services.serve.jellyfin = true;
     networking.tailscaleNode = true;
     roles.nixos = {
       amdCpu = true;
