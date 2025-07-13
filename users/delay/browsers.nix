@@ -22,9 +22,7 @@ in
         ];
         extensions = [
           {id = "aeblfdkhhhdcdjpifhhbdiojplfjncoa";} # 1Password
-          {id = "cdglnehniifkbagbbombnjghhcihifij";} # Kagi Search
-          {id = "ghmbeldphafepmbegfdlkpapadhbakde";} # Proton Pass
-          {id = "dhdgffkkebhmkfjojejmpbldmpobfkfo";} # Tampermonkey
+          {id = "nngceckbapebfimnlniiiahkandclblb";} # Bitwarden
           {id = "cjpalhdlnbpafiamejdnhcphjbkeiagm";} # uBlock Origin
         ];
       };

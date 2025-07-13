@@ -10,14 +10,6 @@
     extensions.packages = with firefox-addons; [
       bitwarden
       clearurls
-      # NOTE: The 1Password database is regularly corrupted on restart.
-      # The assumption is that the add-on is auto-updated when firefox is
-      # running and then overwrote by subsequent `nixos-rebuild switch`.
-      # Add-ons auto-update was disabled for this reason. This may cause other
-      # issues in the future where the browser extension version gets out of
-      # sync with the desktop client.
-      # The alternative would be to manually install this extension.
-      onepassword-password-manager
       simple-translate
       ublock-origin
     ];

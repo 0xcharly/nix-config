@@ -9,6 +9,26 @@
   cfg = config.modules;
 in {
   options.modules.flags = {
+    atuin = {
+      enable = mkOption {
+        type = bool;
+        default = !cfg.usrenv.isCorpManaged && cfg.system.networking.tailscaleNode;
+        readOnly = true;
+        description = ''
+          Installs and setups atuin client.
+        '';
+      };
+
+      syncAddress = mkOption {
+        type = str;
+        default = "https://atuin.qyrnl.com";
+        readOnly = true;
+        description = ''
+          The address of the self-hosted atuin sync server.
+        '';
+      };
+    };
+
     jujutsu = {
       deprecatedUiDiffTool = mkOption {
         type = bool;

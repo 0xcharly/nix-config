@@ -10,6 +10,7 @@
     flavor = "mocha";
     accent = "blue";
 
+    atuin.enable = true;
     bat.enable = true;
     bottom.enable = true;
     fish.enable = true;
