@@ -10,9 +10,11 @@ ns2 300 IN A    @tailscaleIPv4@
 ns2 300 IN AAAA @tailscaleIPv6@
 
 heimdall        IN CNAME heimdall.@tailnetName@.
+album           IN CNAME heimdall
 atuin           IN CNAME heimdall
 beans           IN CNAME heimdall
 jellyfin        IN CNAME heimdall
+shared.album    IN CNAME heimdall
 status          IN CNAME heimdall
 vault           IN CNAME heimdall
 
