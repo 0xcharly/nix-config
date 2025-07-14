@@ -26,14 +26,16 @@ in
             }
         '';
         # TODO: define Immich's host and port somewhere else.
-        "album.qyrnl.com" = lib.mkIf cfg.atuin {
+        # TODO: define flag to enable this virtual host.
+        "album.qyrnl.com" = {
           extraConfig = ''
             import ts_host
             reverse_proxy helios.neko-danio.ts.net:2283
           '';
         };
         # TODO: define IPP's host and port somewhere else.
-        "shared.album.qyrnl.com" = lib.mkIf cfg.atuin {
+        # TODO: define flag to enable this virtual host.
+        "shared.album.qyrnl.com" = {
           extraConfig = ''
             import ts_host
             reverse_proxy helios.neko-danio.ts.net:3000
