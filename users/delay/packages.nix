@@ -8,7 +8,7 @@
   inherit (pkgs.stdenv) isLinux;
   inherit ((usrlib.hm.getUserConfig args).modules) flags;
   inherit ((usrlib.hm.getUserConfig args).modules.system) beans;
-  inherit ((usrlib.hm.getUserConfig args).modules.usrenv) isCorpManaged isLinuxDesktop;
+  inherit ((usrlib.hm.getUserConfig args).modules.usrenv) isLinuxDesktop;
 in {
   # Packages I always want installed. Most packages I install using per-project
   # flakes sourced with direnv and nix-shell, so this is not a huge list.
@@ -29,7 +29,6 @@ in {
       # at anytime (e.g. in the corp-specific flavor).
       nvim
     ]
-    ++ lib.optionals isLinux [pkgs.valgrind]
     ++ lib.optionals isLinuxDesktop [pkgs.nvtopPackages.full];
 
   programs = {
@@ -41,11 +40,12 @@ in {
     eza.enable = true; # `ls` replacement.
     fzf.enable = true;
 
-    atuin = {
+    atuin = lib.mkIf isLinux {
       enable = flags.atuin.enable;
       flags = ["--disable-up-arrow"];
       settings = {
         auto_sync = true;
+        key_path = args.osConfig.age.secrets."services/atuin.key".path;
         sync_frequency = "5m";
         sync_address = flags.atuin.syncAddress;
         search_mode = "prefix";
