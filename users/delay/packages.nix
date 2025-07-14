@@ -46,6 +46,7 @@ in {
       settings = {
         auto_sync = true;
         key_path = args.osConfig.age.secrets."services/atuin.key".path;
+        session_path = args.osConfig.age.secrets."services/atuin.session".path;
         sync_frequency = "5m";
         sync_address = flags.atuin.syncAddress;
         search_mode = "prefix";

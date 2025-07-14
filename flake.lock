@@ -302,11 +302,11 @@
         "nixpkgs": "nixpkgs_7"
       },
       "locked": {
-        "lastModified": 1752498410,
-        "narHash": "sha256-1qynDEj/1NOGCQ5/x1eqyw1wDruBmmBuXJKMEjGl7QU=",
+        "lastModified": 1752502657,
+        "narHash": "sha256-BZGJ6oovQJsA1XXllJCm8ObwUvDzZ67Kiotu+fae0qU=",
         "owner": "0xcharly",
         "repo": "nix-config-secrets",
-        "rev": "bed9755f48583caf44ba98d65adde7ea2218add3",
+        "rev": "4704d40030ff411e4f63ffa6edf6517891dd83a9",
         "type": "github"
       },
       "original": {
