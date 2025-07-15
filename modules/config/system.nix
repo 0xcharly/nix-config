@@ -110,6 +110,16 @@ in {
           '';
         };
 
+        healthchecks = mkOption {
+          type = bool;
+          default = false;
+          description = ''
+            If true, host spins up a Healthchecks server.
+
+            https://healthchecks.io/
+          '';
+        };
+
         immich = mkOption {
           type = bool;
           default = false;

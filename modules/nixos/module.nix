@@ -15,6 +15,7 @@
     ./fail2ban.nix
     ./fonts.nix
     ./golink.nix
+    ./healthchecks.nix
     ./jellyfin.nix
     ./immich.nix
     ./nas-fs.nix

@@ -26,6 +26,7 @@
       atuin = true;
       dns = true;
       golink = true;
+      healthchecks = true;
       reverseProxy = true;
       status = true;
       vaultwarden = true;
