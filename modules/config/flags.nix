@@ -5,7 +5,7 @@
   ...
 }: let
   inherit (lib.options) mkOption;
-  inherit (lib.types) bool listOf str;
+  inherit (lib.types) bool int listOf str;
 
   cfg = config.modules;
 in {
@@ -42,6 +42,27 @@ in {
           ui.diff-formatter in newer versions.
 
           # TODO(25.11): Remove deprecated config.
+        '';
+      };
+    };
+
+    lockScreen = {
+      enable = mkOption {
+        type = bool;
+        default = cfg.system.security.isHighlyPrivilegedAccessTier;
+        readOnly = true;
+        description = ''
+          Whether to enable the lock screen.
+          This has no effect on non-NixOS host.
+        '';
+      };
+
+      timeout = mkOption {
+        type = int;
+        default = 600; # 10 minutes.
+        readOnly = true;
+        description = ''
+          The amount of idle time, in seconds, before enabling the lock screen.
         '';
       };
     };

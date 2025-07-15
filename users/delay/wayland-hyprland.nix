@@ -5,6 +5,7 @@
   usrlib,
   ...
 } @ args: let
+  inherit ((usrlib.hm.getUserConfig args).modules) flags;
   inherit ((usrlib.hm.getUserConfig args).modules.usrenv) isCorpManaged isLinuxWaylandDesktop;
 
   map-workspaces = mapFn:
@@ -348,21 +349,24 @@ in {
         after_sleep_cmd = "${hyprctl} dispatch dpms on"; # to avoid having to press a key twice to turn on the display.
       };
 
-      listener = [
-        {
-          timeout = 600; # 10 minutes.
-          on-timeout = lock;
-        }
-        {
-          timeout = 900; # 15 minutes.
-          on-timeout = "${hyprctl} dispatch dpms off";
-          on-resume = "${hyprctl} dispatch dpms on";
-        }
-        {
-          timeout = 3600; # 1 hour.
-          on-timeout = "${systemctl} suspend";
-        }
-      ];
+      listener =
+        lib.optionals flags.lockScreen.enable [
+          {
+            inherit (flags.lockScreen) timeout;
+            on-timeout = lock;
+          }
+        ]
+        ++ [
+          {
+            timeout = 900; # 15 minutes.
+            on-timeout = "${hyprctl} dispatch dpms off";
+            on-resume = "${hyprctl} dispatch dpms on";
+          }
+          {
+            timeout = 3600; # 1 hour.
+            on-timeout = "${systemctl} suspend";
+          }
+        ];
     };
   };
 }
