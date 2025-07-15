@@ -13,6 +13,7 @@ in
       config = {
         DOMAIN = "https://vault.qyrnl.com";
         PASSWORD_HINTS_ALLOWED = false;
+        SIGNUPS_ALLOWED = false; # Disable registration.
 
         # Listen on localhost (IPv4) so Tailscale can access it.
         ROCKET_ADDRESS = "127.0.0.1";
