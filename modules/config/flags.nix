@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }: let
   inherit (lib.options) mkOption;
@@ -10,9 +11,9 @@
 in {
   options.modules.flags = {
     atuin = {
-      enable = mkOption {
+      enableSync = mkOption {
         type = bool;
-        default = !cfg.usrenv.isCorpManaged && cfg.system.networking.tailscaleNode;
+        default = pkgs.stdenv.isLinux && !cfg.usrenv.isCorpManaged && cfg.system.networking.tailscaleNode;
         readOnly = true;
         description = ''
           Installs and setups atuin client.
@@ -81,7 +82,8 @@ in {
 
           For a given `key`:
             - Encrypted key path must be `keys/basic-access/{key}_ed25519_key`
-            - Key will be symlinked to `~/.ssh/{key}`
+            - Private key will be symlinked to `~/.ssh/{key}`
+            - Public key will be symlinked to `~/.ssh/{key}.pub`
         '';
       };
 
@@ -98,7 +100,8 @@ in {
 
           For a given `key`:
             - Encrypted key path must be `keys/trusted-access/{key}_ed25519_key`
-            - Key will be symlinked to `~/.ssh/{key}`
+            - Private key will be symlinked to `~/.ssh/{key}`
+            - Public key will be symlinked to `~/.ssh/{key}.pub`
         '';
       };
 

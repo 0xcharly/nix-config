@@ -54,14 +54,18 @@ in {
         usrlib.ssh.genKnownHostsFile {inherit extraKnownHosts;};
     }
     // lib.optionalAttrs flags.ssh.installBasicAccessKeys (let
+      mkOutOfStoreSymlink = fname: args.config.lib.file.mkOutOfStoreSymlink args.osConfig.age.secrets."keys/basic-access/${fname}".path;
       mkSshKeySymLink = key: {
-        ".ssh/${key}".source = args.config.lib.file.mkOutOfStoreSymlink args.osConfig.age.secrets."keys/basic-access/${key}_ed25519_key".path;
+        ".ssh/${key}".source = mkOutOfStoreSymlink "${key}_ed25519_key";
+        ".ssh/${key}.pub".source = mkOutOfStoreSymlink "${key}_ed25519_key.pub";
       };
     in
       lib.mergeAttrsList (builtins.map mkSshKeySymLink flags.ssh.basicAccessKeys))
     // lib.optionalAttrs flags.ssh.installTrustedAccessKeys (let
+      mkOutOfStoreSymlink = fname: args.config.lib.file.mkOutOfStoreSymlink args.osConfig.age.secrets."keys/trusted-access/${fname}".path;
       mkSshKeySymLink = key: {
-        ".ssh/${key}".source = args.config.lib.file.mkOutOfStoreSymlink args.osConfig.age.secrets."keys/trusted-access/${key}_ed25519_key".path;
+        ".ssh/${key}".source = mkOutOfStoreSymlink "${key}_ed25519_key";
+        ".ssh/${key}.pub".source = mkOutOfStoreSymlink "${key}_ed25519_key.pub";
       };
     in
       lib.mergeAttrsList (builtins.map mkSshKeySymLink flags.ssh.trustedAccessKeys));

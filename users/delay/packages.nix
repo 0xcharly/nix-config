@@ -5,7 +5,6 @@
   usrlib,
   ...
 } @ args: let
-  inherit (pkgs.stdenv) isLinux;
   inherit ((usrlib.hm.getUserConfig args).modules) flags;
   inherit ((usrlib.hm.getUserConfig args).modules.system) beans;
   inherit ((usrlib.hm.getUserConfig args).modules.usrenv) isLinuxDesktop;
@@ -40,16 +39,15 @@ in {
     eza.enable = true; # `ls` replacement.
     fzf.enable = true;
 
-    atuin = lib.mkIf isLinux {
-      enable = flags.atuin.enable;
+    atuin = {
+      enable = true;
       flags = ["--disable-up-arrow"];
-      settings = {
+      settings = lib.mkIf flags.atuin.enableSync {
         auto_sync = true;
         key_path = args.osConfig.age.secrets."services/atuin.key".path;
         session_path = args.osConfig.age.secrets."services/atuin.session".path;
         sync_frequency = "5m";
         sync_address = flags.atuin.syncAddress;
-        search_mode = "prefix";
       };
     };
 
@@ -67,10 +65,7 @@ in {
     keychain = {
       enable = lib.mkDefault true;
       enableFishIntegration = true;
-      keys = lib.optionals flags.ssh.installTrustedAccessKeys [
-        # TODO: Add the public key to avoid the warning printed on login.
-        # "${config.home.homeDirectory}/.ssh/git_commit_signing"
-      ];
+      keys = lib.optionals flags.ssh.installTrustedAccessKeys flags.ssh.trustedAccessKeys;
     };
   };
 }
