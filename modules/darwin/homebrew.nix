@@ -32,11 +32,7 @@ in {
       [
         # Cross-platforms password management.
         "1password"
-        "1password-cli"
         "bitwarden"
-
-        # Browsers.
-        "firefox@developer-edition" # Firefox, for isolates.
 
         # Utilities.
         "beeper" # Messaging.
@@ -47,6 +43,7 @@ in {
       ]
       ++ lib.optionals (!isCorpManaged) [
         # Don't install these on corp-managed hosts.
+        "firefox@developer-edition" # Firefox, for isolates.
         "google-chrome" # When there's no alternatives.
         "protonvpn" # Private network.
         "tailscale-app" # Personal VPN network.
