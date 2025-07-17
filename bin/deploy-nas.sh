@@ -36,11 +36,15 @@ NAS_VAULT_PATH="op://Private/NAS - ZFS Pool Encryption Passphrases"
 op read "$NAS_VAULT_PATH/backups/ayako" >"$temp_setup_secrets/run/agenix/zfs/tank/backups/ayako.key"
 op read "$NAS_VAULT_PATH/backups/dad" >"$temp_setup_secrets/run/agenix/zfs/tank/backups/dad.key"
 op read "$NAS_VAULT_PATH/backups/delay" >"$temp_setup_secrets/run/agenix/zfs/tank/backups/delay.key"
+op read "$NAS_VAULT_PATH/backups/services" >"$temp_setup_secrets/run/agenix/zfs/tank/backups/services.key"
 op read "$NAS_VAULT_PATH/ayako/files" >"$temp_setup_secrets/run/agenix/zfs/tank/ayako/files.key"
 op read "$NAS_VAULT_PATH/ayako/media" >"$temp_setup_secrets/run/agenix/zfs/tank/ayako/media.key"
+op read "$NAS_VAULT_PATH/delay/album" >"$temp_setup_secrets/run/agenix/zfs/tank/delay/album.key"
 op read "$NAS_VAULT_PATH/delay/beans" >"$temp_setup_secrets/run/agenix/zfs/tank/delay/beans.key"
 op read "$NAS_VAULT_PATH/delay/files" >"$temp_setup_secrets/run/agenix/zfs/tank/delay/files.key"
 op read "$NAS_VAULT_PATH/delay/media" >"$temp_setup_secrets/run/agenix/zfs/tank/delay/media.key"
+op read "$NAS_VAULT_PATH/delay/notes" >"$temp_setup_secrets/run/agenix/zfs/tank/delay/notes.key"
+op read "$NAS_VAULT_PATH/delay/vault" >"$temp_setup_secrets/run/agenix/zfs/tank/delay/vault.key"
 
 # Copy the secrets to the host machine.
 rsync -rv --no-p --no-g --no-o --stats --progress \
