@@ -13,6 +13,8 @@
     (modulesPath + "/installer/cd-dvd/channel.nix")
   ];
 
+  networking.useDHCP = true;
+
   # Setup SSH to disable password authentication.
   services.openssh = {
     enable = true;
