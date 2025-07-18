@@ -22,6 +22,7 @@ vault           IN CNAME heimdall
 helios          IN CNAME helios.@tailnetName@.
 images          IN CNAME helios
 
+linode          IN CNAME linode.@tailnetName@.
 nyx             IN CNAME nyx.@tailnetName@.
 selene          IN CNAME selene.@tailnetName@.
-linode          IN CNAME linode.@tailnetName@.
+skullkid        IN CNAME skullkid.@tailnetName@.
