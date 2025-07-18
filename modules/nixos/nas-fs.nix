@@ -11,7 +11,7 @@
 // lib.mkIf config.modules.system.roles.nas.enable {
   # The primary use case is to ensure when using ZFS that a pool isn’t imported
   # accidentally on a wrong machine.
-  # https://search.nixos.org/options?channel=24.11&query=networking.hostId
+  # https://search.nixos.org/options?channel=unstable&query=networking.hostId
   networking.hostId = config.modules.system.roles.nas.hostId;
 
   environment.systemPackages = with pkgs; [zfs];
@@ -113,6 +113,15 @@
         lib.getExe mount-tank;
     };
   };
+
+  # NOTE: services-related group currently need to exist to set the proper
+  # permissions on the secondaries. Would it be better to simply keep files
+  # separate from backups? (i.e. /tank/delay and /tank/ayako only exist on the
+  # primary?) Or should we just systematically create all users on all machines?
+  # Seems like this would unnecessarily increase the attack surface…
+  # TODO: figure out a better way to do this.
+  users.groups.immich = {};
+  users.groups.jellyfin = {};
 
   disko.devices = {
     disk = let
