@@ -266,6 +266,12 @@ in {
           description = "True for machines with an Intel GPU.";
         };
 
+        intelThunderbolt = mkOption {
+          type = bool;
+          default = false;
+          description = "True for machines with an Intel Thunderbolt interface.";
+        };
+
         netboot = mkOption {
           type = bool;
           default = false;
