@@ -158,5 +158,6 @@ in {
     (mkNixosHost ./nixos/nyx {})
     (mkNixosHost ./nixos/helios {})
     (mkNixosHost ./nixos/selene {})
+    (mkNixosHost ./nixos/skullkid {})
   ];
 }
