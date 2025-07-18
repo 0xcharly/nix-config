@@ -86,6 +86,12 @@ nix run github:nix-community/nixos-anywhere -- \
 echo -e "System installation \033[32;1mcomplete\033[0m. System rebooting."
 echo -e "\033[33;1mImportant\033[0m: Make sure to remove the installation media! "
 echo
+
+for i in {10..1}; do
+  echo -ne "$i… \r"
+  sleep 1
+done
+
 echo "じゃあね。"
 
 # We're done.
