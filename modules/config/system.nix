@@ -254,6 +254,12 @@ in {
           description = "True for machines with an AMD GPU.";
         };
 
+        intelCpu = mkOption {
+          type = bool;
+          default = cfg.roles.nixos.intelThunderbolt;
+          description = "True for machines with an Intel CPU.";
+        };
+
         intelGpu = mkOption {
           type = bool;
           default = false;
