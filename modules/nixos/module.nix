@@ -12,12 +12,17 @@
     ./beans.nix
     ./caddy.nix
     ./coredns.nix
+    ./cpu-arch-amd.nix
+    ./cpu-arch-intel.nix
     ./fail2ban.nix
     ./fonts.nix
     ./golink.nix
+    ./gpu-arch-amd.nix
+    ./gpu-arch-intel.nix
     ./healthchecks.nix
-    ./jellyfin.nix
     ./immich.nix
+    ./jellyfin.nix
+    ./intel-thunderbolt.nix
     ./nas-fs.nix
     ./nas-replication.nix
     ./nas-samba.nix
