@@ -37,6 +37,7 @@ in {
         # Utilities.
         "beeper" # Messaging.
         "ghostty" # Terminal.
+        "obsidian" # Notes.
         "raycast" # Mandatory Spotlight alternative.
         "tidal" # Spotify alternative.
         "vlc" # Media player.
