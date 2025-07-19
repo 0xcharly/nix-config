@@ -1,10 +1,9 @@
 {
   config,
   lib,
-  usrlib,
   ...
 }:
-lib.mkIf (usrlib.bool.isTrue config.modules.system.roles.nas.primary) {
+lib.mkIf (lib.fn.isTrue config.modules.system.roles.nas.primary) {
   networking.firewall = {
     enable = true;
     allowPing = true;

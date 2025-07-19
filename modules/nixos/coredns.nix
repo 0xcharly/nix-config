@@ -5,7 +5,6 @@
   config,
   lib,
   pkgs,
-  usrlib,
   ...
 }: let
   tailscaleInterface = config.services.tailscale.interfaceName;
@@ -47,7 +46,7 @@ in
     };
 
     services.tailscale.extraSetFlags = let
-      isTailscaleNode = usrlib.bool.isTrue config.modules.system.networking.tailscaleNode;
+      isTailscaleNode = lib.fn.isTrue config.modules.system.networking.tailscaleNode;
     in
       lib.mkIf isTailscaleNode ["--accept-dns=true"];
   }

@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  usrlib,
   ...
 }: let
   cfg = config.modules.system.roles.nas;
@@ -19,7 +18,7 @@ in
         monthly = 12;
         yearly = 2;
         autoprune = true;
-        autosnap = usrlib.bool.isTrue cfg.primary; # Only create snapshot on the primary.
+        autosnap = lib.fn.isTrue cfg.primary; # Only create snapshot on the primary.
       };
 
       # Snapshot retention policy for user files.
@@ -29,7 +28,7 @@ in
         monthly = 3;
         yearly = 0;
         autoprune = true;
-        autosnap = usrlib.bool.isTrue cfg.primary; # Only create snapshot on the primary.
+        autosnap = lib.fn.isTrue cfg.primary; # Only create snapshot on the primary.
       };
 
       datasets = let

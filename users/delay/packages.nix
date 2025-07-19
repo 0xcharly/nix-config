@@ -2,12 +2,11 @@
   config,
   lib,
   pkgs,
-  usrlib,
   ...
 } @ args: let
-  inherit ((usrlib.hm.getUserConfig args).modules) flags;
-  inherit ((usrlib.hm.getUserConfig args).modules.system) beans;
-  inherit ((usrlib.hm.getUserConfig args).modules.usrenv) isLinuxDesktop;
+  inherit ((lib.user.getUserConfig args).modules) flags;
+  inherit ((lib.user.getUserConfig args).modules.system) beans;
+  inherit ((lib.user.getUserConfig args).modules.usrenv) isLinuxDesktop;
 in {
   # Packages I always want installed. Most packages I install using per-project
   # flakes sourced with direnv and nix-shell, so this is not a huge list.

@@ -1,10 +1,9 @@
 {
   lib,
   pkgs,
-  usrlib,
   ...
 } @ args: let
-  inherit ((usrlib.hm.getUserConfig args).modules.usrenv) isLinuxWaylandDesktop;
+  inherit ((lib.user.getUserConfig args).modules.usrenv) isLinuxWaylandDesktop;
 
   waylandSessionVariables = {
     NIXOS_OZONE_WL = 1;

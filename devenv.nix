@@ -8,6 +8,7 @@
     cachix
     jq
     just
+    home-manager
 
     alejandra
   ];

@@ -4,7 +4,7 @@
   usrlib,
   ...
 } @ args: let
-  inherit ((usrlib.hm.getUserConfig args).modules) flags;
+  inherit ((lib.user.getUserConfig args).modules) flags;
   home = config.home.homeDirectory;
 in {
   programs.ssh = let

@@ -1,10 +1,9 @@
 {
   config,
   lib,
-  usrlib,
   ...
 } @ args: let
-  inherit ((usrlib.hm.getUserConfig args).modules.system.security) isBasicAccessTier;
+  inherit ((lib.user.getUserConfig args).modules.system.security) isBasicAccessTier;
 in
   lib.mkIf (config.isNixOS && isBasicAccessTier) {
     xdg.configFile."cachix/cachix.dhall".source =

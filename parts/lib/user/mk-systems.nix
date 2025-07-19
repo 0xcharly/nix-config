@@ -12,7 +12,7 @@
   # Merge `inputs` into `inputs'` in the shape expected by flake-parts such that:
   #
   # inputs =  { a = { x86_64-linux = {...}; }; b = { x86_64-linux = {...}; }; };
-  # inputs' = { x = {...};; y = {...}; };
+  # inputs' = { x = {...}; y = {...}; };
   #
   # mergeInputs' "x86_64-linux" inputs' inputs =
   #   { a = {...}; b = {...}; x = {...}; y = {...}; };
@@ -21,7 +21,7 @@
   in
     recursiveUpdate inputs' systemMappedInputs;
 
-  # mkSystem is a convenient wrapper around either lib.nixosSystem or
+  # mkSystem is a convenience wrapper around either lib.nixosSystem or
   # lib.darwinSystem.
   mkSystem = nixpkgs: systemBuilder: {
     withSystem,
@@ -76,7 +76,7 @@
       inputs.home-manager.lib.homeManagerConfiguration {
         # Arguments passed to all modules.
         extraSpecialArgs = recursiveUpdate {
-          inherit self' usrlib;
+          inherit self' lib usrlib;
 
           inputs = recursiveUpdate inputs (args.inputs or {});
           inputs' = mergeInputs' system inputs' (args.inputs or {});

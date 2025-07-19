@@ -1,10 +1,9 @@
 {
   lib,
   pkgs,
-  usrlib,
   ...
 } @ args: let
-  inherit ((usrlib.hm.getUserConfig args).modules.usrenv) isCorpManaged isLinuxDesktop;
+  inherit ((lib.user.getUserConfig args).modules.usrenv) isCorpManaged isLinuxDesktop;
 in
   lib.mkIf isLinuxDesktop {
     programs = {

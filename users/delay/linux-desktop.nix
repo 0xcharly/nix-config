@@ -1,10 +1,9 @@
 {
   pkgs,
   lib,
-  usrlib,
   ...
 } @ args: let
-  inherit ((usrlib.hm.getUserConfig args).modules.usrenv) isLinuxDesktop;
+  inherit ((lib.user.getUserConfig args).modules.usrenv) isLinuxDesktop;
 in
   lib.mkIf isLinuxDesktop {
     home.packages = with pkgs; [

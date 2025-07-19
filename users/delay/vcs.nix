@@ -2,10 +2,9 @@
   config,
   lib,
   pkgs,
-  usrlib,
   ...
 } @ args: let
-  inherit ((usrlib.hm.getUserConfig args).modules) flags;
+  inherit ((lib.user.getUserConfig args).modules) flags;
 in {
   programs.mergiraf.enable = true;
 

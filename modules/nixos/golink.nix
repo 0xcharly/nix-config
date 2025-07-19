@@ -2,11 +2,10 @@
   config,
   inputs,
   lib,
-  usrlib,
   pkgs,
   ...
 }: let
-  isNasPrimary = usrlib.bool.isTrue config.modules.system.roles.nas.primary;
+  isNasPrimary = lib.fn.isTrue config.modules.system.roles.nas.primary;
 in {
   imports = [inputs.golink.nixosModules.default];
 

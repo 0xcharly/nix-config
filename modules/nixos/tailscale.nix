@@ -1,12 +1,11 @@
 {
   config,
   lib,
-  usrlib,
   ...
 }: let
   cfg = config.modules.system.networking;
 in
-  lib.mkIf (usrlib.bool.isTrue cfg.tailscaleNode) {
+  lib.mkIf (lib.fn.isTrue cfg.tailscaleNode) {
     # Create group Tailscale.
     users.groups.tailscale = {};
 

@@ -2,11 +2,10 @@
   config,
   lib,
   pkgs,
-  usrlib,
   ...
 } @ args: let
-  inherit ((usrlib.hm.getUserConfig args).modules) flags;
-  inherit ((usrlib.hm.getUserConfig args).modules.usrenv) isCorpManaged isLinuxWaylandDesktop;
+  inherit ((lib.user.getUserConfig args).modules) flags;
+  inherit ((lib.user.getUserConfig args).modules.usrenv) isCorpManaged isLinuxWaylandDesktop;
 
   map-workspaces = mapFn:
     builtins.map (x:

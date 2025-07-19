@@ -5,8 +5,8 @@
 }: let
   # `self.usrlib` is an extended version of `nixpkgs.lib`.
   # mkDarwinSystem and mkNixosSystem are builders for assembling a new system.
-  inherit (inputs.self.usrlib.builders) mkDarwinSystem mkNixosSystem mkStandaloneHome;
-  inherit (inputs.self.usrlib.modules) mkModuleTree;
+  inherit (inputs.self.lib.user) mkDarwinSystem mkNixosSystem mkStandaloneHome;
+  inherit (inputs.self.lib.user) mkModuleTree;
   inherit (inputs.nixpkgs.lib.attrsets) recursiveUpdate;
   inherit (inputs.nixpkgs.lib.lists) concatLists flatten singleton;
 
@@ -134,18 +134,27 @@
         roles = roles ++ [iso];
       });
 
-  mkHostAttrs = builtins.foldl' recursiveUpdate {};
-in {
-  flake.lib = {
-    inherit mkDarwinHost mkHomeHost mkHostAttrs;
+  mkHomeFromNixosHost = hostname: {username ? "delay"}: {
+    ${hostname} = inputs.self.nixosConfigurations.${hostname}.config.home-manager.users.${username}.home;
   };
 
+  mkHostAttrs = builtins.foldl' recursiveUpdate {};
+in {
   flake.darwinConfigurations = mkHostAttrs [
     (mkDarwinHost ./darwin/mbp {})
   ];
 
   flake.homeConfigurations = mkHostAttrs [
     (mkHomeHost (./home + "/delay@linode") {})
+
+    # NOTE: the following configuration currently do not work because HM fails
+    # on news.json.output attribute missing (only available in standalone HM?).
+    (mkHomeFromNixosHost "heimdall" {})
+    (mkHomeFromNixosHost "linode" {})
+    (mkHomeFromNixosHost "nyx" {})
+    (mkHomeFromNixosHost "helios" {})
+    (mkHomeFromNixosHost "selene" {})
+    (mkHomeFromNixosHost "skullkid" {})
   ];
 
   flake.nixosConfigurations = mkHostAttrs [

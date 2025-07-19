@@ -2,10 +2,9 @@
   inputs,
   lib,
   pkgs,
-  usrlib,
   ...
 } @ args: let
-  inherit ((usrlib.hm.getUserConfig args).modules.usrenv) isLinuxDesktop;
+  inherit ((lib.user.getUserConfig args).modules.usrenv) isLinuxDesktop;
 in {
   imports = [inputs.nix-config-secrets.nixosModules.default];
 

@@ -1,10 +1,9 @@
 {
   lib,
   pkgs,
-  usrlib,
   ...
 } @ args: let
-  inherit ((usrlib.hm.getUserConfig args).modules.usrenv) isHeadless isLinuxDesktop;
+  inherit ((lib.user.getUserConfig args).modules.usrenv) isHeadless isLinuxDesktop;
   inherit (pkgs.stdenv) isDarwin isLinux;
 
   hasWindowManager = !isHeadless;

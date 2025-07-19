@@ -32,6 +32,10 @@
       ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIOsTlULQNZe35e1q4ztyqe73WRgBAhdIWwirhTJMMY2s";
       ssh-rsa = "AAAAB3NzaC1yc2EAAAADAQABAAACAQCiHrD2gS7AGUoxTt5AW0Z85LXwcbRpekJTxj0wM6uhCbAJmyRgHFA2gpGoPURMwGF2H83lAmG/ZtcfDH/DSycd1r6YSdoLZGhG96PWg3jHjMyPIGQKRIFd3pgPVnPYeABwJR4/11Clx8e6FOJj9mmZdyW+UV+MpgUeQTaEpodjK8+4TDjPheaWlqvotEFYFqaWxJSSlh/7Jw9WnpHyXdeQ4ZrFqKsYzCKaDt5n++p6qc38Mz6rp2w4FOARnsUkUE3gkO/tOAMhqPttmK9yGRnV6I5zLi6tkE4CwYusQ6y9qIkyHIWjfH24L3qVfVK3y2at0MdwXLiVNG9Hh7U8lazjeOeT44MSWj7O/n+HGxZpnXsvt4k6uRw8Ft1KptLxohGPYZMCc3HPtzSrthBtoxX29riq1SqZk5LZB6vwM59L1M8RHuKfNIrkcNUJML+uePwkIMV7xmiriJ/1JYo3T3c6tFdJu2px9rKSpByzVVah8CJ/zu5PB5D8f/y8TvNMHcHCO6OJ4pERFg+OVfYpb3pjJgL8sPdWPTCXlxNE5rSrp9pqQxfskT3mBAAefZGG7HJJVY4Ph65OKSvnSqv3ass2BYEDAcKtS+gkjz/g4DAMBvgdp/5jEAzk9CLKr03Gs3I/8Q+nqSaHbthLLN5TSUbSnPCxb1UwY6r1C85Fk33Kcw==";
     };
+    "skullkid" = {
+      ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIMiNHW0UczAz+qpv58uCBR0Jzux1rJd36wOktS0t9S8r";
+      ssh-rsa = "AAAAB3NzaC1yc2EAAAADAQABAAACAQDn+xUjPDvI7cXs5p9KqpeFFTrp259moz/N1oOt8EnN9MUzp0K/tenryf8knwyT2o6Wbe8e5O/MwUzO3lnNx4yhN1RZgKxIrYa7K+HGX401CJmz12vK5c8ID2IYp6mfpomZPrX9/tQ7VpvKdvbzurx9/OH6knv1oyF+Vqdqqcg2I0dTh3c3TpxbUhVHDev+QP31sT7wl06WhgtqUJx2kQF2tPsfhpalTEi8M7bUGqkSIQbEbKL2oRrSE/9Qn2O4Nfpu69YxyGHrJkjkGwXVVwdZ14m2Uz0PRFzYMYMoYEAL7pq/HxJ7pI38Kat9lLcfjTcsdtV89IsPedhWgChKGEIJKxXpDTUlgUzMfMfUPRrEFC48gIElGdnL1nMCrPsyzsBbMZbLvN57YlWsxZ237s6rb12GReM3kixPDSs1JNtTK/T+lrw7Z/04vvEmpismrULh33p1yK5+uKugeqbG5qA3UfvHEVIKsBpLQWnc5lPovTwcWOiT4v0e0Z9PAd7sYhEkrFgusloGaCHl9dfNgmqOr8+BzMxNLA9ZJXkOs6ptjh8pAoXh1smKpaB3IRfZuBsEyS2AR/rQTrLxnGpTJa7gqR8vacTGmsOMOjs7TYW+fFOkacVjCPETcM9NXNnSTGITPl7CU85rGyPUIsxwBFg/G7Ub+U3VLVWT9+T2v4XqMw==";
+    };
   };
   qualifyHosts = hosts: domain: lib.mapAttrs' (name: value: lib.nameValuePair "${name}.${domain}" value) hosts;
   allKnownHosts = knownHosts // tailscaleKnownHosts // (qualifyHosts tailscaleKnownHosts "neko-danio.ts.net");
