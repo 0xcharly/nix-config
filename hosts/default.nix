@@ -28,13 +28,13 @@
   users = ../users; # home-manager configurations.
   standalone = users + /standalone.nix;
 
-  # mkModulesFor generates a list of modules imported by the host with the given
+  # mkModulesList generates a list of modules imported by the host with the given
   # hostname. Do note that this needs to be called *in* the (darwin|nixos)System
   # set, since it generates a *module list*, which is also expected by system
   # builders.
-  mkModulesForHost = host: {
+  mkModuleList = {
+    host,
     moduleTrees,
-    roles,
     extraModules,
   }:
     flatten (
@@ -45,7 +45,7 @@
 
         # Recursively import all module trees (i.e. directories with a
         # `module.nix`) for given moduleTree directories and roles.
-        (map mkModuleTree (concatLists [moduleTrees roles]))
+        (builtins.map mkModuleTree moduleTrees)
 
         # And append any additional lists that don't don't conform to the
         # moduleTree API, but still need to be imported somewhat commonly.
@@ -57,116 +57,86 @@
     host,
     builder,
     system,
-    moduleTrees,
-    roles,
-    extraModules,
-    ...
-  } @ args': let
+    moduleTrees ? [],
+    extraModules ? [],
+  }: let
     hostname = builtins.baseNameOf host;
   in {
-    ${hostname} = builder (args'
-      // {
-        inherit hostname system withSystem;
-        modules = mkModulesForHost host {
-          inherit moduleTrees roles extraModules;
-        };
-      });
+    ${hostname} = builder {
+      inherit hostname system withSystem;
+      modules = mkModuleList {inherit host moduleTrees extraModules;};
+    };
   };
 
-  mkDarwinHost = host: {
-    moduleTrees ? [],
-    roles ? [],
-    extraModules ? [],
-    ...
-  } @ args':
-    mkHost (args'
-      // {
-        inherit extraModules host;
-        system = "aarch64-darwin";
-        builder = mkDarwinSystem;
-        moduleTrees = moduleTrees ++ [config fullyManaged shared users];
-        roles = roles ++ [darwin];
-      });
+  mkDarwinHost = host:
+    mkHost {
+      inherit host;
+      system = "aarch64-darwin";
+      builder = mkDarwinSystem;
+      moduleTrees = [config darwin fullyManaged shared users];
+    };
 
-  mkHomeHost = host: {
-    moduleTrees ? [],
-    roles ? [],
-    extraModules ? [],
-    ...
-  } @ args':
-    mkHost (args'
-      // {
-        inherit host;
-        system = "x86_64-linux";
-        builder = mkStandaloneHome;
-        moduleTrees = moduleTrees ++ [config shared];
-        roles = roles ++ [home];
-        extraModules = extraModules ++ [(import standalone "delay")];
-      });
+  mkHomeHost = host:
+    mkHost {
+      inherit host;
+      system = "x86_64-linux";
+      builder = mkStandaloneHome;
+      moduleTrees = [config home shared];
+      extraModules = [(import standalone "delay")];
+    };
 
-  mkNixosHost = host: {
-    moduleTrees ? [],
-    roles ? [],
-    extraModules ? [],
-    ...
-  } @ args':
-    mkHost (args'
-      // {
-        inherit extraModules host;
-        system = "x86_64-linux";
-        builder = mkNixosSystem;
-        moduleTrees = moduleTrees ++ [config fullyManaged shared users];
-        roles = roles ++ [nixos];
-      });
+  mkNixosHost = host:
+    mkHost {
+      inherit host;
+      system = "x86_64-linux";
+      builder = mkNixosSystem;
+      moduleTrees = [config nixos fullyManaged shared users];
+    };
 
-  mkNixosIso = host: {
-    moduleTrees ? [],
-    roles ? [],
-    extraModules ? [],
-    ...
-  } @ args':
-    mkHost (args'
-      // {
-        inherit extraModules host;
-        system = "x86_64-linux";
-        builder = mkNixosSystem;
-        moduleTrees = moduleTrees ++ [config shared];
-        roles = roles ++ [iso];
-      });
+  mkNixosIso = host:
+    mkHost {
+      inherit host;
+      system = "x86_64-linux";
+      builder = mkNixosSystem;
+      moduleTrees = [config iso shared];
+    };
 
-  mkHomeFromNixosHost = hostname: {username ? "delay"}: {
-    ${hostname} = inputs.self.nixosConfigurations.${hostname}.config.home-manager.users.${username}.home;
+  mkHomeFromNixosHost = hostname: {
+    ${hostname} = inputs.self.nixosConfigurations.${hostname}.config.home-manager.users.delay.home;
   };
 
-  mkHostAttrs = builtins.foldl' recursiveUpdate {};
+  mkConfigurations = builtins.foldl' recursiveUpdate {};
 in {
-  flake.darwinConfigurations = mkHostAttrs [
-    (mkDarwinHost ./darwin/mbp {})
-  ];
+  flake = {
+    # Export builder functions to build upon this config.
+    fn = {inherit mkDarwinHost mkHomeHost mkNixosHost mkNixosIso;};
 
-  flake.homeConfigurations = mkHostAttrs [
-    (mkHomeHost (./home + "/delay@linode") {})
+    darwinConfigurations = mkConfigurations [
+      (mkDarwinHost ./darwin/mbp)
+    ];
 
     # NOTE: the following configuration currently do not work because HM fails
     # on news.json.output attribute missing (only available in standalone HM?).
-    (mkHomeFromNixosHost "heimdall" {})
-    (mkHomeFromNixosHost "linode" {})
-    (mkHomeFromNixosHost "nyx" {})
-    (mkHomeFromNixosHost "helios" {})
-    (mkHomeFromNixosHost "selene" {})
-    (mkHomeFromNixosHost "skullkid" {})
-  ];
+    homeConfigurations = mkConfigurations [
+      (mkHomeFromNixosHost "heimdall")
+      (mkHomeFromNixosHost "linode")
+      (mkHomeFromNixosHost "nyx")
+      (mkHomeFromNixosHost "helios")
+      (mkHomeFromNixosHost "selene")
+      (mkHomeFromNixosHost "skullkid")
+    ];
 
-  flake.nixosConfigurations = mkHostAttrs [
-    (mkNixosIso ./iso/recovery {})
-    (mkNixosIso ./iso/recovery-linode {})
-    (mkNixosIso ./iso/recovery-thunderbolt {})
+    nixosConfigurations = mkConfigurations [
+      (mkNixosIso ./iso/recovery)
+      (mkNixosIso ./iso/recovery-linode)
+      (mkNixosIso ./iso/recovery-thunderbolt)
 
-    (mkNixosHost ./nixos/heimdall {})
-    (mkNixosHost ./nixos/linode {})
-    (mkNixosHost ./nixos/nyx {})
-    (mkNixosHost ./nixos/helios {})
-    (mkNixosHost ./nixos/selene {})
-    (mkNixosHost ./nixos/skullkid {})
-  ];
+      (mkNixosHost ./nixos/heimdall)
+      (mkNixosHost ./nixos/linode)
+      (mkNixosHost ./nixos/nyx)
+      (mkNixosHost ./nixos/helios)
+      (mkNixosHost ./nixos/selene)
+      (mkNixosHost ./nixos/skullkid)
+    ];
+  };
 }

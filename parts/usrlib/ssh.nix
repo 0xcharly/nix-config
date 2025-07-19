@@ -46,19 +46,19 @@
       )
       hosts);
 
-  genNixosKnownHostAttrs = host: type: key: {
+  mkNixosKnownHostAttrs = host: type: key: {
     "${host}/${type}" = {
       hostNames = lib.singleton host;
       publicKey = lib.concatStringsSep " " [type key];
     };
   };
-  genKnownHostsFileEntry = host: type: key: "${host} ${type} ${key}";
+  mkKnownHostsFileEntry = host: type: key: "${host} ${type} ${key}";
 in {
   nixos.knownHosts =
     lib.mergeAttrsList
-    (forEachKnownHostsEntry genNixosKnownHostAttrs allKnownHosts);
+    (forEachKnownHostsEntry mkNixosKnownHostAttrs allKnownHosts);
 
-  genKnownHostsFile = {extraKnownHosts ? {}}:
+  mkKnownHostsFile = {extraKnownHosts ? {}}:
     lib.concatStringsSep "\n"
-    (forEachKnownHostsEntry genKnownHostsFileEntry (allKnownHosts // extraKnownHosts));
+    (forEachKnownHostsEntry mkKnownHostsFileEntry (allKnownHosts // extraKnownHosts));
 }

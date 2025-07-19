@@ -36,7 +36,7 @@ in {
   home.file =
     {
       # Install known SSH keys for trusted hosts.
-      ".ssh/known_hosts.trusted".text = usrlib.ssh.genKnownHostsFile {};
+      ".ssh/known_hosts.trusted".text = usrlib.ssh.mkKnownHostsFile {};
     }
     // lib.optionalAttrs flags.ssh.installBasicAccessKeys (let
       mkOutOfStoreSymlink = fname: args.config.lib.file.mkOutOfStoreSymlink args.osConfig.age.secrets."keys/basic-access/${fname}".path;
