@@ -17,6 +17,7 @@
     ./fail2ban.nix
     ./fonts.nix
     ./golink.nix
+    ./gotify.nix
     ./gpu-arch-amd.nix
     ./gpu-arch-intel.nix
     ./healthchecks.nix

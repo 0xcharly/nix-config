@@ -26,6 +26,7 @@
       atuin = true;
       dns = true;
       golink = true;
+      gotify = true;
       healthchecks = true;
       reverseProxy = true;
       status = true;
