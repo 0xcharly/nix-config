@@ -30,25 +30,22 @@ in {
       };
     in
       [
-        # Cross-platforms password management.
-        "1password"
-        "bitwarden"
-
-        # Utilities.
-        "beeper" # Messaging.
+        "1password" # Password manager.
         "ghostty" # Terminal.
-        "obsidian" # Notes.
         "raycast" # Mandatory Spotlight alternative.
-        "tidal" # Spotify alternative.
-        "vlc" # Media player.
       ]
       ++ lib.optionals (!isCorpManaged) [
         # Don't install these on corp-managed hosts.
+        "beeper" # Messaging.
+        "bitwarden" # Personal password management.
         "firefox@developer-edition" # Firefox, for isolates.
         "google-chrome" # When there's no alternatives.
+        "obsidian" # Notes.
         "protonvpn" # Private network.
         "tailscale-app" # Personal VPN network.
+        "tidal" # Spotify alternative.
         "transmission"
+        "vlc" # Media player.
       ];
   };
 }
