@@ -9,18 +9,18 @@ in
     programs = {
       chromium = {
         enable = !isCorpManaged;
-        package = pkgs.google-chrome;
+        package = pkgs.google-chrome.override {
+          commandLineArgs = "--enable-features=VaapiVideoEncoder,VaapiVideoDecoder,Vulkan,DefaultANGLEVulkan,VulkanFromANGLE";
+        };
         commandLineArgs = [
           # Enable to automatically spoof the user agent to something the JP tax site accepts.
           # "--user-agent='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.2 Safari/605.1.15'"
-          "--enable-features=VaapiVideoDecodeLinuxGL,VaapiVideoEncoder,Vulkan,VulkanFromANGLE,DefaultANGLEVulkan,VaapiIgnoreDriverChecks,VaapiVideoDecoder,PlatformHEVCDecoderSupport,UseMultiPlaneFormatForHardwareVideo"
         ];
         dictionaries = with pkgs; [
           hunspellDictsChromium.en_US
           hunspellDictsChromium.fr_FR
         ];
         extensions = [
-          {id = "aeblfdkhhhdcdjpifhhbdiojplfjncoa";} # 1Password
           {id = "nngceckbapebfimnlniiiahkandclblb";} # Bitwarden
           {id = "cjpalhdlnbpafiamejdnhcphjbkeiagm";} # uBlock Origin
         ];
