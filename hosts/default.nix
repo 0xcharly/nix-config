@@ -109,7 +109,7 @@
 in {
   flake = {
     # Export builder functions to build upon this config.
-    fn = {inherit mkDarwinHost mkHomeHost mkNixosHost mkNixosIso;};
+    fn = {inherit mkConfigurations mkDarwinHost mkHomeHost mkNixosHost mkNixosIso;};
 
     darwinConfigurations = mkConfigurations [
       (mkDarwinHost ./darwin/mbp)
