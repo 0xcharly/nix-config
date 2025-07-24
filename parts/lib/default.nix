@@ -17,5 +17,7 @@ in {
 
   user = lib.foldr (path: acc: acc // (import path args)) {} (listModulesRecursive' ./user);
 
+  # Also inject Home-Manager's lib which seems to be required for standalone hosts.
+  # TODO: is this OK?
   inherit (inputs.home-manager.lib) hm;
 }

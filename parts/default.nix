@@ -17,6 +17,5 @@ in {
     ./usrlib # User-library providing utilities.
   ];
 
-  # perSystem._module.args = {inherit lib;};
   flake = {inherit lib;};
 }
