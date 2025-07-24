@@ -7,7 +7,6 @@
     import ./lib {
       inherit inputs pkgs;
       lib = self;
-      inherit (inputs.home-manager.lib) hm;
     });
 in {
   # Explicitly import "parts" of a flake to compose it modularly.

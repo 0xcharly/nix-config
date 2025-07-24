@@ -1,4 +1,4 @@
-{lib, ...} @ args: let
+{inputs, lib, ...} @ args: let
   listFilesWithSuffixRecursive = suffix: dir:
     lib.filter
     (p: lib.hasSuffix suffix p && !(lib.hasPrefix "_" (builtins.baseNameOf p)))
@@ -16,4 +16,6 @@ in {
     // lib.foldr (path: acc: acc // (import path args)) {} (listModulesRecursive' ./fn);
 
   user = lib.foldr (path: acc: acc // (import path args)) {} (listModulesRecursive' ./user);
+
+  inherit (inputs.home-manager.lib) hm;
 }
