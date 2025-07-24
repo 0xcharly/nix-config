@@ -33,7 +33,7 @@
   # set, since it generates a *module list*, which is also expected by system
   # builders.
   mkModuleList = {
-    host,
+    hostModule,
     moduleTrees,
     extraModules,
   }:
@@ -41,7 +41,7 @@
       concatLists [
         # Derive host specific module path from the first argument of the
         # function.
-        (singleton (host + /host.nix))
+        (singleton (hostModule + /host.nix))
 
         # Recursively import all module trees (i.e. directories with a
         # `module.nix`) for given moduleTree directories and roles.
@@ -54,52 +54,76 @@
     );
 
   mkHost = {
-    host,
+    hostModule,
     builder,
     system,
     moduleTrees ? [],
     extraModules ? [],
-  }: let
-    hostname = builtins.baseNameOf host;
+    ...
+  } @ args: let
+    hostname = builtins.baseNameOf hostModule;
   in {
-    ${hostname} = builder {
-      inherit hostname system withSystem;
-      modules = mkModuleList {inherit host moduleTrees extraModules;};
-    };
+    ${hostname} = builder (
+      args
+      // {
+        inherit hostname system withSystem;
+        modules = mkModuleList {inherit hostModule moduleTrees extraModules;};
+      }
+    );
   };
 
-  mkDarwinHost = host:
-    mkHost {
-      inherit host;
-      system = "aarch64-darwin";
-      builder = mkDarwinSystem;
-      moduleTrees = [config darwin fullyManaged shared users];
-    };
+  mkDarwinHost = {
+    hostModule,
+    moduleTrees ? [],
+    extraModules ? [],
+    ...
+  } @ args:
+    mkHost (args
+      // {
+        system = "aarch64-darwin";
+        builder = mkDarwinSystem;
+        moduleTrees = moduleTrees ++ [config darwin fullyManaged shared users];
+      });
 
-  mkHomeHost = host:
-    mkHost {
-      inherit host;
-      system = "x86_64-linux";
-      builder = mkStandaloneHome;
-      moduleTrees = [config home shared];
-      extraModules = [(import standalone "delay")];
-    };
+  mkHomeHost = {
+    hostModule,
+    moduleTrees ? [],
+    extraModules ? [],
+    ...
+  } @ args:
+    mkHost (args
+      // {
+        system = "x86_64-linux";
+        builder = mkStandaloneHome;
+        moduleTrees = moduleTrees ++ [config home shared];
+        extraModules = extraModules ++ [(import standalone "delay")];
+      });
 
-  mkNixosHost = host:
-    mkHost {
-      inherit host;
-      system = "x86_64-linux";
-      builder = mkNixosSystem;
-      moduleTrees = [config nixos fullyManaged shared users];
-    };
+  mkNixosHost = {
+    hostModule,
+    moduleTrees ? [],
+    extraModules ? [],
+    ...
+  } @ args:
+    mkHost (args
+      // {
+        system = "x86_64-linux";
+        builder = mkNixosSystem;
+        moduleTrees = moduleTrees ++ [config nixos fullyManaged shared users];
+      });
 
-  mkNixosIso = host:
-    mkHost {
-      inherit host;
-      system = "x86_64-linux";
-      builder = mkNixosSystem;
-      moduleTrees = [config iso shared];
-    };
+  mkNixosIso = {
+    hostModule,
+    moduleTrees ? [],
+    extraModules ? [],
+    ...
+  } @ args:
+    mkHost (args
+      // {
+        system = "x86_64-linux";
+        builder = mkNixosSystem;
+        moduleTrees = moduleTrees ++ [config iso shared];
+      });
 
   mkHomeFromNixosHost = hostname: {
     ${hostname} = inputs.self.nixosConfigurations.${hostname}.config.home-manager.users.delay.home;
@@ -112,7 +136,7 @@ in {
     fn = {inherit mkConfigurations mkDarwinHost mkHomeHost mkNixosHost mkNixosIso;};
 
     darwinConfigurations = mkConfigurations [
-      (mkDarwinHost ./darwin/mbp)
+      (mkDarwinHost {hostModule = ./darwin/mbp;})
     ];
 
     # NOTE: the following configuration currently do not work because HM fails
@@ -127,16 +151,16 @@ in {
     ];
 
     nixosConfigurations = mkConfigurations [
-      (mkNixosIso ./iso/recovery)
-      (mkNixosIso ./iso/recovery-linode)
-      (mkNixosIso ./iso/recovery-thunderbolt)
+      (mkNixosIso {hostModule = ./iso/recovery;})
+      (mkNixosIso {hostModule = ./iso/recovery-linode;})
+      (mkNixosIso {hostModule = ./iso/recovery-thunderbolt;})
 
-      (mkNixosHost ./nixos/heimdall)
-      (mkNixosHost ./nixos/linode)
-      (mkNixosHost ./nixos/nyx)
-      (mkNixosHost ./nixos/helios)
-      (mkNixosHost ./nixos/selene)
-      (mkNixosHost ./nixos/skullkid)
+      (mkNixosHost {hostModule = ./nixos/heimdall;})
+      (mkNixosHost {hostModule = ./nixos/linode;})
+      (mkNixosHost {hostModule = ./nixos/nyx;})
+      (mkNixosHost {hostModule = ./nixos/helios;})
+      (mkNixosHost {hostModule = ./nixos/selene;})
+      (mkNixosHost {hostModule = ./nixos/skullkid;})
     ];
   };
 }

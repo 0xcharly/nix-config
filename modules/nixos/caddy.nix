@@ -20,10 +20,10 @@ in
       environmentFile = config.age.secrets."services/gandi-creds".path;
       virtualHosts = {
         "(ts_host)".extraConfig = ''
-            tls {
-              resolvers 1.1.1.1
-              dns gandi {env.GANDIV5_PERSONAL_ACCESS_TOKEN}
-            }
+          tls {
+            resolvers 1.1.1.1
+            dns gandi {env.GANDIV5_PERSONAL_ACCESS_TOKEN}
+          }
         '';
         # TODO: define Immich's host and port somewhere else.
         # TODO: define flag to enable this virtual host.
