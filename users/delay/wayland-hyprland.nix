@@ -153,13 +153,13 @@ in {
         # Chrome's Picture-in-Picture.
         "float, class:^$, title:^Picture in picture$"
         "pin, class:^$, title:^Picture in picture$"
-        "move 2426 120, class:^$, title:^Picture in picture$"
+        "move 2426 94, class:^$, title:^Picture in picture$"
         "size 640 360, class:^$, title:^Picture in picture$"
         "keepaspectratio, class:^$, title:^Picture in picture$"
         # Firefox's Picture-in-Picture.
         "float, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
         "pin, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
-        "move 2426 120, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
+        "move 2426 94, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
         "size 640 360, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
         "keepaspectratio, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
       ];
@@ -209,123 +209,53 @@ in {
       };
     };
 
-    hyprpanel = {
+    waybar = {
       enable = lib.mkDefault config.wayland.windowManager.hyprland.enable;
-
-      # Configure and theme almost all options from the GUI.
-      # Configure bar layouts for monitors. See 'https://hyprpanel.com/configuration/panel.html'.
-      # See 'https://hyprpanel.com/configuration/settings.html'.
+      systemd.enable = lib.mkDefault config.programs.waybar.enable;
       settings = {
-        scalingPriority = "hyprland";
-        bar = {
-          layouts = {
-            "*" = {
-              left = ["workspaces"];
-              middle = ["media"];
-              right = ["volume" "clock"];
-            };
+        mainBar = {
+          layer = "bottom";
+          position = "bottom";
+          output = ["DP-3"];
+          margin-bottom = 4;
+          margin-left = 4;
+          margin-right = 4;
+          spacing = 8;
+          modules-left = ["hyprland/workspaces"];
+          modules-center = [];
+          modules-right = ["wireplumber" "clock"];
+
+          "hyprland/workspaces" = {
+            format = "{name}";
+            on-click = "activate";
+            sort-by-number = true;
+            on-scroll-up = "${lib.getExe' pkgs.hyprland "hyprctl"} dispatch workspace e+1";
+            on-scroll-down = "${lib.getExe' pkgs.hyprland "hyprctl"} dispatch workspace e-1";
           };
           clock = {
-            format = "%Od日 ┊ %R";
-            showIcon = false;
+            format = "{:%Od日 %R}";
           };
-          launcher.autoDetectIcon = true;
-          media = {
-            show_active_only = true;
-            truncation_size = 100;
-          };
-          workspaces = {
-            monitorSpecific = false;
-            showWsIcons = true;
-            spacing = 0.2;
-            numbered_active_indicator = "highlight";
-            workspaceMask = true;
-            workspaces = 1;
-            workspaceIconMap = lib.attrsets.mergeAttrsList (
-              map-workspaces (no: repr: {repr = no;})
-            );
-          };
-        };
-
-        theme = {
-          name = "catppuccin_mocha";
-          font = {
-            name = "Recursive Sans Casual Static";
-            size = "12px";
-          };
-          bar = let
-            moduleAccent = "#95b7ef";
-            moduleBg = "#192029";
-            moduleFg = "#8fa3bb";
-          in {
-            dropdownGap = "28px";
-            floating = true;
-            margin_bottom = "0em";
-            margin_sides = "0em";
-            margin_top = "5px";
-            outer_spacing = "0em";
-            transparent = true;
-
-            buttons = {
-              borderSize = "0px";
-              clock = {
-                spacing = "0em";
-                background = moduleBg;
-                text = moduleFg;
-              };
-              enableBorders = false;
-              padding_x = "8px";
-              padding_y = "1px";
-              radius = "8px";
-              y_margins = "0em";
-              battery.background = moduleBg;
-              bluetooth.background = moduleBg;
-              dashboard = {
-                background = moduleBg;
-                border = moduleAccent;
-                icon = moduleAccent;
-              };
-              media = {
-                background = moduleBg;
-                icon = moduleAccent;
-                text = moduleFg;
-              };
-              network.background = moduleBg;
-              volume = {
-                background = moduleBg;
-                icon = moduleAccent;
-                text = moduleFg;
-              };
-              windowtitle.background = moduleBg;
-              workspaces = {
-                fontSize = "1.2em";
-                numbered_active_highlight_border = "0.3em";
-                numbered_active_highlight_padding = "0.4em";
-                numbered_inactive_padding = "0.4em";
-                active = "#203147";
-                available = moduleFg;
-                background = moduleBg;
-                border = moduleAccent;
-                hover = "#203147";
-                numbered_active_highlighted_text_color = "#9fcdfe";
-                occupied = "#bac2de";
-              };
-            };
-          };
-        };
-
-        terminal = lib.getExe pkgs.ghostty;
-
-        menus = {
-          clock = {
-            time = {
-              hideSeconds = true;
-              military = true;
-            };
-            weather.enabled = false;
+          wireplumber = {
+            format = "{icon} {volume}%";
+            format-muted = "  {volume}%";
+            format-icons = [" " " " " "];
+            on-click-middle = "${lib.getExe' pkgs.wireplumber "wpctl"} set-mute @DEFAULT_AUDIO_SOURCE@ toggle";
           };
         };
       };
+      style = let
+        colors = {
+          accentFg = "#9fcdfe";
+          accentBg = "#203147";
+          cursorFg = "#cab4f4";
+          cursorBg = "#312b41";
+          normalBg = "#192029";
+          normalFg = "#8fa3bb";
+          urgentBg = "#41262e";
+          urgentFg = "#fe9fa9";
+        };
+      in
+        pkgs.replaceVars ./waybar/style.css colors;
     };
   };
 

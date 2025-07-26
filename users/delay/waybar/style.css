@@ -1,0 +1,73 @@
+* {
+    font-size: 12px;
+    border-radius: 8px;
+    animation-duration: 0.1s;
+}
+
+window#waybar {
+    font-family: "Recursive Sans Casual Static";
+    font-weight: 600;
+    background-color: transparent;
+    border-bottom: 0px;
+    color: @normalFg@;
+}
+
+button {
+    border: none;
+}
+
+#clock,
+#wireplumber {
+    padding: 0 8px;
+}
+
+#clock,
+#wireplumber,
+#workspaces {
+    background-color: @normalBg@;
+    color: @normalFg@;
+}
+
+#workspaces button {
+    background-color: transparent;
+    color: @normalFg@;
+    border-radius: 0;
+    padding: 0 4px;
+    background-image: none;
+}
+
+#workspaces label {
+    font-size: 1.2em;
+}
+
+#workspaces button:first-child {
+    border-radius: 8px 0 0 8px;
+}
+
+#workspaces button:last-child {
+    border-radius: 0 8px 8px 0;
+}
+
+#workspaces button.active,
+#workspaces button.focused {
+    background-color: @accentBg@;
+    color: @accentFg@;
+}
+
+#clock:hover,
+#wireplumber:hover,
+#wireplumber.muted:hover,
+#workspaces button:hover {
+    background-color: @cursorBg@;
+    color: @cursorFg@;
+}
+
+#workspaces button.urgent {
+    background-color: @urgentBg@;
+    color: @urgentFg@;
+}
+
+#wireplumber.muted {
+    background-color: @accentBg@;
+    color: @accentFg@;
+}
