@@ -176,9 +176,6 @@ in {
       ];
       # Window rules.
       windowrulev2 = [
-        # "workspace 1, class:^firefox$"
-        # "workspace 2, class:^chromium-browser$"
-        # "workspace 5, class:^1Password$"
         "float, class:^thunar$, title:^File Operation Progress$"
         "float, class:^org.pulseaudio.pavucontrol$, title:^Volume Control$"
         # Chrome's Picture-in-Picture.
