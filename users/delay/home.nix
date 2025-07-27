@@ -7,6 +7,7 @@
     ./browsers.nix
     ./catppuccin.nix
     ./fonts.nix
+    ./launcher.nix
     ./linux-desktop.nix
     ./multiplexers.nix
     ./nixos.nix

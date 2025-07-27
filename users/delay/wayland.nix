@@ -101,20 +101,4 @@ in
         "application/farbfeld" = ["swayimg"];
       };
     };
-
-    programs = {
-      rofi = {
-        enable = true;
-        package = pkgs.rofi-wayland;
-        plugins = [
-          (pkgs.rofi-calc.override {rofi-unwrapped = pkgs.rofi-wayland-unwrapped;})
-        ];
-        theme = {
-          "@theme" = builtins.path {
-            name = "catppuccin-obsidian.rasi";
-            path = pkgs.writeText "catppuccin-obsidian.rasi" (builtins.readFile ./rofi/catppuccin-obsidian.rasi);
-          };
-        };
-      };
-    };
   }

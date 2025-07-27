@@ -114,7 +114,7 @@ in {
       bind =
         [
           "SUPER,       Return, exec, ${uwsm-wrapper (lib.getExe pkgs.ghostty)}"
-          "SUPER,       Space,  exec, pkill rofi || ${uwsm-wrapper (lib.getExe config.programs.rofi.finalPackage)} -show combi  -run-command \"${uwsm-wrapper "{cmd}"}\" -calc-command \"echo -n '{result}' | ${lib.getExe' pkgs.wl-clipboard "wl-copy"}\""
+          "SUPER,       Space,  exec, ${uwsm-wrapper (lib.getExe config.programs.walker.package)}"
           "SUPER SHIFT, X,      killactive, "
           "SUPER SHIFT, Q,      exec, ${uwsm-wrapper "loginctl terminate-session \"$XDG_SESSION_ID\""}"
           "SUPER SHIFT, L,      exec, ${uwsm-wrapper (lib.getExe pkgs.hyprlock)}"

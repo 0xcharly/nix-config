@@ -37,6 +37,7 @@
     disko.url = "github:nix-community/disko"; # Filesystem management.
     golink.url = "github:tailscale/golink"; # go/link service.
     catppuccin.url = "github:catppuccin/nix"; # Catppuccin all the things.
+    walker.url = "github:abenz1267/walker"; # Launcher.
 
     nix-config-fonts.url = "github:0xcharly/nix-config-fonts"; # Unfree fonts.
     nix-config-nvim.url = "github:0xcharly/nix-config-nvim"; # Neovim.

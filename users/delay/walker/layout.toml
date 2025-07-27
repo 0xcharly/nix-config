@@ -1,0 +1,36 @@
+[ui.anchors]
+bottom = false
+left = false
+right = false
+top = false
+
+[ui.window.box]
+width = 800
+
+[ui.window.box.scroll.list.item]
+v_align = "fill"
+v_expand = true
+
+[ui.window.box.scroll.list.margins]
+top = 4
+
+[ui.window.box.scroll.list.item.icon]
+pixel_size = 24
+theme = "Adwaita"
+hide = true
+
+[ui.window.box.search.prompt]
+name = "prompt"
+icon = "edit-find-symbolic"
+theme = "Adwaita"
+pixel_size = 18
+h_align = "center"
+v_align = "center"
+
+[ui.window.box.search.clear]
+name = "clear"
+icon = "edit-clear-symbolic"
+theme = "Adwaita"
+pixel_size = 18
+h_align = "center"
+v_align = "center"

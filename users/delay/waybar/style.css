@@ -25,6 +25,7 @@ button {
 #wireplumber,
 #workspaces {
     background-color: @normalBg@;
+    border: 1px solid lighter(@normalBg@);
     color: @normalFg@;
 }
 
