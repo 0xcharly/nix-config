@@ -83,7 +83,11 @@ in {
       ];
 
       # Monitor scaling.
-      monitor = lib.mkDefault "DP-3, 3840x2160@239.991Hz, 0x0, 1.25";
+      # Apple Pro Display XDR.
+      monitor = lib.mkDefault "DP-3, 6016x3384@60.00Hz, 0x0, 2.00";
+      # Alienware Dell AW3225QF 32".
+      # monitor = lib.mkDefault "DP-3, 3840x2160@239.991Hz, 0x0, 1.25";
+
       # Properly scale X11 applications (e.g. 1Password) by unscaling XWayland.
       xwayland.force_zero_scaling = true;
 
@@ -181,13 +185,13 @@ in {
         # Chrome's Picture-in-Picture.
         "float, class:^$, title:^Picture in picture$"
         "pin, class:^$, title:^Picture in picture$"
-        "move 2426 94, class:^$, title:^Picture in picture$"
+        "move 2362 94, class:^$, title:^Picture in picture$"
         "size 640 360, class:^$, title:^Picture in picture$"
         "keepaspectratio, class:^$, title:^Picture in picture$"
         # Firefox's Picture-in-Picture.
         "float, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
         "pin, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
-        "move 2426 94, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
+        "move 2362 94, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
         "size 640 360, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
         "keepaspectratio, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
       ];

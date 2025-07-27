@@ -1,0 +1,25 @@
+<!-- edid-decode /sys/class/drm/card1-DP-3/edid -->
+<monitors version="2">
+  <configuration>
+    <layoutmode>physical</layoutmode>
+    <logicalmonitor>
+      <x>0</x>
+      <y>0</y>
+      <scale>2</scale>
+      <primary>yes</primary>
+      <monitor>
+        <monitorspec>
+          <connector>DP-3</connector>
+          <vendor>APP</vendor>
+          <product>44589</product>
+          <serial>168366852</serial>
+        </monitorspec>
+        <mode>
+          <width>6016</width>
+          <height>3384</height>
+          <rate>60.00</rate>
+        </mode>
+      </monitor>
+    </logicalmonitor>
+  </configuration>
+</monitors>

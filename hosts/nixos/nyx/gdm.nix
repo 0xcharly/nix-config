@@ -1,6 +1,6 @@
 {
-  # Set gdm monitor configuration (2x scale for 4K @ 240Hz monitor).
+  # Set gdm monitor configuration.
   systemd.tmpfiles.rules = [
-    ''L+ /run/gdm/.config/monitors.xml - - - - ${./gdm/monitors.xml}''
+    ''L+ /run/gdm/.config/monitors.xml - - - - ${./gdm/monitors-pro-display-hdr.xml}''
   ];
 }
