@@ -258,7 +258,7 @@ in
               on-resume = "${hyprctl} dispatch dpms on";
             }
             {
-              timeout = 3600; # 1 hour.
+              timeout = 7200; # 2 hours.
               on-timeout = "${systemctl} suspend";
             }
           ];
