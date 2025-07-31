@@ -6,28 +6,25 @@
 } @ args: let
   inherit ((lib.user.getUserConfig args).modules) flags;
   inherit ((lib.user.getUserConfig args).modules.system) beans;
-  inherit ((lib.user.getUserConfig args).modules.usrenv) isLinuxDesktop;
 in {
   # Packages I always want installed. Most packages I install using per-project
   # flakes sourced with direnv and nix-shell, so this is not a huge list.
-  home.packages = with pkgs;
-    [
-      coreutils # For consistency across platforms (i.e. GNU utils on macOS).
-      devenv # For managing development environments.
-      duf # Modern `df` alternative.
-      git-get # Used along with fzf and terminal multiplexers for repository management.
-      libqalculate # Multi-purpose calculator on the command line.
-      tree # List the content of directories in a tree-like format.
-      yazi # File explorer that supports Kitty image protocol.
+  home.packages = with pkgs; [
+    coreutils # For consistency across platforms (i.e. GNU utils on macOS).
+    devenv # For managing development environments.
+    duf # Modern `df` alternative.
+    git-get # Used along with fzf and terminal multiplexers for repository management.
+    libqalculate # Multi-purpose calculator on the command line.
+    tree # List the content of directories in a tree-like format.
+    yazi # File explorer that supports Kitty image protocol.
 
-      # Our own package installed by overlay.
-      # It's important to keep shadowing the original `pkgs.nvim` package
-      # instead of referring to our custom config via another name to maintain
-      # all related integrations (e.g. EDITOR) while being able to override it
-      # at anytime (e.g. in the corp-specific flavor).
-      nvim
-    ]
-    ++ lib.optionals isLinuxDesktop [pkgs.nvtopPackages.full];
+    # Our own package installed by overlay.
+    # It's important to keep shadowing the original `pkgs.nvim` package
+    # instead of referring to our custom config via another name to maintain
+    # all related integrations (e.g. EDITOR) while being able to override it
+    # at anytime (e.g. in the corp-specific flavor).
+    nvim
+  ];
 
   programs = {
     bash.enable = true;
