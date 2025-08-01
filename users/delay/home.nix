@@ -20,6 +20,7 @@
     ./vcs.nix
     ./wayland.nix
     ./wayland-hyprland.nix
+    ./wayland-sway.nix
   ];
 
   home.sessionVariables = let

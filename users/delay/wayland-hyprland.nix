@@ -22,8 +22,39 @@
       "down" = "d";
     };
 in {
+  home = {
+    packages = with pkgs; [
+      hyprpicker # Command line color picker
+
+      # Screenshot toolchain.
+      grimblast # High-level screenshot utility
+      swappy # Annotation tool
+    ];
+
+    sessionVariables.GRIMBLAST_EDITOR = "${lib.getExe pkgs.swappy} -f";
+  };
+
+  xdg.configFile = let
+    waylandSessionVariables = {
+      # Automatically set by UWSM.
+      # XDG_CURRENT_DESKTOP = "Hyprland";
+      # XDG_SESSION_DESKTOP = "Hyprland";
+      # XDG_SESSION_TYPE = "wayland";
+    };
+    create-env = envvars:
+      lib.concatStringsSep "\n" (
+        lib.mapAttrsToList (key: value: "export ${key}=${builtins.toString value}") envvars
+      );
+  in {
+    # For Hyprland UWSM enviroment settings
+    "uwsm/env".text = create-env waylandSessionVariables;
+  };
+
   wayland.windowManager.hyprland = let
-    uwsm-wrapper = cmd: "${lib.getExe pkgs.uwsm} app -- ${cmd}";
+    # uwsm-wrapper = cmd: "${lib.getExe pkgs.uwsm} app -- ${cmd}";
+    # `app2unit --` is a faster alternative to `uwsm app --` (shell implementation
+    # over Python).
+    uwsm-wrapper = cmd: "${lib.getExe pkgs.app2unit} -- ${cmd}";
   in {
     # Don't bother with Hyprland on corp machines.
     enable = lib.mkDefault (isLinuxWaylandDesktop && !isCorpManaged);
@@ -69,8 +100,8 @@ in {
         border_size = 1;
         gaps_in = 2;
         gaps_out = 4;
-        "col.active_border" = "$red $maroon $peach $yellow $green $teal $sky $sapphire $blue $lavender 45deg";
-        "col.inactive_border" = "$overlay0";
+        "col.active_border" = "rgb(9fcdfe)";
+        "col.inactive_border" = "rgb(1d2938)";
       };
       decoration.rounding = 8;
       misc = {
@@ -116,11 +147,11 @@ in {
           "SUPER,       Return, exec, ${uwsm-wrapper (lib.getExe pkgs.ghostty)}"
           "SUPER,       Space,  exec, ${uwsm-wrapper (lib.getExe config.programs.walker.package)}"
           "SUPER SHIFT, X,      killactive, "
-          "SUPER SHIFT, Q,      exec, ${uwsm-wrapper "loginctl terminate-session \"$XDG_SESSION_ID\""}"
+          "SUPER SHIFT, Q,      exec, ${uwsm-wrapper (lib.getExe' pkgs.systemd "loginctl")} terminate-session \"$XDG_SESSION_ID\""
           "SUPER SHIFT, L,      exec, ${uwsm-wrapper (lib.getExe pkgs.hyprlock)}"
           "SUPER,       V,      togglefloating, "
           "SUPER,       F,      fullscreen, "
-          "SUPER CTRL,  C,      exec, ${uwsm-wrapper (lib.getExe pkgs.wl-color-picker)}"
+          "SUPER CTRL,  C,      exec, ${uwsm-wrapper (lib.getExe pkgs.hyprpicker)}"
           "SUPER,       P,      exec, ${uwsm-wrapper (lib.getExe pkgs.grimblast)} edit area"
           "SUPER SHIFT, P,      exec, ${uwsm-wrapper (lib.getExe pkgs.grimblast)} edit active"
           "SUPER CTRL,  P,      exec, ${uwsm-wrapper (lib.getExe pkgs.grimblast)} edit screen"
@@ -166,96 +197,45 @@ in {
     };
   };
 
-  programs = {
-    hyprlock = {
-      enable = lib.mkDefault config.wayland.windowManager.hyprland.enable;
-      settings = {
-        general = [
-          {
-            disable_loading_bar = true;
-            grace = 0;
-            hide_cursor = true;
-            no_fade_in = false;
-          }
-        ];
+  programs.hyprlock = {
+    enable = lib.mkDefault config.wayland.windowManager.hyprland.enable;
+    settings = {
+      general = [
+        {
+          disable_loading_bar = true;
+          grace = 0;
+          hide_cursor = true;
+          no_fade_in = false;
+        }
+      ];
 
-        background = [
-          {
-            path = "screenshot";
-            blur_passes = 3;
-            blur_size = 8;
-          }
-        ];
+      background = [
+        {
+          path = "screenshot";
+          blur_passes = 3;
+          blur_size = 8;
+        }
+      ];
 
-        input-field = [
-          {
-            size = "512, 64";
-            position = "0, 0";
-            dots_center = true;
-            dots_size = 0.2;
-            dots_spacing = 0.4;
-            fade_on_empty = false;
-            font_color = "rgba(225, 232, 244, 1)";
-            inner_color = "rgba(29, 37, 48, 1)";
-            outer_color = "rgba(21, 27, 35, 1)";
-            check_color = "rgba(137, 180, 250, 1)";
-            fail_color = "rgba(254, 154, 164, 1)";
-            outline_thickness = 2;
-            placeholder_text = "<i><span foreground=\"##bac2deff\">Password…</span></i>";
-            shadow_passes = 2;
-            shadow_color = "rgba(21, 27, 35, 1)";
-          }
-        ];
-      };
-    };
-
-    waybar = {
-      enable = lib.mkDefault config.wayland.windowManager.hyprland.enable;
-      systemd.enable = lib.mkDefault config.programs.waybar.enable;
-      settings = {
-        mainBar = {
-          layer = "bottom";
-          position = "bottom";
-          output = ["DP-3"];
-          margin-bottom = 4;
-          margin-left = 4;
-          margin-right = 4;
-          spacing = 8;
-          modules-left = ["hyprland/workspaces"];
-          modules-center = [];
-          modules-right = ["wireplumber" "clock"];
-
-          "hyprland/workspaces" = {
-            format = "{name}";
-            on-click = "activate";
-            sort-by-number = true;
-            on-scroll-up = "${lib.getExe' pkgs.hyprland "hyprctl"} dispatch workspace e+1";
-            on-scroll-down = "${lib.getExe' pkgs.hyprland "hyprctl"} dispatch workspace e-1";
-          };
-          clock = {
-            format = "{:%Od日 %R}";
-          };
-          wireplumber = {
-            format = "{icon} {volume}%";
-            format-muted = "  {volume}%";
-            format-icons = [" " " " " "];
-            on-click-middle = "${lib.getExe' pkgs.wireplumber "wpctl"} set-mute @DEFAULT_AUDIO_SOURCE@ toggle";
-          };
-        };
-      };
-      style = let
-        colors = {
-          accentFg = "#9fcdfe";
-          accentBg = "#203147";
-          cursorFg = "#cab4f4";
-          cursorBg = "#312b41";
-          normalBg = "#192029";
-          normalFg = "#8fa3bb";
-          urgentBg = "#41262e";
-          urgentFg = "#fe9fa9";
-        };
-      in
-        pkgs.replaceVars ./waybar/style.css colors;
+      input-field = [
+        {
+          size = "512, 64";
+          position = "0, 0";
+          dots_center = true;
+          dots_size = 0.2;
+          dots_spacing = 0.4;
+          fade_on_empty = false;
+          font_color = "rgba(225, 232, 244, 1)";
+          inner_color = "rgba(29, 37, 48, 1)";
+          outer_color = "rgba(21, 27, 35, 1)";
+          check_color = "rgba(137, 180, 250, 1)";
+          fail_color = "rgba(254, 154, 164, 1)";
+          outline_thickness = 2;
+          placeholder_text = "<i><span foreground=\"##bac2deff\">Password…</span></i>";
+          shadow_passes = 2;
+          shadow_color = "rgba(21, 27, 35, 1)";
+        }
+      ];
     };
   };
 

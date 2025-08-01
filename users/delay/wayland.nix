@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   ...
@@ -13,11 +14,6 @@
 
     CLUTTER_BACKEND = "wayland";
     SDL_VIDEODRIVER = "wayland";
-
-    # Automatically set by UWSM.
-    # XDG_CURRENT_DESKTOP = "Hyprland";
-    # XDG_SESSION_DESKTOP = "Hyprland";
-    # XDG_SESSION_TYPE = "wayland";
 
     QT_AUTO_SCREEN_SCALE_FACTOR = 1;
     QT_QPA_PLATFORM = "wayland;xcb";
@@ -48,15 +44,10 @@
   };
 in
   lib.mkIf isLinuxWaylandDesktop {
+    services.swaync.enable = true;
+
     home = {
       packages = with pkgs; [
-        # Screenshot toolchain.
-        grim # Fullscreen and window capture
-        slurp # Region capture
-        grimblast # High-level screenshot utility
-        swappy # Annotation tool
-
-        hyprpicker # Command line color picker
         swayimg # Image viewer
         wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
         wl-color-picker # GUI color picker
@@ -65,9 +56,55 @@ in
         qt5.qtwayland
         qt6.qtwayland
       ];
-      sessionVariables = {
-        GRIMBLAST_EDITOR = "${lib.getExe pkgs.swappy} -f";
+    };
+
+    programs.waybar = {
+      enable = lib.mkDefault isLinuxWaylandDesktop;
+      systemd.enable = lib.mkDefault config.programs.waybar.enable;
+      settings = {
+        mainBar = {
+          layer = "bottom";
+          position = "bottom";
+          output = ["DP-3"];
+          margin-bottom = 4;
+          margin-left = 4;
+          margin-right = 4;
+          spacing = 8;
+          modules-left = ["hyprland/workspaces"];
+          modules-center = [];
+          modules-right = ["wireplumber" "clock"];
+
+          "hyprland/workspaces" = {
+            format = "{name}";
+            on-click = "activate";
+            sort-by-number = true;
+            on-scroll-up = "${lib.getExe' pkgs.hyprland "hyprctl"} dispatch workspace e+1";
+            on-scroll-down = "${lib.getExe' pkgs.hyprland "hyprctl"} dispatch workspace e-1";
+          };
+          clock = {
+            format = "{:%Od日 %R}";
+          };
+          wireplumber = {
+            format = "{icon} {volume}%";
+            format-muted = "  {volume}%";
+            format-icons = [" " " " " "];
+            on-click-middle = "${lib.getExe' pkgs.wireplumber "wpctl"} set-mute @DEFAULT_AUDIO_SOURCE@ toggle";
+          };
+        };
       };
+      style = let
+        colors = {
+          accentFg = "#9fcdfe";
+          accentBg = "#203147";
+          cursorFg = "#cab4f4";
+          cursorBg = "#312b41";
+          normalBg = "#192029";
+          normalFg = "#8fa3bb";
+          urgentBg = "#41262e";
+          urgentFg = "#fe9fa9";
+        };
+      in
+        pkgs.replaceVars ./waybar/style.css colors;
     };
 
     xdg = {
@@ -77,7 +114,7 @@ in
             lib.mapAttrsToList (key: value: "export ${key}=${builtins.toString value}") envvars
           );
       in {
-        # For Hyprland UWSM enviroment settings
+        # For Wayland UWSM enviroment settings.
         "uwsm/env".text = create-env waylandSessionVariables;
       };
 
