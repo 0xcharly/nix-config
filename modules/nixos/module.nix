@@ -8,6 +8,7 @@
     inputs.catppuccin.nixosModules.catppuccin
     inputs.home-manager.nixosModules.home-manager
 
+    ./asdcontrol.nix
     ./atuin.nix
     ./beans.nix
     ./caddy.nix

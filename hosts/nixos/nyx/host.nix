@@ -33,6 +33,9 @@
     };
   };
 
+  # Enables brightness control for Apple Monitors.
+  programs.asdcontrol.enable = true;
+
   # Boot configuration.
   boot = {
     initrd = {
