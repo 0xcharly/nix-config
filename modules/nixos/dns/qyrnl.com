@@ -18,6 +18,7 @@ healthchecks    IN CNAME heimdall
 push            IN CNAME heimdall
 shared.album    IN CNAME heimdall
 status          IN CNAME heimdall
+tasks           IN CNAME heimdall
 vault           IN CNAME heimdall
 
 helios          IN CNAME helios.@tailnetName@.
