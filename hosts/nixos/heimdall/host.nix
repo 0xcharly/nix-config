@@ -30,6 +30,7 @@
       healthchecks = true;
       reverseProxy = true;
       status = true;
+      taskchampion-sync-server = true;
       vaultwarden = true;
     };
     networking.tailscaleNode = true;

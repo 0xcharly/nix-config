@@ -42,6 +42,7 @@
     ./smtp.nix
     ./ssh.nix
     ./tailscale.nix
+    ./taskchampion-sync-server.nix
     ./terminfo.nix
     ./user-ayako.nix
     ./user-delay.nix

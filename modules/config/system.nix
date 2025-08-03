@@ -173,6 +173,14 @@ in {
           '';
         };
 
+        taskchampion-sync-server = mkOption {
+          type = bool;
+          default = false;
+          description = ''
+            Whether this machine exposes a TaskWarrior sync service.
+          '';
+        };
+
         vaultwarden = mkOption {
           type = bool;
           default = false;
