@@ -16,7 +16,7 @@ in {
         default = pkgs.stdenv.isLinux && !cfg.usrenv.isCorpManaged && cfg.system.networking.tailscaleNode;
         readOnly = true;
         description = ''
-          Installs and setups atuin client.
+          Installs and setups atuin client sync.
         '';
       };
 
@@ -153,6 +153,26 @@ in {
         description = ''
           Adds an entry to the authorized_keys file to allow backing up bean
           files.
+        '';
+      };
+    };
+
+    taskwarrior = {
+      enableSync = mkOption {
+        type = bool;
+        default = pkgs.stdenv.isLinux && !cfg.usrenv.isCorpManaged && cfg.system.networking.tailscaleNode;
+        readOnly = true;
+        description = ''
+          Installs and setups taskwarrior client sync.
+        '';
+      };
+
+      syncAddress = mkOption {
+        type = str;
+        default = "https://tasks.qyrnl.com";
+        readOnly = true;
+        description = ''
+          The address of the self-hosted TaskWarrior sync server.
         '';
       };
     };

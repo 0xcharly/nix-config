@@ -16,6 +16,7 @@
     ./shells.nix
     ./ssh.nix
     ./systemd-timers.nix
+    ./tasks.nix
     ./terminals.nix
     ./vcs.nix
     ./wayland.nix
