@@ -66,7 +66,7 @@ in
             reverse_proxy localhost:${toString config.services.gotify.environment.GOTIFY_SERVER_PORT}
           '';
         };
-        "task.qyrnl.com" = lib.mkIf cfg.taskchampion-sync-server {
+        "tasks.qyrnl.com" = lib.mkIf cfg.taskchampion-sync-server {
           extraConfig = ''
             import ts_host
             reverse_proxy localhost:${toString config.services.taskchampion-sync-server.port}
