@@ -9,7 +9,7 @@ window#waybar {
   font-weight: 600;
   background-color: transparent;
   border-bottom: 0px;
-  color: @normalFg @;
+  color: @normalFg@;
 }
 
 button {
@@ -24,14 +24,14 @@ button {
 #clock,
 #wireplumber,
 #workspaces {
-  background-color: @normalBg @;
-  border: 1px solid lighter(@normalBg @);
-  color: @normalFg @;
+  background-color: @normalBg@;
+  border: 1px solid lighter(@normalBg@);
+  color: @normalFg@;
 }
 
 #workspaces button {
   background-color: transparent;
-  color: @normalFg @;
+  color: @normalFg@;
   border-radius: 0;
   padding: 0 4px;
   background-image: none;
@@ -51,24 +51,24 @@ button {
 
 #workspaces button.active,
 #workspaces button.focused {
-  background-color: @accentBg @;
-  color: @accentFg @;
+  background-color: @accentBg@;
+  color: @accentFg@;
 }
 
 #clock:hover,
 #wireplumber:hover,
 #wireplumber.muted:hover,
 #workspaces button:hover {
-  background-color: @cursorBg @;
-  color: @cursorFg @;
+  background-color: @cursorBg@;
+  color: @cursorFg@;
 }
 
 #workspaces button.urgent {
-  background-color: @urgentBg @;
-  color: @urgentFg @;
+  background-color: @urgentBg@;
+  color: @urgentFg@;
 }
 
 #wireplumber.muted {
-  background-color: @accentBg @;
-  color: @accentFg @;
+  background-color: @accentBg@;
+  color: @accentFg@;
 }

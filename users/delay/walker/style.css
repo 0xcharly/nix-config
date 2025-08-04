@@ -22,27 +22,27 @@ slider,
 }
 
 #cfgerr {
-  background: @urgentBg @;
-  color: @urgentFg @;
+  background: @urgentBg@;
+  color: @urgentFg@;
   margin-top: 20px;
   padding: 8px;
 }
 
 #window {
-  color: @normalFg @;
+  color: @normalFg@;
 }
 
 #box {
   border-radius: 12px;
-  background: @normalBg @;
+  background: @normalBg@;
   padding: 4px;
-  border: 1px solid lighter(@normalBg @);
+  border: 1px solid lighter(@normalBg@);
 }
 
 #search {
-  color: @accentFg @;
-  background: @accentBg @;
-  border: 1px solid lighter(@accentBg @);
+  color: @accentFg@;
+  background: @accentBg@;
+  border: 1px solid lighter(@accentBg@);
   padding: 16px 8px;
   border-radius: 8px;
 }
@@ -50,12 +50,12 @@ slider,
 #prompt {
   margin-left: 4px;
   margin-right: 12px;
-  color: @normalFg @;
+  color: @normalFg@;
   font-size: 1.2em;
 }
 
 #clear {
-  color: @normalFg @;
+  color: @normalFg@;
   margin-right: 8px;
 }
 
@@ -77,7 +77,7 @@ slider,
 }
 
 #typeahead {
-  color: @normalFg @;
+  color: @normalFg@;
   opacity: 0.8;
 }
 
@@ -95,8 +95,8 @@ child {
 
 child:selected,
 child:hover {
-  color: @cursorFg @;
-  background: @cursorBg @;
+  color: @cursorFg@;
+  background: @cursorBg@;
 }
 
 #item {
@@ -115,14 +115,14 @@ child:hover {
 }
 
 #sub {
-  color: @normalFg @;
+  color: @normalFg@;
   opacity: 0.8;
   font-weight: 400;
   font-size: 0.8em;
 }
 
 #activationlabel {
-  color: @normalFg @;
+  color: @normalFg@;
   opacity: 0.6;
 }
 
@@ -130,7 +130,7 @@ child:selected #activationlabel,
 child:selected #sub,
 child:hover #activationlabel,
 child:hover #sub {
-  color: @cursorFg @;
+  color: @cursorFg@;
 }
 
 #bar {
@@ -151,8 +151,8 @@ child:hover #sub {
 .aiItem {
   padding: 10px;
   border-radius: 2px;
-  color: @normalFg @;
-  background: @normalBg @;
+  color: @normalFg@;
+  background: @normalBg@;
 }
 
 .aiItem.user {
@@ -161,5 +161,5 @@ child:hover #sub {
 }
 
 .aiItem.assistant {
-  background: lighter(@normalBg @);
+  background: lighter(@normalBg@);
 }
