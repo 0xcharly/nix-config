@@ -8,7 +8,8 @@
     ./catppuccin.nix
     ./fonts.nix
     ./launcher.nix
-    ./linux-desktop.nix
+    ./linux-desktop-gui.nix
+    ./linux-desktop-tui.nix
     ./multiplexers.nix
     ./nixos.nix
     ./packages.nix

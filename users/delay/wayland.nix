@@ -5,43 +5,6 @@
   ...
 } @ args: let
   inherit ((lib.user.getUserConfig args).modules.usrenv) isLinuxWaylandDesktop;
-
-  waylandSessionVariables = {
-    NIXOS_OZONE_WL = 1;
-    # This forces the use of the Wayland backend for Electron, but we don't want
-    # 1Password to use Wayland just yet because copy/paste doesn't work.
-    # ELECTRON_OZONE_PLATFORM_HINT = "auto";
-
-    CLUTTER_BACKEND = "wayland";
-    SDL_VIDEODRIVER = "wayland";
-
-    QT_AUTO_SCREEN_SCALE_FACTOR = 1;
-    QT_QPA_PLATFORM = "wayland;xcb";
-    # Should be managed automatically by the wayland compositor.
-    # QT_SCALE_FACTOR = dpiScale;
-    QT_WAYLAND_DISABLE_WINDOWDECORATION = 1;
-    QT_QPA_PLATFORMTHEME = "gtk3";
-
-    # Tells GTK (via GDK, its lower-level windowing layer) which windowing
-    # system backend to use when running GTK applications.
-    GDK_BACKEND = "wayland,x11,*";
-
-    # Scales all UI elements (widgets, windows, etc.) by an _integer_ factor.
-    # Coarse scaling that affects layout size. Commonly used to double or triple
-    # the size of the UI on HiDPI screens.
-    GDK_SCALE = 2;
-
-    # Applies a fractional scaling factor to _text rendering_. It adjusts the
-    # size of fonts without changing the layout size of other UI elements.
-    GDK_DPI_SCALE = 1;
-
-    MOZ_ENABLE_WAYLAND = 1;
-    _JAVA_AWT_WM_NONREPARENTING = 1;
-
-    # IMPORTANT: Keep in sync with ./linux-desktop.nix.
-    XCURSOR_THEME = "BreezeX-RosePine-Linux";
-    XCURSOR_SIZE = args.config.home.pointerCursor.size;
-  };
 in
   lib.mkIf isLinuxWaylandDesktop {
     services.swaync.enable = true;
@@ -108,15 +71,50 @@ in
     };
 
     xdg = {
-      configFile = let
+      # For Wayland UWSM enviroment settings.
+      configFile."uwsm/env".text = let
+        waylandSessionVariables = {
+          NIXOS_OZONE_WL = 1;
+          # This forces the use of the Wayland backend for Electron, but we don't want
+          # 1Password to use Wayland just yet because copy/paste doesn't work.
+          # ELECTRON_OZONE_PLATFORM_HINT = "auto";
+
+          CLUTTER_BACKEND = "wayland";
+          SDL_VIDEODRIVER = "wayland";
+
+          QT_AUTO_SCREEN_SCALE_FACTOR = 1;
+          QT_QPA_PLATFORM = "wayland;xcb";
+          # Should be managed automatically by the wayland compositor.
+          # QT_SCALE_FACTOR = dpiScale;
+          QT_WAYLAND_DISABLE_WINDOWDECORATION = 1;
+          QT_QPA_PLATFORMTHEME = "gtk3";
+
+          # Tells GTK (via GDK, its lower-level windowing layer) which windowing
+          # system backend to use when running GTK applications.
+          GDK_BACKEND = "wayland,x11,*";
+
+          # Scales all UI elements (widgets, windows, etc.) by an _integer_ factor.
+          # Coarse scaling that affects layout size. Commonly used to double or triple
+          # the size of the UI on HiDPI screens.
+          GDK_SCALE = 2;
+
+          # Applies a fractional scaling factor to _text rendering_. It adjusts the
+          # size of fonts without changing the layout size of other UI elements.
+          GDK_DPI_SCALE = 1;
+
+          MOZ_ENABLE_WAYLAND = 1;
+          _JAVA_AWT_WM_NONREPARENTING = 1;
+
+          XCURSOR_THEME = args.config.home.pointerCursor.name;
+          XCURSOR_SIZE = args.config.home.pointerCursor.size;
+        };
+
         create-env = envvars:
           lib.concatStringsSep "\n" (
             lib.mapAttrsToList (key: value: "export ${key}=${builtins.toString value}") envvars
           );
-      in {
-        # For Wayland UWSM enviroment settings.
-        "uwsm/env".text = create-env waylandSessionVariables;
-      };
+      in
+        create-env waylandSessionVariables;
 
       mimeApps.defaultApplications = {
         "application/pdf" = ["zathura.desktop"];

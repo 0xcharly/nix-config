@@ -6,51 +6,8 @@
 } @ args: let
   inherit ((lib.user.getUserConfig args).modules) flags;
   inherit ((lib.user.getUserConfig args).modules.usrenv) isCorpManaged isLinuxWaylandDesktop;
-
-  map-workspaces = mapFn:
-    builtins.map (x:
-      mapFn (toString x) (
-        if x == 0
-        then "10"
-        else (toString x)
-      )) (builtins.genList (x: x) 10);
-  map-movements = mapFn:
-    lib.attrsets.mapAttrsToList mapFn {
-      "left" = "l";
-      "right" = "r";
-      "up" = "u";
-      "down" = "d";
-    };
 in
   lib.mkIf isLinuxWaylandDesktop {
-    home = {
-      packages = with pkgs; [
-        hyprpicker # Command line color picker
-
-        # Screenshot toolchain.
-        grimblast # High-level screenshot utility
-        swappy # Annotation tool
-      ];
-
-      sessionVariables.GRIMBLAST_EDITOR = "${lib.getExe pkgs.swappy} -f";
-    };
-
-    xdg.configFile = let
-      waylandSessionVariables = {
-        # Automatically set by UWSM.
-        # XDG_CURRENT_DESKTOP = "Hyprland";
-        # XDG_SESSION_DESKTOP = "Hyprland";
-        # XDG_SESSION_TYPE = "wayland";
-      };
-      create-env = envvars:
-        lib.concatStringsSep "\n" (
-          lib.mapAttrsToList (key: value: "export ${key}=${builtins.toString value}") envvars
-        );
-    in {
-      # For Hyprland UWSM enviroment settings
-      "uwsm/env".text = create-env waylandSessionVariables;
-    };
-
     wayland.windowManager.hyprland = let
       # uwsm-wrapper = cmd: "${lib.getExe pkgs.uwsm} app -- ${cmd}";
       # `app2unit --` is a faster alternative to `uwsm app --` (shell implementation
@@ -80,7 +37,7 @@ in
         # Open apps on startup.
         exec-once = [
           "[workspace 1] ${uwsm-wrapper (lib.getExe pkgs.google-chrome)}"
-          "[workspace 3] ${uwsm-wrapper (lib.getExe pkgs.ghostty)}"
+          "[workspace 3] ${uwsm-wrapper (lib.getExe config.programs.ghostty.package)}"
         ];
 
         # Monitor scaling.
@@ -147,19 +104,47 @@ in
           ];
         };
         # Keyboard bindings.
-        bind =
+        bind = let
+          screenshot-editor = pkgs.writeShellApplication {
+            name = "screenshot-editor";
+            runtimeInputs = with pkgs; [wl-clipboard satty];
+            text = ''
+              satty --filename - \
+                --copy-command=wl-copy \
+                --output-filename "${config.xdg.userDirs.download}/screenshot-$(date +'%Y-%m-%d_%H-%M-%S').png" \
+                --early-exit \
+                --actions-on-enter save-to-clipboard \
+                --save-after-copy
+            '';
+          };
+
+          map-workspaces = mapFn:
+            builtins.map (x:
+              mapFn (toString x) (
+                if x == 0
+                then "10"
+                else (toString x)
+              )) (builtins.genList (x: x) 10);
+          map-movements = mapFn:
+            lib.attrsets.mapAttrsToList mapFn {
+              "left" = "l";
+              "right" = "r";
+              "up" = "u";
+              "down" = "d";
+            };
+        in
           [
-            "SUPER,       Return, exec, ${uwsm-wrapper (lib.getExe pkgs.ghostty)}"
+            "SUPER,       Return, exec, ${uwsm-wrapper (lib.getExe config.programs.ghostty.package)}"
             "SUPER,       Space,  exec, ${uwsm-wrapper (lib.getExe config.programs.walker.package)}"
             "SUPER SHIFT, X,      killactive, "
             "SUPER SHIFT, Q,      exec, ${uwsm-wrapper (lib.getExe' pkgs.systemd "loginctl")} terminate-session \"$XDG_SESSION_ID\""
-            "SUPER SHIFT, L,      exec, ${uwsm-wrapper (lib.getExe pkgs.hyprlock)}"
+            "SUPER SHIFT, L,      exec, ${uwsm-wrapper (lib.getExe config.programs.hyprlock.package)}"
             "SUPER,       V,      togglefloating, "
             "SUPER,       F,      fullscreen, "
-            "SUPER CTRL,  C,      exec, ${uwsm-wrapper (lib.getExe pkgs.hyprpicker)}"
-            "SUPER,       P,      exec, ${uwsm-wrapper (lib.getExe pkgs.grimblast)} edit area"
-            "SUPER SHIFT, P,      exec, ${uwsm-wrapper (lib.getExe pkgs.grimblast)} edit active"
-            "SUPER CTRL,  P,      exec, ${uwsm-wrapper (lib.getExe pkgs.grimblast)} edit screen"
+            "SUPER CTRL,  C,      exec, ${uwsm-wrapper (lib.getExe pkgs.hyprpicker)} -a"
+            "SUPER,       P,      exec, ${uwsm-wrapper (lib.getExe pkgs.hyprshot)} -m region --raw | ${lib.getExe screenshot-editor}"
+            "SUPER SHIFT, P,      exec, ${uwsm-wrapper (lib.getExe pkgs.hyprshot)} -m window --raw | ${lib.getExe screenshot-editor}"
+            "SUPER CTRL,  P,      exec, ${uwsm-wrapper (lib.getExe pkgs.hyprshot)} -m output --raw | ${lib.getExe screenshot-editor}"
 
             "SUPER,       D,      hy3:makegroup,   h"
             "SUPER,       S,      hy3:makegroup,   v"
@@ -221,7 +206,7 @@ in
 
         input-field = [
           {
-            size = "512, 64";
+            size = "720, 96";
             position = "0, 0";
             dots_center = true;
             dots_size = 0.2;
@@ -229,13 +214,12 @@ in
             fade_on_empty = false;
             font_color = "rgba(225, 232, 244, 1)";
             inner_color = "rgba(29, 37, 48, 1)";
-            outer_color = "rgba(21, 27, 35, 1)";
+            outer_color = "rgba(29, 41, 56, 1)";
             check_color = "rgba(137, 180, 250, 1)";
             fail_color = "rgba(254, 154, 164, 1)";
             outline_thickness = 2;
             placeholder_text = "<i><span foreground=\"##bac2deff\">Password…</span></i>";
-            shadow_passes = 2;
-            shadow_color = "rgba(21, 27, 35, 1)";
+            shadow_passes = 0;
           }
         ];
       };
@@ -245,7 +229,7 @@ in
       enable = lib.mkDefault config.wayland.windowManager.hyprland.enable;
       settings = let
         hyprctl = lib.getExe' pkgs.hyprland "hyprctl";
-        hyprlock = lib.getExe pkgs.hyprlock;
+        hyprlock = lib.getExe config.programs.hyprlock.package;
         loginctl = lib.getExe' pkgs.systemd "loginctl";
         systemctl = lib.getExe' pkgs.systemd "systemctl";
 
@@ -256,8 +240,8 @@ in
           lock_cmd = lock;
           unlock_cmd = "pkill -USR1 ${hyprlock}";
 
-          before_sleep_cmd = "${loginctl} lock-session"; # lock before suspend.
-          after_sleep_cmd = "${hyprctl} dispatch dpms on"; # to avoid having to press a key twice to turn on the display.
+          before_sleep_cmd = "${loginctl} lock-session"; # Lock before suspend.
+          after_sleep_cmd = "${hyprctl} dispatch dpms on"; # To avoid having to press a key twice to turn on the display.
         };
 
         listener =
@@ -269,7 +253,7 @@ in
           ]
           ++ [
             {
-              timeout = 900; # 15 minutes.
+              timeout = 300; # 5 minutes.
               on-timeout = "${hyprctl} dispatch dpms off";
               on-resume = "${hyprctl} dispatch dpms on";
             }

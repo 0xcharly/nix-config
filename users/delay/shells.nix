@@ -38,6 +38,6 @@
   home = {
     shell.enableFishIntegration = true;
     sessionVariables.SHELL = lib.getExe pkgs.fish;
-    packages = with pkgs; [tmux-open-git-repository-fish];
+    packages = with pkgs; [fishPlugins.fzf tmux-open-git-repository-fish];
   };
 }

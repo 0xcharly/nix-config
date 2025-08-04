@@ -6,17 +6,17 @@
   inherit ((lib.user.getUserConfig args).modules.usrenv) isLinuxDesktop;
 in
   lib.mkIf isLinuxDesktop {
-    home.packages = with pkgs; [
-      _1password-gui
-      beeper
-      bitwarden
-      localsend
-      nautilus
-      obsidian
-      proton-pass
-      tidal-hifi
-      xfce.thunar
-    ];
+    home.packages = with pkgs;
+      [
+        _1password-gui
+        beeper
+        bitwarden
+        localsend
+        nautilus
+        obsidian
+        tidal-hifi
+        xfce.thunar
+      ];
 
     services.udiskie.enable = true; # USB automount (requires udisks2 service enabled).
     programs.zathura.enable = true; # PDF viewer.
