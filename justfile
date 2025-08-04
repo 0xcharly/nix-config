@@ -9,28 +9,6 @@ rebuildOptions := '--option accept-flake-config true --show-trace'
 default:
     @just --list
 
-[doc('Format all source files')]
-[group('dev')]
-fmt:
-    treefmt
-
-[doc("Rebuild the current darwin host's configuration and permanently switch to it")]
-[group('nix')]
-[macos]
-switch:
-    sudo darwin-rebuild {{ rebuildOptions }} switch --flake .
-
-[doc("Rebuild the current NixOS/HM host's configuration and permanently switch to it")]
-[group('nix')]
-[linux]
-switch:
-    #! /usr/bin/env fish
-    if test (grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"
-      sudo nixos-rebuild {{ rebuildOptions }} switch --flake .
-    else
-      home-manager {{ rebuildOptions }} switch -b hm.bak --flake .
-    end
-
 [doc("Rebuild the current NixOS host's configuration and temporary switch to it")]
 [group('nix')]
 [linux]
@@ -45,36 +23,6 @@ test:
 [linux]
 gc:
     nix-collect-garbage --delete-older-than 7d
-
-[doc('Update the given flake inputs')]
-[group('nix')]
-update +inputs:
-    for input in {{ inputs }}; nix flake update --flake . $input; end
-
-[doc('Update all "distribution" inputs (nixpkgs, home-manager, disko, etc.)')]
-[group('nix')]
-distupdate:
-    @just update nixpkgs nixpkgs-darwin nixpkgs-unstable home-manager nix-darwin disko nix-index-database nix-homebrew hyperland hy3 catppuccin
-
-[doc('Update all "nixpkgs" inputs (nixpkgs, nixpkgs-darwin, nixpkgs-unstable, nur)')]
-[group('nix')]
-update-nixpkgs:
-    @just update nixpkgs nixpkgs-darwin nixpkgs-unstable nur
-
-[doc('Update all "toolchain" inputs (flake-parts, etc.)')]
-[group('nix')]
-update-toolchain:
-    @just update flake-parts git-hooks-nix treefmt-nix rust-overlay
-
-[doc('Update all "config" inputs (nix-config-lib, nix-config-secrets, etc.)')]
-[group('nix')]
-update-nix-config:
-    @just update nix-config-fonts nix-config-lib nix-config-nvim nix-config-secrets zellij-prime-hopper
-
-[doc('Update all inputs')]
-[group('nix')]
-update-all:
-    nix flake update
 
 # Builds the current darwin host's configuration and caches the results.
 #
