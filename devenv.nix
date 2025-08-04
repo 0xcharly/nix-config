@@ -27,11 +27,11 @@
           sudo darwin-rebuild ${rebuildOptions} switch --flake .
         ''
         else ''
-          if test $(grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"
+          if test $(grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"; then
             sudo nixos-rebuild ${rebuildOptions} switch --flake .
           else
             home-manager ${rebuildOptions} switch -b hm.bak --flake .
-          end
+          fi
         '';
     in
       switch;
