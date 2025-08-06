@@ -191,8 +191,6 @@ in
             Up = "resize shrink height 10 px";
           };
         };
-
-        bars = [{mode = "hide";}];
       };
       extraConfig = ''
         tiling_drag enable
