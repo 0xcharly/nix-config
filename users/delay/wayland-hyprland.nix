@@ -218,7 +218,7 @@ in
             check_color = "rgba(137, 180, 250, 1)";
             fail_color = "rgba(254, 154, 164, 1)";
             outline_thickness = 2;
-            placeholder_text = "<i><span foreground=\"##bac2deff\">Password…</span></i>";
+            placeholder_text = "<i><span foreground=\"##bac2deff\">×͜×</span></i>";
             shadow_passes = 0;
           }
         ];
