@@ -191,6 +191,8 @@ in
             Up = "resize shrink height 10 px";
           };
         };
+
+        bars = [{command = "swaybar_command waybar";}];
       };
       extraConfig = ''
         tiling_drag enable
