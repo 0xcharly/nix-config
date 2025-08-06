@@ -192,7 +192,7 @@ in
           };
         };
 
-        bars = [{command = "swaybar_command waybar";}];
+        bars = []; # Remove default `swaybar` config.
       };
       extraConfig = ''
         tiling_drag enable
