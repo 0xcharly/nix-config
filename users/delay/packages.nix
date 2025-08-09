@@ -15,6 +15,7 @@ in {
     duf # Modern `df` alternative.
     git-get # Used along with fzf and terminal multiplexers for repository management.
     libqalculate # Multi-purpose calculator on the command line.
+    tasksh # Task management with taskwarrior.
     tree # List the content of directories in a tree-like format.
     yazi # File explorer that supports Kitty image protocol.
 
