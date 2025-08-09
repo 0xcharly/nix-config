@@ -9,14 +9,10 @@ in
   lib.mkIf cfg.reverseProxy {
     services.caddy = {
       enable = true;
-      # TODO: switch to `pkgs.caddy.withPlugins` when possible. Currently
-      # doesn't build because of libdns 1.0 release and breaking changes.
-      # Uses a custom build in the meantime.
-      package = pkgs.caddy-gandi;
-      # package = pkgs.caddy.withPlugins {
-      #   plugins = ["github.com/libdns/gandi@v1.0.4"];
-      #   hash = "sha256-cSjFzPw1YcvQQDnv1fLCbKHe+b/tyTqQG89dIH1DI+k=";
-      # };
+      package = pkgs.caddy.withPlugins {
+        plugins = ["github.com/caddy-dns/gandi@v1.1.0"];
+        hash = "sha256-JZLxPJd/HiM6I+YBHwLtQoMG2uZ92jKmlz5nQK6N5+U=";
+      };
       environmentFile = config.age.secrets."services/gandi-creds".path;
       virtualHosts = {
         "(ts_host)".extraConfig = ''
