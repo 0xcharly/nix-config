@@ -35,8 +35,8 @@ in
         };
 
         # Open apps on startup.
-        exec-once = [
-          "[workspace 1] ${uwsm-wrapper (lib.getExe pkgs.google-chrome)}"
+        exec-once = lib.optionals (!isCorpManaged) [
+          "[workspace 1] ${uwsm-wrapper (lib.getExe config.programs.firefox.package)}"
           "[workspace 3] ${uwsm-wrapper (lib.getExe config.programs.ghostty.package)}"
         ];
 
