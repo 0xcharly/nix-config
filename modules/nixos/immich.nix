@@ -8,6 +8,6 @@
 
   services.immich-public-proxy = {
     enable = config.modules.system.services.serve.immich;
-    immichUrl = "https://album.qyrnl.com";
+    immichUrl = "https://shared.album.qyrnl.com";
   };
 }
