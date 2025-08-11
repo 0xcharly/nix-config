@@ -25,6 +25,7 @@
     ./immich.nix
     ./jellyfin.nix
     ./intel-thunderbolt.nix
+    ./iotop.nix
     ./nas-fs.nix
     ./nas-replication.nix
     ./nas-samba.nix
