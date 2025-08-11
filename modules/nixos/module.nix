@@ -15,6 +15,7 @@
     ./coredns.nix
     ./cpu-arch-amd.nix
     ./cpu-arch-intel.nix
+    ./deploy.nix
     ./fail2ban.nix
     ./fonts.nix
     ./golink.nix
@@ -40,6 +41,7 @@
     ./protonvpn.nix
     ./rgb.nix
     ./secrets.nix
+    ./sudo.nix
     ./smtp.nix
     ./ssh.nix
     ./tailscale.nix

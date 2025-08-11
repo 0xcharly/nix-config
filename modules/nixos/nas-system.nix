@@ -14,9 +14,6 @@ lib.mkIf config.modules.system.roles.nas.enable {
   # Configure nixpkgs.
   nixpkgs.config.allowUnfree = true;
 
-  # Don't require password for sudo.
-  security.sudo.wheelNeedsPassword = false;
-
   # Boot configuration.
   boot.initrd.availableKernelModules = ["ahci" "xhci_pci" "nvme" "usbhid" "sd_mod"];
 

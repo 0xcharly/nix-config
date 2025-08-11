@@ -6,6 +6,7 @@
 }: {
   packages = with pkgs; [
     cachix
+    deploy-rs
     jq
     just
     home-manager

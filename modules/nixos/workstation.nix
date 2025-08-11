@@ -7,9 +7,6 @@ lib.mkIf config.modules.system.roles.nixos.workstation {
   # Configure nixpkgs.
   nixpkgs.config.allowUnfree = true;
 
-  # Don't require password for sudo.
-  security.sudo.wheelNeedsPassword = false;
-
   # Automount removable devices (used by udiskie).
   services.udisks2.enable = true;
 

@@ -163,4 +163,6 @@ in {
       (mkNixosHost {hostModule = ./nixos/skullkid;})
     ];
   };
+
+  imports = [./hive-deploy.nix];
 }
