@@ -89,6 +89,7 @@
 #       Device slack:                    0.00B
 #       ```
 {
+  config,
   pkgs,
   modulesPath,
   ...
@@ -107,6 +108,10 @@
 
   # System config.
   modules.system = {
+    healthchecks.ping = {
+      enable = true;
+      keyFile = config.age.secrets."healthchecks/ping-linode".path;
+    };
     security.accessTier = "basic";
     networking = {
       tailscaleNode = true;

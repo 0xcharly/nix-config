@@ -23,6 +23,7 @@
     ./gpu-arch-amd.nix
     ./gpu-arch-intel.nix
     ./healthchecks.nix
+    ./healthchecks-ping.nix
     ./immich.nix
     ./jellyfin.nix
     ./intel-thunderbolt.nix

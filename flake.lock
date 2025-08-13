@@ -338,11 +338,11 @@
         "nixpkgs": "nixpkgs_8"
       },
       "locked": {
-        "lastModified": 1755005345,
-        "narHash": "sha256-jDTy+/Qnh1Tv7njxBWLOCTOOnjQuc0uZ/UQU4UK1mKM=",
+        "lastModified": 1755104836,
+        "narHash": "sha256-V2CUz2YhcYvr4v3yPlv69xzHhSVBx6i1xXuBrHIeQI0=",
         "owner": "0xcharly",
         "repo": "nix-config-secrets",
-        "rev": "58f6db17a125073f639ff00b54d395b2f1e6ca2d",
+        "rev": "a6ae76d2b929bbfd230f50bc9dfcf9947a6e0e7b",
         "type": "github"
       },
       "original": {

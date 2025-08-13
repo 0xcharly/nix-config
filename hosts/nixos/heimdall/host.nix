@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   modulesPath,
   ...
@@ -21,6 +22,10 @@
   };
 
   modules.system = {
+    healthchecks.ping = {
+      enable = true;
+      keyFile = config.age.secrets."healthchecks/ping-heimdall".path;
+    };
     security.accessTier = "trusted";
     services.serve = {
       atuin = true;
