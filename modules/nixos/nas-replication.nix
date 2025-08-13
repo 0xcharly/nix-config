@@ -52,7 +52,7 @@ in
               if (lib.fn.isTrue cfg.primary)
               then "send,receive,snapshot,hold,release,mount"
               else "atime,compression,create,keylocation,mount,mountpoint,receive,recordsize,snapshot,userprop"; # TODO: remove `create` after initial setup.
-            zfsAllow = pkgs.writeShellApplication {
+            zfs-allow = pkgs.writeShellApplication {
               name = "${username}-zfs-allow";
               runtimeInputs = with pkgs; [zfs];
               text = ''
@@ -63,7 +63,7 @@ in
               '';
             };
           in
-            lib.getExe zfsAllow;
+            lib.getExe zfs-allow;
         };
       };
     };
