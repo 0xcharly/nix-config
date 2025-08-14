@@ -84,16 +84,6 @@ in {
 
     services = {
       serve = {
-        golink = mkOption {
-          type = bool;
-          default = false;
-          description = ''
-            If true, host spins up a go/link server.
-
-            https://github.com/tailscale/golink
-          '';
-        };
-
         healthchecks = mkOption {
           type = bool;
           default = false;

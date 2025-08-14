@@ -30,13 +30,13 @@
     services = {
       atuin.enable = true;
       dns.enable = true;
+      golink.enable = true;
     };
   };
 
   modules.system = {
     security.accessTier = "trusted";
     services.serve = {
-      golink = true;
       gotify = true;
       healthchecks = true;
       reverseProxy = true;
