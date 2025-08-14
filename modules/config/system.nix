@@ -149,12 +149,6 @@ in {
 
     roles = {
       nixos = {
-        noRgb = mkOption {
-          type = bool;
-          default = false;
-          description = "Disables RGB lighting on the system.";
-        };
-
         protonvpn = mkOption {
           type = bool;
           default = false;

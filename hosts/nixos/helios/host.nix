@@ -12,6 +12,7 @@
     hardware = {
       cpu.vendor = "amd";
       gpu.vendor = "intel";
+      rgb.disable = true;
     };
 
     healthchecks.ping = {
@@ -28,7 +29,6 @@
   modules.system = {
     security.accessTier = "trusted";
     networking.tailscaleNode = true;
-    roles.nixos.noRgb = true;
   };
 
   modules.system.roles.nas = {

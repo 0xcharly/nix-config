@@ -9,7 +9,10 @@
 
   # System config.
   node = {
-    hardware.cpu.vendor = "amd";
+    hardware = {
+      cpu.vendor = "amd";
+      rgb.disable = true;
+    };
 
     healthchecks.ping = {
       enable = true;
@@ -19,7 +22,6 @@
   modules.system = {
     security.accessTier = "trusted";
     networking.tailscaleNode = true;
-    roles.nixos.noRgb = true;
   };
 
   modules.system.roles.nas = {

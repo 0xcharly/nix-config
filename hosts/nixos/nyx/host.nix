@@ -25,6 +25,7 @@
     hardware = {
       cpu.vendor = "amd";
       gpu.vendor = "amd";
+      rgb.disable = true;
     };
 
     facts.taskwarrior.primaryClient = true;
@@ -35,7 +36,6 @@
     security.accessTier = "highly-privileged";
     networking.tailscaleNode = true;
     roles.nixos = {
-      noRgb = true;
       protonvpn = true;
       workstation = true;
     };
