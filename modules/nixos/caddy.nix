@@ -31,7 +31,7 @@ in {
         "album.qyrnl.com" = {
           extraConfig = ''
             import ts_host
-            reverse_proxy helios.neko-danio.ts.net:2283
+            reverse_proxy helios.neko-danio.ts.net:${toString config.services.immich.port}
           '';
         };
         # TODO: define IPP's host and port somewhere else.
@@ -39,7 +39,7 @@ in {
         "shared.album.qyrnl.com" = {
           extraConfig = ''
             import ts_host
-            reverse_proxy localhost:3000
+            reverse_proxy localhost:${toString config.services.immich-public-proxy.port}
           '';
         };
         "atuin.qyrnl.com" = {
