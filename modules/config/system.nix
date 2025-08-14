@@ -100,16 +100,6 @@ in {
             Whether this machine exposes a TaskWarrior sync service.
           '';
         };
-
-        vaultwarden = mkOption {
-          type = bool;
-          default = false;
-          description = ''
-            If true, host spins up a vaultwarden server.
-
-            https://www.vaultwarden.net
-          '';
-        };
       };
     };
 

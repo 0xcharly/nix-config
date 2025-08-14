@@ -68,7 +68,7 @@ in
             reverse_proxy localhost:${toString config.services.taskchampion-sync-server.port}
           '';
         };
-        "vault.qyrnl.com" = lib.mkIf cfg.vaultwarden {
+        "vault.qyrnl.com" = {
           extraConfig = ''
             import ts_host
             reverse_proxy localhost:${toString config.services.vaultwarden.config.ROCKET_PORT}

@@ -35,6 +35,7 @@
       healthchecks.enable = true;
       immich-public-proxy.enable = true;
       smtp.enable = true;
+      vaultwarden.enable = true;
     };
   };
 
@@ -43,7 +44,6 @@
     services.serve = {
       reverseProxy = true;
       taskchampion-sync-server = true;
-      vaultwarden = true;
     };
     networking.tailscaleNode = true;
     roles.nixos = {

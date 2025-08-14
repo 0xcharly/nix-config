@@ -39,8 +39,8 @@ in {
 
     assertions = [
       {
-        assertion = config.modules.services.serve.vaultwarden -> cfg.enable;
-        message = "`system.services.serve.vaultwarden` requires SMTP";
+        assertion = config.node.services.vaultwarden.enable -> cfg.enable;
+        message = "Vaultwarden requires SMTP";
       }
     ];
   };
