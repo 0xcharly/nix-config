@@ -44,7 +44,7 @@ in
           '';
         };
         # TODO: define Jellyfin's host and port somewhere else.
-        "jellyfin.qyrnl.com" = lib.mkIf cfg.atuin {
+        "jellyfin.qyrnl.com" = {
           extraConfig = ''
             import ts_host
             reverse_proxy helios.neko-danio.ts.net:8096

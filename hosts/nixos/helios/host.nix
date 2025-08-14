@@ -14,12 +14,14 @@
       keyFile = config.age.secrets."healthchecks/ping-helios".path;
     };
 
-    services.immich.enable = true;
+    services = {
+      immich.enable = true;
+      jellyfin.enable = true;
+    };
   };
 
   modules.system = {
     security.accessTier = "trusted";
-    services.serve.jellyfin = true;
     networking.tailscaleNode = true;
     roles.nixos = {
       amdCpu = true;

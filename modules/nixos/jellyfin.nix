@@ -2,7 +2,12 @@
   config,
   lib,
   ...
-}:
-lib.mkIf config.modules.system.services.serve.jellyfin {
-  services.jellyfin.enable = true;
+}: let
+  cfg = config.node.services.jellyfin;
+in {
+  options.node.services.jellyfin.enable = lib.mkEnableOption "Whether to spin up a Jellyfin server.";
+
+  config.services.jellyfin = {
+    inherit (cfg) enable;
+  };
 }

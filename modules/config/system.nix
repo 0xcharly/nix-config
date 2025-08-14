@@ -84,16 +84,6 @@ in {
 
     services = {
       serve = {
-        jellyfin = mkOption {
-          type = bool;
-          default = false;
-          description = ''
-            If true, host spins up a jellyfin server.
-
-            https://jellyfin.org
-          '';
-        };
-
         reverseProxy = mkOption {
           type = bool;
           default = false;
