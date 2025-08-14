@@ -107,11 +107,11 @@
   modules.usrenv.compositor = "headless";
 
   # System config.
+  node.healthchecks.ping = {
+    enable = true;
+    keyFile = config.age.secrets."healthchecks/ping-linode".path;
+  };
   modules.system = {
-    healthchecks.ping = {
-      enable = true;
-      keyFile = config.age.secrets."healthchecks/ping-linode".path;
-    };
     security.accessTier = "basic";
     networking = {
       tailscaleNode = true;

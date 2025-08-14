@@ -4,8 +4,18 @@
   lib,
   ...
 }: let
-  cfg = config.modules.system.healthchecks.ping;
+  cfg = config.node.healthchecks.ping;
 in {
+  options.node.healthchecks.ping = {
+    enable = lib.mkEnableOption "Enable Healthchecks ping";
+    keyFile = lib.mkOption {
+      type = lib.types.path;
+      description = ''
+        The path to the file containing the Healthcheck UUID.
+      '';
+    };
+  };
+
   config = lib.mkIf cfg.enable {
     systemd = {
       timers."healthchecks-ping" = {

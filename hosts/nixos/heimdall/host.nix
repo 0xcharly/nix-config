@@ -21,11 +21,11 @@
     tailscaleIPv6 = "fd7a:115c:a1e0::4036:4f35";
   };
 
+  node.healthchecks.ping = {
+    enable = true;
+    keyFile = config.age.secrets."healthchecks/ping-heimdall".path;
+  };
   modules.system = {
-    healthchecks.ping = {
-      enable = true;
-      keyFile = config.age.secrets."healthchecks/ping-heimdall".path;
-    };
     security.accessTier = "trusted";
     services.serve = {
       atuin = true;

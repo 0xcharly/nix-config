@@ -7,8 +7,8 @@
   inherit (lib.attrsets) genAttrs;
   inherit (lib.lists) optionals;
   inherit (lib.modules) mkMerge;
-  inherit (lib.options) mkEnableOption mkOption;
-  inherit (lib.types) attrsOf bool enum nullOr path str submodule;
+  inherit (lib.options) mkOption;
+  inherit (lib.types) attrsOf bool enum nullOr str submodule;
   inherit (pkgs.stdenv) isDarwin;
 
   cfg = config.modules.system;
@@ -255,18 +255,6 @@ in {
           True for the machine that is the source of truth for bean files
           (i.e. on which beans are edited).
         '';
-      };
-    };
-
-    healthchecks = {
-      ping = {
-        enable = mkEnableOption "Enable Healthchecks ping";
-        keyFile = mkOption {
-          type = path;
-          description = ''
-            The path to the file containing the Healthcheck UUID.
-          '';
-        };
       };
     };
 

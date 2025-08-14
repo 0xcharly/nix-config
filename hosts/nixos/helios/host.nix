@@ -8,11 +8,11 @@
   ];
 
   # System config.
+  node.healthchecks.ping = {
+    enable = true;
+    keyFile = config.age.secrets."healthchecks/ping-helios".path;
+  };
   modules.system = {
-    healthchecks.ping = {
-      enable = true;
-      keyFile = config.age.secrets."healthchecks/ping-helios".path;
-    };
     security.accessTier = "trusted";
     services.serve = {
       immich = true;

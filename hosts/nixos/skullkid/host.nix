@@ -8,11 +8,11 @@
   ];
 
   # System config.
+  node.healthchecks.ping = {
+    enable = true;
+    keyFile = config.age.secrets."healthchecks/ping-skullkid".path;
+  };
   modules.system = {
-    healthchecks.ping = {
-      enable = true;
-      keyFile = config.age.secrets."healthchecks/ping-skullkid".path;
-    };
     security.accessTier = "trusted";
     networking.tailscaleNode = true;
     roles.nixos.intelThunderbolt = true;

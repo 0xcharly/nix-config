@@ -8,11 +8,11 @@
   ];
 
   # System config.
+  node.healthchecks.ping = {
+    enable = true;
+    keyFile = config.age.secrets."healthchecks/ping-selene".path;
+  };
   modules.system = {
-    healthchecks.ping = {
-      enable = true;
-      keyFile = config.age.secrets."healthchecks/ping-selene".path;
-    };
     security.accessTier = "trusted";
     networking.tailscaleNode = true;
     roles.nixos = {
