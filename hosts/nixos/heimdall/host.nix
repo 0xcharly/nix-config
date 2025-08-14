@@ -27,13 +27,15 @@
       keyFile = config.age.secrets."healthchecks/ping-heimdall".path;
     };
 
-    services.atuin.enable = true;
+    services = {
+      atuin.enable = true;
+      dns.enable = true;
+    };
   };
 
   modules.system = {
     security.accessTier = "trusted";
     services.serve = {
-      dns = true;
       golink = true;
       gotify = true;
       healthchecks = true;

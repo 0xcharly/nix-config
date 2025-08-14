@@ -84,12 +84,6 @@ in {
 
     services = {
       serve = {
-        dns = mkOption {
-          type = bool;
-          default = false;
-          description = "If true, host spins up a DNS server.";
-        };
-
         golink = mkOption {
           type = bool;
           default = false;
