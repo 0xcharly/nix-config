@@ -4,9 +4,14 @@
   pkgs,
   ...
 }: let
-  cfg = config.modules.system.services.serve;
-in
-  lib.mkIf cfg.reverseProxy {
+  cfg = config.node.services.reverseProxy;
+in {
+  options.node.services.reverseProxy.enable = lib.mkEnableOption ''
+    Whether to serve services from across the internal network
+    behind a reverse proxy.
+  '';
+
+  config = lib.mkIf cfg.enable {
     services.caddy = {
       enable = true;
       package = pkgs.caddy.withPlugins {
@@ -82,4 +87,5 @@ in
       AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
       EnvironmentFile = config.age.secrets."services/gandi-creds".path;
     };
-  }
+  };
+}

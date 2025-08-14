@@ -37,14 +37,12 @@
       smtp.enable = true;
       vaultwarden.enable = true;
       taskchampion-sync-server.enable = true;
+      reverseProxy.enable = true;
     };
   };
 
   modules.system = {
     security.accessTier = "trusted";
-    services.serve = {
-      reverseProxy = true;
-    };
     networking.tailscaleNode = true;
     roles.nixos = {
       amdCpu = true;

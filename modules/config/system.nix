@@ -82,19 +82,6 @@ in {
       };
     };
 
-    services = {
-      serve = {
-        reverseProxy = mkOption {
-          type = bool;
-          default = false;
-          description = ''
-            If true, host serves services from across the internal network
-            behind a reverse proxy.
-          '';
-        };
-      };
-    };
-
     networking = {
       tailscaleNode = mkOption {
         type = bool;
