@@ -149,12 +149,6 @@ in {
 
     roles = {
       nixos = {
-        netboot = mkOption {
-          type = bool;
-          default = false;
-          description = "Whether the system is a netboot server.";
-        };
-
         noRgb = mkOption {
           type = bool;
           default = false;
