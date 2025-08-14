@@ -36,6 +36,7 @@
       immich-public-proxy.enable = true;
       smtp.enable = true;
       vaultwarden.enable = true;
+      taskchampion-sync-server.enable = true;
     };
   };
 
@@ -43,7 +44,6 @@
     security.accessTier = "trusted";
     services.serve = {
       reverseProxy = true;
-      taskchampion-sync-server = true;
     };
     networking.tailscaleNode = true;
     roles.nixos = {

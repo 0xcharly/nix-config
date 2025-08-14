@@ -1,3 +1,13 @@
-{config, ...}: {
-  services.taskchampion-sync-server.enable = config.modules.system.services.serve.taskchampion-sync-server;
+{
+  config,
+  lib,
+  ...
+}: let
+  cfg = config.node.services.taskchampion-sync-server;
+in {
+  options.node.services.taskchampion-sync-server.enable = lib.mkEnableOption "Whether to spin up a Taskchampion Sync server.";
+
+  config.services.taskchampion-sync-server = {
+    inherit (cfg) enable;
+  };
 }
