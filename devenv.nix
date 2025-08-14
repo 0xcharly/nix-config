@@ -45,6 +45,10 @@
           prettier.enable = true;
           shfmt.enable = false;
         };
+        settings.formatter.prettier.excludes = [
+          "users/delay/walker/style.css"
+          "users/delay/waybar/style.css"
+        ];
       };
       fmt = inputs.treefmt-nix.lib.mkWrapper pkgs fmt-opts;
     in
