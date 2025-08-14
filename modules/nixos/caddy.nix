@@ -37,7 +37,7 @@ in
             reverse_proxy helios.neko-danio.ts.net:3000
           '';
         };
-        "atuin.qyrnl.com" = lib.mkIf cfg.atuin {
+        "atuin.qyrnl.com" = {
           extraConfig = ''
             import ts_host
             reverse_proxy localhost:${toString config.services.atuin.port}

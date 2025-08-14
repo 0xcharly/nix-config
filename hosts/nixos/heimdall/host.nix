@@ -16,19 +16,23 @@
   modules.usrenv.compositor = "headless";
 
   # System config.
-  node.facts.tailscale = {
-    tailscaleIPv4 = "100.85.79.53";
-    tailscaleIPv6 = "fd7a:115c:a1e0::4036:4f35";
+  node = {
+    facts.tailscale = {
+      tailscaleIPv4 = "100.85.79.53";
+      tailscaleIPv6 = "fd7a:115c:a1e0::4036:4f35";
+    };
+
+    healthchecks.ping = {
+      enable = true;
+      keyFile = config.age.secrets."healthchecks/ping-heimdall".path;
+    };
+
+    services.atuin.enable = true;
   };
 
-  node.healthchecks.ping = {
-    enable = true;
-    keyFile = config.age.secrets."healthchecks/ping-heimdall".path;
-  };
   modules.system = {
     security.accessTier = "trusted";
     services.serve = {
-      atuin = true;
       dns = true;
       golink = true;
       gotify = true;

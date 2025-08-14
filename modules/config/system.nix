@@ -84,16 +84,6 @@ in {
 
     services = {
       serve = {
-        atuin = mkOption {
-          type = bool;
-          default = false;
-          description = ''
-            If true, host spins up an Atuin server.
-
-            https://atuin.sh
-          '';
-        };
-
         dns = mkOption {
           type = bool;
           default = false;
