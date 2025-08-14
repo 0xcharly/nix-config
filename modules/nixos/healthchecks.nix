@@ -3,9 +3,11 @@
   lib,
   ...
 }: let
-  cfg = config.services.healthchecks;
-in
-  lib.mkIf config.modules.system.services.serve.healthchecks {
+  cfg = config.node.services.healthchecks;
+in {
+  options.node.services.healthchecks.enable = lib.mkEnableOption "Spins up a Healthchecks server.";
+
+  config = lib.mkIf cfg.enable {
     services.healthchecks = {
       enable = true;
       settings = {
@@ -28,5 +30,6 @@ in
       };
     };
 
-    users.users.${cfg.user}.extraGroups = ["sendmail"];
-  }
+    users.users.${config.services.healthchecks.user}.extraGroups = ["sendmail"];
+  };
+}

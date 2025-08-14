@@ -50,7 +50,7 @@ in
             reverse_proxy helios.neko-danio.ts.net:8096
           '';
         };
-        "healthchecks.qyrnl.com" = lib.mkIf cfg.healthchecks {
+        "healthchecks.qyrnl.com" = {
           extraConfig = ''
             import ts_host
             reverse_proxy localhost:${toString config.services.healthchecks.port}
