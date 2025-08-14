@@ -7,7 +7,7 @@
   cfg = config.node.healthchecks.ping;
 in {
   options.node.healthchecks.ping = {
-    enable = lib.mkEnableOption "Enable Healthchecks ping";
+    enable = lib.mkEnableOption "Whether to enable Healthchecks ping";
     keyFile = lib.mkOption {
       type = lib.types.path;
       description = ''

@@ -5,15 +5,7 @@
 }: let
   cfg = config.node.services.atuin;
 in {
-  options.node.services.atuin.enable = lib.mkOption {
-    type = lib.types.bool;
-    default = false;
-    description = ''
-      If true, host spins up an Atuin server.
-
-      https://atuin.sh
-    '';
-  };
+  options.node.services.atuin.enable = lib.mkEnableOption "Whether to spin up an Atuin server.";
 
   config.services.atuin = {
     inherit (cfg) enable;

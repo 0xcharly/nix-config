@@ -5,7 +5,7 @@
 }: let
   cfg = config.node.services.healthchecks;
 in {
-  options.node.services.healthchecks.enable = lib.mkEnableOption "Spins up a Healthchecks server.";
+  options.node.services.healthchecks.enable = lib.mkEnableOption "Whether to spin up a Healthchecks server.";
 
   config = lib.mkIf cfg.enable {
     services.healthchecks = {

@@ -7,7 +7,7 @@
   cfg = config.programs.asdcontrol;
 in {
   options.programs.asdcontrol = {
-    enable = lib.mkEnableOption "Enables asdcontrol (brightness control for Apple Monitors)";
+    enable = lib.mkEnableOption "Whether to install asdcontrol (brightness control for Apple Monitors)";
   };
 
   config = lib.mkIf cfg.enable {

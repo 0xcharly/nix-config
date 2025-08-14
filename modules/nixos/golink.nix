@@ -8,7 +8,7 @@
 in {
   imports = [inputs.golink.nixosModules.default];
 
-  options.node.services.golink.enable = lib.mkEnableOption "Spins up a go/link server.";
+  options.node.services.golink.enable = lib.mkEnableOption "Whether to spin up a go/link server.";
 
   config = lib.mkIf cfg.enable {
     services.golink = {

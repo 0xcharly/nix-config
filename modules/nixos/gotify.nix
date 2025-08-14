@@ -5,7 +5,7 @@
 }: let
   cfg = config.node.services.gotify;
 in {
-  options.node.services.gotify.enable = lib.mkEnableOption "Spins up a Gotify server.";
+  options.node.services.gotify.enable = lib.mkEnableOption "Whether to spin up a Gotify server.";
 
   config.services.gotify = {
     inherit (cfg) enable;

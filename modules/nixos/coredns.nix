@@ -9,7 +9,7 @@
 }: let
   cfg = config.node.services.dns;
 in {
-  options.node.services.dns.enable = lib.mkEnableOption "Spins up a DNS server.";
+  options.node.services.dns.enable = lib.mkEnableOption "Whether to spin up a DNS server.";
 
   config = lib.mkIf cfg.enable {
     services = {
