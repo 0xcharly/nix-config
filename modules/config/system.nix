@@ -93,14 +93,6 @@ in {
           '';
         };
 
-        smtp = mkOption {
-          type = bool;
-          default = cfg.services.serve.vaultwarden;
-          description = ''
-            Whether this machine exposes an SMTP service.
-          '';
-        };
-
         taskchampion-sync-server = mkOption {
           type = bool;
           default = false;
@@ -348,12 +340,6 @@ in {
       }
     ]
     # NAS config validation.
-    ++ [
-      {
-        assertion = cfg.services.serve.vaultwarden -> cfg.services.serve.smtp;
-        message = "`system.services.serve.vaultwarden` requires SMTP";
-      }
-    ]
     ++ [
       {
         assertion = cfg.roles.nas.enable -> isNixOS;

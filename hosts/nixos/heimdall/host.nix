@@ -34,6 +34,7 @@
       gotify.enable = true;
       healthchecks.enable = true;
       immich-public-proxy.enable = true;
+      smtp.enable = true;
     };
   };
 
