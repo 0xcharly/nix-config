@@ -31,6 +31,7 @@
       atuin.enable = true;
       dns.enable = true;
       golink.enable = true;
+      gotify.enable = true;
       healthchecks.enable = true;
     };
   };
@@ -38,7 +39,6 @@
   modules.system = {
     security.accessTier = "trusted";
     services.serve = {
-      gotify = true;
       reverseProxy = true;
       status = true;
       taskchampion-sync-server = true;

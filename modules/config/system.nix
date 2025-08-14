@@ -104,16 +104,6 @@ in {
           '';
         };
 
-        gotify = mkOption {
-          type = bool;
-          default = false;
-          description = ''
-            If true, host spins up a Gotify server.
-
-            https://gotify.net/
-          '';
-        };
-
         reverseProxy = mkOption {
           type = bool;
           default = false;

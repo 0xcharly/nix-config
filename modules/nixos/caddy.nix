@@ -56,7 +56,7 @@ in
             reverse_proxy localhost:${toString config.services.healthchecks.port}
           '';
         };
-        "push.qyrnl.com" = lib.mkIf cfg.gotify {
+        "push.qyrnl.com" = {
           extraConfig = ''
             import ts_host
             reverse_proxy localhost:${toString config.services.gotify.environment.GOTIFY_SERVER_PORT}
