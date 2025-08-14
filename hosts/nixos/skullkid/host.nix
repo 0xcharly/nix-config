@@ -9,7 +9,10 @@
 
   # System config.
   node = {
-    hardware.cpu.vendor = "intel";
+    hardware = {
+      cpu.vendor = "intel";
+      thunderbolt.enable = true;
+    };
 
     healthchecks.ping = {
       enable = true;
@@ -19,7 +22,6 @@
   modules.system = {
     security.accessTier = "trusted";
     networking.tailscaleNode = true;
-    roles.nixos.intelThunderbolt = true;
   };
 
   modules.system.roles.nas = {
