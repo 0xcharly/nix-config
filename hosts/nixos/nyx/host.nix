@@ -21,15 +21,20 @@
   modules.usrenv.compositor = "wayland";
 
   # NOTE: This should be uniquely defined.
-  node.facts.taskwarrior.primaryClient = true;
+  node = {
+    hardware = {
+      cpu.vendor = "amd";
+      gpu.vendor = "amd";
+    };
+
+    facts.taskwarrior.primaryClient = true;
+  };
 
   # System config.
   modules.system = {
     security.accessTier = "highly-privileged";
     networking.tailscaleNode = true;
     roles.nixos = {
-      amdCpu = true;
-      amdGpu = true;
       noRgb = true;
       protonvpn = true;
       workstation = true;

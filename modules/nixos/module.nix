@@ -13,15 +13,13 @@
     ./beans.nix
     ./caddy.nix
     ./coredns.nix
-    ./cpu-arch-amd.nix
-    ./cpu-arch-intel.nix
+    ./cpu-arch.nix
     ./deploy.nix
     ./fail2ban.nix
     ./fonts.nix
     ./golink.nix
     ./gotify.nix
-    ./gpu-arch-amd.nix
-    ./gpu-arch-intel.nix
+    ./gpu-arch.nix
     ./healthchecks-ping.nix
     ./healthchecks.nix
     ./immich-public-proxy.nix

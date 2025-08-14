@@ -22,6 +22,11 @@
       tailscaleIPv6 = "fd7a:115c:a1e0::4036:4f35";
     };
 
+    hardware = {
+      cpu.vendor = "amd";
+      gpu.vendor = "amd";
+    };
+
     healthchecks.ping = {
       enable = true;
       keyFile = config.age.secrets."healthchecks/ping-heimdall".path;
@@ -44,10 +49,6 @@
   modules.system = {
     security.accessTier = "trusted";
     networking.tailscaleNode = true;
-    roles.nixos = {
-      amdCpu = true;
-      amdGpu = true;
-    };
   };
 
   # Boot configuration.

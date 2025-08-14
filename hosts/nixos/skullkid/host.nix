@@ -8,9 +8,13 @@
   ];
 
   # System config.
-  node.healthchecks.ping = {
-    enable = true;
-    keyFile = config.age.secrets."healthchecks/ping-skullkid".path;
+  node = {
+    hardware.cpu.vendor = "intel";
+
+    healthchecks.ping = {
+      enable = true;
+      keyFile = config.age.secrets."healthchecks/ping-skullkid".path;
+    };
   };
   modules.system = {
     security.accessTier = "trusted";

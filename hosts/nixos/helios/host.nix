@@ -9,6 +9,11 @@
 
   # System config.
   node = {
+    hardware = {
+      cpu.vendor = "amd";
+      gpu.vendor = "intel";
+    };
+
     healthchecks.ping = {
       enable = true;
       keyFile = config.age.secrets."healthchecks/ping-helios".path;
@@ -23,12 +28,7 @@
   modules.system = {
     security.accessTier = "trusted";
     networking.tailscaleNode = true;
-    roles.nixos = {
-      amdCpu = true;
-      intelGpu = true;
-      noRgb = true;
-      protonvpn = true;
-    };
+    roles.nixos.noRgb = true;
   };
 
   modules.system.roles.nas = {

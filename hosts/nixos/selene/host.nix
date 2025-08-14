@@ -8,17 +8,18 @@
   ];
 
   # System config.
-  node.healthchecks.ping = {
-    enable = true;
-    keyFile = config.age.secrets."healthchecks/ping-selene".path;
+  node = {
+    hardware.cpu.vendor = "amd";
+
+    healthchecks.ping = {
+      enable = true;
+      keyFile = config.age.secrets."healthchecks/ping-selene".path;
+    };
   };
   modules.system = {
     security.accessTier = "trusted";
     networking.tailscaleNode = true;
-    roles.nixos = {
-      amdCpu = true;
-      noRgb = true;
-    };
+    roles.nixos.noRgb = true;
   };
 
   modules.system.roles.nas = {

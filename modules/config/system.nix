@@ -149,30 +149,6 @@ in {
 
     roles = {
       nixos = {
-        amdCpu = mkOption {
-          type = bool;
-          default = false;
-          description = "True for machines with an AMD CPU.";
-        };
-
-        amdGpu = mkOption {
-          type = bool;
-          default = false;
-          description = "True for machines with an AMD GPU.";
-        };
-
-        intelCpu = mkOption {
-          type = bool;
-          default = cfg.roles.nixos.intelThunderbolt;
-          description = "True for machines with an Intel CPU.";
-        };
-
-        intelGpu = mkOption {
-          type = bool;
-          default = false;
-          description = "True for machines with an Intel GPU.";
-        };
-
         intelThunderbolt = mkOption {
           type = bool;
           default = false;
