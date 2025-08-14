@@ -41,7 +41,6 @@
     security.accessTier = "trusted";
     services.serve = {
       reverseProxy = true;
-      status = true;
       taskchampion-sync-server = true;
       vaultwarden = true;
     };

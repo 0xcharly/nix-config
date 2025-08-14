@@ -93,12 +93,6 @@ in {
           '';
         };
 
-        status = mkOption {
-          type = bool;
-          default = false;
-          description = "If true, host aggregates statuses from across the internal network.";
-        };
-
         smtp = mkOption {
           type = bool;
           default = cfg.services.serve.vaultwarden;
