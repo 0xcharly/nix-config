@@ -1,13 +1,16 @@
-{config, ...}: {
-  services.immich = {
-    enable = config.modules.system.services.serve.immich;
+{
+  config,
+  lib,
+  ...
+}: let
+  cfg = config.node.services.immich;
+in {
+  options.node.services.immich.enable = lib.mkEnableOption "Whether to spin up an Immich server.";
+
+  config.services.immich = {
+    inherit (cfg) enable;
     host = "0.0.0.0";
     mediaLocation = "/tank/delay/album";
-    settings.server.externalDomain = "https://album.qyrnl.com";
-  };
-
-  services.immich-public-proxy = {
-    enable = config.modules.system.services.serve.immich;
-    immichUrl = "https://shared.album.qyrnl.com";
+    settings.server.externalDomain = "https://shared.album.qyrnl.com";
   };
 }

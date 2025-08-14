@@ -8,16 +8,18 @@
   ];
 
   # System config.
-  node.healthchecks.ping = {
-    enable = true;
-    keyFile = config.age.secrets."healthchecks/ping-helios".path;
+  node = {
+    healthchecks.ping = {
+      enable = true;
+      keyFile = config.age.secrets."healthchecks/ping-helios".path;
+    };
+
+    services.immich.enable = true;
   };
+
   modules.system = {
     security.accessTier = "trusted";
-    services.serve = {
-      immich = true;
-      jellyfin = true;
-    };
+    services.serve.jellyfin = true;
     networking.tailscaleNode = true;
     roles.nixos = {
       amdCpu = true;

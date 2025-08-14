@@ -22,8 +22,9 @@
     ./gotify.nix
     ./gpu-arch-amd.nix
     ./gpu-arch-intel.nix
-    ./healthchecks.nix
     ./healthchecks-ping.nix
+    ./healthchecks.nix
+    ./immich-public-proxy.nix
     ./immich.nix
     ./jellyfin.nix
     ./intel-thunderbolt.nix

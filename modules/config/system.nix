@@ -84,16 +84,6 @@ in {
 
     services = {
       serve = {
-        immich = mkOption {
-          type = bool;
-          default = false;
-          description = ''
-            If true, host spins up an Immich server.
-
-            https://immich.app
-          '';
-        };
-
         jellyfin = mkOption {
           type = bool;
           default = false;

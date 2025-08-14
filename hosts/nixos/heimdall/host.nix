@@ -33,6 +33,7 @@
       golink.enable = true;
       gotify.enable = true;
       healthchecks.enable = true;
+      immich-public-proxy.enable = true;
     };
   };
 

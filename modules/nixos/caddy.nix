@@ -34,7 +34,7 @@ in
         "shared.album.qyrnl.com" = {
           extraConfig = ''
             import ts_host
-            reverse_proxy helios.neko-danio.ts.net:3000
+            reverse_proxy localhost:3000
           '';
         };
         "atuin.qyrnl.com" = {
