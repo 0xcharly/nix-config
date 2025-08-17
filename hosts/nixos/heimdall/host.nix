@@ -39,10 +39,11 @@
       gotify.enable = true;
       healthchecks.enable = true;
       immich-public-proxy.enable = true;
-      smtp.enable = true;
-      vaultwarden.enable = true;
-      taskchampion-sync-server.enable = true;
       reverseProxy.enable = true;
+      smtp.enable = true;
+      taskchampion-sync-server.enable = true;
+      uptime-kuma.enable = true;
+      vaultwarden.enable = true;
     };
   };
 

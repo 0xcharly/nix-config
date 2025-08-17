@@ -37,6 +37,7 @@
     ./nixos-hyprland.nix
     ./openssh.nix
     ./options.nix
+    ./paperless.nix
     ./protonvpn-module.nix
     ./protonvpn.nix
     ./rgb.nix
@@ -47,7 +48,9 @@
     ./tailscale.nix
     ./taskchampion-sync-server.nix
     ./terminfo.nix
+    ./uptime-kuma.nix
     ./user-ayako.nix
+    ./user-bifrost.nix
     ./user-delay.nix
     ./vaultwarden.nix
     ./workstation.nix

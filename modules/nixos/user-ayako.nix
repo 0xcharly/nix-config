@@ -12,8 +12,7 @@ lib.mkIf config.modules.system.roles.nas.enable {
   users.users.ayako = {
     isNormalUser = true;
     home = "/home/ayako";
-    extraGroups = ["ayako"];
+    group = "ayako";
     shell = pkgs.bash;
-    hashedPassword = "*"; # Disable password login.
   };
 }

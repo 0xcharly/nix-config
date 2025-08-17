@@ -31,7 +31,7 @@ in {
         "album.qyrnl.com" = {
           extraConfig = ''
             import ts_host
-            reverse_proxy helios.neko-danio.ts.net:${toString config.services.immich.port}
+            reverse_proxy helios.qyrnl.com:${toString config.services.immich.port}
           '';
         };
         # TODO: define IPP's host and port somewhere else.
@@ -48,11 +48,17 @@ in {
             reverse_proxy localhost:${toString config.services.atuin.port}
           '';
         };
+        "files.qyrnl.com" = {
+          extraConfig = ''
+            import ts_host
+            reverse_proxy helios.qyrnl.com:${toString config.services.paperless.port}
+          '';
+        };
         # TODO: define Jellyfin's host and port somewhere else.
         "jellyfin.qyrnl.com" = {
           extraConfig = ''
             import ts_host
-            reverse_proxy helios.neko-danio.ts.net:8096
+            reverse_proxy helios.qyrnl.com:8096
           '';
         };
         "healthchecks.qyrnl.com" = {
@@ -65,6 +71,12 @@ in {
           extraConfig = ''
             import ts_host
             reverse_proxy localhost:${toString config.services.gotify.environment.GOTIFY_SERVER_PORT}
+          '';
+        };
+        "status.qyrnl.com" = {
+          extraConfig = ''
+            import ts_host
+            reverse_proxy localhost:${config.services.uptime-kuma.settings.PORT}
           '';
         };
         "tasks.qyrnl.com" = {

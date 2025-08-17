@@ -23,6 +23,7 @@
     services = {
       immich.enable = true;
       jellyfin.enable = true;
+      paperless.enable = true;
     };
   };
 

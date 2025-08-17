@@ -13,7 +13,8 @@
   users.users.delay = {
     isNormalUser = true;
     inherit (config.modules.system.users.delay) home;
-    extraGroups = ["delay" "wheel"];
+    group = "delay";
+    extraGroups = ["wheel"];
     shell = pkgs.fish;
     # Create a hashed password with `nix-shell -p mkpasswd --run "mkpasswd -m yescrypt"`
     hashedPasswordFile = config.age.secrets."passwd/delay".path;
