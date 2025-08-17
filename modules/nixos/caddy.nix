@@ -34,20 +34,6 @@ in {
             reverse_proxy helios.qyrnl.com:${toString config.services.immich.port}
           '';
         };
-        # TODO: define IPP's host and port somewhere else.
-        # TODO: define flag to enable this virtual host.
-        "shared.album.qyrnl.com" = {
-          extraConfig = ''
-            import ts_host
-            reverse_proxy localhost:${toString config.services.immich-public-proxy.port}
-          '';
-        };
-        "atuin.qyrnl.com" = {
-          extraConfig = ''
-            import ts_host
-            reverse_proxy localhost:${toString config.services.atuin.port}
-          '';
-        };
         "files.qyrnl.com" = {
           extraConfig = ''
             import ts_host
@@ -59,36 +45,6 @@ in {
           extraConfig = ''
             import ts_host
             reverse_proxy helios.qyrnl.com:8096
-          '';
-        };
-        "healthchecks.qyrnl.com" = {
-          extraConfig = ''
-            import ts_host
-            reverse_proxy localhost:${toString config.services.healthchecks.port}
-          '';
-        };
-        "push.qyrnl.com" = {
-          extraConfig = ''
-            import ts_host
-            reverse_proxy localhost:${toString config.services.gotify.environment.GOTIFY_SERVER_PORT}
-          '';
-        };
-        "status.qyrnl.com" = {
-          extraConfig = ''
-            import ts_host
-            reverse_proxy localhost:${config.services.uptime-kuma.settings.PORT}
-          '';
-        };
-        "tasks.qyrnl.com" = {
-          extraConfig = ''
-            import ts_host
-            reverse_proxy localhost:${toString config.services.taskchampion-sync-server.port}
-          '';
-        };
-        "vault.qyrnl.com" = {
-          extraConfig = ''
-            import ts_host
-            reverse_proxy localhost:${toString config.services.vaultwarden.config.ROCKET_PORT}
           '';
         };
       };
