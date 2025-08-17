@@ -19,35 +19,12 @@ in {
         hash = "sha256-JZLxPJd/HiM6I+YBHwLtQoMG2uZ92jKmlz5nQK6N5+U=";
       };
       environmentFile = config.age.secrets."services/gandi-creds".path;
-      virtualHosts = {
-        "(ts_host)".extraConfig = ''
-          tls {
-            resolvers 1.1.1.1
-            dns gandi {env.GANDIV5_PERSONAL_ACCESS_TOKEN}
-          }
-        '';
-        # TODO: define Immich's host and port somewhere else.
-        # TODO: define flag to enable this virtual host.
-        "album.qyrnl.com" = {
-          extraConfig = ''
-            import ts_host
-            reverse_proxy helios.qyrnl.com:${toString config.services.immich.port}
-          '';
-        };
-        "files.qyrnl.com" = {
-          extraConfig = ''
-            import ts_host
-            reverse_proxy helios.qyrnl.com:${toString config.services.paperless.port}
-          '';
-        };
-        # TODO: define Jellyfin's host and port somewhere else.
-        "jellyfin.qyrnl.com" = {
-          extraConfig = ''
-            import ts_host
-            reverse_proxy helios.qyrnl.com:8096
-          '';
-        };
-      };
+      virtualHosts."(ts_host)".extraConfig = ''
+        tls {
+          resolvers 1.1.1.1
+          dns gandi {env.GANDIV5_PERSONAL_ACCESS_TOKEN}
+        }
+      '';
     };
 
     # Allow Caddy to bind to 443.
