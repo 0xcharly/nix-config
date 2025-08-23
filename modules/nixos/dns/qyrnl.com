@@ -16,6 +16,7 @@ beans           IN CNAME heimdall
 files           IN CNAME heimdall
 jellyfin        IN CNAME heimdall
 healthchecks    IN CNAME heimdall
+news            IN CNAME heimdall
 push            IN CNAME heimdall
 shared.album    IN CNAME heimdall
 status          IN CNAME heimdall

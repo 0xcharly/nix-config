@@ -39,6 +39,7 @@
       gotify.enable = true;
       healthchecks.enable = true;
       immich-public-proxy.enable = true;
+      miniflux.enable = true;
       reverseProxy.enable = true;
       smtp.enable = true;
       taskchampion-sync-server.enable = true;

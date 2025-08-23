@@ -24,9 +24,10 @@
     ./healthchecks.nix
     ./immich-public-proxy.nix
     ./immich.nix
-    ./jellyfin.nix
     ./intel-thunderbolt.nix
     ./iotop.nix
+    ./jellyfin.nix
+    ./miniflux.nix
     ./nas-fs.nix
     ./nas-replication.nix
     ./nas-samba.nix
