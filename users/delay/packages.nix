@@ -17,6 +17,7 @@ in {
     libqalculate # Multi-purpose calculator on the command line.
     tasksh # Task management with taskwarrior.
     tree # List the content of directories in a tree-like format.
+    magic-wormhole-rs # Securely transfer files across devices.
     yazi # File explorer that supports Kitty image protocol.
 
     # Our own package installed by overlay.
