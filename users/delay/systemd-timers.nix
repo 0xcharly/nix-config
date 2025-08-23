@@ -7,18 +7,10 @@
   cfg = config.modules.system;
   isNasPrimary = lib.fn.isTrue cfg.roles.nas.primary;
 in {
-  systemd.user.timers.backup-beans = lib.mkIf isNasPrimary {
-    Unit.Description = "Backup financial information from remote";
-    Install.WantedBy = ["timers.target"];
-    Timer = {
-      OnCalendar = "hourly";
-      Persistent = true;
-    };
-  };
-
   systemd.user.services.backup-beans = lib.mkIf isNasPrimary {
     Unit.Description = "Backup financial information from remote";
     Install.WantedBy = ["default.target"];
+    startAt = "hourly";
     Service = {
       Type = "oneshot";
       IOSchedulingClass = "idle";

@@ -33,20 +33,10 @@ in {
     #   };
     # };
     #
-    # systemd.timers = lib.mkIf isNasPrimary {
-    #   backup-golink-service-data-dir = {
-    #     description = "Backup go/link server data directory";
-    #     wantedBy = ["timers.target"];
-    #     timerConfig = {
-    #       OnCalendar = "daily";
-    #       Persistent = true;
-    #     };
-    #   };
-    # };
-    #
     # systemd.services.backup-golink-service-data-dir = lib.mkIf isNasPrimary {
     #   description = "Backup go/link server data directory";
     #   wantedBy = ["default.target"];
+    #   startAt = "daily";
     #   serviceConfig = {
     #     Type = "oneshot";
     #     IOSchedulingClass = "idle";
