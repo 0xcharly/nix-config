@@ -15,6 +15,10 @@
       immich.enable = true;
       jellyfin.enable = true;
       paperless.enable = true;
+      prometheus.exporters = {
+        node.enable = true;
+        zfs.enable = true;
+      };
     };
   };
 

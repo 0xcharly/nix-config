@@ -18,6 +18,7 @@ gatus           IN CNAME heimdall
 healthchecks    IN CNAME heimdall
 jellyfin        IN CNAME heimdall
 news            IN CNAME heimdall
+prometheus      IN CNAME heimdall
 push            IN CNAME heimdall
 shared.album    IN CNAME heimdall
 status          IN CNAME heimdall

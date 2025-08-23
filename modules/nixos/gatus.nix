@@ -31,6 +31,7 @@ in {
         inherit package;
         environmentFile = config.age.secrets."services/gatus.env".path;
         settings = {
+          metrics = true; # Exposes metrics for Prometheus.
           alerting = {
             gotify = {
               server-url = "https://push.qyrnl.com";

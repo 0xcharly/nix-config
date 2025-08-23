@@ -103,15 +103,19 @@
   system.stateVersion = "25.05";
 
   # No graphical environment.
-  modules.usrenv.compositor = "headless";
+  modules = {
+    usrenv.compositor = "headless";
 
-  modules.system = {
-    security.accessTier = "basic";
-    networking = {
-      tailscaleNode = true;
-      tailscalePublicNode = true;
+    system = {
+      security.accessTier = "basic";
+      networking = {
+        tailscaleNode = true;
+        tailscalePublicNode = true;
+      };
     };
   };
+
+  node.services.prometheus.exporters.node.enable = true;
 
   networking = {
     enableIPv6 = true;

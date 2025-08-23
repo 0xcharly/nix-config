@@ -38,6 +38,9 @@
     ./openssh.nix
     ./options.nix
     ./paperless.nix
+    ./prometheus-exporters-node.nix
+    ./prometheus-exporters-zfs.nix
+    ./prometheus.nix
     ./protonvpn-module.nix
     ./protonvpn.nix
     ./rgb.nix

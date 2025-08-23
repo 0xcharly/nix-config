@@ -9,6 +9,10 @@
       cpu.vendor = "amd";
       rgb.disable = true;
     };
+    services.prometheus.exporters = {
+      node.enable = true;
+      zfs.enable = true;
+    };
   };
   modules.system = {
     security.accessTier = "trusted";
