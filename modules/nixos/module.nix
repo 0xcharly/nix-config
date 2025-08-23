@@ -17,11 +17,10 @@
     ./deploy.nix
     ./fail2ban.nix
     ./fonts.nix
+    ./gatus.nix
     ./golink.nix
     ./gotify.nix
     ./gpu-arch.nix
-    ./healthchecks-ping.nix
-    ./healthchecks.nix
     ./immich-public-proxy.nix
     ./immich.nix
     ./intel-thunderbolt.nix
@@ -49,7 +48,6 @@
     ./tailscale.nix
     ./taskchampion-sync-server.nix
     ./terminfo.nix
-    ./uptime-kuma.nix
     ./user-ayako.nix
     ./user-bifrost.nix
     ./user-delay.nix

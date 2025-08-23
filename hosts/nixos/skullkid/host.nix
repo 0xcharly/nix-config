@@ -1,8 +1,4 @@
-{
-  config,
-  modulesPath,
-  ...
-}: {
+{modulesPath, ...}: {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
@@ -12,11 +8,6 @@
     hardware = {
       cpu.vendor = "intel";
       thunderbolt.enable = true;
-    };
-
-    healthchecks.ping = {
-      enable = true;
-      keyFile = config.age.secrets."healthchecks/ping-skullkid".path;
     };
   };
   modules.system = {

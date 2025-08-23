@@ -11,9 +11,15 @@ in {
   options.node.services.golink.enable = lib.mkEnableOption "Whether to spin up a go/link server.";
 
   config = lib.mkIf cfg.enable {
-    services.golink = {
-      enable = true;
-      tailscaleAuthKeyFile = config.age.secrets."services/tailscale-preauth.key".path;
+    services = {
+      golink = {
+        enable = true;
+        tailscaleAuthKeyFile = config.age.secrets."services/tailscale-preauth.key".path;
+      };
+
+      gatus.settings.endpoints = [
+        (lib.fn.mkHttpServiceEndpoint "golink" "go.neko-danio.ts.net")
+      ];
     };
 
     # TODO: reenable this when config is fixed. `users.users.golink.isNormalUser` is `false`.

@@ -14,11 +14,13 @@ in {
       environmentFiles = [config.age.secrets."services/gotify.env".path];
     };
 
-    caddy.virtualHosts."push.qyrnl.com" = {
-      extraConfig = ''
-        import ts_host
-        reverse_proxy localhost:${toString config.services.gotify.environment.GOTIFY_SERVER_PORT}
-      '';
-    };
+    caddy.virtualHosts."push.qyrnl.com".extraConfig = ''
+      import ts_host
+      reverse_proxy localhost:${toString config.services.gotify.environment.GOTIFY_SERVER_PORT}
+    '';
+
+    gatus.settings.endpoints = [
+      (lib.fn.mkHttpServiceEndpoint "gotify" "push.qyrnl.com")
+    ];
   };
 }

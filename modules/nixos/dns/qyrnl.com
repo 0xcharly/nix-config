@@ -14,8 +14,9 @@ album           IN CNAME heimdall
 atuin           IN CNAME heimdall
 beans           IN CNAME heimdall
 files           IN CNAME heimdall
-jellyfin        IN CNAME heimdall
+gatus           IN CNAME heimdall
 healthchecks    IN CNAME heimdall
+jellyfin        IN CNAME heimdall
 news            IN CNAME heimdall
 push            IN CNAME heimdall
 shared.album    IN CNAME heimdall

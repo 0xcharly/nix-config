@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   modulesPath,
   ...
@@ -27,23 +26,17 @@
       gpu.vendor = "amd";
     };
 
-    healthchecks.ping = {
-      enable = true;
-      keyFile = config.age.secrets."healthchecks/ping-heimdall".path;
-    };
-
     services = {
       atuin.enable = true;
       dns.enable = true;
+      gatus.enable = true;
       golink.enable = true;
       gotify.enable = true;
-      healthchecks.enable = true;
       immich-public-proxy.enable = true;
       miniflux.enable = true;
       reverseProxy.enable = true;
       smtp.enable = true;
       taskchampion-sync-server.enable = true;
-      uptime-kuma.enable = true;
       vaultwarden.enable = true;
     };
   };

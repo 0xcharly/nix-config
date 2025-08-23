@@ -89,7 +89,6 @@
 #       Device slack:                    0.00B
 #       ```
 {
-  config,
   pkgs,
   modulesPath,
   ...
@@ -106,11 +105,6 @@
   # No graphical environment.
   modules.usrenv.compositor = "headless";
 
-  # System config.
-  node.healthchecks.ping = {
-    enable = true;
-    keyFile = config.age.secrets."healthchecks/ping-linode".path;
-  };
   modules.system = {
     security.accessTier = "basic";
     networking = {

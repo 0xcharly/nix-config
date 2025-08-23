@@ -13,11 +13,13 @@ in {
       openRegistration = false; # NOTE: temporary change this value to add new users.
     };
 
-    caddy.virtualHosts."atuin.qyrnl.com" = {
-      extraConfig = ''
-        import ts_host
-        reverse_proxy localhost:${toString config.services.atuin.port}
-      '';
-    };
+    caddy.virtualHosts."atuin.qyrnl.com".extraConfig = ''
+      import ts_host
+      reverse_proxy localhost:${toString config.services.atuin.port}
+    '';
+
+    gatus.settings.endpoints = [
+      (lib.fn.mkHttpServiceEndpoint "atuin" "atuin.qyrnl.com")
+    ];
   };
 }

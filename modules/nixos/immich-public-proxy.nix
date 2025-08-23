@@ -13,11 +13,13 @@ in {
       immichUrl = "https://album.qyrnl.com";
     };
 
-    caddy.virtualHosts."shared.album.qyrnl.com" = {
-      extraConfig = ''
-        import ts_host
-        reverse_proxy localhost:${toString config.services.immich-public-proxy.port}
-      '';
-    };
+    caddy.virtualHosts."shared.album.qyrnl.com".extraConfig = ''
+      import ts_host
+      reverse_proxy localhost:${toString config.services.immich-public-proxy.port}
+    '';
+
+    gatus.settings.endpoints = [
+      (lib.fn.mkHttpServiceEndpoint "immich-public-proxy" "shared.album.qyrnl.com")
+    ];
   };
 }

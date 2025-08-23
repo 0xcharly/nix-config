@@ -1,8 +1,4 @@
-{
-  config,
-  modulesPath,
-  ...
-}: {
+{modulesPath, ...}: {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
@@ -13,11 +9,6 @@
       cpu.vendor = "amd";
       gpu.vendor = "intel";
       rgb.disable = true;
-    };
-
-    healthchecks.ping = {
-      enable = true;
-      keyFile = config.age.secrets."healthchecks/ping-helios".path;
     };
 
     services = {
