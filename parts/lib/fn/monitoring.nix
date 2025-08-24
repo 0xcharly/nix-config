@@ -16,4 +16,9 @@
     ];
     alerts = [{type = "gotify";}];
   };
+  mkApiEndpoint = name: url: conditions: {
+    inherit name;
+    url = "https://${url}";
+    conditions = ["[STATUS] == 200"] ++ conditions;
+  };
 }

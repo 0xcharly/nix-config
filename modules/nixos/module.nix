@@ -21,6 +21,7 @@
     ./golink.nix
     ./gotify.nix
     ./gpu-arch.nix
+    ./grafana.nix
     ./immich-public-proxy.nix
     ./immich.nix
     ./intel-thunderbolt.nix

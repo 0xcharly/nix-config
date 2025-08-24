@@ -32,6 +32,7 @@
       gatus.enable = true;
       golink.enable = true;
       gotify.enable = true;
+      grafana.enable = true;
       immich-public-proxy.enable = true;
       miniflux.enable = true;
       prometheus = {

@@ -5,7 +5,7 @@
 }: let
   cfg = config.node.services.prometheus.server;
 in {
-  options.node.services.prometheus.server.enable = lib.mkEnableOption "Whether to spin up a Prometheus server.";
+  options.node.services.prometheus.server.enable = lib.mkEnableOption "Whether to spin up a Prometheus service.";
 
   config = {
     services = {
@@ -14,31 +14,31 @@ in {
         webExternalUrl = "https://prometheus.qyrnl.com";
 
         scrapeConfigs = let
-          makeNodeExporterConfig = host: address: {
-            targets = ["${address}:${toString config.services.prometheus.exporters.node.port}"];
+          mkNodeExporterConfig = host: {
+            targets = ["${host}.qyrnl.com:${toString config.services.prometheus.exporters.node.port}"];
             labels = {inherit host;};
           };
-          makeZfsExporterConfig = host: address: {
-            targets = ["${address}:${toString config.services.prometheus.exporters.zfs.port}"];
+          mkZfsExporterConfig = host: {
+            targets = ["${host}.qyrnl.com:${toString config.services.prometheus.exporters.zfs.port}"];
             labels = {inherit host;};
           };
         in [
           {
             job_name = "node_exporter";
-            static_configs = [
-              (makeNodeExporterConfig "heimdall" "heimdall.qyrnl.com")
-              (makeNodeExporterConfig "helios" "helios.qyrnl.com")
-              (makeNodeExporterConfig "linode" "linode.qyrnl.com")
-              (makeNodeExporterConfig "selene" "selene.qyrnl.com")
-              (makeNodeExporterConfig "skullkid" "skullkid.qyrnl.com")
+            static_configs = builtins.map mkNodeExporterConfig [
+              "heimdall"
+              "helios"
+              "linode"
+              "selene"
+              "skullkid"
             ];
           }
           {
             job_name = "zfs";
-            static_configs = [
-              (makeZfsExporterConfig "helios" "helios.qyrnl.com")
-              (makeZfsExporterConfig "selene" "selene.qyrnl.com")
-              (makeZfsExporterConfig "skullkid" "skullkid.qyrnl.com")
+            static_configs = builtins.map mkZfsExporterConfig [
+              "helios"
+              "selene"
+              "skullkid"
             ];
           }
           {
