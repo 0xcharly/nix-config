@@ -65,7 +65,7 @@ in
           "col.active_border" = "rgb(9fcdfe)";
           "col.inactive_border" = "rgb(1d2938)";
         };
-        decoration.rounding = 8;
+        decoration.rounding = 2;
         misc = {
           background_color = "0x0b1215";
           disable_hyprland_logo = true;

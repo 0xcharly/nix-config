@@ -198,7 +198,7 @@ in
         tiling_drag enable
 
         # SwayFX options.
-        corner_radius 8
+        corner_radius 2
       '';
     };
 
