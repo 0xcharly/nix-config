@@ -116,6 +116,19 @@ in
         keybindings = let
           modifier = config.wayland.windowManager.sway.config.modifier;
 
+          screenshot-editor = pkgs.writeShellApplication {
+            name = "screenshot-editor";
+            runtimeInputs = with pkgs; [wl-clipboard satty];
+            text = ''
+              satty --filename - \
+                --copy-command=wl-copy \
+                --output-filename "${config.xdg.userDirs.download}/screenshot-$(date +'%Y-%m-%d_%H-%M-%S').png" \
+                --early-exit \
+                --actions-on-enter save-to-clipboard \
+                --save-after-copy
+            '';
+          };
+
           # uwsm-wrapper = cmd: "${lib.getExe pkgs.uwsm} app -- ${cmd}";
           # `app2unit --` is a faster alternative to `uwsm app --` (shell implementation
           # over Python).
@@ -129,9 +142,9 @@ in
             # Color picker.
             "${modifier}+Ctrl+c" = "exec ${uwsm-wrapper (lib.getExe pkgs.wl-color-picker)}";
             # Screenshot tool.
-            "${modifier}+p" = "exec ${uwsm-wrapper (lib.getExe pkgs.sway-contrib.grimshot)} --notify save area";
-            "${modifier}+Shift+p" = "exec ${uwsm-wrapper (lib.getExe pkgs.sway-contrib.grimshot)} --notify save active";
-            "${modifier}+Ctrl+p" = "exec ${uwsm-wrapper (lib.getExe pkgs.sway-contrib.grimshot)} --notify save screen";
+            "${modifier}+p" = "exec ${uwsm-wrapper (lib.getExe pkgs.sway-contrib.grimshot)} --notify save area | ${lib.getExe screenshot-editor}";
+            "${modifier}+Shift+p" = "exec ${uwsm-wrapper (lib.getExe pkgs.sway-contrib.grimshot)} --notify save active | ${lib.getExe screenshot-editor}";
+            "${modifier}+Ctrl+p" = "exec ${uwsm-wrapper (lib.getExe pkgs.sway-contrib.grimshot)} --notify save screen | ${lib.getExe screenshot-editor}";
 
             # Spaces: numbers 1..9 + 0
             "${modifier}+1" = "workspace number 1";
