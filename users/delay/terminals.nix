@@ -53,10 +53,27 @@ in {
     clearDefaultKeybinds = true;
     settings =
       {
-        font-family = ["Comic Code Ligatures"];
+        font-family = ["Recursive Mono Casual Static"];
         font-size = 12;
         # https://www.recursive.design/assets/arrowtype-recursive-sansmono-specimen-230407.pdf
-        font-feature = ["calt" "clig" "dlig" "liga"];
+        font-feature = [
+          "calt"
+          "clig"
+          "dlig"
+          "liga"
+          # "ss01" # Single-story 'a'
+          "ss02" # Single-story 'g'
+          "ss03" # Simplified 'f'
+          # "ss04" # Simplified 'i'
+          "ss05" # Simplified 'l'
+          "ss06" # Simplified 'r'
+          "ss07" # Simplified italic diagonals
+          # "ss08" # Simplified 'L' & 'Z'
+          # "ss09" # Simplified '6' & '9'
+          # "ss10" # Dotted '0'
+          # "ss11" # Simplified '1'
+          "ss12" # Simplified '@'
+        ];
         font-codepoint-map = let
           codepoints-map = {
             "Noto Sans Mono CJK JP" = lib.concatStringsSep "," [
