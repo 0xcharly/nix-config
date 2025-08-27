@@ -196,9 +196,6 @@ in
       };
       extraConfig = ''
         tiling_drag enable
-
-        # SwayFX options.
-        corner_radius 2
       '';
     };
 
