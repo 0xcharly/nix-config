@@ -44,7 +44,7 @@ in
         };
 
         window = {
-          border = 1;
+          border = 2;
           titlebar = false;
           hideEdgeBorders = "smart_no_gaps";
 
@@ -60,7 +60,7 @@ in
         };
 
         floating = {
-          border = 1;
+          border = 2;
           titlebar = false;
         };
 

@@ -59,7 +59,7 @@ in
         };
         general = {
           layout = "hy3"; # Requires the hy3 plugin.
-          border_size = 1;
+          border_size = 2;
           gaps_in = 2;
           gaps_out = 4;
           "col.active_border" = "rgb(9fcdfe)";
