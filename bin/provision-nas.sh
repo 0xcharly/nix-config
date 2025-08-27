@@ -1,0 +1,167 @@
+#! /usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+# Ensure that the script is passed a single argument.
+if test $# -ne 2; then
+  >&2 echo "Illegal number of parameters: expected 2, got $#"
+  >&2 echo "Usage: $0 <ip-addr> <hostname>"
+  exit 1
+fi
+
+REMOTE_ADDR="$1"
+TARGET_HOST="${2,,}"
+
+log_info() {
+  echo -e "\033[32;1mINFO\033[0m: $1"
+}
+
+# Create a temporary directory.
+extra_system_files=$(mktemp -d)
+disk_encryption_key_files=$(mktemp -d)
+
+# Cleanup temporary data and sessions on exit.
+cleanup() {
+  # Delete temporary directories.
+  log_info "Cleaning build artifacts…"
+  rm -rf "$extra_system_files"
+  rm -rf "$disk_encryption_key_files"
+
+  # Close the password vault session.
+  log_info "Locking password vault…"
+  bw lock
+}
+trap cleanup EXIT
+
+log_info "Syncing password vault…"
+bw sync # Sync vault.
+
+log_info "Unlocking password vault…"
+BW_SESSION=$(bw unlock --raw); export BW_SESSION # Open a new password session.
+
+# Fetch keys in bulk to speed up lookups.
+log_info "Loading disk encryption keys…"
+ROOT_DISK_ENCRYPTION_KEYCHAIN_NAME="Homelab ZFS Root Encryption Passphrases"
+ROOT_DISK_ENCRYPTION_KEYCHAIN=$(bw get item "$ROOT_DISK_ENCRYPTION_KEYCHAIN_NAME")
+TANK_DISK_ENCRYPTION_KEYCHAIN_NAME="Homelab ZFS Tank Encryption Passphrases"
+TANK_DISK_ENCRYPTION_KEYCHAIN=$(bw get item "$TANK_DISK_ENCRYPTION_KEYCHAIN_NAME")
+
+# Extract the given key from the top level Bitwarden entry value.
+get_disk_encryption_key() {
+  keychain="$1"
+  key_name="$2"
+
+  echo "$keychain" | jq -r ".fields[] | select(.name==\"$key_name\") | .value"
+}
+
+# Decrypt ZFS root encryption passphrase from the password store.
+load_root_encryption_key() {
+  log_info "Loading root dataset encryption key…"
+
+  output_path="$disk_encryption_key_files/zfs/root.key"
+
+  install -d -m 700 $(dirname "$output_path")
+  get_disk_encryption_key "$ROOT_DISK_ENCRYPTION_KEYCHAIN" "$TARGET_HOST" >"$output_path"
+
+  disk_encryption_keys+=(--disk-encryption-keys /tmp/root-disk-encryption.key "$output_path")
+}
+
+# Decrypt ZFS root encryption passphrases from the password store.
+load_tank_encryption_key() {
+  dataset="$1"
+  log_info "Loading tank/$dataset dataset encryption key…"
+
+  output_path="$disk_encryption_key_files/zfs/tank/$dataset.key"
+
+  install -d -m 700 $(dirname "$output_path")
+  get_disk_encryption_key "$TANK_DISK_ENCRYPTION_KEYCHAIN" "$dataset" >"$output_path"
+
+  disk_encryption_keys+=(--disk-encryption-keys "/run/agenix/zfs/tank/$dataset.key" "$output_path")
+}
+
+copy_local_secret() {
+  secret_path="$1"
+  log_info "Copying $secret_path…"
+
+  disk_encryption_keys+=(--disk-encryption-keys "$secret_path" "$secret_path")
+}
+
+load_root_encryption_key
+load_tank_encryption_key "backups/ayako"
+load_tank_encryption_key "backups/dad"
+load_tank_encryption_key "backups/delay"
+load_tank_encryption_key "backups/services"
+load_tank_encryption_key "ayako/files"
+load_tank_encryption_key "ayako/media"
+load_tank_encryption_key "delay/album"
+load_tank_encryption_key "delay/beans"
+load_tank_encryption_key "delay/files"
+load_tank_encryption_key "delay/media"
+load_tank_encryption_key "delay/notes"
+load_tank_encryption_key "delay/vault"
+copy_local_secret "/run/agenix/services/tailscale-preauth-initrd.key"
+
+# Extract the given key from the top level Bitwarden entry value.
+# `key_type` is either "private" or "public".
+get_ssh_host_key() {
+  keychain="$1"
+  key_type="$2"
+
+  echo "$keychain" | jq -r ".sshKey.${key_type}Key"
+}
+
+load_ssh_host_key() {
+  key_name="$1"
+  log_info "Loading $key_name key pair…"
+
+  SSH_HOST_KEYCHAIN=$(bw get item "$key_name $TARGET_HOST")
+
+  output_path="$extra_system_files/etc/ssh/$key_name"
+
+  install -d -m 700 $(dirname "$output_path")
+  get_ssh_host_key "$SSH_HOST_KEYCHAIN" 'public' >"$output_path.pub"
+  get_ssh_host_key "$SSH_HOST_KEYCHAIN" 'private' >"$output_path"
+
+  # Restrict file ACLs so sshd will accept the keys.
+  chmod 600 "$output_path.pub"
+  chmod 600 "$output_path"
+}
+
+# Decrypt our private keys from the password store and copy them to the temporary directory.
+log_info "Loading target host keys…"
+load_ssh_host_key "ssh_host_ed25519_key"
+load_ssh_host_key "ssh_host_ed25519_key-initrd"
+
+# Setup installation SSH options.
+ssh_options=(
+  --ssh-option "IdentityFile=/run/agenix/keys/trusted-access/provisioning_ed25519_key"
+  --ssh-option "PubkeyAuthentication=yes"
+  --ssh-option "UserKnownHostsFile=/dev/null"
+  --ssh-option "StrictHostKeyChecking=no"
+)
+
+# Build and deploy the new system to the remote machine.
+log_info "Deploying new system…"
+nix run github:nix-community/nixos-anywhere -- \
+  "${ssh_options[@]}" \
+  "${disk_encryption_keys[@]}" \
+  --extra-files "$extra_system_files" \
+  --flake ".#$TARGET_HOST" \
+  --target-host "root@$REMOTE_ADDR"
+
+# System install completion notice.
+echo -e "System installation \033[32;1mcomplete\033[0m. System rebooting."
+echo -e "\033[33;1mImportant\033[0m: Make sure to remove the installation media!"
+echo
+
+for i in {10..1}; do
+  echo -ne "$i… \r"
+  sleep 1
+done
+
+echo "じゃあね。"
+
+# We're done.
+exit 0

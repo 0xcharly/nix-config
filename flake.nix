@@ -1,15 +1,40 @@
 {
   description = "Nix systems and configs for delay";
 
-  outputs = inputs @ {flake-parts, ...}:
-    flake-parts.lib.mkFlake {inherit inputs;} {
+  outputs = inputs @ {flake-parts, ...}: let
+    inherit (inputs.nixpkgs) lib;
+  in
+    lib.recursiveUpdate
+    # Current, manual setup.
+    (flake-parts.lib.mkFlake {inherit inputs;} {
       imports = [
         ./hosts
         ./parts
       ];
 
       systems = ["aarch64-darwin" "x86_64-linux"];
-    };
+    })
+    # Future, blueprint-based setup.
+    (inputs.blueprint {
+        inherit inputs;
+        prefix = ./nix;
+      # }
+      # // {
+      #   deploy.nodes.dalmore = {
+      #     hostname = "dalmore.neko-danio.ts.net";
+      #     profiles.system.path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos inputs.self.nixosConfigurations.dalmore;
+      #
+      #     sshUser = "deploy";
+      #     user = "root";
+      #     sshOpts = ["-A" "-i" "/run/agenix/keys/nixos_deploy_ed25519_key"];
+      #   };
+      #
+      #   checks =
+      #     builtins.mapAttrs (
+      #       system: deployLib: deployLib.deployChecks inputs.self.deploy
+      #     )
+      #     inputs.deploy-rs.lib;
+      });
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
@@ -19,6 +44,11 @@
     # Manages home directory, dotfiles and base environment.
     home-manager = {
       url = "github:nix-community/home-manager/release-25.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    blueprint = {
+      url = "github:numtide/blueprint";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -40,7 +70,6 @@
     catppuccin.url = "github:catppuccin/nix"; # Catppuccin all the things.
     walker.url = "github:abenz1267/walker"; # Launcher.
 
-    nix-config-fonts.url = "github:0xcharly/nix-config-fonts"; # Unfree fonts.
     nix-config-nvim.url = "github:0xcharly/nix-config-nvim"; # Neovim.
     nix-config-secrets.url = "github:0xcharly/nix-config-secrets"; # Secrets management.
 

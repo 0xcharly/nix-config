@@ -30,7 +30,7 @@ in {
           options.fastConnection = true;
         };
         frRemoteHosts = {
-          hostnames = ["selene"];
+          hostnames = ["dalmore" "selene"];
           options = {
             fastConnection = false;
             remoteBuild = true;

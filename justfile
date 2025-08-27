@@ -8,12 +8,6 @@ hostname := `hostname`
 default:
     @just --list
 
-[doc("Run Nix Store garbage collection")]
-[group('nix')]
-[linux]
-gc:
-    nix-collect-garbage --delete-older-than 7d
-
 # Builds the current darwin host's configuration and caches the results.
 #
 # This does not alter the current running system. Requires cachix authentication
@@ -45,26 +39,3 @@ cache config=hostname:
     nix build ".#$CONFIG_PREFIX.{{ config }}.config.system.build.toplevel" --json \
       | jq -r '.[].outputs | to_entries[].value' \
       | cachix push 0xcharly-nixos-config
-
-[doc('Install NixOS on a remove Linode virtual machine')]
-[group('remotes')]
-[linux]
-deploy-linode addr:
-    bash {{ justfile_directory() }}/bin/deploy-linode.sh {{ addr }}
-
-[doc('Install NixOS on a NAS machine')]
-[group('remotes')]
-[linux]
-deploy-nas addr nas_hostname:
-    bash {{ justfile_directory() }}/bin/deploy-nas.sh {{ addr }} {{ nas_hostname }}
-
-[doc('Install NixOS on a remote machine')]
-[group('remotes')]
-[linux]
-deploy-nixos addr hostname:
-    bash {{ justfile_directory() }}/bin/deploy-nixos.sh {{ addr }} {{ hostname }}
-
-[doc("Copy terminal's terminfo to a remote machine")]
-[group('remotes')]
-ssh-copy-terminfo addr:
-    infocmp -x | ssh -o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no {{ addr }} -- tic -x -
