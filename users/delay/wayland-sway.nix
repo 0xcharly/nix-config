@@ -71,6 +71,7 @@ in
           smartGaps = true;
         };
 
+        binding_mode_indicator = "no";
         colors = {
           focused = {
             border = "#9fcdfe";
