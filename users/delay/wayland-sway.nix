@@ -76,7 +76,7 @@ in
             border = "#9fcdfe";
             background = "#203147";
             text = "#9fcdfe";
-            indicator = "#2e9ef4";
+            indicator = "#9fcdfe";
             childBorder = "#9fcdfe";
           };
 
@@ -84,7 +84,7 @@ in
             border = "#333333";
             background = "#5f676a";
             text = "#ffffff";
-            indicator = "#484e50";
+            indicator = "#333333";
             childBorder = "#5f676a";
           };
 
@@ -92,7 +92,7 @@ in
             border = "#1d2938";
             background = "#1d2530";
             text = "#bac2de";
-            indicator = "#292d2e";
+            indicator = "#1d2938";
             childBorder = "#1d2938";
           };
 
@@ -100,7 +100,7 @@ in
             border = "#2f343a";
             background = "#900000";
             text = "#ffffff";
-            indicator = "#900000";
+            indicator = "#2f343a";
             childBorder = "#900000";
           };
 
