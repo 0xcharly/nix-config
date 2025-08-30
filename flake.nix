@@ -52,6 +52,9 @@
 
     # macOS only: Homebrew for Nix.
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+
+    # pieceofenglish.fr
+    pieceofenglish.url = "github:0xcharly/pieceofenglish";
   };
 
   nixConfig = {

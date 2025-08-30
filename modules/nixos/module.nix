@@ -39,6 +39,7 @@
     ./openssh.nix
     ./options.nix
     ./paperless.nix
+    ./pieceofenglish.nix
     ./prometheus-exporters-node.nix
     ./prometheus-exporters-zfs.nix
     ./prometheus.nix

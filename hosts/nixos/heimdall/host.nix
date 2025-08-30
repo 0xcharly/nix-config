@@ -17,6 +17,7 @@
   # System config.
   node = {
     facts.tailscale = {
+      # TODO: move these definitions to facts.
       tailscaleIPv4 = "100.85.79.53";
       tailscaleIPv6 = "fd7a:115c:a1e0::4036:4f35";
     };

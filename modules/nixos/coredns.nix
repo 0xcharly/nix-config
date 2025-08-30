@@ -11,6 +11,31 @@
 in {
   options.node.services.dns.enable = lib.mkEnableOption "Whether to spin up a DNS server.";
 
+  imports = [
+    {
+      # NOTE: this currently only check that the IPv6 address (the AAAA record)
+      # can be resolved, not that the domain can be resolved _over_ IPv6.
+      # TODO: also check resolver over IPv6?
+      config.services.gatus.settings.endpoints = let
+        # TODO: factorize these definitions with the one in facts (when declared).
+        publicIPv4 = "100.85.79.53";
+        domainNames = [
+          "ns1.qyrnl.com"
+          "ns2.qyrnl.com"
+        ];
+      in
+        builtins.concatMap (fun:
+          builtins.concatMap (domainName: [
+            (fun domainName publicIPv4 {name = "${domainName} 🎯";})
+            (fun domainName "8.8.8.8" {
+              name = "${domainName} 🌐";
+              rcode = "NXDOMAIN"; # Should _not_ resolve publicly.
+            })
+          ])
+          domainNames) [lib.fn.mkDnsIPv4Endpoint lib.fn.mkDnsIPv6Endpoint];
+    }
+  ];
+
   config = lib.mkIf cfg.enable {
     services = {
       coredns = {
