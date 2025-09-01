@@ -29,10 +29,12 @@ in {
     };
 
     # TODO: define Paperless' host somewhere else.
-    caddy.virtualHosts."files.qyrnl.com".extraConfig = ''
-      import ts_host
-      reverse_proxy helios.qyrnl.com:${toString config.services.paperless.port}
-    '';
+    caddy.virtualHosts = lib.mkIf config.node.services.reverseProxy.enable {
+      "files.qyrnl.com".extraConfig = ''
+        import ts_host
+        reverse_proxy helios.qyrnl.com:${toString config.services.paperless.port}
+      '';
+    };
 
     gatus.settings.endpoints = [
       (lib.fn.mkHttpServiceEndpoint "paperless" "files.qyrnl.com")

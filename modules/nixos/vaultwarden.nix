@@ -29,10 +29,12 @@ in {
         };
       };
 
-      caddy.virtualHosts."vault.qyrnl.com".extraConfig = ''
-        import ts_host
-        reverse_proxy localhost:${toString config.services.vaultwarden.config.ROCKET_PORT}
-      '';
+      caddy.virtualHosts = lib.mkIf config.node.services.reverseProxy.enable {
+        "vault.qyrnl.com".extraConfig = ''
+          import ts_host
+          reverse_proxy localhost:${toString config.services.vaultwarden.config.ROCKET_PORT}
+        '';
+      };
 
       gatus.settings.endpoints = [
         (lib.fn.mkHttpServiceEndpoint "vaultwarden" "vault.qyrnl.com")

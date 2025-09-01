@@ -54,10 +54,12 @@ in {
         (lib.fn.mkHttpServiceEndpoint "prometheus" "prometheus.qyrnl.com/-/healthy")
       ];
 
-      caddy.virtualHosts."prometheus.qyrnl.com".extraConfig = ''
-        import ts_host
-        reverse_proxy localhost:${toString config.services.prometheus.port}
-      '';
+      caddy.virtualHosts = lib.mkIf config.node.services.reverseProxy.enable {
+        "prometheus.qyrnl.com".extraConfig = ''
+          import ts_host
+          reverse_proxy localhost:${toString config.services.prometheus.port}
+        '';
+      };
     };
   };
 }

@@ -43,10 +43,12 @@ in {
         (lib.fn.mkApiEndpoint "grafana" "graphs.qyrnl.com/api/health" ["[BODY].database == ok"])
       ];
 
-      caddy.virtualHosts."graphs.qyrnl.com".extraConfig = ''
-        import ts_host
-        reverse_proxy localhost:${toString config.services.grafana.settings.server.http_port}
-      '';
+      caddy.virtualHosts = lib.mkIf config.node.services.reverseProxy.enable {
+        "graphs.qyrnl.com".extraConfig = ''
+          import ts_host
+          reverse_proxy localhost:${toString config.services.grafana.settings.server.http_port}
+        '';
+      };
     };
   };
 }

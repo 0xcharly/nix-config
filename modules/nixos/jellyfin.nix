@@ -13,10 +13,12 @@ in {
     };
 
     # TODO: define Jellyfin's host and port somewhere else.
-    caddy.virtualHosts."jellyfin.qyrnl.com".extraConfig = ''
-      import ts_host
-      reverse_proxy helios.qyrnl.com:8096
-    '';
+    caddy.virtualHosts = lib.mkIf config.node.services.reverseProxy.enable {
+      "jellyfin.qyrnl.com".extraConfig = ''
+        import ts_host
+        reverse_proxy helios.qyrnl.com:8096
+      '';
+    };
 
     gatus.settings.endpoints = [
       (lib.fn.mkHttpServiceEndpoint "jellyfin" "jellyfin.qyrnl.com")

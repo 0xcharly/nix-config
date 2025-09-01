@@ -81,17 +81,27 @@ in {
             $ORIGIN ${domainName}.
             $TTL    3600
 
-            @       IN SOA   ns.${domainName}. hostmaster.${domainName}. 2025070100 86400 10800 3600000 3600
-            @   300 IN NS    ns1.${domainName}.
-            @   300 IN NS    ns2.${domainName}.
-            ns1 300 IN A     ${cfg.publicIPv4}
-            ns1 300 IN AAAA  ${cfg.publicIPv6}
-            ns2 300 IN A     ${cfg.publicIPv4}
-            ns2 300 IN AAAA  ${cfg.publicIPv6}
+            @         IN SOA   ns.${domainName}. hostmaster.${domainName}. 2025070100 86400 10800 3600000 3600
+            @   300   IN NS    ns1.${domainName}.
+            @   300   IN NS    ns2.${domainName}.
+            ns1 300   IN A     ${cfg.publicIPv4}
+            ns1 300   IN AAAA  ${cfg.publicIPv6}
+            ns2 300   IN A     ${cfg.publicIPv4}
+            ns2 300   IN AAAA  ${cfg.publicIPv6}
 
-            @       IN A     ${cfg.publicIPv4}
-            @       IN AAAA  ${cfg.publicIPv6}
-            www     IN CNAME @
+            ; Protonmail domain configuration.
+            @                       10800 IN TXT   "protonmail-verification=002e45ea53d2d587fdbd680b84930481eb8ecf9a"
+            @                       10800 IN TXT   "v=spf1 include:_spf.protonmail.ch ~all"
+            _dmarc                  10800 IN TXT   "v=DMARC1; p=quarantine"
+            @                       10800 IN MX    10 mail.protonmail.ch.
+            @                       10800 IN MX    20 mailsec.protonmail.ch.
+            protonmail._domainkey   10800 IN CNAME protonmail.domainkey.d3oesgdehuo3lyylmnywtohdojzlokhdt3hyq5wreaxvd6vmz3a5q.domains.proton.ch.
+            protonmail2._domainkey  10800 IN CNAME protonmail2.domainkey.d3oesgdehuo3lyylmnywtohdojzlokhdt3hyq5wreaxvd6vmz3a5q.domains.proton.ch.
+            protonmail3._domainkey  10800 IN CNAME protonmail3.domainkey.d3oesgdehuo3lyylmnywtohdojzlokhdt3hyq5wreaxvd6vmz3a5q.domains.proton.ch.
+
+            @         IN A     ${cfg.publicIPv4}
+            @         IN AAAA  ${cfg.publicIPv6}
+            www       IN CNAME @
           '';
         in ''
           ${domainName}:53 {
@@ -111,27 +121,13 @@ in {
 
       caddy = {
         enable = true;
-        package = pkgs.caddy.withPlugins {
-          plugins = ["github.com/caddy-dns/gandi@v1.1.0"];
-          hash = "sha256-JZLxPJd/HiM6I+YBHwLtQoMG2uZ92jKmlz5nQK6N5+U=";
-        };
-        environmentFile = config.age.secrets."services/gandi-creds".path;
         virtualHosts = {
-          "(ts_host)".extraConfig = ''
-            tls {
-              resolvers 1.1.1.1
-              dns gandi {env.GANDIV5_PERSONAL_ACCESS_TOKEN}
-            }
-          '';
-
           ${domainName}.extraConfig = ''
-            import ts_host
             reverse_proxy ${config.services.pieceofenglish.listenAddress}:${toString config.services.pieceofenglish.port}
           '';
 
           "www.${domainName}".extraConfig = ''
-            import ts_host
-            reverse_proxy ${config.services.pieceofenglish.listenAddress}:${toString config.services.pieceofenglish.port}
+            redir https://pieceofenglish.fr{uri}
           '';
         };
       };
@@ -140,7 +136,6 @@ in {
     # Allow Caddy to bind to 443.
     systemd.services.caddy.serviceConfig = {
       AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
-      EnvironmentFile = config.age.secrets."services/gandi-creds".path;
     };
 
     networking.firewall = lib.mkIf (cfg.openFirewall) {

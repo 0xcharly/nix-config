@@ -12,10 +12,12 @@ in {
       inherit (cfg) enable;
     };
 
-    caddy.virtualHosts."tasks.qyrnl.com".extraConfig = ''
-      import ts_host
-      reverse_proxy localhost:${toString config.services.taskchampion-sync-server.port}
-    '';
+    caddy.virtualHosts = lib.mkIf config.node.services.reverseProxy.enable {
+      "tasks.qyrnl.com".extraConfig = ''
+        import ts_host
+        reverse_proxy localhost:${toString config.services.taskchampion-sync-server.port}
+      '';
+    };
 
     gatus.settings.endpoints = [
       (lib.fn.mkHttpServiceEndpoint "taskchampion-sync-server" "tasks.qyrnl.com")

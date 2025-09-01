@@ -64,10 +64,12 @@ in {
         };
       };
 
-      caddy.virtualHosts."status.qyrnl.com".extraConfig = ''
-        import ts_host
-        reverse_proxy localhost:${toString config.services.gatus.settings.web.port}
-      '';
+      caddy.virtualHosts = lib.mkIf config.node.services.reverseProxy.enable {
+        "status.qyrnl.com".extraConfig = ''
+          import ts_host
+          reverse_proxy localhost:${toString config.services.gatus.settings.web.port}
+        '';
+      };
     };
 
     # TODO(25.11): Remove once this lands on stable.

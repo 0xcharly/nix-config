@@ -20,10 +20,12 @@ in {
         };
       };
 
-      caddy.virtualHosts."news.qyrnl.com".extraConfig = ''
-        import ts_host
-        reverse_proxy localhost:${toString config.services.miniflux.config.PORT}
-      '';
+      caddy.virtualHosts = lib.mkIf config.node.services.reverseProxy.enable {
+        "news.qyrnl.com".extraConfig = ''
+          import ts_host
+          reverse_proxy localhost:${toString config.services.miniflux.config.PORT}
+        '';
+      };
 
       gatus.settings.endpoints = [
         (lib.fn.mkHttpServiceEndpoint "miniflux" "news.qyrnl.com")
