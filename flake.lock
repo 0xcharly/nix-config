@@ -675,11 +675,11 @@
         "nixpkgs": "nixpkgs_10"
       },
       "locked": {
-        "lastModified": 1756820977,
-        "narHash": "sha256-0UQjItomnPIB62MlpGC8nZhegNh6QjTr+VZq9uClDdQ=",
+        "lastModified": 1756825661,
+        "narHash": "sha256-b3vwMv7n4Peom8QZ4KZ1atqGJMYe1W+xC7IU3NEEXjQ=",
         "owner": "0xcharly",
         "repo": "pieceofenglish",
-        "rev": "70bc2dcd6d1b6cfda96c8307af68786d5d0ce3e6",
+        "rev": "3e9295e94b75f4722c25627bf70603a01be95537",
         "type": "github"
       },
       "original": {
