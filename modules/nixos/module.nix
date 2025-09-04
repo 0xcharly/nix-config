@@ -12,6 +12,7 @@
     ./atuin.nix
     ./beans.nix
     ./caddy.nix
+    ./calibre-web.nix
     ./coredns.nix
     ./cpu-arch.nix
     ./deploy.nix
@@ -47,9 +48,9 @@
     ./protonvpn.nix
     ./rgb.nix
     ./secrets.nix
-    ./sudo.nix
     ./smtp.nix
     ./ssh.nix
+    ./sudo.nix
     ./tailscale.nix
     ./taskchampion-sync-server.nix
     ./terminfo.nix

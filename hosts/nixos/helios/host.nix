@@ -12,6 +12,7 @@
     };
 
     services = {
+      calibre.enable = true;
       immich.enable = true;
       jellyfin.enable = true;
       paperless.enable = true;
