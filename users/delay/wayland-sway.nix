@@ -67,7 +67,6 @@ in
         gaps = {
           outer = 8;
           inner = 8;
-          smartBorders = "on";
           # NOTE: smartGaps declared in extraConfig to support "reverse_outer" value.
         };
 
