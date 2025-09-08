@@ -65,11 +65,10 @@ in
         };
 
         gaps = {
-          outer = 0;
+          outer = 8;
           inner = 8;
-          bottom = 8; # Ensures that there's always a gap above waybar, even with a single window.
           smartBorders = "on";
-          smartGaps = true;
+          smartGaps = "inverse_outer";
         };
 
         colors = {
