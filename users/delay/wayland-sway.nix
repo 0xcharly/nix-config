@@ -68,7 +68,7 @@ in
           outer = 8;
           inner = 8;
           smartBorders = "on";
-          smartGaps = "inverse_outer";
+          # NOTE: smartGaps declared in extraConfig to support "reverse_outer" value.
         };
 
         colors = {
@@ -208,6 +208,7 @@ in
         bars = []; # Remove default `swaybar` config.
       };
       extraConfig = ''
+        smart_gaps inverse_outer
         tiling_drag enable
       '';
     };
