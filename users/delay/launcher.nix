@@ -14,7 +14,7 @@ in {
     runAsService = true;
 
     config = {
-      app_launch_prefix = "${lib.getExe pkgs.uwsm} app -- ";
+      app_launch_prefix = "${lib.getExe pkgs.app2unit} -- ";
       close_when_open = true;
       terminal = lib.getExe pkgs.ghostty;
       timeout = 0;
