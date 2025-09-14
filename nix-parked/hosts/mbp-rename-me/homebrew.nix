@@ -7,6 +7,7 @@
     casks = [
       "beeper" # Messaging.
       "bitwarden" # Personal password management.
+      "bitwarden-cli" # Password management automation.
       "firefox@developer-edition" # Firefox, for isolates.
       "google-chrome" # When there's no alternatives.
       "obsidian" # Notes.

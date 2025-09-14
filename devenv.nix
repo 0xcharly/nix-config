@@ -5,7 +5,6 @@
   ...
 }: {
   packages = with pkgs; [
-    bitwarden-cli
     cachix
     deploy-rs
     jq
@@ -13,7 +12,7 @@
     home-manager
 
     alejandra
-  ];
+  ] ++ lib.optionals pkgs.stdenv.isLinux [pkgs.bitwarden-cli];
 
   languages.nix = {
     enable = true;
