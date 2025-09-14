@@ -6,6 +6,8 @@
 }: let
   cfg = config.programs.git;
 in {
+  home.packages = with pkgs; [jjui];
+
   programs.jujutsu = {
     enable = true;
     package = lib.mkDefault pkgs.jujutsu;
