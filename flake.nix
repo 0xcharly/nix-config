@@ -51,7 +51,7 @@
     deploy-rs.url = "github:serokell/deploy-rs"; # System deploy tool.
     disko.url = "github:nix-community/disko"; # Filesystem management.
     golink.url = "github:tailscale/golink"; # go/link service.
-    catppuccin.url = "github:catppuccin/nix"; # Catppuccin all the things.
+    catppuccin.url = "github:catppuccin/nix/release-25.05"; # Catppuccin all the things.
     walker.url = "github:abenz1267/walker"; # Launcher.
 
     nix-config-nvim.url = "github:0xcharly/nix-config-nvim"; # Neovim.
