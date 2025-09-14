@@ -6,6 +6,8 @@
 } @ args: let
   inherit ((lib.user.getUserConfig args).modules) flags;
 in {
+  home.packages = [pkgs.jjui];
+
   programs.mergiraf.enable = true;
 
   programs.jujutsu = {
