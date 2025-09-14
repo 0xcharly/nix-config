@@ -16,7 +16,7 @@ in {
       enable = true;
       package = pkgs.caddy.withPlugins {
         plugins = ["github.com/caddy-dns/gandi@v1.1.0"];
-        hash = "sha256-JZLxPJd/HiM6I+YBHwLtQoMG2uZ92jKmlz5nQK6N5+U=";
+        hash = "sha256-VxJlx1X4nrqprgcPRFt/pMc5Ix8YV61ou8dwLcR6v2U=";
       };
       environmentFile = config.age.secrets."services/gandi-creds".path;
       virtualHosts."(ts_host)".extraConfig = ''
