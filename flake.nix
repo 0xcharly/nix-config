@@ -16,25 +16,9 @@
     })
     # Future, blueprint-based setup.
     (inputs.blueprint {
-        inherit inputs;
-        prefix = ./nix;
-      # }
-      # // {
-      #   deploy.nodes.dalmore = {
-      #     hostname = "dalmore.neko-danio.ts.net";
-      #     profiles.system.path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos inputs.self.nixosConfigurations.dalmore;
-      #
-      #     sshUser = "deploy";
-      #     user = "root";
-      #     sshOpts = ["-A" "-i" "/run/agenix/keys/nixos_deploy_ed25519_key"];
-      #   };
-      #
-      #   checks =
-      #     builtins.mapAttrs (
-      #       system: deployLib: deployLib.deployChecks inputs.self.deploy
-      #     )
-      #     inputs.deploy-rs.lib;
-      });
+      inherit inputs;
+      prefix = ./nix;
+    });
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
