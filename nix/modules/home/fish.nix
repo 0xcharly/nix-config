@@ -1,15 +1,15 @@
 {
+  config,
   lib,
   pkgs,
   ...
-}: {
+}: let
+  cfg = config.programs.fish;
+in {
   programs = {
     fish = {
       enable = true;
       interactiveShellInit = ''
-        set fish_greeting # Disable greeting message.
-        set -g fish_term24bit 1 # Enable true color support.
-
         fish_vi_key_bindings # Enable vi bindings.
 
         # Fixes cursor shape behavior in vim mode.
@@ -19,9 +19,16 @@
         set fish_cursor_replace block
         set fish_cursor_external block
         set fish_cursor_visual block
+
+        # TODO: figure out where those are defined…
+        bind --erase ctrl-t
+        bind --erase -M insert ctrl-t
+        bind --erase alt-c
+        bind --erase -M insert alt-c
       '';
 
       functions = {
+        fish_greeting = ""; # Disable greeting message.
         fish_mode_prompt = ""; # Disable prompt vi mode reporting.
         fish_prompt = ''
           set_color blue
@@ -29,15 +36,18 @@
           set_color normal
         '';
       };
-      shellAliases.nixsh = "nix-shell --run ${lib.getExe pkgs.fish}";
+      shellAliases.nixsh = "nix-shell --run ${lib.getExe cfg.package}";
     };
 
-    tmux.shell = lib.getExe pkgs.fish;
+    tmux.shell = lib.getExe cfg.package;
   };
 
   home = {
-    shell.enableFishIntegration = true;
-    sessionVariables.SHELL = lib.getExe pkgs.fish;
-    packages = with pkgs; [fishPlugins.fzf tmux-open-git-repository-fish];
+    sessionVariables.SHELL = lib.getExe cfg.package;
+    shell = {
+      enableBashIntegration = false;
+      enableFishIntegration = false;
+    };
+    packages = with pkgs; [tmux-open-git-repository-fish];
   };
 }

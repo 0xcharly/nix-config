@@ -11,6 +11,7 @@ in {
 
   config.programs.atuin = {
     enable = true;
+    enableFishIntegration = true;
     flags = ["--disable-up-arrow"];
     settings = lib.mkIf cfg.enableSync {
       auto_sync = true;
