@@ -1,0 +1,165 @@
+#window,
+#box,
+#aiScroll,
+#aiList,
+#search,
+#password,
+#input,
+#prompt,
+#clear,
+#typeahead,
+#list,
+child,
+scrollbar,
+slider,
+#item,
+#text,
+#label,
+#bar,
+#sub,
+#activationlabel {
+  all: unset;
+}
+
+#cfgerr {
+  background: @urgentBg@;
+  color: @urgentFg@;
+  margin-top: 20px;
+  padding: 8px;
+}
+
+#window {
+  color: @normalFg@;
+}
+
+#box {
+  border-radius: 12px;
+  background: @normalBg@;
+  padding: 4px;
+  border: 1px solid lighter(@normalBg@);
+}
+
+#search {
+  color: @accentFg@;
+  background: @accentBg@;
+  border: 1px solid lighter(@accentBg@);
+  padding: 16px 8px;
+  border-radius: 8px;
+}
+
+#prompt {
+  margin-left: 4px;
+  margin-right: 12px;
+  color: @normalFg@;
+  font-size: 1.2em;
+}
+
+#clear {
+  color: @normalFg@;
+  margin-right: 8px;
+}
+
+#password,
+#input,
+#typeahead {
+  border-radius: 2px;
+}
+
+#input {
+  background: none;
+}
+
+#password {
+}
+
+#spinner {
+  padding: 8px;
+}
+
+#typeahead {
+  color: @normalFg@;
+  opacity: 0.8;
+}
+
+#input placeholder {
+}
+
+#list {
+}
+
+child {
+  padding: 6px 16px;
+  border-radius: 8px;
+  min-height: 32px;
+}
+
+child:selected,
+child:hover {
+  color: @cursorFg@;
+  background: @cursorBg@;
+}
+
+#item {
+}
+
+#icon {
+  margin-right: 16px;
+}
+
+#text {
+  font-size: 0.9em;
+}
+
+#label {
+  font-weight: 500;
+}
+
+#sub {
+  color: @normalFg@;
+  opacity: 0.8;
+  font-weight: 400;
+  font-size: 0.8em;
+}
+
+#activationlabel {
+  color: @normalFg@;
+  opacity: 0.6;
+}
+
+child:selected #activationlabel,
+child:selected #sub,
+child:hover #activationlabel,
+child:hover #sub {
+  color: @cursorFg@;
+}
+
+#bar {
+}
+
+.barentry {
+}
+
+.activation #activationlabel {
+}
+
+.activation #text,
+.activation #icon,
+.activation #search {
+  opacity: 0.5;
+}
+
+.aiItem {
+  padding: 10px;
+  border-radius: 2px;
+  color: @normalFg@;
+  background: @normalBg@;
+}
+
+.aiItem.user {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.aiItem.assistant {
+  background: lighter(@normalBg@);
+}

@@ -383,11 +383,11 @@
         "nixpkgs": "nixpkgs_8"
       },
       "locked": {
-        "lastModified": 1757751998,
-        "narHash": "sha256-cEVHXpPSfOIwE+ChdL5bdJxvwmpJi/V+5A76rjKYQbI=",
+        "lastModified": 1758567184,
+        "narHash": "sha256-ilAKY8278vYMHzhmxyN2TCkUhFSUffycVG95N3bp+eU=",
         "owner": "0xcharly",
         "repo": "nix-config-secrets",
-        "rev": "ac50d6533c89f006e55f87a19c6eca9967ecd19d",
+        "rev": "38ad23b4dec1d832ee3b3b995e5a25d16ab134bf",
         "type": "github"
       },
       "original": {
@@ -432,6 +432,21 @@
       "original": {
         "owner": "zhaofengli",
         "repo": "nix-homebrew",
+        "type": "github"
+      }
+    },
+    "nixos-hardware": {
+      "locked": {
+        "lastModified": 1757943327,
+        "narHash": "sha256-w6cDExPBqbq7fTLo4dZ1ozDGeq3yV6dSN4n/sAaS6OM=",
+        "owner": "NixOS",
+        "repo": "nixos-hardware",
+        "rev": "67a709cfe5d0643dafd798b0b613ed579de8be05",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixos-hardware",
         "type": "github"
       }
     },
@@ -726,6 +741,7 @@
         "nix-config-secrets": "nix-config-secrets",
         "nix-darwin": "nix-darwin",
         "nix-homebrew": "nix-homebrew",
+        "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_9",
         "nixpkgs-darwin": "nixpkgs-darwin",
         "nixpkgs-unstable": "nixpkgs-unstable",

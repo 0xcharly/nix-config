@@ -4,7 +4,6 @@
     flake.modules.home.catppuccin
     flake.modules.home.env
     flake.modules.home.fish
-    flake.modules.home.fonts
     flake.modules.home.git
     flake.modules.home.jujutsu
     flake.modules.home.jujutsu-deprecated

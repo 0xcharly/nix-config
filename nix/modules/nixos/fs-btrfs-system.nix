@@ -1,109 +1,103 @@
-{
-  nvme0,
-  nvme1,
-}: {inputs, ...}: {
-  imports = [inputs.disko.nixosModules.disko];
+{flake, ...}: {
+  config,
+  lib,
+  inputs,
+  ...
+}: {
+  imports = [
+    inputs.disko.nixosModules.disko
+    flake.modules.nixos.fs-btrfs-common
+  ];
 
-  boot = {
-    # Enable mdadm for software RAID
-    initrd = {
-      availableKernelModules = ["raid1" "md_mod"];
-      kernelModules = ["raid1"];
+  options.node.fs.btrfs.system = with lib; {
+    luksPasswordFile = mkOption {
+      type = types.path;
+      description = ''
+        Path to the file containing the disk encryption passphrase.
+
+        Only used at provisioning time to encrypt the disk.
+      '';
     };
+    disk = mkOption {
+      type = types.str;
+      example = "/dev/disk/by-id/ata-WDC_WDS400T1R0A-68A4W0_21083X800070";
+      description = ''
+        The path under /dev to the disk used for the system.
+      '';
+    };
+    swapSize = mkOption {
+      type = types.str;
+      example = "72G";
+      description = ''
+        The size of the swap partition.
 
-    loader = {
-      # Different systems may require a different one of the following two
-      # options. The first instructs Grub to install itself in an EFI standard
-      # location. And the second tells it to install somewhere custom, but
-      # mutate the EFI NVRAM so EFI knows where to find it. The former
-      # should work on any system. The latter allows you to share one ESP
-      # among multiple OSes, but doesn't work on a few systems (namely
-      # VirtualBox, which doesn't support persistent NVRAM).
-      #
-      # Just make sure to only have one of these enabled.
-      grub.efiInstallAsRemovable = true;
-      efi.canTouchEfiVariables = false;
-
-      grub = {
-        enable = true;
-        device = "nodev";
-        efiSupport = true;
-      };
+        Usually, equal to the size of the RAM, if hibernate is not required,
+        size of RAM + square root of RAM otherwise.
+      '';
     };
   };
 
-  disko.devices = {
-    disk = let
-      raid1 = device: {
-        type = "disk";
-        inherit device;
-        content = {
-          type = "gpt";
-          partitions = {
-            boot = {
-              size = "1M";
-              type = "EF02"; # Grub MBR
-            };
-            ESP = {
-              type = "EF00"; # UEFI
-              size = "500M";
-              content = {
-                type = "mdraid";
-                name = "boot";
-              };
-            };
-            mdadm = {
-              size = "100%"; # Remainder of the disk.
-              content = {
-                type = "mdraid";
-                name = "system";
-              };
-            };
-          };
+  config = {
+    boot = {
+      supportedFilesystems = ["vfat"];
+
+      loader = {
+        systemd-boot.enable = true;
+        efi = {
+          canTouchEfiVariables = true;
+          efiSysMountPoint = "/boot";
         };
       };
-    in {
-      # System: these SSD are mirrored in RAID1.
-      disk0 = raid1 nvme0; # NVMe 1
-      disk1 = raid1 nvme1; # NVMe 2
     };
-    mdadm = {
-      boot = {
-        type = "mdadm";
-        level = 1;
-        metadata = "1.0";
-        content = {
-          type = "filesystem";
-          format = "vfat";
-          mountpoint = "/boot";
-          mountOptions = ["umask=0077"];
-        };
-      };
-      system = {
-        type = "mdadm";
-        level = 1;
+
+    disko.devices = let
+      cfg = config.node.fs.btrfs.system;
+    in {
+      disk.system = {
+        type = "disk";
+        device = cfg.disk;
         content = {
           type = "gpt";
           partitions = {
+            ESP = {
+              label = "EFI";
+              size = "500M";
+              type = "EF00";
+              content = {
+                type = "filesystem";
+                format = "vfat";
+                mountpoint = "/boot";
+                mountOptions = ["defaults" "umask=0077"];
+              };
+            };
             swap = {
               label = "swap";
-              start = "-96G"; # Size of RAM.
-              content.type = "swap";
-            };
-            nixos = {
-              label = "nixos";
-              size = "100%"; # Remainder of the disk.
+              start = cfg.swapSize;
               content = {
-                type = "btrfs";
-                subvolumes = {
-                  "NIXOS" = {};
-                  "NIXOS/rootfs" = {
-                    mountpoint = "/";
-                    mountOptions = ["compress=zstd"];
-                  };
-                  "NIXOS/nix" = {
-                    mountpoint = "/nix";
-                    mountOptions = ["compress=zstd" "noatime"];
+                type = "swap";
+                randomEncryption = true;
+                priority = 100;
+              };
+            };
+            luks = {
+              size = "100%";
+              content = {
+                type = "luks";
+                name = "crypted";
+                settings.allowDiscards = true;
+                passwordFile = cfg.luksPasswordFile;
+                content = {
+                  type = "btrfs";
+                  subvolumes = {
+                    "NIXOS" = {};
+                    "NIXOS/rootfs" = {
+                      mountpoint = "/";
+                      mountOptions = ["compress=zstd"];
+                    };
+                    "NIXOS/nix" = {
+                      mountpoint = "/nix";
+                      mountOptions = ["compress=zstd" "noatime"];
+                    };
                   };
                 };
               };
