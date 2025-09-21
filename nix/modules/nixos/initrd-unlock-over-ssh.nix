@@ -25,6 +25,14 @@
         Find drivers to load: `lspci -v | grep -iA8 'network\|ethernet'`.
       '';
     };
+
+    kernelParams = mkOption {
+      type = types.listOf types.str;
+      default = ["ip=::::${config.networking.hostName}-initrd::dhcp"];
+      description = ''
+        The kernel params to use to configure the initrd stage network.
+      '';
+    };
   };
 
   config.boot = let
@@ -45,7 +53,6 @@
       availableKernelModules = cfg.kernelModules;
     };
 
-    kernelParams = ["ip=192.168.1.231::192.168.1.1:255.255.255.0:${config.networking.hostName}-initrd:enp197s0:off"];
-    # kernelParams = ["ip=::::${config.networking.hostName}-initrd::dhcp"];
+    inherit (cfg) kernelParams;
   };
 }

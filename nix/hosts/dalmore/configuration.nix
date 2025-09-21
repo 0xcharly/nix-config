@@ -47,7 +47,10 @@
 
   # System config.
   node = {
-    boot.initrd.ssh-unlock.kernelModules = ["atlantic" "r8169"];
+    boot.initrd.ssh-unlock = {
+      kernelModules = ["atlantic" "r8169"];
+      kernelParams = ["ip=192.168.1.231::192.168.1.1:255.255.255.0:${hostName}-initrd:enp197s0:off"];
+    };
 
     fs.zfs = {
       hostId = "eb3cd4cb";
