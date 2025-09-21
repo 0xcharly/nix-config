@@ -24,10 +24,7 @@
     flake.modules.nixos.fs-minisforum-n5-zfs-backup
     flake.modules.nixos.fs-zfs-mount-tank
     flake.modules.nixos.fs-zfs-replication
-    # TODO: Enable on primary.
-    # flake.modules.nixos.fs-zfs-snapshots
     flake.modules.nixos.hardware-cpu-amd
-    flake.modules.nixos.hardware-gpu-intel
     flake.modules.nixos.initrd-unlock-over-ssh
     flake.modules.nixos.initrd-tailscale
     flake.modules.nixos.networking-common
@@ -42,7 +39,6 @@
     flake.modules.nixos.services-deploy-rs
     flake.modules.nixos.services-fail2ban
     flake.modules.nixos.services-openssh
-    flake.modules.nixos.services-samba-ayako
     flake.modules.nixos.services-tailscale
     flake.modules.nixos.system-common
     flake.modules.nixos.users-ayako
@@ -51,7 +47,7 @@
 
   # System config.
   node = {
-    boot.initrd.ssh-unlock.kernelModules = ["r8169"];
+    boot.initrd.ssh-unlock.kernelModules = ["atlantic" "r8169"];
 
     fs.zfs = {
       hostId = "eb3cd4cb";
@@ -71,11 +67,6 @@
         disk3 = "/dev/disk/by-id/ata-ST24000NT002-3N1101_ZYD8GZ5P";
         disk4 = "/dev/disk/by-id/ata-ST24000NT002-3N1101_ZYD8JJ2R";
       };
-      # TODO: enable on primary.
-      # snapshots = {
-      #   lowFrequency = ["tank/backups"];
-      #   highFrequency = ["tank/dataDirs"];
-      # };
     };
 
     users.delay.ssh.authorizeTailscaleInternalKey = true;
@@ -91,7 +82,14 @@
 
   networking = {
     inherit hostName;
-    interfaces.enp197s0.useDHCP = true;
+    interfaces.enp197s0.ipv4.addresses = [
+      {
+        address = "192.168.1.232";
+        prefixLength = 24;
+      }
+    ];
+    defaultGateway = "192.168.1.1";
+    nameservers = ["1.1.1.1" "8.8.8.8"];
   };
 
   nixpkgs.hostPlatform = "x86_64-linux";
