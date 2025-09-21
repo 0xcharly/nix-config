@@ -1,5 +1,6 @@
 {inputs, ...}: {
-  imports = [inputs.catppuccin.nixosModules.catppuccin];
+  # TODO: Fix and reenable.
+  # imports = [inputs.catppuccin.nixosModules.catppuccin];
 
   # Set your time zone.
   time.timeZone = "Asia/Tokyo";
@@ -20,5 +21,5 @@
     keyMap = "us";
   };
 
-  catppuccin.tty.enable = true;
+  # catppuccin.tty.enable = true;
 }

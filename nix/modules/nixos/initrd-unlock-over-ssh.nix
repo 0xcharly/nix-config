@@ -45,6 +45,7 @@
       availableKernelModules = cfg.kernelModules;
     };
 
-    kernelParams = ["ip=::::${config.networking.hostName}-initrd::dhcp"];
+    kernelParams = ["ip=192.168.1.231::192.168.1.1:255.255.255.0:${config.networking.hostName}-initrd:enp197s0:off"];
+    # kernelParams = ["ip=::::${config.networking.hostName}-initrd::dhcp"];
   };
 }
