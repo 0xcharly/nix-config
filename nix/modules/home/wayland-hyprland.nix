@@ -184,7 +184,7 @@
                 --copy-command=wl-copy \
                 --output-filename "${config.xdg.userDirs.download}/screenshot-$(date +'%Y-%m-%d_%H-%M-%S').png" \
                 --early-exit \
-                --actions-on-enter save-to-clipboard \
+                --action-on-enter save-to-clipboard \
                 --save-after-copy
             '';
           };
