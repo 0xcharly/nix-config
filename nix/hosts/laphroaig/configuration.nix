@@ -19,6 +19,7 @@
     flake.modules.common.nixpkgs-unstable
     flake.modules.common.overlays
 
+    flake.modules.nixos.boot-plymouth
     flake.modules.nixos.fs-btrfs-system
     flake.modules.nixos.hardware-cpu-amd
     flake.modules.nixos.hardware-framework-13
@@ -43,6 +44,8 @@
 
   # System config.
   node = {
+    boot.plymouth.theme = "liquid";
+
     fs.btrfs.system = {
       disk = "/dev/disk/by-id/nvme-WD_BLACK_SN850X_4000GB_251103801906";
       luksPasswordFile = "/tmp/root-disk-encryption.key";
