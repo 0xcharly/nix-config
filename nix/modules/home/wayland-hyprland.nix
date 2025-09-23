@@ -32,7 +32,7 @@
 
         timeout = mkOption {
           type = types.int;
-          default = 300; # 5 minutes.
+          default = 5 * 60; # 5 minutes.
           description = ''
             The amount of idle time, in seconds, before enabling the screen saver.
           '';
@@ -50,7 +50,7 @@
 
         timeout = mkOption {
           type = types.int;
-          default = 600; # 10 minutes.
+          default = 10 * 60; # 10 minutes.
           description = ''
             The amount of idle time, in seconds, before enabling the lock screen.
           '';
@@ -68,7 +68,7 @@
 
         timeout = mkOption {
           type = types.int;
-          default = 7200; # 2 hours.
+          default = 2 * 60 * 60; # 2 hours.
           description = ''
             The amount of idle time, in seconds, before hibernating.
           '';
