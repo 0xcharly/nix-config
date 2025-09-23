@@ -20,6 +20,7 @@
     flake.modules.home.keychain
     flake.modules.home.pkgs-desktop-gui
     flake.modules.home.pkgs-desktop-tui
+    flake.modules.home.pkgs-laptop-tui
     flake.modules.home.secrets
     flake.modules.home.ssh-keys
     flake.modules.home.walker
