@@ -25,7 +25,8 @@ button {
 #battery,
 #clock,
 #wireplumber,
-#workspaces {
+#workspaces,
+tooltip {
   background-color: @normalBg@;
   border: 1px solid lighter(@normalBg@);
   color: @normalFg@;
