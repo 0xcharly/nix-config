@@ -70,6 +70,9 @@
 
     # pieceofenglish.fr
     pieceofenglish.url = "github:0xcharly/pieceofenglish";
+
+    # Formatting.
+    treefmt-nix.url = "github:numtide/treefmt-nix";
   };
 
   nixConfig = {

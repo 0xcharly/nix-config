@@ -1,5 +1,4 @@
 {
-  inputs,
   pkgs,
   lib,
   ...
@@ -20,10 +19,6 @@
     enable = true;
     lsp.package = pkgs.nixd;
   };
-
-  enterShell = ''
-    bw config server https://vault.qyrnl.com 2> /dev/null || true
-  '';
 
   scripts = {
     gc.exec = ''
@@ -52,25 +47,6 @@
         '';
     in
       switch;
-
-    fmt.exec = let
-      fmt-opts = {
-        projectRootFile = "flake.lock";
-        programs = {
-          alejandra.enable = true;
-          prettier.enable = true;
-          shfmt.enable = false;
-        };
-        settings.formatter.prettier.excludes = [
-          "nix/modules/home/walker-style.css"
-          "nix/modules/home/waybar-style.css"
-          "users/delay/walker/style.css"
-          "users/delay/waybar/style.css"
-        ];
-      };
-      fmt = inputs.treefmt-nix.lib.mkWrapper pkgs fmt-opts;
-    in
-      lib.getExe fmt;
 
     ssh-copy-terminfo.exec = let
       app = pkgs.writeShellApplication {

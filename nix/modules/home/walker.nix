@@ -12,7 +12,7 @@
     runAsService = true;
 
     config = {
-      app_launch_prefix = "${lib.getExe pkgs.app2unit} -- ";
+      app_launch_prefix = "${config.node.wayland.uwsm-wrapper.prefix} ";
       close_when_open = true;
       terminal = lib.getExe config.programs.ghostty.package;
       timeout = 0;

@@ -75,16 +75,46 @@
         };
       };
     };
+
+    uwsm-wrapper = {
+      package = mkPackageOption pkgs "uwsm" {
+        extraDescription = ''
+          The uwsm wrapper script to use to spawn new processes.
+
+          Defaults to `uwsm`.
+
+          Consider `app2unit` as a faster alternative to `uwsm` (shell
+          implementation over Python).
+        '';
+      };
+
+      prefix = mkOption {
+        type = types.str;
+        default = "${lib.getExe config.node.wayland.uwsm-wrapper.package} app --";
+        description = ''
+          The prefix command to spawn new processes.
+
+          This is used by walker to create new processes.
+        '';
+      };
+
+      wrapper = mkOption {
+        type = types.functionTo types.str;
+        default = cmd: "${config.node.wayland.uwsm-wrapper.prefix} ${cmd}";
+        description = ''
+          The wrapper function to spawn new processes.
+
+          This is used by hyprland to create new processes.
+        '';
+      };
+    };
   };
 
   config = {
     wayland.windowManager.hyprland = let
-      cfg = config.node.wayland.hyprland;
-
-      # uwsm-wrapper = cmd: "${lib.getExe pkgs.uwsm} app -- ${cmd}";
-      # `app2unit --` is a faster alternative to `uwsm app --` (shell implementation
-      # over Python).
-      uwsm-wrapper = cmd: "${lib.getExe pkgs.app2unit} -- ${cmd}";
+      cfg = config.node.wayland;
+      uwsmGetExe = pkg: cfg.uwsm-wrapper.wrapper (lib.getExe pkg);
+      uwsmGetExe' = pkg: fname: cfg.uwsm-wrapper.wrapper (lib.getExe' pkg fname);
     in {
       enable = true;
 
@@ -109,12 +139,12 @@
 
         # Open apps on startup.
         exec-once = [
-          "[workspace 1] ${uwsm-wrapper (lib.getExe config.programs.firefox.package)}"
-          "[workspace 3] ${uwsm-wrapper (lib.getExe config.programs.ghostty.package)}"
+          "[workspace 1] ${uwsmGetExe config.programs.firefox.package}"
+          "[workspace 3] ${uwsmGetExe config.programs.ghostty.package}"
         ];
 
         # Monitor config.
-        inherit (cfg) monitor;
+        inherit (cfg.hyprland) monitor;
 
         # Properly scale X11 applications (e.g. 1Password) by unscaling XWayland.
         xwayland.force_zero_scaling = true;
@@ -205,17 +235,17 @@
             };
         in
           [
-            "SUPER,       Return, exec, ${uwsm-wrapper (lib.getExe config.programs.ghostty.package)}"
-            "SUPER,       Space,  exec, ${uwsm-wrapper (lib.getExe config.programs.walker.package)}"
+            "SUPER,       Return, exec, ${uwsmGetExe config.programs.ghostty.package}"
+            "SUPER,       Space,  exec, ${uwsmGetExe config.programs.walker.package}"
             "SUPER SHIFT, X,      killactive, "
-            "SUPER SHIFT, Q,      exec, ${uwsm-wrapper (lib.getExe' pkgs.systemd "loginctl")} terminate-session \"$XDG_SESSION_ID\""
-            "SUPER SHIFT, L,      exec, ${uwsm-wrapper (lib.getExe config.programs.hyprlock.package)}"
+            "SUPER SHIFT, Q,      exec, ${uwsmGetExe' pkgs.systemd "loginctl"} terminate-session \"$XDG_SESSION_ID\""
+            "SUPER SHIFT, L,      exec, ${uwsmGetExe config.programs.hyprlock.package}"
             "SUPER,       V,      togglefloating, "
             "SUPER,       F,      fullscreen, "
-            "SUPER CTRL,  C,      exec, ${uwsm-wrapper (lib.getExe pkgs.hyprpicker)} -a"
-            "SUPER,       P,      exec, ${uwsm-wrapper (lib.getExe pkgs.hyprshot)} -m region --raw | ${lib.getExe screenshot-editor}"
-            "SUPER SHIFT, P,      exec, ${uwsm-wrapper (lib.getExe pkgs.hyprshot)} -m window --raw | ${lib.getExe screenshot-editor}"
-            "SUPER CTRL,  P,      exec, ${uwsm-wrapper (lib.getExe pkgs.hyprshot)} -m output --raw | ${lib.getExe screenshot-editor}"
+            "SUPER CTRL,  C,      exec, ${uwsmGetExe pkgs.hyprpicker} -a"
+            "SUPER,       P,      exec, ${uwsmGetExe pkgs.hyprshot} -m region --raw | ${uwsmGetExe screenshot-editor}"
+            "SUPER SHIFT, P,      exec, ${uwsmGetExe pkgs.hyprshot} -m window --raw | ${uwsmGetExe screenshot-editor}"
+            "SUPER CTRL,  P,      exec, ${uwsmGetExe pkgs.hyprshot} -m output --raw | ${uwsmGetExe screenshot-editor}"
 
             "SUPER,       D,      hy3:makegroup,   h"
             "SUPER,       S,      hy3:makegroup,   v"
@@ -227,17 +257,17 @@
             "SUPER,       R,      hy3:changegroup, opposite"
           ]
           ++ [
-            ", XF86AudioLowerVolume,  exec, ${uwsm-wrapper (lib.getExe' pkgs.swayosd "swayosd-client")} --output-volume lower"
-            ", XF86AudioMute,         exec, ${uwsm-wrapper (lib.getExe' pkgs.swayosd "swayosd-client")} --output-volume mute-toggle"
-            ", XF86AudioRaiseVolume,  exec, ${uwsm-wrapper (lib.getExe' pkgs.swayosd "swayosd-client")} --output-volume raise"
-            ", XF86MonBrightnessDown, exec, ${uwsm-wrapper (lib.getExe' pkgs.swayosd "swayosd-client")} --brightness lower"
-            ", XF86MonBrightnessUp,   exec, ${uwsm-wrapper (lib.getExe' pkgs.swayosd "swayosd-client")} --brightness raise"
+            ", XF86AudioLowerVolume,  exec, ${uwsmGetExe' pkgs.swayosd "swayosd-client"} --output-volume lower"
+            ", XF86AudioMute,         exec, ${uwsmGetExe' pkgs.swayosd "swayosd-client"} --output-volume mute-toggle"
+            ", XF86AudioRaiseVolume,  exec, ${uwsmGetExe' pkgs.swayosd "swayosd-client"} --output-volume raise"
+            ", XF86MonBrightnessDown, exec, ${uwsmGetExe' pkgs.swayosd "swayosd-client"} --brightness lower"
+            ", XF86MonBrightnessUp,   exec, ${uwsmGetExe' pkgs.swayosd "swayosd-client"} --brightness raise"
 
-            ", XF86AudioMedia, exec, ${uwsm-wrapper (lib.getExe pkgs.playerctl)} play-pause"
-            ", XF86AudioNext,  exec, ${uwsm-wrapper (lib.getExe pkgs.playerctl)} next"
-            ", XF86AudioPlay,  exec, ${uwsm-wrapper (lib.getExe pkgs.playerctl)} play-pause"
-            ", XF86AudioPrev,  exec, ${uwsm-wrapper (lib.getExe pkgs.playerctl)} previous"
-            ", XF86AudioStop,  exec, ${uwsm-wrapper (lib.getExe pkgs.playerctl)} stop"
+            ", XF86AudioMedia, exec, ${uwsmGetExe pkgs.playerctl} play-pause"
+            ", XF86AudioNext,  exec, ${uwsmGetExe pkgs.playerctl} next"
+            ", XF86AudioPlay,  exec, ${uwsmGetExe pkgs.playerctl} play-pause"
+            ", XF86AudioPrev,  exec, ${uwsmGetExe pkgs.playerctl} previous"
+            ", XF86AudioStop,  exec, ${uwsmGetExe pkgs.playerctl} stop"
           ]
           ++ (map-movements (dir: key: "SUPER, ${dir}, hy3:movefocus, ${key}, wrap"))
           ++ (map-movements (dir: key: "SUPER SHIFT, ${dir}, hy3:movewindow, ${key}, once"))

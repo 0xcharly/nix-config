@@ -1,4 +1,4 @@
-{
+{flake, ...}: {
   config,
   lib,
   pkgs,
@@ -50,6 +50,6 @@ in {
       enableBashIntegration = false;
       enableFishIntegration = false;
     };
-    packages = with pkgs; [tmux-open-git-repository-fish];
+    packages = [flake.packages.${pkgs.system}.tmux-open-git-repository-fish];
   };
 }

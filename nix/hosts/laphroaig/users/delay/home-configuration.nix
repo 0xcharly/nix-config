@@ -1,6 +1,11 @@
 {
+  # Blueprint parameters.
   flake,
   inputs,
+  perSystem,
+  # Module parameters.
+  lib,
+  config,
   ...
 }: {
   imports = [
@@ -40,12 +45,17 @@
     };
     wayland = {
       hyprland.monitor = "eDP-1, 2880x1920@120.00000, 0x0, 2.00";
+
+      idle.hibernate.timeout = 30 * 60; # 30 minutes.
+      uwsm-wrapper = {
+        package = perSystem.self.app2unit;
+        prefix = "${lib.getExe config.node.wayland.uwsm-wrapper.package} --";
+      };
+
       waybar = {
         output = ["eDP-1"];
         extra-modules-right = ["battery"];
       };
-
-      idle.hibernate.timeout = 30 * 60; # 30 minutes.
     };
   };
 }
