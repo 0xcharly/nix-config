@@ -7,6 +7,8 @@
   cfg = config.programs.fish;
 in {
   programs = {
+    eza.enableFishIntegration = true;
+
     fish = {
       enable = true;
       interactiveShellInit = ''
