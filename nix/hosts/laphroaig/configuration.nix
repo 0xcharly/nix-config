@@ -23,6 +23,7 @@
     flake.modules.nixos.fs-btrfs-system
     flake.modules.nixos.hardware-cpu-amd
     flake.modules.nixos.hardware-framework-13
+    flake.modules.nixos.hardware-laptop-essentials
     flake.modules.nixos.hardware-gpu-amd
     flake.modules.nixos.networking-desktop
     flake.modules.nixos.nix-client-config
