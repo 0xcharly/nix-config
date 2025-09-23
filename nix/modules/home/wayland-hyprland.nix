@@ -226,6 +226,19 @@
             "SUPER SHIFT, E,      hy3:expand,      base"
             "SUPER,       R,      hy3:changegroup, opposite"
           ]
+          ++ [
+            ", XF86AudioLowerVolume,  exec, ${uwsm-wrapper (lib.getExe' pkgs.swayosd "swayosd-client")} --output-volume lower"
+            ", XF86AudioMute,         exec, ${uwsm-wrapper (lib.getExe' pkgs.swayosd "swayosd-client")} --output-volume mute-toggle"
+            ", XF86AudioRaiseVolume,  exec, ${uwsm-wrapper (lib.getExe' pkgs.swayosd "swayosd-client")} --output-volume raise"
+            ", XF86MonBrightnessDown, exec, ${uwsm-wrapper (lib.getExe' pkgs.swayosd "swayosd-client")} --brightness lower"
+            ", XF86MonBrightnessUp,   exec, ${uwsm-wrapper (lib.getExe' pkgs.swayosd "swayosd-client")} --brightness raise"
+
+            ", XF86AudioMedia, exec, ${uwsm-wrapper (lib.getExe pkgs.playerctl)} play-pause"
+            ", XF86AudioNext,  exec, ${uwsm-wrapper (lib.getExe pkgs.playerctl)} next"
+            ", XF86AudioPlay,  exec, ${uwsm-wrapper (lib.getExe pkgs.playerctl)} play-pause"
+            ", XF86AudioPrev,  exec, ${uwsm-wrapper (lib.getExe pkgs.playerctl)} previous"
+            ", XF86AudioStop,  exec, ${uwsm-wrapper (lib.getExe pkgs.playerctl)} stop"
+          ]
           ++ (map-movements (dir: key: "SUPER, ${dir}, hy3:movefocus, ${key}, wrap"))
           ++ (map-movements (dir: key: "SUPER SHIFT, ${dir}, hy3:movewindow, ${key}, once"))
           ++ (map-workspaces (no: repr: "SUPER, ${no}, workspace, ${repr}"))
@@ -296,48 +309,52 @@
       };
     };
 
-    services.hypridle = {
-      enable = lib.mkDefault config.wayland.windowManager.hyprland.enable;
-      settings = let
-        hyprctl = lib.getExe' pkgs.hyprland "hyprctl";
-        hyprlock = lib.getExe config.programs.hyprlock.package;
-        loginctl = lib.getExe' pkgs.systemd "loginctl";
-        systemctl = lib.getExe' pkgs.systemd "systemctl";
+    services = {
+      hypridle = {
+        enable = lib.mkDefault config.wayland.windowManager.hyprland.enable;
+        settings = let
+          hyprctl = lib.getExe' pkgs.hyprland "hyprctl";
+          hyprlock = lib.getExe config.programs.hyprlock.package;
+          loginctl = lib.getExe' pkgs.systemd "loginctl";
+          systemctl = lib.getExe' pkgs.systemd "systemctl";
 
-        # Avoid starting multiple hyprlock instances.
-        lock = "${lib.getExe' pkgs.procps "pidof"} ${hyprlock} || ${hyprlock}";
-      in {
-        general = {
-          lock_cmd = lock;
-          unlock_cmd = "pkill -USR1 ${hyprlock}";
+          # Avoid starting multiple hyprlock instances.
+          lock = "${lib.getExe' pkgs.procps "pidof"} ${hyprlock} || ${hyprlock}";
+        in {
+          general = {
+            lock_cmd = lock;
+            unlock_cmd = "pkill -USR1 ${hyprlock}";
 
-          before_sleep_cmd = "${loginctl} lock-session"; # Lock before suspend.
-          after_sleep_cmd = "${hyprctl} dispatch dpms on"; # To avoid having to press a key twice to turn on the display.
+            before_sleep_cmd = "${loginctl} lock-session"; # Lock before suspend.
+            after_sleep_cmd = "${hyprctl} dispatch dpms on"; # To avoid having to press a key twice to turn on the display.
+          };
+
+          listener = let
+            cfg = config.node.wayland.idle;
+          in
+            lib.optionals cfg.screenlock.enable [
+              {
+                inherit (cfg.screenlock) timeout;
+                on-timeout = lock;
+              }
+            ]
+            ++ lib.optionals cfg.screensaver.enable [
+              {
+                inherit (cfg.screensaver) timeout;
+                on-timeout = "${hyprctl} dispatch dpms off";
+                on-resume = "${hyprctl} dispatch dpms on";
+              }
+            ]
+            ++ lib.optionals cfg.hibernate.enable [
+              {
+                inherit (cfg.hibernate) timeout;
+                on-timeout = "${systemctl} suspend";
+              }
+            ];
         };
-
-        listener = let
-          cfg = config.node.wayland.idle;
-        in
-          lib.optionals cfg.screenlock.enable [
-            {
-              inherit (cfg.screenlock) timeout;
-              on-timeout = lock;
-            }
-          ]
-          ++ lib.optionals cfg.screensaver.enable [
-            {
-              inherit (cfg.screensaver) timeout;
-              on-timeout = "${hyprctl} dispatch dpms off";
-              on-resume = "${hyprctl} dispatch dpms on";
-            }
-          ]
-          ++ lib.optionals cfg.hibernate.enable [
-            {
-              inherit (cfg.hibernate) timeout;
-              on-timeout = "${systemctl} suspend";
-            }
-          ];
       };
+
+      swayosd.enable = lib.mkDefault config.wayland.windowManager.hyprland.enable;
     };
   };
 }
