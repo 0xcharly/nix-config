@@ -4,15 +4,17 @@
   lib,
   ...
 }: {
-  packages = with pkgs; [
-    cachix
-    deploy-rs
-    jq
-    just
-    home-manager
+  packages = with pkgs;
+    [
+      cachix
+      deploy-rs
+      jq
+      just
+      home-manager
 
-    alejandra
-  ] ++ lib.optionals pkgs.stdenv.isLinux [pkgs.bitwarden-cli];
+      alejandra
+    ]
+    ++ lib.optionals pkgs.stdenv.isLinux [pkgs.bitwarden-cli];
 
   languages.nix = {
     enable = true;
@@ -60,6 +62,8 @@
           shfmt.enable = false;
         };
         settings.formatter.prettier.excludes = [
+          "nix/modules/home/walker-style.css"
+          "nix/modules/home/waybar-style.css"
           "users/delay/walker/style.css"
           "users/delay/waybar/style.css"
         ];
