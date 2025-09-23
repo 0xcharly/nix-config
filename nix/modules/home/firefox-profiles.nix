@@ -15,7 +15,7 @@
     ];
 
     search = {
-      default = "Google";
+      default = "google";
       # Workaround to Firefox replacing `search.json.mozlz4` symlink.
       # https://github.com/nix-community/home-manager/issues/3698
       force = true;

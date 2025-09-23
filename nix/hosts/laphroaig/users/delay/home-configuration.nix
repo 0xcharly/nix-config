@@ -40,7 +40,10 @@
     };
     wayland = {
       hyprland.monitor = "eDP-1, 2880x1920@120.00000, 0x0, 2.00";
-      waybar.output = ["eDP-1"];
+      waybar = {
+        output = ["eDP-1"];
+        extra-modules-right = ["battery"];
+      };
 
       idle.hibernate.timeout = 30 * 60; # 30 minutes.
     };

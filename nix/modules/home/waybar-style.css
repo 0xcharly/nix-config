@@ -16,11 +16,13 @@ button {
   border: none;
 }
 
+#battery,
 #clock,
 #wireplumber {
   padding: 0 8px;
 }
 
+#battery,
 #clock,
 #wireplumber,
 #workspaces {
@@ -55,6 +57,7 @@ button {
   color: @accentFg@;
 }
 
+#battery:hover,
 #clock:hover,
 #wireplumber:hover,
 #wireplumber.muted:hover,
@@ -64,6 +67,16 @@ button {
 }
 
 #workspaces button.urgent {
+  background-color: @urgentBg@;
+  color: @urgentFg@;
+}
+
+#battery.warning {
+  background-color: @accentBg@;
+  color: @accentFg@;
+}
+
+#battery.critical {
   background-color: @urgentBg@;
   color: @urgentFg@;
 }

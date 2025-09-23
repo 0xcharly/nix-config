@@ -4,12 +4,21 @@
   pkgs,
   ...
 }: {
-  options.node.wayland = with lib; {
-    waybar.output = mkOption {
+  options.node.wayland.waybar = with lib; {
+    output = mkOption {
       type = types.listOf types.str;
       example = ''["DP-3"]'';
       description = ''
         The monitors on which to display the status bar.
+      '';
+    };
+
+    extra-modules-right = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = ''["battery"]'';
+      description = ''
+        List of extra modules to prepend to waybar's right-side widget list.
       '';
     };
   };
@@ -31,7 +40,7 @@
           spacing = 8;
           modules-left = ["hyprland/workspaces"];
           modules-center = [];
-          modules-right = ["wireplumber" "clock"];
+          modules-right = cfg.extra-modules-right ++ ["wireplumber" "clock"];
 
           "hyprland/workspaces" = {
             format = "{name}";
@@ -40,8 +49,30 @@
             on-scroll-up = "${lib.getExe' pkgs.hyprland "hyprctl"} dispatch workspace e+1";
             on-scroll-down = "${lib.getExe' pkgs.hyprland "hyprctl"} dispatch workspace e-1";
           };
+          battery = {
+            states = {
+              warning = 20;
+              critical = 10;
+            };
+            format = "{icon} {capacity}%";
+            format-icons = [" " " " " " " " " "];
+          };
           clock = {
             format = "{:%Od日 %R}";
+            tooltip-format = "<tt>{calendar}</tt>";
+            calendar = {
+              mode = "year";
+              mode-mon-col = 3;
+              weeks-pos = "right";
+              on-scroll = 1;
+              format = {
+                months = "<span color='#f5e0dc'><b>{}</b></span>";
+                days = "<span color='#e1e8f4'><b>{}</b></span>";
+                weeks = "<span color='#9fcdfe'><b>W{}</b></span>";
+                weekdays = "<span color='#8fa3bb'><b>{}</b></span>";
+                today = "<span color='#cab4f4'><b><u>{}</u></b></span>";
+              };
+            };
           };
           wireplumber = {
             format = "{icon} {volume}%";
