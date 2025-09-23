@@ -15,7 +15,7 @@
     ];
 
     search = {
-      default = "Kagi Search";
+      default = "Google";
       # Workaround to Firefox replacing `search.json.mozlz4` symlink.
       # https://github.com/nix-community/home-manager/issues/3698
       force = true;
@@ -70,7 +70,6 @@
         };
 
         # Hide the rest, we don't need it.
-        "google".metaData.hidden = true;
         "amazondotcom-us".metaData.hidden = true;
         "bing".metaData.hidden = true;
         "ebay".metaData.hidden = true;
