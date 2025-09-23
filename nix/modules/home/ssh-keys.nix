@@ -1,4 +1,4 @@
-{
+{flake, ...}: {
   config,
   lib,
   ...
@@ -15,30 +15,19 @@
   };
 
   # Install known SSH keys for trusted hosts.
-  config.home.file = let
+  config.age.secrets = let
     cfg = config.node.openssh.trusted-tier;
-    keys = ["github" "git_commit_signing" "tailscale"];
+    tier =
+      if (cfg.ring == 0)
+      then "trusted"
+      else "basic";
+    keys = flake.lib.facts.ssh.delay.trusted-keys;
 
-    mkOutOfStoreSymlink = tier: fname: config.lib.file.mkOutOfStoreSymlink config.age.secrets."keys/${tier}-access/${fname}".path;
-    mkSshKeySymLink = tier: key: {
-      ".ssh/${key}".source = mkOutOfStoreSymlink tier "${key}_ed25519_key";
-      ".ssh/${key}.pub".source = mkOutOfStoreSymlink tier "${key}_ed25519_key.pub";
+    mkSshKeyPath = fname: "${config.home.homeDirectory}/.ssh/${fname}";
+    mkSshKeyPair = tier: key: {
+      "keys/${tier}-access/${key}_ed25519_key".path = mkSshKeyPath key;
+      "keys/${tier}-access/${key}_ed25519_key.pub".path = mkSshKeyPath "${key}.pub";
     };
-
-    mkSshKeyList = {
-      ring,
-      tier,
-    }:
-      lib.optionals (cfg.ring == ring) (builtins.map (mkSshKeySymLink tier) keys);
   in
-    lib.mergeAttrsList (lib.flatten (builtins.map mkSshKeyList [
-      {
-        ring = 3;
-        tier = "basic";
-      }
-      {
-        ring = 0;
-        tier = "trusted";
-      }
-    ]));
+    lib.mergeAttrsList (builtins.map (mkSshKeyPair tier) keys);
 }
