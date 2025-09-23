@@ -14,6 +14,8 @@
           monitor = "DP-3, 6016x3384@60.00Hz, 0x0, 2.00";
           # Alienware Dell AW3225QF 32".
           monitor = "DP-3, 3840x2160@239.991Hz, 0x0, 1.25";
+          # Framework 13" 2.8k.
+          monitor = "eDP-1, 2880x1920@120.00000, 0x0, 2.00";
         '';
       };
     };
@@ -112,7 +114,7 @@
         ];
 
         # Monitor config.
-        # inherit (cfg) monitor;
+        inherit (cfg) monitor;
 
         # Properly scale X11 applications (e.g. 1Password) by unscaling XWayland.
         xwayland.force_zero_scaling = true;
@@ -124,6 +126,8 @@
           kb_variant = "mac";
           repeat_delay = 200;
           repeat_rate = 60;
+
+          touchpad.natural_scroll = true;
         };
         general = {
           layout = "hy3"; # Requires the hy3 plugin.

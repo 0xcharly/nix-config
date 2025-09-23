@@ -39,8 +39,10 @@
       tasks.enableSync = true;
     };
     wayland = {
-      hyprland.monitor = "";
-      waybar.output = ["DP-1"];
+      hyprland.monitor = "eDP-1, 2880x1920@120.00000, 0x0, 2.00";
+      waybar.output = ["eDP-1"];
+
+      idle.hibernate.timeout = 1800; # 30 minutes.
     };
   };
 }
