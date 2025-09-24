@@ -6,6 +6,7 @@
       package = pkgs.hyprland;
       portalPackage = pkgs.xdg-desktop-portal-hyprland;
     };
+
     uwsm = {
       enable = true;
       waylandCompositors.hyprland = {
@@ -16,15 +17,11 @@
     };
   };
 
+  # Automatically launch UWSM on login.
+  environment.loginShellInit = ''
+    [[ "$(tty)" == "/dev/tty1" ]] && exec uwsm start default >/dev/null 2>&1
+  '';
+
   # Required for graphical interfaces (X or Wayland) to work.
   security.polkit.enable = true;
-
-  services = {
-    xserver.displayManager.gdm = {
-      enable = true;
-      wayland = true;
-    };
-    displayManager.defaultSession = "hyprland-uwsm";
-    libinput.enable = true;
-  };
 }
