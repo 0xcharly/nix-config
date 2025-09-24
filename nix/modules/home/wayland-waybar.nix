@@ -54,6 +54,11 @@
               warning = 20;
               critical = 10;
             };
+            events = {
+              on-discharging-warning = "notify-send -u normal 'Battery below 20%'";
+              on-discharging-critical = "notify-send -u critical 'Battery below 10%'";
+              on-charging-100 = "notify-send -u normal 'Battery Full'";
+            };
             format = "{icon} {capacity}%";
             format-icons = [" " " " " " " " " "];
           };
@@ -90,6 +95,10 @@
           cursorBg = "#312b41";
           normalBg = "#192029";
           normalFg = "#8fa3bb";
+          positiveBg = "#243c2e";
+          positiveFg = "#aff3c0";
+          warningBg = "#433027";
+          warningFg = "#fec49a";
           urgentBg = "#41262e";
           urgentFg = "#fe9fa9";
         };

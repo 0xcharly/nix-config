@@ -72,12 +72,18 @@ tooltip {
   color: @urgentFg@;
 }
 
-#battery.warning {
-  background-color: @accentBg@;
-  color: @accentFg@;
+#battery.charging,
+#battery.charging {
+  background-color: @positiveBg@;
+  color: @positiveFg@;
 }
 
-#battery.critical {
+#battery.warning:not(.charging) {
+  background-color: @warningBg@;
+  color: @warningFg@;
+}
+
+#battery.critical:not(.charging) {
   background-color: @urgentBg@;
   color: @urgentFg@;
 }

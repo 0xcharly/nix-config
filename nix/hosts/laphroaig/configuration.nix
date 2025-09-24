@@ -64,6 +64,13 @@
     "xhci_pci"
   ];
 
+  services.logind = {
+    lidSwitch = "hybrid-sleep";
+    lidSwitchExternalPower = "suspend";
+    powerKey = "suspend";
+    powerKeyLongPress = "poweroff";
+  };
+
   networking = {
     inherit hostName;
   };

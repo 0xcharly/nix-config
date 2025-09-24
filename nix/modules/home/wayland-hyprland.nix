@@ -59,20 +59,80 @@
         fingerprint.enable = mkEnableOption "Enable fingerprint unlock";
       };
 
-      hibernate = {
+      suspend = {
         enable = mkOption {
           type = types.bool;
           default = config.wayland.windowManager.hyprland.enable;
           description = ''
-            Enable hibernate.
+            Enable suspend.
           '';
         };
+
+        timeout = mkOption {
+          type = types.int;
+          default = 30 * 60; # 30 minutes.
+          description = ''
+            The amount of idle time, in seconds, before suspending.
+
+            # Suspend (a.k.a. Suspend-to-RAM, Sleep)
+
+            - What happens:
+              - The system state (running programs, open files, etc.) stays in
+                RAM.
+              - Most hardware powers down, except RAM, which is kept powered at
+                a very low level to preserve its contents.
+              - CPU, GPU, disks, and peripherals are powered off or put in
+                low-power states.
+            - Power usage: Very low, but not zero — the machine must keep
+              feeding power to RAM.
+            - Resume speed: Very fast (a few seconds).
+            - Downside: If the machine loses power (battery dies, unplugged
+              desktop, etc.), the RAM contents are lost and the session is gone.
+          '';
+        };
+      };
+
+      hibernate = {
+        enable = mkEnableOption "Enable hibernate";
 
         timeout = mkOption {
           type = types.int;
           default = 2 * 60 * 60; # 2 hours.
           description = ''
             The amount of idle time, in seconds, before hibernating.
+
+            # Hibernate (a.k.a. Suspend-to-Disk)
+
+            - What happens:
+              - The system state (contents of RAM) is written to swap space (or
+                a swap file) on disk.
+              - The machine then fully powers down — no electricity required.
+              - Power usage: Zero while off.
+            - Resume speed: Slower than suspend (needs to reload RAM image from
+              disk).
+            - Upside: Safe against power loss — your session is preserved even
+              if the battery dies.
+            - Downside: Requires enough swap space to store all RAM contents.
+              Resume can take longer.
+          '';
+        };
+      };
+
+      hybrid-sleep = {
+        enable = mkEnableOption "Enable hybrid-sleep";
+
+        timeout = mkOption {
+          type = types.int;
+          default = 30 * 60; # 30 minutes.
+          description = ''
+            The amount of idle time, in seconds, before triggering hybrid-sleep.
+
+            # Hybrid suspend
+
+            - RAM state is written to disk (like hibernate), then the system
+              suspends (like suspend).
+            - If power remains, wake is fast (like suspend).
+            - If power is lost, state is restored from disk (like hibernate).
           '';
         };
       };
@@ -377,10 +437,22 @@
                 on-resume = "${hyprctl} dispatch dpms on";
               }
             ]
+            ++ lib.optionals cfg.suspend.enable [
+              {
+                inherit (cfg.suspend) timeout;
+                on-timeout = "${systemctl} suspend";
+              }
+            ]
             ++ lib.optionals cfg.hibernate.enable [
               {
                 inherit (cfg.hibernate) timeout;
-                on-timeout = "${systemctl} suspend";
+                on-timeout = "${systemctl} hibernate";
+              }
+            ]
+            ++ lib.optionals cfg.hybrid-sleep.enable [
+              {
+                inherit (cfg.hybrid-sleep) timeout;
+                on-timeout = "${systemctl} hybrid-sleep";
               }
             ];
         };
@@ -388,5 +460,18 @@
 
       swayosd.enable = lib.mkDefault config.wayland.windowManager.hyprland.enable;
     };
+
+    assertions = let
+      cfg = config.node.wayland.idle;
+    in [
+      {
+        assertion = cfg.suspend.enable -> !cfg.hybrid-sleep.enable;
+        message = "suspend and hybrid-sleep are mutually exclusive";
+      }
+      {
+        assertion = cfg.hybrid-sleep.enable -> !cfg.suspend.enable;
+        message = "suspend and hybrid-sleep are mutually exclusive";
+      }
+    ];
   };
 }
