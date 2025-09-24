@@ -30,7 +30,7 @@ cleanup() {
 trap cleanup EXIT
 
 ping -c 1 "$TARGET_HOST-initrd" >/dev/null 2>&1
-if [ $? -ne 0]; then
+if [[ $? -ne 0 ]]; then
   log_error "Could not reach $TARGET_HOST… exiting."
   exit 1
 else
@@ -59,7 +59,7 @@ get_disk_encryption_key() {
 ssh_options=(
   -T
   -l root
-  -o "IdentityFile=/run/agenix/keys/nixos_remote_unlock_ed25519_key"
+  -o "IdentityFile=/run/user/1000/agenix/keys/nixos_remote_unlock_ed25519_key"
   -o "PubkeyAuthentication=yes"
   -o "UserKnownHostsFile=/dev/null"
   -o "StrictHostKeyChecking=no"
