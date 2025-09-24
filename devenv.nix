@@ -48,6 +48,25 @@
     in
       switch;
 
+    rollback.exec = let
+      rebuildOptions = "--option accept-flake-config true --show-trace";
+      switch =
+        if pkgs.stdenv.isDarwin
+        then ''
+          echo "Rollback not available on darwin."
+          exit 1
+        ''
+        else ''
+          if test $(grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"; then
+            sudo nixos-rebuild ${rebuildOptions} --rollback switch --flake .
+          else
+            echo "Rollback not available with home-manager."
+            exit 1
+          fi
+        '';
+    in
+      switch;
+
     ssh-copy-terminfo.exec = let
       app = pkgs.writeShellApplication {
         name = "ssh-copy-terminfo";
