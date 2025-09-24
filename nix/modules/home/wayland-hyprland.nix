@@ -55,6 +55,8 @@
             The amount of idle time, in seconds, before enabling the lock screen.
           '';
         };
+
+        fingerprint.enable = mkEnableOption "Enable fingerprint unlock";
       };
 
       hibernate = {
@@ -130,8 +132,6 @@
 
       # Hyprland configuration.
       settings = {
-        debug.disable_logs = false;
-
         ecosystem = {
           no_update_news = true;
           no_donation_nag = true;
@@ -298,17 +298,19 @@
       };
     };
 
-    programs.hyprlock = {
-      enable = lib.mkDefault config.wayland.windowManager.hyprland.enable;
+    programs.hyprlock = let
+      cfg = config.node.wayland.idle.screenlock;
+    in {
+      enable = cfg.enable;
       settings = {
-        general = [
-          {
-            disable_loading_bar = true;
-            grace = 0;
-            hide_cursor = true;
-            no_fade_in = false;
-          }
-        ];
+        general = {
+          disable_loading_bar = true;
+          grace = 0;
+          hide_cursor = true;
+          no_fade_in = false;
+        };
+
+        auth."fingerprint:enabled" = cfg.fingerprint.enable;
 
         background = [
           {
