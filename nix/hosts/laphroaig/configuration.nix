@@ -56,9 +56,6 @@
     users.delay.ssh.authorizeTailscaleInternalKey = true;
   };
 
-  # Framework specific config (via NixOS Hardware).
-  hardware.framework.laptop13.audioEnhancement.enable = true;
-
   boot.initrd.availableKernelModules = [
     "ahci"
     "nvme"
