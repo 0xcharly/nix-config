@@ -1,1 +1,0 @@
-Japan NAS primary node.
