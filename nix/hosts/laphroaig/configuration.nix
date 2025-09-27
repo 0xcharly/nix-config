@@ -19,13 +19,12 @@
     flake.modules.common.nixpkgs-unstable
     flake.modules.common.overlays
 
-    flake.modules.nixos.boot-plymouth
-    flake.modules.nixos.fs-btrfs-system
+    flake.modules.nixos.fs-zfs-system
     flake.modules.nixos.hardware-cpu-amd
     flake.modules.nixos.hardware-framework-13
     flake.modules.nixos.hardware-laptop-essentials
     flake.modules.nixos.hardware-gpu-amd
-    flake.modules.nixos.networking-desktop
+    flake.modules.nixos.networking-wireless
     flake.modules.nixos.nix-client-config
     flake.modules.nixos.overlays
     flake.modules.nixos.programs-hyprland
@@ -45,12 +44,13 @@
 
   # System config.
   node = {
-    boot.plymouth.theme = "liquid";
-
-    fs.btrfs.system = {
-      disk = "/dev/disk/by-id/nvme-WD_BLACK_SN850X_4000GB_251103801906";
-      luksPasswordFile = "/tmp/root-disk-encryption.key";
-      swapSize = "72G"; # Size of RAM + square root of RAM for hibernate.
+    fs.zfs = {
+      hostId = "7375168d";
+      system = {
+        disk = "/dev/disk/by-id/nvme-WD_BLACK_SN850X_4000GB_251103801906";
+        luksPasswordFile = "/tmp/root-disk-encryption.key";
+        swapSize = "72G"; # Size of RAM + square root of RAM for hibernate.
+      };
     };
 
     users.delay.ssh.authorizeTailscaleInternalKey = true;
@@ -73,6 +73,7 @@
 
   networking = {
     inherit hostName;
+    interfaces.wlp192s0.useDHCP = true;
   };
 
   nixpkgs.hostPlatform = "x86_64-linux";

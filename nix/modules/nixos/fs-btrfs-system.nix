@@ -1,7 +1,10 @@
-{flake, ...}: {
+{
+  flake,
+  inputs,
+  ...
+}: {
   config,
   lib,
-  inputs,
   ...
 }: {
   imports = [
@@ -72,9 +75,7 @@
             };
             swap = {
               label = "swap";
-              # FIXME: This should be "-${cfg.swapsize}".
-              # This allocates 72G for the system, and everything else for the swap…
-              start = cfg.swapSize;
+              start = "-${cfg.swapSize}";
               content = {
                 type = "swap";
                 randomEncryption = true;

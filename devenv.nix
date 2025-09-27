@@ -67,6 +67,34 @@
     in
       switch;
 
+    cache.exec = let
+      cache =
+        if pkgs.stdenv.isDarwin
+        then ''
+          HOSTNAME=$(hostname)
+          CONFIG="''${1:-$HOSTNAME}"
+
+          nix build '.#darwinConfigurations.$CONFIG.config.system.build.toplevel' --json \
+            | jq -r '.[].outputs | to_entries[].value' \
+            | op plugin run -- cachix push 0xcharly-nixos-config
+        ''
+        else ''
+          HOSTNAME=$(hostname)
+          CONFIG=''${1:-$HOSTNAME}
+
+          if test $(grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"; then
+            CONFIG_PREFIX="nixosConfigurations"
+          else
+            CONFIG_PREFIX="homeConfigurations"
+          fi
+
+          nix build ".#$CONFIG_PREFIX.$CONFIG.config.system.build.toplevel" --json \
+            | jq -r '.[].outputs | to_entries[].value' \
+            | cachix push 0xcharly-nixos-config
+        '';
+    in
+      cache;
+
     ssh-copy-terminfo.exec = let
       app = pkgs.writeShellApplication {
         name = "ssh-copy-terminfo";

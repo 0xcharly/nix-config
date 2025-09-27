@@ -100,8 +100,7 @@ load_ssh_host_key "ssh_host_ed25519_key"
 
 # Setup installation SSH options.
 ssh_options=(
-  # --ssh-option "IdentityFile=/run/agenix/keys/trusted-access/provisioning_ed25519_key"
-  --ssh-option "IdentityFile=/tmp/iso.key"
+  --ssh-option "IdentityFile=/run/agenix/keys/trusted-access/provisioning_ed25519_key"
   --ssh-option "PubkeyAuthentication=yes"
   --ssh-option "UserKnownHostsFile=/dev/null"
   --ssh-option "StrictHostKeyChecking=no"
