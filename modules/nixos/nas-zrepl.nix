@@ -40,7 +40,7 @@ in
             type = "push";
             connect = {
               type = "ssh+stdinserver";
-              host = "selene.neko-danio.ts.net";
+              host = "dalmore.neko-danio.ts.net";
               port = 22;
               user = "zrepl";
               identity_file = config.age.secrets."keys/zrepl_ed25519_key".path;

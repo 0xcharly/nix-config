@@ -30,7 +30,7 @@ in {
 
       allNodes = mkOption {
         type = listOf str;
-        default = ["heimdall" "linode" "nyx" "helios" "selene" "skullkid"];
+        default = ["heimdall" "linode" "nyx" "helios" "skullkid"];
         readOnly = true;
         description = ''
           The list of all hosts part of the tailnet.

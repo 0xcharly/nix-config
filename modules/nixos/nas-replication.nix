@@ -100,7 +100,7 @@ in
         };
         mkCommands = hosts: builtins.foldl' lib.attrsets.recursiveUpdate (builtins.map mkReplicationCommand hosts);
       in
-        mkCommands ["selene"];
+        mkCommands ["dalmore"];
     };
 
     assertions = [

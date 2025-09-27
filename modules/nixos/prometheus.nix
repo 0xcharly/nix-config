@@ -26,18 +26,18 @@ in {
           {
             job_name = "node_exporter";
             static_configs = builtins.map mkNodeExporterConfig [
+              "dalmore"
               "heimdall"
               "helios"
               "linode"
-              "selene"
               "skullkid"
             ];
           }
           {
             job_name = "zfs";
             static_configs = builtins.map mkZfsExporterConfig [
+              "dalmore"
               "helios"
-              "selene"
               "skullkid"
             ];
           }

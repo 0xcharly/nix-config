@@ -30,7 +30,7 @@ in {
           options.fastConnection = true;
         };
         frRemoteHosts = {
-          hostnames = ["dalmore" "selene"];
+          hostnames = ["dalmore"];
           options = {
             fastConnection = false;
             # NOTE: Not sure this does what I think it should be doing.

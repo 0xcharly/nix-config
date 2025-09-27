@@ -146,7 +146,6 @@ in {
       (mkHomeFromNixosHost "linode")
       (mkHomeFromNixosHost "nyx")
       (mkHomeFromNixosHost "helios")
-      (mkHomeFromNixosHost "selene")
       (mkHomeFromNixosHost "skullkid")
     ];
 
@@ -159,7 +158,6 @@ in {
       (mkNixosHost {hostModule = ./nixos/linode;})
       (mkNixosHost {hostModule = ./nixos/nyx;})
       (mkNixosHost {hostModule = ./nixos/helios;})
-      (mkNixosHost {hostModule = ./nixos/selene;})
       (mkNixosHost {hostModule = ./nixos/skullkid;})
     ];
   };
