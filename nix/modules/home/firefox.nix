@@ -58,6 +58,9 @@
         "browser.translations.automaticallyPopup" = lock false;
         "browser.urlbar.showSearchSuggestionsFirst" = lock false;
         "browser.urlbar.suggest.searches" = lock false;
+        "extensions.formautofill.addresses.enabled" = lock false;
+        "extensions.formautofill.addresses.capture.enabled" = lock false;
+        "extensions.formautofill.creditCards.enabled" = lock false;
         "extensions.pocket.enabled" = lock false;
         "extensions.screenshots.disabled" = lock true;
         "extensions.update.enabled" = lock false;
