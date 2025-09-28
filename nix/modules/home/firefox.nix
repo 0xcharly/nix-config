@@ -55,6 +55,7 @@
         "browser.search.suggest.enabled.private" = lock false;
         "browser.startup.page" = lock 3;
         "browser.topsites.contile.enabled" = lock false;
+        "browser.translations.automaticallyPopup" = lock false;
         "browser.urlbar.showSearchSuggestionsFirst" = lock false;
         "browser.urlbar.suggest.searches" = lock false;
         "extensions.pocket.enabled" = lock false;
