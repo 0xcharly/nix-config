@@ -61,6 +61,7 @@
         "extensions.screenshots.disabled" = lock true;
         "extensions.update.enabled" = lock false;
         "services.sync.engine.passwords" = lock false;
+        "signon.rememberSignons" = lock false;
       };
     };
   };
