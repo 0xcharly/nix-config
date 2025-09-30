@@ -134,7 +134,19 @@
           ashift = "12";
           autotrim = "on";
         };
-        datasets = {
+        datasets = let
+          mkDataset = mountpoint: options: {
+            type = "zfs_fs";
+            inherit mountpoint;
+            options =
+              {
+                mountpoint = "legacy";
+                canmount = "on";
+                "com.sun:auto-snapshot" = "false";
+              }
+              // options;
+          };
+        in {
           reserved = {
             type = "zfs_fs";
             options = {
@@ -143,32 +155,10 @@
               inherit (cfg) reservation;
             };
           };
-          nix = {
-            type = "zfs_fs";
-            mountpoint = "/nix";
-            options = {
-              mountpoint = "legacy";
-              atime = "off";
-              canmount = "on";
-              "com.sun:auto-snapshot" = "false";
-            };
-          };
-          home = {
-            type = "zfs_fs";
-            mountpoint = "/home";
-            options = {
-              mountpoint = "legacy";
-              "com.sun:auto-snapshot" = "false";
-            };
-          };
-          root = {
-            type = "zfs_fs";
-            mountpoint = "/";
-            options = {
-              mountpoint = "legacy";
-              "com.sun:auto-snapshot" = "false";
-            };
-          };
+          root = mkDataset "/" {};
+          home = mkDataset "/home" {};
+          nix = mkDataset "/nix" {atime = "off";};
+          datadir = mkDataset "/var/lib" {};
         };
       };
     };
