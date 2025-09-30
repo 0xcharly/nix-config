@@ -28,7 +28,6 @@
     flake.modules.home.keychain-trusted-keys
     flake.modules.home.pkgs-essentials
     flake.modules.home.tmux
-    flake.modules.home.raycast
 
     ./homebrew.nix
   ];

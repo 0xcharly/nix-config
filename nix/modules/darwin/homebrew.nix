@@ -29,7 +29,6 @@
       "1password" # Password manager.
       "bitwarden-cli" # Password management automation.
       "ghostty" # Terminal.
-      "raycast" # Mandatory Spotlight alternative.
     ];
   };
 }

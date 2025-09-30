@@ -13,7 +13,6 @@
     ./multiplexers.nix
     ./nixos.nix
     ./packages.nix
-    ./raycast.nix
     ./shells.nix
     ./ssh.nix
     ./systemd-timers.nix

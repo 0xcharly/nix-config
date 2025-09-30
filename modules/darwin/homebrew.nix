@@ -32,7 +32,6 @@ in {
       [
         "1password" # Password manager.
         "ghostty" # Terminal.
-        "raycast" # Mandatory Spotlight alternative.
       ]
       ++ lib.optionals (!isCorpManaged) [
         # Don't install these on corp-managed hosts.
