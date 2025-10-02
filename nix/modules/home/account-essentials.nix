@@ -6,7 +6,6 @@
     flake.modules.home.fish
     flake.modules.home.git
     flake.modules.home.jujutsu
-    flake.modules.home.jujutsu-deprecated
     flake.modules.home.pkgs-essentials
     flake.modules.home.ssh
     flake.modules.home.tasks
