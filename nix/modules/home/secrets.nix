@@ -1,8 +1,4 @@
-{
-  inputs,
-  osConfig,
-  ...
-}: {
+{inputs, ...}: {osConfig, ...}: {
   imports = [inputs.nix-config-secrets.modules.home.blueprint];
 
   age.identityPaths = [
