@@ -1,8 +1,4 @@
-{
-  inputs,
-  lib,
-  ...
-}: {
+{inputs, ...}: {lib, ...}: {
   imports = [inputs.catppuccin.homeModules.catppuccin];
 
   # Configure catppuccin theme applied throughout the configuration.
