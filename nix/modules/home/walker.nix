@@ -1,10 +1,17 @@
-{inputs, ...}: {
+{
+  flake,
+  inputs,
+  ...
+}: {
   config,
   lib,
   pkgs,
   ...
 }: {
-  imports = [inputs.walker.homeManagerModules.default];
+  imports = [
+    inputs.walker.homeManagerModules.default
+    flake.modules.home.wayland-uwsm
+  ];
 
   programs.walker = {
     enable = true;

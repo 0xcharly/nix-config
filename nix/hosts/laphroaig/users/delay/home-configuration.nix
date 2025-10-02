@@ -28,6 +28,7 @@
     flake.modules.home.pkgs-laptop-tui
     flake.modules.home.secrets
     flake.modules.home.ssh-keys
+    flake.modules.home.usb-auto-mount
     flake.modules.home.walker
     flake.modules.home.wayland-essentials
     flake.modules.home.wayland-hyprland
