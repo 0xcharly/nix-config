@@ -145,6 +145,10 @@ in
             "SUPER SHIFT, P,      exec, ${uwsm-wrapper (lib.getExe pkgs.hyprshot)} -m window --raw | ${lib.getExe screenshot-editor}"
             "SUPER CTRL,  P,      exec, ${uwsm-wrapper (lib.getExe pkgs.hyprshot)} -m output --raw | ${lib.getExe screenshot-editor}"
 
+            "SUPER ALT,   F,      exec, ${uwsm-wrapper (lib.getExe config.programs.firefox.package)}"
+            "SUPER ALT,   G,      exec, ${uwsm-wrapper (lib.getExe config.programs.chromium.package)}"
+            "SUPER ALT,   S,      exec, ${uwsm-wrapper (lib.getExe pkgs.bitwarden)}"
+
             "SUPER,       D,      hy3:makegroup,   h"
             "SUPER,       S,      hy3:makegroup,   v"
             "SUPER,       Z,      hy3:makegroup,   tab"

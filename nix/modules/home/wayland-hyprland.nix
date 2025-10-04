@@ -276,6 +276,10 @@
             "SUPER SHIFT, P,      exec, ${uwsmGetExe pkgs.hyprshot} -m window --raw | ${uwsmGetExe screenshot-editor}"
             "SUPER CTRL,  P,      exec, ${uwsmGetExe pkgs.hyprshot} -m output --raw | ${uwsmGetExe screenshot-editor}"
 
+            "SUPER ALT,   F,      exec, ${uwsmGetExe config.programs.firefox.package}"
+            "SUPER ALT,   G,      exec, ${uwsmGetExe config.programs.chromium.package}"
+            "SUPER ALT,   S,      exec, ${uwsmGetExe pkgs.bitwarden}"
+
             "SUPER,       D,      hy3:makegroup,   h"
             "SUPER,       S,      hy3:makegroup,   v"
             "SUPER,       Z,      hy3:makegroup,   tab"
