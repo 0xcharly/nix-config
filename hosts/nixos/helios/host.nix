@@ -43,5 +43,5 @@
   };
 
   # Network config.
-  networking.interfaces.enp15s0.useDHCP = true;
+  networking.interfaces.enp11s0.useDHCP = true;
 }
