@@ -5,13 +5,9 @@
 }: {
   packages = with pkgs;
     [
-      cachix
-      deploy-rs
-      jq
-      just
-      home-manager
-
       alejandra
+      deploy-rs
+      home-manager
     ]
     ++ lib.optionals pkgs.stdenv.isLinux [pkgs.bitwarden-cli];
 
@@ -71,12 +67,8 @@
       cache =
         if pkgs.stdenv.isDarwin
         then ''
-          HOSTNAME=$(hostname)
-          CONFIG="''${1:-$HOSTNAME}"
-
-          nix build '.#darwinConfigurations.$CONFIG.config.system.build.toplevel' --json \
-            | jq -r '.[].outputs | to_entries[].value' \
-            | op plugin run -- cachix push 0xcharly-nixos-config
+          echo "Cache not available on darwin."
+          exit 1
         ''
         else ''
           HOSTNAME=$(hostname)
@@ -89,21 +81,14 @@
           fi
 
           nix build ".#$CONFIG_PREFIX.$CONFIG.config.system.build.toplevel" --json \
-            | jq -r '.[].outputs | to_entries[].value' \
-            | cachix push 0xcharly-nixos-config
+            | ${lib.getExe pkgs.jq} -r '.[].outputs | to_entries[].value' \
+            | ${lib.getExe pkgs.cachix} push 0xcharly-nixos-config
         '';
     in
       cache;
 
-    ssh-copy-terminfo.exec = let
-      app = pkgs.writeShellApplication {
-        name = "ssh-copy-terminfo";
-        runtimeInputs = with pkgs; [ncurses];
-        text = ''
-          infocmp -x | ssh -o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "$1" -- tic -x -
-        '';
-      };
-    in
-      lib.getExe app;
+    ssh-copy-terminfo.exec = ''
+      ${lib.getExe' pkgs.ncurses "infocmp"} -x | ssh -o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "$1" -- tic -x -
+    '';
   };
 }
