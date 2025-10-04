@@ -55,6 +55,7 @@ in {
             description = "Powered by Gatus";
           };
           endpoints = builtins.map lib.fn.mkPingHomelabEndpoint [
+            "bowmore"
             "dalmore"
             "heimdall"
             "helios"

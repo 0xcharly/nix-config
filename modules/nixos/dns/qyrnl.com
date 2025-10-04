@@ -27,6 +27,7 @@ status          IN CNAME heimdall
 tasks           IN CNAME heimdall
 vault           IN CNAME heimdall
 
+bowmore         IN CNAME bowmore.@tailnetName@.
 dalmore         IN CNAME dalmore.@tailnetName@.
 helios          IN CNAME helios.@tailnetName@.
 linode          IN CNAME linode.@tailnetName@.

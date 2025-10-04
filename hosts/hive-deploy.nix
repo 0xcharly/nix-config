@@ -26,7 +26,7 @@ in {
     deploy.nodes = let
       hosts = {
         homelabHosts = {
-          hostnames = ["heimdall" "helios" "skullkid"];
+          hostnames = ["heimdall" "helios" "skullkid" "bowmore"];
           options.fastConnection = true;
         };
         frRemoteHosts = {

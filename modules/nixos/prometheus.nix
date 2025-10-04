@@ -26,6 +26,7 @@ in {
           {
             job_name = "node_exporter";
             static_configs = builtins.map mkNodeExporterConfig [
+              "bowmore"
               "dalmore"
               "heimdall"
               "helios"
@@ -36,6 +37,7 @@ in {
           {
             job_name = "zfs";
             static_configs = builtins.map mkZfsExporterConfig [
+              "bowmore"
               "dalmore"
               "helios"
               "skullkid"

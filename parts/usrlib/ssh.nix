@@ -13,8 +13,10 @@
   };
   tailscaleKnownHosts = {
     # Gen 2 NAS hosts.
+    bowmore.ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIBc7+svM9KE66X8lpQzYny0byI47Kr38LsYXVyJIZd+w";
     dalmore.ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIPEQB+CwUB/zGI76uwH95mhwnhvHQKw1/J08ioDzw+W/";
-    dalmore-initrd.ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIGowkDgQrl3683MXib8Zf4gIRTtitevAT7Y1x02rdXfs";
+    laphroaig.ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIOOGCAJVRToabx32L6jIUdzDhU43QWa6dXm4sAN/H96m";
+    talisker.ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIHsn07q7SmdP1M09ZIrz0bD9Te+5OMVVlfGEtAP9+iP9";
 
     "heimdall" = {
       ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIOBffqWJu60tEBRH9t7aA/Za9BHPghKRt+Ihaie60YTf";
