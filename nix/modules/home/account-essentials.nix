@@ -2,6 +2,7 @@
   imports = [
     flake.modules.home.atuin
     flake.modules.home.catppuccin
+    flake.modules.home.direnv
     flake.modules.home.env
     flake.modules.home.fish
     flake.modules.home.git

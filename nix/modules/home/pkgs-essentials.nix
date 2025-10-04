@@ -33,13 +33,5 @@
     ripgrep.enable = true; # `grep` replacement.
     eza.enable = true; # `ls` replacement.
     fzf.enable = true;
-
-    direnv = {
-      enable = true;
-      nix-direnv.enable = true;
-      config.whitelist.prefix = [
-        "${config.home.homeDirectory}/code"
-      ];
-    };
   };
 }

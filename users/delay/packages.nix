@@ -54,12 +54,15 @@ in {
     direnv = {
       enable = true;
       nix-direnv.enable = true;
-      config.whitelist.prefix =
-        [
-          "${config.home.homeDirectory}/code"
-        ]
-        # TODO: make this a flag instead.
-        ++ lib.optionals beans.sourceOfTruth ["${config.home.homeDirectory}/beans"];
+      config = {
+        warn_timeout = 0;
+        whitelist.prefix =
+          [
+            "${config.home.homeDirectory}/code"
+          ]
+          # TODO: make this a flag instead.
+          ++ lib.optionals beans.sourceOfTruth ["${config.home.homeDirectory}/beans"];
+      };
     };
 
     keychain = {
