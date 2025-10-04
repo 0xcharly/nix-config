@@ -160,7 +160,12 @@
           mkBackupDatasets = datasets: lib.mergeAttrsList (builtins.map mkBackupDataset datasets);
         in
           lib.mergeAttrsList [
-            (namespace "backups" (mkBackupDatasets ["ayako" "dad" "delay" "services"]))
+            (namespace "backups" (mkBackupDatasets [
+              "ayako"
+              "dad"
+              "delay"
+              "homelab"
+            ]))
 
             (namespace "delay" {
               album = mkAlbumDataset "delay/album";

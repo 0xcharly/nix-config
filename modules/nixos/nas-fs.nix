@@ -92,7 +92,7 @@
             install -d --mode 751 --owner ayako --group ayako /tank/backups/ayako
             install -d --mode 751 --owner delay --group delay /tank/backups/dad
             install -d --mode 751 --owner delay --group delay /tank/backups/delay
-            install -d --mode 751 --owner delay --group users /tank/backups/services
+            install -d --mode 751 --owner delay --group users /tank/backups/homelab
 
             # Set root folder world-traversable.
             install -d --mode 751 --owner ayako --group users /tank/ayako
@@ -301,7 +301,7 @@
           mkBackupDatasets = datasets: lib.mergeAttrsList (builtins.map mkBackupDataset datasets);
         in
           lib.mergeAttrsList [
-            (namespace "backups" (mkBackupDatasets ["ayako" "dad" "delay" "services"]))
+            (namespace "backups" (mkBackupDatasets ["ayako" "dad" "delay" "homelab"]))
 
             (namespace "delay" {
               album = mkAlbumDataset "delay/album";

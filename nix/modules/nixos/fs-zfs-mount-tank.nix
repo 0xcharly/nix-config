@@ -38,7 +38,7 @@
           install -v -d --mode 751 --owner ayako --group ayako /tank/backups/ayako
           install -v -d --mode 751 --owner delay --group delay /tank/backups/dad
           install -v -d --mode 751 --owner delay --group delay /tank/backups/delay
-          install -v -d --mode 751 --owner delay --group users /tank/backups/services
+          install -v -d --mode 751 --owner delay --group users /tank/backups/homelab
 
           # Set root folder world-traversable.
           install -v -d --mode 751 --owner ayako --group users /tank/ayako

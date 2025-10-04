@@ -92,7 +92,7 @@ load_root_encryption_key
 load_tank_encryption_key "backups/ayako"
 load_tank_encryption_key "backups/dad"
 load_tank_encryption_key "backups/delay"
-load_tank_encryption_key "backups/services"
+load_tank_encryption_key "backups/homelab"
 load_tank_encryption_key "ayako/files"
 load_tank_encryption_key "ayako/media"
 load_tank_encryption_key "delay/album"

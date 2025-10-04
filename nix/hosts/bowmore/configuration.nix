@@ -20,6 +20,7 @@
     flake.modules.common.nixpkgs-unstable
     flake.modules.common.overlays
 
+    flake.modules.nixos.catppuccin
     flake.modules.nixos.fs-minisforum-n5-zfs-system
     flake.modules.nixos.fs-minisforum-n5-zfs-backup
     flake.modules.nixos.fs-zfs-mount-tank
@@ -42,7 +43,7 @@
     flake.modules.nixos.services-deploy-rs
     flake.modules.nixos.services-fail2ban
     flake.modules.nixos.services-openssh
-    flake.modules.nixos.services-samba-ayako
+    # flake.modules.nixos.services-samba-ayako
     flake.modules.nixos.services-tailscale
     flake.modules.nixos.system-common
     flake.modules.nixos.users-ayako
@@ -59,8 +60,7 @@
         # System drives.
         disk0 = "/dev/disk/by-id/nvme-Samsung_SSD_980_500GB_S78GNL0XC30952W"; # NVMe Left.
         disk1 = "/dev/disk/by-id/nvme-Samsung_SSD_980_500GB_S78GNL0XC30991Y"; # NVMe Right.
-        # TODO: Update disk ID.
-        # swapDisk = "/dev/disk/by-id/nvme-AirDisk_128GB_SSD_QES481B001642P110N";
+        swapDisk = "/dev/disk/by-id/nvme-AirDisk_128GB_SSD_QES481B001084P110N";
         # Encryption keys.
         luksPasswordFile = "/tmp/root-disk-encryption.key";
       };
@@ -71,7 +71,7 @@
         disk2 = "/dev/disk/by-id/ata-ST24000NT002-3N1101_ZYD254N6";
         disk3 = "/dev/disk/by-id/ata-ST24000NT002-3N1101_ZYD160A1";
         # TODO: Update disk ID.
-        # disk4 = "/dev/disk/by-id/ata-ST24000NT002-3N1101_ZYD8JJ2R";
+        disk4 = "/dev/disk/by-id/ata-ST24000NT002-3N1101_WYD05N6H";
       };
       # snapshots = {
       #   lowFrequency = ["tank/backups"];
