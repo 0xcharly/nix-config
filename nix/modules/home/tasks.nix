@@ -31,7 +31,7 @@ in {
         ''
         + lib.optionalString cfg.enableSync ''
           include ${config.age.secrets."services/taskwarrior-sync.key".path}
-          sync.server.url=${flake.lib.facts.services.taskwarrior.url}
+          sync.server.url=https://${flake.lib.facts.services.taskwarrior.domain}
           sync.server.client_id=${flake.lib.facts.services.taskwarrior.user-uuid}
 
           # https://github.com/GothenburgBitFactory/taskwarrior/blob/2e3badbf991e726ba0f0c4b5bb6b243ea2dcdfc3/doc/man/taskrc.5.in#L489

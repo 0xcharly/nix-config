@@ -18,10 +18,38 @@ ipv4 = "172.237.20.186"
 ipv6 = "2600:3c18::2000:a4ff:fe80:d6d4"
 
 [services.atuin]
-url = "https://atuin.qyrnl.com"
+domain = "atuin.qyrnl.com"
+
+[services.calibre-web]
+domain = "reads.qyrnl.com"
+host = "bowmore.qyrnl.com"
+port = 8083
+dataDir = "/var/lib/calibre-web"
+
+[services.immich]
+domain = "album.qyrnl.com"
+host = "bowmore.qyrnl.com"
+port = 2283
+
+[services.immich-public-proxy]
+domain = "shared.album.qyrnl.com"
+host = "heimdall.qyrnl.com"
+port = 3000
+
+[services.jellyfin]
+domain = "jellyfin.qyrnl.com"
+host = "bowmore.qyrnl.com"
+port = 8096
+dataDir = "/var/lib/jellyfin"
+
+[services.paperless]
+domain = "files.qyrnl.com"
+host = "bowmore.qyrnl.com"
+port = 28981
+dataDir = "/var/lib/paperless"
 
 [services.taskwarrior]
-url = "https://tasks.qyrnl.com"
+domain = "tasks.qyrnl.com"
 user-uuid = "7b6b98f4-411d-4561-80fe-5a04e0ba2af8"
 
 [ssh.delay]

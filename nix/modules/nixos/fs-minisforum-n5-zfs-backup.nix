@@ -119,7 +119,7 @@
               };
             };
           };
-          # A dataset for regular files. Better suited for small files.
+          # A dataset for picture files. Better suited for medium-sized files.
           mkAlbumDataset = mountpoint: {
             type = "zfs_fs";
             options = {

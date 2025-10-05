@@ -50,9 +50,9 @@
       conditions = ["[CONNECTED] == true"];
     };
 
-    mkHttpServiceCheck = name: url: {
+    mkHttpServiceCheck = name: {domain, ...}: {
       inherit name;
-      url = "https://${url}";
+      url = "https://${domain}";
       group = "services";
       interval = "60s";
       conditions = [

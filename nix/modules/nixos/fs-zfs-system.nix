@@ -205,10 +205,10 @@
             root = mkDataset "/" {};
             home = mkDataset "/home" {};
             nix = mkDataset "/nix" {atime = "off";};
-            datadir = mkDataset "/var/lib" {};
+            "var/lib" = mkDataset "/var/lib" {};
           }
           // lib.mergeAttrsList (builtins.map (dataset: {
-              "datadir-${dataset.mountpoint}" = mkDataset "/var/lib/${dataset.mountpoint}" {};
+              "var/lib/${dataset.mountpoint}" = mkDataset "/var/lib/${dataset.mountpoint}" {};
             })
             cfg.datasets);
       };

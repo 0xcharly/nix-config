@@ -18,7 +18,7 @@ in {
       key_path = config.age.secrets."services/atuin.key".path;
       session_path = config.age.secrets."services/atuin.session".path;
       sync_frequency = "5m";
-      sync_address = flake.lib.facts.services.atuin.url;
+      sync_address = "https://${flake.lib.facts.services.atuin.domain}";
     };
   };
 }
