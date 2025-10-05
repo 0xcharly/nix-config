@@ -8,6 +8,8 @@
       alejandra
       deploy-rs
       home-manager
+
+      jq # Used in provision and remote-unlock scripts.
     ]
     ++ lib.optionals pkgs.stdenv.isLinux [pkgs.bitwarden-cli];
 
