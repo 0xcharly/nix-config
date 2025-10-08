@@ -14,6 +14,7 @@
     # TODO: figure out a better way to integrate with the github:catppuccin/nix config.
     # fzf.enable = true;
     hyprland.enable = true;
+    mako.enable = true;
   };
 
   programs.fzf.colors = let
