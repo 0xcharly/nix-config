@@ -48,6 +48,11 @@
     wayland = {
       hyprland.monitor = "eDP-1, 2880x1920@120.00000, 0x0, 2.00";
 
+      display = {
+        width = 2880;
+        height = 1920;
+      };
+
       idle = {
         suspend.timeout = 15 * 60; # 15 minutes.
         hibernate = {
