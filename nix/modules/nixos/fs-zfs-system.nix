@@ -58,6 +58,30 @@
         used — it’s just insurance.
       '';
     };
+    datadirs = let
+      datasetType = types.submodule {
+        mountpoint = mkOption {
+          type = types.str;
+          description = ''
+            Relative path under /var/lib.
+          '';
+        };
+        extraOptions = mkOption {
+          type = types.attrsOf types.str;
+          default = {};
+          description = ''
+            Additional options to set on the dataset.
+          '';
+        };
+      };
+    in
+      mkOption {
+        type = types.listOf datasetType;
+        default = [];
+        description = ''
+          List of additional datasets to create under /var/lib.
+        '';
+      };
   };
 
   config = {
