@@ -6,7 +6,7 @@
 }: {
   options.node.wayland = with lib; {
     display = {
-      resolution = {
+      logicalResolution = {
         width = mkOption {
           type = types.int;
           description = ''
