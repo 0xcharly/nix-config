@@ -49,8 +49,8 @@
       hyprland.monitor = "eDP-1, 2880x1920@120.00000, 0x0, 2.00";
 
       display = {
-        width = 2880;
-        height = 1920;
+        width = 1440;
+        height = 960;
       };
 
       idle = {
