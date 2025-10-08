@@ -43,21 +43,19 @@
           '';
         };
       };
-      size = {
-        width = mkOption {
-          type = types.int;
-          default = 640;
-          description = ''
-            The default width of the Picture-in-Picture window.
-          '';
-        };
-        height = mkOption {
-          type = types.int;
-          default = 360;
-          description = ''
-            The default height of the Picture-in-Picture window.
-          '';
-        };
+      width = mkOption {
+        type = types.int;
+        default = 640;
+        description = ''
+          The default width of the Picture-in-Picture window.
+        '';
+      };
+      height = mkOption {
+        type = types.int;
+        default = 360;
+        description = ''
+          The default height of the Picture-in-Picture window.
+        '';
       };
     };
   };
