@@ -5,25 +5,23 @@
   ...
 }: {
   options.node.wayland = with lib; {
-    display = {
-      logicalResolution = {
-        width = mkOption {
-          type = types.int;
-          description = ''
-            The amount of pixel in a row. Should match `node.wayland.hyprland.monitor` values.
-          '';
-        };
-        height = mkOption {
-          type = types.int;
-          description = ''
-            The amount of pixel in a column. Should match `node.wayland.hyprland.monitor` values.
-          '';
-        };
+    display.logicalResolution = {
+      width = mkOption {
+        type = types.int;
+        description = ''
+          The amount of pixel in a row. Should match `node.wayland.hyprland.monitor` values.
+        '';
+      };
+      height = mkOption {
+        type = types.int;
+        description = ''
+          The amount of pixel in a column. Should match `node.wayland.hyprland.monitor` values.
+        '';
       };
     };
 
     pip = {
-      margin = mkOption {
+      margin = {
         x = mkOption {
           type = types.int;
           default = 8;

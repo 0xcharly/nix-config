@@ -314,7 +314,7 @@
         # Window rules.
         windowrulev2 = let
           # Position the PiP window in the top right corner.
-          pipPosX = toString (cfg.display.width - cfg.pip.width - cfg.pip.margin.x);
+          pipPosX = toString (cfg.display.logicalResolution.width - cfg.pip.width - cfg.pip.margin.x);
           pipPosY = toString (cfg.pip.margin.y);
         in [
           "float, class:^thunar$, title:^File Operation Progress$"
@@ -323,13 +323,13 @@
           "float, class:^$, title:^Picture in picture$"
           "pin, class:^$, title:^Picture in picture$"
           "move ${pipPosX} ${pipPosY}, class:^$, title:^Picture in picture$"
-          "size ${cfg.pip.width} ${cfg.pip.height}, class:^$, title:^Picture in picture$"
+          "size ${toString cfg.pip.width} ${toString cfg.pip.height}, class:^$, title:^Picture in picture$"
           "keepaspectratio, class:^$, title:^Picture in picture$"
           # Firefox's Picture-in-Picture.
           "float, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
           "pin, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
           "move ${pipPosX} ${pipPosY}, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
-          "size ${cfg.pip.width} ${cfg.pip.height}, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
+          "size ${toString cfg.pip.width} ${toString cfg.pip.height}, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
           "keepaspectratio, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
         ];
       };
