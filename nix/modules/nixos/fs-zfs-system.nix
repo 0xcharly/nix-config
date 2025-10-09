@@ -5,6 +5,7 @@
 }: {
   config,
   lib,
+  pkgs,
   ...
 }: {
   imports = [
@@ -73,6 +74,27 @@
             Additional options to set on the dataset.
           '';
         };
+        user = mkOption {
+          type = types.str;
+          default = "root";
+          description = ''
+            The owning user of this directory.
+          '';
+        };
+        group = mkOption {
+          type = types.str;
+          default = "users";
+          description = ''
+            The owning group of this directory.
+          '';
+        };
+        mode = mkOption {
+          type = types.str;
+          default = "0755";
+          description = ''
+            The permissions to set on this directory.
+          '';
+        };
       };
     in
       mkOption {
@@ -84,7 +106,9 @@
       };
   };
 
-  config = {
+  config = let
+    cfg = config.node.fs.zfs.system;
+  in {
     boot = {
       supportedFilesystems = ["vfat"];
 
@@ -97,9 +121,7 @@
       };
     };
 
-    disko.devices = let
-      cfg = config.node.fs.zfs.system;
-    in {
+    disko.devices = {
       disk.system = {
         type = "disk";
         device = cfg.disk;
@@ -170,19 +192,52 @@
               }
               // options;
           };
-        in {
-          reserved = {
-            type = "zfs_fs";
-            options = {
-              canmount = "off";
-              mountpoint = "none";
-              inherit (cfg) reservation;
+        in
+          {
+            reserved = {
+              type = "zfs_fs";
+              options = {
+                canmount = "off";
+                mountpoint = "none";
+                inherit (cfg) reservation;
+              };
             };
-          };
-          root = mkDataset "/" {};
-          home = mkDataset "/home" {};
-          nix = mkDataset "/nix" {atime = "off";};
-          datadir = mkDataset "/var/lib" {};
+            root = mkDataset "/" {};
+            home = mkDataset "/home" {};
+            nix = mkDataset "/nix" {atime = "off";};
+            datadir = mkDataset "/var/lib" {};
+          }
+          // lib.mergeAttrsList (builtins.map (dataset: {
+              "datadir-${dataset.mountpoint}" = mkDataset "/var/lib/${dataset.mountpoint}" {};
+            })
+            cfg.datasets);
+      };
+    };
+
+    # Automatically adjust datadirs' permissions, if any.
+    systemd.services = lib.mkIf (cfg.datadirs != []) {
+      set-datadir-perms = {
+        description = "Adjust datadirs' perms";
+
+        # Wait for the agenix service to be running / complete before mounting the ZFS pool.
+        after = ["zfs-import.target"];
+        requires = ["zfs-import.target"];
+        wantedBy = ["multi-user.target"];
+
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = let
+            install-datadir = datadir: ''
+              install -d --mode ${datadir.mode} --owner ${datadir.owner} --group ${datadir.group} /var/lib/${datadir.mountpoint}
+            '';
+            set-datadir-perms = pkgs.writeShellApplication {
+              name = "set-datadir-perms";
+              runtimeInputs = with pkgs; [coreutils zfs];
+              text = lib.concatStringsSep "\n" (builtins.map install-datadir cfg.datadirs);
+            };
+          in
+            lib.getExe set-datadir-perms;
         };
       };
     };
