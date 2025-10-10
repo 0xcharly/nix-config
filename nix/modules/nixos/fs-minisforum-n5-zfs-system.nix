@@ -64,7 +64,16 @@
 
   config = {
     boot = {
-      supportedFilesystems = ["vfat"];
+      kernelParams = ["nohibernate"];
+
+      supportedFilesystems.vfat = true;
+      initrd = {
+        kernelModules = ["zfs"];
+        supportedFilesystems = {
+          vfat = true;
+          zfs = true;
+        };
+      };
 
       loader = {
         systemd-boot.enable = true;
@@ -158,6 +167,7 @@
         type = "zpool";
         mode = "mirror";
         rootFsOptions = {
+          acltype = "posixacl"; # Required for systemd-journald: https://github.com/NixOS/nixpkgs/issues/16954#issuecomment-250578128
           canmount = "off";
           checksum = "edonr";
           compression = "zstd";

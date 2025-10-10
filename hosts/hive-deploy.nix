@@ -30,16 +30,15 @@ in {
           options.fastConnection = true;
         };
         frRemoteHosts = {
-          hostnames = ["dalmore"];
+          hostnames = ["dalmore" "linode-fr"];
           options = {
             fastConnection = false;
-            # NOTE: Not sure this does what I think it should be doing.
-            remoteBuild = true;
+            remoteBuild = false; # NOTE: Default when `fastConnection == false`.
           };
         };
         jpRemoteHosts = {
           hostnames = ["linode"];
-          options.fastConnection = false;
+          options.remoteBuild = false;
         };
       };
 
@@ -52,7 +51,8 @@ in {
           user = "root";
           # TODO: consider either keeping agent forwarding here or moving that
           # to ~/.ssh/config to *.neko-danio.ts.net hosts.
-          sshOpts = ["-A" "-i" "/run/user/1000/agenix/keys/nixos_deploy_ed25519_key"];
+          sshOpts = ["-A" "-i" "/run/agenix/keys/nixos_deploy_ed25519_key"];
+          # sshOpts = ["-A" "-i" "/run/user/1000/agenix/keys/nixos_deploy_ed25519_key"];
           # sshOpts = ["-i" config.age.secrets."keys/nixos_deploy_ed25519_key".path];
         };
       };

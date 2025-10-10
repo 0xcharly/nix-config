@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   boot = {
-    supportedFilesystems = ["btrfs"];
-    initrd.supportedFilesystems = ["btrfs"];
+    supportedFilesystems.btrfs = true;
+    initrd.supportedFilesystems.btrfs = true;
   };
 
   environment.systemPackages = with pkgs; [

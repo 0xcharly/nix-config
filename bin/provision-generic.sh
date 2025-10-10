@@ -85,12 +85,12 @@ load_ssh_host_key() {
 
   output_path="$extra_system_files/etc/ssh/$key_name"
 
-  install -d -m 700 $(dirname "$output_path")
+  install -d -m 755 $(dirname "$output_path")
   get_ssh_host_key "$SSH_HOST_KEYCHAIN" 'public' >"$output_path.pub"
   get_ssh_host_key "$SSH_HOST_KEYCHAIN" 'private' >"$output_path"
 
   # Restrict file ACLs so sshd will accept the keys.
-  chmod 600 "$output_path.pub"
+  chmod 644 "$output_path.pub"
   chmod 600 "$output_path"
 }
 
@@ -120,12 +120,6 @@ nix run github:nix-community/nixos-anywhere -- \
 echo -e "System installation \033[32;1mcomplete\033[0m. System rebooting."
 echo -e "\033[33;1mImportant\033[0m: Make sure to remove the installation media! "
 echo
-
-for i in {10..1}; do
-  echo -ne "$i… \r"
-  sleep 1
-done
-
 echo "じゃあね。"
 
 # We're done.

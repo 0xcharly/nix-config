@@ -42,11 +42,8 @@
         MAILADDR root
       '';
 
-      kernelParams = ["nohibernate"];
       kernelModules = ["zfs"];
-      supportedFilesystems = ["zfs"];
-
-      initrd.supportedFilesystems = ["zfs"];
+      supportedFilesystems.zfs = true;
 
       # IMPORTANT NOTE: Carefully check the latest kernel version that is compatible
       # with the ZFS version in use.
