@@ -18,7 +18,7 @@ in {
         plugins = ["github.com/caddy-dns/gandi@v1.1.0"];
         hash = "sha256-VxJlx1X4nrqprgcPRFt/pMc5Ix8YV61ou8dwLcR6v2U=";
       };
-      environmentFile = config.age.secrets."services/gandi-creds".path;
+      environmentFile = config.age.secrets."services/gandi-creds.qyrnl.com".path;
       virtualHosts."(ts_host)".extraConfig = ''
         tls {
           resolvers 1.1.1.1
@@ -30,7 +30,7 @@ in {
     # Allow Caddy to bind to 443.
     systemd.services.caddy.serviceConfig = {
       AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
-      EnvironmentFile = config.age.secrets."services/gandi-creds".path;
+      EnvironmentFile = config.age.secrets."services/gandi-creds.qyrnl.com".path;
     };
   };
 }
