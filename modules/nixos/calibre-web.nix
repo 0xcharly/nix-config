@@ -31,5 +31,11 @@ in {
         '';
       };
     };
+
+    # Wait for ZFS datasets to be mounted to start the web server.
+    systemd.services.calibre-web = lib.mkIf cfg.enable {
+      after = ["local-fs.target" "zfs-mount.service"];
+      wants = ["zfs-mount.service"];
+    };
   };
 }
