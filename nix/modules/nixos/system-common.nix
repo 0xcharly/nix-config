@@ -1,6 +1,6 @@
-{
+{lib, ...}: {
   # Set your time zone.
-  time.timeZone = "Asia/Tokyo";
+  time.timeZone = lib.mkDefault "Asia/Tokyo";
 
   # Select internationalization properties.
   i18n = {
@@ -13,8 +13,5 @@
     ];
   };
 
-  console = {
-    font = "Lat2-Terminus16";
-    keyMap = "us";
-  };
+  console.font = "Lat2-Terminus16";
 }
