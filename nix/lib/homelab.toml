@@ -17,6 +17,10 @@ ipv6 = "2600:3c18::2000:a4ff:fe80:d6d4"
 ipv4 = "172.237.20.186"
 ipv6 = "2600:3c18::2000:a4ff:fe80:d6d4"
 
+[dns."pieceofenglish.fr"."@"]
+ipv4 = "172.237.20.186"
+ipv6 = "2600:3c18::2000:a4ff:fe80:d6d4"
+
 [services.atuin]
 domain = "atuin.qyrnl.com"
 
