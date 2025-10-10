@@ -60,46 +60,49 @@
       '';
     };
     datadirs = let
-      datasetType = types.submodule {
-        mountpoint = mkOption {
-          type = types.str;
-          description = ''
-            Relative path under /var/lib.
-          '';
-        };
-        extraOptions = mkOption {
-          type = types.attrsOf types.str;
-          default = {};
-          description = ''
-            Additional options to set on the dataset.
-          '';
-        };
-        user = mkOption {
-          type = types.str;
-          default = "root";
-          description = ''
-            The owning user of this directory.
-          '';
-        };
-        group = mkOption {
-          type = types.str;
-          default = "users";
-          description = ''
-            The owning group of this directory.
-          '';
-        };
-        mode = mkOption {
-          type = types.str;
-          default = "0755";
-          description = ''
-            The permissions to set on this directory.
-          '';
+      datasetOpts = {name, ...}: {
+        options = {
+          mountpoint = mkOption {
+            type = types.str;
+            default = name;
+            description = ''
+              Relative path under /var/lib.
+            '';
+          };
+          extraOptions = mkOption {
+            type = types.attrsOf types.str;
+            default = {};
+            description = ''
+              Additional options to set on the dataset.
+            '';
+          };
+          owner = mkOption {
+            type = types.str;
+            default = "root";
+            description = ''
+              The owning user of this directory.
+            '';
+          };
+          group = mkOption {
+            type = types.str;
+            default = "users";
+            description = ''
+              The owning group of this directory.
+            '';
+          };
+          mode = mkOption {
+            type = types.str;
+            default = "0755";
+            description = ''
+              The permissions to set on this directory.
+            '';
+          };
         };
       };
     in
       mkOption {
-        type = types.listOf datasetType;
-        default = [];
+        type = types.attrsOf (types.submodule datasetOpts);
+        default = {};
         description = ''
           List of additional datasets to create under /var/lib.
         '';
@@ -207,10 +210,11 @@
             nix = mkDataset "/nix" {atime = "off";};
             "var/lib" = mkDataset "/var/lib" {};
           }
-          // lib.mergeAttrsList (builtins.map (dataset: {
-              "var/lib/${dataset.mountpoint}" = mkDataset "/var/lib/${dataset.mountpoint}" {};
-            })
-            cfg.datasets);
+          // lib.mapAttrs' (
+            name: options:
+              lib.nameValuePair "var/lib/${name}" (mkDataset "/var/lib/${options.mountpoint}" {})
+          )
+          cfg.datadirs;
       };
     };
 
@@ -228,13 +232,14 @@
           Type = "oneshot";
           RemainAfterExit = true;
           ExecStart = let
+            datadirs = builtins.attrValues cfg.datadirs;
             install-datadir = datadir: ''
               install -d --mode ${datadir.mode} --owner ${datadir.owner} --group ${datadir.group} /var/lib/${datadir.mountpoint}
             '';
             set-datadir-perms = pkgs.writeShellApplication {
               name = "set-datadir-perms";
               runtimeInputs = with pkgs; [coreutils zfs];
-              text = lib.concatStringsSep "\n" (builtins.map install-datadir cfg.datadirs);
+              text = lib.concatStringsSep "\n" (builtins.map install-datadir datadirs);
             };
           in
             lib.getExe set-datadir-perms;
