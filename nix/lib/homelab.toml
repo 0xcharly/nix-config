@@ -14,8 +14,8 @@ ipv4 = "172.237.20.186"
 ipv6 = "2600:3c18::2000:a4ff:fe80:d6d4"
 
 [dns."pieceofenglish.fr".ns2]
-ipv4 = "172.237.20.186"
-ipv6 = "2600:3c18::2000:a4ff:fe80:d6d4"
+ipv4 = "172.233.245.4"
+ipv6 = "2600:3c07::2000:31ff:fe53:d2e1"
 
 [dns."pieceofenglish.fr"."@"]
 ipv4 = "172.237.20.186"

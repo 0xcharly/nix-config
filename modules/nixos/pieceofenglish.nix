@@ -86,8 +86,8 @@ in {
             @   300   IN NS    ns2.${domainName}.
             ns1 300   IN A     ${cfg.publicIPv4}
             ns1 300   IN AAAA  ${cfg.publicIPv6}
-            ns2 300   IN A     ${cfg.publicIPv4}
-            ns2 300   IN AAAA  ${cfg.publicIPv6}
+            ns2 300   IN A     172.233.245.4
+            ns2 300   IN AAAA  2600:3c07::2000:31ff:fe53:d2e1
 
             ; Protonmail domain configuration.
             @                       10800 IN TXT   "protonmail-verification=002e45ea53d2d587fdbd680b84930481eb8ecf9a"
