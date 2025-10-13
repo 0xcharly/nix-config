@@ -6,14 +6,6 @@
   imports = [flake.modules.nixos.fs-zfs-system-base];
 
   options.node.fs.zfs.system = with lib; {
-    luksPasswordFile = mkOption {
-      type = types.path;
-      description = ''
-        Path to the file containing the disk encryption passphrase.
-
-        Only used at provisioning time to encrypt the disk.
-      '';
-    };
     swapSize = mkOption {
       type = types.str;
       example = "72G";
