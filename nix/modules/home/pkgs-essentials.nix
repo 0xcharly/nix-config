@@ -1,8 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   # Packages I always want installed. Most packages I install using per-project
   # flakes sourced with direnv and nix-shell, so this is not a huge list.
   home.packages = with pkgs; [
@@ -11,10 +7,7 @@
     duf # Modern `df` alternative.
     git-get # Used along with fzf and terminal multiplexers for repository management.
     libqalculate # Multi-purpose calculator on the command line.
-    nix-output-monitor # Nix Output Monitor.
-    tasksh # Task management with taskwarrior.
     tree # List the content of directories in a tree-like format.
-    magic-wormhole-rs # Securely transfer files across devices.
     yazi # File explorer that supports Kitty image protocol.
 
     # Our own package installed by overlay.
@@ -27,11 +20,9 @@
 
   programs = {
     bash.enable = true;
+    bat.enable = true;
     bottom.enable = true;
-    bat.enable = true; # `cat` replacement.
-    fd.enable = true; # `find` replacement.
-    ripgrep.enable = true; # `grep` replacement.
-    eza.enable = true; # `ls` replacement.
     fzf.enable = true;
+    ripgrep.enable = true;
   };
 }

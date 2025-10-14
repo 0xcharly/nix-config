@@ -10,6 +10,7 @@
       home-manager
 
       jq # Used in provision and remote-unlock scripts.
+      nix-output-monitor # Nix Output Monitor.
     ]
     ++ lib.optionals pkgs.stdenv.isLinux [pkgs.bitwarden-cli];
 
