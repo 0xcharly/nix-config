@@ -8,5 +8,6 @@ in rec {
   gatus = import ./gatus.nix;
   homebrew = import ./homebrew.nix;
   openssh = import ./openssh.nix {inherit facts lib;};
+  pkgs = import ./pkgs.nix inputs;
   uri = import ./uri.nix lib;
 }

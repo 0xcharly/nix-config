@@ -1,13 +1,9 @@
-{
-  pkgs,
-  # pkgs',
-  ...
-}: {
-  home.packages = with pkgs; [
-    blueberry # Bluetooth.
+{flake, ...}: {pkgs, ...}: let
+  pkgs' = flake.lib.pkgs.mkUnstablePkgs pkgs;
+in {
+  home.packages = [
+    pkgs.bluetui
+    # TODO(25.11): install wiremix from the stable channel.
+    pkgs'.wiremix # Not available on the stable channel yet.
   ];
-  # # TODO(25.11): install these from the stable channel.
-  # ++ (with pkgs'; [
-  #   wiremix # Not available on the stable channel yet.
-  # ]);
 }
