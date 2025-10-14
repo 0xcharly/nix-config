@@ -1,12 +1,10 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
     _1password-gui
-    beeper
     bitwarden
-    localsend
     nautilus
     obsidian
-    tidal-hifi
+    proton-pass
     xfce.thunar
   ];
 
