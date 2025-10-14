@@ -9,7 +9,6 @@
     flake.modules.home.jujutsu
     flake.modules.home.pkgs-essentials
     flake.modules.home.ssh
-    flake.modules.home.tasks
     flake.modules.home.tmux
   ];
 }

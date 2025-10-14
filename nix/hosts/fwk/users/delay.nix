@@ -12,7 +12,6 @@
     inputs.nix-config-secrets.modules.home.blueprint
     inputs.nix-config-secrets.modules.home.services-atuin
     inputs.nix-config-secrets.modules.home.services-cachix
-    inputs.nix-config-secrets.modules.home.services-taskwarrior
     inputs.nix-config-secrets.modules.home.ssh-keys-ring-0-tier
 
     flake.modules.home.account-essentials
@@ -41,10 +40,7 @@
 
   node = {
     openssh.trusted-tier.ring = 0;
-    services = {
-      atuin.enableSync = true;
-      tasks.enableSync = true;
-    };
+    services.atuin.enableSync = true;
     wayland = {
       hyprland.monitor = "eDP-1, 2880x1920@120.00000, 0x0, 2.00";
 

@@ -8,7 +8,6 @@
   imports = [
     inputs.nix-config-secrets.modules.home.blueprint
     inputs.nix-config-secrets.modules.home.services-atuin
-    inputs.nix-config-secrets.modules.home.services-taskwarrior
     inputs.nix-config-secrets.modules.home.ssh-keys-ring-3-tier
 
     flake.modules.home.account-essentials
@@ -22,9 +21,6 @@
 
   node = {
     openssh.trusted-tier.ring = 3;
-    services = {
-      atuin.enableSync = true;
-      tasks.enableSync = true;
-    };
+    services.atuin.enableSync = true;
   };
 }
