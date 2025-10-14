@@ -24,6 +24,7 @@
     flake.modules.nixos.hardware-framework-13
     flake.modules.nixos.hardware-laptop-essentials
     flake.modules.nixos.hardware-gpu-amd
+    flake.modules.nixos.networking-bluetooth
     flake.modules.nixos.networking-wireless
     flake.modules.nixos.nix-client-config
     flake.modules.nixos.overlays
@@ -52,6 +53,8 @@
         swapSize = "72G"; # Size of RAM + square root of RAM for hibernate.
       };
     };
+
+    networking.bluetooth.enableA2DPSink = true;
 
     users.delay.ssh.authorizeTailscaleInternalKey = true;
   };
