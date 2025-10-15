@@ -36,7 +36,11 @@
     flake.modules.home.wayland-waybar
   ];
 
-  home.stateVersion = "25.05";
+  home = {
+    stateVersion = "25.05";
+
+    packages = [perSystem.self.framework-tool-tui];
+  };
 
   node = {
     openssh.trusted-tier.ring = 0;
