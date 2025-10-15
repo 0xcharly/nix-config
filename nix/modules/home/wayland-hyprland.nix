@@ -168,7 +168,7 @@
 
         # Open apps on startup.
         exec-once = [
-          "[workspace 1] ${uwsmGetExe config.programs.firefox.finalPackage}"
+          "[workspace 1] ${uwsmGetExe config.programs.zen-browser.package}"
           "[workspace 3] ${uwsmGetExe config.programs.ghostty.package}"
         ];
 
@@ -326,11 +326,11 @@
           "size ${toString cfg.pip.width} ${toString cfg.pip.height}, class:^$, title:^Picture in picture$"
           "keepaspectratio, class:^$, title:^Picture in picture$"
           # Firefox's Picture-in-Picture.
-          "float, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
-          "pin, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
-          "move ${pipPosX} ${pipPosY}, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
-          "size ${toString cfg.pip.width} ${toString cfg.pip.height}, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
-          "keepaspectratio, class:^(firefox|librewolf)$, title:^Picture-in-Picture$"
+          "float, class:^(firefox|librewolf|zen-beta)$, title:^Picture-in-Picture$"
+          "pin, class:^(firefox|librewolf|zen-beta)$, title:^Picture-in-Picture$"
+          "move ${pipPosX} ${pipPosY}, class:^(firefox|librewolf|zen-beta)$, title:^Picture-in-Picture$"
+          "size ${toString cfg.pip.width} ${toString cfg.pip.height}, class:^(firefox|librewolf|zen-beta)$, title:^Picture-in-Picture$"
+          "keepaspectratio, class:^(firefox|librewolf|zen-beta)$, title:^Picture-in-Picture$"
         ];
       };
     };
