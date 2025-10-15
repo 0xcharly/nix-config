@@ -168,7 +168,7 @@
 
         # Open apps on startup.
         exec-once = [
-          "[workspace 1] ${uwsmGetExe config.programs.firefox.package}"
+          "[workspace 1] ${uwsmGetExe config.programs.firefox.finalPackage}"
           "[workspace 3] ${uwsmGetExe config.programs.ghostty.package}"
         ];
 
