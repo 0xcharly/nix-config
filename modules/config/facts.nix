@@ -37,20 +37,5 @@ in {
         '';
       };
     };
-
-    taskwarrior = {
-      primaryClient = mkEnableOption ''
-        Whether this is the primary Taskwarrior client for this user
-      '';
-
-      userUUID = mkOption {
-        type = str;
-        default = "7b6b98f4-411d-4561-80fe-5a04e0ba2af8";
-        description = ''
-          Randomly generated UUID that identifies a user on the Taskchampion
-          sync server
-        '';
-      };
-    };
   };
 }

@@ -49,10 +49,13 @@
 
   config = {
     boot = {
+      supportedFilesystems.btrfs = true;
+
       # Enable mdadm for software RAID.
       initrd = {
         availableKernelModules = ["raid1" "md_mod"];
         kernelModules = ["raid1"];
+        supportedFilesystems.btrfs = true;
       };
 
       loader = {

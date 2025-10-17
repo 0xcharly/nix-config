@@ -97,6 +97,7 @@ load_ssh_host_key() {
 # Decrypt our private keys from the password store and copy them to the temporary directory.
 log_info "Loading target host keys…"
 load_ssh_host_key "ssh_host_ed25519_key"
+load_ssh_host_key "ssh_host_ed25519_key-initrd"
 
 # Setup installation SSH options.
 ssh_options=(

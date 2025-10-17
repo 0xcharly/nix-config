@@ -52,10 +52,6 @@ host = "bowmore.qyrnl.com"
 port = 28981
 dataDir = "/var/lib/paperless"
 
-[services.taskwarrior]
-domain = "tasks.qyrnl.com"
-user-uuid = "7b6b98f4-411d-4561-80fe-5a04e0ba2af8"
-
 [ssh.delay]
 trusted-keys = ["github", "git_commit_signing", "tailscale"]
 
@@ -75,7 +71,7 @@ ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIBc7+svM9KE66X8lpQzYny0byI47Kr38LsYXVyJIZ
 [ssh.wireguard.tailscale.knownHosts."dalmore"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIPEQB+CwUB/zGI76uwH95mhwnhvHQKw1/J08ioDzw+W/"
 
-[ssh.wireguard.tailscale.knownHosts."laphroaig"]
+[ssh.wireguard.tailscale.knownHosts."fwk"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIOOGCAJVRToabx32L6jIUdzDhU43QWa6dXm4sAN/H96m"
 
 [ssh.wireguard.tailscale.knownHosts."linode-fr"]
@@ -84,8 +80,14 @@ ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIPIhfhgQwVE1yt7xVgZ5jz+3Z0omItxrhyOi+CvHc
 [ssh.wireguard.tailscale.knownHosts."linode-jp"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAILb+AwJFckuzpo34rM9AhyuIMjPExUi+6svoZGWKVKGN"
 
-[ssh.wireguard.tailscale.knownHosts."talisker"]
+[ssh.wireguard.tailscale.knownHosts."nyx"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIHsn07q7SmdP1M09ZIrz0bD9Te+5OMVVlfGEtAP9+iP9"
+
+[ssh.wireguard.tailscale.knownHosts."rip"]
+ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAICMON3vR9YWEzFbj71jkiFMTP2W/3GBWO7POYjpXxsbj"
+
+[ssh.wireguard.tailscale.knownHosts."skl"]
+ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIBu+3cdkRlXUXS4MIwZNNKMo9Ia2XUZE7Ze6haIttCur"
 
 [ssh.wireguard.tailscale.knownHosts."heimdall"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIOBffqWJu60tEBRH9t7aA/Za9BHPghKRt+Ihaie60YTf"
@@ -94,10 +96,6 @@ ssh-rsa = "AAAAB3NzaC1yc2EAAAADAQABAAACAQDmrInYDqQ1w3PCVTmavg95gAo2h73ybn1L73wwr
 [ssh.wireguard.tailscale.knownHosts."linode"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIMVouzrCM9iNkhf3E7yOGPggY6xeBmjfKnwymsSBQ/Af"
 ssh-rsa = "AAAAB3NzaC1yc2EAAAADAQABAAACAQC7QcBkDyoEq57lbAmigUjjfcmbDImHxRZC6h6nEl2ddgNBfDn/PnnU2s1VuzyZggWQPIc+FyHBcodBGP0sy2w8lv9ikqsivhWG6EO+Bj1qefxgU8sxIZ1imFP2nIwUDLUv5Gv5UEexOVQ/DxPgHLRvAqTUiNeu4/aaViG/8AHmPrIxS+zxeYjwg3+v4b0Yf87dUukfkxSLAsxL1vlMSTaNpBqLGNUI4FCLA1Ne95bXlBvY3KM8vDr0SilU8eBkJshn5tgbPnjGgbO3VPAxYp7f76dMJJcsQ5C3pWDAuPQZwpRKnT/ghU7NOXK2Mfo14VMS+FDKfVOkcpvBSRvgE9N+2RHRDdTvWJDSOi5p9Pb/khwlWU5fBz5GXwieFaAyPc2eAw+fA9gZlq6szxTy63yljMNem/koziIgeYnSV9Jqw9E6tdkWzsfSncNI/NewkmyDMFcTQ6dw+dca1OAne0GSiQU3OyG4sjDWvPZUF1L+4ymM3pr7beTsJP5e98LoJWpdzCmr/eyeSBxQwA3cMOGNWfBxMVh25FhqBktJ3NgwGAAGGQRNHqdMSZuFe7sC6AFKMSi3SB4zMXvDhl4vxKTNFNSo0/L7QdoloHlmq/Iz3SmzC7Aq9n/JDpFF6EzRO518YJ6AiXzcXw/CaizZratlTiQVrZWwgnPK/mic1XF2aQ=="
-
-[ssh.wireguard.tailscale.knownHosts."nyx"]
-ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIJmofQEhKZ7TOhqDMBwBr/p7ffOq2caH43ea1w/AsKoS"
-ssh-rsa = "AAAAB3NzaC1yc2EAAAADAQABAAACAQCN42MTL5EUXBc8OEKp3ddH4D7jQe1RYo4l2MFtfsgg3J1KNndRo4ym/VVY5HZKJ3Fk5TqPFbwOP4v8ZcmFK57SuzyyMfzh/2kD8XTGnPJSkwTcTsr9rRuxXus8rQ0Srn2gLi0ai64c5jWcPTne+ZpD/0dA/Xkp+g48Ftvd5DNFGTqY5rAQ5cnRIebt/XNfiCwQ1Y57/q5pwI1A1pCl5X5uk938INv210VdQe2aHa8vL3hbtDkCehC92ST24YDeYKE74BtPN9mAAfXc5vgfoCHaEUnRZNz+ZoGJ+Gvs4V3U9DacrrLKHjpMwoNc/U6d2lvP5q8Xej6pPpf9EbGXMqxjQfgPvYyQ3nxco8prZAYVUOmxUH1rNBCUB4PoUeXW1KvaxZ8Jy+7wED/6WmobggY+CyeWM6VmLIt/WqMBIFolnGOay2dNFN4SSku1lOj5iJzOUIR7JvRzsW4p5yvlIoIgrmKRLiFwZ0BEK9aQhvu+anhjdiXv+DLAhOzV0Cfr0rsY0jQyF2bbB0lBfyZkwDaGkiYrFo/Zi831DTu9tBd6+Iz9NWVaCFwCZv0HpvlvY+59nl37W/pqkcZhu05VreB9bzRV/e+PQ0oSgU0PLQNbl8fRutKgDBAt/G3uh1BhiMzYL4P3iyb7ixVIOjoKaF4Md5ZE4lI5UvIwuIruxED7qQ=="
 
 [ssh.wireguard.tailscale.knownHosts."helios"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIFBeOiRDTb752+OByHhNQWcEq2htfPwhwnb2jasF7CMr"

@@ -12,6 +12,4 @@
       "ja_JP.UTF-8/UTF-8"
     ];
   };
-
-  console.font = "Lat2-Terminus16";
 }

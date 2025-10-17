@@ -32,8 +32,19 @@
             };
           };
         };
+
+        personal-profiles = builtins.map mkWirelessProfile (lib.range 1 3);
+        google-guest-profile = {
+          profile-google-guest = {
+            connection = {
+              id = "google-guest";
+              type = "wifi";
+            };
+            wifi.ssid = "GoogleGuest";
+          };
+        };
       in
-        lib.mergeAttrsList (builtins.map mkWirelessProfile (lib.range 1 3));
+        lib.mergeAttrsList (personal-profiles ++ [google-guest-profile]);
     };
   };
 }

@@ -26,7 +26,7 @@ in {
     deploy.nodes = let
       hosts = {
         homelabHosts = {
-          hostnames = ["heimdall" "helios" "skullkid" "bowmore"];
+          hostnames = ["heimdall" "helios" "bowmore" "skl"];
           options.fastConnection = true;
         };
         frRemoteHosts = {
@@ -52,8 +52,6 @@ in {
           # TODO: consider either keeping agent forwarding here or moving that
           # to ~/.ssh/config to *.neko-danio.ts.net hosts.
           sshOpts = ["-A" "-i" "/run/agenix/keys/nixos_deploy_ed25519_key"];
-          # sshOpts = ["-A" "-i" "/run/user/1000/agenix/keys/nixos_deploy_ed25519_key"];
-          # sshOpts = ["-i" config.age.secrets."keys/nixos_deploy_ed25519_key".path];
         };
       };
 

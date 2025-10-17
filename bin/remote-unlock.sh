@@ -59,7 +59,7 @@ get_disk_encryption_key() {
 ssh_options=(
   -T
   -l root
-  -o "IdentityFile=$XDG_RUNTIME_DIR/agenix/keys/nixos_remote_unlock_ed25519_key"
+  -o "IdentityFile=/run/agenix/keys/nixos_remote_unlock_ed25519_key"
   -o "PubkeyAuthentication=yes"
   -o "UserKnownHostsFile=/dev/null"
   -o "StrictHostKeyChecking=no"

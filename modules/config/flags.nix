@@ -156,25 +156,5 @@ in {
         '';
       };
     };
-
-    taskwarrior = {
-      enableSync = mkOption {
-        type = bool;
-        default = pkgs.stdenv.isLinux && !cfg.usrenv.isCorpManaged && cfg.system.networking.tailscaleNode;
-        readOnly = true;
-        description = ''
-          Installs and setups taskwarrior client sync.
-        '';
-      };
-
-      syncAddress = mkOption {
-        type = str;
-        default = "https://tasks.qyrnl.com";
-        readOnly = true;
-        description = ''
-          The address of the self-hosted TaskWarrior sync server.
-        '';
-      };
-    };
   };
 }
