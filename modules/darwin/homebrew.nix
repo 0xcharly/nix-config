@@ -45,6 +45,7 @@ in {
         "tidal" # Spotify alternative.
         "transmission"
         "vlc" # Media player.
+        "zen" # Firefox alternative.
       ];
   };
 }

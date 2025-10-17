@@ -11,9 +11,9 @@
       "firefox@developer-edition" # Firefox, for isolates.
       "google-chrome" # When there's no alternatives.
       "obsidian" # Notes.
+      "proton-pass" # Personal password management.
       "protonvpn" # Private network.
       "tailscale-app" # Personal VPN network.
-      "tidal" # Spotify alternative.
       "transmission"
       "vlc" # Media player.
     ];
