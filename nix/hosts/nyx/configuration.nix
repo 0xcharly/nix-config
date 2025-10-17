@@ -19,14 +19,11 @@
     flake.modules.common.nixpkgs-unstable
     flake.modules.common.overlays
 
-    # TODO: replace original fs module.
-    # flake.modules.nixos.fs-zfs-system
-    ./fs
+    flake.modules.nixos.fs-zfs-system
     flake.modules.nixos.hardware-cpu-amd
     flake.modules.nixos.hardware-gpu-amd
     flake.modules.nixos.nix-client-config
     flake.modules.nixos.overlays
-    flake.modules.nixos.programs-1password
     flake.modules.nixos.programs-asdcontrol
     flake.modules.nixos.programs-hyprland
     flake.modules.nixos.programs-iotop
@@ -49,14 +46,14 @@
 
   # System config.
   node = {
-    # fs.zfs = {
-    #   hostId = "0a52fab4";
-    #   system = {
-    #     disk = "/dev/disk/by-id/nvme-CT4000T700SSD3_2340E87BB2E0";
-    #     luksPasswordFile = "/tmp/root-disk-encryption.key";
-    #     swapSize = "72G"; # Size of RAM + square root of RAM for hibernate.
-    #   };
-    # };
+    fs.zfs = {
+      hostId = "0a52fab4";
+      system = {
+        disk = "/dev/disk/by-id/nvme-CT4000T700SSD3_2340E87BB2E0";
+        luksPasswordFile = "/tmp/root-disk-encryption.key";
+        swapSize = "72G"; # Size of RAM + square root of RAM for hibernate.
+      };
+    };
 
     users.delay.ssh.authorizeTailscaleInternalKey = true;
   };

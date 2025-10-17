@@ -18,11 +18,11 @@ log_info() {
   echo -e "\033[32;1mINFO\033[0m: $1"
 }
 
-# Create a temporary directory.
+# Create temporary directories.
 extra_system_files=$(mktemp -d)
 disk_encryption_key_files=$(mktemp -d)
 
-# Function to cleanup temporary directory on exit.
+# Cleanup temporary data and sessions on exit.
 cleanup() {
   # Delete temporary directories.
   log_info "Cleaning build artifacts…"
@@ -100,7 +100,7 @@ load_ssh_host_key "ssh_host_ed25519_key"
 
 # Setup installation SSH options.
 ssh_options=(
-  --ssh-option "IdentityFile=/run/agenix/keys/nixos_recovery_ed25519_key"
+  --ssh-option "IdentityFile=$XDG_RUNTIME_DIR/agenix/keys/nixos_recovery_ed25519_key"
   --ssh-option "PubkeyAuthentication=yes"
   --ssh-option "UserKnownHostsFile=/dev/null"
   --ssh-option "StrictHostKeyChecking=no"

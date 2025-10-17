@@ -36,11 +36,7 @@
     flake.modules.home.wayland-waybar
   ];
 
-  home = {
-    stateVersion = "25.05";
-
-    packages = [perSystem.self.framework-tool-tui];
-  };
+  home.stateVersion = "25.05";
 
   node = {
     openssh.trusted-tier.ring = 0;
@@ -61,6 +57,7 @@
         };
         screenlock.fingerprint.enable = true;
       };
+
       uwsm-wrapper = {
         package = perSystem.self.app2unit;
         prefix = "${lib.getExe config.node.wayland.uwsm-wrapper.package} --";

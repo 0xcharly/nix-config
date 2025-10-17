@@ -144,7 +144,6 @@ in {
     homeConfigurations = mkConfigurations [
       (mkHomeFromNixosHost "heimdall")
       (mkHomeFromNixosHost "linode")
-      (mkHomeFromNixosHost "nyx")
       (mkHomeFromNixosHost "helios")
       (mkHomeFromNixosHost "skullkid")
     ];
@@ -152,11 +151,9 @@ in {
     nixosConfigurations = mkConfigurations [
       (mkNixosIso {hostModule = ./iso/recovery;})
       (mkNixosIso {hostModule = ./iso/recovery-linode;})
-      (mkNixosIso {hostModule = ./iso/recovery-thunderbolt;})
 
       (mkNixosHost {hostModule = ./nixos/heimdall;})
       (mkNixosHost {hostModule = ./nixos/linode;})
-      (mkNixosHost {hostModule = ./nixos/nyx;})
       (mkNixosHost {hostModule = ./nixos/helios;})
       (mkNixosHost {hostModule = ./nixos/skullkid;})
     ];
