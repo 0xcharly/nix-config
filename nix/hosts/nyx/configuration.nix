@@ -11,6 +11,7 @@
     inputs.nix-config-secrets.modules.nixos.blueprint
     inputs.nix-config-secrets.modules.nixos.nix-client-config
     inputs.nix-config-secrets.modules.nixos.services-tailscale
+    inputs.nix-config-secrets.modules.nixos.ssh-keys-ring-0-tier
     inputs.nix-config-secrets.modules.nixos.users-delay
 
     flake.modules.common.nix-client-config
@@ -19,6 +20,7 @@
     flake.modules.common.nixpkgs-unstable
     flake.modules.common.overlays
 
+    flake.modules.nixos.catppuccin
     flake.modules.nixos.fs-zfs-system
     flake.modules.nixos.hardware-cpu-amd
     flake.modules.nixos.hardware-gpu-amd
