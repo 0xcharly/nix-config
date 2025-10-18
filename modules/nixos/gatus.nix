@@ -60,9 +60,9 @@ in {
             "heimdall"
             "helios"
             "linode"
-            # "linode-fr"
-            "linode-jp"
-            # rip
+            "linode-fr"
+            # "linode-jp"
+            # "rip"
           ];
         };
       };
