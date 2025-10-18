@@ -276,8 +276,9 @@
             "SUPER SHIFT, P,      exec, ${uwsmGetExe pkgs.hyprshot} -m window --raw | ${uwsmGetExe screenshot-editor}"
             "SUPER CTRL,  P,      exec, ${uwsmGetExe pkgs.hyprshot} -m output --raw | ${uwsmGetExe screenshot-editor}"
 
-            "SUPER ALT,   F,      exec, ${uwsmGetExe config.programs.firefox.package}"
+            "SUPER ALT,   F,      exec, ${uwsmGetExe config.programs.firefox.finalPackage}"
             "SUPER ALT,   G,      exec, ${uwsmGetExe config.programs.chromium.package}"
+            "SUPER ALT,   Z,      exec, ${uwsmGetExe config.programs.zen-browser.package}"
             "SUPER ALT,   S,      exec, ${uwsmGetExe pkgs.bitwarden}"
 
             "SUPER,       D,      hy3:makegroup,   h"
@@ -317,8 +318,12 @@
           pipPosX = toString (cfg.display.logicalResolution.width - cfg.pip.width - cfg.pip.margin.x);
           pipPosY = toString (cfg.pip.margin.y);
         in [
+          # Thunar operation in progress dialog.
           "float, class:^thunar$, title:^File Operation Progress$"
+          # Volume control.
           "float, class:^org.pulseaudio.pavucontrol$, title:^Volume Control$"
+          # Bitwarden extension.
+          "float, class:^(firefox|zen-beta)$, title:^(Extension: \(Bitwarden Password Manager\))(.*)$"
           # Chrome's Picture-in-Picture.
           "float, class:^$, title:^Picture in picture$"
           "pin, class:^$, title:^Picture in picture$"
@@ -326,11 +331,11 @@
           "size ${toString cfg.pip.width} ${toString cfg.pip.height}, class:^$, title:^Picture in picture$"
           "keepaspectratio, class:^$, title:^Picture in picture$"
           # Firefox's Picture-in-Picture.
-          "float, class:^(firefox|librewolf|zen-beta)$, title:^Picture-in-Picture$"
-          "pin, class:^(firefox|librewolf|zen-beta)$, title:^Picture-in-Picture$"
-          "move ${pipPosX} ${pipPosY}, class:^(firefox|librewolf|zen-beta)$, title:^Picture-in-Picture$"
-          "size ${toString cfg.pip.width} ${toString cfg.pip.height}, class:^(firefox|librewolf|zen-beta)$, title:^Picture-in-Picture$"
-          "keepaspectratio, class:^(firefox|librewolf|zen-beta)$, title:^Picture-in-Picture$"
+          "float, class:^(firefox|zen-beta)$, title:^Picture-in-Picture$"
+          "pin, class:^(firefox|zen-beta)$, title:^Picture-in-Picture$"
+          "move ${pipPosX} ${pipPosY}, class:^(firefox|zen-beta)$, title:^Picture-in-Picture$"
+          "size ${toString cfg.pip.width} ${toString cfg.pip.height}, class:^(firefox|zen-beta)$, title:^Picture-in-Picture$"
+          "keepaspectratio, class:^(firefox|zen-beta)$, title:^Picture-in-Picture$"
         ];
       };
     };
