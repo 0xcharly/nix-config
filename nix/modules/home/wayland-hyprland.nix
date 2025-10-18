@@ -42,13 +42,7 @@
       };
 
       screenlock = {
-        enable = mkOption {
-          type = types.bool;
-          default = config.wayland.windowManager.hyprland.enable;
-          description = ''
-            Enable screenlock.
-          '';
-        };
+        enable = mkEnableOption "Enable screenlock";
 
         timeout = mkOption {
           type = types.int;
