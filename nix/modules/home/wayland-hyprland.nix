@@ -135,12 +135,12 @@
     };
   };
 
-  config = {
-    wayland.windowManager.hyprland = let
-      cfg = config.node.wayland;
-      uwsmGetExe = pkg: cfg.uwsm-wrapper.wrapper (lib.getExe pkg);
-      uwsmGetExe' = pkg: fname: cfg.uwsm-wrapper.wrapper (lib.getExe' pkg fname);
-    in {
+  config = let
+    cfg = config.node.wayland;
+    uwsmGetExe = pkg: cfg.uwsm-wrapper.wrapper (lib.getExe pkg);
+    uwsmGetExe' = pkg: fname: cfg.uwsm-wrapper.wrapper (lib.getExe' pkg fname);
+  in {
+    wayland.windowManager.hyprland = {
       enable = true;
 
       # Set the Hyprland and XDPH packages to null to use the ones from the NixOS module.
@@ -381,13 +381,13 @@
       hypridle = {
         enable = lib.mkDefault config.wayland.windowManager.hyprland.enable;
         settings = let
-          hyprctl = lib.getExe' pkgs.hyprland "hyprctl";
-          hyprlock = lib.getExe config.programs.hyprlock.package;
-          loginctl = lib.getExe' pkgs.systemd "loginctl";
-          systemctl = lib.getExe' pkgs.systemd "systemctl";
+          hyprctl = uwsmGetExe' pkgs.hyprland "hyprctl";
+          hyprlock = uwsmGetExe config.programs.hyprlock.package;
+          loginctl = uwsmGetExe' pkgs.systemd "loginctl";
+          systemctl = uwsmGetExe' pkgs.systemd "systemctl";
 
           # Avoid starting multiple hyprlock instances.
-          lock = "${lib.getExe' pkgs.procps "pidof"} ${hyprlock} || ${hyprlock}";
+          lock = "${uwsmGetExe' pkgs.procps "pidof"} ${hyprlock} || ${hyprlock}";
         in {
           general = {
             lock_cmd = lock;
