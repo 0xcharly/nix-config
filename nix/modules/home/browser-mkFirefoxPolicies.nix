@@ -29,7 +29,6 @@
       Status = "locked";
     };
   in {
-    "gfx.webrender.all" = lock true; # Hardware acceleration.
     "browser.contentblocking.category" = lock "strict";
     "browser.formfill.enable" = lock false;
     "browser.newtabpage.activity-stream.feeds.section.topstories" = lock false;
@@ -54,6 +53,8 @@
     "extensions.pocket.enabled" = lock false;
     "extensions.screenshots.disabled" = lock true;
     "extensions.update.enabled" = lock false;
+    "gfx.webrender.all" = lock true; # Hardware acceleration.
+    "media.videocontrols.picture-in-picture.enable-when-switching-tabs.enabled" = lock true;
     "services.sync.engine.passwords" = lock false;
     "signon.rememberSignons" = lock false;
   };
