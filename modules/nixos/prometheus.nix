@@ -31,7 +31,9 @@ in {
               "heimdall"
               "helios"
               "linode"
-              "skullkid"
+              "linode-fr"
+              "linode-jp"
+              "skl"
             ];
           }
           {
@@ -39,8 +41,14 @@ in {
             static_configs = builtins.map mkZfsExporterConfig [
               "bowmore"
               "dalmore"
+              "fwk"
               "helios"
-              "skullkid"
+              "linode"
+              "linode-fr"
+              "linode-jp"
+              "nyx"
+              "rip"
+              "skl"
             ];
           }
           {

@@ -60,7 +60,9 @@ in {
             "heimdall"
             "helios"
             "linode"
-            "skullkid"
+            # "linode-fr"
+            "linode-jp"
+            # rip
           ];
         };
       };

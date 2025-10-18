@@ -145,7 +145,6 @@ in {
       (mkHomeFromNixosHost "heimdall")
       (mkHomeFromNixosHost "linode")
       (mkHomeFromNixosHost "helios")
-      (mkHomeFromNixosHost "skullkid")
     ];
 
     nixosConfigurations = mkConfigurations [
@@ -155,7 +154,6 @@ in {
       (mkNixosHost {hostModule = ./nixos/heimdall;})
       (mkNixosHost {hostModule = ./nixos/linode;})
       (mkNixosHost {hostModule = ./nixos/helios;})
-      (mkNixosHost {hostModule = ./nixos/skullkid;})
     ];
   };
 

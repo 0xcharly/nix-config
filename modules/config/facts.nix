@@ -1,6 +1,6 @@
 {lib, ...}: let
-  inherit (lib.options) mkEnableOption mkOption;
-  inherit (lib.types) listOf nullOr str;
+  inherit (lib.options) mkOption;
+  inherit (lib.types) nullOr str;
 in {
   options.node.facts = {
     tailscale = {
@@ -25,15 +25,6 @@ in {
         description = ''
           Unique name is used when registering DNS entries, sharing your device
           to other tailnets, and issuing TLS certificates.
-        '';
-      };
-
-      allNodes = mkOption {
-        type = listOf str;
-        default = ["heimdall" "linode" "nyx" "helios" "skullkid"];
-        readOnly = true;
-        description = ''
-          The list of all hosts part of the tailnet.
         '';
       };
     };
