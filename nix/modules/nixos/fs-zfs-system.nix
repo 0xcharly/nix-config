@@ -27,14 +27,6 @@
     boot = {
       supportedFilesystems.vfat = true;
       initrd.supportedFilesystems.vfat = true;
-
-      loader = {
-        systemd-boot.enable = true;
-        efi = {
-          canTouchEfiVariables = true;
-          efiSysMountPoint = "/boot";
-        };
-      };
     };
 
     disko.devices.disk.system.content.partitions = {

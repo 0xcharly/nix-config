@@ -20,6 +20,7 @@
     flake.modules.common.nixpkgs-unstable
     flake.modules.common.overlays
 
+    flake.modules.nixos.bootloader-systemd-boot
     flake.modules.nixos.catppuccin
     flake.modules.nixos.fs-minisforum-n5-zfs-system
     flake.modules.nixos.fs-minisforum-n5-zfs-backup

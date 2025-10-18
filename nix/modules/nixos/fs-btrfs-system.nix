@@ -42,15 +42,8 @@
 
   config = {
     boot = {
-      supportedFilesystems = ["vfat"];
-
-      loader = {
-        systemd-boot.enable = true;
-        efi = {
-          canTouchEfiVariables = true;
-          efiSysMountPoint = "/boot";
-        };
-      };
+      supportedFilesystems.vfat = true;
+      initrd.supportedFilesystems.vfat = true;
     };
 
     disko.devices = let

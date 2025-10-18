@@ -57,14 +57,6 @@
         kernelModules = ["raid1"];
         supportedFilesystems.btrfs = true;
       };
-
-      loader = {
-        systemd-boot.enable = true;
-        efi = {
-          canTouchEfiVariables = true;
-          efiSysMountPoint = "/boot";
-        };
-      };
     };
 
     disko.devices = let

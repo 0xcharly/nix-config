@@ -74,14 +74,6 @@
           zfs = true;
         };
       };
-
-      loader = {
-        systemd-boot.enable = true;
-        efi = {
-          canTouchEfiVariables = true;
-          efiSysMountPoint = "/boot";
-        };
-      };
     };
 
     systemd.services.sync-boot-fallback = {

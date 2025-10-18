@@ -19,6 +19,7 @@
     flake.modules.common.nixpkgs-unstable
     flake.modules.common.overlays
 
+    flake.modules.nixos.bootloader-systemd-boot
     flake.modules.nixos.fs-zfs-system
     flake.modules.nixos.hardware-cpu-intel
     flake.modules.nixos.hardware-gpu-intel

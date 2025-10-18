@@ -21,12 +21,6 @@
     boot = {
       supportedFilesystems.ext4 = true;
       initrd.supportedFilesystems.ext4 = true;
-
-      loader.grub = {
-        enable = true;
-        device = "nodev";
-        forceInstall = true;
-      };
     };
 
     disko.devices.disk = {

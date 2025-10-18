@@ -20,6 +20,7 @@
     flake.modules.common.nixpkgs-unstable
     flake.modules.common.overlays
 
+    flake.modules.nixos.bootloader-grub
     flake.modules.nixos.fs-zfs-system-linode
     flake.modules.nixos.initrd-unlock-over-ssh
     flake.modules.nixos.initrd-tailscale
