@@ -25,6 +25,7 @@
     flake.modules.nixos.fs-zfs-system
     flake.modules.nixos.hardware-cpu-amd
     flake.modules.nixos.hardware-gpu-amd
+    flake.modules.nixos.nix-build-aarch64
     flake.modules.nixos.nix-client-config
     flake.modules.nixos.overlays
     flake.modules.nixos.programs-asdcontrol
