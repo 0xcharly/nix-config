@@ -1,9 +1,10 @@
 {flake, ...}: {
   imports = [
+    flake.modules.common.overlays
+
     flake.modules.iso.provisioning
   ];
 
-  boot.kernelParams = ["console=ttyS0"]; # For LISH compatibility.
-  networking.hostName = "linode";
+  networking.hostName = "nixos";
   nixpkgs.hostPlatform = "x86_64-linux";
 }
