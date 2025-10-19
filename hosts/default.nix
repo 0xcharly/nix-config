@@ -112,45 +112,13 @@
         moduleTrees = moduleTrees ++ [config nixos fullyManaged shared users];
       });
 
-  mkNixosIso = {
-    hostModule,
-    moduleTrees ? [],
-    extraModules ? [],
-    ...
-  } @ args:
-    mkHost (args
-      // {
-        system = "x86_64-linux";
-        builder = mkNixosSystem;
-        moduleTrees = moduleTrees ++ [config iso shared];
-      });
-
-  mkHomeFromNixosHost = hostname: {
-    ${hostname} = inputs.self.nixosConfigurations.${hostname}.config.home-manager.users.delay.home;
-  };
-
   mkConfigurations = builtins.foldl' recursiveUpdate {};
 in {
   flake = {
     # Export builder functions to build upon this config.
-    fn = {inherit mkConfigurations mkDarwinHost mkHomeHost mkNixosHost mkNixosIso;};
-
-    darwinConfigurations = mkConfigurations [
-      (mkDarwinHost {hostModule = ./darwin/mbp;})
-    ];
-
-    # NOTE: the following configuration currently do not work because HM fails
-    # on news.json.output attribute missing (only available in standalone HM?).
-    homeConfigurations = mkConfigurations [
-      (mkHomeFromNixosHost "heimdall")
-      (mkHomeFromNixosHost "linode")
-      (mkHomeFromNixosHost "helios")
-    ];
+    fn = {inherit mkConfigurations mkDarwinHost mkHomeHost mkNixosHost;};
 
     nixosConfigurations = mkConfigurations [
-      (mkNixosIso {hostModule = ./iso/recovery;})
-      (mkNixosIso {hostModule = ./iso/recovery-linode;})
-
       (mkNixosHost {hostModule = ./nixos/heimdall;})
       (mkNixosHost {hostModule = ./nixos/linode;})
       (mkNixosHost {hostModule = ./nixos/helios;})

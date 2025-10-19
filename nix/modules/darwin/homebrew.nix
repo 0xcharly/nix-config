@@ -1,34 +1,74 @@
-{
+{inputs, ...}: {
   config,
-  inputs,
+  lib,
   ...
 }: {
   # Nix-managed homebrew.
   imports = [inputs.nix-homebrew.darwinModules.nix-homebrew];
 
-  nix-homebrew = {
-    enable = true; # Install Homebrew under the default prefix.
-    user = config.system.primaryUser; # User owning the Homebrew prefix.
+  options.node.homebrew = with lib; {
+    extraMasApps = mkOption {
+      type = types.attrsOf types.int;
+      default = {};
+      description = ''
+        Additional mas apps to install.
+      '';
+    };
+
+    extraBrews = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = ''
+        Additional formulae to install.
+      '';
+    };
+
+    extraCasks = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = ''
+        Additional casks to install.
+      '';
+    };
   };
 
-  homebrew = {
-    enable = true;
-    onActivation = {
-      autoUpdate = true;
-      cleanup = "zap";
+  config = {
+    nix-homebrew = {
+      enable = true; # Install Homebrew under the default prefix.
+      user = config.system.primaryUser; # User owning the Homebrew prefix.
     };
-    global = {
-      brewfile = true;
-      autoUpdate = false;
+
+    homebrew = let
+      cfg = config.node.homebrew;
+    in {
+      enable = true;
+      onActivation = {
+        autoUpdate = true;
+        cleanup = "zap";
+      };
+      global = {
+        brewfile = true;
+        autoUpdate = false;
+      };
+      masApps =
+        {
+          Amphetamine = 937984704;
+          ColorSlurp = 1287239339;
+        }
+        // cfg.extraMasApps;
+      brews =
+        [
+          "bitwarden-cli" # Password management automation.
+        ]
+        ++ cfg.extraBrews;
+      casks =
+        [
+          "1password" # Password manager.
+          "bitwarden" # Personal password management.
+          "ghostty" # Terminal.
+          "proton-pass" # Personal password management.
+        ]
+        ++ cfg.extraCasks;
     };
-    masApps = {
-      Amphetamine = 937984704;
-      ColorSlurp = 1287239339;
-    };
-    casks = [
-      "1password" # Password manager.
-      "bitwarden-cli" # Password management automation.
-      "ghostty" # Terminal.
-    ];
   };
 }

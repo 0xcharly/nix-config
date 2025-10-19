@@ -1,9 +1,14 @@
 {
   flake,
+  inputs,
   pkgs,
   ...
 }: {
   imports = [
+    inputs.nix-config-secrets.modules.darwin.blueprint
+    inputs.nix-config-secrets.modules.darwin.nix-client-config
+    inputs.nix-config-secrets.modules.darwin.users-delay
+
     flake.modules.common.nix-client-config
     flake.modules.common.nix-path
     flake.modules.common.nixpkgs-unfree
@@ -15,26 +20,28 @@
     flake.modules.darwin.nixpkgs-flake
     flake.modules.darwin.shells
     flake.modules.darwin.system-defaults
-
-    flake.modules.home.atuin
-    flake.modules.home.catppuccin
-    flake.modules.home.fish
-    flake.modules.home.fonts
-    flake.modules.home.ghostty
-    flake.modules.home.git
-    flake.modules.home.jujutsu
-    flake.modules.home.jujutsu-deprecated
-    flake.modules.home.keychain
-    flake.modules.home.keychain-trusted-keys
-    flake.modules.home.pkgs-essentials
-    flake.modules.home.tmux
-
-    ./homebrew.nix
   ];
 
   ids.gids.nixbld = 30000;
 
   nixpkgs.hostPlatform = "aarch64-darwin";
+
+  node.homebrew = {
+    extraMasApps = {
+      Xcode = 497799835; # Xcode is installed out-of-band on corp devices.
+    };
+    extraCasks = [
+      "beeper" # Messaging.
+      "firefox@developer-edition" # Firefox, for isolates.
+      "google-chrome" # When there's no alternatives.
+      "obsidian" # Notes.
+      "protonvpn" # Private network.
+      "tailscale-app" # Personal VPN network.
+      "transmission"
+      "vlc" # Media player.
+      "zen" # Firefox alternative.
+    ];
+  };
 
   system = {
     primaryUser = "delay";
