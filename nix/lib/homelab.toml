@@ -28,7 +28,6 @@ domain = "atuin.qyrnl.com"
 domain = "reads.qyrnl.com"
 host = "bowmore.qyrnl.com"
 port = 8083
-dataDir = "/var/lib/calibre-web"
 
 [services.immich]
 domain = "album.qyrnl.com"
@@ -50,7 +49,6 @@ dataDir = "/var/lib/jellyfin"
 domain = "files.qyrnl.com"
 host = "bowmore.qyrnl.com"
 port = 28981
-dataDir = "/var/lib/paperless"
 
 [ssh.delay]
 trusted-keys = ["github", "git_commit_signing", "tailscale"]

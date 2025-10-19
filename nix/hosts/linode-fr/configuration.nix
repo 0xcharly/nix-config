@@ -22,6 +22,9 @@
 
     flake.modules.nixos.bootloader-grub
     flake.modules.nixos.fs-zfs-system-linode
+    flake.modules.nixos.fs-zfs-zpool-root
+    flake.modules.nixos.fs-zfs-zpool-root-data
+    flake.modules.nixos.fs-zfs-zpool-root-home
     flake.modules.nixos.initrd-unlock-over-ssh
     flake.modules.nixos.initrd-tailscale
     flake.modules.nixos.nix-client-config
@@ -46,11 +49,11 @@
       hostId = "0db85ca6";
       system = {
         disk = "/dev/sda";
-        luksPasswordFile = "/tmp/root-disk-encryption.key";
-        reservation = "2GiB";
-
         linode.swapDisk = "/dev/sdb";
-
+        luksPasswordFile = "/tmp/root-disk-encryption.key";
+      };
+      zpool.root = {
+        reservation = "2GiB";
         datadirs.pieceofenglish = {};
       };
     };

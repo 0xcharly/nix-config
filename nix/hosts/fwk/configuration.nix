@@ -21,8 +21,11 @@
     flake.modules.common.overlays
 
     flake.modules.nixos.bootloader-systemd-boot
-    flake.modules.nixos.catppuccin
+    # TODO(25.11): reenable when not broken.
+    # flake.modules.nixos.catppuccin
     flake.modules.nixos.fs-zfs-system
+    flake.modules.nixos.fs-zfs-zpool-root
+    flake.modules.nixos.fs-zfs-zpool-root-home
     flake.modules.nixos.hardware-cpu-amd
     flake.modules.nixos.hardware-framework-13
     flake.modules.nixos.hardware-laptop-essentials

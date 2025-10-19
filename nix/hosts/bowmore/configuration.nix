@@ -21,11 +21,12 @@
     flake.modules.common.overlays
 
     flake.modules.nixos.bootloader-systemd-boot
-    flake.modules.nixos.catppuccin
-    flake.modules.nixos.fs-minisforum-n5-zfs-system
-    flake.modules.nixos.fs-minisforum-n5-zfs-backup
+    flake.modules.nixos.fs-zfs-backup-minisforum-n5
     flake.modules.nixos.fs-zfs-mount-tank
     flake.modules.nixos.fs-zfs-replication
+    flake.modules.nixos.fs-zfs-system-minisforum-n5
+    flake.modules.nixos.fs-zfs-zpool-root
+    flake.modules.nixos.fs-zfs-zpool-root-data
     # TODO: Enable on primary.
     # flake.modules.nixos.fs-zfs-snapshots
     flake.modules.nixos.hardware-cpu-amd
@@ -41,6 +42,7 @@
     flake.modules.nixos.programs-terminfo
     flake.modules.nixos.prometheus-exporters-node
     flake.modules.nixos.prometheus-exporters-zfs
+    # flake.modules.nixos.selfhosted-calibre-web
     flake.modules.nixos.services-deploy-rs
     flake.modules.nixos.services-fail2ban
     flake.modules.nixos.services-openssh
@@ -71,7 +73,6 @@
         disk1 = "/dev/disk/by-id/ata-ST24000NT002-3N1101_ZYD20R4R";
         disk2 = "/dev/disk/by-id/ata-ST24000NT002-3N1101_ZYD254N6";
         disk3 = "/dev/disk/by-id/ata-ST24000NT002-3N1101_ZYD160A1";
-        # TODO: Update disk ID.
         disk4 = "/dev/disk/by-id/ata-ST24000NT002-3N1101_WYD05N6H";
       };
       # snapshots = {
@@ -79,6 +80,8 @@
       #   highFrequency = ["tank/dataDirs"];
       # };
     };
+
+    # services.calibre.enable = true;
 
     users.delay.ssh.authorizeTailscaleInternalKey = true;
   };

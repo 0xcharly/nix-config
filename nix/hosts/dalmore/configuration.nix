@@ -21,11 +21,12 @@
     flake.modules.common.overlays
 
     flake.modules.nixos.bootloader-systemd-boot
-    flake.modules.nixos.catppuccin
-    flake.modules.nixos.fs-minisforum-n5-zfs-system
-    flake.modules.nixos.fs-minisforum-n5-zfs-backup
+    flake.modules.nixos.fs-zfs-backup-minisforum-n5
     flake.modules.nixos.fs-zfs-mount-tank
     flake.modules.nixos.fs-zfs-replication
+    flake.modules.nixos.fs-zfs-system-minisforum-n5
+    flake.modules.nixos.fs-zfs-zpool-root
+    flake.modules.nixos.fs-zfs-zpool-root-data
     flake.modules.nixos.hardware-cpu-amd
     flake.modules.nixos.initrd-unlock-over-ssh
     flake.modules.nixos.initrd-tailscale

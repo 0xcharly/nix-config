@@ -12,4 +12,5 @@ in rec {
   openssh = import ./openssh.nix {inherit facts lib;};
   pkgs = import ./pkgs.nix inputs;
   uri = import ./uri.nix lib;
+  zfs = import ./zfs.nix;
 }

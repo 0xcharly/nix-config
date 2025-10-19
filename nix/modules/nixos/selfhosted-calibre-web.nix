@@ -3,6 +3,8 @@
   lib,
   ...
 }: {
+  imports = [flake.modules.nixos.fs-zfs-zpool-root-data];
+
   options.node.services.calibre = with lib; {
     enable = mkEnableOption "Spin up a Calibre Web service";
   };
@@ -11,10 +13,14 @@
     cfg = config.node.services.calibre;
     inherit (flake.lib) caddy facts gatus;
   in {
+    node = lib.mkIf cfg.enable {
+      fs.zfs.zpool.root.datadirs.calibre-web = {};
+    };
+
     services = {
       calibre-web = {
         inherit (cfg) enable;
-        inherit (facts.paperless) dataDir;
+        dataDir = config.node.fs.zfs.zpool.root.datadirs.calibre-web.absolutePath;
         listen = {
           ip = "0.0.0.0";
           inherit (facts.services.calibre-web) port;

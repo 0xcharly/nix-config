@@ -21,6 +21,9 @@
 
     flake.modules.nixos.bootloader-systemd-boot
     flake.modules.nixos.fs-zfs-system
+    flake.modules.nixos.fs-zfs-zpool-root
+    flake.modules.nixos.fs-zfs-zpool-root-data
+    flake.modules.nixos.fs-zfs-zpool-root-home
     flake.modules.nixos.hardware-cpu-intel
     flake.modules.nixos.hardware-gpu-intel
     flake.modules.nixos.initrd-unlock-over-ssh
