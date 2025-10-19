@@ -63,6 +63,7 @@ in {
             "linode-fr"
             # "linode-jp"
             # "rip"
+            "skl"
           ];
         };
       };
