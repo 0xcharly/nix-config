@@ -1,4 +1,4 @@
-{
+{flake, ...}: {
   config,
   lib,
   pkgs,
@@ -102,8 +102,12 @@
           urgentBg = "#41262e";
           urgentFg = "#fe9fa9";
         };
+
+        fonts = {
+          sansSerifFontFamily = flake.lib.user.gui.fonts.sansSerif.name;
+        };
       in
-        pkgs.replaceVars ./waybar-style.css colors;
+        pkgs.replaceVars ./wayland-waybar-style.css (colors // fonts);
     };
   };
 }

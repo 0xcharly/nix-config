@@ -57,6 +57,7 @@
     catppuccin.url = "github:catppuccin/nix/release-25.05"; # Catppuccin all the things.
     walker.url = "github:abenz1267/walker"; # Launcher.
 
+    nix-config-fonts.url = "github:0xcharly/nix-config-fonts"; # Unfree fonts.
     nix-config-nvim.url = "github:0xcharly/nix-config-nvim"; # Neovim.
     nix-config-secrets.url = "github:0xcharly/nix-config-secrets"; # Secrets management.
 

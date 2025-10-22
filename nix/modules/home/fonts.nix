@@ -1,10 +1,16 @@
-{pkgs, ...}: {
+{
+  flake,
+  inputs,
+  ...
+}: {pkgs, ...}: {
   fonts.fontconfig = {
     enable = true;
-    defaultFonts = {
-      monospace = ["Recursive Mono Casual Static"];
-      sansSerif = ["Recursive Sans Casual Static"];
-      serif = ["Recursive Sans Linear Static"];
+    defaultFonts = let
+      inherit (flake.lib.user.gui.fonts) monospace sansSerif serif;
+    in {
+      monospace = [monospace.name];
+      sansSerif = [sansSerif.name];
+      serif = [serif.name];
     };
   };
 
@@ -13,5 +19,7 @@
     nerd-fonts.symbols-only
     noto-fonts-cjk-sans # CJK fonts.
     recursive # Variable font family for code & UI.
+
+    inputs.nix-config-fonts.packages.${system}.comic-code
   ];
 }

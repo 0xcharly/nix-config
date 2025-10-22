@@ -1,0 +1,12 @@
+[gui.fonts.monospace]
+name = "Comic Code"
+# name = "Recursive Mono Casual Static"
+size = 12
+
+[gui.fonts.sansSerif]
+name = "Recursive Sans Casual Static"
+size = 12
+
+[gui.fonts.serif]
+name = "Recursive Sans Linear Static"
+size = 12

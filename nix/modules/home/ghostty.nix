@@ -1,4 +1,4 @@
-{
+{flake, ...}: {
   lib,
   pkgs,
   ...
@@ -47,10 +47,12 @@ in {
         };
       };
       clearDefaultKeybinds = true;
-      settings =
+      settings = let
+          inherit (flake.lib.user.gui.fonts) monospace;
+        in
         {
-          font-family = ["Recursive Mono Casual Static"];
-          font-size = 12;
+          font-family = [monospace.name];
+          font-size = monospace.size;
           # https://www.recursive.design/assets/arrowtype-recursive-sansmono-specimen-230407.pdf
           font-feature = [
             "calt"

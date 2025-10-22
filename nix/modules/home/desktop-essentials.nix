@@ -1,12 +1,15 @@
-{pkgs, ...}: {
+{flake, ...}: {pkgs, ...}: let
+  inherit (flake.lib.user.gui.fonts) monospace sansSerif;
+  inherit (flake.lib.fonts) mkFontName;
+in {
   dconf = {
     enable = true;
     settings = {
       "org/gnome/desktop/interface" = {
         color-scheme = "prefer-dark";
-        font-name = "Recursive Sans Casual Static 12";
-        monospace-font-name = "Recursive Mono Casual Static 13";
-        document-font-name = "Recursive Sans Casual Static 12";
+        document-font-name = mkFontName sansSerif;
+        font-name = mkFontName sansSerif;
+        monospace-font-name = mkFontName monospace;
       };
       "org/gtk/settings/file-chooser" = {
         sort-directories-first = true;
@@ -23,10 +26,7 @@
       name = "Adwaita";
       package = pkgs.adwaita-icon-theme;
     };
-    font = {
-      name = "Recursive Sans Casual Static";
-      size = 12;
-    };
+    font = {inherit (sansSerif) name size;};
     gtk2.extraConfig = ''
       gtk-application-prefer-dark-theme=1
     '';
