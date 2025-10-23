@@ -47,6 +47,7 @@
         width = 3008;
         height = 1692;
       };
+      pip.margin.y = 8;
 
       uwsm-wrapper = {
         package = perSystem.self.app2unit;
