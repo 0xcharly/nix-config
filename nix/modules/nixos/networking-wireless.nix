@@ -40,7 +40,7 @@
               id = "google-guest";
               type = "wifi";
             };
-            wifi.ssid = "GoogleGuest";
+            wifi.ssid = "Google-Guest";
           };
         };
       in
