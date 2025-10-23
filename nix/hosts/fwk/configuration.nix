@@ -32,6 +32,7 @@
     flake.modules.nixos.hardware-gpu-amd
     flake.modules.nixos.networking-bluetooth
     flake.modules.nixos.networking-wireless
+    flake.modules.nixos.nix-build-aarch64
     flake.modules.nixos.nix-client-config
     flake.modules.nixos.overlays
     flake.modules.nixos.programs-hyprland
