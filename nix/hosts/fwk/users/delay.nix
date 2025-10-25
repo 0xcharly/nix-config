@@ -49,6 +49,11 @@
         height = 960;
       };
 
+      pip = {
+        width = 320;
+        height = 180;
+      };
+
       idle = {
         suspend.timeout = 15 * 60; # 15 minutes.
         hibernate = {
