@@ -96,89 +96,106 @@
         mountpoint = null;
 
         datasets = let
-          namespace = dataset-name: sub-datasets:
-            {
-              ${dataset-name} = {
-                type = "zfs_fs";
-                options.mountpoint = "none";
-              };
-            }
-            // (lib.attrsets.foldlAttrs (acc: sub-dataset-name: value: acc // {"${dataset-name}/${sub-dataset-name}" = value;}) {} sub-datasets);
-          # A dataset for backups.
-          mkBackupDataset = name: {
-            ${name} = {
+          # mkPassphraseEncryptionOptions :: String -> AttrSet
+          mkPassphraseEncryptionOptions = mountpoint: {
+            encryption = "aes-256-gcm";
+            keyformat = "passphrase";
+            keylocation = "file://${config.age.secrets."zfs/tank/${mountpoint}.key".path}";
+          };
+
+          # mkDataset :: AttrSet -> String -> AttrSet
+          mkDataset = options: mountpoint: {
+            ${mountpoint} = {
               type = "zfs_fs";
-              options = {
-                mountpoint = "/tank/backups/${name}";
-                compression = "lz4"; # Fast and space-efficient.
-                atime = "off"; # Disables updating access times.
-                recordsize = "128K"; # Default block size.
-                encryption = "aes-256-gcm";
-                keyformat = "passphrase";
-                keylocation = "file://${config.age.secrets."zfs/tank/backups/${name}.key".path}";
-              };
-            };
-          };
-          # A dataset for picture files. Better suited for medium-sized files.
-          mkAlbumDataset = mountpoint: {
-            type = "zfs_fs";
-            options = {
-              mountpoint = "/tank/${mountpoint}";
-              compression = "zstd"; # Better compression for text and PDFs.
-              recordsize = "1M"; # Larger blocks improve performance for large sequential files.
-              encryption = "aes-256-gcm";
-              keyformat = "passphrase";
-              keylocation = "file://${config.age.secrets."zfs/tank/${mountpoint}.key".path}";
-            };
-          };
-          # A dataset for regular files. Better suited for small files.
-          mkGenericDataset = mountpoint: {
-            type = "zfs_fs";
-            options = {
-              mountpoint = "/tank/${mountpoint}";
-              compression = "zstd"; # Better compression for text and PDFs.
-              recordsize = "16K"; # Smaller blocks are better for small text files.
-              encryption = "aes-256-gcm";
-              keyformat = "passphrase";
-              keylocation = "file://${config.age.secrets."zfs/tank/${mountpoint}.key".path}";
-            };
-          };
-          # A dataset for media files. Better suited for large files.
-          mkMediaDataset = mountpoint: {
-            type = "zfs_fs";
-            options = {
-              mountpoint = "/tank/${mountpoint}";
-              compression = "lz4"; # Fast and space-efficient.
-              atime = "off"; # Disables updating access times.
-              recordsize = "1M"; # Larger blocks improve performance for large sequential files.
-              encryption = "aes-256-gcm";
-              keyformat = "passphrase";
-              keylocation = "file://${config.age.secrets."zfs/tank/${mountpoint}.key".path}";
+              options = {mountpoint = "/tank/${mountpoint}";} // options;
             };
           };
 
-          mkBackupDatasets = datasets: lib.mergeAttrsList (builtins.map mkBackupDataset datasets);
+          # mkEncryptedDataset :: AttrSet -> String -> AttrSet
+          mkEncryptedDataset = options: mountpoint: {
+            ${mountpoint} = {
+              type = "zfs_fs";
+              options = {mountpoint = "/tank/${mountpoint}";} // (mkPassphraseEncryptionOptions mountpoint) // options;
+            };
+          };
+
+          # Creates multiple `datasets` under a common root dataset at `mountpoint`.
+          #
+          # mkNamespaceDataset :: {
+          #   mountpoint :: String;
+          #   datasets :: { [String] :: (String -> AttrSet) };
+          #   options :: AttrSet;
+          # } -> AttrSet
+          mkNamespaceDataset = {
+            mountpoint,
+            datasets,
+            options ? {},
+          }: let
+            parent = mkDataset ({mountpoint = "none";} // options) mountpoint;
+            mkChildDataset = name: builder: builder "${mountpoint}/${name}";
+          in
+            parent // (lib.concatMapAttrs mkChildDataset datasets);
+
+          # A dataset for picture files. Better suited for medium-sized files.
+          # mkAlbumDataset :: String -> AttrSet
+          mkAlbumDataset = mkEncryptedDataset {
+            compression = "zstd"; # Better compression for text and PDFs.
+            recordsize = "1M"; # Larger blocks improve performance for large sequential files.
+          };
+
+          # A dataset for backups.
+          # mkBackupDataset :: String -> AttrSet
+          mkBackupDataset = mkEncryptedDataset {
+            atime = "off"; # Disables updating access times.
+            compression = "lz4"; # Fast and space-efficient.
+            recordsize = "128K"; # Default block size.
+          };
+
+          # A dataset for regular files. Better suited for small files.
+          # mkGenericDataset :: String -> AttrSet
+          mkGenericDataset = mkEncryptedDataset {
+            compression = "zstd"; # Better compression for text and PDFs.
+            recordsize = "16K"; # Smaller blocks are better for small text files.
+          };
+
+          # A dataset for media files. Better suited for large files.
+          # mkMediaDataset :: String -> AttrSet
+          mkMediaDataset = mkEncryptedDataset {
+            atime = "off"; # Disables updating access times.
+            compression = "lz4"; # Fast and space-efficient.
+            recordsize = "1M"; # Larger blocks improve performance for large sequential files.
+          };
+
         in
           lib.mergeAttrsList [
-            (namespace "backups" (mkBackupDatasets [
-              "ayako"
-              "dad"
-              "delay"
-              "homelab"
-            ]))
-
-            (namespace "delay" {
-              album = mkAlbumDataset "delay/album";
-              beans = mkGenericDataset "delay/beans";
-              files = mkGenericDataset "delay/files";
-              media = mkMediaDataset "delay/media";
-              notes = mkGenericDataset "delay/notes";
-              vault = mkGenericDataset "delay/vault";
+            (mkNamespaceDataset {
+              mountpoint = "backups";
+              datasets = {
+                ayako = mkBackupDataset;
+                dad = mkBackupDataset;
+                delay = mkBackupDataset;
+                homelab = mkBackupDataset;
+              };
             })
 
-            (namespace "ayako" {
-              files = mkGenericDataset "ayako/files";
-              media = mkMediaDataset "ayako/media";
+            (mkNamespaceDataset {
+              mountpoint = "delay";
+              datasets = {
+                album = mkAlbumDataset;
+                beans = mkGenericDataset;
+                files = mkGenericDataset;
+                media = mkMediaDataset;
+                notes = mkGenericDataset;
+                vault = mkGenericDataset;
+              };
+            })
+
+            (mkNamespaceDataset {
+              mountpoint = "ayako";
+              datasets = {
+                files = mkGenericDataset;
+                media = mkMediaDataset;
+              };
             })
           ];
       };

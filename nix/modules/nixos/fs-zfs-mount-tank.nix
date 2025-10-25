@@ -33,26 +33,27 @@
           # Create the directories for the ZFS datasets, with the correct permissions.
           # TODO: Consider creating groups as well (eg. `backups`?).
 
-          # Set root folder world-traversable.
-          install -v -d --mode 751 --owner delay --group users /tank/backups
-          install -v -d --mode 751 --owner ayako --group ayako /tank/backups/ayako
-          install -v -d --mode 751 --owner delay --group delay /tank/backups/dad
-          install -v -d --mode 751 --owner delay --group delay /tank/backups/delay
-          install -v -d --mode 751 --owner delay --group users /tank/backups/homelab
+          # Set tank root folder world-traversable.
+          install -v -d --mode 751 --owner root  --group root     /tank
 
-          # Set root folder world-traversable.
-          install -v -d --mode 751 --owner ayako --group users /tank/ayako
-          install -v -d --mode 751 --owner ayako --group ayako /tank/ayako/files
-          install -v -d --mode 751 --owner ayako --group users /tank/ayako/media
+          # Set backup root folder world-traversable.
+          install -v -d --mode 751 --owner delay --group users    /tank/backups
+          install -v -d --mode 750 --owner ayako --group ayako    /tank/backups/ayako
+          install -v -d --mode 750 --owner delay --group delay    /tank/backups/dad
+          install -v -d --mode 750 --owner delay --group delay    /tank/backups/delay
+          install -v -d --mode 750 --owner delay --group delay    /tank/backups/homelab
 
-          # Set root folder world-traversable.
-          install -v -d --mode 751 --owner delay --group users /tank/delay
-          install -v -d --mode 771 --owner delay --group immich /tank/delay/album
-          install -v -d --mode 751 --owner delay --group delay /tank/delay/beans
-          install -v -d --mode 751 --owner delay --group delay /tank/delay/files
-          install -v -d --mode 751 --owner delay --group jellyfin /tank/delay/media
-          install -v -d --mode 751 --owner delay --group delay /tank/delay/notes
-          install -v -d --mode 751 --owner delay --group delay /tank/delay/vault
+          install -v -d --mode 750 --owner ayako --group users    /tank/ayako
+          install -v -d --mode 750 --owner ayako --group ayako    /tank/ayako/files
+          install -v -d --mode 750 --owner ayako --group users    /tank/ayako/media
+
+          install -v -d --mode 750 --owner delay --group users    /tank/delay
+          install -v -d --mode 770 --owner delay --group immich   /tank/delay/album
+          install -v -d --mode 750 --owner delay --group delay    /tank/delay/beans
+          install -v -d --mode 750 --owner delay --group delay    /tank/delay/files
+          install -v -d --mode 750 --owner delay --group jellyfin /tank/delay/media
+          install -v -d --mode 750 --owner delay --group delay    /tank/delay/notes
+          install -v -d --mode 750 --owner delay --group delay    /tank/delay/vault
         '';
       };
     };
