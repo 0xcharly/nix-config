@@ -59,6 +59,7 @@
       };
     };
 
+    # TODO: There is something fishy happening with this.
     systemd.services.sync-boot-fallback = {
       description = "Sync /boot to /boot-fallback after boot";
       after = ["local-fs.target" "zfs-mount.service"];
