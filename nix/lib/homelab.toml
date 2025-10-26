@@ -43,7 +43,6 @@ port = 3000
 domain = "jellyfin.qyrnl.com"
 host = "bowmore.qyrnl.com"
 port = 8096
-dataDir = "/var/lib/jellyfin"
 
 [services.paperless]
 domain = "files.qyrnl.com"
