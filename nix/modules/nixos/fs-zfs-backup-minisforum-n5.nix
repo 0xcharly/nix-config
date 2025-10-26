@@ -166,6 +166,25 @@
             recordsize = "1M"; # Larger blocks improve performance for large sequential files.
           };
 
+          # Namespaced datasets for hosting the content of repositories.
+          # mkForgeDatasets :: String -> AttrSet
+          mkForgeDatasets = mountpoint:
+            mkNamespaceDataset {
+              inherit mountpoint;
+              options = mkPassphraseEncryptionOptions mountpoint;
+              datasets = {
+                # Git LFS dataset.
+                data = mkDataset {
+                  compression = "lz4"; # Fast and space-efficient.
+                  recordsize = "1M"; # Larger blocks improve performance for large sequential files.
+                };
+                # Git repositories dataset.
+                repo = mkDataset {
+                  compression = "zstd"; # Better compression for text and PDFs.
+                  recordsize = "16K"; # Smaller blocks are better for small text files.
+                };
+              };
+            };
         in
           lib.mergeAttrsList [
             (mkNamespaceDataset {
@@ -184,6 +203,7 @@
                 album = mkAlbumDataset;
                 beans = mkGenericDataset;
                 files = mkGenericDataset;
+                forge = mkForgeDatasets;
                 media = mkMediaDataset;
                 notes = mkGenericDataset;
                 vault = mkGenericDataset;

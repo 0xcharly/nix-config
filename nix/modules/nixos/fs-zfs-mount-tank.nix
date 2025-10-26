@@ -54,6 +54,10 @@
           install -v -d --mode 750 --owner delay --group jellyfin /tank/delay/media
           install -v -d --mode 750 --owner delay --group delay    /tank/delay/notes
           install -v -d --mode 750 --owner delay --group delay    /tank/delay/vault
+
+          install -v -d --mode 750 --owner delay --group forgejo  /tank/delay/forge
+          install -v -d --mode 770 --owner delay --group forgejo  /tank/delay/forge/data
+          install -v -d --mode 770 --owner delay --group forgejo  /tank/delay/forge/repo
         '';
       };
     };
@@ -66,6 +70,7 @@
   # Seems like this would unnecessarily increase the attack surface…
   # TODO: figure out a better way to do this.
   users.groups = {
+    forgejo = {};
     immich = {};
     jellyfin = {};
   };

@@ -29,6 +29,11 @@ domain = "reads.qyrnl.com"
 host = "bowmore.qyrnl.com"
 port = 8083
 
+[services.forgejo]
+domain = "git.qyrnl.com"
+host = "bowmore.qyrnl.com"
+port = 3917
+
 [services.immich]
 domain = "album.qyrnl.com"
 host = "bowmore.qyrnl.com"
