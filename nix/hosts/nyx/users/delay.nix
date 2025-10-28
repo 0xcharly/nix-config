@@ -32,7 +32,7 @@
     flake.modules.home.wayland-essentials
     flake.modules.home.wayland-hyprland
     flake.modules.home.wayland-notifications
-    flake.modules.home.wayland-waybar
+    flake.modules.home.wayland-quickshell
   ];
 
   home.stateVersion = "25.05";
@@ -53,8 +53,6 @@
         package = perSystem.self.app2unit;
         prefix = "${lib.getExe config.node.wayland.uwsm-wrapper.package} --";
       };
-
-      waybar.output = ["DP-3"];
     };
   };
 }
