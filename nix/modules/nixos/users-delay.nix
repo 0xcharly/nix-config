@@ -32,7 +32,7 @@
         isNormalUser = true;
         home = "/home/delay";
         group = "delay";
-        extraGroups = ["wheel"];
+        extraGroups = ["users" "wheel"];
         shell = pkgs.fish;
         # Create a hashed password with `nix-shell -p mkpasswd --run "mkpasswd -m yescrypt"`
         hashedPasswordFile = config.age.secrets."passwd/delay".path;

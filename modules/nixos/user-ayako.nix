@@ -13,6 +13,7 @@ lib.mkIf config.modules.system.roles.nas.enable {
     isNormalUser = true;
     home = "/home/ayako";
     group = "ayako";
+    extraGroups = ["users"];
     shell = pkgs.bash;
   };
 }

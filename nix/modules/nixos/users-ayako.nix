@@ -10,6 +10,7 @@
       isNormalUser = true;
       home = "/home/ayako";
       group = "ayako";
+      extraGroups = ["users"];
       shell = pkgs.bash;
     };
   };
