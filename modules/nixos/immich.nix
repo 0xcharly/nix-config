@@ -19,7 +19,7 @@ in {
     caddy.virtualHosts = lib.mkIf config.node.services.reverseProxy.enable {
       "album.qyrnl.com".extraConfig = ''
         import ts_host
-        reverse_proxy helios.qyrnl.com:${toString config.services.immich.port}
+        reverse_proxy bowmore.qyrnl.com:${toString config.services.immich.port}
       '';
     };
 

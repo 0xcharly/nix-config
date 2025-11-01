@@ -31,7 +31,7 @@
             type = types.attrsOf types.str;
             default = {};
             description = ''
-              Additional options to set on the dataset.
+              Additional ZFS options to set on the dataset.
             '';
           };
           owner = mkOption {
@@ -75,7 +75,7 @@
         mkDataDirAttrs = lib.mapAttrs' (
           name: options:
             lib.nameValuePair "var/lib/${name}" (
-              flake.lib.zfs.mkLegacyDataset "/var/lib/${options.mountpoint}" {}
+              flake.lib.zfs.mkLegacyDataset "/var/lib/${options.mountpoint}" options.extraOptions
             )
         );
       in

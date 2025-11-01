@@ -43,11 +43,11 @@
           install -v -d --mode 750 --owner delay --group delay    /tank/backups/delay
           install -v -d --mode 750 --owner delay --group delay    /tank/backups/homelab
 
-          install -v -d --mode 750 --owner ayako --group users    /tank/ayako
+          install -v -d --mode 751 --owner ayako --group users    /tank/ayako
           install -v -d --mode 750 --owner ayako --group ayako    /tank/ayako/files
           install -v -d --mode 750 --owner ayako --group users    /tank/ayako/media
 
-          install -v -d --mode 750 --owner delay --group users    /tank/delay
+          install -v -d --mode 751 --owner delay --group users    /tank/delay
           install -v -d --mode 770 --owner delay --group immich   /tank/delay/album
           install -v -d --mode 750 --owner delay --group delay    /tank/delay/beans
           install -v -d --mode 750 --owner delay --group delay    /tank/delay/files
@@ -55,7 +55,7 @@
           install -v -d --mode 750 --owner delay --group delay    /tank/delay/notes
           install -v -d --mode 750 --owner delay --group delay    /tank/delay/vault
 
-          install -v -d --mode 750 --owner delay --group forgejo  /tank/delay/forge
+          install -v -d --mode 751 --owner delay --group forgejo  /tank/delay/forge
           install -v -d --mode 770 --owner delay --group forgejo  /tank/delay/forge/data
           install -v -d --mode 770 --owner delay --group forgejo  /tank/delay/forge/repo
         '';

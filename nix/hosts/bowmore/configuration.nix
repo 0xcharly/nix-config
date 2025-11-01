@@ -27,6 +27,7 @@
     flake.modules.nixos.fs-zfs-system-minisforum-n5
     flake.modules.nixos.fs-zfs-zpool-root
     flake.modules.nixos.fs-zfs-zpool-root-data
+    flake.modules.nixos.fs-zfs-zpool-root-data-postgresql
     # TODO: Enable on primary.
     # flake.modules.nixos.fs-zfs-snapshots
     flake.modules.nixos.hardware-cpu-amd
@@ -42,7 +43,7 @@
     flake.modules.nixos.programs-terminfo
     flake.modules.nixos.prometheus-exporters-node
     flake.modules.nixos.prometheus-exporters-zfs
-    # flake.modules.nixos.selfhosted-calibre-web
+    flake.modules.nixos.selfhosted-immich
     flake.modules.nixos.services-deploy-rs
     flake.modules.nixos.services-fail2ban
     flake.modules.nixos.services-openssh
@@ -81,7 +82,7 @@
       # };
     };
 
-    # services.calibre.enable = true;
+    services.immich.enable = true;
 
     users.delay.ssh.authorizeTailscaleInternalKey = true;
   };
