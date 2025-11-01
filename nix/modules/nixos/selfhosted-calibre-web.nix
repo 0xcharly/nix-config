@@ -3,8 +3,6 @@
   lib,
   ...
 }: {
-  imports = [flake.modules.nixos.fs-zfs-zpool-root-data];
-
   options.node.services.calibre = with lib; {
     enable = mkEnableOption "Spin up a Calibre Web service";
   };
