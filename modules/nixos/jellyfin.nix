@@ -16,7 +16,7 @@ in {
     caddy.virtualHosts = lib.mkIf config.node.services.reverseProxy.enable {
       "jellyfin.qyrnl.com".extraConfig = ''
         import ts_host
-        reverse_proxy helios.qyrnl.com:8096
+        reverse_proxy bowmore.qyrnl.com:8096
       '';
     };
 

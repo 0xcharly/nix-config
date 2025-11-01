@@ -14,7 +14,7 @@
     services = {
       calibre.enable = true;
       immich.enable = false; # 2025-11-01: migrated to bowmore.
-      jellyfin.enable = true;
+      jellyfin.enable = false; # 2025-11-01: migrated to bowmore.
       paperless.enable = true;
       prometheus.exporters = {
         node.enable = true;

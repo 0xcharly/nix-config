@@ -11,8 +11,12 @@
     cfg = config.node.services.jellyfin;
     inherit (flake.lib) caddy facts gatus;
   in {
-    node = lib.mkIf cfg.enable {
-      fs.zfs.zpool.root.datadirs.jellyfin = {};
+    node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
+      jellyfin = {
+        owner = "jellyfin";
+        group = "jellyfin";
+        mode = "0700";
+      };
     };
 
     services = {
