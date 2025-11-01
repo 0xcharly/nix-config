@@ -1,7 +1,7 @@
 [gui.fonts.monospace]
 name = "Comic Code"
 # name = "Recursive Mono Casual Static"
-size = 12
+size = 11
 
 [gui.fonts.sansSerif]
 name = "Recursive Sans Casual Static"
