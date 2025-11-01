@@ -6,11 +6,7 @@
 }: {
   options.node.fs.zfs.zpool.root = with lib; {
     datadirs = let
-      datasetOpts = {
-        name,
-        config,
-        ...
-      }: {
+      datasetOpts = {name, ...}: {
         options = {
           mountpoint = mkOption {
             type = types.str;
@@ -21,7 +17,7 @@
           };
           absolutePath = mkOption {
             type = types.path;
-            default = /var/lib + "/${config.node.fs.zfs.zpool.root.datadirs.${name}.mountpoint}";
+            default = "/var/lib/${config.node.fs.zfs.zpool.root.datadirs.${name}.mountpoint}";
             readOnly = true;
             description = ''
               The absolute mountpoint path.
