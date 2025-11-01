@@ -7,7 +7,6 @@
   node = {
     hardware = {
       cpu.vendor = "amd";
-      gpu.vendor = "intel";
       rgb.disable = true;
     };
 
