@@ -12,11 +12,6 @@
     inherit (flake.lib) caddy facts gatus;
   in {
     node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
-      immich = {
-        owner = "immich";
-        group = "immich";
-        mode = "0755";
-      };
       redis-immich = {
         owner = "redis-immich";
         group = "redis-immich";
