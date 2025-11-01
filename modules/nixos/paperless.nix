@@ -32,7 +32,7 @@ in {
     caddy.virtualHosts = lib.mkIf config.node.services.reverseProxy.enable {
       "files.qyrnl.com".extraConfig = ''
         import ts_host
-        reverse_proxy helios.qyrnl.com:${toString config.services.paperless.port}
+        reverse_proxy bowmore.qyrnl.com:${toString config.services.paperless.port}
       '';
     };
 

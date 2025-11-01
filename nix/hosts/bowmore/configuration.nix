@@ -45,6 +45,7 @@
     flake.modules.nixos.prometheus-exporters-zfs
     flake.modules.nixos.selfhosted-immich
     flake.modules.nixos.selfhosted-jellyfin
+    flake.modules.nixos.selfhosted-paperless
     flake.modules.nixos.services-deploy-rs
     flake.modules.nixos.services-fail2ban
     flake.modules.nixos.services-openssh
@@ -86,6 +87,7 @@
     services = {
       immich.enable = true;
       jellyfin.enable = true;
+      paperless.enable = true;
     };
 
     users.delay.ssh.authorizeTailscaleInternalKey = true;

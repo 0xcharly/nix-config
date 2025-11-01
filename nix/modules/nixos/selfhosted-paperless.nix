@@ -1,8 +1,16 @@
-{flake, ...}: {
+{
+  flake,
+  inputs,
+  ...
+}: {
   config,
   lib,
   ...
 }: {
+  imports = [
+    inputs.nix-config-secrets.modules.nixos.services-paperless
+  ];
+
   options.node.services.paperless = with lib; {
     enable = mkEnableOption "Spin up a Paperless-ngx service";
   };
@@ -11,8 +19,17 @@
     cfg = config.node.services.paperless;
     inherit (flake.lib) caddy facts gatus;
   in {
-    node = lib.mkIf cfg.enable {
-      fs.zfs.zpool.root.datadirs.paperless = {};
+    node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
+      paperless = {
+        owner = "paperless";
+        group = "paperless";
+        mode = "0755";
+      };
+      redis-paperless = {
+        owner = "redis-paperless";
+        group = "redis-paperless";
+        mode = "0700";
+      };
     };
 
     services = {
@@ -24,7 +41,7 @@
         mediaDir = "/tank/delay/files";
         passwordFile = config.age.secrets."services/paperless-admin-passwd".path;
         settings = {
-          PAPERLESS_URL = "https://${facts.paperless.domain}";
+          PAPERLESS_URL = "https://${facts.services.paperless.domain}";
           PAPERLESS_CONSUMER_IGNORE_PATTERN = [
             ".DS_STORE/*"
             "desktop.ini"
