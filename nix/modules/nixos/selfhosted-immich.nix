@@ -13,6 +13,7 @@
   in {
     node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
       redis-immich = {
+        extraOptions = flake.lib.zfs.redis-dataset-options;
         owner = config.services.redis.servers.immich.user;
         group = config.services.redis.servers.immich.group;
         mode = "0700";

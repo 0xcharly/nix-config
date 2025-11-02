@@ -43,6 +43,7 @@
     flake.modules.nixos.programs-terminfo
     flake.modules.nixos.prometheus-exporters-node
     flake.modules.nixos.prometheus-exporters-zfs
+    flake.modules.nixos.selfhosted-forgejo
     flake.modules.nixos.selfhosted-immich
     flake.modules.nixos.selfhosted-jellyfin
     flake.modules.nixos.selfhosted-paperless
@@ -85,6 +86,7 @@
     };
 
     services = {
+      forgejo.enable = true;
       immich.enable = true;
       jellyfin.enable = true;
       paperless.enable = true;

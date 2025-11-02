@@ -15,6 +15,7 @@ atuin           IN CNAME heimdall
 beans           IN CNAME heimdall
 files           IN CNAME heimdall
 gatus           IN CNAME heimdall
+git             IN CNAME heimdall
 graphs          IN CNAME heimdall
 healthchecks    IN CNAME heimdall
 jellyfin        IN CNAME heimdall

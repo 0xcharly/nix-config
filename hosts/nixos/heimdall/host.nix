@@ -1,4 +1,6 @@
 {
+  config,
+  lib,
   pkgs,
   modulesPath,
   ...
@@ -13,6 +15,20 @@
 
   # No graphical environment.
   modules.usrenv.compositor = "headless";
+
+  # NOTE: temporary kludge until Heimdall is migrated to Blueprint.
+  services = {
+    caddy.virtualHosts = lib.mkIf config.node.services.reverseProxy.enable {
+      "git.qyrnl.com".extraConfig = ''
+        import ts_host
+        reverse_proxy bowmore.qyrnl.com:3917
+      '';
+    };
+
+    gatus.settings.endpoints = [
+      (lib.fn.mkHttpServiceEndpoint "Forgejo" "git.qyrnl.com")
+    ];
+  };
 
   # System config.
   node = {

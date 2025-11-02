@@ -17,7 +17,18 @@
         group = config.services.forgejo.group;
         mode = "0755";
       };
+      redis-forgejo = {
+        extraOptions = flake.lib.zfs.redis-dataset-options;
+        owner = config.services.redis.servers.forgejo.user;
+        group = config.services.redis.servers.forgejo.group;
+        mode = "0700";
+      };
     };
+
+    # Add the forgejo user to the redis-forgejo group to access the UNIX socket.
+    users.users."${config.services.forgejo.user}".extraGroups = [
+      config.services.redis.servers.forgejo.group
+    ];
 
     services = {
       forgejo = {
@@ -29,23 +40,29 @@
           contentDir = "/tank/delay/forge/data";
         };
         settings = {
+          actions.ENABLED = false;
           cache = {
             ADAPTER = "redis";
             HOST = "redis+socket://${config.services.redis.servers.forgejo.unixSocket}";
           };
+          oauth2.ENABLED = false;
+          openid.ENABLE_OPENID_SIGNIN = false;
           server = {
             DISABLE_SSH = true;
             DOMAIN = facts.services.forgejo.domain;
+            ROOT_URL = "https://${facts.services.forgejo.domain}";
             HTTP_ADDR = "0.0.0.0";
             HTTP_PORT = facts.services.forgejo.port;
+            ENABLE_ACME = false;
           };
+          service.DISABLE_REGISTRATION = true;
           session.COOKIE_SECURE = true;
         };
+      };
 
-        redis.servers.forgejo = {
-          inherit (cfg) enable;
-          port = 0; # Disables TCP.
-        };
+      redis.servers.forgejo = {
+        inherit (cfg) enable;
+        port = 0; # Disables TCP.
       };
 
       caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.forgejo;

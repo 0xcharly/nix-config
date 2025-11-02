@@ -26,6 +26,7 @@
         mode = "0755";
       };
       redis-paperless = {
+        extraOptions = flake.lib.zfs.redis-dataset-options;
         owner = config.services.redis.servers.paperless.user;
         group = config.services.redis.servers.paperless.group;
         mode = "0700";
