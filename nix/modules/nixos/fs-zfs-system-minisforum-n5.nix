@@ -93,6 +93,14 @@
             type = "gpt";
             partitions = {
               ESP = {
+                # TODO: figure out how to do that safely and remotely.
+                # IMPORTANT: Disko references to these partitions by label in
+                # /etc/fstab. They MUST be distinct per disk, otherwise this
+                # will mount the same partition twice.
+                # label =
+                #   if device == cfg.disk0
+                #   then "EFI0"
+                #   else "EFI1";
                 label = "EFI";
                 name = "ESP";
                 size = "500M";
