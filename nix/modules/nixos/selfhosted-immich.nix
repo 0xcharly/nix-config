@@ -13,8 +13,8 @@
   in {
     node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
       redis-immich = {
-        owner = "redis-immich";
-        group = "redis-immich";
+        owner = config.services.redis.servers.immich.user;
+        group = config.services.redis.servers.immich.group;
         mode = "0700";
       };
     };

@@ -13,8 +13,8 @@
   in {
     node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
       jellyfin = {
-        owner = "jellyfin";
-        group = "jellyfin";
+        owner = config.services.jellyfin.user;
+        group = config.services.jellyfin.group;
         mode = "0700";
       };
     };

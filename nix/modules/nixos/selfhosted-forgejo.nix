@@ -11,8 +11,12 @@
     cfg = config.node.services.forgejo;
     inherit (flake.lib) caddy facts gatus;
   in {
-    node = lib.mkIf cfg.enable {
-      fs.zfs.zpool.root.datadirs.forgejo = {};
+    node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
+      forgejo = {
+        owner = config.services.forgejo.user;
+        group = config.services.forgejo.group;
+        mode = "0755";
+      };
     };
 
     services = {

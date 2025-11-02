@@ -21,13 +21,13 @@
   in {
     node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
       paperless = {
-        owner = "paperless";
-        group = "paperless";
+        owner = config.services.paperless.user;
+        group = config.services.paperless.user;
         mode = "0755";
       };
       redis-paperless = {
-        owner = "redis-paperless";
-        group = "redis-paperless";
+        owner = config.services.redis.servers.paperless.user;
+        group = config.services.redis.servers.paperless.group;
         mode = "0700";
       };
     };
