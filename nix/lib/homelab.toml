@@ -51,6 +51,11 @@ domain = "jellyfin.qyrnl.com"
 host = "bowmore.qyrnl.com"
 port = 8096
 
+[services.miniflux]
+domain = "news.qyrnl.com"
+host = "bowmore.qyrnl.com"
+port = 8067
+
 [services.paperless]
 domain = "files.qyrnl.com"
 host = "bowmore.qyrnl.com"

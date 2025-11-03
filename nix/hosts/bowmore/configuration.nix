@@ -11,6 +11,7 @@
     inputs.nix-config-secrets.modules.nixos.blueprint
     inputs.nix-config-secrets.modules.nixos.disk-encryption-keys
     inputs.nix-config-secrets.modules.nixos.nix-client-config
+    inputs.nix-config-secrets.modules.nixos.services-miniflux
     inputs.nix-config-secrets.modules.nixos.services-msmtp
     inputs.nix-config-secrets.modules.nixos.services-tailscale
     inputs.nix-config-secrets.modules.nixos.services-vaultwarden
@@ -49,6 +50,7 @@
     flake.modules.nixos.selfhosted-forgejo
     flake.modules.nixos.selfhosted-immich
     flake.modules.nixos.selfhosted-jellyfin
+    flake.modules.nixos.selfhosted-miniflux
     flake.modules.nixos.selfhosted-paperless
     flake.modules.nixos.selfhosted-vaultwarden
     flake.modules.nixos.services-deploy-rs
@@ -95,6 +97,7 @@
       forgejo.enable = true;
       immich.enable = true;
       jellyfin.enable = true;
+      miniflux.enable = true;
       msmtp.enable = true;
       paperless.enable = true;
       vaultwarden.enable = true;

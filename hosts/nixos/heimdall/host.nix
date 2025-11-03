@@ -51,7 +51,7 @@
       gotify.enable = true;
       grafana.enable = true;
       immich-public-proxy.enable = true;
-      miniflux.enable = true;
+      miniflux.enable = false; # 2025-11-03: migrated to bowmore.
       prometheus = {
         server.enable = true;
         exporters.node.enable = true;
