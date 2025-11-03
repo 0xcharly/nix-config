@@ -1,4 +1,3 @@
-# Atuin data is stored in postgresql database.
 {flake, ...}: {
   config,
   lib,

@@ -46,7 +46,7 @@ in {
       caddy.virtualHosts = lib.mkIf config.node.services.reverseProxy.enable {
         "graphs.qyrnl.com".extraConfig = ''
           import ts_host
-          reverse_proxy localhost:${toString config.services.grafana.settings.server.http_port}
+          reverse_proxy bowmore.qyrnl.com:3333
         '';
       };
     };

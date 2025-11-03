@@ -63,6 +63,7 @@
 
     mkApiCheck = name: url: conditions: {
       inherit name;
+      group = "api";
       url = "https://${url}";
       conditions = ["[STATUS] == 200"] ++ conditions;
     };

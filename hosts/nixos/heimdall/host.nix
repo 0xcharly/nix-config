@@ -49,11 +49,11 @@
       gatus.enable = true;
       golink.enable = true;
       gotify.enable = true;
-      grafana.enable = true;
+      grafana.enable = false; # 2025-11-03: migrated to bowmore.
       immich-public-proxy.enable = true;
       miniflux.enable = false; # 2025-11-03: migrated to bowmore.
       prometheus = {
-        server.enable = true;
+        server.enable = false; # 2025-11-03: migrated to bowmore.
         exporters.node.enable = true;
       };
       reverseProxy.enable = true;

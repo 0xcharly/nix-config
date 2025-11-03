@@ -23,7 +23,7 @@ in {
       caddy.virtualHosts = lib.mkIf config.node.services.reverseProxy.enable {
         "news.qyrnl.com".extraConfig = ''
           import ts_host
-          reverse_proxy bowmore.neko-danio.ts.net:${toString config.services.miniflux.config.PORT}
+          reverse_proxy bowmore.qyrnl.com:${toString config.services.miniflux.config.PORT}
         '';
       };
 

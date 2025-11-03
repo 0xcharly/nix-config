@@ -48,10 +48,12 @@
     flake.modules.nixos.prometheus-exporters-zfs
     flake.modules.nixos.selfhosted-atuin
     flake.modules.nixos.selfhosted-forgejo
+    flake.modules.nixos.selfhosted-grafana
     flake.modules.nixos.selfhosted-immich
     flake.modules.nixos.selfhosted-jellyfin
     flake.modules.nixos.selfhosted-miniflux
     flake.modules.nixos.selfhosted-paperless
+    flake.modules.nixos.selfhosted-prometheus
     flake.modules.nixos.selfhosted-vaultwarden
     flake.modules.nixos.services-deploy-rs
     flake.modules.nixos.services-fail2ban
@@ -95,11 +97,13 @@
     services = {
       atuin.enable = true;
       forgejo.enable = true;
+      grafana.enable = true;
       immich.enable = true;
       jellyfin.enable = true;
       miniflux.enable = true;
       msmtp.enable = true;
       paperless.enable = true;
+      prometheus.enable = true;
       vaultwarden.enable = true;
     };
 

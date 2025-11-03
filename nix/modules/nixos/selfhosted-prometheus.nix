@@ -1,17 +1,29 @@
-{
+{flake, ...}: {
   config,
   lib,
   ...
-}: let
-  cfg = config.node.services.prometheus.server;
-in {
-  options.node.services.prometheus.server.enable = lib.mkEnableOption "Whether to spin up a Prometheus service.";
+}: {
+  options.node.services.prometheus = with lib; {
+    enable = mkEnableOption "Spin up a Prometheus service";
+  };
 
-  config = {
+  config = let
+    cfg = config.node.services.prometheus;
+    inherit (flake.lib) caddy facts gatus;
+  in {
+    node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
+      prometheus = {
+        owner = "prometheus";
+        group = "prometheus";
+        mode = "0700";
+      };
+    };
+
     services = {
       prometheus = {
         inherit (cfg) enable;
-        webExternalUrl = "https://prometheus.qyrnl.com";
+        stateDir = "prometheus";
+        webExternalUrl = "https://${facts.services.prometheus.domain}";
 
         scrapeConfigs = let
           mkNodeExporterConfig = host: {
@@ -28,10 +40,11 @@ in {
             static_configs = builtins.map mkNodeExporterConfig [
               "bowmore"
               "dalmore"
-              "heimdall"
-              "linode"
+              "fwk"
               "linode-fr"
-              "linode-jp"
+              # "linode-jp"
+              "nyx"
+              "rip"
               "skl"
             ];
           }
@@ -41,9 +54,8 @@ in {
               "bowmore"
               "dalmore"
               "fwk"
-              "linode"
               "linode-fr"
-              "linode-jp"
+              # "linode-jp"
               "nyx"
               "rip"
               "skl"
@@ -58,16 +70,12 @@ in {
         ];
       };
 
+      caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.prometheus;
       gatus.settings.endpoints = [
-        (lib.fn.mkHttpServiceEndpoint "prometheus" "prometheus.qyrnl.com/-/healthy")
+        (gatus.mkHttpServiceCheck "prometheus" {
+          domain = "prometheus.qyrnl.com/-/healthy";
+        })
       ];
-
-      caddy.virtualHosts = lib.mkIf config.node.services.reverseProxy.enable {
-        "prometheus.qyrnl.com".extraConfig = ''
-          import ts_host
-          reverse_proxy bowmore.qyrnl.com:${toString config.services.prometheus.port}
-        '';
-      };
     };
   };
 }

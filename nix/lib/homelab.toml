@@ -36,6 +36,11 @@ domain = "git.qyrnl.com"
 host = "bowmore.qyrnl.com"
 port = 3917
 
+[services.grafana]
+domain = "graphs.qyrnl.com"
+host = "bowmore.qyrnl.com"
+port = 3333
+
 [services.immich]
 domain = "album.qyrnl.com"
 host = "bowmore.qyrnl.com"
@@ -60,6 +65,11 @@ port = 8067
 domain = "files.qyrnl.com"
 host = "bowmore.qyrnl.com"
 port = 28981
+
+[services.prometheus]
+domain = "prometheus.qyrnl.com"
+host = "bowmore.qyrnl.com"
+port = 9090
 
 [services.vaultwarden]
 domain = "vault.qyrnl.com"
