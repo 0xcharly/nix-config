@@ -32,7 +32,7 @@ in {
       caddy.virtualHosts = lib.mkIf config.node.services.reverseProxy.enable {
         "vault.qyrnl.com".extraConfig = ''
           import ts_host
-          reverse_proxy localhost:${toString config.services.vaultwarden.config.ROCKET_PORT}
+          reverse_proxy bowmore.neko-danio.ts.net:${toString config.services.vaultwarden.config.ROCKET_PORT}
         '';
       };
 

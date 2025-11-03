@@ -59,7 +59,7 @@
       reverseProxy.enable = true;
       smtp.enable = true;
       taskchampion-sync-server.enable = true;
-      vaultwarden.enable = true;
+      vaultwarden.enable = false; # 2025-11-03: migrated to bowmore.
     };
   };
 

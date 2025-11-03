@@ -54,6 +54,11 @@ domain = "files.qyrnl.com"
 host = "bowmore.qyrnl.com"
 port = 28981
 
+[services.vaultwarden]
+domain = "vault.qyrnl.com"
+host = "bowmore.qyrnl.com"
+port = 8222
+
 [ssh.delay]
 trusted-keys = ["github", "git_commit_signing", "tailscale"]
 

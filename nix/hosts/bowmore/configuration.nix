@@ -11,7 +11,9 @@
     inputs.nix-config-secrets.modules.nixos.blueprint
     inputs.nix-config-secrets.modules.nixos.disk-encryption-keys
     inputs.nix-config-secrets.modules.nixos.nix-client-config
+    inputs.nix-config-secrets.modules.nixos.services-msmtp
     inputs.nix-config-secrets.modules.nixos.services-tailscale
+    inputs.nix-config-secrets.modules.nixos.services-vaultwarden
     inputs.nix-config-secrets.modules.nixos.users-delay
 
     flake.modules.common.nix-client-config
@@ -47,8 +49,10 @@
     flake.modules.nixos.selfhosted-immich
     flake.modules.nixos.selfhosted-jellyfin
     flake.modules.nixos.selfhosted-paperless
+    flake.modules.nixos.selfhosted-vaultwarden
     flake.modules.nixos.services-deploy-rs
     flake.modules.nixos.services-fail2ban
+    flake.modules.nixos.services-msmtp
     flake.modules.nixos.services-openssh
     # flake.modules.nixos.services-samba-ayako
     flake.modules.nixos.services-tailscale
@@ -89,7 +93,9 @@
       forgejo.enable = true;
       immich.enable = true;
       jellyfin.enable = true;
+      msmtp.enable = true;
       paperless.enable = true;
+      vaultwarden.enable = true;
     };
 
     users.delay.ssh.authorizeTailscaleInternalKey = true;
