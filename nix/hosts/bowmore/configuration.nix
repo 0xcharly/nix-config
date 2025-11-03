@@ -14,6 +14,7 @@
     inputs.nix-config-secrets.modules.nixos.services-miniflux
     inputs.nix-config-secrets.modules.nixos.services-msmtp
     inputs.nix-config-secrets.modules.nixos.services-tailscale
+    inputs.nix-config-secrets.modules.nixos.services-tailscale-initrd
     inputs.nix-config-secrets.modules.nixos.services-vaultwarden
     inputs.nix-config-secrets.modules.nixos.users-delay
 

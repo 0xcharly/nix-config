@@ -12,6 +12,7 @@
     inputs.nix-config-secrets.modules.nixos.disk-encryption-keys
     inputs.nix-config-secrets.modules.nixos.nix-client-config
     inputs.nix-config-secrets.modules.nixos.services-tailscale
+    inputs.nix-config-secrets.modules.nixos.services-tailscale-initrd
     inputs.nix-config-secrets.modules.nixos.users-delay
 
     flake.modules.common.nix-client-config
