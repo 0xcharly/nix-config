@@ -23,6 +23,8 @@ ipv6 = "2600:3c18::2000:a4ff:fe80:d6d4"
 
 [services.atuin]
 domain = "atuin.qyrnl.com"
+host = "bowmore.qyrnl.com"
+port = 8888
 
 [services.calibre-web]
 domain = "reads.qyrnl.com"

@@ -44,7 +44,7 @@
     };
 
     services = {
-      atuin.enable = true;
+      atuin.enable = false; # 2025-11-03: migrated to bowmore.
       dns.enable = true;
       gatus.enable = true;
       golink.enable = true;
@@ -57,8 +57,8 @@
         exporters.node.enable = true;
       };
       reverseProxy.enable = true;
-      smtp.enable = true;
-      taskchampion-sync-server.enable = true;
+      smtp.enable = false; # 2025-11-03: migrated to bowmore.
+      taskchampion-sync-server.enable = false; # 2025-11-03: Disabled because unused. Will decommission.
       vaultwarden.enable = false; # 2025-11-03: migrated to bowmore.
     };
   };

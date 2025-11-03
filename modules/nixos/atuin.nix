@@ -16,7 +16,7 @@ in {
     caddy.virtualHosts = lib.mkIf config.node.services.reverseProxy.enable {
       "atuin.qyrnl.com".extraConfig = ''
         import ts_host
-        reverse_proxy localhost:${toString config.services.atuin.port}
+        reverse_proxy bowmore.neko-danio.ts.net:${toString config.services.atuin.port}
       '';
     };
 

@@ -45,6 +45,7 @@
     flake.modules.nixos.programs-terminfo
     flake.modules.nixos.prometheus-exporters-node
     flake.modules.nixos.prometheus-exporters-zfs
+    flake.modules.nixos.selfhosted-atuin
     flake.modules.nixos.selfhosted-forgejo
     flake.modules.nixos.selfhosted-immich
     flake.modules.nixos.selfhosted-jellyfin
@@ -90,6 +91,7 @@
     };
 
     services = {
+      atuin.enable = true;
       forgejo.enable = true;
       immich.enable = true;
       jellyfin.enable = true;
