@@ -12,7 +12,7 @@ inputs.treefmt-nix.lib.mkWrapper pkgs {
   };
   settings.formatter.prettier.excludes = [
     "nix/modules/home/walker-style.css"
-    "nix/modules/home/waybar-style.css"
+    "nix/modules/home/wayland-waybar-style.css"
     "users/delay/walker/style.css"
     "users/delay/waybar/style.css"
   ];

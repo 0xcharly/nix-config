@@ -48,8 +48,8 @@ in {
       };
       clearDefaultKeybinds = true;
       settings = let
-          inherit (flake.lib.user.gui.fonts) monospace;
-        in
+        inherit (flake.lib.user.gui.fonts) monospace;
+      in
         {
           font-family = [monospace.name];
           font-size = monospace.size;

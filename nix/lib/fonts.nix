@@ -1,3 +1,7 @@
 {
-  mkFontName = {name, size, ...}: "${name} ${toString size}";
+  mkFontName = {
+    name,
+    size,
+    ...
+  }: "${name} ${toString size}";
 }
