@@ -37,6 +37,8 @@
     flake.modules.nixos.programs-steam
     flake.modules.nixos.programs-sudo
     flake.modules.nixos.programs-terminfo
+    flake.modules.nixos.prometheus-exporters-node
+    flake.modules.nixos.prometheus-exporters-zfs
     flake.modules.nixos.services-adb
     flake.modules.nixos.services-deploy-rs
     flake.modules.nixos.services-fail2ban

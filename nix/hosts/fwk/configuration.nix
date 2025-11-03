@@ -39,6 +39,8 @@
     flake.modules.nixos.programs-packages-common
     flake.modules.nixos.programs-sudo
     flake.modules.nixos.programs-terminfo
+    flake.modules.nixos.prometheus-exporters-node
+    flake.modules.nixos.prometheus-exporters-zfs
     flake.modules.nixos.services-deploy-rs
     flake.modules.nixos.services-fail2ban
     flake.modules.nixos.services-openssh
