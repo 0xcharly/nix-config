@@ -16,7 +16,7 @@ in {
       # TODO: also check resolver over IPv6?
       services.gatus.settings.endpoints = let
         # TODO: factorize these definitions with the one in facts (when declared).
-        publicIPv4 = "172.237.20.186";
+        publicIPv4 = "172.233.245.4";
 
         domainNames = [
           "ns1.pieceofenglish.fr"

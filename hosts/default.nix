@@ -5,7 +5,7 @@
 }: let
   # `self.usrlib` is an extended version of `nixpkgs.lib`.
   # mkDarwinSystem and mkNixosSystem are builders for assembling a new system.
-  inherit (inputs.self.lib.user) mkDarwinSystem mkNixosSystem mkStandaloneHome;
+  inherit (inputs.self.lib.user) mkNixosSystem;
   inherit (inputs.self.lib.user) mkModuleTree;
   inherit (inputs.nixpkgs.lib.attrsets) recursiveUpdate;
   inherit (inputs.nixpkgs.lib.lists) concatLists flatten singleton;
@@ -15,18 +15,13 @@
   # depth (i.e modules becomes nixos/modules).
   systemsModulePath = ../modules;
 
-  darwin = systemsModulePath + /darwin; # darwin-specific modules.
-  home = systemsModulePath + /home; # standalone-specific modules.
-  nixos = systemsModulePath + /nixos; # nixos-specific modules.
-  iso = systemsModulePath + /iso; # nixos-specific modules for creating an ISO.
-
   config = systemsModulePath + /config; # options for system configuration.
+  nixos = systemsModulePath + /nixos; # nixos-specific modules.
   shared = systemsModulePath + /shared; # shared modules across all hosts.
   fullyManaged = systemsModulePath + /system; # shared modules across NixOS/darwin.
 
   # home-manager
   users = ../users; # home-manager configurations.
-  standalone = users + /standalone.nix;
 
   # mkModulesList generates a list of modules imported by the host with the given
   # hostname. Do note that this needs to be called *in* the (darwin|nixos)System
@@ -72,39 +67,7 @@
     );
   };
 
-  mkDarwinHost = {
-    hostModule,
-    moduleTrees ? [],
-    extraModules ? [],
-    ...
-  } @ args:
-    mkHost (args
-      // {
-        system = "aarch64-darwin";
-        builder = mkDarwinSystem;
-        moduleTrees = moduleTrees ++ [config darwin fullyManaged shared users];
-      });
-
-  mkHomeHost = {
-    hostModule,
-    moduleTrees ? [],
-    extraModules ? [],
-    ...
-  } @ args:
-    mkHost (args
-      // {
-        system = "x86_64-linux";
-        builder = mkStandaloneHome;
-        moduleTrees = moduleTrees ++ [config home shared];
-        extraModules = extraModules ++ [(import standalone "delay")];
-      });
-
-  mkNixosHost = {
-    hostModule,
-    moduleTrees ? [],
-    extraModules ? [],
-    ...
-  } @ args:
+  mkNixosHost = {moduleTrees ? [], ...} @ args:
     mkHost (args
       // {
         system = "x86_64-linux";
@@ -115,9 +78,6 @@
   mkConfigurations = builtins.foldl' recursiveUpdate {};
 in {
   flake = {
-    # Export builder functions to build upon this config.
-    fn = {inherit mkConfigurations mkDarwinHost mkHomeHost mkNixosHost;};
-
     nixosConfigurations = mkConfigurations [
       (mkNixosHost {hostModule = ./nixos/heimdall;})
     ];
