@@ -36,29 +36,39 @@
           };
         in [
           {
-            job_name = "node_exporter";
+            job_name = "servers_system_stats";
             static_configs = builtins.map mkNodeExporterConfig [
               "bowmore"
               "dalmore"
-              "fwk"
               "linode-fr"
               # "linode-jp"
-              "nyx"
               "rip"
               "skl"
             ];
           }
           {
-            job_name = "zfs";
+            job_name = "workstations_system_stats";
+            static_configs = builtins.map mkNodeExporterConfig [
+              "fwk"
+              "nyx"
+            ];
+          }
+          {
+            job_name = "servers_zfs_stats";
             static_configs = builtins.map mkZfsExporterConfig [
               "bowmore"
               "dalmore"
-              "fwk"
               "linode-fr"
               # "linode-jp"
-              "nyx"
               "rip"
               "skl"
+            ];
+          }
+          {
+            job_name = "workstations_zfs_stats";
+            static_configs = builtins.map mkZfsExporterConfig [
+              "fwk"
+              "nyx"
             ];
           }
           {
