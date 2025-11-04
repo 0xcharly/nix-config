@@ -66,7 +66,17 @@ load_root_encryption_key() {
   disk_encryption_keys+=(--disk-encryption-keys /tmp/root-disk-encryption.key "$output_path")
 }
 
+load_tailscale_initrd_key() {
+  log_info "Loading Tailscale Preauth key for initrd…"
+
+  output_path="$extra_system_files/run/agenix/services/tailscale-preauth-initrd.key"
+
+  install -d -m 700 $(dirname "$output_path")
+  bw get password "Homelab Tailscale Auth Key for Initrd" >"$output_path"
+}
+
 load_root_encryption_key
+load_tailscale_initrd_key
 
 # Extract the given key from the top level Bitwarden entry value.
 # `key_type` is either "private" or "public".
@@ -97,7 +107,7 @@ load_ssh_host_key() {
 # Decrypt our private keys from the password store and copy them to the temporary directory.
 log_info "Loading target host keys…"
 load_ssh_host_key "ssh_host_ed25519_key"
-# load_ssh_host_key "ssh_host_ed25519_key-initrd"
+load_ssh_host_key "ssh_host_ed25519_key-initrd"
 
 # Setup installation SSH options.
 ssh_options=(
