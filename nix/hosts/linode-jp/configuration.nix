@@ -37,7 +37,6 @@
     flake.modules.nixos.prometheus-exporters-node
     flake.modules.nixos.prometheus-exporters-zfs
     flake.modules.nixos.selfhosted-dns-pieceofenglish
-    flake.modules.nixos.selfhosted-pieceofenglish
     flake.modules.nixos.services-deploy-rs
     flake.modules.nixos.services-fail2ban
     flake.modules.nixos.services-openssh
@@ -50,7 +49,7 @@
   # System config.
   node = {
     fs.zfs = {
-      hostId = "0db85ca6";
+      hostId = "60eec752";
       system = {
         disk = "/dev/sda";
         linode.swapDisk = "/dev/sdb";
@@ -59,23 +58,16 @@
       zpool.root.reservation = "2GiB";
     };
 
-    services = {
-      dns."pieceofenglish.fr" = {
-        enable = true;
-        openFirewall = true;
-        bindInterface = "eth0";
-      };
-      pieceofenglish = {
-        enable = true;
-        reverse-proxy = {
-          enable = true;
-          openFirewall = true;
-          bindInterface = "eth0";
-        };
-      };
+    services.dns."pieceofenglish.fr" = {
+      enable = true;
+      openFirewall = true;
+      bindInterface = "eth0";
     };
 
-    users.delay.ssh.authorizeTailscaleInternalKey = true;
+    users.delay.ssh = {
+      authorizeTailscaleInternalKey = true;
+      authorizeTailscalePublicKey = true;
+    };
   };
 
   networking = {
