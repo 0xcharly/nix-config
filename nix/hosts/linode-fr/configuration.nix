@@ -37,6 +37,7 @@
     flake.modules.nixos.prometheus-exporters-node
     flake.modules.nixos.prometheus-exporters-zfs
     flake.modules.nixos.selfhosted-dns-pieceofenglish
+    flake.modules.nixos.selfhosted-pieceofenglish
     flake.modules.nixos.services-deploy-rs
     flake.modules.nixos.services-fail2ban
     flake.modules.nixos.services-openssh
@@ -55,16 +56,23 @@
         linode.swapDisk = "/dev/sdb";
         luksPasswordFile = "/tmp/root-disk-encryption.key";
       };
-      zpool.root = {
-        reservation = "2GiB";
-        datadirs.pieceofenglish = {};
-      };
+      zpool.root.reservation = "2GiB";
     };
 
-    services.dns."pieceofenglish.fr" = {
-      enable = true;
-      openFirewall = true;
-      bindInterface = "eth0";
+    services = {
+      dns."pieceofenglish.fr" = {
+        enable = true;
+        openFirewall = true;
+        bindInterface = "eth0";
+      };
+      pieceofenglish = {
+        enable = true;
+        reverse-proxy = {
+          enable = true;
+          openFirewall = true;
+          bindInterface = "eth0";
+        };
+      };
     };
 
     users.delay.ssh = {

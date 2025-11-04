@@ -116,11 +116,11 @@
   };
 
   node.services = {
+    # 2025-11-04: migrated to linode-fr.
     pieceofenglish = {
       enable = true;
       openFirewall = true;
       bindInterface = "eth0";
-      # TODO: move these definitions to facts.
       publicIPv4 = "172.237.20.186";
       publicIPv6 = "2600:3c18::2000:a4ff:fe80:d6d4";
     };

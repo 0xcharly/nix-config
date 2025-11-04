@@ -64,14 +64,14 @@ in {
 
   config = lib.mkIf cfg.enable {
     services = {
-      pieceofenglish = {
-        enable = true;
-        # HACK: this should not be necessary and is likely due to a
-        # misconfiguration in the exposed module.
-        package = inputs.pieceofenglish.packages.x86_64-linux.default;
-        baseUrl = domainName;
-        environmentFile = config.age.secrets."services/pieceofenglish.env".path;
-      };
+      # pieceofenglish = {
+      #   enable = true;
+      #   # HACK: this should not be necessary and is likely due to a
+      #   # misconfiguration in the exposed module.
+      #   package = inputs.pieceofenglish.packages.x86_64-linux.default;
+      #   baseUrl = domainName;
+      #   environmentFile = config.age.secrets."services/pieceofenglish.env".path;
+      # };
 
       coredns = {
         enable = true;
@@ -99,8 +99,8 @@ in {
             protonmail2._domainkey  10800 IN CNAME protonmail2.domainkey.d3oesgdehuo3lyylmnywtohdojzlokhdt3hyq5wreaxvd6vmz3a5q.domains.proton.ch.
             protonmail3._domainkey  10800 IN CNAME protonmail3.domainkey.d3oesgdehuo3lyylmnywtohdojzlokhdt3hyq5wreaxvd6vmz3a5q.domains.proton.ch.
 
-            @         IN A     ${cfg.publicIPv4}
-            @         IN AAAA  ${cfg.publicIPv6}
+            @         IN A     172.233.245.4
+            @         IN AAAA  2600:3c07::2000:31ff:fe53:d2e1
             www       IN CNAME @
           '';
         in ''
@@ -119,28 +119,28 @@ in {
         '';
       };
 
-      caddy = {
-        enable = true;
-        virtualHosts = {
-          ${domainName}.extraConfig = ''
-            reverse_proxy ${config.services.pieceofenglish.listenAddress}:${toString config.services.pieceofenglish.port}
-          '';
-
-          "www.${domainName}".extraConfig = ''
-            redir https://pieceofenglish.fr{uri}
-          '';
-        };
-      };
+      # caddy = {
+      #   enable = true;
+      #   virtualHosts = {
+      #     ${domainName}.extraConfig = ''
+      #       reverse_proxy ${config.services.pieceofenglish.listenAddress}:${toString config.services.pieceofenglish.port}
+      #     '';
+      #
+      #     "www.${domainName}".extraConfig = ''
+      #       redir https://pieceofenglish.fr{uri}
+      #     '';
+      #   };
+      # };
     };
 
     # Allow Caddy to bind to 443.
-    systemd.services.caddy.serviceConfig = {
-      AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
-    };
+    # systemd.services.caddy.serviceConfig = {
+    #   AmbientCapabilities = ["CAP_NET_BIND_SERVICE"];
+    # };
 
     networking.firewall = lib.mkIf (cfg.openFirewall) {
       interfaces.${cfg.bindInterface} = {
-        allowedTCPPorts = [53 80 443];
+        allowedTCPPorts = [53]; # 80 443];
         allowedUDPPorts = [53];
       };
     };
