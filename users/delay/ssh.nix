@@ -11,25 +11,17 @@ in {
     mkIdentityFile = key: {IdentityFile = "${home}/.ssh/${key}";};
   in {
     enable = true;
-    matchBlocks =
-      {
-        # Public services.
-        "bitbucket.org" = {
-          user = "git";
-          extraOptions = mkIdentityFile "bitbucket";
-        };
-        "github.com" = {
-          user = "git";
-          extraOptions = mkIdentityFile "github";
-        };
-      }
-      // lib.optionalAttrs flags.ssh.declareTailscaleEntryNodeHosts {
-        # Tailscale nodes accessible from the public internet.
-        linode = {
-          hostname = "2600:3c18::2000:a4ff:fe80:d6d4";
-          extraOptions = mkIdentityFile "tailscale-public";
-        };
+    matchBlocks = {
+      # Public services.
+      "bitbucket.org" = {
+        user = "git";
+        extraOptions = mkIdentityFile "bitbucket";
       };
+      "github.com" = {
+        user = "git";
+        extraOptions = mkIdentityFile "github";
+      };
+    };
     userKnownHostsFile = "${home}/.ssh/known_hosts ${home}/.ssh/known_hosts.trusted";
   };
 

@@ -31,8 +31,6 @@ vault           IN CNAME heimdall
 bowmore         IN CNAME bowmore.@tailnetName@.
 dalmore         IN CNAME dalmore.@tailnetName@.
 fwk             IN CNAME fwk.@tailnetName@.
-helios          IN CNAME helios.@tailnetName@.
-linode          IN CNAME linode.@tailnetName@.
 linode-fr       IN CNAME linode-fr.@tailnetName@.
 linode-jp       IN CNAME linode-jp.@tailnetName@.
 nyx             IN CNAME nyx.@tailnetName@.

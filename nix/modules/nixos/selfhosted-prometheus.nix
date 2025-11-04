@@ -41,7 +41,7 @@
               "bowmore"
               "dalmore"
               "linode-fr"
-              # "linode-jp"
+              "linode-jp"
               "rip"
               "skl"
             ];
@@ -59,7 +59,7 @@
               "bowmore"
               "dalmore"
               "linode-fr"
-              # "linode-jp"
+              "linode-jp"
               "rip"
               "skl"
             ];
