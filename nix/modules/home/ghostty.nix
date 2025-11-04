@@ -90,7 +90,6 @@ in {
             gen-font-codepoint-map = family: codepoints: lib.concatStringsSep "=" [codepoints family];
           in
             lib.mapAttrsToList gen-font-codepoint-map codepoints-map;
-          title = " ";
           theme = "catppuccin-obsidian";
           custom-shader = "${./ghostty-cursor.glsl}";
           window-padding-x = 4;
