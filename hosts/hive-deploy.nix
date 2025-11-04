@@ -26,7 +26,7 @@ in {
     deploy.nodes = let
       hosts = {
         homelabHosts = {
-          hostnames = ["heimdall" "helios" "bowmore" "skl"];
+          hostnames = ["heimdall" "bowmore" "rip" "skl"];
           options.fastConnection = true;
         };
         frRemoteHosts = {
@@ -37,7 +37,7 @@ in {
           };
         };
         jpRemoteHosts = {
-          hostnames = ["linode"];
+          hostnames = ["linode-jp"];
           options.remoteBuild = false;
         };
       };

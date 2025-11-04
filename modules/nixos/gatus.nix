@@ -58,10 +58,8 @@ in {
             "bowmore"
             "dalmore"
             "heimdall"
-            "helios"
-            "linode"
             "linode-fr"
-            # "linode-jp"
+            "linode-jp"
             # "rip"
             "skl"
           ];

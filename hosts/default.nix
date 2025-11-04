@@ -120,8 +120,6 @@ in {
 
     nixosConfigurations = mkConfigurations [
       (mkNixosHost {hostModule = ./nixos/heimdall;})
-      (mkNixosHost {hostModule = ./nixos/linode;})
-      (mkNixosHost {hostModule = ./nixos/helios;})
     ];
   };
 
