@@ -1,12 +1,11 @@
 {inputs, ...}: let
   inherit (inputs) deploy-rs nixpkgs;
-  inherit (inputs.nixpkgs.lib.attrsets) recursiveUpdate;
+  inherit (inputs.nixpkgs.lib.attrsets) mergeAttrsList;
 
   system = "x86_64-linux";
 
   # Unmodified nixpkgs.
   pkgs = import nixpkgs {inherit system;};
-  inherit (pkgs.lib) flatten mapAttrsToList;
 
   # nixpkgs with deploy-rs overlay but force the nixpkgs package.
   deployPkgs = import nixpkgs {
@@ -24,26 +23,17 @@
 in {
   flake = {
     deploy.nodes = let
-      hosts = {
-        homelabHosts = {
-          hostnames = ["heimdall" "bowmore" "skl"];
-          options.fastConnection = true;
-        };
-        frRemoteHosts = {
-          hostnames = ["dalmore" "linode-fr"];
-          options = {
-            fastConnection = false;
-            remoteBuild = false; # NOTE: Default when `fastConnection == false`.
-          };
-        };
-        jpRemoteHosts = {
-          hostnames = ["linode-jp"];
-          options.remoteBuild = false;
-        };
-      };
+      hosts = [
+        "bowmore"
+        "dalmore"
+        "heimdall"
+        "linode-fr"
+        "linode-jp"
+        "skl"
+      ];
 
-      mkDeployHostConfiguration = options: hostname: {
-        "${hostname}" = recursiveUpdate options {
+      mkDeployConfiguration = hostname: {
+        "${hostname}" = {
           hostname = "${hostname}.neko-danio.ts.net";
           profiles.system.path = deployPkgs.deploy-rs.lib.activate.nixos inputs.self.nixosConfigurations."${hostname}";
 
@@ -54,13 +44,8 @@ in {
           sshOpts = ["-A" "-i" "/run/agenix/keys/nixos_deploy_ed25519_key"];
         };
       };
-
-      mkDeployConfigurations = group:
-        builtins.map (mkDeployHostConfiguration group.options) group.hostnames;
-
-      mkConfigurations = builtins.foldl' recursiveUpdate {};
     in
-      mkConfigurations (flatten (mapAttrsToList (_: mkDeployConfigurations) hosts));
+      mergeAttrsList (builtins.map mkDeployConfiguration hosts);
 
     checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks inputs.self.deploy) deploy-rs.lib;
   };
