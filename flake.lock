@@ -476,11 +476,11 @@
         "quickshell": "quickshell"
       },
       "locked": {
-        "lastModified": 1762326147,
-        "narHash": "sha256-Vk4+d/2PlJCJXhwWxaPl897YK4iwpwI9m2UzvTcjd5w=",
+        "lastModified": 1762328307,
+        "narHash": "sha256-YEj0Mz6KbdBUCJPWCF/SU3s97gH4MyT9dvA11kRNdOE=",
         "owner": "0xcharly",
         "repo": "nix-config-shell",
-        "rev": "6d85ab045ed04b1c7b518041dd899bdc09aa4148",
+        "rev": "fce4999e2ab945fa62870786f6db96044a526810",
         "type": "github"
       },
       "original": {
