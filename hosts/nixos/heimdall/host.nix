@@ -47,7 +47,7 @@
       atuin.enable = false; # 2025-11-03: migrated to bowmore.
       dns.enable = true;
       gatus.enable = true;
-      golink.enable = true;
+      golink.enable = false; # 2025-11-06: migrated to bowmore.
       gotify.enable = true;
       grafana.enable = false; # 2025-11-03: migrated to bowmore.
       immich-public-proxy.enable = true;

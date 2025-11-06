@@ -36,6 +36,11 @@ domain = "git.qyrnl.com"
 host = "bowmore.qyrnl.com"
 port = 3917
 
+[services.go]
+domain = "go.neko-danio.ts.net"
+host = "bowmore.qyrnl.com"
+# no port, self-advertising on the TS network.
+
 [services.grafana]
 domain = "graphs.qyrnl.com"
 host = "bowmore.qyrnl.com"
