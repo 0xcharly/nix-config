@@ -10,7 +10,7 @@
     firefox = config.programs.firefox.finalPackage.meta.desktopFileName;
     zen-browser = config.programs.zen-browser.package.meta.desktopFileName;
 
-    browserList = [zen-browser firefox chromium];
+    browserList = [chromium firefox zen-browser];
 
     associations = builtins.listToAttrs (map (name: {
         inherit name browserList;
