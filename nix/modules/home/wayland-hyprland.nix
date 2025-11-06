@@ -284,8 +284,8 @@
             "SUPER CTRL,  P,      exec, ${uwsmGetExe pkgs.hyprshot} -m output --raw | ${uwsmGetExe screenshot-editor}"
 
             "SUPER ALT,   F,      exec, ${uwsmGetExe config.programs.firefox.finalPackage}"
-            "SUPER ALT,   S,      exec, ${uwsmGetExe pkgs.bitwarden}"
             "SUPER ALT,   C,      exec, ${uwsmGetExe config.programs.chromium.package}"
+            "SUPER ALT,   B,      exec, ${uwsmGetExe pkgs.bitwarden}"
 
             "SUPER,       D,      hy3:makegroup,   h"
             "SUPER,       S,      hy3:makegroup,   v"
@@ -323,12 +323,15 @@
           # Position the PiP window in the top right corner.
           pipPosX = toString (cfg.display.logicalResolution.width - cfg.pip.width - cfg.pip.margin.x);
           pipPosY = toString (cfg.pip.margin.y);
+
+          bitwardenExtId = "nngceckbapebfimnlniiiahkandclblb";
         in [
           # Thunar operation in progress dialog.
           "float, class:^thunar$, title:^File Operation Progress$"
           # Volume control.
           "float, class:^org.pulseaudio.pavucontrol$, title:^Volume Control$"
           # Bitwarden extension.
+          "float, class:^chrome-${bitwardenExtId}-Default$, initialTitle:^_crx_${bitwardenExtId}$"
           "float, class:^firefox$, title:^(Extension: \(Bitwarden Password Manager\))(.*)$"
           # Chrome's Picture-in-Picture.
           "float, class:^$, title:^Picture in picture$"
