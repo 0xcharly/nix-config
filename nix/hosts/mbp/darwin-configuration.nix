@@ -38,6 +38,7 @@
       "protonvpn" # Private network.
       "tailscale-app" # Personal VPN network.
       "transmission"
+      "ungoogled-chromium"
       "vlc" # Media player.
       "zen" # Firefox alternative.
     ];
