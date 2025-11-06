@@ -279,9 +279,9 @@
             "SUPER,       V,      togglefloating, "
             "SUPER,       F,      fullscreen, "
             "SUPER CTRL,  C,      exec, ${uwsmGetExe pkgs.hyprpicker} -a"
-            "SUPER,       P,      exec, ${uwsmGetExe pkgs.hyprshot} -m region --raw | ${uwsmGetExe screenshot-editor}"
-            "SUPER SHIFT, P,      exec, ${uwsmGetExe pkgs.hyprshot} -m window --raw | ${uwsmGetExe screenshot-editor}"
-            "SUPER CTRL,  P,      exec, ${uwsmGetExe pkgs.hyprshot} -m output --raw | ${uwsmGetExe screenshot-editor}"
+            "SUPER,       P,      exec, ${uwsmGetExe pkgs.grimblast} save area - | ${uwsmGetExe screenshot-editor}"
+            "SUPER SHIFT, P,      exec, ${uwsmGetExe pkgs.grimblast} save active - | ${uwsmGetExe screenshot-editor}"
+            "SUPER CTRL,  P,      exec, ${uwsmGetExe pkgs.grimblast} save screen - | ${uwsmGetExe screenshot-editor}"
 
             "SUPER ALT,   F,      exec, ${uwsmGetExe config.programs.firefox.finalPackage}"
             "SUPER ALT,   C,      exec, ${uwsmGetExe config.programs.chromium.package}"
