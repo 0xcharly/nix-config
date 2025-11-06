@@ -185,7 +185,7 @@
         general = {
           layout = "hy3"; # Requires the hy3 plugin.
           border_size = 2;
-          gaps_in = 2;
+          gaps_in = 8;
           gaps_out = 8;
           "col.active_border" = "rgb(9fcdfe)";
           "col.inactive_border" = "rgb(1d2938)";
@@ -273,11 +273,12 @@
           [
             "SUPER,       Return, exec, ${uwsmGetExe config.programs.ghostty.package}"
             "SUPER,       Space,  exec, ${uwsmGetExe config.programs.walker.package}"
-            "SUPER SHIFT, X,      killactive, "
+            "SUPER SHIFT, X,      killactive"
             "SUPER SHIFT, Q,      exec, ${uwsmGetExe' pkgs.systemd "loginctl"} terminate-session \"$XDG_SESSION_ID\""
             "SUPER SHIFT, L,      exec, ${uwsmGetExe config.programs.hyprlock.package}"
-            "SUPER,       V,      togglefloating, "
-            "SUPER,       F,      fullscreen, "
+            "SUPER,       V,      togglefloating"
+            "SUPER,       F,      fullscreen, 1" # Maximize.
+            "SUPER SHIFT, F,      fullscreen, 0" # Fullscreen.
             "SUPER CTRL,  C,      exec, ${uwsmGetExe pkgs.hyprpicker} -a"
             "SUPER,       P,      exec, ${uwsmGetExe pkgs.grimblast} save area - | ${uwsmGetExe screenshot-editor}"
             "SUPER SHIFT, P,      exec, ${uwsmGetExe pkgs.grimblast} save active - | ${uwsmGetExe screenshot-editor}"
@@ -345,6 +346,17 @@
           "move ${pipPosX} ${pipPosY}, class:^firefox$, title:^Picture-in-Picture$"
           "size ${toString cfg.pip.width} ${toString cfg.pip.height}, class:^firefox$, title:^Picture-in-Picture$"
           "keepaspectratio, class:^firefox$, title:^Picture-in-Picture$"
+          # Implement "smart gaps" via workspace rules.
+          # https://wiki.hypr.land/Configuring/Workspace-Rules/#smart-gaps
+          "bordersize 0, floating:0, onworkspace:w[tv1]"
+          "rounding 0, floating:0, onworkspace:w[tv1]"
+          "bordersize 0, floating:0, onworkspace:f[1]"
+          "rounding 0, floating:0, onworkspace:f[1]"
+        ];
+        # "smart gaps" cont'd.
+        workspace = [
+          "w[tv1], gapsout:0, gapsin:0"
+          "f[1], gapsout:0, gapsin:0"
         ];
       };
     };
