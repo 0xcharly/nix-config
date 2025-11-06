@@ -184,18 +184,18 @@
         };
         general = {
           layout = "hy3"; # Requires the hy3 plugin.
-          border_size = 2;
-          gaps_in = 8;
+          border_size = 1;
+          gaps_in = 4;
           gaps_out = 8;
           "col.active_border" = "rgb(9fcdfe)";
           "col.inactive_border" = "rgb(1d2938)";
         };
         decoration = {
-          rounding = 10;
+          rounding = 4;
           # Adjusts the curve used for rounding corners, larger is smoother, 2.0
           # is a circle, 4.0 is a squircle, 1.0 is a triangular corner.
           # [1.0 - 10.0].
-          rounding_power = 4;
+          rounding_power = 2;
           shadow = {
             enabled = true;
             range = 4;
