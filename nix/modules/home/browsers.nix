@@ -1,19 +1,18 @@
-{flake, ...}: {config, ...}: {
+{flake, ...}: {
   imports = [
     flake.modules.home.browser-chromium
     flake.modules.home.browser-firefox
-    flake.modules.home.browser-zen
   ];
 
   xdg.mimeApps = let
-    chromium = config.programs.chromium.finalPackage.meta.desktopFileName;
-    firefox = config.programs.firefox.finalPackage.meta.desktopFileName;
-    zen-browser = config.programs.zen-browser.package.meta.desktopFileName;
+    chromium = "chromium-browser.desktop";
+    firefox = "firefox.desktop";
 
-    browserList = [chromium firefox zen-browser];
+    browserList = [chromium firefox];
 
     associations = builtins.listToAttrs (map (name: {
-        inherit name browserList;
+        inherit name;
+        value = browserList;
       }) [
         "application/json"
         "application/x-extension-htm"
@@ -35,6 +34,7 @@
         "x-scheme-handler/unknown"
       ]);
   in {
+    enable = true;
     associations.added = associations;
     defaultApplications = associations;
   };

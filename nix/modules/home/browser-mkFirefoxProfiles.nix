@@ -49,23 +49,9 @@ in {
       force = true;
       engines = {
         "Nix Packages" = {
-          urls = [
-            {
-              template = "https://search.nixos.org/packages";
-              params = [
-                {
-                  name = "type";
-                  value = "packages";
-                }
-                {
-                  name = "query";
-                  value = "{searchTerms}";
-                }
-              ];
-            }
-          ];
-
+          urls = [{template = "https://search.nixos.org/packages?query={searchTerms}";}];
           icon = "${nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+          updateInterval = 7 * 24 * 60 * 60 * 1000; # Weekly
           definedAliases = ["@np"];
         };
 
@@ -91,7 +77,7 @@ in {
         };
 
         "GitHub Code Search" = {
-          urls = [{template = "https://github.com/search?q={searchTerms}&type=code";}];
+          urls = [{template = "https://github.com/search?type=code&q={searchTerms}";}];
           icon = "https://github.com/fluidicon.png";
           updateInterval = 7 * 24 * 60 * 60 * 1000; # Weekly
           definedAliases = ["cs"];
