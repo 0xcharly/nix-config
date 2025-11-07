@@ -13,7 +13,29 @@
     flake.modules.nixos.fs-zfs-common
   ];
 
-  options.node.fs.zfs.system = with lib; {
+  options.node.fs.zfs.system = with lib; let
+    diskOptions = {
+      options = {
+        device = mkOption {
+          type = types.str;
+          example = "/dev/disk/by-id/ata-WDC_WDS400T1R0A-68A4W0_21083X800070";
+          description = ''
+            The absolute path under /dev/disk/by-id to the disk used for the system (in mirror config).
+          '';
+        };
+
+        bootPartitionUuid = mkOption {
+          type = types.strMatching "[[:xdigit:]]{8}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{12}";
+          example = "809b3a2b-828a-4730-95e1-75b6343e415a";
+          description = ''
+            The UUID (also known as GUID) of the partition. Note that this is distinct from the UUID of the filesystem.
+
+            You can generate a UUID with the command `uuidgen -r`.
+          '';
+        };
+      };
+    };
+  in {
     luksPasswordFile = mkOption {
       type = types.path;
       description = ''
@@ -23,17 +45,15 @@
       '';
     };
     disk0 = mkOption {
-      type = types.str;
-      example = "/dev/disk/by-id/ata-WDC_WDS400T1R0A-68A4W0_21083X800070";
+      type = types.submodule diskOptions;
       description = ''
-        The path under /dev to the 1st disk used for the system (in mirror config).
+        The options for the 1st disk used for the system (in mirror config).
       '';
     };
     disk1 = mkOption {
-      type = types.str;
-      example = "/dev/disk/by-id/ata-WDC_WDS400T1R0A-68A4W0_21083X800070";
+      type = types.submodule diskOptions;
       description = ''
-        The path under /dev to the 2nd disk used for the system (in mirror config).
+        The options for the 2nd disk used for the system (in mirror config).
       '';
     };
     swapDisk = mkOption {
@@ -59,49 +79,52 @@
       };
     };
 
-    # TODO: There is something fishy happening with this.
-    systemd.services.sync-boot-fallback = {
-      description = "Sync /boot to /boot-fallback after boot";
-      after = ["local-fs.target" "zfs-mount.service"];
-      wants = ["zfs-mount.service"];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        ExecStart = flake.lib.builders.mkShellApplication pkgs {
-          name = "sync-boot-fallback";
-          runtimeInputs = with pkgs; [rsync];
-          text = ''
-            # Keep /boot and /boot-fallback in sync.
-            # -a: archive mode (preserves permissions, symlinks, timestamps)
-            # -H: preserve hardlinks
-            # --delete: remove files on fallback that were deleted on primary
-            rsync -aH --delete /boot/ /boot-fallback/
-          '';
-        };
-      };
-      wantedBy = ["multi-user.target"];
+    # "Sync /boot to /boot-fallback on activation.
+    system.activationScripts.syncBootFallback = {
+      text = ''
+        echo "[nix-config] syncing /boot and /boot-fallback"
+
+        # Keep /boot and /boot-fallback in sync on each activation.
+        # -a: archive mode (preserves permissions, symlinks, timestamps)
+        # -H: preserve hardlinks
+        # --delete: remove files on fallback that were deleted on primary
+        ${lib.getExe pkgs.rsync} -aH --delete /boot/ /boot-fallback/
+      '';
+      deps = ["specialfs"]; # Ensure /boot and /boot-fallback are mounted.
     };
 
     disko.devices = let
       cfg = config.node.fs.zfs.system;
     in {
       disk = let
-        mkSystemDisk = device: luksName: {
+        mkSystemDisk = {
+          device,
+          bootPartitionUuid,
+        }: luksName: {
           type = "disk";
           inherit device;
           content = {
             type = "gpt";
             partitions = {
               ESP = {
-                # TODO: figure out how to do that safely and remotely.
-                # IMPORTANT: Disko references to these partitions by label in
-                # /etc/fstab. They MUST be distinct per disk, otherwise this
-                # will mount the same partition twice.
+                # IMPORTANT: When `label=` is specified, Disko references to these partitions by
+                # label in /etc/fstab. They MUST be distinct per disk, otherwise this will mount
+                # the same partition twice.
+                # This config originally assign the same label to both disk, causing a race when
+                # mounting /boot and /boot-fallback, effectively causing one of these partitions
+                # to be mounted twice, and /boot and /boot-fallback to point to it (/etc/fstab).
+                # This caused sync-boot-fallback.service to be a noop.
+                # Luckily disko prefers using the partition UUID if specified. This permitted to
+                # safely untangle this mess remotly without crashing the system, since deploying
+                # a new configuration triggers boot.service and boot-fallback.service.
+                # Partition labels were manually fixed with gdisk to match the comment below.
+
                 # label =
-                #   if device == cfg.disk0
+                #   if device == cfg.disk0.device
                 #   then "EFI0"
                 #   else "EFI1";
-                label = "EFI";
+
+                uuid = bootPartitionUuid;
                 name = "ESP";
                 size = "500M";
                 type = "EF00";
@@ -109,7 +132,7 @@
                   type = "filesystem";
                   format = "vfat";
                   mountpoint =
-                    if device == cfg.disk0
+                    if bootPartitionUuid == cfg.disk0.bootPartitionUuid
                     then "/boot"
                     else "/boot-fallback";
                   mountOptions = ["defaults" "umask=0077"];

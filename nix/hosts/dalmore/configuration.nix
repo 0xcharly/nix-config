@@ -60,8 +60,14 @@
       hostId = "eb3cd4cb";
       system = {
         # System drives.
-        disk0 = "/dev/disk/by-id/nvme-Samsung_SSD_980_500GB_S78GNL0Y827740P"; # NVMe Left.
-        disk1 = "/dev/disk/by-id/nvme-Samsung_SSD_980_500GB_S78GNL0Y827727J"; # NVMe Right.
+        disk0 = {
+          device = "/dev/disk/by-id/nvme-Samsung_SSD_980_500GB_S78GNL0Y827740P"; # NVMe Left.
+          bootPartitionUuid = "5709a552-1e89-43fd-9e6a-205f3246dc76";
+        };
+        disk1 = {
+          device = "/dev/disk/by-id/nvme-Samsung_SSD_980_500GB_S78GNL0Y827727J"; # NVMe Right.
+          bootPartitionUuid = "7260144b-b3c2-4b71-b91e-d874ef59ae01";
+        };
         swapDisk = "/dev/disk/by-id/nvme-AirDisk_128GB_SSD_QES481B001642P110N";
         # Encryption keys.
         luksPasswordFile = "/tmp/root-disk-encryption.key";

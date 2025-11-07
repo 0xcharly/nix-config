@@ -70,7 +70,10 @@
             type = "gpt";
             partitions = {
               ESP = {
-                label = "EFI";
+                label =
+                  if device == cfg.disk0
+                  then "EFI0"
+                  else "EFI1";
                 size = "500M";
                 type = "EF00";
                 content = {
