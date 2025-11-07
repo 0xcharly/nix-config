@@ -4,7 +4,10 @@
   pkgs,
   ...
 }: {
-  imports = [flake.modules.home.wayland-uwsm];
+  imports = [
+    flake.modules.home.wayland-uwsm
+    # flake.modules.home.wayland-hyprland-smartgaps
+  ];
 
   options.node.wayland = with lib; {
     hyprland = {
@@ -187,20 +190,27 @@
           border_size = 1;
           gaps_in = 4;
           gaps_out = 8;
-          "col.active_border" = "rgb(9fcdfe)";
-          "col.inactive_border" = "rgb(1d2938)";
+          "col.active_border" = "rgb(FFA028)";
+          "col.inactive_border" = "rgb(00C8FF)";
         };
         decoration = {
-          rounding = 4;
+          rounding = 8;
           # Adjusts the curve used for rounding corners, larger is smoother, 2.0
           # is a circle, 4.0 is a squircle, 1.0 is a triangular corner.
           # [1.0 - 10.0].
-          rounding_power = 2;
+          rounding_power = 11;
           shadow = {
             enabled = true;
-            range = 4;
-            render_power = 3;
-            color = "rgba(1a1a1aee)";
+            range = 8;
+            render_power = 2;
+            color = "rgb(B43C00)";
+            color_inactive = "rgb(005AA0)";
+          };
+          blur = {
+            enabled = true;
+            size = 3;
+            passes = 2;
+            new_optimizations = 0;
           };
         };
         misc = {
@@ -220,24 +230,24 @@
           };
         };
         bezier = [
-          "user, 0.6, 0.5, 0.1, 1"
-          "user_dim, 0.3, 0.4, 0.6, 0.7"
+          "expressiveFastSpatial, 0.42, 1.67, 0.21, 0.90"
+          "expressiveSlowSpatial, 0.39, 1.29, 0.35, 0.98"
+          "expressiveDefaultSpatial, 0.38, 1.21, 0.22, 1.00"
+          "emphasizedDecel, 0.05, 0.7, 0.1, 1"
+          "emphasizedAccel, 0.3, 0, 0.8, 0.15"
         ];
         animations = {
           enabled = true;
           animation = [
             # https://wiki.hyprland.org/Configuring/Animations/#animation-tree
             # name, on/off, speed (100ms increments), curve, style
-            # borderangle loop requires Hyprland to push new frame at the
-            # monitor's refresh rate, which puts stress on CPU/GPU. Don't do
-            # this on a laptop.
-            "border,      1,    1,   user"
-            # "borderangle, 1,    500, user,     loop"
-            "fade,        1,    1,   user"
-            "fadeDim,     1,    1,   user_dim"
-            "layers,      1,    1,   user,     popin 70%"
-            "windows,     1,    1,   user,     popin 70%"
-            "workspaces,  0,    2,   user,     slidefade 10%"
+            "global,      1, 1.2, emphasizedDecel"
+            "fade,        1, 1.2, emphasizedDecel"
+            "layers,      1, 1.2, emphasizedDecel, popin 93%"
+            "windowsIn,   1, 1.2, emphasizedDecel, slidefade 90%"
+            "windowsMove, 1, 1.2, emphasizedDecel, slide"
+            "windowsOut,  1, 1.2, emphasizedAccel, slidefade 90%"
+            "workspaces,  0,   2, emphasizedDecel, slide"
           ];
         };
         # Keyboard bindings.
@@ -346,17 +356,6 @@
           "move ${pipPosX} ${pipPosY}, class:^firefox$, title:^Picture-in-Picture$"
           "size ${toString cfg.pip.width} ${toString cfg.pip.height}, class:^firefox$, title:^Picture-in-Picture$"
           "keepaspectratio, class:^firefox$, title:^Picture-in-Picture$"
-          # Implement "smart gaps" via workspace rules.
-          # https://wiki.hypr.land/Configuring/Workspace-Rules/#smart-gaps
-          "bordersize 0, floating:0, onworkspace:w[tv1]"
-          "rounding 0, floating:0, onworkspace:w[tv1]"
-          "bordersize 0, floating:0, onworkspace:f[1]"
-          "rounding 0, floating:0, onworkspace:f[1]"
-        ];
-        # "smart gaps" cont'd.
-        workspace = [
-          "w[tv1], gapsout:0, gapsin:0"
-          "f[1], gapsout:0, gapsin:0"
         ];
       };
     };

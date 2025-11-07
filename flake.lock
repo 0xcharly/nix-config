@@ -396,11 +396,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1751378622,
-        "narHash": "sha256-zTRHIgThL584dAv4nlrOETRy2SDF+08BpTV5RYcyCBQ=",
+        "lastModified": 1762866835,
+        "narHash": "sha256-eRnZWmg8c6o2tkWbEBLmt2ctcCP+MG2cMenDEpfVpko=",
         "owner": "0xcharly",
         "repo": "nix-config-fonts",
-        "rev": "6ff9412c9675f7e7b57aefe5f5ead7d6a5f20b7d",
+        "rev": "159de366ddc8fe4cb6fcdc823c768e5cfa921fc1",
         "type": "github"
       },
       "original": {

@@ -33,8 +33,10 @@ in {
         fish_greeting = ""; # Disable greeting message.
         fish_mode_prompt = ""; # Disable prompt vi mode reporting.
         fish_prompt = ''
+          set_color white
+          printf "❬%s❭" (prompt_hostname)
           set_color blue
-          printf "\$ "
+          printf " ~ \$ "
           set_color normal
         '';
       };

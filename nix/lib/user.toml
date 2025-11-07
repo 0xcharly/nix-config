@@ -1,12 +1,11 @@
 [gui.fonts.monospace]
-name = "Comic Code"
-# name = "Recursive Mono Casual Static"
+name = "Berkeley Mono SemiCondensed"
 size = 11
 
 [gui.fonts.sansSerif]
-name = "Recursive Sans Casual Static"
+name = "Rubik"
 size = 12
 
 [gui.fonts.serif]
-name = "Recursive Sans Linear Static"
+name = "Rubik"
 size = 12

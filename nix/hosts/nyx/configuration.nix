@@ -76,6 +76,7 @@
 
   networking = {
     inherit hostName;
+    domain = "qyrnl.com";
     interfaces.enp115s0.useDHCP = true;
   };
 
