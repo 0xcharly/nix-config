@@ -1,11 +1,11 @@
 [gui.fonts.monospace]
 name = "PragmataPro Mono Liga"
-size = 14
+size = 13
 
 [gui.fonts.sansSerif]
-name = "Rubik"
-size = 14
+name = "Sys"
+size = 13
 
 [gui.fonts.serif]
-name = "Rubik"
-size = 14
+name = "Sys"
+size = 13

@@ -21,5 +21,6 @@
     rubik
 
     inputs.nix-config-fonts.packages.${system}.pragmatapro
+    inputs.nix-config-fonts.packages.${system}.sys
   ];
 }
