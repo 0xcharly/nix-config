@@ -84,6 +84,7 @@
 
   networking = {
     inherit hostName;
+    domain = "qyrnl.com";
     interfaces.wlp192s0.useDHCP = true;
   };
 
