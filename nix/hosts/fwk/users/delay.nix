@@ -33,7 +33,7 @@
     flake.modules.home.wayland-essentials
     flake.modules.home.wayland-hyprland
     flake.modules.home.wayland-notifications
-    flake.modules.home.wayland-waybar
+    flake.modules.home.wayland-quickshell
   ];
 
   home.stateVersion = "25.05";
@@ -68,10 +68,7 @@
         prefix = "${lib.getExe config.node.wayland.uwsm-wrapper.package} --";
       };
 
-      waybar = {
-        output = ["eDP-1"];
-        extra-modules-right = ["battery"];
-      };
+      arcshell.modules.powerManagement = true;
     };
   };
 }

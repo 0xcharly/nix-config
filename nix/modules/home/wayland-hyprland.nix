@@ -183,7 +183,10 @@
           repeat_delay = 200;
           repeat_rate = 60;
 
-          touchpad.natural_scroll = true;
+          touchpad = {
+            natural_scroll = true;
+            scroll_factor = 0.25;
+          };
         };
         general = {
           layout = "hy3"; # Requires the hy3 plugin.
@@ -357,6 +360,10 @@
           "size ${toString cfg.pip.width} ${toString cfg.pip.height}, class:^firefox$, title:^Picture-in-Picture$"
           "keepaspectratio, class:^firefox$, title:^Picture-in-Picture$"
         ];
+
+        # gesture = [
+        #   "3, horizontal, workspace"
+        # ];
       };
     };
 
