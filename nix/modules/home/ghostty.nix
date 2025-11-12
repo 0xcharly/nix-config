@@ -119,7 +119,10 @@ in {
           gtk-single-instance = true;
           gtk-titlebar = false;
         }
-        // lib.optionalAttrs isDarwin {macos-titlebar-proxy-icon = "hidden";};
+        // lib.optionalAttrs isDarwin {
+          font-size = 14;
+          macos-titlebar-proxy-icon = "hidden";
+        };
     };
   };
 }
