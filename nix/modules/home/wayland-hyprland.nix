@@ -314,8 +314,8 @@
             ", XF86AudioLowerVolume,  exec, ${uwsmGetExe' pkgs.swayosd "swayosd-client"} --output-volume lower"
             ", XF86AudioMute,         exec, ${uwsmGetExe' pkgs.swayosd "swayosd-client"} --output-volume mute-toggle"
             ", XF86AudioRaiseVolume,  exec, ${uwsmGetExe' pkgs.swayosd "swayosd-client"} --output-volume raise"
-            ", XF86MonBrightnessDown, exec, ${uwsmGetExe' pkgs.swayosd "swayosd-client"} --brightness lower"
-            ", XF86MonBrightnessUp,   exec, ${uwsmGetExe' pkgs.swayosd "swayosd-client"} --brightness raise"
+            ", XF86MonBrightnessDown, exec, ${uwsmGetExe pkgs.brightnessctl} set 10%-"
+            ", XF86MonBrightnessUp,   exec, ${uwsmGetExe pkgs.brightnessctl} set +10%"
 
             ", XF86AudioMedia, exec, ${uwsmGetExe pkgs.playerctl} play-pause"
             ", XF86AudioNext,  exec, ${uwsmGetExe pkgs.playerctl} next"
