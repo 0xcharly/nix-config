@@ -24,7 +24,7 @@
       margin = {
         x = mkOption {
           type = types.int;
-          default = 8;
+          default = 16;
           description = ''
             The horizontal distance between the screen edge and the Picture-in-Picture window.
 
@@ -33,7 +33,7 @@
         };
         y = mkOption {
           type = types.int;
-          default = 94;
+          default = 16;
           description = ''
             The vertical distance between the screen edge and the Picture-in-Picture window.
 

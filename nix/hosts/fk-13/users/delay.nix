@@ -42,16 +42,16 @@
     openssh.trusted-tier.ring = 0;
     services.atuin.enableSync = true;
     wayland = {
-      hyprland.monitor = "eDP-1, 2880x1920@120.00000, 0x0, 2.00";
+      hyprland.monitor = "eDP-1, 2880x1920@120.00000, 0x0, 1.50";
 
       display.logicalResolution = {
-        width = 1440;
-        height = 960;
+        width = 1920;
+        height = 1280;
       };
 
       pip = {
-        width = 320;
-        height = 180;
+        width = 640;
+        height = 360;
       };
 
       idle = {
