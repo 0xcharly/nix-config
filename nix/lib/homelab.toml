@@ -105,7 +105,7 @@ ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIBc7+svM9KE66X8lpQzYny0byI47Kr38LsYXVyJIZ
 [ssh.wireguard.tailscale.knownHosts."dalmore"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIPEQB+CwUB/zGI76uwH95mhwnhvHQKw1/J08ioDzw+W/"
 
-[ssh.wireguard.tailscale.knownHosts."fwk"]
+[ssh.wireguard.tailscale.knownHosts."fk-13"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIOOGCAJVRToabx32L6jIUdzDhU43QWa6dXm4sAN/H96m"
 
 [ssh.wireguard.tailscale.knownHosts."linode-fr"]

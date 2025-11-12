@@ -49,7 +49,7 @@
           {
             job_name = "workstations_system_stats";
             static_configs = builtins.map mkNodeExporterConfig [
-              "fwk"
+              "fk-13"
               "nyx"
             ];
           }
@@ -67,7 +67,7 @@
           {
             job_name = "workstations_zfs_stats";
             static_configs = builtins.map mkZfsExporterConfig [
-              "fwk"
+              "fk-13"
               "nyx"
             ];
           }

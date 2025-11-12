@@ -40,7 +40,7 @@ in {
             static_configs = builtins.map mkZfsExporterConfig [
               "bowmore"
               "dalmore"
-              "fwk"
+              "fk-13"
               "linode"
               "linode-fr"
               "linode-jp"
