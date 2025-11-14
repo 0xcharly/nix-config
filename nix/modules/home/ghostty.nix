@@ -78,7 +78,6 @@ in {
           in
             lib.mapAttrsToList gen-font-codepoint-map codepoints-map;
           theme = "catppuccin-obsidian";
-          custom-shader = "${./ghostty-cursor.glsl}";
           window-padding-x = 4;
           window-padding-y = 4;
           window-padding-balance = true;
