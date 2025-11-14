@@ -31,7 +31,6 @@
       Xcode = 497799835; # Xcode is installed out-of-band on corp devices.
     };
     extraCasks = [
-      "beeper" # Messaging.
       "firefox@developer-edition" # Firefox, for isolates.
       "google-chrome" # When there's no alternatives.
       "obsidian" # Notes.
@@ -40,7 +39,6 @@
       "transmission"
       "ungoogled-chromium"
       "vlc" # Media player.
-      "zen" # Firefox alternative.
     ];
   };
 
