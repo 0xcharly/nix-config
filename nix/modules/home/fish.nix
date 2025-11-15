@@ -37,10 +37,10 @@ in {
           printf "❬%s❭" (prompt_hostname)
           set_color 9FCDFE
           printf " ~ "
-          set_color FEC49A
-          printf ""
+          set_color --bold FEC49A
+          printf ":"
           set_color normal
-          printf "  "
+          printf " "
         '';
       };
       shellAliases.nixsh = "nix-shell --run ${lib.getExe cfg.package}";

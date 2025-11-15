@@ -22,6 +22,7 @@
     rubik
 
     inputs.nix-config-fonts.packages.${system}.comic-code
+    inputs.nix-config-fonts.packages.${system}.pragmatapro
     inputs.nix-config-fonts.packages.${system}.tx-02 # Berkeley Mono
   ];
 }
