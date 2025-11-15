@@ -18,11 +18,8 @@
     material-design-icons
     nerd-fonts.symbols-only
     noto-fonts-cjk-sans # CJK fonts.
-    recursive # Variable font family for code & UI.
     rubik
 
-    inputs.nix-config-fonts.packages.${system}.comic-code
     inputs.nix-config-fonts.packages.${system}.pragmatapro
-    inputs.nix-config-fonts.packages.${system}.tx-02 # Berkeley Mono
   ];
 }
