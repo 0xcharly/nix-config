@@ -6,7 +6,7 @@
 }: {
   imports = [
     flake.modules.home.wayland-uwsm
-    # flake.modules.home.wayland-hyprland-smartgaps
+    flake.modules.home.wayland-hyprland-smartgaps
   ];
 
   options.node.wayland = with lib; {

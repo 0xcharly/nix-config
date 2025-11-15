@@ -33,14 +33,19 @@ in {
         fish_greeting = ""; # Disable greeting message.
         fish_mode_prompt = ""; # Disable prompt vi mode reporting.
         fish_prompt = ''
-          set_color FEC49A
-          printf "❬%s❭" (prompt_hostname)
-          set_color 9FCDFE
-          printf " ~ "
-          set_color --bold FEC49A
-          printf ":"
+          set -l last_status $status
+
+          set_color 7A8490
+          printf (prompt_hostname)
+          if test $last_status -ne 0
+              set_color FE9FA9
+          else
+              set_color AFF3C0
+          end
+          printf " ⌁ "
+          set_color 7A8490
+          printf "♯ "
           set_color normal
-          printf " "
         '';
       };
       shellAliases.nixsh = "nix-shell --run ${lib.getExe cfg.package}";
