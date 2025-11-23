@@ -44,19 +44,20 @@
     };
 
     services = {
-      atuin.enable = false; # 2025-11-03: migrated to bowmore.
       dns.enable = true;
       gatus.enable = true;
-      golink.enable = false; # 2025-11-06: migrated to bowmore.
       gotify.enable = true;
-      grafana.enable = false; # 2025-11-03: migrated to bowmore.
       immich-public-proxy.enable = true;
+      reverseProxy.enable = true;
+
+      atuin.enable = false; # 2025-11-03: migrated to bowmore.
+      golink.enable = false; # 2025-11-06: migrated to bowmore.
+      grafana.enable = false; # 2025-11-03: migrated to bowmore.
       miniflux.enable = false; # 2025-11-03: migrated to bowmore.
       prometheus = {
         server.enable = false; # 2025-11-03: migrated to bowmore.
         exporters.node.enable = true;
       };
-      reverseProxy.enable = true;
       smtp.enable = false; # 2025-11-03: migrated to bowmore.
       taskchampion-sync-server.enable = false; # 2025-11-03: Disabled because unused. Will decommission.
       vaultwarden.enable = false; # 2025-11-03: migrated to bowmore.
