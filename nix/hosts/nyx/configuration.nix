@@ -27,6 +27,7 @@
     flake.modules.nixos.fs-zfs-zpool-root-home
     flake.modules.nixos.hardware-cpu-amd
     flake.modules.nixos.hardware-gpu-amd
+    flake.modules.nixos.networking-bluetooth
     flake.modules.nixos.nix-build-aarch64
     flake.modules.nixos.nix-client-config
     flake.modules.nixos.overlays
@@ -61,6 +62,12 @@
         luksPasswordFile = "/tmp/root-disk-encryption.key";
         swapSize = "72G"; # Size of RAM + square root of RAM for hibernate.
       };
+    };
+
+    networking.bluetooth = {
+      powerOnBoot = true;
+      enableA2DPSink = true;
+      enableFastConnectable = true;
     };
 
     users.delay.ssh.authorizeTailscaleInternalKey = true;
