@@ -1,9 +1,5 @@
-# https://nixos.wiki/wiki/Laptop
-{
-  powerManagement = {
-    enable = true;
-    powertop.enable = true; # Auto-tune on start.
-  };
-
-  services.upower.enable = true;
+{flake, ...}: {
+  imports = [
+    flake.modules.nixos.hardware-power-management
+  ];
 }
