@@ -74,8 +74,8 @@
 
     fs.zfs = {
       hostId = "71fe60d5";
+      # System drives.
       system = {
-        # System drives.
         disk0 = {
           device = "/dev/disk/by-id/nvme-Samsung_SSD_980_500GB_S78GNL0XC30952W"; # NVMe Left.
           bootPartitionUuid = "19430f4e-7a29-4761-ba17-2aaf52148427";
@@ -85,11 +85,10 @@
           bootPartitionUuid = "16234e47-2eb8-42fa-b937-2dd737521ada";
         };
         swapDisk = "/dev/disk/by-id/nvme-AirDisk_128GB_SSD_QES481B001084P110N";
-        # Encryption keys.
         luksPasswordFile = "/tmp/root-disk-encryption.key";
       };
+      # Backup drives.
       backup = {
-        # Backup drives.
         disk0 = "/dev/disk/by-id/ata-ST24000NT002-3N1101_ZYD2E1FW";
         disk1 = "/dev/disk/by-id/ata-ST24000NT002-3N1101_ZYD20R4R";
         disk2 = "/dev/disk/by-id/ata-ST24000NT002-3N1101_ZYD254N6";
