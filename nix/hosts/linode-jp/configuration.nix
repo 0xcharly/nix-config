@@ -38,7 +38,7 @@
     flake.modules.nixos.programs-terminfo
     flake.modules.nixos.prometheus-exporters-node
     flake.modules.nixos.prometheus-exporters-zfs
-    flake.modules.nixos.selfhosted-dns-pieceofenglish
+    flake.modules.nixos.selfhosted-dns-pieceofenglish.fr
     flake.modules.nixos.selfhosted-gatus
     flake.modules.nixos.selfhosted-gatus-endpoints
     flake.modules.nixos.selfhosted-gatus-unstable # TODO(25.11): Remove after 25.11 update.

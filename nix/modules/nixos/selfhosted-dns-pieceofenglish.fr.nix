@@ -8,7 +8,7 @@
 in {
   options.node.services.dns.${domainName} = with lib; {
     enable = mkEnableOption "Spin up a DNS server for the ${domainName} domain";
-    openFirewall = mkEnableOption "Open firewall ports for Piece of English service";
+    openFirewall = mkEnableOption "Open firewall ports for the specified interface";
 
     bindInterface = mkOption {
       type = types.str;
