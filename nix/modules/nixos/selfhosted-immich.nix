@@ -9,7 +9,7 @@
 
   config = let
     cfg = config.node.services.immich;
-    inherit (flake.lib) caddy facts gatus;
+    inherit (flake.lib) caddy facts;
   in {
     node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
       redis-immich = {
@@ -30,9 +30,6 @@
       };
 
       caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.immich;
-      gatus.settings.endpoints = [
-        (gatus.mkHttpServiceCheck "immich" facts.services.immich)
-      ];
     };
   };
 }

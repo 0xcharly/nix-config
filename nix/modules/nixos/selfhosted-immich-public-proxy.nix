@@ -9,7 +9,7 @@
 
   config.services = let
     cfg = config.node.services.immich-public-proxy;
-    inherit (flake.lib) caddy facts gatus;
+    inherit (flake.lib) caddy facts;
   in {
     immich-public-proxy = {
       inherit (cfg) enable;
@@ -18,8 +18,5 @@
     };
 
     caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.immich-public-proxy;
-    gatus.settings.endpoints = [
-      (gatus.mkHttpServiceCheck "immich-public-proxy" facts.services.immich-public-proxy)
-    ];
   };
 }

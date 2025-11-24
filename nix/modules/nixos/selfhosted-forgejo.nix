@@ -9,7 +9,7 @@
 
   config = let
     cfg = config.node.services.forgejo;
-    inherit (flake.lib) caddy facts gatus;
+    inherit (flake.lib) caddy facts;
   in {
     node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
       forgejo = {
@@ -66,9 +66,6 @@
       };
 
       caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.forgejo;
-      gatus.settings.endpoints = [
-        (gatus.mkHttpServiceCheck "forgejo" facts.services.forgejo)
-      ];
     };
   };
 }

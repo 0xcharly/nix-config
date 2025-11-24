@@ -10,7 +10,7 @@
 
   config = let
     cfg = config.node.services.vaultwarden;
-    inherit (flake.lib) caddy facts gatus;
+    inherit (flake.lib) caddy facts;
   in {
     node = lib.mkIf cfg.enable {
       fs.zfs.zpool.root.datadirs = {
@@ -50,9 +50,6 @@
       };
 
       caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.vaultwarden;
-      gatus.settings.endpoints = [
-        (gatus.mkHttpServiceCheck "vaultwarden" facts.services.vaultwarden)
-      ];
     };
 
     assertions = [

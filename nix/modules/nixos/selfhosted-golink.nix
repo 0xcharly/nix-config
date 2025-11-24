@@ -15,7 +15,6 @@
 
   config = let
     cfg = config.node.services.golink;
-    inherit (flake.lib) facts gatus;
   in {
     node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
       golink = {
@@ -30,10 +29,6 @@
         inherit (cfg) enable;
         tailscaleAuthKeyFile = config.age.secrets."services/tailscale-preauth.key".path;
       };
-
-      gatus.settings.endpoints = [
-        (gatus.mkHttpServiceCheck "go/link" facts.services.golink)
-      ];
     };
 
     # Grant access to preauth key.

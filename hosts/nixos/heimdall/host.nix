@@ -45,14 +45,14 @@
 
     services = {
       dns.enable = true;
-      gatus.enable = true;
-      gotify.enable = true;
       reverseProxy.enable = true;
 
       atuin.enable = false; # 2025-11-03: migrated to bowmore.
+      gatus.enable = false; # 2025-11-24: migrated to linode-jp.
       golink.enable = false; # 2025-11-06: migrated to bowmore.
+      gotify.enable = false; # 2025-11-24: migrated to linode-jp.
       grafana.enable = false; # 2025-11-03: migrated to bowmore.
-      immich-public-proxy.enable = false; # 2025-11-03: migrated to linode-jp.
+      immich-public-proxy.enable = false; # 2025-11-23: migrated to linode-jp.
       miniflux.enable = false; # 2025-11-03: migrated to bowmore.
       prometheus = {
         server.enable = false; # 2025-11-03: migrated to bowmore.

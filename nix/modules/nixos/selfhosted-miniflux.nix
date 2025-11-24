@@ -9,7 +9,7 @@
 
   config = let
     cfg = config.node.services.miniflux;
-    inherit (flake.lib) caddy facts gatus;
+    inherit (flake.lib) caddy facts;
   in {
     services = {
       miniflux = {
@@ -24,9 +24,6 @@
       };
 
       caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.miniflux;
-      gatus.settings.endpoints = [
-        (gatus.mkHttpServiceCheck "miniflux" facts.services.miniflux)
-      ];
     };
   };
 }

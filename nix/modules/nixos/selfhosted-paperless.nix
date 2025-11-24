@@ -17,7 +17,7 @@
 
   config = let
     cfg = config.node.services.paperless;
-    inherit (flake.lib) caddy facts gatus;
+    inherit (flake.lib) caddy facts;
   in {
     node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
       paperless = {
@@ -56,9 +56,6 @@
       };
 
       caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.paperless;
-      gatus.settings.endpoints = [
-        (gatus.mkHttpServiceCheck "paperless" facts.services.paperless)
-      ];
     };
   };
 }

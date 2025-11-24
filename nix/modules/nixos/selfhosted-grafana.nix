@@ -9,7 +9,7 @@
 
   config = let
     cfg = config.node.services.grafana;
-    inherit (flake.lib) caddy facts gatus;
+    inherit (flake.lib) caddy facts;
   in {
     node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
       grafana = {
@@ -53,9 +53,6 @@
       };
 
       caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.grafana;
-      gatus.settings.endpoints = [
-        (gatus.mkApiCheck "grafana" "${facts.services.grafana.domain}/api/health" ["[BODY].database == ok"])
-      ];
     };
   };
 }

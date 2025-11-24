@@ -9,7 +9,7 @@
 
   config = let
     cfg = config.node.services.jellyfin;
-    inherit (flake.lib) caddy facts gatus;
+    inherit (flake.lib) caddy facts;
   in {
     node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
       jellyfin = {
@@ -26,9 +26,6 @@
       };
 
       caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.jellyfin;
-      gatus.settings.endpoints = [
-        (gatus.mkHttpServiceCheck "jellyfin" facts.services.jellyfin)
-      ];
     };
   };
 }

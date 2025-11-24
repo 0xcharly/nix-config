@@ -1,6 +1,9 @@
 [wireguard.tailscale]
 tailnet = "neko-danio.ts.net"
 
+[dns."qyrnl.com"]
+nameservers = ["ns1.qyrnl.com", "ns2.qyrnl.com"]
+
 [dns."qyrnl.com".ns1]
 ipv4 = "100.85.79.53"
 ipv6 = "fd7a:115c:a1e0::4036:4f35"
@@ -8,6 +11,9 @@ ipv6 = "fd7a:115c:a1e0::4036:4f35"
 [dns."qyrnl.com".ns2]
 ipv4 = "100.85.79.53"
 ipv6 = "fd7a:115c:a1e0::4036:4f35"
+
+[dns."pieceofenglish.fr"]
+nameservers = ["ns1.pieceofenglish.fr", "ns2.pieceofenglish.fr"]
 
 [dns."pieceofenglish.fr".ns1]
 ipv4 = "172.237.20.186"
@@ -36,10 +42,20 @@ domain = "git.qyrnl.com"
 host = "bowmore.qyrnl.com"
 port = 3917
 
+[services.gatus]
+domain = "status.qyrnl.com"
+host = "linode-jp.qyrnl.com"
+port = 8080
+
 [services.go]
 domain = "go.neko-danio.ts.net"
 host = "bowmore.qyrnl.com"
 # no port, self-advertising on the TS network.
+
+[services.gotify]
+domain = "push.qyrnl.com"
+host = "linode-jp.qyrnl.com"
+port = 6060
 
 [services.grafana]
 domain = "graphs.qyrnl.com"

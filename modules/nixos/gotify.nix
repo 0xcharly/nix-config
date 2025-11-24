@@ -17,7 +17,7 @@ in {
     caddy.virtualHosts = lib.mkIf config.node.services.reverseProxy.enable {
       "push.qyrnl.com".extraConfig = ''
         import ts_host
-        reverse_proxy localhost:${toString config.services.gotify.environment.GOTIFY_SERVER_PORT}
+        reverse_proxy linode-jp.qyrnl.com:${toString config.services.gotify.environment.GOTIFY_SERVER_PORT}
       '';
     };
 

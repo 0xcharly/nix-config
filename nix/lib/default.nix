@@ -1,8 +1,9 @@
 {inputs, ...}: let
   inherit (inputs.nixpkgs) lib;
 in rec {
-  user = builtins.fromTOML (builtins.readFile ./user.toml);
   facts = builtins.fromTOML (builtins.readFile ./homelab.toml);
+  inventory = builtins.fromTOML (builtins.readFile ./inventory.toml);
+  user = builtins.fromTOML (builtins.readFile ./user.toml);
 
   builders = import ./builders.nix;
   caddy = import ./caddy.nix {inherit lib;};

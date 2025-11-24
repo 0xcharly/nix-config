@@ -9,7 +9,7 @@
 
   config = let
     cfg = config.node.services.calibre;
-    inherit (flake.lib) caddy facts gatus;
+    inherit (flake.lib) caddy facts;
   in {
     node = lib.mkIf cfg.enable {
       fs.zfs.zpool.root.datadirs.calibre-web = {};
@@ -32,9 +32,6 @@
       };
 
       caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.calibre-web;
-      gatus.settings.endpoints = [
-        (gatus.mkHttpServiceCheck "calibre-web" facts.services.calibre-web)
-      ];
     };
   };
 }

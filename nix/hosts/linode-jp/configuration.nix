@@ -11,6 +11,8 @@
 
     inputs.nix-config-secrets.modules.nixos.blueprint
     inputs.nix-config-secrets.modules.nixos.nix-client-config
+    inputs.nix-config-secrets.modules.nixos.services-gatus
+    inputs.nix-config-secrets.modules.nixos.services-gotify
     inputs.nix-config-secrets.modules.nixos.services-tailscale
     inputs.nix-config-secrets.modules.nixos.services-tailscale-initrd
     inputs.nix-config-secrets.modules.nixos.users-delay
@@ -37,6 +39,10 @@
     flake.modules.nixos.prometheus-exporters-node
     flake.modules.nixos.prometheus-exporters-zfs
     flake.modules.nixos.selfhosted-dns-pieceofenglish
+    flake.modules.nixos.selfhosted-gatus
+    flake.modules.nixos.selfhosted-gatus-endpoints
+    flake.modules.nixos.selfhosted-gatus-unstable # TODO(25.11): Remove after 25.11 update.
+    flake.modules.nixos.selfhosted-gotify
     flake.modules.nixos.selfhosted-immich-public-proxy
     flake.modules.nixos.services-deploy-rs
     flake.modules.nixos.services-fail2ban
@@ -66,6 +72,8 @@
         bindInterface = "eth0";
       };
 
+      gatus.enable = true;
+      gotify.enable = true;
       immich-public-proxy.enable = true;
     };
 

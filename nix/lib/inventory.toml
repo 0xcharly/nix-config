@@ -1,0 +1,10 @@
+servers = [
+  "bowmore",
+  "dalmore",
+  "heimdall",
+  "linode-fr",
+  "linode-jp",
+  "rip",
+  "skl",
+]
+workstations = ["fwk", "nyx"]

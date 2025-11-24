@@ -5,7 +5,6 @@
 }: {
   config,
   lib,
-  pkgs,
   ...
 }: {
   imports = [
@@ -28,7 +27,7 @@
 
   config = let
     cfg = config.node.services.pieceofenglish;
-    inherit (flake.lib) caddy facts gatus;
+    inherit (flake.lib) caddy facts;
   in {
     node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
       pieceofenglish = {
@@ -74,10 +73,6 @@
           (caddy.mkWwwRedirectConfig facts.services.pieceofenglish)
         ];
       };
-
-      gatus.settings.endpoints = [
-        (gatus.mkHttpServiceCheck "pieceofenglish" facts.services.pieceofenglish)
-      ];
     };
 
     systemd.services.caddy.serviceConfig = lib.mkIf cfg.reverse-proxy.enable {

@@ -10,7 +10,7 @@
 
   config = let
     cfg = config.node.services.atuin;
-    inherit (flake.lib) caddy facts gatus;
+    inherit (flake.lib) caddy facts;
   in {
     services = {
       atuin = {
@@ -21,9 +21,6 @@
       };
 
       caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.atuin;
-      gatus.settings.endpoints = [
-        (gatus.mkHttpServiceCheck "atuin" facts.services.atuin)
-      ];
     };
   };
 }

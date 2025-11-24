@@ -9,7 +9,7 @@
 
   config = let
     cfg = config.node.services.prometheus;
-    inherit (flake.lib) caddy facts gatus;
+    inherit (flake.lib) caddy facts inventory;
   in {
     node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
       prometheus = {
@@ -34,58 +34,20 @@
             targets = ["${host}.qyrnl.com:${toString config.services.prometheus.exporters.zfs.port}"];
             labels = {inherit host;};
           };
-        in [
-          {
-            job_name = "servers_system_stats";
-            static_configs = builtins.map mkNodeExporterConfig [
-              "bowmore"
-              "dalmore"
-              "linode-fr"
-              "linode-jp"
-              "rip"
-              "skl"
-            ];
-          }
-          {
-            job_name = "workstations_system_stats";
-            static_configs = builtins.map mkNodeExporterConfig [
-              "fk-13"
-              "nyx"
-            ];
-          }
-          {
-            job_name = "servers_zfs_stats";
-            static_configs = builtins.map mkZfsExporterConfig [
-              "bowmore"
-              "dalmore"
-              "linode-fr"
-              "linode-jp"
-              "rip"
-              "skl"
-            ];
-          }
-          {
-            job_name = "workstations_zfs_stats";
-            static_configs = builtins.map mkZfsExporterConfig [
-              "fk-13"
-              "nyx"
-            ];
-          }
-          {
-            job_name = "gatus";
-            static_configs = [
-              {targets = ["status.qyrnl.com"];}
-            ];
-          }
-        ];
+          mkScrapeConfigs = lib.mapAttrsToList (job_name: static_configs: {
+            inherit job_name static_configs;
+          });
+        in
+          mkScrapeConfigs {
+            gatus = lib.singleton {targets = [facts.services.gatus.domain];};
+            servers_system_stats = builtins.map mkNodeExporterConfig inventory.servers;
+            servers_zfs_stats = builtins.map mkZfsExporterConfig inventory.servers;
+            workstations_system_stats = builtins.map mkNodeExporterConfig inventory.workstations;
+            workstations_zfs_stats = builtins.map mkZfsExporterConfig inventory.workstations;
+          };
       };
 
       caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.prometheus;
-      gatus.settings.endpoints = [
-        (gatus.mkHttpServiceCheck "prometheus" {
-          domain = "prometheus.qyrnl.com/-/healthy";
-        })
-      ];
     };
   };
 }
