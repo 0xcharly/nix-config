@@ -41,6 +41,7 @@
           install -v -d --mode 750 --owner ayako --group ayako    /tank/backups/ayako
           install -v -d --mode 750 --owner delay --group delay    /tank/backups/dad
           install -v -d --mode 750 --owner delay --group delay    /tank/backups/delay
+          install -v -d --mode 750 --owner delay --group git      /tank/backups/github
           install -v -d --mode 750 --owner delay --group delay    /tank/backups/homelab
 
           install -v -d --mode 751 --owner ayako --group users    /tank/ayako
@@ -71,6 +72,7 @@
   # TODO: figure out a better way to do this.
   users.groups = {
     forgejo = {};
+    git = {};
     immich = {};
     jellyfin = {};
     paperless = {};

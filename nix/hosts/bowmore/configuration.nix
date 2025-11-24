@@ -60,6 +60,7 @@
     flake.modules.nixos.selfhosted-vaultwarden
     flake.modules.nixos.services-deploy-rs
     flake.modules.nixos.services-fail2ban
+    flake.modules.nixos.services-github-backup
     flake.modules.nixos.services-msmtp
     flake.modules.nixos.services-openssh
     # flake.modules.nixos.services-samba-ayako
