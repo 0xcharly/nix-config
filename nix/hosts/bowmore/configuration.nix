@@ -49,6 +49,7 @@
     flake.modules.nixos.prometheus-exporters-node
     flake.modules.nixos.prometheus-exporters-zfs
     flake.modules.nixos.selfhosted-atuin
+    flake.modules.nixos.selfhosted-cgit
     flake.modules.nixos.selfhosted-forgejo
     flake.modules.nixos.selfhosted-golink
     flake.modules.nixos.selfhosted-grafana
@@ -105,6 +106,7 @@
 
     services = {
       atuin.enable = true;
+      cgit.enable = true;
       forgejo.enable = true;
       golink.enable = true;
       grafana.enable = true;

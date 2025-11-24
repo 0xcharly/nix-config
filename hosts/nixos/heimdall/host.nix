@@ -23,6 +23,10 @@
         import ts_host
         reverse_proxy bowmore.qyrnl.com:3917
       '';
+      "github.qyrnl.com".extraConfig = ''
+        import ts_host
+        reverse_proxy bowmore.qyrnl.com
+      '';
     };
 
     gatus.settings.endpoints = [

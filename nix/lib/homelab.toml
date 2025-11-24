@@ -37,6 +37,11 @@ domain = "atuin.qyrnl.com"
 host = "bowmore.qyrnl.com"
 port = 8888
 
+[services.cgit]
+domain = "github.qyrnl.com"
+host = "bowmore.qyrnl.com"
+port = 80
+
 [services.calibre-web]
 domain = "reads.qyrnl.com"
 host = "bowmore.qyrnl.com"

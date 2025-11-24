@@ -26,6 +26,7 @@ news            IN CNAME heimdall
 prometheus      IN CNAME heimdall
 push            IN CNAME heimdall
 reads           IN CNAME heimdall
+github          IN CNAME heimdall
 shared.album    IN CNAME heimdall
 status          IN CNAME heimdall
 tasks           IN CNAME heimdall
