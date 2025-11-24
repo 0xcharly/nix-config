@@ -19,7 +19,11 @@ in rec {
     ...
   }: {
     ${domain}.extraConfig = ''
-      ${if (import != "") then "import ${import}" else ""}
+      ${
+        if (import != "")
+        then "import ${import}"
+        else ""
+      }
       reverse_proxy ${uri.mkAuthority {inherit host port;}}
     '';
   };
@@ -31,12 +35,20 @@ in rec {
     ...
   }: {
     "${from}".extraConfig = ''
-      ${if (import != "") then "import ${import}" else ""}
+      ${
+        if (import != "")
+        then "import ${import}"
+        else ""
+      }
       redir https://${to}{uri}
     '';
   };
 
-  mkWwwRedirectConfig = {domain, import ? "", ...}:
+  mkWwwRedirectConfig = {
+    domain,
+    import ? "",
+    ...
+  }:
     mkRedirectConfig {
       inherit import;
       from = "www.${domain}";
