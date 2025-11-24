@@ -51,7 +51,10 @@ in {
         font = flake.lib.user.gui.fonts.terminal;
       in
         {
-          font-family = [font.name];
+          font-family = [
+            font.name
+            "Noto Emoji" # Monochrome emojis
+          ];
           font-size = font.size;
           font-feature = font.features;
           font-codepoint-map = let
@@ -69,6 +72,10 @@ in {
                 "U+31F0-U+31FF,U+3220-U+3243,U+3280-U+337F" # Miscellaneous Japanese Symbols and Characters
                 "U+FF01-U+FF5E" # Alphanumeric and Punctuation (full width)
               ];
+              "Noto Emoji" = let
+                inherit (builtins.fromTOML (builtins.readFile ./emoji.toml)) codepoints;
+              in
+                mkCodepointList codepoints;
               # https://github.com/ryanoasis/nerd-fonts/wiki/Glyph-Sets-and-Code-Points#material-design-icons
               "Material Design Icons" = mkCodepointList [
                 "U+F0001-U+F1AF0" # Material Design Icons

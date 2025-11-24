@@ -17,7 +17,8 @@
   home.packages = with pkgs; [
     material-design-icons
     nerd-fonts.symbols-only
-    noto-fonts-cjk-sans # CJK fonts.
+    noto-fonts-cjk-sans # CJK fonts
+    noto-fonts-monochrome-emoji # Monochrome emojis
     rubik
 
     inputs.nix-config-fonts.packages.${system}.pragmatapro
