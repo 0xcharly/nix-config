@@ -32,7 +32,7 @@
                 description = "Status Change";
                 send-on-resolved = true;
                 failure-threshold = 5;
-                success-thershold = 3;
+                success-threshold = 3;
               };
             };
           };

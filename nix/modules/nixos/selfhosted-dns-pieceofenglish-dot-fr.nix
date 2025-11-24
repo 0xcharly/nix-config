@@ -30,13 +30,18 @@ in {
           $ORIGIN ${domainName}.
           $TTL    3600
 
-          @         IN SOA   ns.${domainName}. hostmaster.${domainName}. 2025070100 86400 10800 3600000 3600
-          @   300   IN NS    ns1.${domainName}.
-          @   300   IN NS    ns2.${domainName}.
-          ns1 300   IN A     ${records.ns1.ipv4}
-          ns1 300   IN AAAA  ${records.ns1.ipv6}
-          ns2 300   IN A     ${records.ns2.ipv4}
-          ns2 300   IN AAAA  ${records.ns2.ipv6}
+          @             IN SOA   ns.${domainName}. hostmaster.${domainName}. 2025070100 86400 10800 3600000 3600
+          @       300   IN NS    ns1.${domainName}.
+          @       300   IN NS    ns2.${domainName}.
+          ns1     300   IN A     ${records.ns1.ipv4}
+          ns1     300   IN AAAA  ${records.ns1.ipv6}
+          ns2     300   IN A     ${records.ns2.ipv4}
+          ns2     300   IN AAAA  ${records.ns2.ipv6}
+
+          ; pieceofenglish.fr website records.
+          @             IN A     ${records."@".ipv4}
+          @             IN AAAA  ${records."@".ipv6}
+          www           IN CNAME @
 
           ; Protonmail domain configuration.
           @                       10800 IN TXT   "protonmail-verification=002e45ea53d2d587fdbd680b84930481eb8ecf9a"
@@ -47,10 +52,6 @@ in {
           protonmail._domainkey   10800 IN CNAME protonmail.domainkey.d3oesgdehuo3lyylmnywtohdojzlokhdt3hyq5wreaxvd6vmz3a5q.domains.proton.ch.
           protonmail2._domainkey  10800 IN CNAME protonmail2.domainkey.d3oesgdehuo3lyylmnywtohdojzlokhdt3hyq5wreaxvd6vmz3a5q.domains.proton.ch.
           protonmail3._domainkey  10800 IN CNAME protonmail3.domainkey.d3oesgdehuo3lyylmnywtohdojzlokhdt3hyq5wreaxvd6vmz3a5q.domains.proton.ch.
-
-          @         IN A     ${records."@".ipv4}
-          @         IN AAAA  ${records."@".ipv6}
-          www       IN CNAME @
         '';
       in ''
         ${domainName}:53 {

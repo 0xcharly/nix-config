@@ -38,7 +38,8 @@
     flake.modules.nixos.programs-terminfo
     flake.modules.nixos.prometheus-exporters-node
     flake.modules.nixos.prometheus-exporters-zfs
-    flake.modules.nixos.selfhosted-dns-pieceofenglish.fr
+    flake.modules.nixos.selfhosted-dns-pieceofenglish-dot-fr
+    flake.modules.nixos.selfhosted-dns-qyrnl-dot-com
     flake.modules.nixos.selfhosted-gatus
     flake.modules.nixos.selfhosted-gatus-endpoints
     flake.modules.nixos.selfhosted-gatus-unstable # TODO(25.11): Remove after 25.11 update.
@@ -66,10 +67,13 @@
     };
 
     services = {
-      dns."pieceofenglish.fr" = {
-        enable = true;
-        openFirewall = true;
-        bindInterface = "eth0";
+      dns = {
+        "pieceofenglish.fr" = {
+          enable = true;
+          openFirewall = true;
+          bindInterface = "eth0";
+        };
+        "qyrnl.com".enable = true;
       };
 
       gatus.enable = true;

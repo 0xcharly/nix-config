@@ -11,7 +11,7 @@
       query-name = domain;
       query-type = "A";
     };
-    interval = "1m";
+    interval = "10m";
     conditions =
       [
         "[CONNECTED] == true"
@@ -32,7 +32,7 @@
       query-name = domain;
       query-type = "AAAA";
     };
-    interval = "1m";
+    interval = "10m";
     conditions =
       [
         "[CONNECTED] == true"
@@ -45,7 +45,7 @@
     name = hostName;
     url = "icmp://${hostName}.qyrnl.com";
     group = "hosts";
-    interval = "1m";
+    interval = "5m";
     conditions = ["[CONNECTED] == true"];
   };
 
@@ -53,7 +53,7 @@
     inherit name;
     url = "https://${domain}";
     group = "services";
-    interval = "60s";
+    interval = "5m";
     conditions = [
       "[STATUS] == 200"
     ];
@@ -67,6 +67,7 @@
     inherit name;
     group = "api";
     url = "https://${url}";
+    interval = "5m";
     conditions = ["[STATUS] == 200"] ++ conditions;
   };
 }

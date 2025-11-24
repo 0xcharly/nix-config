@@ -36,7 +36,8 @@
     flake.modules.nixos.programs-terminfo
     flake.modules.nixos.prometheus-exporters-node
     flake.modules.nixos.prometheus-exporters-zfs
-    flake.modules.nixos.selfhosted-dns-pieceofenglish.fr
+    flake.modules.nixos.selfhosted-dns-pieceofenglish-dot-fr
+    flake.modules.nixos.selfhosted-dns-qyrnl-dot-com
     flake.modules.nixos.selfhosted-pieceofenglish
     flake.modules.nixos.services-deploy-rs
     flake.modules.nixos.services-fail2ban
@@ -60,11 +61,15 @@
     };
 
     services = {
-      dns."pieceofenglish.fr" = {
-        enable = true;
-        openFirewall = true;
-        bindInterface = "eth0";
+      dns = {
+        "pieceofenglish.fr" = {
+          enable = true;
+          openFirewall = true;
+          bindInterface = "eth0";
+        };
+        "qyrnl.com".enable = true;
       };
+
       pieceofenglish = {
         enable = true;
         reverse-proxy = {

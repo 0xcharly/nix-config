@@ -45,7 +45,6 @@ in {
           inherit (config.node.facts.tailscale) tailnetName;
           zoneFile = pkgs.replaceVars ./dns/qyrnl.com {
             inherit tailnetName;
-            inherit (config.node.facts.tailscale) tailscaleIPv4 tailscaleIPv6;
           };
           tailscaleInterface = config.services.tailscale.interfaceName;
         in ''
