@@ -56,6 +56,7 @@
     flake.modules.nixos.selfhosted-immich
     flake.modules.nixos.selfhosted-jellyfin
     flake.modules.nixos.selfhosted-miniflux
+    flake.modules.nixos.selfhosted-navidrome
     flake.modules.nixos.selfhosted-paperless
     flake.modules.nixos.selfhosted-prometheus
     flake.modules.nixos.selfhosted-vaultwarden
@@ -114,6 +115,7 @@
       jellyfin.enable = true;
       miniflux.enable = true;
       msmtp.enable = true;
+      navidrome.enable = true;
       paperless.enable = true;
       prometheus.enable = true;
       vaultwarden.enable = true;

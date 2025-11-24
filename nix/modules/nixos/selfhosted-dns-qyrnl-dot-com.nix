@@ -58,6 +58,7 @@ in {
           git           IN CNAME ${reverseProxyHostName}
           graphs        IN CNAME ${reverseProxyHostName}
           jellyfin      IN CNAME ${reverseProxyHostName}
+          music         IN CNAME ${reverseProxyHostName}
           news          IN CNAME ${reverseProxyHostName}
           prometheus    IN CNAME ${reverseProxyHostName}
           push          IN CNAME ${reverseProxyHostName}

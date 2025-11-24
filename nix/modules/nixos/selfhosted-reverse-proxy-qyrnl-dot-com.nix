@@ -59,6 +59,7 @@
               immich
               jellyfin
               miniflux
+              navidrome
               paperless
               prometheus
               vaultwarden

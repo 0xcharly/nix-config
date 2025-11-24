@@ -96,6 +96,11 @@ domain = "news.qyrnl.com"
 host = "bowmore.qyrnl.com"
 port = 8067
 
+[services.navidrome]
+domain = "music.qyrnl.com"
+host = "bowmore.qyrnl.com"
+port = 4533
+
 [services.paperless]
 domain = "files.qyrnl.com"
 host = "bowmore.qyrnl.com"

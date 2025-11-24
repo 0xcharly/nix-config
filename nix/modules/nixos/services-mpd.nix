@@ -1,8 +1,4 @@
-{flake, ...}: {
-  config,
-  lib,
-  ...
-}: {
+{
   services = {
     mpd = {
       enable = true;
