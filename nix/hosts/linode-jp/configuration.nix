@@ -37,6 +37,7 @@
     flake.modules.nixos.prometheus-exporters-node
     flake.modules.nixos.prometheus-exporters-zfs
     flake.modules.nixos.selfhosted-dns-pieceofenglish
+    flake.modules.nixos.selfhosted-immich-public-proxy
     flake.modules.nixos.services-deploy-rs
     flake.modules.nixos.services-fail2ban
     flake.modules.nixos.services-openssh
@@ -58,10 +59,14 @@
       zpool.root.reservation = "2GiB";
     };
 
-    services.dns."pieceofenglish.fr" = {
-      enable = true;
-      openFirewall = true;
-      bindInterface = "eth0";
+    services = {
+      dns."pieceofenglish.fr" = {
+        enable = true;
+        openFirewall = true;
+        bindInterface = "eth0";
+      };
+
+      immich-public-proxy.enable = true;
     };
 
     users.delay.ssh = {
