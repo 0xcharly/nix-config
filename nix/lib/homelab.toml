@@ -5,25 +5,30 @@ tailnet = "neko-danio.ts.net"
 nameservers = ["ns1.qyrnl.com", "ns2.qyrnl.com"]
 
 [dns."qyrnl.com".ns1]
-ipv4 = "100.85.79.53"
-ipv6 = "fd7a:115c:a1e0::4036:4f35"
+host = "linode-jp"
+ipv4 = "100.76.97.8"
+ipv6 = "fd7a:115c:a1e0::b736:6108"
 
 [dns."qyrnl.com".ns2]
-ipv4 = "100.85.79.53"
-ipv6 = "fd7a:115c:a1e0::4036:4f35"
+host = "linode-fr"
+ipv4 = "100.83.95.114"
+ipv6 = "fd7a:115c:a1e0::e736:5f72"
 
 [dns."pieceofenglish.fr"]
 nameservers = ["ns1.pieceofenglish.fr", "ns2.pieceofenglish.fr"]
 
 [dns."pieceofenglish.fr".ns1]
+host = "linode-jp"
 ipv4 = "172.237.20.186"
 ipv6 = "2600:3c18::2000:a4ff:fe80:d6d4"
 
 [dns."pieceofenglish.fr".ns2]
+host = "linode-fr"
 ipv4 = "172.233.245.4"
 ipv6 = "2600:3c07::2000:31ff:fe53:d2e1"
 
 [dns."pieceofenglish.fr"."@"]
+host = "linode-fr"
 ipv4 = "172.233.245.4"
 ipv6 = "2600:3c07::2000:31ff:fe53:d2e1"
 
