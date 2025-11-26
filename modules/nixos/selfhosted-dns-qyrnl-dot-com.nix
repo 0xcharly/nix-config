@@ -44,12 +44,12 @@ in {
           bowmore       IN CNAME bowmore.${tailnetDomainName}.
           dalmore       IN CNAME dalmore.${tailnetDomainName}.
           fwk           IN CNAME fwk.${tailnetDomainName}.
-          heimdall      IN CNAME heimdall.${tailnetDomainName}.
           linode-fr     IN CNAME linode-fr.${tailnetDomainName}.
           linode-jp     IN CNAME linode-jp.${tailnetDomainName}.
           nyx           IN CNAME nyx.${tailnetDomainName}.
           rip           IN CNAME rip.${tailnetDomainName}.
           skl           IN CNAME skl.${tailnetDomainName}.
+          x1p           IN CNAME x1p.${tailnetDomainName}.
 
           ; Services declaration.
           album         IN CNAME ${reverseProxyHostName}

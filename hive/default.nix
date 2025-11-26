@@ -29,6 +29,7 @@ in rec {
       "linode-fr"
       "linode-jp"
       "skl"
+      "x1p"
     ];
 
     mkDeployConfiguration = hostname: {

@@ -1,10 +1,10 @@
 servers = [
   "bowmore",
   "dalmore",
-  "heimdall",
   "linode-fr",
   "linode-jp",
   "rip",
   "skl",
+  "x1p",
 ]
 workstations = ["fwk", "nyx"]
