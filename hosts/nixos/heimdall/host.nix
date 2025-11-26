@@ -48,9 +48,8 @@
     };
 
     services = {
-      dns.enable = true;
-
       atuin.enable = false; # 2025-11-03: migrated to bowmore.
+      dns.enable = false; # 2025-11-27: turned ns3 off after migrating ns1 and ns2 to linode-jp and linode-fr respectively.
       gatus.enable = false; # 2025-11-24: migrated to linode-jp.
       golink.enable = false; # 2025-11-06: migrated to bowmore.
       gotify.enable = false; # 2025-11-24: migrated to linode-jp.

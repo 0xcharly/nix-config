@@ -35,13 +35,10 @@ in {
           @             IN SOA   ns.${domainName}. hostmaster.${domainName}. 2025070100 86400 10800 3600000 3600
           @       300   IN NS    ns1.${domainName}.
           @       300   IN NS    ns2.${domainName}.
-          @       300   IN NS    ns3.${domainName}.
           ns1     300   IN A     ${records.ns1.ipv4}
           ns1     300   IN AAAA  ${records.ns1.ipv6}
           ns2     300   IN A     ${records.ns2.ipv4}
           ns2     300   IN AAAA  ${records.ns2.ipv6}
-          ns3     300   IN A     100.85.79.53
-          ns3     300   IN AAAA  fd7a:115c:a1e0::4036:4f35
 
           ; Hosts declaration.
           bowmore       IN CNAME bowmore.${tailnetDomainName}.
