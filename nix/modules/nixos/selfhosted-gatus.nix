@@ -9,7 +9,7 @@
 
   config = let
     cfg = config.node.services.gatus;
-    inherit (flake.lib) caddy facts;
+    inherit (flake.lib) facts;
   in {
     services = {
       gatus = {
@@ -47,8 +47,6 @@
           };
         };
       };
-
-      caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.gatus;
     };
   };
 }

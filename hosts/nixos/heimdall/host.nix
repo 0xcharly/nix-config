@@ -49,7 +49,6 @@
 
     services = {
       dns.enable = true;
-      reverseProxy.enable = true;
 
       atuin.enable = false; # 2025-11-03: migrated to bowmore.
       gatus.enable = false; # 2025-11-24: migrated to linode-jp.
@@ -62,6 +61,7 @@
         server.enable = false; # 2025-11-03: migrated to bowmore.
         exporters.node.enable = true;
       };
+      reverseProxy.enable = false; # 2025-11-26: migrated to linode-jp.
       smtp.enable = false; # 2025-11-03: migrated to bowmore.
       taskchampion-sync-server.enable = false; # 2025-11-03: Disabled because unused. Will decommission.
       vaultwarden.enable = false; # 2025-11-03: migrated to bowmore.

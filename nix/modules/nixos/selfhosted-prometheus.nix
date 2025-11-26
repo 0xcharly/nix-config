@@ -9,7 +9,7 @@
 
   config = let
     cfg = config.node.services.prometheus;
-    inherit (flake.lib) caddy facts inventory;
+    inherit (flake.lib) facts inventory;
   in {
     node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
       prometheus = {
@@ -46,8 +46,6 @@
             workstations_zfs_stats = builtins.map mkZfsExporterConfig inventory.workstations;
           };
       };
-
-      caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.prometheus;
     };
   };
 }

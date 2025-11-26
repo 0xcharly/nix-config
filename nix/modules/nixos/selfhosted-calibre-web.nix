@@ -9,7 +9,7 @@
 
   config = let
     cfg = config.node.services.calibre;
-    inherit (flake.lib) caddy facts;
+    inherit (flake.lib) facts;
   in {
     node = lib.mkIf cfg.enable {
       fs.zfs.zpool.root.datadirs.calibre-web = {};
@@ -30,8 +30,6 @@
           calibreLibrary = "/tank/delay/media/books";
         };
       };
-
-      caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.calibre-web;
     };
   };
 }

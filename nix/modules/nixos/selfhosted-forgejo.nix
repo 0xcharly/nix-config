@@ -9,7 +9,7 @@
 
   config = let
     cfg = config.node.services.forgejo;
-    inherit (flake.lib) caddy facts;
+    inherit (flake.lib) facts;
   in {
     node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
       forgejo = {
@@ -64,8 +64,6 @@
         inherit (cfg) enable;
         port = 0; # Disables TCP.
       };
-
-      caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.forgejo;
     };
   };
 }

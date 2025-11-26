@@ -17,7 +17,7 @@
 
   config = let
     cfg = config.node.services.paperless;
-    inherit (flake.lib) caddy facts;
+    inherit (flake.lib) facts;
   in {
     node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
       paperless = {
@@ -54,8 +54,6 @@
           };
         };
       };
-
-      caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.paperless;
     };
   };
 }

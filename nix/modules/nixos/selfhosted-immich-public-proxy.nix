@@ -9,14 +9,12 @@
 
   config.services = let
     cfg = config.node.services.immich-public-proxy;
-    inherit (flake.lib) caddy facts;
+    inherit (flake.lib) facts;
   in {
     immich-public-proxy = {
       inherit (cfg) enable;
       inherit (facts.services.immich-public-proxy) port;
       immichUrl = "https://${facts.services.immich.domain}";
     };
-
-    caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.immich-public-proxy;
   };
 }

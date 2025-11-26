@@ -27,6 +27,7 @@ in {
 
       config = let
         records = facts.dns.${domainName};
+        reverseProxyHostName = facts.reverse-proxy.${domainName}.host;
         zoneFile = pkgs.writeText domainName ''
           $ORIGIN ${domainName}.
           $TTL    3600
@@ -54,20 +55,20 @@ in {
           skl           IN CNAME skl.${tailnetDomainName}.
 
           ; Services declaration.
-          album         IN CNAME heimdall
-          atuin         IN CNAME heimdall
-          files         IN CNAME heimdall
-          git           IN CNAME heimdall
-          graphs        IN CNAME heimdall
-          jellyfin      IN CNAME heimdall
-          news          IN CNAME heimdall
-          prometheus    IN CNAME heimdall
-          push          IN CNAME heimdall
-          reads         IN CNAME heimdall
-          github        IN CNAME heimdall
-          shared.album  IN CNAME heimdall
-          status        IN CNAME heimdall
-          vault         IN CNAME heimdall
+          album         IN CNAME ${reverseProxyHostName}
+          atuin         IN CNAME ${reverseProxyHostName}
+          files         IN CNAME ${reverseProxyHostName}
+          git           IN CNAME ${reverseProxyHostName}
+          graphs        IN CNAME ${reverseProxyHostName}
+          jellyfin      IN CNAME ${reverseProxyHostName}
+          news          IN CNAME ${reverseProxyHostName}
+          prometheus    IN CNAME ${reverseProxyHostName}
+          push          IN CNAME ${reverseProxyHostName}
+          reads         IN CNAME ${reverseProxyHostName}
+          github        IN CNAME ${reverseProxyHostName}
+          shared.album  IN CNAME ${reverseProxyHostName}
+          status        IN CNAME ${reverseProxyHostName}
+          vault         IN CNAME ${reverseProxyHostName}
         '';
       in ''
         ${domainName}:53 {

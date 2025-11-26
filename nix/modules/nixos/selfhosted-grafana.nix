@@ -9,7 +9,7 @@
 
   config = let
     cfg = config.node.services.grafana;
-    inherit (flake.lib) caddy facts;
+    inherit (flake.lib) facts;
   in {
     node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
       grafana = {
@@ -51,8 +51,6 @@
           ];
         };
       };
-
-      caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.grafana;
     };
   };
 }

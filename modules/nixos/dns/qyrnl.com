@@ -13,25 +13,6 @@ ns3 300 IN A    100.85.79.53
 ns3 300 IN AAAA fd7a:115c:a1e0::4036:4f35
 
 heimdall        IN CNAME heimdall.@tailnetName@.
-album           IN CNAME heimdall
-atuin           IN CNAME heimdall
-beans           IN CNAME heimdall
-files           IN CNAME heimdall
-gatus           IN CNAME heimdall
-git             IN CNAME heimdall
-graphs          IN CNAME heimdall
-healthchecks    IN CNAME heimdall
-jellyfin        IN CNAME heimdall
-news            IN CNAME heimdall
-prometheus      IN CNAME heimdall
-push            IN CNAME heimdall
-reads           IN CNAME heimdall
-github          IN CNAME heimdall
-shared.album    IN CNAME heimdall
-status          IN CNAME heimdall
-tasks           IN CNAME heimdall
-vault           IN CNAME heimdall
-
 bowmore         IN CNAME bowmore.@tailnetName@.
 dalmore         IN CNAME dalmore.@tailnetName@.
 fk-13           IN CNAME fk-13.@tailnetName@.
@@ -40,3 +21,22 @@ linode-jp       IN CNAME linode-jp.@tailnetName@.
 nyx             IN CNAME nyx.@tailnetName@.
 rip             IN CNAME rip.@tailnetName@.
 skl             IN CNAME skl.@tailnetName@.
+
+album           IN CNAME linode-jp
+atuin           IN CNAME linode-jp
+beans           IN CNAME linode-jp
+files           IN CNAME linode-jp
+gatus           IN CNAME linode-jp
+git             IN CNAME linode-jp
+graphs          IN CNAME linode-jp
+healthchecks    IN CNAME linode-jp
+jellyfin        IN CNAME linode-jp
+news            IN CNAME linode-jp
+prometheus      IN CNAME linode-jp
+push            IN CNAME linode-jp
+reads           IN CNAME linode-jp
+github          IN CNAME linode-jp
+shared.album    IN CNAME linode-jp
+status          IN CNAME linode-jp
+tasks           IN CNAME linode-jp
+vault           IN CNAME linode-jp

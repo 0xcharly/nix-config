@@ -9,7 +9,7 @@
 
   config = let
     cfg = config.node.services.immich;
-    inherit (flake.lib) caddy facts;
+    inherit (flake.lib) facts;
   in {
     node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
       redis-immich = {
@@ -28,8 +28,6 @@
         mediaLocation = "/tank/delay/album";
         settings.server.externalDomain = "https://${facts.services.immich-public-proxy.domain}";
       };
-
-      caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.immich;
     };
   };
 }

@@ -32,6 +32,9 @@ host = "linode-fr"
 ipv4 = "172.233.245.4"
 ipv6 = "2600:3c07::2000:31ff:fe53:d2e1"
 
+[reverse-proxy."qyrnl.com"]
+host = "linode-jp"
+
 [services.atuin]
 domain = "atuin.qyrnl.com"
 host = "bowmore.qyrnl.com"
@@ -79,7 +82,7 @@ port = 2283
 
 [services.immich-public-proxy]
 domain = "shared.album.qyrnl.com"
-host = "heimdall.qyrnl.com"
+host = "linode-jp.qyrnl.com"
 port = 3000
 
 [services.jellyfin]

@@ -11,6 +11,7 @@
 
     inputs.nix-config-secrets.modules.nixos.blueprint
     inputs.nix-config-secrets.modules.nixos.nix-client-config
+    inputs.nix-config-secrets.modules.nixos.dns-qyrnl-dot-com
     inputs.nix-config-secrets.modules.nixos.services-gatus
     inputs.nix-config-secrets.modules.nixos.services-gotify
     inputs.nix-config-secrets.modules.nixos.services-tailscale
@@ -45,6 +46,7 @@
     flake.modules.nixos.selfhosted-gatus-unstable # TODO(25.11): Remove after 25.11 update.
     flake.modules.nixos.selfhosted-gotify
     flake.modules.nixos.selfhosted-immich-public-proxy
+    flake.modules.nixos.selfhosted-reverse-proxy-qyrnl-dot-com
     flake.modules.nixos.services-deploy-rs
     flake.modules.nixos.services-fail2ban
     flake.modules.nixos.services-openssh
@@ -79,6 +81,14 @@
       gatus.enable = true;
       gotify.enable = true;
       immich-public-proxy.enable = true;
+
+      reverse-proxy = {
+        enable = true;
+        "qyrnl.com" = {
+          enable = true;
+          bindIP = "100.76.97.8";
+        };
+      };
     };
 
     users.delay.ssh = {

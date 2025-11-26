@@ -10,7 +10,7 @@
 
   config = let
     cfg = config.node.services.vaultwarden;
-    inherit (flake.lib) caddy facts;
+    inherit (flake.lib) facts;
   in {
     node = lib.mkIf cfg.enable {
       fs.zfs.zpool.root.datadirs = {
@@ -48,8 +48,6 @@
           };
         };
       };
-
-      caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.vaultwarden;
     };
 
     assertions = [

@@ -10,7 +10,7 @@
 
   config = let
     cfg = config.node.services.cgit;
-    inherit (flake.lib) caddy facts;
+    inherit (flake.lib) facts;
   in {
     services = {
       cgit.github = {
@@ -28,8 +28,6 @@
       nginx.virtualHosts.${facts.services.cgit.domain}.locations."= /custom.css".extraConfig = ''
         alias ${./selfhosted-cgit.css};
       '';
-
-      caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.cgit;
     };
 
     users.users.${config.services.cgit.github.user}.extraGroups = ["git"];

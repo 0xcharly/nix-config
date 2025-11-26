@@ -9,7 +9,7 @@
 
   config = let
     cfg = config.node.services.gotify;
-    inherit (flake.lib) caddy facts;
+    inherit (flake.lib) facts;
   in {
     services = {
       gotify = {
@@ -17,8 +17,6 @@
         environment.GOTIFY_SERVER_PORT = facts.services.gotify.port;
         environmentFiles = [config.age.secrets."services/gotify.env".path];
       };
-
-      caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.gotify;
     };
   };
 }

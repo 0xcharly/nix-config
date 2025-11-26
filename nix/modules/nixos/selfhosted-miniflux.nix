@@ -9,7 +9,7 @@
 
   config = let
     cfg = config.node.services.miniflux;
-    inherit (flake.lib) caddy facts;
+    inherit (flake.lib) facts;
   in {
     services = {
       miniflux = {
@@ -22,8 +22,6 @@
           WEBAUTHN = 1;
         };
       };
-
-      caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.miniflux;
     };
   };
 }

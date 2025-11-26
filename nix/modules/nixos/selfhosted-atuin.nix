@@ -10,7 +10,7 @@
 
   config = let
     cfg = config.node.services.atuin;
-    inherit (flake.lib) caddy facts;
+    inherit (flake.lib) facts;
   in {
     services = {
       atuin = {
@@ -19,8 +19,6 @@
         host = "0.0.0.0";
         openRegistration = false; # NOTE: temporary change this value to add new users.
       };
-
-      caddy.virtualHosts = caddy.mkReverseProxyConfig facts.services.atuin;
     };
   };
 }
