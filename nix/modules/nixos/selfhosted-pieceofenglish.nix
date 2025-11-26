@@ -68,7 +68,6 @@
           (caddy.mkReverseProxyConfig (facts.services.pieceofenglish
             // {
               host = config.services.pieceofenglish.listenAddress;
-              import = "";
             }))
           (caddy.mkWwwRedirectConfig facts.services.pieceofenglish)
         ];

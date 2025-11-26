@@ -34,6 +34,7 @@ ipv6 = "2600:3c07::2000:31ff:fe53:d2e1"
 
 [reverse-proxy."qyrnl.com"]
 host = "linode-jp"
+tmpl = "tailscale_reverse_proxy"
 
 [services.atuin]
 domain = "atuin.qyrnl.com"

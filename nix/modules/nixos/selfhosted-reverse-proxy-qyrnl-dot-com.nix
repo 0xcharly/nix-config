@@ -26,6 +26,7 @@
   config = let
     cfg = config.node.services.reverse-proxy;
     inherit (flake.lib) caddy facts;
+    inherit (facts.reverse-proxy."qyrnl.com") tmpl;
   in {
     services = {
       caddy = {
@@ -37,7 +38,7 @@
         environmentFile = config.age.secrets."services/gandi-creds.qyrnl.com".path;
         virtualHosts =
           {
-            "(tailscale_reverse_proxy)".extraConfig = ''
+            "(${tmpl})".extraConfig = ''
               bind ${cfg."qyrnl.com".bindIP}
               tls {
                 resolvers 1.1.1.1
@@ -62,22 +63,12 @@
               prometheus
               vaultwarden
             ];
-            reverse-proxy-configs = builtins.map caddy.mkReverseProxyConfig services;
+            reverse-proxy-configs = builtins.map caddy.mkReverseProxyConfig (
+              builtins.map (service: service // {import = tmpl;}) services
+            );
           in
             lib.mergeAttrsList reverse-proxy-configs);
       };
-
-      # caddy = lib.mkIf cfg.reverse-proxy.enable {
-      #   inherit (cfg.reverse-proxy) enable;
-      #   virtualHosts = lib.mergeAttrsList [
-      #     (caddy.mkReverseProxyConfig (facts.services.pieceofenglish
-      #       // {
-      #         host = config.services.pieceofenglish.listenAddress;
-      #         import = "";
-      #       }))
-      #     (caddy.mkWwwRedirectConfig facts.services.pieceofenglish)
-      #   ];
-      # };
     };
 
     systemd.services.caddy = lib.mkIf cfg.enable {
@@ -89,10 +80,6 @@
       serviceConfig = {
         RestartSec = "5s";
         AmbientCapabilities = ["CAP_NET_BIND_SERVICE"]; # Allow Caddy to bind to 443.
-
-        # TODO: do we need this?
-        # } // lib.optionalsAttrs cfg."qyrnl.com".enable {
-        # EnvironmentFile = config.age.secrets."services/gandi-creds.qyrnl.com".path;
       };
     };
 

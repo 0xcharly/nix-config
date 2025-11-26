@@ -15,7 +15,7 @@ in rec {
     domain,
     host,
     port,
-    import ? "tailscale_reverse_proxy",
+    import ? "",
     ...
   }: {
     ${domain}.extraConfig = ''
