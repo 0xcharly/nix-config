@@ -1,24 +1,11 @@
 {
   description = "Nix systems and configs for delay";
 
-  outputs = inputs @ {flake-parts, ...}: let
-    inherit (inputs.nixpkgs) lib;
-  in
-    lib.recursiveUpdate
-    # Current, manual setup.
-    (flake-parts.lib.mkFlake {inherit inputs;} {
-      imports = [
-        ./hosts
-        ./parts
-      ];
-
-      systems = ["aarch64-darwin" "x86_64-linux"];
-    })
-    # Future, blueprint-based setup.
-    (inputs.blueprint {
+  outputs = inputs:
+    inputs.blueprint {
       inherit inputs;
       prefix = ./nix;
-    });
+    };
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
@@ -37,12 +24,6 @@
     blueprint = {
       url = "github:numtide/blueprint";
       inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # Convenience helpers for flake organization.
-    flake-parts = {
-      url = "github:hercules-ci/flake-parts";
-      inputs.nixpkgs-lib.follows = "nixpkgs";
     };
 
     # Nix (community) Unofficial Repository.

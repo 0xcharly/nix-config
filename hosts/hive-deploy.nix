@@ -26,10 +26,8 @@ in {
       hosts = [
         "bowmore"
         "dalmore"
-        "heimdall"
         "linode-fr"
         "linode-jp"
-        "skl"
       ];
 
       mkDeployConfiguration = hostname: {
