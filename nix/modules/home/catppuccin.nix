@@ -20,8 +20,8 @@
   programs.fzf.colors = let
     lavender = "#b4befe";
     accent = lavender;
-    base = "#11181c";
-    text = "#e1e8f4";
+    base = "#10141E";
+    text = "#cad5e2";
     rosewater = "#f5e0dc";
     surface_blue = "#203147";
     on_surface_blue = "#9fcdfe";

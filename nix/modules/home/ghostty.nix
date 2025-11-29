@@ -21,8 +21,8 @@ in {
       enableFishIntegration = true;
       themes = {
         catppuccin-obsidian = {
-          background = "#11181c";
-          foreground = "#e1e8f4";
+          background = "#10141e";
+          foreground = "#cad5e2";
           selection-background = "#303747";
           selection-foreground = "#e1e8f4";
           cursor-color = "#bac2de";
