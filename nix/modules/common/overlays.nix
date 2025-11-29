@@ -5,6 +5,8 @@
 }: {
   nixpkgs.overlays = [
     flake.overlays.default
-    inputs.nix-config-nvim.overlays.default
+    (super: prev: {
+      nvim = inputs.nix-config-nvim.packages.${super.stdenv.hostPlatform.system}.default;
+    })
   ];
 }
