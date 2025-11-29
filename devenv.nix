@@ -25,6 +25,7 @@
     '';
 
     remote-unlock.exec = builtins.readFile ./bin/remote-unlock.sh;
+    remote-unlock-emergency.exec = builtins.readFile ./bin/remote-unlock-emergency.sh;
 
     provision-generic.exec = builtins.readFile ./bin/provision-generic.sh;
     provision-linode.exec = builtins.readFile ./bin/provision-linode.sh;
