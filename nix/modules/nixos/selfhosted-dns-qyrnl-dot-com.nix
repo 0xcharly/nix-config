@@ -43,7 +43,7 @@ in {
           ; Hosts declaration.
           bowmore       IN CNAME bowmore.${tailnetDomainName}.
           dalmore       IN CNAME dalmore.${tailnetDomainName}.
-          fk-13         IN CNAME fk-13.${tailnetDomainName}.
+          fwk           IN CNAME fwk.${tailnetDomainName}.
           heimdall      IN CNAME heimdall.${tailnetDomainName}.
           linode-fr     IN CNAME linode-fr.${tailnetDomainName}.
           linode-jp     IN CNAME linode-jp.${tailnetDomainName}.
