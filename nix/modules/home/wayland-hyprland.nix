@@ -193,8 +193,8 @@
           border_size = 1;
           gaps_in = 4;
           gaps_out = 8;
-          "col.active_border" = "rgb(FFA028)";
-          "col.inactive_border" = "rgb(00C8FF)";
+          "col.active_border" = "rgb(d98b3e)";
+          "col.inactive_border" = "rgb(41a9d4)";
         };
         decoration = {
           rounding = 8;
@@ -205,9 +205,9 @@
           shadow = {
             enabled = true;
             range = 8;
-            render_power = 2;
-            color = "rgb(B43C00)";
-            color_inactive = "rgb(005AA0)";
+            render_power = 4;
+            color = "rgb(a34e19)";
+            color_inactive = "rgb(2e5f9e)";
           };
           blur = {
             enabled = true;
@@ -217,7 +217,7 @@
           };
         };
         misc = {
-          background_color = "0x0b1215";
+          background_color = "rgb(0b1215)";
           disable_hyprland_logo = true;
           force_default_wallpaper = 0;
         };
