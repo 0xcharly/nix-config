@@ -47,5 +47,5 @@ in rec {
     mergeAttrsList (builtins.map mkDeployConfiguration hosts);
 
   # TODO: consider moving the checks to Blueprint's check directory.
-  checks = builtins.mapAttrs (system: lib': lib'.deployChecks deploy) pkgs'.deploy-rs.lib;
+  checks = builtins.mapAttrs (system: lib': lib'.deployChecks deploy) deploy-rs.lib;
 }
