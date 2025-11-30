@@ -7,12 +7,12 @@
       prefix = ./nix;
     };
     deploy-rs = import ./hive inputs blueprint;
-  in {
-    inherit (blueprint) nixosConfigurations nixosModules homeModules lib modules packages devShells;
-    inherit (deploy-rs) deploy;
-
-    checks = blueprint.checks // deploy-rs.checks;
-  };
+  in
+    blueprint
+    // {
+      inherit (deploy-rs) deploy;
+      checks = blueprint.checks // deploy-rs.checks;
+    };
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
