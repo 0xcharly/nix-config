@@ -48,12 +48,19 @@
           oauth2.ENABLED = false;
           openid.ENABLE_OPENID_SIGNIN = false;
           server = {
-            DISABLE_SSH = true;
             DOMAIN = facts.services.forgejo.domain;
             ROOT_URL = "https://${facts.services.forgejo.domain}";
             HTTP_ADDR = "0.0.0.0";
             HTTP_PORT = facts.services.forgejo.port;
             ENABLE_ACME = false;
+
+            START_SSH_SERVER = true;
+            SSH_DOMAIN = facts.services.forgejo.ssh.domain;
+            SSH_PORT = facts.services.forgejo.ssh.port;
+            SSH_LISTEN_HOST = "0.0.0.0";
+            SSH_LISTEN_PORT = facts.services.forgejo.ssh.port;
+            SSH_SERVER_HOST_KEYS = config.age.secrets."keys/forgejo_ed25519_key".path;
+            BUILTIN_SSH_SERVER_USER = "git";
           };
           service.DISABLE_REGISTRATION = true;
           session.COOKIE_SECURE = true;

@@ -11,6 +11,7 @@
     inputs.nix-config-secrets.modules.nixos.blueprint
     inputs.nix-config-secrets.modules.nixos.disk-encryption-keys
     inputs.nix-config-secrets.modules.nixos.nix-client-config
+    inputs.nix-config-secrets.modules.nixos.services-forgejo-ssh-host-keys
     inputs.nix-config-secrets.modules.nixos.services-github-backup
     inputs.nix-config-secrets.modules.nixos.services-miniflux
     inputs.nix-config-secrets.modules.nixos.services-msmtp
