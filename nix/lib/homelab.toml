@@ -123,6 +123,11 @@ domain = "prometheus.qyrnl.com"
 host = "bowmore.qyrnl.com"
 port = 9090
 
+[services.search]
+domain = "search.qyrnl.com"
+host = "bowmore.qyrnl.com"
+port = 9009
+
 [services.vaultwarden]
 domain = "vault.qyrnl.com"
 host = "bowmore.qyrnl.com"

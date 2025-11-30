@@ -56,6 +56,7 @@ in {
           atuin         IN CNAME ${reverseProxyHostName}
           files         IN CNAME ${reverseProxyHostName}
           git           IN CNAME ${reverseProxyHostName}
+          github        IN CNAME ${reverseProxyHostName}
           graphs        IN CNAME ${reverseProxyHostName}
           jellyfin      IN CNAME ${reverseProxyHostName}
           music         IN CNAME ${reverseProxyHostName}
@@ -63,7 +64,7 @@ in {
           prometheus    IN CNAME ${reverseProxyHostName}
           push          IN CNAME ${reverseProxyHostName}
           reads         IN CNAME ${reverseProxyHostName}
-          github        IN CNAME ${reverseProxyHostName}
+          search        IN CNAME ${reverseProxyHostName}
           shared.album  IN CNAME ${reverseProxyHostName}
           status        IN CNAME ${reverseProxyHostName}
           vault         IN CNAME ${reverseProxyHostName}

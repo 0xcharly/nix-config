@@ -62,6 +62,7 @@
               navidrome
               paperless
               prometheus
+              search
               vaultwarden
             ];
             reverse-proxy-configs = builtins.map caddy.mkReverseProxyConfig (
