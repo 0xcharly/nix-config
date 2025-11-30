@@ -82,6 +82,7 @@ in {
       (gatus.mkHttpServiceCheck "immich" facts.services.immich)
       (gatus.mkHttpServiceCheck "jellyfin" facts.services.jellyfin)
       (gatus.mkHttpServiceCheck "miniflux" facts.services.miniflux)
+      (gatus.mkHttpServiceCheck "navidrome" facts.services.navidrome)
       (gatus.mkHttpServiceCheck "paperless" facts.services.paperless)
       (gatus.mkHttpServiceCheck "Piece of English" facts.services.pieceofenglish)
       (gatus.mkHttpServiceCheck "prometheus" {
