@@ -25,7 +25,7 @@ in {
           foreground = "#cad5e2";
           selection-background = "#303747";
           selection-foreground = "#e1e8f4";
-          cursor-color = "#bac2de";
+          cursor-color = "#cad5e2";
           palette = [
             "0=#bac2de"
             "1=#fe9aa4"
