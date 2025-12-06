@@ -7,6 +7,7 @@
     keyMode = "vi";
     mouse = true;
     sensibleOnTop = false;
+    terminal = "tmux-direct";
     plugins = [
       {
         plugin = pkgs.tmuxPlugins.fingers;
