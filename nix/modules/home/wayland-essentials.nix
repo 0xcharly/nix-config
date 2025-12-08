@@ -103,6 +103,9 @@
           # size of fonts without changing the layout size of other UI elements.
           GDK_DPI_SCALE = 1;
 
+          # Steam used `GDK_SCALE` before.
+          STEAM_FORCE_DESKTOPUI_SCALING = 2;
+
           MOZ_ENABLE_WAYLAND = 1;
           _JAVA_AWT_WM_NONREPARENTING = 1;
 
