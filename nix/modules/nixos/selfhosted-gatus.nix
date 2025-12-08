@@ -20,6 +20,21 @@
 
           metrics = true; # Exposes metrics for Prometheus.
           alerting = {
+            email = {
+              to = "mail@qyrnl.com";
+              from = "status@qyrnl.com";
+              username = "status@qyrnl.com";
+              password = "$EMAIL_TOKEN";
+              host = "smtp.protonmail.ch";
+              port = 587;
+              client.insecure = false;
+              default-alert = {
+                description = "Status Alert";
+                send-on-resolved = true;
+                failure-threshold = 5;
+                success-threshold = 3;
+              };
+            };
             gotify = {
               server-url = "https://${facts.services.gotify.domain}";
               token = "$GOTIFY_TOKEN";
@@ -29,7 +44,7 @@
                 body = "[ALERT_DESCRIPTION] - [ENDPOINT_URL]";
               };
               default-alert = {
-                description = "Status Change";
+                description = "Status Alert";
                 send-on-resolved = true;
                 failure-threshold = 5;
                 success-threshold = 3;
