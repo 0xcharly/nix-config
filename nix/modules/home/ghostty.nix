@@ -1,10 +1,16 @@
-{flake, ...}: {
+{
+  flake,
+  inputs,
+  ...
+}: {
   lib,
   pkgs,
   ...
 }: let
   inherit (pkgs.stdenv) isDarwin isLinux;
 in {
+  imports = [inputs.nix-config-colorscheme.modules.home.ghostty];
+
   programs = {
     tmux.terminal = lib.mkDefault "xterm-ghostty";
 
@@ -19,33 +25,6 @@ in {
       enableBashIntegration = true;
       enableZshIntegration = true;
       enableFishIntegration = true;
-      themes = {
-        catppuccin-obsidian = {
-          background = "#10141e";
-          foreground = "#cad5e2";
-          selection-background = "#303747";
-          selection-foreground = "#e1e8f4";
-          cursor-color = "#cad5e2";
-          palette = [
-            "0=#bac2de"
-            "1=#fe9aa4"
-            "2=#addba9"
-            "3=#f3dfb4"
-            "4=#95b7ef"
-            "5=#b4befe"
-            "6=#92d8d2"
-            "7=#e1e8f4"
-            "8=#7a8390"
-            "9=#fe818d"
-            "10=#8ed29c"
-            "11=#f1b48e"
-            "12=#89b5fa"
-            "13=#d0aff8"
-            "14=#71d1c7"
-            "15=#90a4bb"
-          ];
-        };
-      };
       clearDefaultKeybinds = true;
       settings = let
         font = flake.lib.user.gui.fonts.terminal;
@@ -105,7 +84,6 @@ in {
             gen-font-codepoint-map = family: codepoints: lib.concatStringsSep "=" [codepoints family];
           in
             lib.mapAttrsToList gen-font-codepoint-map codepoints-map;
-          theme = "catppuccin-obsidian";
           window-padding-x = 4;
           window-padding-y = 4;
           window-padding-balance = true;
