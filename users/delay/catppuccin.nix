@@ -13,7 +13,6 @@
     atuin.enable = true;
     bat.enable = true;
     bottom.enable = true;
-    fish.enable = true;
     # TODO: figure out a better way to integrate with the github:catppuccin/nix config.
     # fzf.enable = true;
     hyprland.enable = true;

@@ -420,11 +420,11 @@
         "nixpkgs": "nixpkgs_6"
       },
       "locked": {
-        "lastModified": 1765183868,
-        "narHash": "sha256-HZl9AY4oabAGGnQ+yzDRWECW2Z3jB5S/oYELKd/+/mg=",
+        "lastModified": 1765186265,
+        "narHash": "sha256-sojCcaQXJs16y7JSxMo8ijFSr7hNNYnprA8PS91IfpQ=",
         "owner": "0xcharly",
         "repo": "nix-config-colorscheme",
-        "rev": "9c87e8969643b063f139018566d8061494f37a0c",
+        "rev": "73a050d767390a8811e96613b96cd1440d1e7580",
         "type": "github"
       },
       "original": {

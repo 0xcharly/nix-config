@@ -1,4 +1,8 @@
-{flake, ...}: {
+{
+  flake,
+  inputs,
+  ...
+}: {
   config,
   lib,
   pkgs,
@@ -6,6 +10,8 @@
 }: let
   cfg = config.programs.fish;
 in {
+  imports = [inputs.nix-config-colorscheme.modules.home.fish];
+
   programs = {
     eza.enableFishIntegration = true;
 
@@ -35,15 +41,15 @@ in {
         fish_prompt = ''
           set -l last_status $status
 
-          set_color 7A8490
+          set_color brblack
           printf (prompt_hostname)
           if test $last_status -ne 0
-              set_color FE9FA9
+              set_color red
           else
-              set_color AFF3C0
+              set_color green
           end
           printf " ⌁ "
-          set_color 7A8490
+          set_color brblack
           printf "♯ "
           set_color normal
         '';
