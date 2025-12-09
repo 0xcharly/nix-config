@@ -1,4 +1,6 @@
-{pkgs, ...}: {
+{inputs, ...}: {pkgs, ...}: {
+  imports = [inputs.nix-config-colorscheme.modules.home.tmux];
+
   programs.tmux = {
     enable = true;
     aggressiveResize = true;
@@ -7,7 +9,6 @@
     keyMode = "vi";
     mouse = true;
     sensibleOnTop = false;
-    terminal = "tmux-direct";
     plugins = [
       {
         plugin = pkgs.tmuxPlugins.fingers;
