@@ -461,11 +461,11 @@
         "nixpkgs": "nixpkgs_6"
       },
       "locked": {
-        "lastModified": 1765257108,
-        "narHash": "sha256-8+IBYhlYdWFFOrBjD3ZEy3LMRngYdlupfQj4vzHoCZk=",
+        "lastModified": 1765258786,
+        "narHash": "sha256-CNvHootSXs+22issWElI0S2A2dTNv5DKGk8CH7fAT5s=",
         "owner": "0xcharly",
         "repo": "nix-config-colorscheme",
-        "rev": "fc98d1604a686324b596d8089b9dc5590ad24af1",
+        "rev": "94127ec4fed78f015ba132e77cc419d7b5a3159a",
         "type": "github"
       },
       "original": {

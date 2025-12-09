@@ -6,7 +6,6 @@
     flavor = "mocha";
     accent = "blue";
 
-    atuin.enable = true;
     bat.enable = true;
     # TODO(25.05): reenable this when fixed.
     # bottom.enable = true;

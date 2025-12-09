@@ -1,10 +1,12 @@
-{flake, ...}: {
+{flake, inputs, ...}: {
   config,
   lib,
   ...
 }: let
   cfg = config.node.services.atuin;
 in {
+  imports = [inputs.nix-config-colorscheme.modules.home.atuin];
+
   options.node.services.atuin = with lib; {
     enableSync = mkEnableOption "Enable syncing shell history via the atuin service";
   };
