@@ -5,8 +5,5 @@
   catppuccin = {
     flavor = "mocha";
     accent = "blue";
-
-    # TODO(25.05): reenable this when fixed.
-    # bottom.enable = true;
   };
 }

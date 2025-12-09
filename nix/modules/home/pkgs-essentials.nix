@@ -1,6 +1,7 @@
 {inputs, ...}: {pkgs, ...}: {
   imports = [
     inputs.nix-config-colorscheme.modules.home.bat
+    inputs.nix-config-colorscheme.modules.home.bottom
     inputs.nix-config-colorscheme.modules.home.fzf
   ];
 
