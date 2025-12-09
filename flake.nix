@@ -39,7 +39,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    catppuccin.url = "github:catppuccin/nix/release-25.05"; # Catppuccin all the things.
     deploy-rs.url = "github:serokell/deploy-rs"; # System deploy tool.
     disko.url = "github:nix-community/disko"; # Filesystem management.
     golink.url = "github:tailscale/golink"; # go/link service.
