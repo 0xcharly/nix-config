@@ -1,4 +1,8 @@
-{flake, ...}: {
+{
+  flake,
+  inputs,
+  ...
+}: {
   config,
   lib,
   pkgs,
@@ -7,6 +11,8 @@
   imports = [
     flake.modules.home.wayland-uwsm
     flake.modules.home.wayland-hyprland-smartgaps
+
+    inputs.nix-config-colorscheme.modules.home.hyprland
   ];
 
   options.node.wayland = with lib; {
@@ -193,8 +199,6 @@
           border_size = 1;
           gaps_in = 4;
           gaps_out = 8;
-          "col.active_border" = "rgb(d98b3e)";
-          "col.inactive_border" = "rgb(41a9d4)";
         };
         decoration = {
           rounding = 8;
@@ -206,8 +210,6 @@
             enabled = true;
             range = 8;
             render_power = 4;
-            color = "rgb(a34e19)";
-            color_inactive = "rgb(2e5f9e)";
           };
           blur = {
             enabled = true;
@@ -217,7 +219,6 @@
           };
         };
         misc = {
-          background_color = "rgb(0b1215)";
           disable_hyprland_logo = true;
           force_default_wallpaper = 0;
         };
@@ -227,9 +228,6 @@
             padding = 8;
             rounding = 3;
             render_text = false;
-            "col.active" = "$blue";
-            "col.inactive" = "$overlay0";
-            "col.urgent" = "$peach";
           };
         };
         bezier = [
