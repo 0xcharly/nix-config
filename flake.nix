@@ -2,10 +2,7 @@
   description = "Nix systems and configs for delay";
 
   outputs = inputs: let
-    blueprint = inputs.blueprint {
-      inherit inputs;
-      prefix = ./nix;
-    };
+    blueprint = inputs.blueprint {inherit inputs;};
     deploy-rs = import ./hive inputs blueprint;
   in
     blueprint
