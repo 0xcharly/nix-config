@@ -1,6 +1,5 @@
 inputs: outputs: let
   # Take advantage of the nixpkgs cache instead of building deploy-rs from the flake.
-
   inherit (inputs) deploy-rs nixpkgs;
   inherit (inputs.nixpkgs.lib.attrsets) mergeAttrsList;
 

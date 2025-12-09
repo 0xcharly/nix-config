@@ -1,4 +1,8 @@
-{flake, inputs, ...}: {
+{
+  flake,
+  inputs,
+  ...
+}: {
   config,
   lib,
   ...
