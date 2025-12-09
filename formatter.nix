@@ -11,9 +11,7 @@ inputs.treefmt-nix.lib.mkWrapper pkgs {
     shfmt.enable = false;
   };
   settings.formatter.prettier.excludes = [
-    "nix/modules/home/walker-style.css"
-    "nix/modules/home/wayland-waybar-style.css"
-    "users/delay/walker/style.css"
-    "users/delay/waybar/style.css"
+    "modules/home/walker-style.css"
+    "modules/home/wayland-waybar-style.css"
   ];
 }
