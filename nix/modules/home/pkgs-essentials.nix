@@ -1,4 +1,6 @@
-{pkgs, ...}: {
+{inputs, ...}: {pkgs, ...}: {
+  imports = [inputs.nix-config-colorscheme.modules.home.fzf];
+
   # Packages I always want installed. Most packages I install using per-project
   # flakes sourced with direnv and nix-shell, so this is not a huge list.
   home.packages = with pkgs; [
