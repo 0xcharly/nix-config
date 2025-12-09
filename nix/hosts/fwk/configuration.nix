@@ -8,6 +8,8 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
 
+    inputs.nix-config-colorscheme.modules.nixos.console
+
     inputs.nix-config-secrets.modules.nixos.blueprint
     inputs.nix-config-secrets.modules.nixos.nix-client-config
     inputs.nix-config-secrets.modules.nixos.services-tailscale
@@ -21,7 +23,6 @@
     flake.modules.common.overlays
 
     flake.modules.nixos.bootloader-systemd-boot
-    flake.modules.nixos.catppuccin
     flake.modules.nixos.fs-zfs-system
     flake.modules.nixos.fs-zfs-zpool-root
     flake.modules.nixos.fs-zfs-zpool-root-home
