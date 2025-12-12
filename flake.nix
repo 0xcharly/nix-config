@@ -64,6 +64,8 @@
   };
 
   nixConfig = {
+    experimental-features = ["nix-command" "flakes" "pipe-operators"];
+
     extra-substituters = [
       "https://0xcharly-nixos-config.cachix.org"
       "https://nixos-raspberrypi.cachix.org"

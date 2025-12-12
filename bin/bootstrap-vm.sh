@@ -13,6 +13,7 @@ fi
 
 NIX_OPTIONS="--option extra-experimental-features nix-command"
 NIX_OPTIONS+=" --option extra-experimental-features flakes"
+NIX_OPTIONS+=" --option extra-experimental-features pipe-operators"
 NIX_OPTIONS+=" --option accept-flake-config true"
 NIX_OPTIONS+=" --show-trace"
 

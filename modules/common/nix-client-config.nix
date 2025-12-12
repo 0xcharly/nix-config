@@ -5,7 +5,7 @@
       trusted-users = allowed-users;
 
       # Enable flakes.
-      experimental-features = "nix-command flakes";
+      experimental-features = "nix-command flakes pipe-operators";
       accept-flake-config = true;
 
       # Add community cache
