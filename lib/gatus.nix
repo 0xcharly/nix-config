@@ -18,6 +18,7 @@
         "[DNS_RCODE] == ${rcode}"
       ]
       ++ conditions;
+    alerts = [{type = "email";} {type = "gotify";}];
   };
 
   mkDnsIPv6Endpoint = domain: nameserver: {
@@ -39,6 +40,7 @@
         "[DNS_RCODE] == ${rcode}"
       ]
       ++ conditions;
+    alerts = [{type = "email";} {type = "gotify";}];
   };
 
   mkPingHostCheck = hostName: {
@@ -47,6 +49,7 @@
     group = "hosts";
     interval = "5m";
     conditions = ["[CONNECTED] == true"];
+    alerts = [{type = "email";} {type = "gotify";}];
   };
 
   mkHttpServiceCheck = name: {domain, ...}: {
@@ -57,7 +60,7 @@
     conditions = [
       "[STATUS] == 200"
     ];
-    alerts = [{type = "gotify";}];
+    alerts = [{type = "email";} {type = "gotify";}];
   };
 
   mkApiCheck = name: {
@@ -69,5 +72,6 @@
     url = "https://${url}";
     interval = "5m";
     conditions = ["[STATUS] == 200"] ++ conditions;
+    alerts = [{type = "email";} {type = "gotify";}];
   };
 }

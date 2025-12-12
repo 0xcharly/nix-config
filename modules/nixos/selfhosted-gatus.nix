@@ -20,6 +20,8 @@
 
           metrics = true; # Exposes metrics for Prometheus.
           alerting = {
+            # FIXME: This fails with:
+            #   dial tcp <ip>:587: i/o timeout
             email = {
               to = "mail@qyrnl.com";
               from = "status@qyrnl.com";
@@ -29,10 +31,11 @@
               port = 587;
               client.insecure = false;
               default-alert = {
+                enabled = false;
                 description = "Status Alert";
                 send-on-resolved = true;
-                failure-threshold = 5;
-                success-threshold = 3;
+                failure-threshold = 3;
+                success-threshold = 2;
               };
             };
             gotify = {
@@ -44,10 +47,11 @@
                 body = "[ALERT_DESCRIPTION] - [ENDPOINT_URL]";
               };
               default-alert = {
+                enabled = true;
                 description = "Status Alert";
                 send-on-resolved = true;
-                failure-threshold = 5;
-                success-threshold = 3;
+                failure-threshold = 3;
+                success-threshold = 2;
               };
             };
           };
