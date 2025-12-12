@@ -1,4 +1,4 @@
 {
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # TODO: fold into `access-directory.nix` once migration is completed.
   users.mutableUsers = false;
 }
