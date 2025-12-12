@@ -35,8 +35,8 @@
 
     # Wait for ZFS datasets to be mounted to start the service.
     systemd.services.navidrome = lib.mkIf cfg.enable {
-      after = ["local-fs.target" "zfs-mount.service"];
-      wants = ["zfs-mount.service"];
+      after = ["local-fs.target" "zfs-mount.service" "zfs-mount-tank.service"];
+      wants = ["zfs-mount-tank.service"];
     };
   };
 }
