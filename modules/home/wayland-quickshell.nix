@@ -3,7 +3,11 @@
   lib,
   ...
 }: {
-  imports = [inputs.nix-config-shell.homeManagerModules.default];
+  imports = [
+    inputs.nix-config-shell.homeManagerModules.default
+
+    inputs.nix-config-colorscheme.modules.home.arcshell
+  ];
 
   options.node.wayland.arcshell = with lib; {
     modules = {

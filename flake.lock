@@ -442,11 +442,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1765516604,
-        "narHash": "sha256-rNbB1d/gEesqmtV9VND0mibRl0M87H7juuJUl3iwsiM=",
+        "lastModified": 1765521536,
+        "narHash": "sha256-XlcJexmZYFIC/4xxUSHLGF7Gsd6sva3gSq+tIfJWDmA=",
         "owner": "0xcharly",
         "repo": "nix-config-colorscheme",
-        "rev": "2fecef81865ed4407cb5ceb5137007fa27e05d12",
+        "rev": "0e8cab4c428402f168dc86128379f73120623331",
         "type": "github"
       },
       "original": {
@@ -540,11 +540,11 @@
         "quickshell": "quickshell"
       },
       "locked": {
-        "lastModified": 1764415643,
-        "narHash": "sha256-6Mi/hi/999J+avGAUGOup/WiMvvZeBXm864qd8TMjmk=",
+        "lastModified": 1765520999,
+        "narHash": "sha256-CKhs1zTZH8u8sWK+bruGg0E9f2ulV2xdNd1L9/N3xrs=",
         "owner": "0xcharly",
         "repo": "nix-config-shell",
-        "rev": "5f23412a51adb85d1f5a7b1b7c38a2e4ede406ee",
+        "rev": "6b83f6d70a19bf7fc57743aa5bbfeccc974a5962",
         "type": "github"
       },
       "original": {
