@@ -103,8 +103,20 @@
         disk4 = "/dev/disk/by-id/ata-ST24000NT002-3N1101_WYD05N6H";
       };
       # snapshots = {
-      #   lowFrequency = ["tank/backups"];
-      #   highFrequency = ["tank/dataDirs"];
+      #   daily = [
+      #     "tank/ayako"
+      #     "tank/backups"
+      #     "tank/delay/album"
+      #     "tank/delay/files"
+      #     "tank/delay/forge"
+      #     "tank/delay/media"
+      #     "tank/delay/music"
+      #     "tank/delay/notes"
+      #     "tank/delay/vault"
+      #   ];
+      #   hourly = [
+      #     "tank/delay/beans"
+      #   ];
       # };
     };
 

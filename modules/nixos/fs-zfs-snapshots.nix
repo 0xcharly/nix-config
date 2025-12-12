@@ -6,7 +6,7 @@
   cfg = config.node.fs.zfs.snapshots;
 in {
   options.node.fs.zfs.snapshots = with lib; {
-    lowFrequency = mkOption {
+    daily = mkOption {
       type = types.listOf types.str;
       default = [];
       description = ''
@@ -25,7 +25,7 @@ in {
       '';
     };
 
-    highFrequency = mkOption {
+    hourly = mkOption {
       type = types.listOf types.str;
       default = [];
       description = ''
@@ -54,7 +54,7 @@ in {
       templates = {
         # Snapshot retention policy for occasionally written datasets
         # (backups/archives).
-        lowFrequencyPolicy = {
+        daily = {
           hourly = 0;
           daily = 30;
           monthly = 12;
@@ -64,7 +64,7 @@ in {
         };
 
         # Snapshot retention policy for frequently written datasets.
-        highFrequencyPolicy = {
+        hourly = {
           hourly = 36;
           daily = 30;
           monthly = 3;
@@ -75,16 +75,16 @@ in {
       };
 
       datasets = let
-        mkLowFrequencyPolicy = dataset: {
+        mkDailyPolicy = dataset: {
           "${dataset}" = {
-            useTemplate = ["lowFrequencyPolicy"];
+            useTemplate = ["daily"];
             recursive = true;
             process_children_only = true;
           };
         };
-        mkHighFrequencyPolicy = dataset: {
+        mkHourlyPolicy = dataset: {
           "${dataset}" = {
-            useTemplate = ["highFrequencyPolicy"];
+            useTemplate = ["hourly"];
             recursive = true;
             process_children_only = true;
           };
@@ -93,8 +93,8 @@ in {
           lib.mergeAttrsList (builtins.map mkConfig datasets);
       in
         lib.mergeAttrsList [
-          (mapPolicy mkLowFrequencyPolicy cfg.lowFrequency)
-          (mapPolicy mkHighFrequencyPolicy cfg.highFrequency)
+          (mapPolicy mkDailyPolicy cfg.daily)
+          (mapPolicy mkHourlyPolicy cfg.hourly)
         ];
     };
 
