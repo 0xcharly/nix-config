@@ -63,19 +63,4 @@
       };
     };
   };
-
-  # NOTE: services-related group currently need to exist to set the proper
-  # permissions on the secondaries. Would it be better to simply keep files
-  # separate from backups? (i.e. /tank/delay and /tank/ayako only exist on the
-  # primary?) Or should we just systematically create all users on all machines?
-  # Seems like this would unnecessarily increase the attack surface…
-  # TODO: figure out a better way to do this.
-  users.groups = {
-    forgejo = {};
-    git = {};
-    immich = {};
-    jellyfin = {};
-    paperless = {};
-    vaultwarden = {};
-  };
 }

@@ -13,7 +13,6 @@
     inputs.nix-config-secrets.modules.nixos.nix-client-config
     inputs.nix-config-secrets.modules.nixos.services-tailscale
     inputs.nix-config-secrets.modules.nixos.services-tailscale-initrd
-    inputs.nix-config-secrets.modules.nixos.users-delay
 
     flake.modules.common.nix-client-config
     flake.modules.common.nix-path
@@ -21,6 +20,7 @@
     flake.modules.common.nixpkgs-unstable
     flake.modules.common.overlays
 
+    flake.modules.nixos.access-directory
     flake.modules.nixos.bootloader-systemd-boot
     flake.modules.nixos.fs-zfs-backup-minisforum-n5
     flake.modules.nixos.fs-zfs-mount-tank
@@ -45,8 +45,6 @@
     flake.modules.nixos.services-openssh
     flake.modules.nixos.services-tailscale
     flake.modules.nixos.system-common
-    flake.modules.nixos.users-ayako
-    flake.modules.nixos.users-delay
   ];
 
   # System config.
