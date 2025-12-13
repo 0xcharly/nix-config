@@ -20,6 +20,7 @@
     inputs.nix-config-secrets.modules.nixos.services-tailscale-initrd
     inputs.nix-config-secrets.modules.nixos.services-vaultwarden
     inputs.nix-config-secrets.modules.nixos.users-delay
+    inputs.nix-config-secrets.modules.nixos.zfs-replication-keys
 
     flake.modules.common.nix-client-config
     flake.modules.common.nix-path
@@ -73,6 +74,7 @@
     flake.modules.nixos.system-common
     flake.modules.nixos.users-ayako
     flake.modules.nixos.users-delay
+    flake.modules.nixos.zfs-send-wrappers
   ];
 
   # System config.

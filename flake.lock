@@ -520,11 +520,11 @@
         "nixpkgs": "nixpkgs_12"
       },
       "locked": {
-        "lastModified": 1765168353,
-        "narHash": "sha256-DuhhsPYB8+xbLZ9HgJfSQLNO4Yrzp/0nzgu2POddhQA=",
+        "lastModified": 1765633906,
+        "narHash": "sha256-1LM/VgcEbVPHuO24/tDuAx/vHn9abVZZG3IKQM3crME=",
         "owner": "0xcharly",
         "repo": "nix-config-secrets",
-        "rev": "9d6a152918fa365dabc0cf4e11eff02ca1670bf1",
+        "rev": "4ac71f9090ac17e6cee477f061560d89851c4ade",
         "type": "github"
       },
       "original": {
