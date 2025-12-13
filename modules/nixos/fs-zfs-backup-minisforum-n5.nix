@@ -206,6 +206,7 @@
                 files = mkGenericDataset;
                 forge = mkForgeDatasets;
                 media = mkMediaDataset;
+                music = mkMediaDataset;
                 notes = mkGenericDataset;
                 vault = mkGenericDataset;
               };

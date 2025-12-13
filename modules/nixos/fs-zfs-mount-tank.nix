@@ -37,28 +37,29 @@
           install -v -d --mode 751 --owner root  --group root     /tank
 
           # Set backup root folder world-traversable.
-          install -v -d --mode 751 --owner delay --group users    /tank/backups
-          install -v -d --mode 750 --owner ayako --group ayako    /tank/backups/ayako
-          install -v -d --mode 750 --owner delay --group delay    /tank/backups/dad
-          install -v -d --mode 750 --owner delay --group delay    /tank/backups/delay
-          install -v -d --mode 750 --owner delay --group git      /tank/backups/github
-          install -v -d --mode 750 --owner delay --group delay    /tank/backups/homelab
+          install -v -d --mode 751 --owner delay --group users       /tank/backups
+          install -v -d --mode 750 --owner ayako --group ayako       /tank/backups/ayako
+          install -v -d --mode 750 --owner delay --group delay       /tank/backups/dad
+          install -v -d --mode 750 --owner delay --group delay       /tank/backups/delay
+          install -v -d --mode 750 --owner delay --group git         /tank/backups/github
+          install -v -d --mode 750 --owner delay --group delay       /tank/backups/homelab
 
-          install -v -d --mode 751 --owner ayako --group users    /tank/ayako
-          install -v -d --mode 750 --owner ayako --group ayako    /tank/ayako/files
-          install -v -d --mode 750 --owner ayako --group users    /tank/ayako/media
+          install -v -d --mode 751 --owner ayako --group users       /tank/ayako
+          install -v -d --mode 750 --owner ayako --group ayako       /tank/ayako/files
+          install -v -d --mode 750 --owner ayako --group users       /tank/ayako/media
 
           install -v -d --mode 751 --owner delay --group users       /tank/delay
           install -v -d --mode 770 --owner delay --group immich      /tank/delay/album
           install -v -d --mode 750 --owner delay --group delay       /tank/delay/beans
           install -v -d --mode 770 --owner delay --group paperless   /tank/delay/files
           install -v -d --mode 751 --owner delay --group jellyfin    /tank/delay/media
+          install -v -d --mode 750 --owner delay --group navidrome   /tank/delay/music
           install -v -d --mode 750 --owner delay --group delay       /tank/delay/notes
           install -v -d --mode 770 --owner delay --group vaultwarden /tank/delay/vault
 
-          install -v -d --mode 751 --owner delay --group forgejo  /tank/delay/forge
-          install -v -d --mode 770 --owner delay --group forgejo  /tank/delay/forge/data
-          install -v -d --mode 770 --owner delay --group forgejo  /tank/delay/forge/repo
+          install -v -d --mode 751 --owner delay --group forgejo     /tank/delay/forge
+          install -v -d --mode 770 --owner delay --group forgejo     /tank/delay/forge/data
+          install -v -d --mode 770 --owner delay --group forgejo     /tank/delay/forge/repo
         '';
       };
     };
