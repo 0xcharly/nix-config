@@ -18,6 +18,11 @@
     facts.ssh.internet.knownHosts
     // facts.ssh.wireguard.tailscale.knownHosts
     // (
+      # *.qyrnl.com
+      mapToFqn facts.domain facts.ssh.wireguard.tailscale.knownHosts
+    )
+    // (
+      # *.neko-danio.ts.net
       mapToFqn
       facts.wireguard.tailscale.tailnet
       facts.ssh.wireguard.tailscale.knownHosts
