@@ -442,11 +442,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1765521891,
-        "narHash": "sha256-wKULzLJ+kKpp/iZdXdVRLn5Pp+lwy45wjXsgoOkMJwk=",
+        "lastModified": 1765599892,
+        "narHash": "sha256-FKEEuNBeRLVF/cCUdu/wX01YhWVN8E2mOEfDRzkMGNI=",
         "owner": "0xcharly",
         "repo": "nix-config-colorscheme",
-        "rev": "a1f71a2b1e4eb7f6faa878ee09fa11a0ddd01089",
+        "rev": "501627b3c2f37b81634fd2bbba972f940fd91541",
         "type": "github"
       },
       "original": {

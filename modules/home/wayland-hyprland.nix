@@ -225,8 +225,8 @@
         plugin.hy3 = {
           tabs = {
             height = 8;
-            padding = 8;
-            rounding = 3;
+            padding = 6;
+            rounding = 4;
             render_text = false;
           };
         };
