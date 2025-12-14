@@ -61,7 +61,7 @@
       system = {
         disk = "/dev/disk/by-id/nvme-CT4000T700SSD3_2340E87BB2E0";
         luksPasswordFile = "/tmp/root-disk-encryption.key";
-        swapSize = "72G"; # Size of RAM + square root of RAM for hibernate.
+        swapSize = "72G"; # Size of RAM + square root of RAM for hibernate
       };
     };
 
