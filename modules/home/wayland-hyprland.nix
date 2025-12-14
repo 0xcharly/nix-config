@@ -220,9 +220,10 @@
         };
         plugin.hy3 = {
           tabs = {
-            height = 8;
+            border_width = 0;
+            height = 6;
             padding = 6;
-            rounding = 4;
+            rounding = 3;
             render_text = false;
           };
         };
