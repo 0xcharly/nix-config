@@ -61,6 +61,8 @@
   config = {
     home = {
       packages = with pkgs; [
+        hyprlock # Screenlock
+
         swayimg # Image viewer
         wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
         wl-color-picker # GUI color picker
