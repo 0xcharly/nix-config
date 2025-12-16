@@ -33,13 +33,11 @@
 
     idle = {
       screensaver = {
-        enable = mkOption {
-          type = types.bool;
-          default = config.wayland.windowManager.hyprland.enable;
-          description = ''
-            Enable screen saver.
-          '';
-        };
+        enable =
+          mkEnableOption "Enable screensaver"
+          // {
+            default = config.wayland.windowManager.hyprland.enable;
+          };
 
         timeout = mkOption {
           type = types.int;
@@ -65,13 +63,11 @@
       };
 
       suspend = {
-        enable = mkOption {
-          type = types.bool;
-          default = config.wayland.windowManager.hyprland.enable;
-          description = ''
-            Enable suspend.
-          '';
-        };
+        enable =
+          mkEnableOption "Enable suspend"
+          // {
+            default = config.wayland.windowManager.hyprland.enable;
+          };
 
         timeout = mkOption {
           type = types.int;
