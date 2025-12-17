@@ -27,7 +27,7 @@
           BaseUrl = "https://${facts.services.navidrome.domain}";
           Port = facts.services.navidrome.port;
           DataFolder = config.node.fs.zfs.zpool.root.datadirs.navidrome.absolutePath;
-          MusicFolder = "/tank/delay/media/music";
+          MusicFolder = "/tank/delay/music";
           EnableInsightsCollector = false;
         };
       };
