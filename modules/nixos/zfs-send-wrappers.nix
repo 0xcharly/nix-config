@@ -4,13 +4,13 @@
   ...
 }: let
   mkBufferedSshCall = remote_command: ''
-    mbuffer -m 1G -q \
+    mbuffer -m 1G -s 1M -q \
       | ssh \
           -o IdentitiesOnly=yes \
           -o PasswordAuthentication=no \
           -o KbdInteractiveAuthentication=no \
           -o IdentityFile=${config.age.secrets."keys/zfs_replication_ed25519_key".path} \
-          syncoid@dalmore.qyrnl.com "mbuffer -m 1G | ${remote_command}"
+          syncoid@dalmore.qyrnl.com "mbuffer -m 1G -s 1M | ${remote_command}"
   '';
 in {
   environment.defaultPackages = with pkgs; [
