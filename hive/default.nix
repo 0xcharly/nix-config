@@ -28,6 +28,7 @@ in rec {
       "dalmore"
       "linode-fr"
       "linode-jp"
+      "skl"
     ];
 
     mkDeployConfiguration = hostname: {
