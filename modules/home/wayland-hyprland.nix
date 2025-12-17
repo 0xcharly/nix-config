@@ -250,6 +250,18 @@
         };
         # Keyboard bindings.
         bind = let
+          set-aspect-ratio = pkgs.writeShellApplication {
+            name = "set-aspect-ratio";
+            runtimeInputs = with pkgs; [bc jq];
+            text = ''
+              focused_window=$(hyprctl activewindow -j)
+
+              width=$(echo "$focused_window" | jq -r '.size[0]')
+              height=$(echo "scale=0; ($width * $2 / $1) / 1" | bc -l)
+
+              hyprctl dispatch resizeactive exact "$width" "$height"
+            '';
+          };
           screenshot-editor = pkgs.writeShellApplication {
             name = "screenshot-editor";
             runtimeInputs = with pkgs; [wl-clipboard satty];
@@ -295,6 +307,7 @@
             "SUPER ALT,   F,      exec, ${uwsmGetExe config.programs.firefox.finalPackage}"
             "SUPER ALT,   C,      exec, ${uwsmGetExe config.programs.chromium.package}"
             "SUPER ALT,   B,      exec, ${uwsmGetExe pkgs.bitwarden}"
+            "SUPER ALT,   R,      exec, ${uwsmGetExe set-aspect-ratio} 16 9"
 
             "SUPER,       D,      hy3:makegroup,   h"
             "SUPER,       S,      hy3:makegroup,   v"
