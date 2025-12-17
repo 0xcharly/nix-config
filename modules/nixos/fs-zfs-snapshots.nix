@@ -78,15 +78,15 @@ in {
         mkDailyPolicy = dataset: {
           "${dataset}" = {
             useTemplate = ["daily"];
-            recursive = true;
-            process_children_only = true;
+            recursive = false;
+            process_children_only = false;
           };
         };
         mkHourlyPolicy = dataset: {
           "${dataset}" = {
             useTemplate = ["hourly"];
-            recursive = true;
-            process_children_only = true;
+            recursive = false;
+            process_children_only = false;
           };
         };
         mapPolicy = mkConfig: datasets:

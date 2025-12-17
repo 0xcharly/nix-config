@@ -24,7 +24,7 @@
     flake.modules.nixos.bootloader-systemd-boot
     flake.modules.nixos.fs-zfs-backup-minisforum-n5
     flake.modules.nixos.fs-zfs-mount-tank
-    flake.modules.nixos.fs-zfs-replication
+    flake.modules.nixos.fs-zfs-replication-replica
     flake.modules.nixos.fs-zfs-system-minisforum-n5
     flake.modules.nixos.fs-zfs-zpool-root
     flake.modules.nixos.fs-zfs-zpool-root-data

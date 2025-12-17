@@ -31,7 +31,7 @@
     flake.modules.nixos.bootloader-systemd-boot
     flake.modules.nixos.fs-zfs-backup-minisforum-n5
     flake.modules.nixos.fs-zfs-mount-tank
-    flake.modules.nixos.fs-zfs-replication
+    flake.modules.nixos.fs-zfs-replication-primary
     flake.modules.nixos.fs-zfs-system-minisforum-n5
     flake.modules.nixos.fs-zfs-zpool-root
     flake.modules.nixos.fs-zfs-zpool-root-data
@@ -104,19 +104,25 @@
         disk4 = "/dev/disk/by-id/ata-ST24000NT002-3N1101_WYD05N6H";
       };
       # snapshots = {
+      #   hourly = [
+      #     "tank/delay/beans"
+      #   ];
       #   daily = [
-      #     "tank/ayako"
-      #     "tank/backups"
+      #     "tank/ayako/files"
+      #     "tank/ayako/media"
+      #     "tank/backups/ayako"
+      #     "tank/backups/dad"
+      #     "tank/backups/delay"
+      #     "tank/backups/github"
+      #     "tank/backups/homelab"
       #     "tank/delay/album"
       #     "tank/delay/files"
-      #     "tank/delay/forge"
+      #     "tank/delay/forge/data"
+      #     "tank/delay/forge/repo"
       #     "tank/delay/media"
       #     "tank/delay/music"
       #     "tank/delay/notes"
       #     "tank/delay/vault"
-      #   ];
-      #   hourly = [
-      #     "tank/delay/beans"
       #   ];
       # };
     };

@@ -38,6 +38,15 @@ ipv6 = "2600:3c07::2000:31ff:fe53:d2e1"
 host = "linode-jp"
 tmpl = "tailscale_reverse_proxy"
 
+[nas.primary]
+host = "bowmore.qyrnl.com"
+ipv4 = "100.114.247.6"
+
+[nas.replicas.dalmore]
+label = "dalmore"
+host = "dalmore.qyrnl.com"
+ipv4 = "100.122.134.64"
+
 [services.atuin]
 domain = "atuin.qyrnl.com"
 host = "bowmore.qyrnl.com"
