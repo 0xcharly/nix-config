@@ -168,7 +168,7 @@
         # Open apps on startup.
         exec-once = [
           "[workspace 1] ${uwsmGetExe config.programs.chromium.package}"
-          "[workspace 3] ${uwsmGetExe config.programs.ghostty.package}"
+          "[workspace 3] ${uwsmGetExe config.programs.kitty.package}"
         ];
 
         # Monitor config.
@@ -291,7 +291,7 @@
             };
         in
           [
-            "SUPER,       Return, exec, ${uwsmGetExe config.programs.ghostty.package}"
+            "SUPER,       Return, exec, ${uwsmGetExe config.programs.kitty.package}"
             "SUPER,       Space,  exec, ${uwsmGetExe config.programs.walker.package}"
             "SUPER SHIFT, X,      killactive"
             "SUPER SHIFT, Q,      exec, ${uwsmGetExe' pkgs.systemd "loginctl"} terminate-session \"$XDG_SESSION_ID\""
