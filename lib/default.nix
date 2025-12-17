@@ -7,7 +7,7 @@ in rec {
 
   builders = import ./builders.nix;
   caddy = import ./caddy.nix {inherit lib;};
-  fonts = import ./fonts.nix;
+  fonts = import ./fonts.nix {inherit lib;};
   gatus = import ./gatus.nix;
   homebrew = import ./homebrew.nix;
   openssh = import ./openssh.nix {inherit facts lib;};

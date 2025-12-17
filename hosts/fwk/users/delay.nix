@@ -23,6 +23,7 @@
     flake.modules.home.home-manager-nixos
     flake.modules.home.jujutsu-deprecated
     flake.modules.home.keychain
+    flake.modules.home.kitty
     flake.modules.home.pkgs-desktop-gui
     flake.modules.home.pkgs-desktop-tui
     flake.modules.home.pkgs-laptop-tui
