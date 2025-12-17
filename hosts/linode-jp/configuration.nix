@@ -33,6 +33,7 @@
     flake.modules.nixos.initrd-tailscale
     flake.modules.nixos.nix-client-config
     flake.modules.nixos.overlays
+    flake.modules.nixos.programs-essentials
     flake.modules.nixos.programs-iotop
     flake.modules.nixos.programs-packages-common
     flake.modules.nixos.programs-sudo

@@ -33,6 +33,7 @@
     flake.modules.nixos.nix-client-config
     flake.modules.nixos.overlays
     flake.modules.nixos.programs-asdcontrol
+    flake.modules.nixos.programs-essentials
     flake.modules.nixos.programs-hyprland
     flake.modules.nixos.programs-iotop
     flake.modules.nixos.programs-packages-common
