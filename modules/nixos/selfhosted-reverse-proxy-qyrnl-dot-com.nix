@@ -58,6 +58,7 @@
               immich-public-proxy
               immich
               jellyfin
+              linkwarden
               miniflux
               navidrome
               paperless

@@ -13,6 +13,7 @@
     inputs.nix-config-secrets.modules.nixos.nix-client-config
     inputs.nix-config-secrets.modules.nixos.services-forgejo-ssh-host-keys
     inputs.nix-config-secrets.modules.nixos.services-github-backup
+    inputs.nix-config-secrets.modules.nixos.services-linkwarden
     inputs.nix-config-secrets.modules.nixos.services-miniflux
     inputs.nix-config-secrets.modules.nixos.services-msmtp
     inputs.nix-config-secrets.modules.nixos.services-searxng
@@ -59,6 +60,8 @@
     flake.modules.nixos.selfhosted-grafana
     flake.modules.nixos.selfhosted-immich
     flake.modules.nixos.selfhosted-jellyfin
+    # TODO(25.11): enable when available
+    # flake.modules.nixos.selfhosted-linkwarden
     flake.modules.nixos.selfhosted-miniflux
     flake.modules.nixos.selfhosted-navidrome
     flake.modules.nixos.selfhosted-paperless
@@ -135,6 +138,8 @@
       grafana.enable = true;
       immich.enable = true;
       jellyfin.enable = true;
+      # TODO(25.11): enable when available
+      # linkwarden.enable = true;
       miniflux.enable = true;
       msmtp.enable = true;
       navidrome.enable = true;

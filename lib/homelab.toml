@@ -107,6 +107,11 @@ domain = "jellyfin.qyrnl.com"
 host = "bowmore.qyrnl.com"
 port = 8096
 
+[services.linkwarden]
+domain = "readlater.qyrnl.com"
+host = "bowmore.qyrnl.com"
+port = 3001
+
 [services.miniflux]
 domain = "news.qyrnl.com"
 host = "bowmore.qyrnl.com"
