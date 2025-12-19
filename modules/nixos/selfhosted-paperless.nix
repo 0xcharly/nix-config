@@ -9,6 +9,9 @@
 }: {
   imports = [
     inputs.nix-config-secrets.modules.nixos.services-paperless
+
+    # TODO: delete once github:nixos/nixpkgs#471742 is merged in nixos-25.11
+    ./python3Packages-granian-overlay.nix
   ];
 
   options.node.services.paperless = with lib; {

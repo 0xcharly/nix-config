@@ -40,6 +40,23 @@
         isSystemUser = lib.mkDefault true;
         group = lib.mkDefault "linkwarden";
       };
+
+      # immich = {
+      #   isSystemUser = lib.mkDefault true;
+      #   extraGroups = ["_pics"];
+      # };
+      # jellyfin = {
+      #   isSystemUser = lib.mkDefault true;
+      #   extraGroups = ["_media" "_music"];
+      # };
+      # navidrome = {
+      #   isSystemUser = lib.mkDefault true;
+      #   extraGroups = ["_music"];
+      # };
+      # paperless = {
+      #   isSystemUser = lib.mkDefault true;
+      #   extraGroups = ["_files"];
+      # };
     };
 
     groups = {
@@ -53,6 +70,11 @@
 
       # Standalone groups.
       zfsadm.gid = 4000;
+      # _zfsadm.gid = 4000;
+      # _files.gid = 4001;
+      # _media.gid = 4002;
+      # _music.gid = 4003;
+      # _pics.gid = 4004;
 
       # TODO: Migrate the remaining groups.
       forgejo = {};

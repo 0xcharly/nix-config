@@ -12,10 +12,7 @@
     };
 
   inputs = {
-    # TODO: consider switching back to nixos-25.11 once
-    # https://github.com/NixOS/nixpkgs/pull/471742 is merged.
-    # https://nixpkgs-tracker.ocfox.me/?pr=471742
-    nixpkgs.url = "github:NixOS/nixpkgs/release-25.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.11-darwin";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 

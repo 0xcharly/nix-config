@@ -1,7 +1,7 @@
 {inputs, ...}: {
   nixpkgs.overlays = [
-    (super: prev: {
-      nvim = inputs.nix-config-nvim.packages.${super.stdenv.hostPlatform.system}.default;
+    (final: prev: {
+      nvim = inputs.nix-config-nvim.packages.${prev.stdenv.hostPlatform.system}.default;
     })
   ];
 }
