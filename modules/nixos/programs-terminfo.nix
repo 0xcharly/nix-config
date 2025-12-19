@@ -1,3 +1,6 @@
 {pkgs, ...}: {
-  environment.systemPackages = with pkgs; [ghostty.terminfo];
+  environment.systemPackages = with pkgs; [
+    ghostty.terminfo
+    kitty.terminfo
+  ];
 }
