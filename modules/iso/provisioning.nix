@@ -13,7 +13,7 @@
     (modulesPath + "/installer/cd-dvd/channel.nix")
   ];
 
-  networking.useDHCP = true;
+  networking.useDHCP = lib.mkForce true;
 
   # Setup SSH to disable password authentication.
   services.openssh = {

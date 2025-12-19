@@ -35,7 +35,11 @@
         group = lib.mkDefault "syncoid";
         extraGroups = ["zfsadm"];
       };
-      linkwarden.uid = 3002;
+      linkwarden = {
+        uid = 3002;
+        isSystemUser = lib.mkDefault true;
+        group = lib.mkDefault "linkwarden";
+      };
     };
 
     groups = {

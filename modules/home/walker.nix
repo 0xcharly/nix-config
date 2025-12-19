@@ -39,7 +39,6 @@
           entries = [
             {
               name = "GitHub";
-              # TODO(25.11): https://github.com/abenz1267/walker/issues/332
               url = "https://github.com/search?type=code&q=%TERM%";
               prefix = "@cs ";
             }

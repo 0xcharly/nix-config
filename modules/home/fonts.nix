@@ -21,7 +21,7 @@
     noto-fonts-monochrome-emoji # Monochrome emojis
     rubik
 
-    inputs.nix-config-fonts.packages.${system}.pragmatapro
-    inputs.nix-config-fonts.packages.${system}.sys
+    inputs.nix-config-fonts.packages.${stdenv.hostPlatform.system}.pragmatapro
+    inputs.nix-config-fonts.packages.${stdenv.hostPlatform.system}.sys
   ];
 }

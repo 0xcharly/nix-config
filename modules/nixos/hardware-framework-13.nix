@@ -22,6 +22,6 @@
   ];
 
   environment.defaultPackages = [
-    flake.packages.${pkgs.system}.framework-tool-tui
+    flake.packages.${pkgs.stdenv.hostPlatform.system}.framework-tool-tui
   ];
 }

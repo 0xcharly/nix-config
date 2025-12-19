@@ -306,7 +306,7 @@
 
             "SUPER ALT,   F,      exec, ${uwsmGetExe config.programs.firefox.finalPackage}"
             "SUPER ALT,   C,      exec, ${uwsmGetExe config.programs.chromium.package}"
-            "SUPER ALT,   B,      exec, ${uwsmGetExe pkgs.bitwarden}"
+            "SUPER ALT,   B,      exec, ${uwsmGetExe pkgs.bitwarden-desktop}"
             "SUPER ALT,   R,      exec, ${uwsmGetExe set-aspect-ratio} 16 9"
 
             "SUPER,       D,      hy3:makegroup,   h"

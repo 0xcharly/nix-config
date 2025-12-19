@@ -1,5 +1,5 @@
 {flake, ...}: {pkgs, ...}: {
-  environment.defaultPackages = [flake.packages.${pkgs.system}.asdcontrol];
+  environment.defaultPackages = [flake.packages.${pkgs.stdenv.hostPlatform.system}.asdcontrol];
 
   # Studio Display (1114), Pro Display XDR (9243).
   # KERNEL=="hiddev*", ATTRS{idVendor}=="05ac", ATTRS{idProduct}=="1114", GROUP="users", OWNER="root", MODE="0660"

@@ -9,7 +9,6 @@
 
     flake.modules.home.account-essentials
     flake.modules.home.home-manager-nixos
-    flake.modules.home.jujutsu-deprecated
     flake.modules.home.secrets
   ];
 

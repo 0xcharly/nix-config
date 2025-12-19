@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   home.packages = with pkgs; [
     _1password-gui
-    bitwarden
+    bitwarden-desktop
     blueberry
     nautilus
     obsidian

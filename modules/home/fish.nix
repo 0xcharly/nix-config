@@ -66,6 +66,6 @@ in {
       enableBashIntegration = false;
       enableFishIntegration = false;
     };
-    packages = [flake.packages.${pkgs.system}.tmux-open-git-repository-fish];
+    packages = [flake.packages.${pkgs.stdenv.hostPlatform.system}.tmux-open-git-repository-fish];
   };
 }

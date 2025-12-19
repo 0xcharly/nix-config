@@ -77,11 +77,11 @@
     "xhci_pci"
   ];
 
-  services.logind = {
-    lidSwitch = "hybrid-sleep";
-    lidSwitchExternalPower = "suspend";
-    powerKey = "suspend";
-    powerKeyLongPress = "poweroff";
+  services.logind.settings.Login = {
+    HandleLidSwitch = "hybrid-sleep";
+    HandleLidSwitchExternalPower = "suspend";
+    HandlePowerKey = "suspend";
+    HandlePowerKeyLongPress = "poweroff";
   };
 
   networking = {

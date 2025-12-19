@@ -11,7 +11,6 @@
     flake.modules.home.fonts
     flake.modules.home.ghostty
     flake.modules.home.home-manager-nixos
-    flake.modules.home.jujutsu-deprecated
     flake.modules.home.keychain
   ];
 

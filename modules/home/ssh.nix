@@ -1,9 +1,15 @@
-{flake, ...}: {config, ...}: {
+{flake, ...}: {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   programs.ssh = let
     home = config.home.homeDirectory;
     mkIdentityFile = key: "${home}/.ssh/${key}";
   in {
     enable = true;
+    enableDefaultConfig = false;
     matchBlocks = {
       "bitbucket.org" = {
         user = "git";
@@ -13,10 +19,25 @@
         user = "git";
         identityFile = mkIdentityFile "github";
       };
-    };
-    userKnownHostsFile = "${home}/.ssh/known_hosts ${home}/.ssh/known_hosts.trusted";
-  };
+      "*" = {
+        userKnownHostsFile = lib.concatStringsSep " " [
+          "${home}/.ssh/known_hosts"
+          # Install known SSH keys for trusted hosts.
+          (pkgs.writeText "known_hosts.trusted" flake.lib.openssh.knownHostsFile)
+        ];
 
-  # Install known SSH keys for trusted hosts.
-  home.file.".ssh/known_hosts.trusted".text = flake.lib.openssh.knownHostsFile;
+        # The following options used to be the default before 25.11 (when
+        # `enableDefaultConfig` was introduced).
+        forwardAgent = false;
+        addKeysToAgent = "no";
+        compression = false;
+        serverAliveInterval = 0;
+        serverAliveCountMax = 3;
+        hashKnownHosts = false;
+        controlMaster = "no";
+        controlPath = "${home}/.ssh/master-%r@%n:%p";
+        controlPersist = "no";
+      };
+    };
+  };
 }

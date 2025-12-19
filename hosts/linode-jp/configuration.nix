@@ -44,7 +44,6 @@
     flake.modules.nixos.selfhosted-dns-qyrnl-dot-com
     flake.modules.nixos.selfhosted-gatus
     flake.modules.nixos.selfhosted-gatus-endpoints
-    flake.modules.nixos.selfhosted-gatus-unstable # TODO(25.11): Remove after 25.11 update.
     flake.modules.nixos.selfhosted-gotify
     flake.modules.nixos.selfhosted-immich-public-proxy
     flake.modules.nixos.selfhosted-reverse-proxy-qyrnl-dot-com
