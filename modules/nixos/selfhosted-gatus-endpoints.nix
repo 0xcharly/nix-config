@@ -81,6 +81,7 @@ in {
       (gatus.mkHttpServiceCheck "immich-public-proxy" facts.services.immich-public-proxy)
       (gatus.mkHttpServiceCheck "immich" facts.services.immich)
       (gatus.mkHttpServiceCheck "jellyfin" facts.services.jellyfin)
+      (gatus.mkHttpServiceCheck "linkwarden" facts.services.linkwarden)
       (gatus.mkHttpServiceCheck "miniflux" facts.services.miniflux)
       (gatus.mkHttpServiceCheck "navidrome" facts.services.navidrome)
       (gatus.mkHttpServiceCheck "paperless" facts.services.paperless)

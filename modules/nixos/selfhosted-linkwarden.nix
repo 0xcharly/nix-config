@@ -26,10 +26,12 @@
         host = "0.0.0.0";
         storageLocation = config.node.fs.zfs.zpool.root.datadirs.linkwarden.absolutePath;
         environmentFile = config.age.secrets."services/linkwarden.env".path;
+
         environment = {
-          NEXT_PUBLIC_DISABLE_REGISTRATION = false; # TODO: enable after setup
-          DISABLE_NEW_SSO_USERS = false; # TODO enable after setup
+          NEXTAUTH_URL = "https://${facts.services.linkwarden.domain}/api/v1/auth";
+          DISABLE_NEW_SSO_USERS = "true";
         };
+        enableRegistration = false;
       };
     };
   };
