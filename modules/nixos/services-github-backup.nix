@@ -44,10 +44,4 @@
     };
     startAt = "02:00"; # Daily at 2am.
   };
-
-  users.users.git = {
-    isNormalUser = true;
-    description = "Dedicated user for git tools";
-    group = "git";
-  };
 }

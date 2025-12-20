@@ -29,7 +29,5 @@
         alias ${./selfhosted-cgit.css};
       '';
     };
-
-    users.users.${config.services.cgit.github.user}.extraGroups = ["git"];
   };
 }

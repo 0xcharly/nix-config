@@ -24,7 +24,14 @@
       # Login users.
       delay = {
         # uid = 2000;
-        extraGroups = ["_zfsadm"];
+        extraGroups = [
+          "_files"
+          "_media"
+          "_music"
+          "_pics"
+          "_vcs"
+          "_zfsadm"
+        ];
       };
       ayako.uid = 2001;
 
@@ -40,16 +47,24 @@
         isSystemUser = lib.mkDefault true;
         group = lib.mkDefault "linkwarden";
       };
+      git = {
+        uid = 3003;
+        isNormalUser = true;
+        description = "Dedicated user for git tools";
+        extraGroups = ["git" "_vcs"];
+        group = lib.mkDefault "users";
+      };
+      cgit = {
+        uid = 3004;
+        isSystemUser = true;
+        extraGroups = ["_vcs"];
+        group = lib.mkDefault "cgit";
+      };
 
       # forgejo = {
       #   isSystemUser = lib.mkDefault true;
       #   extraGroups = ["_vcs"];
       #   group = lib.mkDefault "forgejo";
-      # };
-      # git = {
-      #   isNormalUser = lib.mkDefault true;
-      #   extraGroups = ["_vcs"];
-      #   group = lib.mkDefault "git";
       # };
       # immich = {
       #   isSystemUser = lib.mkDefault true;
@@ -81,14 +96,16 @@
       # System users' groups.
       syncoid.gid = 3001;
       linkwarden.gid = 3002;
+      git.gid = 3003;
+      cgit.gid = 3004;
 
       # Standalone groups.
       _zfsadm.gid = 4000;
-      # _files.gid = 4001;
-      # _media.gid = 4002;
-      # _music.gid = 4003;
-      # _pics.gid = 4004;
-      # _vcs.gid = 4005;
+      _files.gid = 4001;
+      _media.gid = 4002;
+      _music.gid = 4003;
+      _pics.gid = 4004;
+      _vcs.gid = 4005;
 
       # TODO: Migrate the remaining groups.
       forgejo = {};
