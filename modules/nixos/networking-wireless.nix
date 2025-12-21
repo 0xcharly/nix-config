@@ -33,7 +33,7 @@
           };
         };
 
-        personal-profiles = builtins.map mkWirelessProfile (lib.range 1 4);
+        personal-profiles = builtins.map mkWirelessProfile (lib.range 1 5);
         google-guest-profile = {
           profile-google-guest = {
             connection = {
