@@ -64,7 +64,10 @@
       };
     };
 
-    networking.bluetooth.enableA2DPSink = true;
+    networking = {
+      bluetooth.enableA2DPSink = true;
+      tailscale.acceptRoutes = true;
+    };
 
     users.delay.ssh.authorizeTailscaleInternalKey = true;
   };

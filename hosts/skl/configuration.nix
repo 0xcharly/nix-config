@@ -62,10 +62,13 @@
       };
     };
 
-    networking.bluetooth = {
-      powerOnBoot = true;
-      enableA2DPSink = true;
-      enableFastConnectable = true;
+    networking = {
+      bluetooth = {
+        powerOnBoot = true;
+        enableA2DPSink = true;
+        enableFastConnectable = true;
+      };
+      tailscale.acceptRoutes = true;
     };
 
     users.delay.ssh.authorizeTailscaleInternalKey = true;
