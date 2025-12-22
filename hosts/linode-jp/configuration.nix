@@ -86,7 +86,8 @@
         enable = true;
         "qyrnl.com" = {
           enable = true;
-          bindIP = "100.76.97.8";
+          # TODO: this should be read from the homelab config
+          bindIP = "100.64.0.140";
         };
       };
     };

@@ -8,12 +8,12 @@ nameservers = ["ns1.qyrnl.com", "ns2.qyrnl.com"]
 
 [dns."qyrnl.com".ns1]
 host = "linode-jp"
-ipv4 = "100.76.97.8"
+ipv4 = "100.64.0.140"
 ipv6 = "fd7a:115c:a1e0::b736:6108"
 
 [dns."qyrnl.com".ns2]
 host = "linode-fr"
-ipv4 = "100.83.95.114"
+ipv4 = "100.64.0.141"
 ipv6 = "fd7a:115c:a1e0::e736:5f72"
 
 [dns."pieceofenglish.fr"]
@@ -40,12 +40,12 @@ tmpl = "tailscale_reverse_proxy"
 
 [nas.primary]
 host = "bowmore.qyrnl.com"
-ipv4 = "100.114.247.6"
+ipv4 = "100.64.0.120"
 
 [nas.replicas.dalmore]
 label = "dalmore"
 host = "dalmore.qyrnl.com"
-ipv4 = "100.122.134.64"
+ipv4 = "100.64.0.121"
 
 [services.atuin]
 domain = "atuin.qyrnl.com"
