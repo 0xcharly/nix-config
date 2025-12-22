@@ -422,6 +422,8 @@
       hypridle = {
         enable = lib.mkDefault config.wayland.windowManager.hyprland.enable;
         settings = let
+          cfg = config.node.wayland.idle;
+
           hyprctl = uwsmGetExe' pkgs.hyprland "hyprctl";
           hyprlock = uwsmGetExe config.programs.hyprlock.package;
           loginctl = uwsmGetExe' pkgs.systemd "loginctl";
@@ -430,17 +432,18 @@
           # Avoid starting multiple hyprlock instances.
           lock = "${uwsmGetExe' pkgs.procps "pidof"} ${hyprlock} || ${hyprlock}";
         in {
-          general = {
-            lock_cmd = lock;
-            unlock_cmd = "pkill -USR1 ${hyprlock}";
+          general =
+            {
+              after_sleep_cmd = "${hyprctl} dispatch dpms on"; # To avoid having to press a key twice to turn on the display.
+            }
+            // lib.optionalAttrs cfg.screenlock.enable {
+              lock_cmd = lock;
+              unlock_cmd = "pkill -USR1 ${hyprlock}";
 
-            before_sleep_cmd = "${loginctl} lock-session"; # Lock before suspend.
-            after_sleep_cmd = "${hyprctl} dispatch dpms on"; # To avoid having to press a key twice to turn on the display.
-          };
+              before_sleep_cmd = "${loginctl} lock-session"; # Lock before suspend.
+            };
 
-          listener = let
-            cfg = config.node.wayland.idle;
-          in
+          listener =
             lib.optionals cfg.screenlock.enable [
               {
                 inherit (cfg.screenlock) timeout;
