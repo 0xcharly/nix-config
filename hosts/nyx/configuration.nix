@@ -28,6 +28,7 @@
     flake.modules.nixos.fs-zfs-zpool-root-home
     flake.modules.nixos.hardware-cpu-amd
     flake.modules.nixos.hardware-gpu-amd
+    flake.modules.nixos.networking-common
     flake.modules.nixos.nix-build-aarch64
     flake.modules.nixos.nix-client-config
     flake.modules.nixos.overlays
