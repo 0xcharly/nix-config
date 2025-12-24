@@ -66,7 +66,6 @@
       };
     };
 
-    networking.tailscale.acceptRoutes = true;
     users.delay.ssh.authorizeTailscaleInternalKey = true;
   };
 
