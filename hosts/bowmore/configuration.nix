@@ -16,6 +16,7 @@
     inputs.nix-config-secrets.modules.nixos.services-linkwarden
     inputs.nix-config-secrets.modules.nixos.services-miniflux
     inputs.nix-config-secrets.modules.nixos.services-msmtp
+    inputs.nix-config-secrets.modules.nixos.services-radicale
     inputs.nix-config-secrets.modules.nixos.services-searxng
     inputs.nix-config-secrets.modules.nixos.services-tailscale
     inputs.nix-config-secrets.modules.nixos.services-tailscale-initrd
@@ -65,6 +66,7 @@
     flake.modules.nixos.selfhosted-navidrome
     flake.modules.nixos.selfhosted-paperless
     flake.modules.nixos.selfhosted-prometheus
+    flake.modules.nixos.selfhosted-radicale
     flake.modules.nixos.selfhosted-searxng
     flake.modules.nixos.selfhosted-vaultwarden
     flake.modules.nixos.services-deploy-rs
@@ -143,6 +145,7 @@
       navidrome.enable = true;
       paperless.enable = true;
       prometheus.enable = true;
+      radicale.enable = true;
       searxng.enable = true;
       vaultwarden.enable = true;
     };

@@ -54,6 +54,8 @@ in {
           ; Services declaration.
           album         IN CNAME ${reverseProxyHostName}
           atuin         IN CNAME ${reverseProxyHostName}
+          cal           IN CNAME ${reverseProxyHostName}
+          contacts      IN CNAME ${reverseProxyHostName}
           files         IN CNAME ${reverseProxyHostName}
           git           IN CNAME ${reverseProxyHostName}
           github        IN CNAME ${reverseProxyHostName}

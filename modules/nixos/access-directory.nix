@@ -60,6 +60,12 @@
         extraGroups = ["_vcs"];
         group = lib.mkDefault "cgit";
       };
+      radicale = {
+        uid = 3005;
+        isSystemUser = true;
+        extraGroups = ["_dav"];
+        group = lib.mkDefault "radicale";
+      };
 
       # forgejo = {
       #   isSystemUser = lib.mkDefault true;
@@ -98,6 +104,7 @@
       linkwarden.gid = 3002;
       git.gid = 3003;
       cgit.gid = 3004;
+      radicale.gid = 3005;
 
       # Standalone groups.
       _zfsadm.gid = 4000;
@@ -106,6 +113,7 @@
       _music.gid = 4003;
       _pics.gid = 4004;
       _vcs.gid = 4005;
+      _dav.gid = 4006;
 
       # TODO: Migrate the remaining groups.
       forgejo = {};

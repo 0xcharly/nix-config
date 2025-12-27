@@ -63,6 +63,7 @@
               navidrome
               paperless
               prometheus
+              radicale
               search
               vaultwarden
             ];
