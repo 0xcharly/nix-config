@@ -3,6 +3,8 @@
   inputs,
   hostName,
   modulesPath,
+  lib,
+  pkgs,
   ...
 }: {
   imports = [
@@ -83,6 +85,11 @@
     domain = "qyrnl.com";
     interfaces.enp115s0.useDHCP = true;
   };
+
+  # Forces a DHCP service restart on resume to flush out stale state.
+  powerManagement.resumeCommands = ''
+    ${lib.getExe' pkgs.systemd "systemctl"} restart dhcpcd.service
+  '';
 
   nixpkgs.hostPlatform = "x86_64-linux";
 
