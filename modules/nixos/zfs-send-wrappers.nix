@@ -16,7 +16,7 @@ in {
   environment.defaultPackages = with pkgs; [
     (writeShellApplication {
       name = "zfs-send-snapshot";
-      runtimeInputs = [zfs mbuffer];
+      runtimeInputs = [mbuffer config.boot.zfs.package];
       text = ''
         DATASET="$1"
         SNAPSHOT="$2"
@@ -28,7 +28,7 @@ in {
 
     (writeShellApplication {
       name = "zfs-resume-send";
-      runtimeInputs = [zfs mbuffer];
+      runtimeInputs = [mbuffer config.boot.zfs.package];
       text = ''
         DATASET=$1
         RESUME_TOKEN=$2

@@ -1,4 +1,4 @@
-{flake, ...}: {pkgs, ...}: {
+{flake, ...}: {config, pkgs, ...}: {
   # Automatically mount the ZFS pool when agenix secrets are mounted.
   systemd.services.zfs-mount-tank = {
     description = "Mount ZFS pool `tank` and its datasets";
@@ -13,7 +13,7 @@
       RemainAfterExit = true;
       ExecStart = flake.lib.builders.mkShellApplication pkgs {
         name = "mount-tank";
-        runtimeInputs = with pkgs; [coreutils zfs];
+        runtimeInputs = [pkgs.coreutils config.boot.zfs.package];
         text = ''
           set -euo pipefail
 

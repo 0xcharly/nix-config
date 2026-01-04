@@ -97,7 +97,7 @@
               '';
               set-datadir-perms = pkgs.writeShellApplication {
                 name = "set-datadir-perms";
-                runtimeInputs = with pkgs; [coreutils zfs];
+                runtimeInputs = [pkgs.coreutils config.boot.zfs.package];
                 text = lib.concatStringsSep "\n" (builtins.map install-datadir datadirs);
               };
             in

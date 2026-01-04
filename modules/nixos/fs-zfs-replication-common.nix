@@ -33,7 +33,7 @@
           syncoid-zfs-allow = with pkgs;
             writeShellApplication {
               name = "syncoid-zfs-allow";
-              runtimeInputs = [zfs];
+              runtimeInputs = [config.boot.zfs.package];
               text = ''
                 for dataset in $(zfs list -H -o name -r tank); do
                   echo "Setting ZFS permissions for $dataset…"
