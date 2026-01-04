@@ -15,6 +15,10 @@
         user = "git";
         identityFile = mkIdentityFile "bitbucket";
       };
+      "codeberg.org" = {
+        user = "git";
+        identityFile = mkIdentityFile "github";
+      };
       "github.com" = {
         user = "git";
         identityFile = mkIdentityFile "github";
