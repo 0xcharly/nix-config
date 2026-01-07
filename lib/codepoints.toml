@@ -50,7 +50,7 @@ codepoints = [
 [emojis]
 font_name = "Noto Emoji"
 codepoints = [
-  "U+2700-U+27BF",   # Dingbats
+  # "U+2700-U+27BF",   # Dingbats
   "U+1F600-U+1F64F", # Emoticons
   "U+1F300-U+1F5FF", # Miscellaneous Symbols and Pictographs
   "U+1F680-U+1F6FF", # Transport and Map Symbols
