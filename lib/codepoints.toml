@@ -125,12 +125,13 @@ codepoints = [
   "U+270F-U+2710",
   "U+2712",
   # "U+2713", # Checkmark codepoint ✓
-  "U+2714-U+2715",
+  "U+2714",
+  # "U+2715", # Multiplication codepoint ✕
   "U+2716-U+2717",
   "U+271D-U+271E",
   "U+2721-U+2722",
-  "U+2726", # Black four-pointed star codepoint ✦
-  "U+2727", # White four-pointed star codepoint ✧
+  #"U+2726", # Black four-pointed star codepoint ✦
+  #"U+2727", # White four-pointed star codepoint ✧
   "U+2728-U+2729",
   "U+2733-U+2735",
   "U+2744-U+2745",
