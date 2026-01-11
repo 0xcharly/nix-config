@@ -6,13 +6,13 @@
 with pkgs;
   rustPlatform.buildRustPackage rec {
     inherit pname;
-    version = "0.5.1";
+    version = "0.7.2";
 
     src = fetchFromGitHub {
       owner = "grouzen";
       repo = "framework-tool-tui";
       tag = "v${version}";
-      sha256 = "sha256-R4/VeymmthI96PJt7XsKRYz1Y8QW/lV90HvJgt+e+hI=";
+      sha256 = "sha256-N+X6o76Fn0KAqG2MNyR29cDyuh3lLdV20JX8jxHNHjY=";
     };
 
     nativeBuildInputs = [
@@ -27,9 +27,9 @@ with pkgs;
       versionCheckHook
     ];
 
-    cargoHash = "sha256-tDNYkV5MWb4+co/gwjpAt/M7yJbEWrryieJoBuXmY8M=";
+    cargoHash = "sha256-vENf1wzXJdtsN+KfuNgtmJLkdfYf+2ULR+VW61dRG+I=";
 
-    doInstallCheck = true;
+    doInstallCheck = false; # "The application needs to be run with root privileges." error
     versionCheckProgram = "${placeholder "out"}/bin/${pname}";
     versionCheckProgramArg = "--version";
 
