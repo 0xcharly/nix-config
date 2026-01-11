@@ -11,7 +11,14 @@
 
   programs.zathura.enable = true; # PDF viewer.
 
-  xdg.mimeApps.defaultApplications = {
-    "application/pdf" = ["org.pwmt.zathura.desktop"];
+  xdg.mimeApps = {
+    applications.added = {
+      "application/pdf" = "org.pwmt.zathura.desktop";
+      "x-scheme-handler/otpauth" = "bitwarden.desktop";
+    };
+    defaultApplications = {
+      "application/pdf" = "org.pwmt.zathura.desktop";
+      "x-scheme-handler/otpauth" = "bitwarden.desktop";
+    };
   };
 }
