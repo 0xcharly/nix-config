@@ -117,7 +117,6 @@
 
       # TODO: Migrate the remaining groups.
       forgejo = {};
-      git = {};
       immich = {};
       jellyfin = {};
       navidrome = {};
