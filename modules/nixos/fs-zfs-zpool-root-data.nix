@@ -82,7 +82,6 @@
         set-datadir-perms = {
           description = "Adjust datadirs' perms";
 
-          # Wait for the agenix service to be running / complete before mounting the ZFS pool.
           after = ["zfs-import.target"];
           requires = ["zfs-import.target"];
           wantedBy = ["multi-user.target"];
