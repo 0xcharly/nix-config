@@ -78,6 +78,7 @@
         mkDataDirAttrs cfg.datadirs;
 
       # Automatically adjust datadirs' permissions, if any.
+      # TODO: can this simply be replaced by `systemd.tmpfiles.rules`?
       systemd.services = {
         set-datadir-perms = {
           description = "Adjust datadirs' perms";
