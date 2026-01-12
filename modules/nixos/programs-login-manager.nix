@@ -1,4 +1,9 @@
-{pkgs, ...}: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   programs = {
     hyprland = {
       enable = true;
@@ -18,9 +23,17 @@
   };
 
   # Automatically launch UWSM on login.
-  environment.loginShellInit = ''
-    [[ "$(tty)" == "/dev/tty1" ]] && exec uwsm start default >/dev/null 2>&1
-  '';
+  # environment.loginShellInit = ''
+  #   [[ "$(tty)" == "/dev/tty1" ]] && exec ${lib.getExe config.programs.uwsm.package} start default >/dev/null 2>&1
+  # '';
+
+  # Greetd Login Manager daemon with tuigreet greeter.
+  services.greetd = {
+    enable = true;
+    settings.default_session.command = ''
+      ${lib.getExe pkgs.tuigreet} --time --cmd "${lib.getExe config.programs.uwsm.package} start default"
+    '';
+  };
 
   # Required for graphical interfaces (X or Wayland) to work.
   security.polkit.enable = true;
