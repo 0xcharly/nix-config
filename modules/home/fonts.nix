@@ -6,11 +6,12 @@
   fonts.fontconfig = {
     enable = true;
     defaultFonts = let
-      inherit (flake.lib.user.gui.fonts) monospace sansSerif serif;
+      inherit (flake.lib.user.gui.fonts) emoji monospace sansSerif serif;
     in {
       monospace = [monospace.name];
       sansSerif = [sansSerif.name];
       serif = [serif.name];
+      emoji = [emoji.name];
     };
   };
 

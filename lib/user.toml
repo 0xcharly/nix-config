@@ -14,3 +14,7 @@ size = 13
 [gui.fonts.serif]
 name = "Sys"
 size = 13
+
+[gui.fonts.emoji]
+name = "Noto Emoji" # Monochrome version
+size = 13
