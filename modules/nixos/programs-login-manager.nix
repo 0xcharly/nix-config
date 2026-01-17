@@ -30,6 +30,7 @@
   # Greetd Login Manager daemon with tuigreet greeter.
   services.greetd = {
     enable = true;
+    useTextGreeter = true;
     settings.default_session.command = ''
       ${lib.getExe pkgs.tuigreet} --time --cmd "${lib.getExe config.programs.uwsm.package} start default"
     '';
