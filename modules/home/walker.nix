@@ -9,21 +9,20 @@
   ...
 }: {
   imports = [
-    inputs.walker.homeManagerModules.default
     flake.modules.home.wayland-uwsm
+    inputs.nix-config-colorscheme.modules.home.walker
   ];
 
-  programs.walker = {
+  services.walker = {
     enable = true;
     package = pkgs.walker;
-    runAsService = true;
+    systemd.enable = true;
 
-    config = {
+    settings = {
       app_launch_prefix = "${config.node.wayland.uwsm-wrapper.prefix} ";
       close_when_open = true;
-      terminal = lib.getExe config.programs.ghostty.package;
+      terminal = lib.getExe config.programs.kitty.package;
       timeout = 0;
-      theme = "catppuccin-obsidian";
 
       activation_mode.labels = "aoeuhtns";
       builtins = {
@@ -66,22 +65,5 @@
         };
       };
     };
-  };
-
-  xdg.configFile = {
-    "walker/themes/catppuccin-obsidian.toml".source = ./walker-layout.toml;
-    "walker/themes/catppuccin-obsidian.css".source = let
-      colors = {
-        accentFg = "#9fcdfe";
-        accentBg = "#203147";
-        cursorFg = "#cab4f4";
-        cursorBg = "#312b41";
-        normalBg = "#192029";
-        normalFg = "#8fa3bb";
-        urgentBg = "#41262e";
-        urgentFg = "#fe9fa9";
-      };
-    in
-      pkgs.replaceVars ./walker-style.css colors;
   };
 }

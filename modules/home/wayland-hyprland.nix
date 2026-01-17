@@ -292,7 +292,7 @@
         in
           [
             "SUPER,       Return, exec, ${uwsmGetExe config.programs.kitty.package}"
-            "SUPER,       Space,  exec, ${uwsmGetExe config.programs.walker.package}"
+            "SUPER,       Space,  exec, ${uwsmGetExe config.services.walker.package}"
             "SUPER SHIFT, X,      killactive"
             "SUPER SHIFT, Q,      exec, ${uwsmGetExe' pkgs.systemd "loginctl"} terminate-session \"$XDG_SESSION_ID\""
             "SUPER SHIFT, L,      exec, ${uwsmGetExe config.programs.hyprlock.package}"
