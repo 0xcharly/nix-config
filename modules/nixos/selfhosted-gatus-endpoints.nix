@@ -71,7 +71,7 @@ in {
       (gatus.mkHttpServiceCheck "atuin" facts.services.atuin)
       (gatus.mkHttpServiceCheck "CalDAV" facts.services.radicale)
       (gatus.mkHttpServiceCheck "cgit" facts.services.cgit)
-      (gatus.mkHttpServiceCheck "calibre-web" facts.services.calibre-web)
+      # (gatus.mkHttpServiceCheck "calibre-web" facts.services.calibre-web)
       (gatus.mkHttpServiceCheck "forgejo" facts.services.forgejo)
       (gatus.mkHttpServiceCheck "go/link" facts.services.go)
       (gatus.mkHttpServiceCheck "gotify" facts.services.gotify)
