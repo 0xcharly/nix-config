@@ -192,9 +192,6 @@ ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAILb+AwJFckuzpo34rM9AhyuIMjPExUi+6svoZGWKV
 [ssh.wireguard.tailscale.knownHosts."nyx"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIHsn07q7SmdP1M09ZIrz0bD9Te+5OMVVlfGEtAP9+iP9"
 
-[ssh.wireguard.tailscale.knownHosts."rip"]
-ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAICMON3vR9YWEzFbj71jkiFMTP2W/3GBWO7POYjpXxsbj"
-
 [ssh.wireguard.tailscale.knownHosts."skl"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIBu+3cdkRlXUXS4MIwZNNKMo9Ia2XUZE7Ze6haIttCur"
 

@@ -3,7 +3,6 @@ servers = [
   "dalmore",
   "linode-fr",
   "linode-jp",
-  "rip",
   "skl",
   "x1p",
 ]
