@@ -66,6 +66,7 @@
           "1password" # Password manager.
           "bitwarden" # Personal password management.
           "ghostty" # Terminal.
+          "kitty" # Terminal.
           "proton-pass" # Personal password management.
         ]
         ++ cfg.extraCasks;
