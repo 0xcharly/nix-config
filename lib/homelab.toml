@@ -139,9 +139,9 @@ port = 9090
 
 [services.radicale]
 domain = "cal.qyrnl.com"
+aliases = ["contacts.qyrnl.com"]
 host = "bowmore.qyrnl.com"
 port = 5232
-# TODO: add support for aliases: contacts
 
 [services.search]
 domain = "search.qyrnl.com"

@@ -16,17 +16,28 @@ in rec {
     host,
     port,
     import ? "",
+    aliases ? [],
     ...
-  }: {
-    ${domain}.extraConfig = ''
-      ${
-        if (import != "")
-        then "import ${import}"
-        else ""
-      }
-      reverse_proxy ${uri.mkAuthority {inherit host port;}}
-    '';
-  };
+  }:
+    {
+      ${domain}.extraConfig = ''
+        ${
+          if (import != "")
+          then "import ${import}"
+          else ""
+        }
+        reverse_proxy ${uri.mkAuthority {inherit host port;}}
+      '';
+    }
+    // (let
+      mkAliasRedirectConfig = alias:
+        mkRedirectConfig {
+          from = domain;
+          to = alias;
+          inherit import;
+        };
+    in
+      lib.mergeAttrsList (builtins.map mkAliasRedirectConfig aliases));
 
   mkRedirectConfig = {
     from,

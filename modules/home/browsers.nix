@@ -10,7 +10,7 @@
 
     browserList = [chromium firefox];
 
-    associations = builtins.listToAttrs (map (name: {
+    associations = builtins.listToAttrs (builtins.map (name: {
         inherit name;
         value = browserList;
       }) [
