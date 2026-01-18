@@ -942,11 +942,11 @@
         "nixpkgs": "nixpkgs_15"
       },
       "locked": {
-        "lastModified": 1762260929,
-        "narHash": "sha256-q1g58LZlh2yLxrE7QwmkmNfX9WItpXPcGVlFRM3oZX8=",
+        "lastModified": 1768702637,
+        "narHash": "sha256-eXc7tax45yRlwrZCOdYqmMYek4C12U0hsjwQN7NkWUI=",
         "owner": "0xcharly",
         "repo": "pieceofenglish",
-        "rev": "c4c9f8c33ff0c7903b38bac9f55ee0bba0156ce8",
+        "rev": "ac4e0b0228c12db9187f62270d5a70e3a17e9a74",
         "type": "github"
       },
       "original": {
