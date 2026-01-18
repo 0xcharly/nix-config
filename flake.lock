@@ -444,11 +444,11 @@
         "nixpkgs": "nixpkgs_9"
       },
       "locked": {
-        "lastModified": 1768207145,
-        "narHash": "sha256-mplKV9s+ti5GadkmcQnUYubFuNSFAY6s4KWwQxutAjw=",
+        "lastModified": 1768714704,
+        "narHash": "sha256-ZN/qHyOW/b9pRlWJr+459HlE9CUQQBWA2P96Fmrnt5E=",
         "owner": "0xcharly",
         "repo": "nix-config-nvim",
-        "rev": "23ae72ef4b190fb8302018f61f2c4b8b0e04428e",
+        "rev": "6add6924d8e0ebe4396c4f0a0278d3738b8f5520",
         "type": "github"
       },
       "original": {
