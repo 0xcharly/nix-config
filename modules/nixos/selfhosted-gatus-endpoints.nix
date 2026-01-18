@@ -72,34 +72,40 @@ let
     );
 in
 {
-  services.gatus.settings.endpoints =
-    qyrnl-checks
-    ++ pieceofenglish-checks
-    ++ (builtins.map gatus.mkPingHostCheck inventory.servers)
-    ++ [
-      (gatus.mkHttpServiceCheck "atuin" facts.services.atuin)
-      (gatus.mkHttpServiceCheck "CalDAV" facts.services.radicale)
-      (gatus.mkHttpServiceCheck "cgit" facts.services.cgit)
-      # (gatus.mkHttpServiceCheck "calibre-web" facts.services.calibre-web)
-      (gatus.mkHttpServiceCheck "forgejo" facts.services.forgejo)
-      (gatus.mkHttpServiceCheck "go/link" facts.services.go)
-      (gatus.mkHttpServiceCheck "gotify" facts.services.gotify)
-      (gatus.mkApiCheck "grafana" {
-        url = "${facts.services.grafana.domain}/api/health";
-        conditions = [ "[BODY].database == ok" ];
-      })
-      (gatus.mkHttpServiceCheck "immich-public-proxy" facts.services.immich-public-proxy)
-      (gatus.mkHttpServiceCheck "immich" facts.services.immich)
-      (gatus.mkHttpServiceCheck "jellyfin" facts.services.jellyfin)
-      (gatus.mkHttpServiceCheck "linkwarden" facts.services.linkwarden)
-      (gatus.mkHttpServiceCheck "miniflux" facts.services.miniflux)
-      (gatus.mkHttpServiceCheck "navidrome" facts.services.navidrome)
-      (gatus.mkHttpServiceCheck "paperless" facts.services.paperless)
-      (gatus.mkHttpServiceCheck "Piece of English" facts.services.pieceofenglish)
-      (gatus.mkHttpServiceCheck "prometheus" {
-        domain = "${facts.services.prometheus.domain}/-/healthy";
-      })
-      (gatus.mkHttpServiceCheck "search" facts.services.search)
-      (gatus.mkHttpServiceCheck "vaultwarden" facts.services.vaultwarden)
+  services.gatus.settings = {
+    endpoints =
+      qyrnl-checks
+      ++ pieceofenglish-checks
+      ++ (builtins.map gatus.mkPingHostCheck inventory.servers)
+      ++ [
+        (gatus.mkHttpServiceCheck "atuin" facts.services.atuin)
+        (gatus.mkHttpServiceCheck "CalDAV" facts.services.radicale)
+        (gatus.mkHttpServiceCheck "cgit" facts.services.cgit)
+        # (gatus.mkHttpServiceCheck "calibre-web" facts.services.calibre-web)
+        (gatus.mkHttpServiceCheck "forgejo" facts.services.forgejo)
+        (gatus.mkHttpServiceCheck "go/link" facts.services.go)
+        (gatus.mkHttpServiceCheck "gotify" facts.services.gotify)
+        (gatus.mkApiCheck "grafana" {
+          url = "${facts.services.grafana.domain}/api/health";
+          conditions = [ "[BODY].database == ok" ];
+        })
+        (gatus.mkHttpServiceCheck "immich-public-proxy" facts.services.immich-public-proxy)
+        (gatus.mkHttpServiceCheck "immich" facts.services.immich)
+        (gatus.mkHttpServiceCheck "jellyfin" facts.services.jellyfin)
+        (gatus.mkHttpServiceCheck "linkwarden" facts.services.linkwarden)
+        (gatus.mkHttpServiceCheck "miniflux" facts.services.miniflux)
+        (gatus.mkHttpServiceCheck "navidrome" facts.services.navidrome)
+        (gatus.mkHttpServiceCheck "paperless" facts.services.paperless)
+        (gatus.mkHttpServiceCheck "Piece of English" facts.services.pieceofenglish)
+        (gatus.mkHttpServiceCheck "prometheus" {
+          domain = "${facts.services.prometheus.domain}/-/healthy";
+        })
+        (gatus.mkHttpServiceCheck "search" facts.services.search)
+        (gatus.mkHttpServiceCheck "vaultwarden" facts.services.vaultwarden)
+      ];
+
+    external-endpoints = [
+      (gatus.mkPushBasedExternalEndpoint "GitHub backup" { heartbeat = "48h"; })
     ];
+  };
 }

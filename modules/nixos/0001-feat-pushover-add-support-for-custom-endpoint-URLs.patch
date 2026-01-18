@@ -1,0 +1,99 @@
+From 084996278aba47f6a3425ba6f4263e85ee1a74f3 Mon Sep 17 00:00:00 2001
+From: Charly Delay <charly@delay.gg>
+Date: Sun, 18 Jan 2026 21:07:30 +0900
+Subject: [PATCH] feat(pushover): add support for custom endpoint URLs
+
+This enables pushover-compatible services such as msg.taxi.
+---
+ alerting/provider/pushover/pushover.go      | 24 +++++++++++++++------
+ alerting/provider/pushover/pushover_test.go | 12 +++++++++++
+ 2 files changed, 29 insertions(+), 7 deletions(-)
+
+diff --git a/alerting/provider/pushover/pushover.go b/alerting/provider/pushover/pushover.go
+index 4c8fdd02..8ee7e5a1 100644
+--- a/alerting/provider/pushover/pushover.go
++++ b/alerting/provider/pushover/pushover.go
+@@ -27,6 +27,10 @@ var (
+ )
+ 
+ type Config struct {
++	// Optional custom endpoint URL to support Pushover-compatible services (e.g. https://msg.taxi).
++	// default: "https://api.pushover.net/1/messages.json"
++	EndpointURL string `yaml:"endpoint-url,omitempty"`
++
+ 	// Key used to authenticate the application sending
+ 	// See "Your Applications" on the dashboard, or add a new one: https://pushover.net/apps/build
+ 	ApplicationToken string `yaml:"application-token"`
+@@ -61,18 +65,21 @@ type Config struct {
+ }
+ 
+ func (cfg *Config) Validate() error {
++	if len(cfg.EndpointURL) == 0 {
++		cfg.EndpointURL = ApiURL
++	}
++	if len(cfg.ApplicationToken) == 0 {
++		return ErrInvalidApplicationToken
++	}
++	if len(cfg.UserKey) == 0 {
++		return ErrInvalidUserKey
++	}
+ 	if cfg.Priority == 0 {
+ 		cfg.Priority = defaultPriority
+ 	}
+ 	if cfg.ResolvedPriority == 0 {
+ 		cfg.ResolvedPriority = defaultPriority
+ 	}
+-	if len(cfg.ApplicationToken) != 30 {
+-		return ErrInvalidApplicationToken
+-	}
+-	if len(cfg.UserKey) != 30 {
+-		return ErrInvalidUserKey
+-	}
+ 	if cfg.Priority < -2 || cfg.Priority > 2 || cfg.ResolvedPriority < -2 || cfg.ResolvedPriority > 2 {
+ 		return ErrInvalidPriority
+ 	}
+@@ -83,6 +90,9 @@ func (cfg *Config) Validate() error {
+ }
+ 
+ func (cfg *Config) Merge(override *Config) {
++	if len(override.EndpointURL) > 0 {
++		cfg.EndpointURL = override.EndpointURL
++	}
+ 	if len(override.ApplicationToken) > 0 {
+ 		cfg.ApplicationToken = override.ApplicationToken
+ 	}
+@@ -130,7 +140,7 @@ func (provider *AlertProvider) Send(ep *endpoint.Endpoint, alert *alert.Alert, r
+ 		return err
+ 	}
+ 	buffer := bytes.NewBuffer(provider.buildRequestBody(cfg, ep, alert, result, resolved))
+-	request, err := http.NewRequest(http.MethodPost, ApiURL, buffer)
++	request, err := http.NewRequest(http.MethodPost, cfg.EndpointURL, buffer)
+ 	if err != nil {
+ 		return err
+ 	}
+diff --git a/alerting/provider/pushover/pushover_test.go b/alerting/provider/pushover/pushover_test.go
+index 4ced2e89..06e81e63 100644
+--- a/alerting/provider/pushover/pushover_test.go
++++ b/alerting/provider/pushover/pushover_test.go
+@@ -44,6 +44,18 @@ func TestPushoverAlertProvider_IsValid(t *testing.T) {
+ 			t.Error("provider should've been invalid")
+ 		}
+ 	})
++	t.Run("default-endpoint", func(t *testing.T) {
++		provider := AlertProvider{
++			DefaultConfig: Config{
++				ApplicationToken: "aTokenWithLengthOf30characters",
++				UserKey:          "aTokenWithLengthOf30characters",
++				Priority:         1,
++			},
++		}
++		if err := provider.Validate(); err != nil || provider.DefaultConfig.EndpointURL != ApiURL {
++			t.Errorf("default Pushover endpoint URL should have been set.\nexpected: %s\ngot: %s", ApiURL, provider.DefaultConfig.EndpointURL)
++		}
++	})
+ }
+ 
+ func TestAlertProvider_Send(t *testing.T) {
+-- 
+2.51.2
+

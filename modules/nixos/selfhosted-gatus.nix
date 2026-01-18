@@ -2,6 +2,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 {
@@ -18,14 +19,19 @@
       services = {
         gatus = {
           inherit (cfg) enable;
+
+          package = pkgs.gatus.overrideAttrs (attrs: {
+            patches = (attrs.patches or [ ]) ++ [
+              ./0001-feat-pushover-add-support-for-custom-endpoint-URLs.patch
+            ];
+          });
+
           environmentFile = config.age.secrets."services/gatus.env".path;
           settings = {
             web = { inherit (facts.services.gatus) port; };
 
             metrics = true; # Exposes metrics for Prometheus.
             alerting = {
-              # FIXME: This fails with:
-              #   dial tcp <ip>:587: i/o timeout
               email = rec {
                 to = "mail@qyrnl.com";
                 from = "status@qyrnl.com";
@@ -34,12 +40,13 @@
                 host = "smtp.protonmail.ch";
                 port = 587;
                 client.insecure = false;
-                default-alert = {
+                default-alert = flake.lib.gatus.mkAlertParams {
+                  # FIXME: Linode blocks outgoing SMTP connections
+                  #   https://techdocs.akamai.com/cloud-computing/docs/send-email
+                  #   https://www.linode.com/docs/guides/running-a-mail-server/
+                  #   gomail fails with: dial tcp <ip>:587: i/o timeout
                   enabled = false;
-                  description = "Status Alert";
-                  send-on-resolved = true;
-                  failure-threshold = 3;
-                  success-threshold = 2;
+                  failure-threshold = 2;
                 };
               };
               gotify = {
@@ -50,13 +57,13 @@
                   title = "Gatus [ALERT_TRIGGERED_OR_RESOLVED]: [ENDPOINT_NAME]";
                   body = "[ALERT_DESCRIPTION] - [ENDPOINT_URL]";
                 };
-                default-alert = {
-                  enabled = true;
-                  description = "Status Alert";
-                  send-on-resolved = true;
-                  failure-threshold = 3;
-                  success-threshold = 2;
-                };
+                default-alert = flake.lib.gatus.mkAlertParams { failure-threshold = 2; };
+              };
+              pushover = {
+                endpoint-url = "https://via.msg.taxi/1/messages.json";
+                application-token = "$MSGTAXI_TOKEN";
+                user-key = "$MSGTAXI_USER_KEY";
+                default-alert = flake.lib.gatus.mkAlertParams { failure-threshold = 2; };
               };
             };
             storage = {

@@ -14,6 +14,7 @@
     inputs.nix-config-secrets.modules.nixos.nix-client-config
     inputs.nix-config-secrets.modules.nixos.dns-qyrnl-dot-com
     inputs.nix-config-secrets.modules.nixos.services-gatus
+    inputs.nix-config-secrets.modules.nixos.services-gatus-external-endpoints
     inputs.nix-config-secrets.modules.nixos.services-gotify
     inputs.nix-config-secrets.modules.nixos.services-tailscale
     inputs.nix-config-secrets.modules.nixos.services-tailscale-initrd

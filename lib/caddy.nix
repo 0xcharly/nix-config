@@ -23,23 +23,14 @@ rec {
       ...
     }:
     {
-      ${domain}.extraConfig = ''
-        ${if (import != "") then "import ${import}" else ""}
-        reverse_proxy ${uri.mkAuthority { inherit host port; }}
-      '';
-    }
-    // (
-      let
-        mkAliasRedirectConfig =
-          alias:
-          mkRedirectConfig {
-            from = alias;
-            to = domain;
-            inherit import;
-          };
-      in
-      lib.mergeAttrsList (builtins.map mkAliasRedirectConfig aliases)
-    );
+      ${domain} = {
+        extraConfig = ''
+          ${if (import != "") then "import ${import}" else ""}
+          reverse_proxy ${uri.mkAuthority { inherit host port; }}
+        '';
+        serverAliases = aliases;
+      };
+    };
 
   mkRedirectConfig =
     {

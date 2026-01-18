@@ -10,7 +10,7 @@ rec {
   builders = import ./builders.nix;
   caddy = import ./caddy.nix { inherit lib; };
   fonts = import ./fonts.nix { inherit lib; };
-  gatus = import ./gatus.nix;
+  gatus = import ./gatus.nix { inherit lib; };
   homebrew = import ./homebrew.nix;
   openssh = import ./openssh.nix { inherit facts lib; };
   pkgs = import ./pkgs.nix inputs;
