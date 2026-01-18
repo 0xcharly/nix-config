@@ -33,8 +33,8 @@ rec {
         mkAliasRedirectConfig =
           alias:
           mkRedirectConfig {
-            from = domain;
-            to = alias;
+            from = alias;
+            to = domain;
             inherit import;
           };
       in

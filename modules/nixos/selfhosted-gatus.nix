@@ -26,10 +26,10 @@
             alerting = {
               # FIXME: This fails with:
               #   dial tcp <ip>:587: i/o timeout
-              email = {
+              email = rec {
                 to = "mail@qyrnl.com";
                 from = "status@qyrnl.com";
-                username = "status@qyrnl.com";
+                username = from;
                 password = "$EMAIL_TOKEN";
                 host = "smtp.protonmail.ch";
                 port = 587;
