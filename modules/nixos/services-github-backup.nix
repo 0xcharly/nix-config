@@ -1,14 +1,16 @@
-{flake, ...}: {
+{ flake, ... }:
+{
   config,
   pkgs,
   ...
-}: {
+}:
+{
   systemd.services.github-backup = {
     description = "Backup GitHub data";
 
     script = flake.lib.builders.mkShellApplication pkgs {
       name = "mount-tank";
-      runtimeInputs = with pkgs; [github-backup];
+      runtimeInputs = with pkgs; [ github-backup ];
       text = ''
         set -euo pipefail
 

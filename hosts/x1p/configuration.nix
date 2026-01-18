@@ -4,7 +4,8 @@
   hostName,
   modulesPath,
   ...
-}: {
+}:
+{
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
 
@@ -51,7 +52,7 @@
 
   # System config.
   node = {
-    boot.initrd.ssh-unlock.kernelModules = ["r8169"];
+    boot.initrd.ssh-unlock.kernelModules = [ "r8169" ];
 
     fs.zfs = {
       hostId = "be2d9ac1";

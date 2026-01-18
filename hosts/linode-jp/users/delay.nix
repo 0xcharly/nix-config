@@ -4,7 +4,8 @@
   inputs,
   # Module parameters.
   ...
-}: {
+}:
+{
   imports = [
     inputs.nix-config-secrets.modules.home.blueprint
     inputs.nix-config-secrets.modules.home.services-atuin

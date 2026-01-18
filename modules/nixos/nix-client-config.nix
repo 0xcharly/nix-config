@@ -1,8 +1,9 @@
-{config, ...}: {
+{ config, ... }:
+{
   nix.settings = {
     # Sudo's users.
-    allowed-users = ["@wheel"];
-    trusted-users = ["@wheel"];
+    allowed-users = [ "@wheel" ];
+    trusted-users = [ "@wheel" ];
   };
 
   # Use a ! prefix to skip validation at build time (which fails since the file

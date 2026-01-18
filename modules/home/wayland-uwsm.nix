@@ -3,7 +3,8 @@
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   options.node.wayland = with lib; {
     uwsm-wrapper = {
       package = mkPackageOption pkgs "uwsm" {

@@ -4,7 +4,8 @@
   pkgs,
   modulesPath,
   ...
-}: {
+}:
+{
   imports = [
     # Base ISO content.
     (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")

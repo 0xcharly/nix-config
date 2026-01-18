@@ -1,19 +1,30 @@
-{flake, ...}: {config, pkgs, ...}: {
+{ flake, ... }:
+{ config, pkgs, ... }:
+{
   # Automatically mount the ZFS pool when agenix secrets are mounted.
   systemd.services.zfs-mount-tank = {
     description = "Mount ZFS pool `tank` and its datasets";
 
     # Wait for the agenix service to be running / complete before mounting the ZFS pool.
-    after = ["run-agenix.d.mount" "zfs-import.target"];
-    requires = ["run-agenix.d.mount" "zfs-import.target"];
-    wantedBy = ["multi-user.target"];
+    after = [
+      "run-agenix.d.mount"
+      "zfs-import.target"
+    ];
+    requires = [
+      "run-agenix.d.mount"
+      "zfs-import.target"
+    ];
+    wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
       ExecStart = flake.lib.builders.mkShellApplication pkgs {
         name = "mount-tank";
-        runtimeInputs = [pkgs.coreutils config.boot.zfs.package];
+        runtimeInputs = [
+          pkgs.coreutils
+          config.boot.zfs.package
+        ];
         text = ''
           set -euo pipefail
 

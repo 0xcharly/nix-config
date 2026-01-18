@@ -1,10 +1,12 @@
 {
   description = "Nix systems and configs for delay";
 
-  outputs = inputs: let
-    blueprint = inputs.blueprint {inherit inputs;};
-    deploy-rs = import ./hive inputs blueprint;
-  in
+  outputs =
+    inputs:
+    let
+      blueprint = inputs.blueprint { inherit inputs; };
+      deploy-rs = import ./hive inputs blueprint;
+    in
     blueprint
     // {
       inherit (deploy-rs) deploy;
@@ -62,9 +64,15 @@
   };
 
   nixConfig = {
-    experimental-features = ["nix-command" "flakes" "pipe-operators"];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+      "pipe-operators"
+    ];
 
-    extra-substituters = ["https://0xcharly-nixos-config.cachix.org"];
-    extra-trusted-public-keys = ["0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU="];
+    extra-substituters = [ "https://0xcharly-nixos-config.cachix.org" ];
+    extra-trusted-public-keys = [
+      "0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU="
+    ];
   };
 }

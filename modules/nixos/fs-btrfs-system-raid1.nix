@@ -2,11 +2,13 @@
   flake,
   inputs,
   ...
-}: {
+}:
+{
   config,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     inputs.disko.nixosModules.disko
     flake.modules.nixos.fs-btrfs-common
@@ -53,90 +55,98 @@
 
       # Enable mdadm for software RAID.
       initrd = {
-        availableKernelModules = ["raid1" "md_mod"];
-        kernelModules = ["raid1"];
+        availableKernelModules = [
+          "raid1"
+          "md_mod"
+        ];
+        kernelModules = [ "raid1" ];
         supportedFilesystems.btrfs = true;
       };
     };
 
-    disko.devices = let
-      cfg = config.node.fs.btrfs.system;
-    in {
-      disk = let
-        raid1 = device: {
-          type = "disk";
-          inherit device;
-          content = {
-            type = "gpt";
-            partitions = {
-              ESP = {
-                label =
-                  if device == cfg.disk0
-                  then "EFI0"
-                  else "EFI1";
-                size = "500M";
-                type = "EF00";
-                content = {
-                  type = "mdraid";
-                  name = "boot";
-                };
-              };
-              mdadm = {
-                size = "100%"; # Remainder of the disk.
-                content = {
-                  type = "mdraid";
-                  name = "system";
+    disko.devices =
+      let
+        cfg = config.node.fs.btrfs.system;
+      in
+      {
+        disk =
+          let
+            raid1 = device: {
+              type = "disk";
+              inherit device;
+              content = {
+                type = "gpt";
+                partitions = {
+                  ESP = {
+                    label = if device == cfg.disk0 then "EFI0" else "EFI1";
+                    size = "500M";
+                    type = "EF00";
+                    content = {
+                      type = "mdraid";
+                      name = "boot";
+                    };
+                  };
+                  mdadm = {
+                    size = "100%"; # Remainder of the disk.
+                    content = {
+                      type = "mdraid";
+                      name = "system";
+                    };
+                  };
                 };
               };
             };
+          in
+          {
+            # System: these SSD are mirrored in RAID1.
+            disk0 = raid1 cfg.disk0;
+            disk1 = raid1 cfg.disk1;
           };
-        };
-      in {
-        # System: these SSD are mirrored in RAID1.
-        disk0 = raid1 cfg.disk0;
-        disk1 = raid1 cfg.disk1;
-      };
-      mdadm = {
-        boot = {
-          type = "mdadm";
-          level = 1;
-          metadata = "1.0";
-          content = {
-            type = "filesystem";
-            format = "vfat";
-            mountpoint = "/boot";
-            mountOptions = ["umask=0077"];
+        mdadm = {
+          boot = {
+            type = "mdadm";
+            level = 1;
+            metadata = "1.0";
+            content = {
+              type = "filesystem";
+              format = "vfat";
+              mountpoint = "/boot";
+              mountOptions = [ "umask=0077" ];
+            };
           };
-        };
-        system = {
-          type = "mdadm";
-          level = 1;
-          content = {
-            type = "gpt";
-            partitions = {
-              swap = {
-                label = "swap";
-                start = "-${cfg.swapSize}";
-                content = {
-                  type = "swap";
-                  randomEncryption = true;
-                  priority = 100;
+          system = {
+            type = "mdadm";
+            level = 1;
+            content = {
+              type = "gpt";
+              partitions = {
+                swap = {
+                  label = "swap";
+                  start = "-${cfg.swapSize}";
+                  content = {
+                    type = "swap";
+                    randomEncryption = true;
+                    priority = 100;
+                  };
                 };
-              };
-              nixos = {
-                label = "nixos";
-                size = "100%"; # Remainder of the disk.
-                content = {
-                  type = "btrfs";
-                  subvolumes = {
-                    "NIXOS" = {};
-                    "NIXOS/rootfs" = {
-                      mountpoint = "/";
-                      mountOptions = ["compress=zstd"];
-                    };
-                    "NIXOS/nix" = {
-                      mountpoint = "/nix";
-                      mountOptions = ["compress=zstd" "noatime"];
+                nixos = {
+                  label = "nixos";
+                  size = "100%"; # Remainder of the disk.
+                  content = {
+                    type = "btrfs";
+                    subvolumes = {
+                      "NIXOS" = { };
+                      "NIXOS/rootfs" = {
+                        mountpoint = "/";
+                        mountOptions = [ "compress=zstd" ];
+                      };
+                      "NIXOS/nix" = {
+                        mountpoint = "/nix";
+                        mountOptions = [
+                          "compress=zstd"
+                          "noatime"
+                        ];
+                      };
                     };
                   };
                 };
@@ -145,6 +155,5 @@
           };
         };
       };
-    };
   };
 }

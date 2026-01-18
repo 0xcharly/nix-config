@@ -1,4 +1,5 @@
-{flake, ...}: {
+{ flake, ... }:
+{
   imports = [
     flake.modules.common.overlays
 

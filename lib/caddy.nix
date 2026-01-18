@@ -1,6 +1,8 @@
-{lib}: let
+{ lib }:
+let
   uri = import ./uri.nix lib;
-in rec {
+in
+rec {
   # Caddy’s Automatic HTTPS (ACME) certificate management.
   mkGandiTlsCertificateIssuanceConfig = virtualHost: {
     "(${virtualHost})".extraConfig = ''
@@ -11,55 +13,54 @@ in rec {
     '';
   };
 
-  mkReverseProxyConfig = {
-    domain,
-    host,
-    port,
-    import ? "",
-    aliases ? [],
-    ...
-  }:
+  mkReverseProxyConfig =
+    {
+      domain,
+      host,
+      port,
+      import ? "",
+      aliases ? [ ],
+      ...
+    }:
     {
       ${domain}.extraConfig = ''
-        ${
-          if (import != "")
-          then "import ${import}"
-          else ""
-        }
-        reverse_proxy ${uri.mkAuthority {inherit host port;}}
+        ${if (import != "") then "import ${import}" else ""}
+        reverse_proxy ${uri.mkAuthority { inherit host port; }}
       '';
     }
-    // (let
-      mkAliasRedirectConfig = alias:
-        mkRedirectConfig {
-          from = domain;
-          to = alias;
-          inherit import;
-        };
-    in
-      lib.mergeAttrsList (builtins.map mkAliasRedirectConfig aliases));
+    // (
+      let
+        mkAliasRedirectConfig =
+          alias:
+          mkRedirectConfig {
+            from = domain;
+            to = alias;
+            inherit import;
+          };
+      in
+      lib.mergeAttrsList (builtins.map mkAliasRedirectConfig aliases)
+    );
 
-  mkRedirectConfig = {
-    from,
-    to,
-    import ? "",
-    ...
-  }: {
-    "${from}".extraConfig = ''
-      ${
-        if (import != "")
-        then "import ${import}"
-        else ""
-      }
-      redir https://${to}{uri}
-    '';
-  };
+  mkRedirectConfig =
+    {
+      from,
+      to,
+      import ? "",
+      ...
+    }:
+    {
+      "${from}".extraConfig = ''
+        ${if (import != "") then "import ${import}" else ""}
+        redir https://${to}{uri}
+      '';
+    };
 
-  mkWwwRedirectConfig = {
-    domain,
-    import ? "",
-    ...
-  }:
+  mkWwwRedirectConfig =
+    {
+      domain,
+      import ? "",
+      ...
+    }:
     mkRedirectConfig {
       inherit import;
       from = "www.${domain}";

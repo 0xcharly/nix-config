@@ -1,7 +1,7 @@
 {
   config.services.prometheus.exporters.node = {
     enable = true;
-    enabledCollectors = ["systemd"];
+    enabledCollectors = [ "systemd" ];
     # node_exporter  --help
     extraFlags = [
       "--collector.ethtool"

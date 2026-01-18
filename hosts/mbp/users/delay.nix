@@ -2,7 +2,8 @@
   flake,
   inputs,
   ...
-}: {
+}:
+{
   imports = [
     inputs.nix-config-secrets.modules.home.blueprint
     inputs.nix-config-secrets.modules.home.services-atuin

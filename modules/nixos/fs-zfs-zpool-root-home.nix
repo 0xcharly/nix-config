@@ -1,5 +1,6 @@
-{flake, ...}: {
+{ flake, ... }:
+{
   disko.devices.zpool.root = {
-    datasets.home = flake.lib.zfs.mkLegacyDataset "/home" {};
+    datasets.home = flake.lib.zfs.mkLegacyDataset "/home" { };
   };
 }

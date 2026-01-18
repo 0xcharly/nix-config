@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
@@ -7,6 +8,6 @@
       libvdpau-va-gl
       mangohud
     ];
-    extraPackages32 = with pkgs; [mangohud];
+    extraPackages32 = with pkgs; [ mangohud ];
   };
 }

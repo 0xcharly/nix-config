@@ -1,5 +1,7 @@
-{inputs, ...}: {pkgs, ...}: {
-  imports = [inputs.nix-config-colorscheme.modules.home.tmux];
+{ inputs, ... }:
+{ pkgs, ... }:
+{
+  imports = [ inputs.nix-config-colorscheme.modules.home.tmux ];
 
   programs.tmux = {
     enable = true;

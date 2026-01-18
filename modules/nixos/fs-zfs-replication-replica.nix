@@ -1,5 +1,6 @@
-{flake, ...}: {
-  imports = [flake.modules.nixos.fs-zfs-replication-common];
+{ flake, ... }:
+{
+  imports = [ flake.modules.nixos.fs-zfs-replication-common ];
 
   config = {
     node.fs.zfs.replication.permissions = [
@@ -31,7 +32,7 @@
         ];
       };
 
-      groups.syncoid = {};
+      groups.syncoid = { };
     };
   };
 }

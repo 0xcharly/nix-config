@@ -1,33 +1,37 @@
-{flake, ...}: {
+{ flake, ... }:
+{
   config,
   lib,
   ...
-}: {
+}:
+{
   options.node.services.immich = with lib; {
     enable = mkEnableOption "Spin up an Immich service";
   };
 
-  config = let
-    cfg = config.node.services.immich;
-    inherit (flake.lib) facts;
-  in {
-    node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
-      redis-immich = {
-        extraOptions = flake.lib.zfs.redis-dataset-options;
-        owner = config.services.redis.servers.immich.user;
-        group = config.services.redis.servers.immich.group;
-        mode = "0700";
+  config =
+    let
+      cfg = config.node.services.immich;
+      inherit (flake.lib) facts;
+    in
+    {
+      node.fs.zfs.zpool.root.datadirs = lib.mkIf cfg.enable {
+        redis-immich = {
+          extraOptions = flake.lib.zfs.redis-dataset-options;
+          owner = config.services.redis.servers.immich.user;
+          group = config.services.redis.servers.immich.group;
+          mode = "0700";
+        };
       };
-    };
 
-    services = {
-      immich = {
-        inherit (cfg) enable;
-        host = "0.0.0.0";
-        inherit (facts.services.immich) port;
-        mediaLocation = "/tank/delay/album";
-        settings.server.externalDomain = "https://${facts.services.immich-public-proxy.domain}";
+      services = {
+        immich = {
+          inherit (cfg) enable;
+          host = "0.0.0.0";
+          inherit (facts.services.immich) port;
+          mediaLocation = "/tank/delay/album";
+          settings.server.externalDomain = "https://${facts.services.immich-public-proxy.domain}";
+        };
       };
     };
-  };
 }

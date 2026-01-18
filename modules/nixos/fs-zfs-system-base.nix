@@ -2,11 +2,13 @@
   flake,
   inputs,
   ...
-}: {
+}:
+{
   config,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     inputs.disko.nixosModules.disko
     flake.modules.nixos.fs-zfs-common
@@ -30,33 +32,35 @@
     };
   };
 
-  config = let
-    cfg = config.node.fs.zfs.system;
-  in {
-    boot.initrd = {
-      kernelModules = ["zfs"];
-      supportedFilesystems.zfs = true;
-    };
+  config =
+    let
+      cfg = config.node.fs.zfs.system;
+    in
+    {
+      boot.initrd = {
+        kernelModules = [ "zfs" ];
+        supportedFilesystems.zfs = true;
+      };
 
-    disko.devices.disk.system = {
-      type = "disk";
-      device = cfg.disk;
-      content = {
-        type = "gpt";
-        partitions.luks = {
-          size = "100%";
-          content = {
-            type = "luks";
-            name = "crypted";
-            settings.allowDiscards = true;
-            passwordFile = cfg.luksPasswordFile;
+      disko.devices.disk.system = {
+        type = "disk";
+        device = cfg.disk;
+        content = {
+          type = "gpt";
+          partitions.luks = {
+            size = "100%";
             content = {
-              type = "zfs";
-              pool = "root";
+              type = "luks";
+              name = "crypted";
+              settings.allowDiscards = true;
+              passwordFile = cfg.luksPasswordFile;
+              content = {
+                type = "zfs";
+                pool = "root";
+              };
             };
           };
         };
       };
     };
-  };
 }

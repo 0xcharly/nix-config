@@ -1,5 +1,6 @@
-{pkgs, ...}: {
-  environment.defaultPackages = with pkgs; [gnome-calendar];
+{ pkgs, ... }:
+{
+  environment.defaultPackages = with pkgs; [ gnome-calendar ];
   programs.dconf.enable = true;
 
   services.gnome = {

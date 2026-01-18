@@ -11,8 +11,8 @@
         autohide-time-modifier = 0.4;
         expose-animation-duration = 0.1;
         orientation = "left";
-        persistent-apps = [];
-        persistent-others = [];
+        persistent-apps = [ ];
+        persistent-others = [ ];
         show-process-indicators = false;
         show-recents = false;
         static-only = true;

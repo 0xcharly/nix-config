@@ -1,8 +1,13 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   programs.firefox = {
     enable = true;
     package = pkgs.firefox;
-    languagePacks = ["en_US" "fr_FR" "ja_JP"];
+    languagePacks = [
+      "en_US"
+      "fr_FR"
+      "ja_JP"
+    ];
     policies = import ./browser-mkFirefoxPolicies.nix;
     profiles = import ./browser-mkFirefoxProfiles.nix {
       inherit (pkgs) lib nixos-icons;

@@ -1,4 +1,6 @@
-{flake, ...}: {lib, ...}: {
+{ flake, ... }:
+{ lib, ... }:
+{
   # Install known SSH keys for trusted hosts.
   programs.ssh.knownHosts = flake.lib.openssh.knownHosts;
 

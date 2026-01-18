@@ -2,13 +2,15 @@
   config,
   lib,
   ...
-}: let
+}:
+let
   cfg = config.node.fs.zfs.snapshots;
-in {
+in
+{
   options.node.fs.zfs.snapshots = with lib; {
     daily = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         The datasets to backup with the following policy:
 
@@ -27,7 +29,7 @@ in {
 
     hourly = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         The datasets to backup with the following policy:
 
@@ -74,24 +76,24 @@ in {
         };
       };
 
-      datasets = let
-        mkDailyPolicy = dataset: {
-          "${dataset}" = {
-            useTemplate = ["daily"];
-            recursive = false;
-            process_children_only = false;
+      datasets =
+        let
+          mkDailyPolicy = dataset: {
+            "${dataset}" = {
+              useTemplate = [ "daily" ];
+              recursive = false;
+              process_children_only = false;
+            };
           };
-        };
-        mkHourlyPolicy = dataset: {
-          "${dataset}" = {
-            useTemplate = ["hourly"];
-            recursive = false;
-            process_children_only = false;
+          mkHourlyPolicy = dataset: {
+            "${dataset}" = {
+              useTemplate = [ "hourly" ];
+              recursive = false;
+              process_children_only = false;
+            };
           };
-        };
-        mapPolicy = mkConfig: datasets:
-          lib.mergeAttrsList (builtins.map mkConfig datasets);
-      in
+          mapPolicy = mkConfig: datasets: lib.mergeAttrsList (builtins.map mkConfig datasets);
+        in
         lib.mergeAttrsList [
           (mapPolicy mkDailyPolicy cfg.daily)
           (mapPolicy mkHourlyPolicy cfg.hourly)
@@ -100,8 +102,11 @@ in {
 
     # Only run sanoid when ZFS datasets are mounted.
     systemd.services.sanoid = {
-      after = ["local-fs.target" "zfs-mount.service"];
-      wants = ["zfs-mount.service"];
+      after = [
+        "local-fs.target"
+        "zfs-mount.service"
+      ];
+      wants = [ "zfs-mount.service" ];
     };
   };
 }

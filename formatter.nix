@@ -6,7 +6,7 @@
 inputs.treefmt-nix.lib.mkWrapper pkgs {
   projectRootFile = "flake.lock";
   programs = {
-    alejandra.enable = true;
+    nixfmt.enable = true;
     prettier.enable = true;
     shfmt.enable = false;
   };

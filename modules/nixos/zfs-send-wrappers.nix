@@ -2,7 +2,8 @@
   config,
   pkgs,
   ...
-}: let
+}:
+let
   mkBufferedSshCall = remote_command: ''
     mbuffer -m 1G -s 1M -q \
       | ssh \
@@ -12,11 +13,15 @@
           -o IdentityFile=${config.age.secrets."keys/zfs_replication_ed25519_key".path} \
           syncoid@dalmore.qyrnl.com "mbuffer -m 1G -s 1M | ${remote_command}"
   '';
-in {
+in
+{
   environment.defaultPackages = with pkgs; [
     (writeShellApplication {
       name = "zfs-send-snapshot";
-      runtimeInputs = [mbuffer config.boot.zfs.package];
+      runtimeInputs = [
+        mbuffer
+        config.boot.zfs.package
+      ];
       text = ''
         DATASET="$1"
         SNAPSHOT="$2"
@@ -28,7 +33,10 @@ in {
 
     (writeShellApplication {
       name = "zfs-resume-send";
-      runtimeInputs = [mbuffer config.boot.zfs.package];
+      runtimeInputs = [
+        mbuffer
+        config.boot.zfs.package
+      ];
       text = ''
         DATASET=$1
         RESUME_TOKEN=$2

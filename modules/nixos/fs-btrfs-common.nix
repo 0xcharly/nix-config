@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   boot = {
     supportedFilesystems.btrfs = true;
     initrd.supportedFilesystems.btrfs = true;

@@ -30,12 +30,10 @@ For installation, the ISO image is written to the Swap partition. This partition
 ### Steps
 
 1. Create two disk images:
-
    - SWAP: 2048mb (raw)
    - SYSTEM: rest (raw)
 
 1. Boot in rescue mode with:
-
    - /dev/sda -> SWAP
    - /dev/sdb -> SYSTEM
 
@@ -47,7 +45,6 @@ For installation, the ISO image is written to the Swap partition. This partition
    ```
 
 1. Create a "Boot" configuration profile:
-
    - Kernel: Direct Disk
    - /dev/sda -> SYSTEM
    - /dev/sdb -> SWAP
@@ -72,7 +69,6 @@ For installation, the ISO image is written to the Swap partition. This partition
    ```
 
 1. Turn off and edit the "Boot" profile:
-
    - Root device: /dev/sda
 
 1. Resize to Nanode (Linode 1Go) if necessary.

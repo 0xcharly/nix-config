@@ -9,15 +9,15 @@
 
   # TODO: Should we disallow login to all but allowlisted users?
   # services.openssh.settings.AllowUsers = ["deploy"];
-  nix.settings.trusted-users = ["deploy"];
+  nix.settings.trusted-users = [ "deploy" ];
 
   security.sudo.extraRules = [
     {
-      users = ["deploy"];
+      users = [ "deploy" ];
       commands = [
         # Authenticated via SSH Agent authentication: https://linux.die.net/man/8/pam_ssh_agent_auth.
-        {command = "/nix/store/*-activatable-nixos-system-*/activate-rs";}
-        {command = "/run/current-system/sw/bin/rm /tmp/deploy-rs-canary-*";}
+        { command = "/nix/store/*-activatable-nixos-system-*/activate-rs"; }
+        { command = "/run/current-system/sw/bin/rm /tmp/deploy-rs-canary-*"; }
       ];
     }
   ];

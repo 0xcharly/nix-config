@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   networking = {
     enableIPv6 = true;
     tempAddresses = "disabled";
@@ -33,7 +34,7 @@
     ];
 
     # LISH config.
-    kernelParams = ["console=ttyS0,19200n8"];
+    kernelParams = [ "console=ttyS0,19200n8" ];
     loader = {
       timeout = 10;
       grub.extraConfig = ''

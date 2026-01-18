@@ -1,4 +1,5 @@
-{flake, ...}: {
+{ flake, ... }:
+{
   imports = [
     flake.modules.home.atuin
     flake.modules.home.direnv

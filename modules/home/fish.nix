@@ -2,15 +2,18 @@
   flake,
   inputs,
   ...
-}: {
+}:
+{
   config,
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.programs.fish;
-in {
-  imports = [inputs.nix-config-colorscheme.modules.home.fish];
+in
+{
+  imports = [ inputs.nix-config-colorscheme.modules.home.fish ];
 
   programs = {
     eza.enableFishIntegration = true;
@@ -66,6 +69,6 @@ in {
       enableBashIntegration = false;
       enableFishIntegration = false;
     };
-    packages = [flake.packages.${pkgs.stdenv.hostPlatform.system}.tmux-open-git-repository-fish];
+    packages = [ flake.packages.${pkgs.stdenv.hostPlatform.system}.tmux-open-git-repository-fish ];
   };
 }

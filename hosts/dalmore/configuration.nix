@@ -4,7 +4,8 @@
   hostName,
   modulesPath,
   ...
-}: {
+}:
+{
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
 
@@ -51,8 +52,11 @@
   # System config.
   node = {
     boot.initrd.ssh-unlock = {
-      kernelModules = ["atlantic" "r8169"];
-      kernelParams = ["ip=192.168.1.231::192.168.1.1:255.255.255.0:${hostName}-initrd:enp197s0:off"];
+      kernelModules = [
+        "atlantic"
+        "r8169"
+      ];
+      kernelParams = [ "ip=192.168.1.231::192.168.1.1:255.255.255.0:${hostName}-initrd:enp197s0:off" ];
     };
 
     fs.zfs = {
@@ -101,7 +105,10 @@
       }
     ];
     defaultGateway = "192.168.1.1";
-    nameservers = ["1.1.1.1" "8.8.8.8"];
+    nameservers = [
+      "1.1.1.1"
+      "8.8.8.8"
+    ];
   };
 
   nixpkgs.hostPlatform = "x86_64-linux";

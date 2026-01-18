@@ -2,7 +2,8 @@
   config,
   lib,
   ...
-}: {
+}:
+{
   options.node.boot.initrd.ssh-unlock = with lib; {
     authorizedKeys = mkOption {
       type = types.listOf types.str;
@@ -16,7 +17,7 @@
 
     kernelModules = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         The list of network interface drivers to load at boot.
 
@@ -28,31 +29,33 @@
 
     kernelParams = mkOption {
       type = types.listOf types.str;
-      default = ["ip=::::${config.networking.hostName}-initrd::dhcp"];
+      default = [ "ip=::::${config.networking.hostName}-initrd::dhcp" ];
       description = ''
         The kernel params to use to configure the initrd stage network.
       '';
     };
   };
 
-  config.boot = let
-    cfg = config.node.boot.initrd.ssh-unlock;
-  in {
-    initrd = {
-      network = {
-        enable = true;
-        ssh = {
+  config.boot =
+    let
+      cfg = config.node.boot.initrd.ssh-unlock;
+    in
+    {
+      initrd = {
+        network = {
           enable = true;
-          port = 22;
-          shell = "/bin/cryptsetup-askpass";
-          inherit (cfg) authorizedKeys;
-          hostKeys = ["/etc/ssh/ssh_host_ed25519_key-initrd"];
+          ssh = {
+            enable = true;
+            port = 22;
+            shell = "/bin/cryptsetup-askpass";
+            inherit (cfg) authorizedKeys;
+            hostKeys = [ "/etc/ssh/ssh_host_ed25519_key-initrd" ];
+          };
         };
+        secrets."/etc/ssh/ssh_host_ed25519_key-initrd" = "/etc/ssh/ssh_host_ed25519_key-initrd";
+        availableKernelModules = cfg.kernelModules;
       };
-      secrets."/etc/ssh/ssh_host_ed25519_key-initrd" = "/etc/ssh/ssh_host_ed25519_key-initrd";
-      availableKernelModules = cfg.kernelModules;
-    };
 
-    inherit (cfg) kernelParams;
-  };
+      inherit (cfg) kernelParams;
+    };
 }

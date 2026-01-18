@@ -3,7 +3,8 @@
   inputs,
   pkgs,
   ...
-}: {
+}:
+{
   imports = [
     inputs.nix-config-secrets.modules.darwin.blueprint
     inputs.nix-config-secrets.modules.darwin.nix-client-config

@@ -1,8 +1,10 @@
-{inputs, ...}: {
+{ inputs, ... }:
+{
   config,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     inputs.nix-config-shell.homeManagerModules.default
 
@@ -15,13 +17,15 @@
     };
   };
 
-  config = let
-    cfg = config.node.wayland.arcshell;
-  in {
-    programs.arcshell = {
-      enable = true;
-      systemd.enable = true;
-      settings.theme.hud.widgets.powerManagement.enable = cfg.modules.powerManagement;
+  config =
+    let
+      cfg = config.node.wayland.arcshell;
+    in
+    {
+      programs.arcshell = {
+        enable = true;
+        systemd.enable = true;
+        settings.theme.hud.widgets.powerManagement.enable = cfg.modules.powerManagement;
+      };
     };
-  };
 }

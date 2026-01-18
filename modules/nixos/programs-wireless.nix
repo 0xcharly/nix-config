@@ -1,4 +1,4 @@
 {
   networking.networkmanager.enable = true;
-  users.users.delay.extraGroups = ["networkmanager"];
+  users.users.delay.extraGroups = [ "networkmanager" ];
 }

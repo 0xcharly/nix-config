@@ -1,3 +1,4 @@
-{flake, ...}: {
-  imports = [flake.modules.nixos.hardware-gpu-common];
+{ flake, ... }:
+{
+  imports = [ flake.modules.nixos.hardware-gpu-common ];
 }

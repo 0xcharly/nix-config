@@ -1,9 +1,11 @@
-{flake, ...}: {
+{ flake, ... }:
+{
   config,
   lib,
   ...
-}: {
-  imports = [flake.modules.nixos.fs-zfs-system-base];
+}:
+{
+  imports = [ flake.modules.nixos.fs-zfs-system-base ];
 
   options.node.fs.zfs.system.linode = with lib; {
     swapDisk = mkOption {
@@ -15,39 +17,41 @@
     };
   };
 
-  config = let
-    cfg = config.node.fs.zfs.system.linode;
-  in {
-    boot = {
-      supportedFilesystems.ext4 = true;
-      initrd.supportedFilesystems.ext4 = true;
-    };
+  config =
+    let
+      cfg = config.node.fs.zfs.system.linode;
+    in
+    {
+      boot = {
+        supportedFilesystems.ext4 = true;
+        initrd.supportedFilesystems.ext4 = true;
+      };
 
-    disko.devices.disk = {
-      system.content.partitions = {
-        bios = {
-          start = "0"; # Force boot partition to be the first.
-          size = "1M";
-          type = "EF02"; # BIOS boot partition (for GRUB in BIOS mode)
+      disko.devices.disk = {
+        system.content.partitions = {
+          bios = {
+            start = "0"; # Force boot partition to be the first.
+            size = "1M";
+            type = "EF02"; # BIOS boot partition (for GRUB in BIOS mode)
+          };
+          boot = {
+            size = "512M";
+            content = {
+              type = "filesystem";
+              format = "ext4";
+              mountpoint = "/boot";
+            };
+          };
         };
-        boot = {
-          size = "512M";
+        swapDisk = {
+          type = "disk";
+          device = cfg.swapDisk;
           content = {
-            type = "filesystem";
-            format = "ext4";
-            mountpoint = "/boot";
+            type = "swap";
+            randomEncryption = true;
+            priority = 100;
           };
         };
       };
-      swapDisk = {
-        type = "disk";
-        device = cfg.swapDisk;
-        content = {
-          type = "swap";
-          randomEncryption = true;
-          priority = 100;
-        };
-      };
     };
-  };
 }

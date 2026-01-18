@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   # Fish is the default shell on Mac and we want to make sure that we're
   # configuring the rc correctly with nix-darwin paths.
   programs.fish = {
@@ -12,5 +13,9 @@
     '';
   };
 
-  environment.shells = with pkgs; [bashInteractive zsh fish];
+  environment.shells = with pkgs; [
+    bashInteractive
+    zsh
+    fish
+  ];
 }

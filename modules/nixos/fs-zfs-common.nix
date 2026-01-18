@@ -3,7 +3,8 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   options.node.fs.zfs = with lib; {
     hostId = mkOption {
       type = types.nullOr types.str;
@@ -29,37 +30,39 @@
     };
   };
 
-  config = let
-    cfg = config.node.fs.zfs;
-  in {
-    # The primary use case is to ensure when using ZFS that a pool isn’t imported
-    # accidentally on a wrong machine.
-    # https://search.nixos.org/options?channel=unstable&query=networking.hostId
-    networking = {inherit (cfg) hostId;};
+  config =
+    let
+      cfg = config.node.fs.zfs;
+    in
+    {
+      # The primary use case is to ensure when using ZFS that a pool isn’t imported
+      # accidentally on a wrong machine.
+      # https://search.nixos.org/options?channel=unstable&query=networking.hostId
+      networking = { inherit (cfg) hostId; };
 
-    boot = {
-      swraid.mdadmConf = ''
-        MAILADDR root
-      '';
+      boot = {
+        swraid.mdadmConf = ''
+          MAILADDR root
+        '';
 
-      kernelModules = ["zfs"];
-      supportedFilesystems.zfs = true;
+        kernelModules = [ "zfs" ];
+        supportedFilesystems.zfs = true;
 
-      # IMPORTANT NOTE: Carefully check the latest kernel version that is compatible
-      # with the ZFS version in use.
-      # Compatible kernel versions are listed on the OpenZFS release page. Check
-      # which ZFS version is in use for the current stable channel.
-      # The current stable channel is 25.05, which uses ZFS 2.4.0, and is compatible
-      # with 4.18 - 6.18 kernels.
-      # https://discourse.nixos.org/t/zfs-latestcompatiblelinuxpackages-is-deprecated/52540
-      # https://github.com/openzfs/zfs/releases
-      kernelPackages = pkgs.linuxPackages_6_18;
-      zfs.package = pkgs.zfs_2_4;
+        # IMPORTANT NOTE: Carefully check the latest kernel version that is compatible
+        # with the ZFS version in use.
+        # Compatible kernel versions are listed on the OpenZFS release page. Check
+        # which ZFS version is in use for the current stable channel.
+        # The current stable channel is 25.05, which uses ZFS 2.4.0, and is compatible
+        # with 4.18 - 6.18 kernels.
+        # https://discourse.nixos.org/t/zfs-latestcompatiblelinuxpackages-is-deprecated/52540
+        # https://github.com/openzfs/zfs/releases
+        kernelPackages = pkgs.linuxPackages_6_18;
+        zfs.package = pkgs.zfs_2_4;
+      };
+
+      environment.systemPackages = [
+        pkgs.httm # Snapshot browsing.
+        config.boot.zfs.package
+      ];
     };
-
-    environment.systemPackages = [
-      pkgs.httm # Snapshot browsing.
-      config.boot.zfs.package
-    ];
-  };
 }

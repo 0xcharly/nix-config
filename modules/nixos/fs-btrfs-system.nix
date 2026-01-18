@@ -2,11 +2,13 @@
   flake,
   inputs,
   ...
-}: {
+}:
+{
   config,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     inputs.disko.nixosModules.disko
     flake.modules.nixos.fs-btrfs-common
@@ -46,53 +48,62 @@
       initrd.supportedFilesystems.vfat = true;
     };
 
-    disko.devices = let
-      cfg = config.node.fs.btrfs.system;
-    in {
-      disk.system = {
-        type = "disk";
-        device = cfg.disk;
-        content = {
-          type = "gpt";
-          partitions = {
-            ESP = {
-              label = "EFI";
-              size = "500M";
-              type = "EF00";
-              content = {
-                type = "filesystem";
-                format = "vfat";
-                mountpoint = "/boot";
-                mountOptions = ["defaults" "umask=0077"];
-              };
-            };
-            swap = {
-              label = "swap";
-              start = "-${cfg.swapSize}";
-              content = {
-                type = "swap";
-                randomEncryption = true;
-                priority = 100;
-              };
-            };
-            luks = {
-              size = "100%";
-              content = {
-                type = "luks";
-                name = "crypted";
-                settings.allowDiscards = true;
-                passwordFile = cfg.luksPasswordFile;
+    disko.devices =
+      let
+        cfg = config.node.fs.btrfs.system;
+      in
+      {
+        disk.system = {
+          type = "disk";
+          device = cfg.disk;
+          content = {
+            type = "gpt";
+            partitions = {
+              ESP = {
+                label = "EFI";
+                size = "500M";
+                type = "EF00";
                 content = {
-                  type = "btrfs";
-                  subvolumes = {
-                    "NIXOS" = {};
-                    "NIXOS/rootfs" = {
-                      mountpoint = "/";
-                      mountOptions = ["compress=zstd"];
-                    };
-                    "NIXOS/nix" = {
-                      mountpoint = "/nix";
-                      mountOptions = ["compress=zstd" "noatime"];
+                  type = "filesystem";
+                  format = "vfat";
+                  mountpoint = "/boot";
+                  mountOptions = [
+                    "defaults"
+                    "umask=0077"
+                  ];
+                };
+              };
+              swap = {
+                label = "swap";
+                start = "-${cfg.swapSize}";
+                content = {
+                  type = "swap";
+                  randomEncryption = true;
+                  priority = 100;
+                };
+              };
+              luks = {
+                size = "100%";
+                content = {
+                  type = "luks";
+                  name = "crypted";
+                  settings.allowDiscards = true;
+                  passwordFile = cfg.luksPasswordFile;
+                  content = {
+                    type = "btrfs";
+                    subvolumes = {
+                      "NIXOS" = { };
+                      "NIXOS/rootfs" = {
+                        mountpoint = "/";
+                        mountOptions = [ "compress=zstd" ];
+                      };
+                      "NIXOS/nix" = {
+                        mountpoint = "/nix";
+                        mountOptions = [
+                          "compress=zstd"
+                          "noatime"
+                        ];
+                      };
                     };
                   };
                 };
@@ -101,6 +112,5 @@
           };
         };
       };
-    };
   };
 }

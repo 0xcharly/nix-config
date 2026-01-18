@@ -2,14 +2,17 @@
   flake,
   inputs,
   ...
-}: {
+}:
+{
   config,
   lib,
   ...
-}: let
+}:
+let
   cfg = config.node.services.atuin;
-in {
-  imports = [inputs.nix-config-colorscheme.modules.home.atuin];
+in
+{
+  imports = [ inputs.nix-config-colorscheme.modules.home.atuin ];
 
   options.node.services.atuin = with lib; {
     enableSync = mkEnableOption "Enable syncing shell history via the atuin service";
@@ -18,7 +21,7 @@ in {
   config.programs.atuin = {
     enable = true;
     enableFishIntegration = true;
-    flags = ["--disable-up-arrow"];
+    flags = [ "--disable-up-arrow" ];
     settings = lib.mkIf cfg.enableSync {
       auto_sync = true;
       key_path = config.age.secrets."services/atuin.key".path;

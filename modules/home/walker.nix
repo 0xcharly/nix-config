@@ -2,12 +2,14 @@
   flake,
   inputs,
   ...
-}: {
+}:
+{
   config,
   lib,
   pkgs,
   ...
-}: {
+}:
+{
   imports = [
     flake.modules.home.wayland-uwsm
     inputs.nix-config-colorscheme.modules.home.walker

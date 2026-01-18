@@ -2,7 +2,8 @@
   lib,
   firefox-addons,
   nixos-icons,
-}: let
+}:
+let
   alternate-player-for-twitch-dot-tv = firefox-addons.buildFirefoxXpiAddon rec {
     pname = "alternate-player-for-twitch-dot-tv";
     version = "2025.6.16";
@@ -28,7 +29,8 @@
       platforms = platforms.all;
     };
   };
-in {
+in
+{
   default = {
     id = 0;
     isDefault = true;
@@ -49,38 +51,38 @@ in {
       force = true;
       engines = {
         "Nix Packages" = {
-          urls = [{template = "https://search.nixos.org/packages?query={searchTerms}";}];
+          urls = [ { template = "https://search.nixos.org/packages?query={searchTerms}"; } ];
           icon = "${nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
           updateInterval = 7 * 24 * 60 * 60 * 1000; # Weekly
-          definedAliases = ["@np"];
+          definedAliases = [ "@np" ];
         };
 
         "Nix Options" = {
-          urls = [{template = "https://search.nixos.org/options?query={searchTerms}";}];
+          urls = [ { template = "https://search.nixos.org/options?query={searchTerms}"; } ];
           icon = "${nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
           updateInterval = 7 * 24 * 60 * 60 * 1000; # Weekly
-          definedAliases = ["@no"];
+          definedAliases = [ "@no" ];
         };
 
         "Home Manager Options" = {
-          urls = [{template = "https://home-manager-options.extranix.com/?query={searchTerms}";}];
+          urls = [ { template = "https://home-manager-options.extranix.com/?query={searchTerms}"; } ];
           icon = "https://home-manager-options.extranix.com/images/favicon.png";
           updateInterval = 7 * 24 * 60 * 60 * 1000; # Weekly
-          definedAliases = ["@hm"];
+          definedAliases = [ "@hm" ];
         };
 
         "NixOS Wiki" = {
-          urls = [{template = "https://wiki.nixos.org/w/index.php?search={searchTerms}";}];
+          urls = [ { template = "https://wiki.nixos.org/w/index.php?search={searchTerms}"; } ];
           icon = "https://wiki.nixos.org/favicon.png";
           updateInterval = 24 * 60 * 60 * 1000; # Daily
-          definedAliases = ["@nw"];
+          definedAliases = [ "@nw" ];
         };
 
         "GitHub Code Search" = {
-          urls = [{template = "https://github.com/search?type=code&q={searchTerms}";}];
+          urls = [ { template = "https://github.com/search?type=code&q={searchTerms}"; } ];
           icon = "https://github.com/fluidicon.png";
           updateInterval = 7 * 24 * 60 * 60 * 1000; # Weekly
-          definedAliases = ["cs"];
+          definedAliases = [ "cs" ];
         };
 
         # Hide the rest, we don't need it.

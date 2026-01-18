@@ -2,11 +2,13 @@
   flake,
   inputs,
   ...
-}: {
+}:
+{
   config,
   lib,
   ...
-}: {
+}:
+{
   imports = [
     inputs.disko.nixosModules.disko
     flake.modules.nixos.fs-zfs-common
@@ -32,38 +34,40 @@
     };
   };
 
-  config = let
-    cfg = config.node.fs.zfs.zpool.root;
-  in {
-    disko.devices.zpool.root = {
-      type = "zpool";
-      rootFsOptions = {
-        acltype = "posixacl"; # Required for systemd-journald: https://github.com/NixOS/nixpkgs/issues/16954#issuecomment-250578128
-        canmount = "off";
-        checksum = "edonr";
-        compression = "zstd";
-        dnodesize = "auto";
-        mountpoint = "none";
-        normalization = "none";
-        relatime = "on";
-        "com.sun:auto-snapshot" = "false";
-      };
-      options = {
-        ashift = "12";
-        autotrim = "on";
-      };
-      datasets = {
-        reserved = {
-          type = "zfs_fs";
-          options = {
-            canmount = "off";
-            mountpoint = "none";
-            inherit (cfg) reservation;
-          };
+  config =
+    let
+      cfg = config.node.fs.zfs.zpool.root;
+    in
+    {
+      disko.devices.zpool.root = {
+        type = "zpool";
+        rootFsOptions = {
+          acltype = "posixacl"; # Required for systemd-journald: https://github.com/NixOS/nixpkgs/issues/16954#issuecomment-250578128
+          canmount = "off";
+          checksum = "edonr";
+          compression = "zstd";
+          dnodesize = "auto";
+          mountpoint = "none";
+          normalization = "none";
+          relatime = "on";
+          "com.sun:auto-snapshot" = "false";
         };
-        root = flake.lib.zfs.mkLegacyDataset "/" {};
-        nix = flake.lib.zfs.mkLegacyDataset "/nix" {atime = "off";};
+        options = {
+          ashift = "12";
+          autotrim = "on";
+        };
+        datasets = {
+          reserved = {
+            type = "zfs_fs";
+            options = {
+              canmount = "off";
+              mountpoint = "none";
+              inherit (cfg) reservation;
+            };
+          };
+          root = flake.lib.zfs.mkLegacyDataset "/" { };
+          nix = flake.lib.zfs.mkLegacyDataset "/nix" { atime = "off"; };
+        };
       };
     };
-  };
 }

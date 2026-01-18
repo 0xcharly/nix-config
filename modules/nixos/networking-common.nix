@@ -11,5 +11,5 @@
 
   # All users that should have permission to change network settings must belong
   # to the networkmanager group:
-  users.users.delay.extraGroups = ["networkmanager"];
+  users.users.delay.extraGroups = [ "networkmanager" ];
 }

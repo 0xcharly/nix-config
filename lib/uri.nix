@@ -1,9 +1,11 @@
 lib: {
   mkFqn = domain: hostName: "${hostName}.${domain}";
 
-  mkAuthority = {
-    host,
-    port,
-    ...
-  }: "${host}:${toString port}";
+  mkAuthority =
+    {
+      host,
+      port,
+      ...
+    }:
+    "${host}:${toString port}";
 }

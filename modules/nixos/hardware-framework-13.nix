@@ -16,7 +16,9 @@
   flake,
   inputs,
   ...
-}: {pkgs, ...}: {
+}:
+{ pkgs, ... }:
+{
   imports = [
     inputs.nixos-hardware.nixosModules.framework-amd-ai-300-series
   ];

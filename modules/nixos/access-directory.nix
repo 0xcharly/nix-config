@@ -10,7 +10,9 @@
   flake,
   inputs,
   ...
-}: {lib, ...}: {
+}:
+{ lib, ... }:
+{
   imports = [
     inputs.nix-config-secrets.modules.nixos.users-delay
 
@@ -40,7 +42,7 @@
         uid = 3001;
         isSystemUser = lib.mkDefault true;
         group = lib.mkDefault "syncoid";
-        extraGroups = ["_zfsadm"];
+        extraGroups = [ "_zfsadm" ];
       };
       linkwarden = {
         uid = 3002;
@@ -51,19 +53,22 @@
         uid = 3003;
         isNormalUser = true;
         description = "Dedicated user for git tools";
-        extraGroups = ["git" "_vcs"];
+        extraGroups = [
+          "git"
+          "_vcs"
+        ];
         group = lib.mkDefault "users";
       };
       cgit = {
         uid = 3004;
         isSystemUser = true;
-        extraGroups = ["_vcs"];
+        extraGroups = [ "_vcs" ];
         group = lib.mkDefault "cgit";
       };
       radicale = {
         uid = 3005;
         isSystemUser = true;
-        extraGroups = ["_dav"];
+        extraGroups = [ "_dav" ];
         group = lib.mkDefault "radicale";
       };
 
@@ -116,12 +121,12 @@
       _dav.gid = 4006;
 
       # TODO: Migrate the remaining groups.
-      forgejo = {};
-      immich = {};
-      jellyfin = {};
-      navidrome = {};
-      paperless = {};
-      vaultwarden = {};
+      forgejo = { };
+      immich = { };
+      jellyfin = { };
+      navidrome = { };
+      paperless = { };
+      vaultwarden = { };
     };
   };
 }

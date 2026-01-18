@@ -1,4 +1,3 @@
 {
-  mkShellApplication = pkgs: opts:
-    pkgs.lib.getExe (pkgs.writeShellApplication opts);
+  mkShellApplication = pkgs: opts: pkgs.lib.getExe (pkgs.writeShellApplication opts);
 }

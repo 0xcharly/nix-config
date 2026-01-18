@@ -1,7 +1,10 @@
-{flake, ...}: {pkgs, ...}: let
+{ flake, ... }:
+{ pkgs, ... }:
+let
   inherit (flake.lib.user.gui.fonts) monospace sansSerif;
   inherit (flake.lib.fonts) mkFontName;
-in {
+in
+{
   dconf = {
     enable = true;
     settings = {
@@ -26,7 +29,7 @@ in {
       name = "Adwaita";
       package = pkgs.adwaita-icon-theme;
     };
-    font = {inherit (sansSerif) name size;};
+    font = { inherit (sansSerif) name size; };
     gtk2.extraConfig = ''
       gtk-application-prefer-dark-theme=1
     '';

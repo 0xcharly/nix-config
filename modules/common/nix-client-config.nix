@@ -1,7 +1,7 @@
 {
   nix = {
     settings = rec {
-      allowed-users = ["delay"];
+      allowed-users = [ "delay" ];
       trusted-users = allowed-users;
 
       # Enable flakes.
