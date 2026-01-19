@@ -12,9 +12,6 @@
 
     inputs.nix-config-secrets.modules.nixos.blueprint
     inputs.nix-config-secrets.modules.nixos.nix-client-config
-    inputs.nix-config-secrets.modules.nixos.dns-qyrnl-dot-com
-    inputs.nix-config-secrets.modules.nixos.services-gatus
-    inputs.nix-config-secrets.modules.nixos.services-gotify
     inputs.nix-config-secrets.modules.nixos.services-tailscale
     inputs.nix-config-secrets.modules.nixos.services-tailscale-initrd
     inputs.nix-config-secrets.modules.nixos.users-delay
@@ -41,13 +38,6 @@
     flake.modules.nixos.programs-terminfo
     flake.modules.nixos.prometheus-exporters-node
     flake.modules.nixos.prometheus-exporters-zfs
-    flake.modules.nixos.selfhosted-dns-pieceofenglish-dot-fr
-    flake.modules.nixos.selfhosted-dns-qyrnl-dot-com
-    flake.modules.nixos.selfhosted-gatus
-    flake.modules.nixos.selfhosted-gatus-endpoints
-    flake.modules.nixos.selfhosted-gotify
-    flake.modules.nixos.selfhosted-immich-public-proxy
-    flake.modules.nixos.selfhosted-reverse-proxy-qyrnl-dot-com
     flake.modules.nixos.services-deploy-rs
     flake.modules.nixos.services-fail2ban
     flake.modules.nixos.services-openssh
@@ -60,7 +50,7 @@
   # System config.
   node = {
     fs.zfs = {
-      hostId = "60eec752";
+      hostId = "df18314a";
       system = {
         disk = "/dev/sda";
         linode.swapDisk = "/dev/sdb";
@@ -69,33 +59,8 @@
       zpool.root.reservation = "2GiB";
     };
 
-    services = {
-      dns = {
-        "pieceofenglish.fr" = {
-          enable = true;
-          openFirewall = true;
-          bindInterface = "eth0";
-        };
-        "qyrnl.com".enable = true;
-      };
-
-      gatus.enable = true;
-      gotify.enable = true;
-      immich-public-proxy.enable = true;
-
-      reverse-proxy = {
-        enable = true;
-        "qyrnl.com" = {
-          enable = true;
-          # TODO: this should be read from the homelab config
-          bindIP = "100.64.0.140";
-        };
-      };
-    };
-
     users.delay.ssh = {
       authorizeTailscaleInternalKey = true;
-      # TODO: remove once bastion is deployed.
       authorizeTailscalePublicKey = true;
     };
   };
@@ -106,5 +71,5 @@
 
   nixpkgs.hostPlatform = "x86_64-linux";
 
-  system.stateVersion = "25.05";
+  system.stateVersion = "25.11";
 }
