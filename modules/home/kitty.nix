@@ -28,7 +28,10 @@
             symbol_maps = mapFontCodepoints (font_name: codepoints: "symbol_map ${codepoints} ${font_name}");
           in
           ''
-            font_features ${font.name} ${lib.concatStringsSep "\n" font.features}
+            font_features PragmataProMonoLiga-Regular ${lib.concatStringsSep " " (builtins.map (f: "+${f}") font.features)}
+            font_features PragmataProMonoLiga-Bold ${lib.concatStringsSep " " (builtins.map (f: "+${f}") font.features)}
+            font_features PragmataProMonoLiga-Italic ${lib.concatStringsSep " " (builtins.map (f: "+${f}") font.features)}
+            font_features PragmataProMonoLiga-BoldItalic ${lib.concatStringsSep " " (builtins.map (f: "+${f}") font.features)}
             text_composition_strategy 0.5 0
 
             window_padding_width 4
