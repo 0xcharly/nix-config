@@ -9,7 +9,7 @@
     [
       deploy-rs
       home-manager
-      nixfmt-rfc-style
+      nixfmt
 
       jq # Used in provision and remote-unlock scripts.
       nix-output-monitor # Nix Output Monitor.
