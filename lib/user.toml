@@ -1,11 +1,11 @@
 [gui.fonts.terminal]
 name = "PragmataPro Mono Liga"
-size = 14
+size = 13
 features = ["calt", "clig", "dlig", "liga"]
 
 [gui.fonts.monospace]
 name = "PragmataPro Mono Liga"
-size = 14
+size = 13
 
 [gui.fonts.sansSerif]
 name = "Sys"
