@@ -32,6 +32,7 @@
     flake.modules.nixos.hardware-cpu-amd
     flake.modules.nixos.hardware-gpu-amd
     flake.modules.nixos.networking-common
+    flake.modules.nixos.networking-resolved
     flake.modules.nixos.nix-build-aarch64
     flake.modules.nixos.nix-client-config
     flake.modules.nixos.overlays
@@ -86,11 +87,6 @@
     domain = "qyrnl.com";
     interfaces.enp115s0.useDHCP = true;
   };
-
-  # Forces a DHCP service restart on resume to flush out stale state.
-  powerManagement.resumeCommands = ''
-    ${lib.getExe' pkgs.systemd "systemctl"} restart dhcpcd.service
-  '';
 
   nixpkgs.hostPlatform = "x86_64-linux";
 
