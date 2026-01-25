@@ -12,7 +12,7 @@
   mapFontCodepoints =
     fn:
     let
-      mappings = builtins.fromTOML (builtins.readFile ./codepoints.toml);
+      mappings = fromTOML (builtins.readFile ./codepoints.toml);
       transformMappingValue =
         {
           font_name ? "default",
