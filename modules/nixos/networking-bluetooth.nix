@@ -6,7 +6,6 @@
 {
   options.node.networking.bluetooth = with lib; {
     powerOnBoot = mkEnableOption "Whether to power up the default Bluetooth controller on boot";
-    enableA2DPSink = mkEnableOption "Allow headsets will generally try to connect using the A2DP profile";
     enableFastConnectable = mkEnableOption "When enabled other devices can connect faster to us";
   };
 
@@ -26,9 +25,6 @@
           # the tradeoff is increased power consumption. Defaults to
           # 'false'.
           FastConnectable = cfg.enableFastConnectable;
-        }
-        // lib.optionalAttrs cfg.enableA2DPSink {
-          Enable = "Source,Sink,Media,Socket";
         };
       };
     };
