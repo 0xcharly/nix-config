@@ -120,7 +120,7 @@
           create-env =
             envvars:
             lib.concatStringsSep "\n" (
-              lib.mapAttrsToList (key: value: "export ${key}=${builtins.toString value}") envvars
+              lib.mapAttrsToList (key: value: "export ${key}=${toString value}") envvars
             );
         in
         create-env waylandSessionVariables;
