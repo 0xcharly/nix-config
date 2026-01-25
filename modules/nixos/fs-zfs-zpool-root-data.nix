@@ -109,7 +109,7 @@
                     pkgs.coreutils
                     config.boot.zfs.package
                   ];
-                  text = lib.concatStringsSep "\n" (builtins.map install-datadir datadirs);
+                  text = lib.concatStringsSep "\n" (map install-datadir datadirs);
                 };
               in
               lib.getExe set-datadir-perms;

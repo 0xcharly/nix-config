@@ -47,10 +47,10 @@
             in
             mkScrapeConfigs {
               gatus = lib.singleton { targets = [ facts.services.gatus.domain ]; };
-              servers_system_stats = builtins.map mkNodeExporterConfig inventory.servers;
-              servers_zfs_stats = builtins.map mkZfsExporterConfig inventory.servers;
-              workstations_system_stats = builtins.map mkNodeExporterConfig inventory.workstations;
-              workstations_zfs_stats = builtins.map mkZfsExporterConfig inventory.workstations;
+              servers_system_stats = map mkNodeExporterConfig inventory.servers;
+              servers_zfs_stats = map mkZfsExporterConfig inventory.servers;
+              workstations_system_stats = map mkNodeExporterConfig inventory.workstations;
+              workstations_zfs_stats = map mkZfsExporterConfig inventory.workstations;
             };
         };
       };

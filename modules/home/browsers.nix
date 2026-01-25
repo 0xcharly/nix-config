@@ -16,7 +16,7 @@
       ];
 
       associations = builtins.listToAttrs (
-        builtins.map
+        map
           (name: {
             inherit name;
             value = browserList;

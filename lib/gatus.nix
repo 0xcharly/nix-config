@@ -33,9 +33,9 @@ let
     let
       params = mkAlertParams args;
     in
-    builtins.map (type: params // { inherit type; }) alert-providers;
+    map (type: params // { inherit type; }) alert-providers;
 
-  mkShortAlerts = builtins.map (type: { inherit type; }) alert-providers;
+  mkShortAlerts = map (type: { inherit type; }) alert-providers;
 in
 {
   inherit mkAlertParams;
@@ -159,7 +159,7 @@ in
         "."
         "#"
       ];
-      substitutes = builtins.map (_: "-") (lib.range 1 (builtins.length forbidden));
+      substitutes = map (_: "-") (lib.range 1 (builtins.length forbidden));
       key = builtins.replaceStrings forbidden substitutes "${group}_${endpoint}";
 
       parameters = {

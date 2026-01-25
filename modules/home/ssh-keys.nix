@@ -32,5 +32,5 @@
         "keys/${tier}-access/${key}_ed25519_key.pub".path = mkSshKeyPath "${key}.pub";
       };
     in
-    lib.mergeAttrsList (builtins.map (mkSshKeyPair tier) keys);
+    lib.mergeAttrsList (map (mkSshKeyPair tier) keys);
 }

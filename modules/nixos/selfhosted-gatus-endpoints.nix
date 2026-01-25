@@ -76,7 +76,7 @@ in
     endpoints =
       qyrnl-checks
       ++ pieceofenglish-checks
-      ++ (builtins.map gatus.mkPingHostCheck inventory.servers)
+      ++ (map gatus.mkPingHostCheck inventory.servers)
       ++ [
         (gatus.mkHttpServiceCheck "atuin" facts.services.atuin)
         (gatus.mkHttpServiceCheck "CalDAV" facts.services.radicale)

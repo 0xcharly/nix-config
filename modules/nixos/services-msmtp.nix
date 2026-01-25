@@ -50,7 +50,7 @@
               ${user}.extraGroups = [ "sendmail" ];
             };
           in
-          lib.mergeAttrsList (builtins.map addToSendmailGroup ([ "delay" ] ++ cfg.allowUsers));
+          lib.mergeAttrsList (map addToSendmailGroup ([ "delay" ] ++ cfg.allowUsers));
       };
     };
 }

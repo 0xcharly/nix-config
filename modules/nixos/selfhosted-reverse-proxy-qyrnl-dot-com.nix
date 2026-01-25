@@ -71,8 +71,8 @@
                 search
                 vaultwarden
               ];
-              reverse-proxy-configs = builtins.map caddy.mkReverseProxyConfig (
-                builtins.map (service: service // { import = tmpl; }) services
+              reverse-proxy-configs = map caddy.mkReverseProxyConfig (
+                map (service: service // { import = tmpl; }) services
               );
             in
             lib.mergeAttrsList reverse-proxy-configs

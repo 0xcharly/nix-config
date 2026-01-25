@@ -92,7 +92,7 @@ in
               process_children_only = false;
             };
           };
-          mapPolicy = mkConfig: datasets: lib.mergeAttrsList (builtins.map mkConfig datasets);
+          mapPolicy = mkConfig: datasets: lib.mergeAttrsList (map mkConfig datasets);
         in
         lib.mergeAttrsList [
           (mapPolicy mkDailyPolicy cfg.daily)

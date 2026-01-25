@@ -284,9 +284,7 @@
 
               map-workspaces =
                 mapFn:
-                builtins.map (x: mapFn (toString x) (if x == 0 then "10" else (toString x))) (
-                  builtins.genList (x: x) 10
-                );
+                map (x: mapFn (toString x) (if x == 0 then "10" else (toString x))) (builtins.genList (x: x) 10);
               map-movements =
                 mapFn:
                 lib.attrsets.mapAttrsToList mapFn {
