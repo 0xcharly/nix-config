@@ -11,26 +11,29 @@
 {
   imports = [
     flake.modules.nixos.networking-common
-    inputs.nix-config-secrets.modules.nixos.wireless-passwords
+    inputs.nix-config-secrets.modules.nixos.wireless-config
   ];
 
   # NetworkManager is controlled using either nmcli or nmtui.
   networking.networkmanager = {
     enable = true;
     ensureProfiles = {
-      environmentFiles = [ config.age.secrets."wireless-passwords.env".path ];
+      environmentFiles = [ config.age.secrets."wireless-config.env".path ];
       profiles =
         let
           mkWirelessProfile = id: {
             "profile-${toString id}" = {
               connection = {
-                id = "wireless-${toString id}";
+                id = "$SSID${toString id}";
                 type = "wifi";
+                autoconnect = "$AUTO${toString id}";
               };
-              wifi.ssid = "$SSID${toString id}";
+              wifi = {
+                mode = "$MODE${toString id}";
+                ssid = "$SSID${toString id}";
+              };
               wifi-security = {
-                auth-alg = "open";
-                key-mgmt = "wpa-psk";
+                key-mgmt = "$MGMT${toString id}";
                 psk = "$PASS${toString id}";
               };
             };
@@ -40,7 +43,7 @@
           google-guest-profile = {
             profile-google-guest = {
               connection = {
-                id = "google-guest";
+                id = "Google-Guest";
                 type = "wifi";
               };
               wifi.ssid = "Google-Guest";

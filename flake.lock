@@ -464,11 +464,11 @@
         "nixpkgs": "nixpkgs_12"
       },
       "locked": {
-        "lastModified": 1768739775,
-        "narHash": "sha256-ykZFIy5zgzV6Lo49ZRtafEPNcAPw9iW+IHS24HexrYM=",
+        "lastModified": 1769312220,
+        "narHash": "sha256-ybl5OUT3Z7sOvem5me0z75k7i7CDvjQ9M4PtmgS+fnA=",
         "owner": "0xcharly",
         "repo": "nix-config-secrets",
-        "rev": "7f9601aec2757dfc22518d49a415369ceb1c9100",
+        "rev": "d664fb5285fc2818a93472ec1da89f5472a2957a",
         "type": "github"
       },
       "original": {
