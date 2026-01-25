@@ -3,8 +3,6 @@
   inputs,
   hostName,
   modulesPath,
-  lib,
-  pkgs,
   ...
 }:
 {
