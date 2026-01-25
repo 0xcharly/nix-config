@@ -186,6 +186,10 @@
             repeat_rate = 60;
 
             touchpad = {
+              # Button presses with 1, 2, or 3 fingers will be mapped to LMB,
+              # RMB, and MMB respectively. This disables interpretation of
+              # clicks based on location on the touchpad.
+              clickfinger_behavior = true;
               natural_scroll = true;
               scroll_factor = 0.25;
             };
