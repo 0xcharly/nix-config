@@ -3,10 +3,7 @@
   home.packages = with pkgs; [
     _1password-gui
     bitwarden-desktop
-    blueberry
     nautilus
-    obsidian
-    proton-pass
     xfce.thunar
   ];
 
