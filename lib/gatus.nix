@@ -183,9 +183,9 @@ in
       runtimeInputs = with pkgs; [ curl ];
       text = ''
         TOKEN=$(<"${tokenFile}")
-        TOKEN="$${TOKEN//$'\n'/}"
+        TOKEN="''${TOKEN//$'\n'/}"
 
-        curl -X POST -H "Authorization: Bearer $${TOKEN}" "${url}"
+        curl -X POST -H "Authorization: Bearer ''${TOKEN}" "${url}"
       '';
     };
 }
