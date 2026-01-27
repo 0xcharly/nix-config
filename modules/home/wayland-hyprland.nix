@@ -33,7 +33,7 @@
       };
 
       exec-once = mkOption {
-        type = types.attrsOf types.pkgs;
+        type = types.attrsOf types.package;
         example = lib.literalExpression ''
           {
             "1" = config.programs.chromium.package;
