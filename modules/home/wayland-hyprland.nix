@@ -31,6 +31,20 @@
           monitor = "eDP-1, 2880x1920@120.00000, 0x0, 2.00";
         '';
       };
+
+      exec-once = mkOption {
+        type = types.attrsOf types.pkgs;
+        example = lib.literalExpression ''
+          {
+            "1" = config.programs.chromium.package;
+            "3" = config.programs.kitty.package;
+          }
+        '';
+        default = {
+          "1" = config.programs.chromium.package;
+          "3" = config.programs.kitty.package;
+        };
+      };
     };
 
     idle = {
@@ -149,8 +163,8 @@
         enable = true;
 
         # Set the Hyprland and XDPH packages to null to use the ones from the NixOS module.
-        package = null;
-        portalPackage = null;
+        package = lib.mkDefault null;
+        portalPackage = lib.mkDefault null;
 
         # Managed by UWSM.
         systemd.enable = false;
@@ -166,10 +180,11 @@
           };
 
           # Open apps on startup.
-          exec-once = [
-            "[workspace 1] ${uwsmGetExe config.programs.chromium.package}"
-            "[workspace 3] ${uwsmGetExe config.programs.kitty.package}"
-          ];
+          exec-once =
+            let
+              mkEntry = workspace: pkg: "[workspace ${workspace}] ${uwsmGetExe pkg}";
+            in
+            lib.mapAttrsToList mkEntry cfg.hyprland.exec-once;
 
           # Monitor config.
           inherit (cfg.hyprland) monitor;
@@ -312,9 +327,6 @@
               "SUPER SHIFT, P,      exec, ${uwsmGetExe pkgs.grimblast} save active - | ${uwsmGetExe screenshot-editor}"
               "SUPER CTRL,  P,      exec, ${uwsmGetExe pkgs.grimblast} save screen - | ${uwsmGetExe screenshot-editor}"
 
-              "SUPER ALT,   F,      exec, ${uwsmGetExe config.programs.firefox.finalPackage}"
-              "SUPER ALT,   C,      exec, ${uwsmGetExe config.programs.chromium.package}"
-              "SUPER ALT,   B,      exec, ${uwsmGetExe pkgs.bitwarden-desktop}"
               "SUPER ALT,   R,      exec, ${uwsmGetExe set-aspect-ratio} 16 9"
 
               "SUPER,       D,      hy3:makegroup,   h"
