@@ -42,7 +42,6 @@
     golink.url = "github:tailscale/golink"; # go/link service.
 
     nix-config-colorscheme.url = "github:0xcharly/nix-config-colorscheme"; # Custom colorscheme.
-    nix-config-fonts.url = "github:0xcharly/nix-config-fonts"; # Unfree fonts.
     nix-config-nvim.url = "github:0xcharly/nix-config-nvim"; # Neovim.
     nix-config-secrets.url = "github:0xcharly/nix-config-secrets"; # Secrets management.
     nix-config-shell.url = "github:0xcharly/nix-config-shell"; # Quickshell.

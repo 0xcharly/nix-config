@@ -28,13 +28,14 @@ in
       clearDefaultKeybinds = true;
       settings =
         let
-          font = flake.lib.user.gui.fonts.terminal;
           inherit (flake.lib.fonts) mapFontCodepoints;
+          inherit (flake.lib.user.gui) fonts;
+          font = fonts.terminal;
         in
         {
           font-family = [
             font.name
-            "Noto Emoji" # Monochrome emojis
+            fonts.emoji.name
           ];
           font-size = font.size;
           font-feature = font.features;

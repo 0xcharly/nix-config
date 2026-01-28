@@ -1,8 +1,4 @@
-{
-  flake,
-  inputs,
-  ...
-}:
+{ flake, ... }:
 { pkgs, ... }:
 {
   fonts.fontconfig = {
@@ -27,11 +23,8 @@
   home.packages = with pkgs; [
     material-design-icons
     nerd-fonts.symbols-only
-    noto-fonts-cjk-sans # CJK fonts
-    noto-fonts-monochrome-emoji # Monochrome emojis
-    rubik
-
-    inputs.nix-config-fonts.packages.${stdenv.hostPlatform.system}.pragmatapro
-    inputs.nix-config-fonts.packages.${stdenv.hostPlatform.system}.sys
+    noto-fonts-cjk-sans
+    noto-fonts-color-emoji
+    recursive
   ];
 }

@@ -1,20 +1,53 @@
+# https://www.recursive.design/assets/arrowtype-recursive-sansmono-specimen-230407.pdf
+[gui.fonts.variable.mono]
+name = "Recursive"
+size = 12
+features = [
+  "dlig",
+  "ss01",
+  "ss02",
+  "ss03",
+  "ss04",
+  "ss05",
+  "ss06",
+  "ss11",
+  "ss12",
+]
+
+[gui.fonts.variable.mono.variations]
+casl = 1
+crsv = 0
+mono = 1
+slnt = 0
+wght = 400
+
 [gui.fonts.terminal]
-name = "PragmataPro Mono Liga"
-size = 13
-features = ["calt", "clig", "dlig", "liga"]
+name = "Recursive Mono Casual Static"
+size = 12
+features = [
+  "dlig",
+  "ss01",
+  "ss02",
+  "ss03",
+  "ss04",
+  "ss05",
+  "ss06",
+  "ss11",
+  "ss12",
+]
 
 [gui.fonts.monospace]
-name = "PragmataPro Mono Liga"
+name = "Recursive Mono Casual Static"
 size = 13
 
 [gui.fonts.sansSerif]
-name = "Sys"
+name = "Recursive Sans Casual Static"
 size = 13
 
 [gui.fonts.serif]
-name = "Sys"
+name = "Recursive Sans Linear Static"
 size = 13
 
 [gui.fonts.emoji]
-name = "Noto Emoji" # Monochrome version
+name = "Noto Color Emoji"
 size = 13
