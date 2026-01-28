@@ -46,14 +46,15 @@ in
 
           set_color brblack
           printf (prompt_hostname)
+          set_color -i green
+          printf " %s " (prompt_pwd | string split /)[-1]
+          set_color normal
           if test $last_status -ne 0
               set_color red
           else
-              set_color green
+              set_color brblack
           end
-          printf " ⌁ "
-          set_color brblack
-          printf "♯ "
+          printf "\$ "
           set_color normal
         '';
       };
