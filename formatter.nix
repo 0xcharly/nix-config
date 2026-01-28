@@ -10,7 +10,4 @@ inputs.treefmt-nix.lib.mkWrapper pkgs {
     prettier.enable = true;
     shfmt.enable = false;
   };
-  settings.formatter.prettier.excludes = [
-    "modules/home/wayland-waybar-style.css"
-  ];
 }
