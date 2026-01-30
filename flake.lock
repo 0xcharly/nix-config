@@ -368,11 +368,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1769743212,
-        "narHash": "sha256-qlByvm64ZTTH71r7H8IYEmKxDGd5j4GllLT7vEGSC7w=",
+        "lastModified": 1769743365,
+        "narHash": "sha256-AKuTiSRVjE4bXLUmim8pz0qM/23eEMQmOjZ/1NTcz2w=",
         "owner": "0xcharly",
         "repo": "nix-config-colorscheme",
-        "rev": "35577df5f667a722cb3770308b8cd76c68f90b6f",
+        "rev": "c1cbb8b2d0fc1478dbd16e78f77b31da5b0e5ac1",
         "type": "github"
       },
       "original": {
