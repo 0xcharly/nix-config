@@ -44,15 +44,24 @@ in
         fish_prompt = ''
           set -l last_status $status
 
+          # Reset all ANSI sequences
+          set_color normal
+
+          # Hostname
           if test -z "$SSH_CONNECTION"
             set_color $fish_color_host
           else
             set_color $fish_color_host_remote
           end
           printf (prompt_hostname)
+          set_color normal
+
+          # CWD: last component only (i.e. current directory name)
           set_color $fish_color_cwd
           printf " %s " (prompt_pwd | string split /)[-1]
+          set_color normal
 
+          # Prompt character: colored based on last $status
           if test $last_status -ne 0
               set_color $fish_color_status
           else
