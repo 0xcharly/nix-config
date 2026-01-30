@@ -44,7 +44,14 @@ in
         fish_prompt = ''
           set -l last_status $status
 
-          printf "%s %s " (prompt_hostname) (prompt_pwd | string split /)[-1]
+          if test -n "$SSH_CONNECTION"
+            set_color $fish_prompt_host
+          else
+            set_color $fish_prompt_host_remote
+          end
+          printf (prompt_hostname)
+          set_color $fish_prompt_cwd
+          printf " %s " (prompt_pwd | string split /)[-1]
 
           if test $last_status -ne 0
               set_color $fish_color_status
