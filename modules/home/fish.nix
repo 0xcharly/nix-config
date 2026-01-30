@@ -45,12 +45,12 @@ in
           set -l last_status $status
 
           if test -n "$SSH_CONNECTION"
-            set_color $fish_prompt_host
+            set_color $fish_color_host
           else
-            set_color $fish_prompt_host_remote
+            set_color $fish_color_host_remote
           end
           printf (prompt_hostname)
-          set_color $fish_prompt_cwd
+          set_color $fish_color_cwd
           printf " %s " (prompt_pwd | string split /)[-1]
 
           if test $last_status -ne 0
