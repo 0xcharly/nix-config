@@ -1,6 +1,6 @@
 { inputs, ... }:
 {
-  imports = [ inputs.nix-config-colorscheme.modules.home.fish ];
+  imports = [ inputs.nix-config-colorscheme.modules.home.mako ];
 
   services.mako = {
     enable = true;
