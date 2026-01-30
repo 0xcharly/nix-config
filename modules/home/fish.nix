@@ -47,9 +47,9 @@ in
           printf "%s %s " (prompt_hostname) (prompt_pwd | string split /)[-1]
 
           if test $last_status -ne 0
-              set_color (fish_color_status)
+              set_color $fish_color_status
           else
-              set_color (fish_color_host)
+              set_color $fish_color_host
           end
           printf "\$ "
           set_color normal
