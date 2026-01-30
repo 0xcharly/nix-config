@@ -44,15 +44,12 @@ in
         fish_prompt = ''
           set -l last_status $status
 
-          set_color brblack
-          printf (prompt_hostname)
-          set_color -i green
-          printf " %s " (prompt_pwd | string split /)[-1]
-          set_color normal
+          printf "%s %s " (prompt_hostname) (prompt_pwd | string split /)[-1]
+
           if test $last_status -ne 0
-              set_color red
+              set_color (fish_color_status)
           else
-              set_color brblack
+              set_color (fish_color_host)
           end
           printf "\$ "
           set_color normal
