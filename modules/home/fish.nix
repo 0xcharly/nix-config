@@ -44,7 +44,7 @@ in
         fish_prompt = ''
           set -l last_status $status
 
-          if test -n "$SSH_CONNECTION"
+          if test -z "$SSH_CONNECTION"
             set_color $fish_color_host
           else
             set_color $fish_color_host_remote
