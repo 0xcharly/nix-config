@@ -21,9 +21,9 @@ in
     fish = {
       enable = true;
       interactiveShellInit = ''
-        fish_vi_key_bindings # Enable vi bindings.
+        fish_vi_key_bindings # Enable vi bindings
 
-        # Fixes cursor shape behavior in vim mode.
+        # Fixes cursor shape behavior in vim mode
         set fish_cursor_default block
         set fish_cursor_insert block
         set fish_cursor_replace_one block
@@ -36,6 +36,9 @@ in
         bind --erase -M insert ctrl-t
         bind --erase alt-c
         bind --erase -M insert alt-c
+
+        # Convenience binds
+        bind \cw backward-kill-word
       '';
 
       functions = {
