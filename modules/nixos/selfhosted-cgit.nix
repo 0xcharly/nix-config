@@ -22,6 +22,7 @@
           package = pkgs.cgit-pink;
           scanPath = "/tank/backups/github";
           nginx.virtualHost = facts.services.cgit.domain;
+          gitHttpBackend.checkExportOkFiles = false; # Instance is private.
 
           # cgit-pink options.
           extraConfig = ''
