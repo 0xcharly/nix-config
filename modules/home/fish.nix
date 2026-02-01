@@ -44,34 +44,27 @@ in
       functions = {
         fish_greeting = ""; # Disable greeting message.
         fish_mode_prompt = ""; # Disable prompt vi mode reporting.
+        prompt_template = ''
+          if not set -q __fish_prompt_template
+            # Cache the resulting template string since all of its content is
+            # static, and it shells out to lolcat for highlightings.
+            set -g __fish_prompt_template (
+                # Reset all ANSI sequences before and after the prompt
+                set_color normal
+                # Create a template string starting with the hostname: "<hostname> %s $ ".
+                # '%' is expanded into '%s' separately to avoid lolcat inserting escape sequences between '%' and 's'.
+                printf (
+                      printf "%s %% \$ " (prompt_hostname) \
+                    | ${lib.getExe pkgs.lolcat} --force --seed=(printf "%d" 0x(bat /etc/machine-id |head -c8)) -p 0.5 \
+                    | sed "s/%/%s/"
+                ) (set_color --italics brblack; echo -n %s; set_color normal))
+          end
+          echo -n $__fish_prompt_template
+        '';
         fish_prompt = ''
-          set -l last_status $status
-
-          # Reset all ANSI sequences
-          set_color normal
-
-          # Hostname
-          if test -z "$SSH_CONNECTION"
-            set_color $fish_color_host
-          else
-            set_color $fish_color_host_remote
-          end
-          printf (prompt_hostname)
-          set_color normal
-
+          # Format template string with CWD.
           # CWD: last component only (i.e. current directory name)
-          set_color $fish_color_cwd
-          printf " %s " (prompt_pwd | string split /)[-1]
-          set_color normal
-
-          # Prompt character: colored based on last $status
-          if test $last_status -ne 0
-              set_color $fish_color_status
-          else
-              set_color $fish_color_host
-          end
-          printf "\$ "
-          set_color normal
+          printf (prompt_template) (prompt_pwd | string split /)[-1]
         '';
       };
       shellAliases.nixsh = "nix-shell --run ${lib.getExe cfg.package}";
