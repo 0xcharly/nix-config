@@ -99,6 +99,10 @@
       in
       cache;
 
+    preview-avatar.exec = ''
+      ${lib.getExe pkgs.glslviewer} --uniform -h 1024 -w 1024 data/avatar.frag
+    '';
+
     ssh-copy-terminfo.exec = ''
       ${lib.getExe' pkgs.ncurses "infocmp"} -x | ssh -o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "$1" -- tic -x -
     '';
