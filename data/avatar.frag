@@ -41,7 +41,6 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
     float seamWidth = 3.75; // smaller = wider
     float merge = exp(-abs(side) * seamWidth);
 
-
     // Animate seam
     merge = exp(-abs(side + 0.05 * sin(u_time)) * 4.0);
 
