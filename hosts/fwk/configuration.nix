@@ -37,6 +37,7 @@
     flake.modules.nixos.nix-client-config
     flake.modules.nixos.overlays
     flake.modules.nixos.programs-essentials
+    flake.modules.nixos.programs-gnome-calendar
     flake.modules.nixos.programs-iotop
     flake.modules.nixos.programs-login-manager
     flake.modules.nixos.programs-packages-common
