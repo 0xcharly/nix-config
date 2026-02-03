@@ -71,6 +71,18 @@
         extraGroups = [ "_dav" ];
         group = lib.mkDefault "radicale";
       };
+      navidrome = {
+        uid = 3006;
+        isSystemUser = lib.mkDefault true;
+        extraGroups = ["_music"];
+        group = lib.mkDefault "navidrome";
+      };
+      jellyfin = {
+        uid = 3007;
+        isSystemUser = lib.mkDefault true;
+        extraGroups = ["_media" "_music"];
+        group = lib.mkDefault "jellyfin";
+      };
 
       # forgejo = {
       #   isSystemUser = lib.mkDefault true;
@@ -81,16 +93,6 @@
       #   isSystemUser = lib.mkDefault true;
       #   extraGroups = ["_pics"];
       #   group = lib.mkDefault "immich";
-      # };
-      # jellyfin = {
-      #   isSystemUser = lib.mkDefault true;
-      #   extraGroups = ["_media" "_music"];
-      #   group = lib.mkDefault "jellyfin";
-      # };
-      # navidrome = {
-      #   isSystemUser = lib.mkDefault true;
-      #   extraGroups = ["_music"];
-      #   group = lib.mkDefault "navidrome";
       # };
       # paperless = {
       #   isSystemUser = lib.mkDefault true;
@@ -110,6 +112,8 @@
       git.gid = 3003;
       cgit.gid = 3004;
       radicale.gid = 3005;
+      navidrome.gid = 3006;
+      jellyfin.gid = 3007;
 
       # Standalone groups.
       _zfsadm.gid = 4000;
@@ -123,8 +127,6 @@
       # TODO: Migrate the remaining groups.
       forgejo = { };
       immich = { };
-      jellyfin = { };
-      navidrome = { };
       paperless = { };
       vaultwarden = { };
     };
