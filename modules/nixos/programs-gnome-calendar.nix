@@ -13,4 +13,7 @@
     gnome-online-accounts.enable = true;
     gnome-keyring.enable = true;
   };
+
+  # Auto unlock default keyring on login
+  security.pam.services.login.enableGnomeKeyring = true;
 }
