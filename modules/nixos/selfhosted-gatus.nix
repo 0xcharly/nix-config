@@ -32,6 +32,11 @@
 
             metrics = true; # Exposes metrics for Prometheus.
             alerting = {
+              # NOTE: Linode blocks outgoing SMTP connections
+              #   https://techdocs.akamai.com/cloud-computing/docs/send-email
+              #   https://www.linode.com/docs/guides/running-a-mail-server/
+              #   gomail fails with: dial tcp <ip>:587: i/o timeout
+              # These restrictions have been lifted for this instance.
               email = rec {
                 to = "mail@qyrnl.com";
                 from = "status@qyrnl.com";
@@ -39,15 +44,7 @@
                 password = "$EMAIL_TOKEN";
                 host = "smtp.protonmail.ch";
                 port = 587;
-                client.insecure = false;
-                default-alert = flake.lib.gatus.mkAlertParams {
-                  # FIXME: Linode blocks outgoing SMTP connections
-                  #   https://techdocs.akamai.com/cloud-computing/docs/send-email
-                  #   https://www.linode.com/docs/guides/running-a-mail-server/
-                  #   gomail fails with: dial tcp <ip>:587: i/o timeout
-                  enabled = false;
-                  failure-threshold = 2;
-                };
+                default-alert = flake.lib.gatus.mkAlertParams { failure-threshold = 2; };
               };
               gotify = {
                 server-url = "https://${facts.services.gotify.domain}";
