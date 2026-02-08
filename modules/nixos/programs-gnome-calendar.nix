@@ -15,5 +15,8 @@
   };
 
   # Auto unlock default keyring on login
-  security.pam.services.login.enableGnomeKeyring = true;
+  security.pam.services = {
+    greetd.enableGnomeKeyring = true;
+    login.enableGnomeKeyring = true;
+  };
 }
