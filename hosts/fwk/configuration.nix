@@ -24,12 +24,12 @@
     flake.modules.common.overlays
 
     flake.modules.nixos.bootloader-systemd-boot
+    flake.modules.nixos.essentials-laptop
     flake.modules.nixos.fs-zfs-system
     flake.modules.nixos.fs-zfs-zpool-root
     flake.modules.nixos.fs-zfs-zpool-root-home
     flake.modules.nixos.hardware-cpu-amd
     flake.modules.nixos.hardware-framework-13
-    flake.modules.nixos.hardware-laptop-essentials
     flake.modules.nixos.hardware-gpu-amd
     flake.modules.nixos.networking-bluetooth
     flake.modules.nixos.networking-wireless

@@ -4,6 +4,4 @@
     enable = true;
     powertop.enable = true; # Auto-tune on start.
   };
-
-  services.upower.enable = true;
 }

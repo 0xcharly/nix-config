@@ -23,6 +23,7 @@
     flake.modules.common.overlays
 
     flake.modules.nixos.bootloader-systemd-boot
+    flake.modules.nixos.essentials-desktop
     flake.modules.nixos.fs-zfs-system
     flake.modules.nixos.fs-zfs-zpool-root
     flake.modules.nixos.fs-zfs-zpool-root-home
