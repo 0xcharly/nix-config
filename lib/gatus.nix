@@ -1,11 +1,11 @@
 { lib }:
 let
+  # NOTE: Linode blocks outgoing SMTP connections by default.
+  #   https://techdocs.akamai.com/cloud-computing/docs/send-email
+  #   https://www.linode.com/docs/guides/running-a-mail-server/
+  #   gomail fails with: dial tcp <ip>:587: i/o timeout
   alert-providers = [
-    # FIXME: Linode blocks outgoing SMTP connections
-    #   https://techdocs.akamai.com/cloud-computing/docs/send-email
-    #   https://www.linode.com/docs/guides/running-a-mail-server/
-    #   gomail fails with: dial tcp <ip>:587: i/o timeout
-    # "email"
+    "email"
     "gotify"
     "pushover"
   ];
