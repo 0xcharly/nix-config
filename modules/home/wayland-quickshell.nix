@@ -12,8 +12,11 @@
   ];
 
   options.node.wayland.arcshell = with lib; {
+    wallpaper = {
+      animate = mkEnableOption "Enable wallpaper animations";
+    };
     modules = {
-      powerManagement = mkEnableOption "Enable the power management module";
+      power = mkEnableOption "Enable the power management module";
     };
   };
 
@@ -25,7 +28,10 @@
       programs.arcshell = {
         enable = true;
         systemd.enable = true;
-        settings.theme.hud.widgets.powerManagement.enable = cfg.modules.powerManagement;
+        settings.theme = {
+          desktop.animateWallpaper = cfg.wallpaper.animate;
+          hud.bar.widgets.power.enable = cfg.modules.power;
+        };
       };
     };
 }

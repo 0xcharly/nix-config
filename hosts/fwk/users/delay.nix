@@ -70,7 +70,7 @@
         prefix = "${lib.getExe config.node.wayland.uwsm-wrapper.package} --";
       };
 
-      arcshell.modules.powerManagement = true;
+      arcshell.modules.power = true;
     };
   };
 }
