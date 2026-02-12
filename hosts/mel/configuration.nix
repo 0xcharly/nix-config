@@ -59,10 +59,7 @@
       zpool.root.reservation = "2GiB";
     };
 
-    users.delay.ssh = {
-      authorizeTailscaleInternalKey = true;
-      authorizeTailscalePublicKey = true;
-    };
+    users.delay.ssh.authorizeTailscaleInternalKey = true;
   };
 
   networking = {
