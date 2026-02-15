@@ -30,7 +30,7 @@
         systemd.enable = true;
         settings.theme = {
           desktop.animateWallpaper = cfg.wallpaper.animate;
-          hud.bar.widgets.power.enable = cfg.modules.power;
+          hud.bar.power.enable = cfg.modules.power;
         };
       };
     };
