@@ -3,6 +3,83 @@ domain = "qyrnl.com"
 [wireguard.tailscale]
 tailnet = "neko-danio.ts.net"
 
+# チャーリー.com
+[dns."xn--7ck8cva5eb.com"]
+nameservers = ["ns1.xn--7ck8cva5eb.com", "ns2.xn--7ck8cva5eb.com"]
+
+[dns."xn--7ck8cva5eb.com".ns1]
+host = "linode-jp"
+ipv4 = "172.237.20.186"
+ipv6 = "2600:3c18::2000:a4ff:fe80:d6d4"
+
+[dns."xn--7ck8cva5eb.com".ns2]
+host = "linode-fr"
+ipv4 = "172.233.245.4"
+ipv6 = "2600:3c07::2000:31ff:fe53:d2e1"
+
+[dns."xn--7ck8cva5eb.com".mx]
+host = "mail-vt1"
+ipv4 = "172.237.13.18"
+ipv6 = "2600:3c18::2000:4fff:fe5e:fe68"
+
+# 0xcharly.com
+[dns."0xcharly.com"]
+nameservers = ["ns1.0xcharly.com", "ns2.0xcharly.com"]
+
+[dns."0xcharly.com".ns1]
+host = "linode-jp"
+ipv4 = "172.237.20.186"
+ipv6 = "2600:3c18::2000:a4ff:fe80:d6d4"
+
+[dns."0xcharly.com".ns2]
+host = "linode-fr"
+ipv4 = "172.233.245.4"
+ipv6 = "2600:3c07::2000:31ff:fe53:d2e1"
+
+[dns."0xcharly.com".mx]
+host = "mail-vt1"
+ipv4 = "172.237.13.18"
+ipv6 = "2600:3c18::2000:4fff:fe5e:fe68"
+
+# splicedpixel.com
+[dns."splicedpixel.com"]
+nameservers = ["ns1.splicedpixel.com", "ns2.splicedpixel.com"]
+
+[dns."splicedpixel.com".ns1]
+host = "linode-jp"
+ipv4 = "172.237.20.186"
+ipv6 = "2600:3c18::2000:a4ff:fe80:d6d4"
+
+[dns."splicedpixel.com".ns2]
+host = "linode-fr"
+ipv4 = "172.233.245.4"
+ipv6 = "2600:3c07::2000:31ff:fe53:d2e1"
+
+[dns."splicedpixel.com".mx]
+host = "mail-vt1"
+ipv4 = "172.237.13.18"
+ipv6 = "2600:3c18::2000:4fff:fe5e:fe68"
+
+# splicedpixel.xyz
+[dns."splicedpixel.xyz"]
+nameservers = ["ns1.splicedpixel.xyz", "ns2.splicedpixel.xyz"]
+
+[dns."splicedpixel.xyz".ns1]
+host = "linode-jp"
+ipv4 = "172.237.20.186"
+ipv6 = "2600:3c18::2000:a4ff:fe80:d6d4"
+
+[dns."splicedpixel.xyz".ns2]
+host = "linode-fr"
+ipv4 = "172.233.245.4"
+ipv6 = "2600:3c07::2000:31ff:fe53:d2e1"
+
+[dns."splicedpixel.xyz".mx]
+host = "mail-vt1"
+ipv4 = "172.237.13.18"
+ipv6 = "2600:3c18::2000:4fff:fe5e:fe68"
+
+# qyrnl.com
 [dns."qyrnl.com"]
 nameservers = ["ns1.qyrnl.com", "ns2.qyrnl.com"]
 
@@ -16,6 +93,7 @@ host = "linode-fr"
 ipv4 = "100.64.0.141"
 ipv6 = "fd7a:115c:a1e0::e736:5f72"
 
+# pieceofenglish.fr
 [dns."pieceofenglish.fr"]
 nameservers = ["ns1.pieceofenglish.fr", "ns2.pieceofenglish.fr"]
 
@@ -174,26 +252,29 @@ ssh-rsa = "AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+VTTvDP6mH
 [ssh.internet.knownHosts."git.qyrnl.com"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAILCvz0lTYUokMyuoq2gn+STcWY+EPCw+zzuyLOcj9nU0"
 
-[ssh.wireguard.tailscale.knownHosts."bowmore"]
+[ssh.wireguard.tailscale.knownHosts."bowmore"] # site-pt0
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIBc7+svM9KE66X8lpQzYny0byI47Kr38LsYXVyJIZd+w"
 
-[ssh.wireguard.tailscale.knownHosts."dalmore"]
+[ssh.wireguard.tailscale.knownHosts."dalmore"] # site-pm1
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIPEQB+CwUB/zGI76uwH95mhwnhvHQKw1/J08ioDzw+W/"
 
-[ssh.wireguard.tailscale.knownHosts."fwk"]
+[ssh.wireguard.tailscale.knownHosts."fwk"] # node-px0
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIOOGCAJVRToabx32L6jIUdzDhU43QWa6dXm4sAN/H96m"
 
-[ssh.wireguard.tailscale.knownHosts."linode-fr"]
+[ssh.wireguard.tailscale.knownHosts."linode-fr"] # gate-vp1
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIPIhfhgQwVE1yt7xVgZ5jz+3Z0omItxrhyOi+CvHcs0B"
 
-[ssh.wireguard.tailscale.knownHosts."linode-jp"]
+[ssh.wireguard.tailscale.knownHosts."linode-jp"] # gate-vt0
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAILb+AwJFckuzpo34rM9AhyuIMjPExUi+6svoZGWKVKGN"
 
-[ssh.wireguard.tailscale.knownHosts."nyx"]
+[ssh.wireguard.tailscale.knownHosts."nyx"] # node-nyx
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIHsn07q7SmdP1M09ZIrz0bD9Te+5OMVVlfGEtAP9+iP9"
 
-[ssh.wireguard.tailscale.knownHosts."skl"]
+[ssh.wireguard.tailscale.knownHosts."skl"] # node-skl
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIBu+3cdkRlXUXS4MIwZNNKMo9Ia2XUZE7Ze6haIttCur"
 
-[ssh.wireguard.tailscale.knownHosts."x1p"]
+[ssh.wireguard.tailscale.knownHosts."x1p"] # node-x1p
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIJGA1jfPuKCEaOfYh9H9wO/HTXiOTLxBCfgVXp5Sx/Ca"
+
+[ssh.wireguard.tailscale.knownHosts."mail-vt1"]
+ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIOF74XheqFzcb9eYwOh1mrTSUSFLtOVK2OIfDwCa1Uri"
