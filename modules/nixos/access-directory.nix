@@ -27,6 +27,7 @@
       delay = {
         # uid = 2000;
         extraGroups = [
+          "mail"
           "_files"
           "_media"
           "_music"
@@ -38,6 +39,11 @@
       ayako.uid = 2001;
 
       # System users.
+      mail = {
+        uid = 3000;
+        isSystemUser = lib.mkDefault true;
+        group = lib.mkDefault "mail";
+      };
       syncoid = {
         uid = 3001;
         isSystemUser = lib.mkDefault true;
@@ -107,6 +113,7 @@
       ayako.gid = 2001;
 
       # System users' groups.
+      mail.gid = 3000;
       syncoid.gid = 3001;
       linkwarden.gid = 3002;
       git.gid = 3003;

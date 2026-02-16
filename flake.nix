@@ -47,6 +47,9 @@
     nix-config-secrets.url = "github:0xcharly/nix-config-secrets"; # Secrets management.
     nix-config-shell.url = "github:0xcharly/nix-config-shell"; # Quickshell.
 
+    # Out of the box mailserver.
+    simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-25.11";
+
     # macOS only: system configuration with Nix.
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
