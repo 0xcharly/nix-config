@@ -42,6 +42,7 @@
     flake.modules.nixos.programs-greetd-autologin
     flake.modules.nixos.programs-iotop
     flake.modules.nixos.programs-packages-common
+    flake.modules.nixos.programs-secrets
     flake.modules.nixos.programs-sudo
     flake.modules.nixos.programs-terminfo
     flake.modules.nixos.prometheus-exporters-node

@@ -2,7 +2,6 @@
 {
   home.packages = with pkgs; [
     _1password-gui
-    bitwarden-desktop
     nautilus
     xfce.thunar
   ];
