@@ -7,11 +7,7 @@
   packages =
     with pkgs;
     [
-      deploy-rs
-      home-manager
       nixfmt
-
-      jq # Used in provision and remote-unlock scripts.
       nix-output-monitor # Nix Output Monitor.
     ]
     ++ lib.optionals pkgs.stdenv.isLinux [ pkgs.bitwarden-cli ];
@@ -21,90 +17,101 @@
     lsp.package = pkgs.nixd;
   };
 
-  scripts = {
-    gc.exec = ''
-      nix-collect-garbage --delete-older-than 7d
-    '';
+  scripts =
+    let
+      inhibit = why: command: ''
+        ${lib.getExe' pkgs.systemd "systemd-inhibit"} --what=idle --who=$(whoami) --why='${why}' ${command}
+      '';
+      rebuildOptions = "--option accept-flake-config true --show-trace";
+    in
+    {
+      gc.exec = ''
+        nix-collect-garbage --delete-older-than 7d
+      '';
 
-    remote-unlock.exec = builtins.readFile ./bin/remote-unlock.sh;
-    remote-unlock-emergency.exec = builtins.readFile ./bin/remote-unlock-emergency.sh;
+      remote-unlock.exec = builtins.readFile ./bin/remote-unlock.sh;
+      remote-unlock-emergency.exec = builtins.readFile ./bin/remote-unlock-emergency.sh;
 
-    provision-generic.exec = builtins.readFile ./bin/provision-generic.sh;
-    provision-linode.exec = builtins.readFile ./bin/provision-linode.sh;
-    provision-nas.exec = builtins.readFile ./bin/provision-nas.sh;
+      provision-generic.exec = builtins.readFile ./bin/provision-generic.sh;
+      provision-linode.exec = builtins.readFile ./bin/provision-linode.sh;
+      provision-nas.exec = builtins.readFile ./bin/provision-nas.sh;
 
-    rebuild.exec =
-      let
-        rebuildOptions = "--option accept-flake-config true --show-trace";
-        switch =
-          if pkgs.stdenv.isDarwin then
-            ''
-              sudo darwin-rebuild ${rebuildOptions} switch --flake .
-            ''
-          else
-            ''
-              if test $(grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"; then
-                sudo nixos-rebuild ${rebuildOptions} switch --flake .
-              else
-                home-manager ${rebuildOptions} switch -b hm.bak --flake .
-              fi
-            '';
-      in
-      switch;
+      rebuild.exec =
+        if pkgs.stdenv.isDarwin then
+          ''
+            sudo darwin-rebuild ${rebuildOptions} switch --flake .
+          ''
+        else
+          ''
+            if test $(grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"; then
+              ${inhibit "Rebuilding NixOS system" "sudo nixos-rebuild ${rebuildOptions} switch --flake ."}
+            else
+              ${inhibit "Rebuilding home-manager config" "${lib.getExe pkgs.home-manager} ${rebuildOptions} switch -b hm.bak --flake ."}
+            fi
+          '';
 
-    rollback.exec =
-      let
-        rebuildOptions = "--option accept-flake-config true --show-trace";
-        switch =
-          if pkgs.stdenv.isDarwin then
-            ''
-              echo "Rollback not available on darwin."
+      rollback.exec =
+        if pkgs.stdenv.isDarwin then
+          ''
+            >&2 echo "`rollback` not available on darwin."
+            exit 1
+          ''
+        else
+          ''
+            if test $(grep ^NAME= /etc/os-release | cut -d= -f2) != "NixOS"; then
+              echo "`rollback` not available with home-manager."
               exit 1
-            ''
-          else
-            ''
-              if test $(grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"; then
-                sudo nixos-rebuild ${rebuildOptions} --rollback switch --flake .
-              else
-                echo "Rollback not available with home-manager."
-                exit 1
-              fi
-            '';
-      in
-      switch;
+            fi
 
-    cache.exec =
-      let
-        cache =
-          if pkgs.stdenv.isDarwin then
-            ''
-              echo "Cache not available on darwin."
-              exit 1
-            ''
-          else
-            ''
-              HOSTNAME=$(hostname)
-              CONFIG=''${1:-$HOSTNAME}
+            ${inhibit "Rolling back NixOS system" "sudo nixos-rebuild ${rebuildOptions} --rollback switch --flake ."}
+          '';
 
-              if test $(grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"; then
-                CONFIG_PREFIX="nixosConfigurations"
-              else
-                CONFIG_PREFIX="homeConfigurations"
-              fi
+      cache.exec =
+        if pkgs.stdenv.isDarwin then
+          ''
+            >&2 echo "`cache` not available on darwin."
+            exit 1
+          ''
+        else
+          ''
+            HOSTNAME=$(hostname)
+            CONFIG=''${1:-$HOSTNAME}
 
+            if test $(grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"; then
+              CONFIG_PREFIX="nixosConfigurations"
+            else
+              CONFIG_PREFIX="homeConfigurations"
+            fi
+
+            ${inhibit "Building and caching NixOS system closure" ''
               nix build ".#$CONFIG_PREFIX.$CONFIG.config.system.build.toplevel" --json \
                 | ${lib.getExe pkgs.jq} -r '.[].outputs | to_entries[].value' \
                 | ${lib.getExe pkgs.cachix} push 0xcharly-nixos-config
-            '';
-      in
-      cache;
+            ''}
+          '';
 
-    preview-avatar.exec = ''
-      ${lib.getExe pkgs.glslviewer} --uniform -h 1024 -w 1024 data/avatar.frag
-    '';
+      deploy.exec =
+        if pkgs.stdenv.isDarwin then
+          ''
+            >&2 echo "`deploy` not available on darwin."
+            exit 1
+          ''
+        else
+          ''
+            if test $(grep ^NAME= /etc/os-release | cut -d= -f2) != "NixOS"; then
+              >&2 echo "`deploy` not available on non-NixOS systems."
+              exit 1
+            fi
 
-    ssh-copy-terminfo.exec = ''
-      ${lib.getExe' pkgs.ncurses "infocmp"} -x | ssh -o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "$1" -- tic -x -
-    '';
-  };
+            ${inhibit "Deploying NixOS systems" "${lib.getExe pkgs.deploy-rs} ''$@"}
+          '';
+
+      preview-avatar.exec = ''
+        ${lib.getExe pkgs.glslviewer} --uniform -h 1024 -w 1024 data/avatar.frag
+      '';
+
+      ssh-copy-terminfo.exec = ''
+        ${lib.getExe' pkgs.ncurses "infocmp"} -x | ssh -o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "$1" -- tic -x -
+      '';
+    };
 }
