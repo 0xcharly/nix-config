@@ -16,6 +16,7 @@
     inputs.nix-config-secrets.modules.home.ssh-keys-ring-0-tier
 
     flake.modules.home.account-essentials
+    flake.modules.home.browser-google-chrome-for-jp-taxes
     flake.modules.home.browsers
     flake.modules.home.cachix
     flake.modules.home.desktop-essentials
