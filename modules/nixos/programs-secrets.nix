@@ -4,7 +4,6 @@
   services.pcscd.enable = true;
 
   environment.systemPackages = with pkgs; [
-    bitwarden-desktop
     yubikey-manager
     yubioath-flutter
   ];
