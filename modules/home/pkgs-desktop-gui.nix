@@ -1,8 +1,9 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
-    bitwarden-desktop
     _1password-gui
+    beeper
+    bitwarden-desktop
     nautilus
     xfce.thunar
   ];
