@@ -40,6 +40,7 @@ in
         shell-integration-features = "no-cursor,no-title";
         confirm-close-surface = false;
         auto-update = "off";
+        custom-shader = "${./ghostty-cursor-trail.glsl}";
         adjust-cursor-thickness = 2;
         keybind = [
           "super+shift+comma=reload_config"
