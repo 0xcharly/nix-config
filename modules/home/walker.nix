@@ -23,7 +23,7 @@
     settings = {
       app_launch_prefix = "${config.node.wayland.uwsm-wrapper.prefix} ";
       close_when_open = true;
-      terminal = lib.getExe config.programs.kitty.package;
+      terminal = lib.getExe config.user.terminal.default.package;
       timeout = 0;
 
       activation_mode.labels = "aoeuhtns";

@@ -10,9 +10,9 @@
 
     flake.modules.home.account-essentials
     flake.modules.home.fonts
-    flake.modules.home.ghostty
     flake.modules.home.home-manager-nixos
     flake.modules.home.keychain
+    flake.modules.home.terminals
   ];
 
   home.stateVersion = "24.05";

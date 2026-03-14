@@ -42,7 +42,7 @@
         '';
         default = {
           "1" = config.programs.chromium.package;
-          "3" = config.programs.kitty.package;
+          "3" = config.user.terminal.default.package;
         };
       };
     };
@@ -314,7 +314,7 @@
                 };
             in
             [
-              "SUPER,       Return, exec, ${uwsmGetExe config.programs.kitty.package}"
+              "SUPER,       Return, exec, ${uwsmGetExe config.user.terminal.default.package}"
               "SUPER,       Space,  exec, ${uwsmGetExe config.services.walker.package}"
               "SUPER SHIFT, X,      killactive"
               "SUPER SHIFT, Q,      exec, ${uwsmGetExe' pkgs.systemd "loginctl"} terminate-session \"$XDG_SESSION_ID\""

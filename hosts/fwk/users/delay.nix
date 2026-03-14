@@ -15,16 +15,16 @@
     inputs.nix-config-secrets.modules.home.services-cachix
     inputs.nix-config-secrets.modules.home.ssh-keys-ring-0-tier
 
+    flake.modules.common.nixpkgs-unstable
+
     flake.modules.home.account-essentials
     flake.modules.home.browser-google-chrome-for-jp-taxes
     flake.modules.home.browsers
     flake.modules.home.cachix
     flake.modules.home.desktop-essentials
     flake.modules.home.fonts
-    flake.modules.home.ghostty
     flake.modules.home.home-manager-nixos
     flake.modules.home.keychain
-    flake.modules.home.kitty
     flake.modules.home.opencode
     flake.modules.home.pkgs-desktop-gui
     flake.modules.home.pkgs-desktop-tui
@@ -32,6 +32,7 @@
     flake.modules.home.secrets
     flake.modules.home.ssh-forgejo
     flake.modules.home.ssh-keys
+    flake.modules.home.terminals
     flake.modules.home.usb-auto-mount
     flake.modules.home.walker
     flake.modules.home.wayland-essentials
