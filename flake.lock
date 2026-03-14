@@ -606,11 +606,11 @@
         "quickshell": "quickshell"
       },
       "locked": {
-        "lastModified": 1771151637,
-        "narHash": "sha256-1+ErsE1Lfn09/Jxxos0c7Lm8qVbw1bGsA8+fbP7BBlY=",
+        "lastModified": 1773498691,
+        "narHash": "sha256-C5z44oQAiLRbVjRUt8VfrlYvoofEo1Umg4XhPOragng=",
         "owner": "0xcharly",
         "repo": "nix-config-shell",
-        "rev": "ba5e2d8bfe65926a46aa12b5a7717b23dc950d17",
+        "rev": "e61977bfe2e76dcb5111f77571fc0f147931d963",
         "type": "github"
       },
       "original": {
