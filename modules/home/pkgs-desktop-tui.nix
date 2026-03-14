@@ -2,6 +2,7 @@
 {
   home.packages = with pkgs; [
     bluetui
-    wiremix # Not available on the stable channel yet.
+    mplayer # Remember QF60…
+    wiremix
   ];
 }
