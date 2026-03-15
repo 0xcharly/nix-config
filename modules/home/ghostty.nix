@@ -38,6 +38,9 @@ in
         window-padding-y = 2;
         window-padding-balance = true;
         window-padding-color = "extend";
+        window-inherit-working-directory = false;
+        tab-inherit-working-directory = true;
+        split-inherit-working-directory = true;
         unfocused-split-opacity = 1;
         shell-integration-features = "no-cursor,no-title";
         notify-on-command-finish = "unfocused";
