@@ -1,5 +1,5 @@
 { inputs, ... }:
-{ pkgs, ... }:
+{ pkgs, pkgs', ... }:
 {
   imports = [ inputs.nix-config-colorscheme.modules.home.tmux ];
 
@@ -13,7 +13,7 @@
     sensibleOnTop = false;
     plugins = [
       {
-        plugin = pkgs.tmuxPlugins.fingers;
+        plugin = pkgs'.tmuxPlugins.fingers;
         extraConfig = "set -g @plugin 'Morantron/tmux-fingers'";
       }
       {
