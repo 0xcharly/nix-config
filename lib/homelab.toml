@@ -258,7 +258,7 @@ ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIBc7+svM9KE66X8lpQzYny0byI47Kr38LsYXVyJIZ
 [ssh.wireguard.tailscale.knownHosts."dalmore"] # site-pm1
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIPEQB+CwUB/zGI76uwH95mhwnhvHQKw1/J08ioDzw+W/"
 
-[ssh.wireguard.tailscale.knownHosts."fwk"] # node-px0
+[ssh.wireguard.tailscale.knownHosts."fwk"] # node-rx0
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIOOGCAJVRToabx32L6jIUdzDhU43QWa6dXm4sAN/H96m"
 
 [ssh.wireguard.tailscale.knownHosts."linode-fr"] # gate-vp1
@@ -267,14 +267,14 @@ ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIPIhfhgQwVE1yt7xVgZ5jz+3Z0omItxrhyOi+CvHc
 [ssh.wireguard.tailscale.knownHosts."linode-jp"] # gate-vt0
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAILb+AwJFckuzpo34rM9AhyuIMjPExUi+6svoZGWKVKGN"
 
-[ssh.wireguard.tailscale.knownHosts."nyx"] # node-nyx
+[ssh.wireguard.tailscale.knownHosts."nyx"] # node-pk0
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIHsn07q7SmdP1M09ZIrz0bD9Te+5OMVVlfGEtAP9+iP9"
 
-[ssh.wireguard.tailscale.knownHosts."skl"] # node-skl
+[ssh.wireguard.tailscale.knownHosts."skl"] # node-pg2
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIBu+3cdkRlXUXS4MIwZNNKMo9Ia2XUZE7Ze6haIttCur"
 
-[ssh.wireguard.tailscale.knownHosts."x1p"] # node-x1p
+[ssh.wireguard.tailscale.knownHosts."x1p"] # node-pk1
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIJGA1jfPuKCEaOfYh9H9wO/HTXiOTLxBCfgVXp5Sx/Ca"
 
-[ssh.wireguard.tailscale.knownHosts."mail-vt1"]
+[ssh.wireguard.tailscale.knownHosts."cloud9"] # mail-vt0
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIOF74XheqFzcb9eYwOh1mrTSUSFLtOVK2OIfDwCa1Uri"
