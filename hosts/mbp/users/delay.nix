@@ -8,6 +8,8 @@
     inputs.nix-config-secrets.modules.home.blueprint
     inputs.nix-config-secrets.modules.home.services-atuin
 
+    flake.modules.common.nixpkgs-unstable
+
     flake.modules.home.account-essentials
     flake.modules.home.fonts
     flake.modules.home.home-manager-nixos

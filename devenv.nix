@@ -9,6 +9,8 @@
     [
       nixfmt
       nix-output-monitor # Nix Output Monitor.
+
+      jq
     ]
     ++ lib.optionals pkgs.stdenv.isLinux [ pkgs.bitwarden-cli ];
 
