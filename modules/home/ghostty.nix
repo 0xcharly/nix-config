@@ -45,7 +45,7 @@ in
         confirm-close-surface = false;
         auto-update = "off";
         custom-shader = "${./ghostty-cursor-trail.glsl}";
-        adjust-cursor-thickness = 2;
+        adjust-cursor-thickness = 1;
         keybind = [
           "super+shift+comma=reload_config"
           "ctrl+tab=next_tab"
@@ -62,6 +62,14 @@ in
           "ctrl+a>l=new_split:right"
           "ctrl+a>f=toggle_split_zoom"
 
+          "alt+2=goto_tab:1"
+          "alt+3=goto_tab:2"
+          "alt+4=goto_tab:3"
+          "alt+5=goto_tab:4"
+
+          "ctrl+a>/=start_search"
+          "ctrl+a>shift+8=search_selection"
+
           "ctrl+a>n=next_tab"
           "ctrl+a>p=previous_tab"
         ]
@@ -71,7 +79,9 @@ in
           in
           [
             "${mod}+n=new_window"
-            "${mod}+t=new_tab"
+            "${mod}+t=last_tab"
+            "chain=new_tab"
+            "${mod}+k=toggle_command_palette"
             "${mod}+shift+t=toggle_tab_overview"
             "${mod}+shift+w=close_surface"
             "${mod}+shift+c=copy_to_clipboard"
