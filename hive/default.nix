@@ -28,6 +28,7 @@ rec {
     let
       hosts = [
         "bowmore"
+        "cloud9"
         "dalmore"
         "linode-fr"
         "linode-jp"
