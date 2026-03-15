@@ -18,7 +18,7 @@ ipv4 = "172.233.245.4"
 ipv6 = "2600:3c07::2000:31ff:fe53:d2e1"
 
 [dns."xn--7ck8cva5eb.com".mx]
-host = "mail-vt1"
+host = "cloud9"
 ipv4 = "172.237.13.18"
 ipv6 = "2600:3c18::2000:4fff:fe5e:fe68"
 
@@ -37,7 +37,7 @@ ipv4 = "172.233.245.4"
 ipv6 = "2600:3c07::2000:31ff:fe53:d2e1"
 
 [dns."0xcharly.com".mx]
-host = "mail-vt1"
+host = "cloud9"
 ipv4 = "172.237.13.18"
 ipv6 = "2600:3c18::2000:4fff:fe5e:fe68"
 
@@ -56,7 +56,7 @@ ipv4 = "172.233.245.4"
 ipv6 = "2600:3c07::2000:31ff:fe53:d2e1"
 
 [dns."splicedpixel.com".mx]
-host = "mail-vt1"
+host = "cloud9"
 ipv4 = "172.237.13.18"
 ipv6 = "2600:3c18::2000:4fff:fe5e:fe68"
 
@@ -75,7 +75,7 @@ ipv4 = "172.233.245.4"
 ipv6 = "2600:3c07::2000:31ff:fe53:d2e1"
 
 [dns."splicedpixel.xyz".mx]
-host = "mail-vt1"
+host = "cloud9"
 ipv4 = "172.237.13.18"
 ipv6 = "2600:3c18::2000:4fff:fe5e:fe68"
 
