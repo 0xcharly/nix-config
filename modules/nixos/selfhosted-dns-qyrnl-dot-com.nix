@@ -48,6 +48,7 @@ in
 
               ; Hosts declaration.
               bowmore       IN CNAME bowmore.${tailnetDomainName}.
+              cloud9        IN CNAME cloud9.${tailnetDomainName}.
               dalmore       IN CNAME dalmore.${tailnetDomainName}.
               fwk           IN CNAME fwk.${tailnetDomainName}.
               linode-fr     IN CNAME linode-fr.${tailnetDomainName}.
