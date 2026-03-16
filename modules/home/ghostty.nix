@@ -47,7 +47,6 @@ in
         notify-on-command-finish-action = "no-bell,notify";
         confirm-close-surface = false;
         auto-update = "off";
-        custom-shader = "${./ghostty-cursor-trail.glsl}";
         adjust-cursor-thickness = 1;
         keybind = [
           "super+shift+comma=reload_config"
