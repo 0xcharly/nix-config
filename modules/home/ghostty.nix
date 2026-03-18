@@ -50,6 +50,7 @@ in
         adjust-cursor-thickness = 1;
         keybind = [
           "super+shift+comma=reload_config"
+          "super+k=toggle_command_palette"
           "ctrl+tab=next_tab"
           "ctrl+shift+tab=previous_tab"
 
@@ -83,7 +84,6 @@ in
             "${mod}+n=new_window"
             "${mod}+t=last_tab"
             "chain=new_tab"
-            "${mod}+k=toggle_command_palette"
             "${mod}+shift+t=toggle_tab_overview"
             "${mod}+shift+w=close_surface"
             "${mod}+shift+c=copy_to_clipboard"
