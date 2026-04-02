@@ -55,7 +55,7 @@ in
                 # '%' is expanded into '%s' separately to avoid lolcat inserting escape sequences between '%' and 's'.
                 printf (
                       printf "%s %% \$ " (prompt_hostname) \
-                    | ${lib.getExe pkgs.lolcat} --force --seed=(printf "%d" 0x(bat /etc/machine-id |head -c8)) -p 0.5 \
+                    | ${lib.getExe pkgs.lolcat} --force --seed=(printf "%d" 0x(bat /etc/machine-id 2>/dev/null |head -c8)) -p 0.5 \
                     | sed "s/%/%s/"
                 ) (set_color --italics brblack; echo -n %s; set_color normal))
           end
