@@ -11,9 +11,7 @@
   # flakes sourced with direnv and nix-shell, so this is not a huge list.
   home.packages = with pkgs; [
     coreutils # For consistency across platforms (i.e. GNU utils on macOS).
-    devenv # For managing development environments.
     duf # Modern `df` alternative.
-    git-get # Used along with fzf and terminal multiplexers for repository management.
     libqalculate # Multi-purpose calculator on the command line.
     tree # List the content of directories in a tree-like format.
     yazi # File explorer that supports Kitty image protocol.
