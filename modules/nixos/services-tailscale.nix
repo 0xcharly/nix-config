@@ -22,7 +22,7 @@ in
       extraSetFlags =
         let
           mkFlags =
-            flags: flags |> lib.mapAttrsToList (flag: enable: lib.optional enable flag) |> lib.concatLists;
+            flags: lib.concatLists (lib.mapAttrsToList (flag: enable: lib.optional enable flag) flags);
         in
         mkFlags {
           "--ssh" = cfg.enableSsh;

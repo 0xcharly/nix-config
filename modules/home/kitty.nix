@@ -17,11 +17,10 @@
       };
       extraConfig =
         let
-          font-features = font.features |> map (feat: "+${feat}") |> lib.concatStringsSep " ";
-          font-variations =
-            font.variations
-            |> lib.mapAttrsToList (axis: value: "${axis}=${toString value}")
-            |> lib.concatStringsSep " ";
+          font-features = lib.concatStringsSep " " (map (feat: "+${feat}") font.features);
+          font-variations = lib.concatStringsSep " " (
+            lib.mapAttrsToList (axis: value: "${axis}=${toString value}") font.variations
+          );
           symbol-maps = mapFontCodepoints (font_name: codepoints: "symbol_map ${codepoints} ${font_name}");
         in
         ''

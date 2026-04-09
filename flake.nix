@@ -67,12 +67,6 @@
   };
 
   nixConfig = {
-    experimental-features = [
-      "nix-command"
-      "flakes"
-      "pipe-operators"
-    ];
-
     extra-substituters = [ "https://0xcharly-nixos-config.cachix.org" ];
     extra-trusted-public-keys = [
       "0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU="

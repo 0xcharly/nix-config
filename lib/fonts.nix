@@ -22,5 +22,5 @@
         lib.nameValuePair font_name (lib.concatStringsSep "," codepoints);
       rehydrateMappings = lib.mapAttrs' (_: transformMappingValue);
     in
-    rehydrateMappings mappings |> lib.mapAttrsToList fn;
+    lib.mapAttrsToList fn (rehydrateMappings mappings);
 }
