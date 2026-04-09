@@ -1,18 +1,15 @@
 { flake, ... }:
 {
   imports = [
-    flake.modules.home.browser-chromium
-    flake.modules.home.browser-firefox
+    # flake.modules.home.browser-firefox
+    flake.modules.home.browser-google-chrome
   ];
 
   xdg.mimeApps =
     let
-      chromium = "chromium-browser.desktop";
-      firefox = "firefox.desktop";
-
       browserList = [
-        chromium
-        firefox
+        # "firefox.desktop"
+        "google-chrome.desktop"
       ];
 
       associations = builtins.listToAttrs (
