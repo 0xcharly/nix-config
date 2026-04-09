@@ -376,19 +376,12 @@
               "float, class:^org.pulseaudio.pavucontrol$, title:^Volume Control$"
               # Bitwarden extension.
               "float, class:^chrome-${bitwardenExtId}-Default$, initialTitle:^_crx_${bitwardenExtId}$"
-              "float, class:^firefox$, title:^(Extension: \(Bitwarden Password Manager\))(.*)$"
               # Chrome's Picture-in-Picture.
               "float, class:^$, title:^Picture in picture$"
               "pin, class:^$, title:^Picture in picture$"
               "move ${pipPosX} ${pipPosY}, class:^$, title:^Picture in picture$"
               "size ${toString cfg.pip.width} ${toString cfg.pip.height}, class:^$, title:^Picture in picture$"
               "keepaspectratio, class:^$, title:^Picture in picture$"
-              # Firefox's Picture-in-Picture.
-              "float, class:^firefox$, title:^Picture-in-Picture$"
-              "pin, class:^firefox$, title:^Picture-in-Picture$"
-              "move ${pipPosX} ${pipPosY}, class:^firefox$, title:^Picture-in-Picture$"
-              "size ${toString cfg.pip.width} ${toString cfg.pip.height}, class:^firefox$, title:^Picture-in-Picture$"
-              "keepaspectratio, class:^firefox$, title:^Picture-in-Picture$"
             ];
 
           # gesture = [

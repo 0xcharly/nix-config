@@ -1,16 +1,12 @@
 { flake, ... }:
 {
   imports = [
-    # flake.modules.home.browser-firefox
     flake.modules.home.browser-google-chrome
   ];
 
   xdg.mimeApps =
     let
-      browserList = [
-        # "firefox.desktop"
-        "google-chrome.desktop"
-      ];
+      browserList = [ "google-chrome.desktop" ];
 
       associations = builtins.listToAttrs (
         map
