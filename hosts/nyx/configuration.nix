@@ -31,6 +31,7 @@
     flake.modules.nixos.fs-zfs-zpool-root-home
     flake.modules.nixos.hardware-cpu-amd
     flake.modules.nixos.hardware-gpu-amd
+    flake.modules.nixos.hardware-zmk-studio
     flake.modules.nixos.networking-common
     flake.modules.nixos.networking-resolved
     flake.modules.nixos.nix-build-aarch64

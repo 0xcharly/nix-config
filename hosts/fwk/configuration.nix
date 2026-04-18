@@ -31,6 +31,7 @@
     flake.modules.nixos.hardware-cpu-amd
     flake.modules.nixos.hardware-framework-13
     flake.modules.nixos.hardware-gpu-amd
+    flake.modules.nixos.hardware-zmk-studio
     flake.modules.nixos.networking-bluetooth
     flake.modules.nixos.networking-wireless
     flake.modules.nixos.nix-build-aarch64
