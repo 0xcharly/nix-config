@@ -65,10 +65,10 @@ in
           "ctrl+a>l=new_split:right"
           "ctrl+a>f=toggle_split_zoom"
 
-          "alt+2=goto_tab:1"
-          "alt+3=goto_tab:2"
-          "alt+4=goto_tab:3"
-          "alt+5=goto_tab:4"
+          "ctrl+a>alt+2=goto_tab:1"
+          "ctrl+a>alt+3=goto_tab:2"
+          "ctrl+a>alt+4=goto_tab:3"
+          "ctrl+a>alt+5=goto_tab:4"
 
           "ctrl+a>/=start_search"
           "ctrl+a>shift+8=search_selection"
