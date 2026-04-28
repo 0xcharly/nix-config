@@ -7,6 +7,7 @@
     enable = true;
     aggressiveResize = true;
     escapeTime = 0;
+    focusEvents = true;
     historyLimit = 100000;
     keyMode = "vi";
     mouse = true;
