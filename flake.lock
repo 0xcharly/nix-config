@@ -586,11 +586,11 @@
         "nixpkgs": "nixpkgs_11"
       },
       "locked": {
-        "lastModified": 1773997340,
-        "narHash": "sha256-yanXJ82FvkEErA5RiMDvELI6ceCJ/N4MeYXcIQhic6I=",
+        "lastModified": 1777693536,
+        "narHash": "sha256-uDdZGtjuz/znS297o4z8AagF4ZluJJjfQQAMBgOBre8=",
         "owner": "0xcharly",
         "repo": "nix-config-secrets",
-        "rev": "db590edb9ae823bc68697fd78c04d46b0d9b95f4",
+        "rev": "18bd364c8062f63f88d47f9b365897b1d31b358d",
         "type": "github"
       },
       "original": {
