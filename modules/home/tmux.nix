@@ -1,5 +1,4 @@
 { inputs, ... }:
-{ pkgs, ... }:
 {
   imports = [ inputs.nix-config-colorscheme.modules.home.tmux ];
 
@@ -12,12 +11,6 @@
     keyMode = "vi";
     mouse = true;
     sensibleOnTop = false;
-    plugins = [
-      {
-        plugin = pkgs.tmuxPlugins.yank;
-        extraConfig = "set -g @plugin 'tmux-plugins/tmux-yank'";
-      }
-    ];
     extraConfig = builtins.readFile ./tmux.conf;
   };
 }
