@@ -74,7 +74,6 @@ in
               push          IN CNAME ${reverseProxyHostName}
               reads         IN CNAME ${reverseProxyHostName}
               readlater     IN CNAME ${reverseProxyHostName}
-              search        IN CNAME ${reverseProxyHostName}
               shared.album  IN CNAME ${reverseProxyHostName}
               status        IN CNAME ${reverseProxyHostName}
               vault         IN CNAME ${reverseProxyHostName}

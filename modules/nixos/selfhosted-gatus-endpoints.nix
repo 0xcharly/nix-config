@@ -100,7 +100,6 @@ in
         (gatus.mkHttpServiceCheck "prometheus" {
           domain = "${facts.services.prometheus.domain}/-/healthy";
         })
-        (gatus.mkHttpServiceCheck "search" facts.services.search)
         (gatus.mkHttpServiceCheck "vaultwarden" facts.services.vaultwarden)
       ];
 

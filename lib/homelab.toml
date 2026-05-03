@@ -221,11 +221,6 @@ aliases = ["contacts.qyrnl.com"]
 host = "bowmore.qyrnl.com"
 port = 5232
 
-[services.search]
-domain = "search.qyrnl.com"
-host = "bowmore.qyrnl.com"
-port = 9009
-
 [services.vaultwarden]
 domain = "vault.qyrnl.com"
 host = "bowmore.qyrnl.com"

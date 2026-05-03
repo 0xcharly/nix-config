@@ -68,7 +68,6 @@
                 paperless
                 prometheus
                 radicale
-                search
                 vaultwarden
               ];
               reverse-proxy-configs = map caddy.mkReverseProxyConfig (
