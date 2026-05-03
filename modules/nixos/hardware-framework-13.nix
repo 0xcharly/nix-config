@@ -12,11 +12,7 @@
 # ```
 #
 # Latest Update: https://fwupd.org/lvfs/devices/work.frame.Laptop.RyzenAI300.BIOS.firmware
-{
-  flake,
-  inputs,
-  ...
-}:
+{ flake, inputs, ... }:
 { pkgs, ... }:
 {
   imports = [

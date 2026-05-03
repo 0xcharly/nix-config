@@ -10,14 +10,14 @@
     enable = mkEnableOption "Spin up a reverse proxy service via Caddy";
     "qyrnl.com" = {
       enable = mkEnableOption "Set up reverse proxy service for qyrnl.com";
-      openFirewall = lib.mkEnableOption "Open firewall ports for qyrnl.com's reverse proxy";
-      bindIP = lib.mkOption {
-        type = lib.types.str;
+      openFirewall = mkEnableOption "Open firewall ports for qyrnl.com's reverse proxy";
+      bindIP = mkOption {
+        type = types.str;
         example = "10.0.0.1";
         description = "The network IP to bind domains to.";
       };
-      bindInterface = lib.mkOption {
-        type = lib.types.str;
+      bindInterface = mkOption {
+        type = types.str;
         example = "eth0";
         default = config.services.tailscale.interfaceName;
         description = "The network interface to bind to.";
