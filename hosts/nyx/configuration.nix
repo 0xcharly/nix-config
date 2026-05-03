@@ -31,6 +31,7 @@
     flake.modules.nixos.fs-zfs-zpool-root-home
     flake.modules.nixos.hardware-cpu-amd
     flake.modules.nixos.hardware-gpu-amd
+    flake.modules.nixos.hardware-wake-on-lan
     flake.modules.nixos.hardware-zmk-studio
     flake.modules.nixos.networking-common
     flake.modules.nixos.networking-resolved
@@ -74,6 +75,7 @@
       };
     };
 
+    networking.wakeOnLan.interface = "enp115s0";
     users.delay.ssh.authorizeTailscaleInternalKey = true;
   };
 
