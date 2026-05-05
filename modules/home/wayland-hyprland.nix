@@ -395,7 +395,7 @@
           cfg = config.node.wayland.idle.screenlock;
         in
         {
-          enable = cfg.enable;
+          enable = lib.mkDefault cfg.enable;
           settings = {
             general = {
               disable_loading_bar = true;
