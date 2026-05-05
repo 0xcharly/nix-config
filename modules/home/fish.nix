@@ -13,7 +13,7 @@ let
   cfg = config.programs.fish;
 in
 {
-  imports = [ inputs.nix-config-colorscheme.modules.home.fish ];
+  imports = [ inputs.nix-config-colorscheme.homeModules.fish ];
 
   programs = {
     eza.enableFishIntegration = true;

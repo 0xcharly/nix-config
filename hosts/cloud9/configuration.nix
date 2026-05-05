@@ -22,29 +22,29 @@
     flake.modules.common.nixpkgs-unstable
     flake.modules.common.overlays
 
-    flake.modules.nixos.bootloader-grub
-    flake.modules.nixos.fs-zfs-system-linode
-    flake.modules.nixos.fs-zfs-zpool-root
-    flake.modules.nixos.fs-zfs-zpool-root-data
-    flake.modules.nixos.fs-zfs-zpool-root-home
-    flake.modules.nixos.initrd-unlock-over-ssh
-    flake.modules.nixos.initrd-tailscale
-    flake.modules.nixos.nix-client-config
-    flake.modules.nixos.overlays
-    flake.modules.nixos.programs-essentials
-    flake.modules.nixos.programs-iotop
-    flake.modules.nixos.programs-packages-common
-    flake.modules.nixos.programs-sudo
-    flake.modules.nixos.programs-terminfo
-    flake.modules.nixos.prometheus-exporters-node
-    flake.modules.nixos.prometheus-exporters-zfs
-    flake.modules.nixos.services-deploy-rs
-    flake.modules.nixos.services-fail2ban
-    flake.modules.nixos.services-openssh
-    flake.modules.nixos.services-tailscale
-    flake.modules.nixos.system-common
-    flake.modules.nixos.system-linode
-    flake.modules.nixos.users-delay
+    flake.nixosModules.bootloader-grub
+    flake.nixosModules.fs-zfs-system-linode
+    flake.nixosModules.fs-zfs-zpool-root
+    flake.nixosModules.fs-zfs-zpool-root-data
+    flake.nixosModules.fs-zfs-zpool-root-home
+    flake.nixosModules.initrd-unlock-over-ssh
+    flake.nixosModules.initrd-tailscale
+    flake.nixosModules.nix-client-config
+    flake.nixosModules.overlays
+    flake.nixosModules.programs-essentials
+    flake.nixosModules.programs-iotop
+    flake.nixosModules.programs-packages-common
+    flake.nixosModules.programs-sudo
+    flake.nixosModules.programs-terminfo
+    flake.nixosModules.prometheus-exporters-node
+    flake.nixosModules.prometheus-exporters-zfs
+    flake.nixosModules.services-deploy-rs
+    flake.nixosModules.services-fail2ban
+    flake.nixosModules.services-openssh
+    flake.nixosModules.services-tailscale
+    flake.nixosModules.system-common
+    flake.nixosModules.system-linode
+    flake.nixosModules.users-delay
   ];
 
   # System config.

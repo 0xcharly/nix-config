@@ -29,54 +29,54 @@
     flake.modules.common.nixpkgs-unstable
     flake.modules.common.overlays
 
-    flake.modules.nixos.access-directory
-    flake.modules.nixos.bootloader-systemd-boot
-    flake.modules.nixos.fs-zfs-backup-minisforum-n5
-    flake.modules.nixos.fs-zfs-mount-tank
-    flake.modules.nixos.fs-zfs-replication-primary
-    flake.modules.nixos.fs-zfs-system-minisforum-n5
-    flake.modules.nixos.fs-zfs-zpool-root
-    flake.modules.nixos.fs-zfs-zpool-root-data
-    flake.modules.nixos.fs-zfs-zpool-root-data-postgresql
+    flake.nixosModules.access-directory
+    flake.nixosModules.bootloader-systemd-boot
+    flake.nixosModules.fs-zfs-backup-minisforum-n5
+    flake.nixosModules.fs-zfs-mount-tank
+    flake.nixosModules.fs-zfs-replication-primary
+    flake.nixosModules.fs-zfs-system-minisforum-n5
+    flake.nixosModules.fs-zfs-zpool-root
+    flake.nixosModules.fs-zfs-zpool-root-data
+    flake.nixosModules.fs-zfs-zpool-root-data-postgresql
     # TODO: Enable on primary.
-    # flake.modules.nixos.fs-zfs-snapshots
-    flake.modules.nixos.hardware-cpu-amd
-    flake.modules.nixos.hardware-gpu-intel
-    flake.modules.nixos.initrd-unlock-over-ssh
-    flake.modules.nixos.initrd-tailscale
-    flake.modules.nixos.networking-common
-    flake.modules.nixos.nix-client-config
-    flake.modules.nixos.programs-essentials
-    flake.modules.nixos.programs-iotop
-    flake.modules.nixos.programs-packages-common
-    flake.modules.nixos.programs-sudo
-    flake.modules.nixos.programs-terminfo
-    flake.modules.nixos.prometheus-exporters-node
-    flake.modules.nixos.prometheus-exporters-zfs
-    flake.modules.nixos.selfhosted-atuin
-    flake.modules.nixos.selfhosted-cgit
-    flake.modules.nixos.selfhosted-forgejo
-    flake.modules.nixos.selfhosted-golink
-    flake.modules.nixos.selfhosted-grafana
-    flake.modules.nixos.selfhosted-immich
-    flake.modules.nixos.selfhosted-jellyfin
-    flake.modules.nixos.selfhosted-linkwarden
-    flake.modules.nixos.selfhosted-miniflux
-    flake.modules.nixos.selfhosted-navidrome
-    flake.modules.nixos.selfhosted-paperless
-    flake.modules.nixos.selfhosted-prometheus
-    flake.modules.nixos.selfhosted-prometheus-tailscalesd
-    flake.modules.nixos.selfhosted-radicale
-    flake.modules.nixos.selfhosted-vaultwarden
-    flake.modules.nixos.services-deploy-rs
-    flake.modules.nixos.services-fail2ban
-    flake.modules.nixos.services-github-backup
-    flake.modules.nixos.services-msmtp
-    flake.modules.nixos.services-openssh
-    # flake.modules.nixos.services-samba-ayako
-    flake.modules.nixos.services-tailscale
-    flake.modules.nixos.system-common
-    flake.modules.nixos.zfs-send-wrappers
+    # flake.nixosModules.fs-zfs-snapshots
+    flake.nixosModules.hardware-cpu-amd
+    flake.nixosModules.hardware-gpu-intel
+    flake.nixosModules.initrd-unlock-over-ssh
+    flake.nixosModules.initrd-tailscale
+    flake.nixosModules.networking-common
+    flake.nixosModules.nix-client-config
+    flake.nixosModules.programs-essentials
+    flake.nixosModules.programs-iotop
+    flake.nixosModules.programs-packages-common
+    flake.nixosModules.programs-sudo
+    flake.nixosModules.programs-terminfo
+    flake.nixosModules.prometheus-exporters-node
+    flake.nixosModules.prometheus-exporters-zfs
+    flake.nixosModules.selfhosted-atuin
+    flake.nixosModules.selfhosted-cgit
+    flake.nixosModules.selfhosted-forgejo
+    flake.nixosModules.selfhosted-golink
+    flake.nixosModules.selfhosted-grafana
+    flake.nixosModules.selfhosted-immich
+    flake.nixosModules.selfhosted-jellyfin
+    flake.nixosModules.selfhosted-linkwarden
+    flake.nixosModules.selfhosted-miniflux
+    flake.nixosModules.selfhosted-navidrome
+    flake.nixosModules.selfhosted-paperless
+    flake.nixosModules.selfhosted-prometheus
+    flake.nixosModules.selfhosted-prometheus-tailscalesd
+    flake.nixosModules.selfhosted-radicale
+    flake.nixosModules.selfhosted-vaultwarden
+    flake.nixosModules.services-deploy-rs
+    flake.nixosModules.services-fail2ban
+    flake.nixosModules.services-github-backup
+    flake.nixosModules.services-msmtp
+    flake.nixosModules.services-openssh
+    # flake.nixosModules.services-samba-ayako
+    flake.nixosModules.services-tailscale
+    flake.nixosModules.system-common
+    flake.nixosModules.zfs-send-wrappers
   ];
 
   # System config.

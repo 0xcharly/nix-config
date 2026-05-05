@@ -5,7 +5,7 @@
   ...
 }:
 {
-  imports = [ flake.modules.nixos.fs-zfs-replication-common ];
+  imports = [ flake.nixosModules.fs-zfs-replication-common ];
 
   options.node.fs.zfs.replication = with lib; {
     port = mkOption {

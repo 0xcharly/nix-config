@@ -1,8 +1,6 @@
 { flake, ... }:
 {
-  imports = [
-    flake.modules.home.browser-google-chrome
-  ];
+  imports = [ flake.homeModules.browser-google-chrome ];
 
   xdg.mimeApps =
     let

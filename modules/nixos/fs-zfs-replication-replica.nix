@@ -1,6 +1,6 @@
 { flake, ... }:
 {
-  imports = [ flake.modules.nixos.fs-zfs-replication-common ];
+  imports = [ flake.nixosModules.fs-zfs-replication-common ];
 
   config = {
     node.fs.zfs.replication.permissions = [

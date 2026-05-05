@@ -8,7 +8,7 @@
   imports = [
     inputs.nix-config-shell.homeManagerModules.default
 
-    inputs.nix-config-colorscheme.modules.home.arcshell
+    inputs.nix-config-colorscheme.homeModules.arcshell
   ];
 
   options.node.wayland.arcshell = with lib; {

@@ -10,11 +10,11 @@
 
     flake.modules.common.nixpkgs-unstable
 
-    flake.modules.home.account-essentials
-    flake.modules.home.fonts
-    flake.modules.home.home-manager-nixos
-    flake.modules.home.keychain
-    flake.modules.home.terminals
+    flake.homeModules.account-essentials
+    flake.homeModules.fonts
+    flake.homeModules.home-manager-nixos
+    flake.homeModules.keychain
+    flake.homeModules.terminals
   ];
 
   home.stateVersion = "24.05";

@@ -1,6 +1,6 @@
 { inputs, ... }:
 {
-  imports = [ inputs.nix-config-colorscheme.modules.home.tmux ];
+  imports = [ inputs.nix-config-colorscheme.homeModules.tmux ];
 
   programs.tmux = {
     enable = true;

@@ -12,7 +12,7 @@ let
   cfg = config.node.services.atuin;
 in
 {
-  imports = [ inputs.nix-config-colorscheme.modules.home.atuin ];
+  imports = [ inputs.nix-config-colorscheme.homeModules.atuin ];
 
   options.node.services.atuin = with lib; {
     enableSync = mkEnableOption "Enable syncing shell history via the atuin service";

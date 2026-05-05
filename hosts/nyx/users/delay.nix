@@ -17,26 +17,26 @@
 
     flake.modules.common.nixpkgs-unstable
 
-    flake.modules.home.account-essentials
-    flake.modules.home.browsers
-    flake.modules.home.cachix
-    flake.modules.home.desktop-essentials
-    flake.modules.home.fonts
-    flake.modules.home.home-manager-nixos
-    flake.modules.home.keychain
-    flake.modules.home.opencode
-    flake.modules.home.pkgs-desktop-gui
-    flake.modules.home.pkgs-desktop-tui
-    flake.modules.home.secrets
-    flake.modules.home.ssh-forgejo
-    flake.modules.home.ssh-keys
-    flake.modules.home.terminals
-    flake.modules.home.usb-auto-mount
-    flake.modules.home.walker
-    flake.modules.home.wayland-essentials
-    flake.modules.home.wayland-hyprland
-    flake.modules.home.wayland-notifications
-    flake.modules.home.wayland-quickshell
+    flake.homeModules.account-essentials
+    flake.homeModules.browsers
+    flake.homeModules.cachix
+    flake.homeModules.desktop-essentials
+    flake.homeModules.fonts
+    flake.homeModules.home-manager-nixos
+    flake.homeModules.keychain
+    flake.homeModules.opencode
+    flake.homeModules.pkgs-desktop-gui
+    flake.homeModules.pkgs-desktop-tui
+    flake.homeModules.secrets
+    flake.homeModules.ssh-forgejo
+    flake.homeModules.ssh-keys
+    flake.homeModules.terminals
+    flake.homeModules.usb-auto-mount
+    flake.homeModules.walker
+    flake.homeModules.wayland-essentials
+    flake.homeModules.wayland-hyprland
+    flake.homeModules.wayland-notifications
+    flake.homeModules.wayland-quickshell
   ];
 
   home.stateVersion = "25.05";

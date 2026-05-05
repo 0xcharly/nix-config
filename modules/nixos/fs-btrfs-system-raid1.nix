@@ -11,7 +11,7 @@
 {
   imports = [
     inputs.disko.nixosModules.disko
-    flake.modules.nixos.fs-btrfs-common
+    flake.nixosModules.fs-btrfs-common
   ];
 
   options.node.fs.btrfs.system = with lib; {

@@ -10,7 +10,7 @@
 }:
 {
   imports = [
-    flake.modules.nixos.networking-common
+    flake.nixosModules.networking-common
     inputs.nix-config-secrets.nixosModules.wireless-config
   ];
 

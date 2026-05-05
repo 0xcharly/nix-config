@@ -9,7 +9,7 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
 
-    inputs.nix-config-colorscheme.modules.nixos.console
+    inputs.nix-config-colorscheme.nixosModules.console
 
     inputs.nix-config-secrets.nixosModules.default
     inputs.nix-config-secrets.nixosModules.nix-client-config
@@ -23,39 +23,39 @@
     flake.modules.common.nixpkgs-unstable
     flake.modules.common.overlays
 
-    flake.modules.nixos.bootloader-systemd-boot
-    flake.modules.nixos.essentials-laptop
-    flake.modules.nixos.fs-zfs-system
-    flake.modules.nixos.fs-zfs-zpool-root
-    flake.modules.nixos.fs-zfs-zpool-root-home
-    flake.modules.nixos.hardware-cpu-amd
-    flake.modules.nixos.hardware-framework-13
-    flake.modules.nixos.hardware-gpu-amd
-    flake.modules.nixos.hardware-zmk-studio
-    flake.modules.nixos.networking-bluetooth
-    flake.modules.nixos.networking-wireless
-    flake.modules.nixos.nix-build-aarch64
-    flake.modules.nixos.nix-client-config
-    flake.modules.nixos.overlays
-    flake.modules.nixos.programs-essentials
-    flake.modules.nixos.programs-gnome-calendar
-    flake.modules.nixos.programs-greetd
-    flake.modules.nixos.programs-greetd-autologin
-    flake.modules.nixos.programs-iotop
-    flake.modules.nixos.programs-packages-common
-    flake.modules.nixos.programs-secrets
-    flake.modules.nixos.programs-sudo
-    flake.modules.nixos.programs-terminfo
-    flake.modules.nixos.prometheus-exporters-node
-    flake.modules.nixos.prometheus-exporters-zfs
-    flake.modules.nixos.services-deploy-rs
-    flake.modules.nixos.services-fail2ban
-    flake.modules.nixos.services-openssh
-    flake.modules.nixos.services-removable-devices
-    flake.modules.nixos.services-tailscale
-    flake.modules.nixos.system-common
-    flake.modules.nixos.system-fonts
-    flake.modules.nixos.users-delay
+    flake.nixosModules.bootloader-systemd-boot
+    flake.nixosModules.essentials-laptop
+    flake.nixosModules.fs-zfs-system
+    flake.nixosModules.fs-zfs-zpool-root
+    flake.nixosModules.fs-zfs-zpool-root-home
+    flake.nixosModules.hardware-cpu-amd
+    flake.nixosModules.hardware-framework-13
+    flake.nixosModules.hardware-gpu-amd
+    flake.nixosModules.hardware-zmk-studio
+    flake.nixosModules.networking-bluetooth
+    flake.nixosModules.networking-wireless
+    flake.nixosModules.nix-build-aarch64
+    flake.nixosModules.nix-client-config
+    flake.nixosModules.overlays
+    flake.nixosModules.programs-essentials
+    flake.nixosModules.programs-gnome-calendar
+    flake.nixosModules.programs-greetd
+    flake.nixosModules.programs-greetd-autologin
+    flake.nixosModules.programs-iotop
+    flake.nixosModules.programs-packages-common
+    flake.nixosModules.programs-secrets
+    flake.nixosModules.programs-sudo
+    flake.nixosModules.programs-terminfo
+    flake.nixosModules.prometheus-exporters-node
+    flake.nixosModules.prometheus-exporters-zfs
+    flake.nixosModules.services-deploy-rs
+    flake.nixosModules.services-fail2ban
+    flake.nixosModules.services-openssh
+    flake.nixosModules.services-removable-devices
+    flake.nixosModules.services-tailscale
+    flake.nixosModules.system-common
+    flake.nixosModules.system-fonts
+    flake.nixosModules.users-delay
   ];
 
   # System config.

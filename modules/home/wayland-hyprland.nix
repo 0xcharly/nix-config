@@ -11,10 +11,10 @@
 }:
 {
   imports = [
-    flake.modules.home.wayland-uwsm
-    flake.modules.home.wayland-hyprland-smartgaps
+    flake.homeModules.wayland-uwsm
+    flake.homeModules.wayland-hyprland-smartgaps
 
-    inputs.nix-config-colorscheme.modules.home.hyprland
+    inputs.nix-config-colorscheme.homeModules.hyprland
   ];
 
   options.node.wayland = with lib; {

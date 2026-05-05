@@ -621,11 +621,11 @@
         "systems": "systems_8"
       },
       "locked": {
-        "lastModified": 1777954975,
-        "narHash": "sha256-FILGNGXzdVKoz4dIvWiM+68sTIyQ3nUnRRKzb1QiDoM=",
+        "lastModified": 1777956575,
+        "narHash": "sha256-mc/ZGqlXlv4AuUAVv7lzRXIWQnwBCrtIou8YXuoA7WE=",
         "owner": "0xcharly",
         "repo": "nix-config-secrets",
-        "rev": "41d0ee6fbded54ed25ae6c7598fdc3354013a50f",
+        "rev": "a78f9304f43b3986c09c153386bc0c9ac6736338",
         "type": "github"
       },
       "original": {

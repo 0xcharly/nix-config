@@ -10,9 +10,9 @@
 
     flake.modules.common.nixpkgs-unstable
 
-    flake.modules.home.account-essentials
-    flake.modules.home.home-manager-nixos
-    flake.modules.home.secrets
+    flake.homeModules.account-essentials
+    flake.homeModules.home-manager-nixos
+    flake.homeModules.secrets
   ];
 
   home.stateVersion = "25.11";

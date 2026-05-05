@@ -11,8 +11,8 @@
 }:
 {
   imports = [
-    flake.modules.home.wayland-uwsm
-    inputs.nix-config-colorscheme.modules.home.walker
+    flake.homeModules.wayland-uwsm
+    inputs.nix-config-colorscheme.homeModules.walker
   ];
 
   services.walker = {

@@ -12,7 +12,7 @@
 {
   imports = [
     inputs.disko.nixosModules.disko
-    flake.modules.nixos.fs-zfs-common
+    flake.nixosModules.fs-zfs-common
   ];
 
   options.node.fs.zfs.system =

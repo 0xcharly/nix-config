@@ -1,7 +1,7 @@
 { flake, ... }:
 { pkgs, ... }:
 {
-  imports = [ flake.modules.nixos.users-common ];
+  imports = [ flake.nixosModules.users-common ];
 
   users = {
     # Creates the group `ayako`.

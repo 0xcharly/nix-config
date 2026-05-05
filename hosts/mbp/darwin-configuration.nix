@@ -7,11 +7,11 @@
     flake.modules.common.nixpkgs-unstable
     flake.modules.common.overlays
 
-    flake.modules.darwin.homebrew
-    flake.modules.darwin.nix-client-config
-    flake.modules.darwin.nixpkgs-flake
-    flake.modules.darwin.shells
-    flake.modules.darwin.system-defaults
+    flake.darwinModules.homebrew
+    flake.darwinModules.nix-client-config
+    flake.darwinModules.nixpkgs-flake
+    flake.darwinModules.shells
+    flake.darwinModules.system-defaults
   ];
 
   ids.gids.nixbld = 30000;

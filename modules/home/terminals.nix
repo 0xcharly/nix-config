@@ -1,9 +1,9 @@
 { flake, ... }:
 { config, lib, ... }:
 {
-  imports = [
-    flake.modules.home.ghostty
-    flake.modules.home.kitty
+  imports = with flake.homeModules; [
+    ghostty
+    kitty
   ];
 
   options.user.terminal.default = with lib; {

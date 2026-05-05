@@ -16,8 +16,8 @@
   imports = [
     inputs.nix-config-secrets.nixosModules.users-delay
 
-    flake.modules.nixos.users-ayako
-    flake.modules.nixos.users-delay
+    flake.nixosModules.users-ayako
+    flake.nixosModules.users-delay
   ];
 
   # TODO: assign common GIDs for these groups.

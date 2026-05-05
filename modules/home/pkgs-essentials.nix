@@ -1,10 +1,10 @@
 { inputs, ... }:
 { pkgs, ... }:
 {
-  imports = [
-    inputs.nix-config-colorscheme.modules.home.bat
-    inputs.nix-config-colorscheme.modules.home.bottom
-    inputs.nix-config-colorscheme.modules.home.fzf
+  imports = with inputs.nix-config-colorscheme.homeModules; [
+    bat
+    bottom
+    fzf
   ];
 
   # Packages I always want installed. Most packages I install using per-project

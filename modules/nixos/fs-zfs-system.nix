@@ -5,7 +5,7 @@
   ...
 }:
 {
-  imports = [ flake.modules.nixos.fs-zfs-system-base ];
+  imports = [ flake.nixosModules.fs-zfs-system-base ];
 
   options.node.fs.zfs.system = with lib; {
     swapSize = mkOption {

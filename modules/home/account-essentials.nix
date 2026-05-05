@@ -1,14 +1,14 @@
 { flake, ... }:
 {
-  imports = [
-    flake.modules.home.atuin
-    flake.modules.home.devenv
-    flake.modules.home.env
-    flake.modules.home.fish
-    flake.modules.home.git
-    flake.modules.home.jujutsu
-    flake.modules.home.pkgs-essentials
-    flake.modules.home.ssh
-    flake.modules.home.tmux
+  imports = with flake.homeModules; [
+    atuin
+    devenv
+    env
+    fish
+    git
+    jujutsu
+    pkgs-essentials
+    ssh
+    tmux
   ];
 }

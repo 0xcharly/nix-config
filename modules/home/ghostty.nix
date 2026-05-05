@@ -5,7 +5,7 @@ let
   package = if isLinux then pkgs'.ghostty else pkgs'.ghostty-bin;
 in
 {
-  imports = [ inputs.nix-config-colorscheme.modules.home.ghostty ];
+  imports = [ inputs.nix-config-colorscheme.homeModules.ghostty ];
 
   programs.ghostty = {
     enable = true;

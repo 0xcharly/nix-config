@@ -6,7 +6,7 @@
   ...
 }:
 {
-  imports = [ flake.modules.nixos.users-common ];
+  imports = [ flake.nixosModules.users-common ];
 
   options.node.users.delay = with lib; {
     ssh = {
