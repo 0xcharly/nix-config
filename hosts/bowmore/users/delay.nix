@@ -5,8 +5,8 @@
 }:
 {
   imports = [
-    inputs.nix-config-secrets.modules.home.blueprint
-    inputs.nix-config-secrets.modules.home.services-atuin
+    inputs.nix-config-secrets.homeModules.default
+    inputs.nix-config-secrets.homeModules.services-atuin
 
     flake.modules.common.nixpkgs-unstable
 

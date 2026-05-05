@@ -11,7 +11,7 @@
 {
   imports = [
     flake.modules.nixos.networking-common
-    inputs.nix-config-secrets.modules.nixos.wireless-config
+    inputs.nix-config-secrets.nixosModules.wireless-config
   ];
 
   # NetworkManager is controlled using either nmcli or nmtui.

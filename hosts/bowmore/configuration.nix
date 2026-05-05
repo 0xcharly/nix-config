@@ -9,19 +9,19 @@
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
 
-    inputs.nix-config-secrets.modules.nixos.blueprint
-    inputs.nix-config-secrets.modules.nixos.disk-encryption-keys
-    inputs.nix-config-secrets.modules.nixos.nix-client-config
-    inputs.nix-config-secrets.modules.nixos.services-forgejo-ssh-host-keys
-    inputs.nix-config-secrets.modules.nixos.services-github-backup
-    inputs.nix-config-secrets.modules.nixos.services-linkwarden
-    inputs.nix-config-secrets.modules.nixos.services-miniflux
-    inputs.nix-config-secrets.modules.nixos.services-msmtp
-    inputs.nix-config-secrets.modules.nixos.services-radicale
-    inputs.nix-config-secrets.modules.nixos.services-tailscale
-    inputs.nix-config-secrets.modules.nixos.services-tailscale-initrd
-    inputs.nix-config-secrets.modules.nixos.services-vaultwarden
-    inputs.nix-config-secrets.modules.nixos.zfs-replication-keys
+    inputs.nix-config-secrets.nixosModules.default
+    inputs.nix-config-secrets.nixosModules.disk-encryption-keys
+    inputs.nix-config-secrets.nixosModules.nix-client-config
+    inputs.nix-config-secrets.nixosModules.services-forgejo-ssh-host-keys
+    inputs.nix-config-secrets.nixosModules.services-github-backup
+    inputs.nix-config-secrets.nixosModules.services-linkwarden
+    inputs.nix-config-secrets.nixosModules.services-miniflux
+    inputs.nix-config-secrets.nixosModules.services-msmtp
+    inputs.nix-config-secrets.nixosModules.services-radicale
+    inputs.nix-config-secrets.nixosModules.services-tailscale
+    inputs.nix-config-secrets.nixosModules.services-tailscale-initrd
+    inputs.nix-config-secrets.nixosModules.services-vaultwarden
+    inputs.nix-config-secrets.nixosModules.zfs-replication-keys
 
     flake.modules.common.nix-client-config
     flake.modules.common.nix-path

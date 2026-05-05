@@ -10,7 +10,7 @@
 }:
 {
   imports = [
-    inputs.nix-config-secrets.modules.nixos.services-paperless
+    inputs.nix-config-secrets.nixosModules.services-paperless
   ];
 
   options.node.services.paperless = with lib; {

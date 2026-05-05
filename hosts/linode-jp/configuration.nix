@@ -10,15 +10,15 @@
     (modulesPath + "/installer/scan/not-detected.nix")
     (modulesPath + "/profiles/qemu-guest.nix")
 
-    inputs.nix-config-secrets.modules.nixos.blueprint
-    inputs.nix-config-secrets.modules.nixos.nix-client-config
-    inputs.nix-config-secrets.modules.nixos.dns-qyrnl-dot-com
-    inputs.nix-config-secrets.modules.nixos.services-gatus
-    inputs.nix-config-secrets.modules.nixos.services-gatus-external-endpoints
-    inputs.nix-config-secrets.modules.nixos.services-gotify
-    inputs.nix-config-secrets.modules.nixos.services-tailscale
-    inputs.nix-config-secrets.modules.nixos.services-tailscale-initrd
-    inputs.nix-config-secrets.modules.nixos.users-delay
+    inputs.nix-config-secrets.nixosModules.default
+    inputs.nix-config-secrets.nixosModules.nix-client-config
+    inputs.nix-config-secrets.nixosModules.dns-qyrnl-dot-com
+    inputs.nix-config-secrets.nixosModules.services-gatus
+    inputs.nix-config-secrets.nixosModules.services-gatus-external-endpoints
+    inputs.nix-config-secrets.nixosModules.services-gotify
+    inputs.nix-config-secrets.nixosModules.services-tailscale
+    inputs.nix-config-secrets.nixosModules.services-tailscale-initrd
+    inputs.nix-config-secrets.nixosModules.users-delay
 
     flake.modules.common.nix-client-config
     flake.modules.common.nix-path

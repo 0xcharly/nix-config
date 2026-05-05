@@ -14,7 +14,7 @@
 { lib, ... }:
 {
   imports = [
-    inputs.nix-config-secrets.modules.nixos.users-delay
+    inputs.nix-config-secrets.nixosModules.users-delay
 
     flake.modules.nixos.users-ayako
     flake.modules.nixos.users-delay

@@ -1,15 +1,6 @@
-{
-  flake,
-  inputs,
-  pkgs,
-  ...
-}:
+{ flake, pkgs, ... }:
 {
   imports = [
-    inputs.nix-config-secrets.modules.darwin.blueprint
-    inputs.nix-config-secrets.modules.darwin.nix-client-config
-    inputs.nix-config-secrets.modules.darwin.users-delay
-
     flake.modules.common.nix-client-config
     flake.modules.common.nix-path
     flake.modules.common.nixpkgs-unfree

@@ -10,7 +10,7 @@
 }:
 {
   imports = [
-    inputs.nix-config-secrets.modules.nixos.services-pieceofenglish
+    inputs.nix-config-secrets.nixosModules.services-pieceofenglish
     inputs.pieceofenglish.nixosModules.default
   ];
 

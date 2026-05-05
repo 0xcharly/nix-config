@@ -11,11 +11,11 @@
 
     inputs.nix-config-colorscheme.modules.nixos.console
 
-    inputs.nix-config-secrets.modules.nixos.blueprint
-    inputs.nix-config-secrets.modules.nixos.nix-client-config
-    inputs.nix-config-secrets.modules.nixos.services-tailscale
-    inputs.nix-config-secrets.modules.nixos.services-tailscale-initrd
-    inputs.nix-config-secrets.modules.nixos.users-delay
+    inputs.nix-config-secrets.nixosModules.default
+    inputs.nix-config-secrets.nixosModules.nix-client-config
+    inputs.nix-config-secrets.nixosModules.services-tailscale
+    inputs.nix-config-secrets.nixosModules.services-tailscale-initrd
+    inputs.nix-config-secrets.nixosModules.users-delay
 
     flake.modules.common.nix-client-config
     flake.modules.common.nix-path
