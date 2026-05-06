@@ -7,20 +7,20 @@
 {
   options.node.wayland = with lib; {
     uwsm-wrapper = {
-      package = mkPackageOption pkgs "uwsm" {
+      package = mkPackageOption pkgs "app2unit" {
         extraDescription = ''
           The uwsm wrapper script to use to spawn new processes.
 
-          Defaults to `uwsm`.
+          Defaults to `app2unit`.
 
-          Consider `app2unit` as a faster alternative to `uwsm` (shell
-          implementation over Python).
+          `app2unit` is a faster alternative to `uwsm` (shell implementation
+          over Python).
         '';
       };
 
       prefix = mkOption {
         type = types.str;
-        default = "${lib.getExe config.node.wayland.uwsm-wrapper.package} app --";
+        default = "${lib.getExe config.node.wayland.uwsm-wrapper.package} --";
         description = ''
           The prefix command to spawn new processes.
 

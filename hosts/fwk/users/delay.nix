@@ -67,11 +67,6 @@
         screenlock.fingerprint.enable = true;
       };
 
-      uwsm-wrapper = {
-        package = perSystem.self.app2unit;
-        prefix = "${lib.getExe config.node.wayland.uwsm-wrapper.package} --";
-      };
-
       arcshell.modules.power = true;
     };
   };

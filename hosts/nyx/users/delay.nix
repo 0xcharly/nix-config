@@ -52,11 +52,6 @@
         height = 1692;
       };
 
-      uwsm-wrapper = {
-        package = perSystem.self.app2unit;
-        prefix = "${lib.getExe config.node.wayland.uwsm-wrapper.package} --";
-      };
-
       arcshell.wallpaper.animate = true;
     };
   };
