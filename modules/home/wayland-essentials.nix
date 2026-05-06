@@ -63,6 +63,7 @@
     home = {
       packages = with pkgs; [
         hyprlock # Screenlock
+        rose-pine-hyprcursor # https://wiki.hypr.land/Hypr-Ecosystem/hyprcursor/
 
         swayimg # Image viewer
         wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
@@ -115,6 +116,9 @@
 
             XCURSOR_THEME = config.home.pointerCursor.name;
             XCURSOR_SIZE = config.home.pointerCursor.size;
+
+            HYPRCURSOR_THEME = "rose-pine-hyprcursor";
+            HYPRCURSOR_SIZE = config.home.pointerCursor.size;
           };
 
           create-env =
