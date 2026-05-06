@@ -7,6 +7,7 @@
   config,
   lib,
   pkgs,
+  pkgs',
   ...
 }:
 {
@@ -44,6 +45,25 @@
           "1" = config.programs.chromium.package;
           "3" = config.user.terminal.default.package;
         };
+      };
+    };
+
+    hyprlauncher = {
+      package = mkPackageOption pkgs' "hyprlauncher" {
+        extraDescription = ''
+          The `hyprlauncher` package to use.
+        '';
+      };
+
+      desktop_launch_prefix = mkOption {
+        type = types.str;
+        default = config.node.wayland.uwsm-wrapper.prefix;
+        description = ''
+          Launch prefix for each desktop app, e.g. `uwsm app -- `.
+        '';
+        example = lib.literalExpression ''
+          uwsm app --
+        '';
       };
     };
 
@@ -186,7 +206,10 @@
             let
               mkEntry = workspace: pkg: "[workspace ${workspace}] ${uwsmGetExe pkg}";
             in
-            lib.mapAttrsToList mkEntry cfg.hyprland.exec-once;
+            (lib.mapAttrsToList mkEntry cfg.hyprland.exec-once)
+            ++ [
+              "${uwsmGetExe config.node.wayland.hyprlauncher.package} --daemon"
+            ];
 
           # Monitor config.
           inherit (cfg.hyprland) monitor;
@@ -317,7 +340,7 @@
             in
             [
               "SUPER,       Return, exec, ${uwsmGetExe config.user.terminal.default.package}"
-              "SUPER,       Space,  exec, ${uwsmGetExe config.services.walker.package}"
+              "SUPER,       Space,  exec, ${uwsmGetExe config.node.wayland.hyprlauncher.package} --toggle"
               "SUPER SHIFT, X,      killactive"
               "SUPER SHIFT, Q,      exec, ${uwsmGetExe' pkgs.systemd "loginctl"} terminate-session \"$XDG_SESSION_ID\""
               "SUPER SHIFT, L,      exec, ${uwsmGetExe config.programs.hyprlock.package}"
@@ -500,6 +523,20 @@
 
         swayosd.enable = lib.mkDefault config.wayland.windowManager.hyprland.enable;
       };
+
+      xdg.configFile."hypr/hyprlauncher.conf".text =
+        let
+          cfg = config.node.wayland.hyprlauncher;
+        in
+        ''
+          finders {
+              desktop_launch_prefix = ${cfg.desktop_launch_prefix}
+          }
+
+          ui {
+              window_size = 640 360
+          }
+        '';
 
       assertions =
         let

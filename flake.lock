@@ -610,11 +610,11 @@
         "systems": "systems_4"
       },
       "locked": {
-        "lastModified": 1777965817,
-        "narHash": "sha256-989PUr96ibCnyfaWDemMNcT0r6mWQQ70lXsD45ZOYGg=",
+        "lastModified": 1778071274,
+        "narHash": "sha256-tvIb441IeXEXL0kDfLyZ09ioGItstnYHUwqfO953JxM=",
         "owner": "0xcharly",
         "repo": "nix-config-colorscheme",
-        "rev": "7c3783139fb5e736d5a18dac19e1ccc50886f771",
+        "rev": "a2587d3a614b3107b71b19ba74cdc4e9885cbda6",
         "type": "github"
       },
       "original": {

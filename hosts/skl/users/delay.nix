@@ -31,7 +31,6 @@
     flake.homeModules.ssh-keys
     flake.homeModules.terminals
     flake.homeModules.usb-auto-mount
-    flake.homeModules.walker
     flake.homeModules.wayland-essentials
     flake.homeModules.wayland-hyprland
     flake.homeModules.wayland-notifications

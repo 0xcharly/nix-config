@@ -20,11 +20,11 @@
 
       prefix = mkOption {
         type = types.str;
-        default = "${lib.getExe config.node.wayland.uwsm-wrapper.package} --";
+        default = "${lib.getExe config.node.wayland.uwsm-wrapper.package} -- ";
         description = ''
           The prefix command to spawn new processes.
 
-          This is used by walker to create new processes.
+          This is used by launchers to create new processes.
         '';
       };
 
