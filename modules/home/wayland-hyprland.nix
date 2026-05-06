@@ -159,6 +159,8 @@
       uwsmGetExe' = pkg: fname: cfg.uwsm-wrapper.wrapper (lib.getExe' pkg fname);
     in
     {
+      home.packages = [ pkgs'.hyprshutdown ];
+
       wayland.windowManager.hyprland = {
         enable = true;
 
