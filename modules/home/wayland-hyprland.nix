@@ -536,6 +536,7 @@
         in
         ''
           finders {
+              desktop_icons = false
               desktop_launch_prefix = ${cfg.desktop_launch_prefix}
           }
 
