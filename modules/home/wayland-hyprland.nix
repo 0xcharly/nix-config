@@ -85,6 +85,12 @@
       screenlock = {
         enable = mkEnableOption "Enable screenlock";
 
+        package = mkPackageOption pkgs "hyprlock" {
+          extraDescription = ''
+            The screenlock package to use.
+          '';
+        };
+
         timeout = mkOption {
           type = types.int;
           default = 10 * 60; # 10 minutes.
@@ -343,7 +349,7 @@
               "SUPER,       Space,  exec, ${uwsmGetExe config.node.wayland.hyprlauncher.package} --toggle"
               "SUPER SHIFT, X,      killactive"
               "SUPER SHIFT, Q,      exec, ${uwsmGetExe' pkgs.systemd "loginctl"} terminate-session \"$XDG_SESSION_ID\""
-              "SUPER SHIFT, L,      exec, ${uwsmGetExe config.programs.hyprlock.package}"
+              "SUPER SHIFT, L,      exec, ${uwsmGetExe config.node.wayland.idle.screenlock.package}"
               "SUPER,       V,      togglefloating"
               "SUPER,       F,      fullscreen, 1" # Maximize.
               "SUPER SHIFT, F,      fullscreen, 0" # Fullscreen.
@@ -468,12 +474,12 @@
               cfg = config.node.wayland.idle;
 
               hyprctl = uwsmGetExe' pkgs.hyprland "hyprctl";
-              hyprlock = uwsmGetExe config.programs.hyprlock.package;
+              screenlock = uwsmGetExe config.node.wayland.idle.screenlock.package;
               loginctl = uwsmGetExe' pkgs.systemd "loginctl";
               systemctl = uwsmGetExe' pkgs.systemd "systemctl";
 
-              # Avoid starting multiple hyprlock instances.
-              lock = "${uwsmGetExe' pkgs.procps "pidof"} ${hyprlock} || ${hyprlock}";
+              # Avoid starting multiple screenlock instances.
+              lock = "${uwsmGetExe' pkgs.procps "pidof"} ${screenlock} || ${screenlock}";
             in
             {
               general = {
@@ -481,7 +487,7 @@
               }
               // lib.optionalAttrs cfg.screenlock.enable {
                 lock_cmd = lock;
-                unlock_cmd = "pkill -USR1 ${hyprlock}";
+                unlock_cmd = "pkill -USR1 ${screenlock}";
 
                 before_sleep_cmd = "${loginctl} lock-session"; # Lock before suspend.
               };
