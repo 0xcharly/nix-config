@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ flake, inputs, ... }:
 { pkgs, ... }:
 {
   imports = with inputs.nix-config-colorscheme.homeModules; [
@@ -16,12 +16,7 @@
     tree # List the content of directories in a tree-like format.
     yazi # File explorer that supports Kitty image protocol.
 
-    # Our own package installed by overlay.
-    # It's important to keep shadowing the original `pkgs.nvim` package
-    # instead of referring to our custom config via another name to maintain
-    # all related integrations (e.g. EDITOR) while being able to override it
-    # at anytime (e.g. in the corp-specific flavor).
-    nvim
+    flake.packages.${pkgs.stdenv.hostPlatform.system}.nvim # Our own package.
   ];
 
   programs = {

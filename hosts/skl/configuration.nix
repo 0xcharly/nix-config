@@ -16,11 +16,8 @@
     inputs.nix-config-secrets.nixosModules.services-tailscale
     inputs.nix-config-secrets.nixosModules.users-delay
 
-    flake.modules.common.nix-client-config
-    flake.modules.common.nix-path
-    flake.modules.common.nixpkgs-unfree
-    flake.modules.common.nixpkgs-unstable
-    flake.modules.common.overlays
+    flake.modules.generic.nix-client-config
+    flake.modules.generic.nix-path
 
     flake.nixosModules.bootloader-systemd-boot
     flake.nixosModules.essentials-desktop
@@ -32,6 +29,8 @@
     flake.nixosModules.networking-bluetooth
     flake.nixosModules.networking-wireless
     flake.nixosModules.nix-client-config
+    flake.nixosModules.nixpkgs-unfree
+    flake.nixosModules.nixpkgs-unstable
     flake.nixosModules.programs-essentials
     flake.nixosModules.programs-greetd
     flake.nixosModules.programs-greetd-autologin

@@ -2,10 +2,6 @@
   # Blueprint parameters.
   flake,
   inputs,
-  perSystem,
-  # Module parameters.
-  lib,
-  config,
   ...
 }:
 {
@@ -15,8 +11,6 @@
     inputs.nix-config-secrets.homeModules.services-cachix
     inputs.nix-config-secrets.homeModules.ssh-keys-ring-0-tier
 
-    flake.modules.common.nixpkgs-unstable
-
     flake.homeModules.account-essentials
     flake.homeModules.browsers
     flake.homeModules.cachix
@@ -24,6 +18,7 @@
     flake.homeModules.fonts
     flake.homeModules.home-manager-nixos
     flake.homeModules.keychain
+    flake.homeModules.nixpkgs-unstable
     flake.homeModules.opencode
     flake.homeModules.pkgs-desktop-gui
     flake.homeModules.pkgs-desktop-tui

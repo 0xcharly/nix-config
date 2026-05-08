@@ -18,11 +18,8 @@
     inputs.nix-config-secrets.nixosModules.ssh-keys-ring-0-tier
     inputs.nix-config-secrets.nixosModules.users-delay
 
-    flake.modules.common.nix-client-config
-    flake.modules.common.nix-path
-    flake.modules.common.nixpkgs-unfree
-    flake.modules.common.nixpkgs-unstable
-    flake.modules.common.overlays
+    flake.modules.generic.nix-client-config
+    flake.modules.generic.nix-path
 
     flake.nixosModules.bootloader-systemd-boot
     flake.nixosModules.essentials-desktop
@@ -37,9 +34,11 @@
     flake.nixosModules.networking-resolved
     flake.nixosModules.nix-build-aarch64
     flake.nixosModules.nix-client-config
+    flake.nixosModules.nixpkgs-unfree
+    flake.nixosModules.nixpkgs-unstable
     flake.nixosModules.programs-apdbctl
-    flake.nixosModules.programs-gnome-calendar
     flake.nixosModules.programs-essentials
+    flake.nixosModules.programs-gnome-calendar
     flake.nixosModules.programs-greetd
     flake.nixosModules.programs-greetd-autologin
     flake.nixosModules.programs-iotop

@@ -11,11 +11,10 @@
     inputs.nix-config-secrets.homeModules.services-atuin
     inputs.nix-config-secrets.homeModules.ssh-keys-ring-3-tier
 
-    flake.modules.common.nixpkgs-unstable
-
     flake.homeModules.account-essentials
     flake.homeModules.home-manager-nixos
     flake.homeModules.keychain
+    flake.homeModules.nixpkgs-unstable
     flake.homeModules.secrets
     flake.homeModules.ssh-keys
   ];

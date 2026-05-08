@@ -23,11 +23,8 @@
     inputs.nix-config-secrets.nixosModules.services-vaultwarden
     inputs.nix-config-secrets.nixosModules.zfs-replication-keys
 
-    flake.modules.common.nix-client-config
-    flake.modules.common.nix-path
-    flake.modules.common.nixpkgs-unfree
-    flake.modules.common.nixpkgs-unstable
-    flake.modules.common.overlays
+    flake.modules.generic.nix-client-config
+    flake.modules.generic.nix-path
 
     flake.nixosModules.access-directory
     flake.nixosModules.bootloader-systemd-boot
@@ -46,6 +43,8 @@
     flake.nixosModules.initrd-tailscale
     flake.nixosModules.networking-common
     flake.nixosModules.nix-client-config
+    flake.nixosModules.nixpkgs-unfree
+    flake.nixosModules.nixpkgs-unstable
     flake.nixosModules.programs-essentials
     flake.nixosModules.programs-iotop
     flake.nixosModules.programs-packages-common

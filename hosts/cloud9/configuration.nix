@@ -16,20 +16,19 @@
     inputs.nix-config-secrets.nixosModules.services-tailscale-initrd
     inputs.nix-config-secrets.nixosModules.users-delay
 
-    flake.modules.common.nix-client-config
-    flake.modules.common.nix-path
-    flake.modules.common.nixpkgs-unfree
-    flake.modules.common.nixpkgs-unstable
-    flake.modules.common.overlays
+    flake.modules.generic.nix-client-config
+    flake.modules.generic.nix-path
 
     flake.nixosModules.bootloader-grub
     flake.nixosModules.fs-zfs-system-linode
     flake.nixosModules.fs-zfs-zpool-root
     flake.nixosModules.fs-zfs-zpool-root-data
     flake.nixosModules.fs-zfs-zpool-root-home
-    flake.nixosModules.initrd-unlock-over-ssh
     flake.nixosModules.initrd-tailscale
+    flake.nixosModules.initrd-unlock-over-ssh
     flake.nixosModules.nix-client-config
+    flake.nixosModules.nixpkgs-unfree
+    flake.nixosModules.nixpkgs-unstable
     flake.nixosModules.programs-essentials
     flake.nixosModules.programs-iotop
     flake.nixosModules.programs-packages-common
