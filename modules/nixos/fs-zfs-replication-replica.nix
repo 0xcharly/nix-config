@@ -28,7 +28,7 @@
         createHome = true;
         group = "syncoid";
         openssh.authorizedKeys.keys = [
-          ''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIf1BY82EBfuIPmqzPhA0SXNRQ9z7zdCzE99TiqdjWmg''
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIf1BY82EBfuIPmqzPhA0SXNRQ9z7zdCzE99TiqdjWmg"
         ];
       };
 

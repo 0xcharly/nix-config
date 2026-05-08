@@ -80,13 +80,16 @@
       navidrome = {
         uid = 3006;
         isSystemUser = lib.mkDefault true;
-        extraGroups = ["_music"];
+        extraGroups = [ "_music" ];
         group = lib.mkDefault "navidrome";
       };
       jellyfin = {
         uid = 3007;
         isSystemUser = lib.mkDefault true;
-        extraGroups = ["_media" "_music"];
+        extraGroups = [
+          "_media"
+          "_music"
+        ];
         group = lib.mkDefault "jellyfin";
       };
 
