@@ -1,18 +1,21 @@
 {
-  pkgs,
-  pname,
+  lib,
+  fishPlugins,
+  fzf,
+  git,
+  tmux,
   ...
 }:
-with pkgs;
 fishPlugins.buildFishPlugin {
-  inherit pname;
-  version = "2026-03-15";
+  pname = "tmux-git-repository";
+  version = "2025-05-08";
 
   src = ./.;
 
   buildInput = [
     fzf
     git
+    tmux
   ];
 
   meta = with lib; {

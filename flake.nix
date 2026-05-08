@@ -6,8 +6,15 @@
     let
       blueprint = inputs.blueprint { inherit inputs; };
       deploy-rs = import ./hive inputs blueprint;
+
+      outputs = inputs.flake-parts.lib.mkFlake { inherit inputs; } (
+        inputs.import-tree [
+          # ./lib.parts
+          ./modules.parts
+        ]
+      );
     in
-    blueprint
+    (inputs.nixpkgs.lib.recursiveUpdate blueprint outputs)
     // {
       inherit (deploy-rs) deploy;
       checks = blueprint.checks // deploy-rs.checks;
@@ -25,6 +32,10 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    import-tree.url = "github:vic/import-tree";
+    systems.url = "github:nix-systems/default";
 
     blueprint = {
       url = "github:numtide/blueprint";
