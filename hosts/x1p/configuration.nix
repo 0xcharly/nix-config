@@ -34,7 +34,6 @@
     flake.nixosModules.initrd-tailscale
     flake.nixosModules.nix-build-aarch64
     flake.nixosModules.nix-client-config
-    flake.nixosModules.overlays
     flake.nixosModules.programs-essentials
     flake.nixosModules.programs-iotop
     flake.nixosModules.programs-packages-common

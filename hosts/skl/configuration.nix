@@ -32,7 +32,6 @@
     flake.nixosModules.networking-bluetooth
     flake.nixosModules.networking-wireless
     flake.nixosModules.nix-client-config
-    flake.nixosModules.overlays
     flake.nixosModules.programs-essentials
     flake.nixosModules.programs-greetd
     flake.nixosModules.programs-greetd-autologin

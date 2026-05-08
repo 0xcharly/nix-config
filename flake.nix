@@ -31,12 +31,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Nix (community) Unofficial Repository.
-    nur = {
-      url = "github:nix-community/NUR";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     deploy-rs.url = "github:serokell/deploy-rs"; # System deploy tool.
     disko.url = "github:nix-community/disko"; # Filesystem management.
     golink.url = "github:tailscale/golink"; # go/link service.

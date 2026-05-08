@@ -37,7 +37,6 @@
     flake.nixosModules.networking-resolved
     flake.nixosModules.nix-build-aarch64
     flake.nixosModules.nix-client-config
-    flake.nixosModules.overlays
     flake.nixosModules.programs-apdbctl
     flake.nixosModules.programs-gnome-calendar
     flake.nixosModules.programs-essentials
