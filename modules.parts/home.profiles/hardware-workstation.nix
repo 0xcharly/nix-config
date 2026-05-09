@@ -18,11 +18,11 @@
       programs-coreutils
       programs-fish
       programs-jujutsu
+      programs-terminals
+      programs-tmux
       secrets
       ssh
       ssh-forgejo
-      terminals
-      tmux
       usb-auto-mount
       wayland-essentials
       wayland-hyprland

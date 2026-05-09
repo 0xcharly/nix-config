@@ -78,8 +78,8 @@
     { pkgs, ... }:
     {
       packages = with pkgs; {
-        fishPlugins-dir-git-repository = callPackage ./_dir-git-repository { };
-        fishPlugins-tmux-git-repository = callPackage ./_tmux-git-repository { };
+        fishPlugins-dir-git-repository = callPackage ./fishPlugins/_dir-git-repository { };
+        fishPlugins-tmux-git-repository = callPackage ./fishPlugins/_tmux-git-repository { };
       };
     };
 }

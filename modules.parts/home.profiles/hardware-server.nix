@@ -12,9 +12,9 @@
       programs-coreutils
       programs-fish
       programs-jujutsu
+      programs-tmux
       secrets
       ssh
-      tmux
     ];
   };
 }

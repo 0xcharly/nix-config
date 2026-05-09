@@ -13,9 +13,9 @@
       programs-coreutils
       programs-fish
       programs-jujutsu
+      programs-terminals
+      programs-tmux
       ssh
-      terminals
-      tmux
     ];
 
     node.keychain.autoLoadTrustedKeys = false;
