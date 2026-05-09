@@ -1,36 +1,16 @@
-{ flake, inputs, ... }:
+{ flake, ... }:
 {
-  imports = [
-    inputs.nix-config-secrets.homeModules.ssh-keys-ring-0-tier
+  imports = with flake.homeModules; [
+    opencode
+    pkgs-laptop-tui
 
-    flake.homeModules.account-essentials
-    flake.homeModules.atuin-sync
-    flake.homeModules.browsers
-    flake.homeModules.cachix
-    flake.homeModules.desktop-essentials
-    flake.homeModules.fonts
-    flake.homeModules.home-manager-nixos
-    flake.homeModules.keychain
-    flake.homeModules.nixpkgs-unstable
-    flake.homeModules.opencode
-    flake.homeModules.pkgs-desktop-gui
-    flake.homeModules.pkgs-desktop-tui
-    flake.homeModules.pkgs-laptop-tui
-    flake.homeModules.secrets
-    flake.homeModules.ssh-forgejo
-    flake.homeModules.ssh-keys
-    flake.homeModules.terminals
-    flake.homeModules.usb-auto-mount
-    flake.homeModules.wayland-essentials
-    flake.homeModules.wayland-hyprland
-    flake.homeModules.wayland-notifications
-    flake.homeModules.wayland-quickshell
+    profile-hardware-workstation
+    profile-ssh-keys-ring-0-tier
   ];
 
   home.stateVersion = "25.05";
 
   node = {
-    openssh.trusted-tier.ring = 0;
     wayland = {
       hyprland.monitor = "eDP-1, 2880x1920@120.00000, 0x0, 1.50";
 
