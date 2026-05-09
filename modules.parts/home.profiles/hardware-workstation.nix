@@ -2,7 +2,6 @@
 {
   flake.homeModules.profile-hardware-workstation = {
     imports = with self.homeModules; [
-      browsers
       desktop-essentials
       devenv
       env
@@ -14,6 +13,7 @@
       pkgs-desktop-tui
       programs-atuin
       programs-atuin-sync
+      programs-browsers
       programs-cachix
       programs-coreutils
       programs-fish
