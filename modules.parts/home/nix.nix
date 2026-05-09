@@ -1,21 +1,15 @@
+# TODO: move this to repo that uses it.
 { inputs, ... }:
 {
-  flake.nixosModules.nix-config =
+  flake.homeModules.nix =
     { config, lib, ... }:
     {
-      imports = [ inputs.nix-config-secrets.nixosModules.nix-config ];
+      imports = [ inputs.nix-config-secrets.homeModules.nix-config ];
 
       nix = {
         settings = {
-          # Sudo's users
-          allowed-users = [
-            "delay"
-            "@wheel"
-          ];
-          trusted-users = [
-            "delay"
-            "@wheel"
-          ];
+          allowed-users = [ "delay" ];
+          trusted-users = [ "delay" ];
 
           # Enable flakes
           experimental-features = "nix-command flakes";
@@ -45,7 +39,7 @@
         # Use a ! prefix to skip validation at build time (which fails since the file
         # is not stored in the Nix store).
         extraOptions = ''
-          !include ${config.age.secrets."services/nix-access-tokens.conf".path}
+          !include ${config.xdg.configHome}/nix/access-tokens.conf
         '';
       };
     };

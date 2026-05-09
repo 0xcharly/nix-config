@@ -28,8 +28,8 @@
     flake.nixosModules.hardware-zmk-studio
     flake.nixosModules.networking-common
     flake.nixosModules.networking-resolved
+    flake.nixosModules.nix
     flake.nixosModules.nix-build-aarch64
-    flake.nixosModules.nix-config
     flake.nixosModules.nixpkgs
     flake.nixosModules.programs-apdbctl
     flake.nixosModules.programs-essentials

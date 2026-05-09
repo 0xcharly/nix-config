@@ -1,14 +1,18 @@
 { inputs, ... }:
 {
-  flake.homeModules.nix-config =
+  flake.darwinModules.nix =
     { config, lib, ... }:
     {
-      imports = [ inputs.nix-config-secrets.homeModules.nix-config ];
-
       nix = {
         settings = {
-          allowed-users = [ "delay" ];
-          trusted-users = [ "delay" ];
+          allowed-users = [
+            "delay"
+            "@admin"
+          ];
+          trusted-users = [
+            "delay"
+            "@wheel"
+          ];
 
           # Enable flakes
           experimental-features = "nix-command flakes";
@@ -34,12 +38,6 @@
 
         # Add inputs to the system's legacy channels
         nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
-
-        # Use a ! prefix to skip validation at build time (which fails since the file
-        # is not stored in the Nix store).
-        extraOptions = ''
-          !include ${config.xdg.configHome}/nix/access-tokens.conf
-        '';
       };
     };
 }

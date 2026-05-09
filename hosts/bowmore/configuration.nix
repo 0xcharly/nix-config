@@ -38,7 +38,7 @@
     flake.nixosModules.initrd-unlock-over-ssh
     flake.nixosModules.initrd-tailscale
     flake.nixosModules.networking-common
-    flake.nixosModules.nix-config
+    flake.nixosModules.nix
     flake.nixosModules.nixpkgs
     flake.nixosModules.programs-essentials
     flake.nixosModules.programs-iotop

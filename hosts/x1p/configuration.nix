@@ -25,8 +25,8 @@
     flake.nixosModules.hardware-gpu-intel
     flake.nixosModules.initrd-tailscale
     flake.nixosModules.initrd-unlock-over-ssh
+    flake.nixosModules.nix
     flake.nixosModules.nix-build-aarch64
-    flake.nixosModules.nix-config
     flake.nixosModules.nixpkgs
     flake.nixosModules.programs-essentials
     flake.nixosModules.programs-iotop

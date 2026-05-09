@@ -24,7 +24,7 @@
     flake.nixosModules.hardware-gpu-intel
     flake.nixosModules.networking-bluetooth
     flake.nixosModules.networking-wireless
-    flake.nixosModules.nix-config
+    flake.nixosModules.nix
     flake.nixosModules.nixpkgs
     flake.nixosModules.programs-essentials
     flake.nixosModules.programs-greetd

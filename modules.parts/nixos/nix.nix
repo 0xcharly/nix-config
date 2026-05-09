@@ -1,13 +1,16 @@
 { inputs, ... }:
 {
-  flake.darwinModules.nix-config =
+  flake.nixosModules.nix =
     { config, lib, ... }:
     {
+      imports = [ inputs.nix-config-secrets.nixosModules.nix-config ];
+
       nix = {
         settings = {
+          # Sudo's users
           allowed-users = [
             "delay"
-            "@admin"
+            "@wheel"
           ];
           trusted-users = [
             "delay"
@@ -38,6 +41,12 @@
 
         # Add inputs to the system's legacy channels
         nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
+
+        # Use a ! prefix to skip validation at build time (which fails since the file
+        # is not stored in the Nix store).
+        extraOptions = ''
+          !include ${config.age.secrets."services/nix-access-tokens.conf".path}
+        '';
       };
     };
 }

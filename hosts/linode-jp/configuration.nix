@@ -26,7 +26,7 @@
     flake.nixosModules.fs-zfs-zpool-root-home
     flake.nixosModules.initrd-tailscale
     flake.nixosModules.initrd-unlock-over-ssh
-    flake.nixosModules.nix-config
+    flake.nixosModules.nix
     flake.nixosModules.nixpkgs
     flake.nixosModules.programs-essentials
     flake.nixosModules.programs-iotop

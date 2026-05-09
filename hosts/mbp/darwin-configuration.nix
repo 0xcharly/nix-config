@@ -2,7 +2,7 @@
 {
   imports = [
     flake.darwinModules.homebrew
-    flake.darwinModules.nix-config
+    flake.darwinModules.nix
     flake.darwinModules.nixpkgs
     flake.darwinModules.shells
     flake.darwinModules.system-defaults
