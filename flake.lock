@@ -665,11 +665,11 @@
         "systems": "systems_8"
       },
       "locked": {
-        "lastModified": 1777956575,
-        "narHash": "sha256-mc/ZGqlXlv4AuUAVv7lzRXIWQnwBCrtIou8YXuoA7WE=",
+        "lastModified": 1778294583,
+        "narHash": "sha256-gWKswla4yLPLsmQLmT5NNOsWKxPYQVugJh9g4n/ux7k=",
         "owner": "0xcharly",
         "repo": "nix-config-secrets",
-        "rev": "a78f9304f43b3986c09c153386bc0c9ac6736338",
+        "rev": "c0db700ce5d9a2ec41226832179309b5d2c0a683",
         "type": "github"
       },
       "original": {

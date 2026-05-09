@@ -11,7 +11,6 @@
 
     inputs.nix-config-secrets.nixosModules.default
     inputs.nix-config-secrets.nixosModules.disk-encryption-keys
-    inputs.nix-config-secrets.nixosModules.nix-client-config
     inputs.nix-config-secrets.nixosModules.services-forgejo-ssh-host-keys
     inputs.nix-config-secrets.nixosModules.services-github-backup
     inputs.nix-config-secrets.nixosModules.services-linkwarden
@@ -22,9 +21,6 @@
     inputs.nix-config-secrets.nixosModules.services-tailscale-initrd
     inputs.nix-config-secrets.nixosModules.services-vaultwarden
     inputs.nix-config-secrets.nixosModules.zfs-replication-keys
-
-    flake.modules.generic.nix-client-config
-    flake.modules.generic.nix-path
 
     flake.nixosModules.access-directory
     flake.nixosModules.bootloader-systemd-boot
@@ -42,7 +38,7 @@
     flake.nixosModules.initrd-unlock-over-ssh
     flake.nixosModules.initrd-tailscale
     flake.nixosModules.networking-common
-    flake.nixosModules.nix-client-config
+    flake.nixosModules.nix-config
     flake.nixosModules.nixpkgs-unfree
     flake.nixosModules.nixpkgs-unstable
     flake.nixosModules.programs-essentials

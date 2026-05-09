@@ -13,13 +13,9 @@
 
     inputs.nix-config-secrets.nixosModules.default
     inputs.nix-config-secrets.nixosModules.jptax-fa5003-inputs
-    inputs.nix-config-secrets.nixosModules.nix-client-config
     inputs.nix-config-secrets.nixosModules.services-tailscale
     inputs.nix-config-secrets.nixosModules.ssh-keys-ring-0-tier
     inputs.nix-config-secrets.nixosModules.users-delay
-
-    flake.modules.generic.nix-client-config
-    flake.modules.generic.nix-path
 
     flake.nixosModules.bootloader-systemd-boot
     flake.nixosModules.essentials-desktop
@@ -33,7 +29,7 @@
     flake.nixosModules.networking-common
     flake.nixosModules.networking-resolved
     flake.nixosModules.nix-build-aarch64
-    flake.nixosModules.nix-client-config
+    flake.nixosModules.nix-config
     flake.nixosModules.nixpkgs-unfree
     flake.nixosModules.nixpkgs-unstable
     flake.nixosModules.programs-apdbctl

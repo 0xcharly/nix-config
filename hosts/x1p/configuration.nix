@@ -12,13 +12,9 @@
     inputs.nix-config-colorscheme.nixosModules.console
 
     inputs.nix-config-secrets.nixosModules.default
-    inputs.nix-config-secrets.nixosModules.nix-client-config
     inputs.nix-config-secrets.nixosModules.services-tailscale
     inputs.nix-config-secrets.nixosModules.services-tailscale-initrd
     inputs.nix-config-secrets.nixosModules.users-delay
-
-    flake.modules.generic.nix-client-config
-    flake.modules.generic.nix-path
 
     flake.nixosModules.bootloader-systemd-boot
     flake.nixosModules.fs-zfs-system
@@ -30,7 +26,7 @@
     flake.nixosModules.initrd-tailscale
     flake.nixosModules.initrd-unlock-over-ssh
     flake.nixosModules.nix-build-aarch64
-    flake.nixosModules.nix-client-config
+    flake.nixosModules.nix-config
     flake.nixosModules.nixpkgs-unfree
     flake.nixosModules.nixpkgs-unstable
     flake.nixosModules.programs-essentials

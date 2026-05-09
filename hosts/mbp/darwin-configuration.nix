@@ -1,11 +1,8 @@
 { flake, pkgs, ... }:
 {
   imports = [
-    flake.modules.generic.nix-client-config
-    flake.modules.generic.nix-path
-
     flake.darwinModules.homebrew
-    flake.darwinModules.nix-client-config
+    flake.darwinModules.nix-config
     flake.darwinModules.nixpkgs-flake
     flake.darwinModules.nixpkgs-unfree
     flake.darwinModules.nixpkgs-unstable
