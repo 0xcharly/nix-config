@@ -5,7 +5,7 @@
       account-essentials
       atuin-sync
       home-manager-nixos
-      nixpkgs-unstable
+      nixpkgs
       secrets
     ];
   };

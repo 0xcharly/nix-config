@@ -9,7 +9,7 @@
       desktop-essentials
       fonts
       home-manager-nixos
-      nixpkgs-unstable
+      nixpkgs
       pkgs-desktop-gui
       pkgs-desktop-tui
       secrets

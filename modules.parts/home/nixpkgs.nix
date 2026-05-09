@@ -1,6 +1,6 @@
 { inputs, ... }:
 {
-  flake.nixosModules.nixpkgs-unstable =
+  flake.homeModules.nixpkgs =
     { pkgs, ... }:
     {
       _module.args.pkgs' = import inputs.nixpkgs-unstable {

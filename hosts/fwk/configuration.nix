@@ -29,8 +29,7 @@
     flake.nixosModules.networking-wireless
     flake.nixosModules.nix-build-aarch64
     flake.nixosModules.nix-config
-    flake.nixosModules.nixpkgs-unfree
-    flake.nixosModules.nixpkgs-unstable
+    flake.nixosModules.nixpkgs
     flake.nixosModules.programs-essentials
     flake.nixosModules.programs-gnome-calendar
     flake.nixosModules.programs-greetd

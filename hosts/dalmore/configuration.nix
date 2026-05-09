@@ -27,8 +27,7 @@
     flake.nixosModules.initrd-unlock-over-ssh
     flake.nixosModules.networking-common
     flake.nixosModules.nix-config
-    flake.nixosModules.nixpkgs-unfree
-    flake.nixosModules.nixpkgs-unstable
+    flake.nixosModules.nixpkgs
     flake.nixosModules.programs-essentials
     flake.nixosModules.programs-iotop
     flake.nixosModules.programs-packages-common

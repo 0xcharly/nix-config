@@ -3,9 +3,7 @@
   imports = [
     flake.darwinModules.homebrew
     flake.darwinModules.nix-config
-    flake.darwinModules.nixpkgs-flake
-    flake.darwinModules.nixpkgs-unfree
-    flake.darwinModules.nixpkgs-unstable
+    flake.darwinModules.nixpkgs
     flake.darwinModules.shells
     flake.darwinModules.system-defaults
   ];
