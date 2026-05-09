@@ -670,11 +670,11 @@
         "systems": "systems_4"
       },
       "locked": {
-        "lastModified": 1778334065,
-        "narHash": "sha256-HAqtz4P7FVHt/ot9/iRR78L+aNIQaYpPsMaWX/zxzWg=",
+        "lastModified": 1778336291,
+        "narHash": "sha256-CCBrcu1t900rpnzYErwsTmuK3SQSOyO4Yl67g2n+1Fk=",
         "owner": "0xcharly",
         "repo": "nix-config-colorscheme",
-        "rev": "9d6b0def435371494c487980416ec3581d4e6d11",
+        "rev": "4a6fce25680dfc68b3d71ac4855e60027ba7aa5b",
         "type": "github"
       },
       "original": {
