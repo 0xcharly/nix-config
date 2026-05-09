@@ -6,7 +6,9 @@
       environment-desktop
       environment-desktop-wayland
       environment-development
-      home-manager-nixos
+      home-manager
+      home-manager-age
+      home-manager-nix
       install-fonts
       nixpkgs
       pkgs-desktop-gui
@@ -22,7 +24,6 @@
       programs-terminals
       programs-tmux
       programs-vcs
-      secrets
       services-usb-auto-mount
     ];
   };

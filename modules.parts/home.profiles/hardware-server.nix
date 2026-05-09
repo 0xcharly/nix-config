@@ -4,7 +4,9 @@
     imports = with self.homeModules; [
       environment
       environment-development
-      home-manager-nixos
+      home-manager
+      home-manager-age
+      home-manager-nix
       nixpkgs
       programs-atuin
       programs-atuin-sync
@@ -13,7 +15,6 @@
       programs-ssh
       programs-tmux
       programs-vcs
-      secrets
     ];
   };
 }

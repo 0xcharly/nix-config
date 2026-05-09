@@ -4,7 +4,8 @@
     imports = with self.homeModules; [
       environment
       environment-development
-      home-manager-nixos
+      home-manager
+      home-manager-nix
       install-fonts
       nixpkgs
       programs-atuin
