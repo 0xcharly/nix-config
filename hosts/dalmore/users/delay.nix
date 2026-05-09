@@ -1,11 +1,6 @@
-{
-  flake,
-  inputs,
-  ...
-}:
+{ flake, inputs, ... }:
 {
   imports = [
-    inputs.nix-config-secrets.homeModules.default
     inputs.nix-config-secrets.homeModules.services-atuin
 
     flake.homeModules.account-essentials

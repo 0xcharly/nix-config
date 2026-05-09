@@ -1,14 +1,7 @@
-{
-  # Blueprint parameters.
-  flake,
-  inputs,
-  ...
-}:
+{ flake, inputs, ... }:
 {
   imports = [
-    inputs.nix-config-secrets.homeModules.default
     inputs.nix-config-secrets.homeModules.services-atuin
-    inputs.nix-config-secrets.homeModules.services-cachix
     inputs.nix-config-secrets.homeModules.ssh-keys-ring-0-tier
 
     flake.homeModules.account-essentials
