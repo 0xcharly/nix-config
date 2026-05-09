@@ -30,7 +30,6 @@
           "1password" # Password manager
           "bitwarden" # Personal password management
           "firefox@developer-edition" # Firefox, for isolates
-          "ghostty" # Terminal
           "google-chrome" # When there's no alternatives
           "kitty" # Terminal
           "proton-pass" # Personal password management

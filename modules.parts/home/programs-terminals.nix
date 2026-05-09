@@ -4,8 +4,8 @@
     { config, lib, ... }:
     {
       imports = with self.homeModules; [
-        ghostty
-        kitty
+        programs-ghostty
+        programs-kitty
       ];
 
       options.user.terminal.default = with lib; {
