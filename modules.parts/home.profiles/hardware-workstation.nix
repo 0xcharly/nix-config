@@ -20,10 +20,12 @@
       programs-core-headless
       programs-fish
       programs-opencode
+      programs-password-managers
       programs-ssh
       programs-terminals
       programs-tmux
       programs-vcs
+      programs-zathura
       services-pipewire
       services-usb-auto-mount
     ];

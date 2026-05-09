@@ -43,10 +43,13 @@
         };
       };
 
-      xdg.configFile."gtk-4.0/settings.ini".text = ''
-        [AdwStyleManager]
-        color-scheme=ADW_COLOR_SCHEME_PREFER_DARK
-      '';
+      xdg = {
+        configFile."gtk-4.0/settings.ini".text = ''
+          [AdwStyleManager]
+          color-scheme=ADW_COLOR_SCHEME_PREFER_DARK
+        '';
+        mimeApps.enable = true;
+      };
 
       qt = {
         enable = true;
