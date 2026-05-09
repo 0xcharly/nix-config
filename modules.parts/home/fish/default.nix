@@ -1,6 +1,6 @@
 { withSystem, inputs, ... }:
 {
-  flake.homeModules.fish =
+  flake.homeModules.programs-fish =
     {
       config,
       lib,

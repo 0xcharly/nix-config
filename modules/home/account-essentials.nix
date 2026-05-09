@@ -1,13 +1,13 @@
 { flake, ... }:
 {
   imports = with flake.homeModules; [
-    atuin
     devenv
     env
-    fish
     git
-    jujutsu
     pkgs-essentials
+    programs-atuin
+    programs-fish
+    programs-jujutsu
     ssh
     tmux
   ];

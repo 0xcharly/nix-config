@@ -1,6 +1,6 @@
 { inputs, ... }:
 {
-  flake.homeModules.cachix =
+  flake.homeModules.programs-cachix =
     { config, ... }:
     {
       imports = [ inputs.nix-config-secrets.homeModules.services-cachix ];

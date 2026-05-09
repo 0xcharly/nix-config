@@ -3,15 +3,15 @@
   flake.homeModules.profile-hardware-workstation = {
     imports = with self.homeModules; [
       account-essentials
-      atuin-sync
       browsers
-      cachix
       desktop-essentials
       fonts
       home-manager-nixos
       nixpkgs
       pkgs-desktop-gui
       pkgs-desktop-tui
+      programs-atuin-sync
+      programs-cachix
       secrets
       ssh-forgejo
       terminals

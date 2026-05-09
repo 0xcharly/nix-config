@@ -1,6 +1,6 @@
 { inputs, ... }:
 {
-  flake.homeModules.atuin = {
+  flake.homeModules.programs-atuin = {
     imports = [ inputs.nix-config-colorscheme.homeModules.atuin ];
 
     programs.atuin = {

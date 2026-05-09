@@ -1,6 +1,6 @@
 { self, inputs, ... }:
 {
-  flake.homeModules.atuin-sync =
+  flake.homeModules.programs-atuin-sync =
     { config, ... }:
     {
       imports = [ inputs.nix-config-secrets.homeModules.services-atuin ];

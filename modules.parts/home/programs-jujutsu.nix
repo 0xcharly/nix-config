@@ -1,6 +1,6 @@
 { withSystem, ... }:
 {
-  flake.homeModules.jujutsu =
+  flake.homeModules.programs-jujutsu =
     {
       config,
       lib,
