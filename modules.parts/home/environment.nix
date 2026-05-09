@@ -1,13 +1,12 @@
-{ withSystem, ... }:
+{ moduleWithSystem, ... }:
 {
-  flake.homeModules.environment =
-    { lib, pkgs, ... }:
+  flake.homeModules.environment = moduleWithSystem (
+    perSystem@{ config, ... }:
+    { lib, ... }:
     {
       home.sessionVariables =
         let
-          nvim = lib.getExe (
-            withSystem pkgs.stdenv.hostPlatform.system ({ config, ... }: config.packages.nvim)
-          );
+          nvim = lib.getExe perSystem.config.packages.nvim;
         in
         {
           LANG = "en_US.UTF-8";
@@ -18,5 +17,6 @@
           MANPAGER = "${nvim} +Man!";
           PAGER = "less -FirSwX";
         };
-    };
+    }
+  );
 }

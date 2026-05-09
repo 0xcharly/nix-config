@@ -1,14 +1,10 @@
-{ withSystem, inputs, ... }:
+{ moduleWithSystem, inputs, ... }:
 {
-  flake.homeModules.programs-fish =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
-    }:
+  flake.homeModules.programs-fish = moduleWithSystem (
+    perSystem@{ config, ... }:
+    homeManager@{ lib, ... }:
     let
-      cfg = config.programs.fish;
+      cfg = homeManager.config.programs.fish;
     in
     {
       imports = [ inputs.nix-config-colorscheme.homeModules.fish ];
@@ -64,15 +60,13 @@
           enableBashIntegration = false;
           enableFishIntegration = false;
         };
-        packages = withSystem pkgs.stdenv.hostPlatform.system (
-          { config, ... }:
-          [
-            config.packages.fishPlugins-dir-git-repository
-            config.packages.fishPlugins-tmux-git-repository
-          ]
-        );
+        packages = with perSystem.config.packages; [
+          fishPlugins-dir-git-repository
+          fishPlugins-tmux-git-repository
+        ];
       };
-    };
+    }
+  );
 
   perSystem =
     { pkgs, ... }:

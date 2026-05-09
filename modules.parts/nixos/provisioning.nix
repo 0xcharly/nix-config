@@ -1,7 +1,8 @@
 # Modules used to create a NixOS image.
-{ withSystem, ... }:
+{ moduleWithSystem, ... }:
 {
-  flake.nixosModules.iso-provisioning =
+  flake.nixosModules.iso-provisioning = moduleWithSystem (
+    perSystem@{ config, ... }:
     {
       lib,
       pkgs,
@@ -44,8 +45,8 @@
         tree # List the content of directories in a tree-like format
         yazi # File explorer that supports Kitty image protocol
 
-        # Our own package
-        (withSystem pkgs.stdenv.hostPlatform.system ({ config, ... }: config.packages.nvim))
+        perSystem.config.packages.nvim # Our own package
       ];
-    };
+    }
+  );
 }

@@ -1,6 +1,7 @@
-{ withSystem, inputs, ... }:
+{ moduleWithSystem, inputs, ... }:
 {
-  flake.homeModules.programs-core-headless =
+  flake.homeModules.programs-core-headless = moduleWithSystem (
+    perSystem@{ config, ... }:
     { pkgs, ... }:
     {
       imports = with inputs.nix-config-colorscheme.homeModules; [
@@ -18,8 +19,7 @@
         tree # List the content of directories in a tree-like format
         yazi # File explorer that supports Kitty image protocol
 
-        # Our own package
-        (withSystem pkgs.stdenv.hostPlatform.system ({ config, ... }: config.packages.nvim))
+        perSystem.config.packages.nvim # Our own package
       ];
 
       programs = {
@@ -29,5 +29,6 @@
         fzf.enable = true;
         ripgrep.enable = true;
       };
-    };
+    }
+  );
 }
