@@ -40,11 +40,11 @@
         fish
         git
 
-        duf # Modern `df` alternative.
-        tree # List the content of directories in a tree-like format.
-        yazi # File explorer that supports Kitty image protocol.
+        duf # Modern `df` alternative
+        tree # List the content of directories in a tree-like format
+        yazi # File explorer that supports Kitty image protocol
 
-        # Our own package.
+        # Our own package
         (withSystem pkgs.stdenv.hostPlatform.system ({ config, ... }: config.packages.nvim))
       ];
     };
