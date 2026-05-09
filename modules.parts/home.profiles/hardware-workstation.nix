@@ -7,7 +7,6 @@
       environment-desktop-wayland
       environment-development
       fonts
-      git
       home-manager-nixos
       nixpkgs
       pkgs-desktop-gui
@@ -18,9 +17,9 @@
       programs-cachix
       programs-coreutils
       programs-fish
-      programs-jujutsu
       programs-terminals
       programs-tmux
+      programs-vcs
       secrets
       ssh
       ssh-forgejo

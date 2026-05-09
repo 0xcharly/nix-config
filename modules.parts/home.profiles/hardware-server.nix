@@ -4,15 +4,14 @@
     imports = with self.homeModules; [
       environment
       environment-development
-      git
       home-manager-nixos
       nixpkgs
       programs-atuin
       programs-atuin-sync
       programs-coreutils
       programs-fish
-      programs-jujutsu
       programs-tmux
+      programs-vcs
       secrets
       ssh
     ];

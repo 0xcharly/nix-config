@@ -5,16 +5,15 @@
       environment
       environment-development
       fonts
-      git
       home-manager-nixos
       keychain
       nixpkgs
       programs-atuin
       programs-coreutils
       programs-fish
-      programs-jujutsu
       programs-terminals
       programs-tmux
+      programs-vcs
       ssh
     ];
 
