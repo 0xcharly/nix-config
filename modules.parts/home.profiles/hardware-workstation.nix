@@ -3,8 +3,8 @@
   flake.homeModules.profile-hardware-workstation = {
     imports = with self.homeModules; [
       desktop-essentials
-      devenv
-      env
+      environment
+      environment-dev
       fonts
       git
       home-manager-nixos

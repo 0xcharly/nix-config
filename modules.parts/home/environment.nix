@@ -1,6 +1,6 @@
 { withSystem, ... }:
 {
-  flake.homeModules.env =
+  flake.homeModules.environment =
     { lib, pkgs, ... }:
     {
       home.sessionVariables =
