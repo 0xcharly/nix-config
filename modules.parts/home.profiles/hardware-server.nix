@@ -10,7 +10,7 @@
       nixpkgs
       programs-atuin
       programs-atuin-sync
-      programs-coreutils
+      programs-core-headless
       programs-fish
       programs-ssh
       programs-tmux

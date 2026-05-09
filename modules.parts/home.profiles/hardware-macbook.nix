@@ -9,7 +9,7 @@
       install-fonts
       nixpkgs
       programs-atuin
-      programs-coreutils
+      programs-core-headless
       programs-fish
       programs-keychain
       programs-ssh

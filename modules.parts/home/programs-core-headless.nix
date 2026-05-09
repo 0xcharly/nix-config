@@ -1,6 +1,6 @@
 { withSystem, inputs, ... }:
 {
-  flake.homeModules.programs-coreutils =
+  flake.homeModules.programs-core-headless =
     { pkgs, ... }:
     {
       imports = with inputs.nix-config-colorscheme.homeModules; [

@@ -1,6 +1,7 @@
 { flake, ... }:
 {
   imports = with flake.homeModules; [
+    profile-hardware-wireless
     profile-hardware-workstation
     profile-ssh-keys-ring-0-tier
   ];

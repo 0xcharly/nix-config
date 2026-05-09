@@ -1,8 +1,8 @@
 { flake, ... }:
 {
   imports = with flake.homeModules; [
-    pkgs-laptop-tui
-
+    profile-hardware-laptop
+    profile-hardware-wireless
     profile-hardware-workstation
     profile-ssh-keys-ring-0-tier
   ];
