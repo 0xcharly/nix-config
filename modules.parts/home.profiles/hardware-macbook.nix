@@ -6,17 +6,15 @@
       environment-development
       fonts
       home-manager-nixos
-      keychain
       nixpkgs
       programs-atuin
       programs-coreutils
       programs-fish
+      programs-keychain
       programs-terminals
       programs-tmux
       programs-vcs
       ssh
     ];
-
-    node.keychain.autoLoadTrustedKeys = false;
   };
 }

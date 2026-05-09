@@ -4,7 +4,7 @@
     imports = [
       inputs.nix-config-secrets.homeModules.ssh-keys-ring-0-tier
 
-      self.homeModules.keychain
+      self.homeModules.programs-keychain
       self.homeModules.ssh-keys
     ];
 
