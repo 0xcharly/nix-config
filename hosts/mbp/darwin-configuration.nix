@@ -4,29 +4,13 @@
     flake.darwinModules.homebrew
     flake.darwinModules.nix
     flake.darwinModules.nixpkgs
-    flake.darwinModules.shells
     flake.darwinModules.system-defaults
+    flake.darwinModules.system-shells
   ];
 
   ids.gids.nixbld = 30000;
 
   nixpkgs.hostPlatform = "aarch64-darwin";
-
-  node.homebrew = {
-    extraMasApps = {
-      Xcode = 497799835; # Xcode is installed out-of-band on corp devices.
-    };
-    extraCasks = [
-      "firefox@developer-edition" # Firefox, for isolates.
-      "google-chrome" # When there's no alternatives.
-      "obsidian" # Notes.
-      "protonvpn" # Private network.
-      "tailscale-app" # Personal VPN network.
-      "transmission"
-      "ungoogled-chromium"
-      "vlc" # Media player.
-    ];
-  };
 
   system = {
     primaryUser = "delay";
