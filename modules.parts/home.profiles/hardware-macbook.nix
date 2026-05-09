@@ -11,10 +11,10 @@
       programs-coreutils
       programs-fish
       programs-keychain
+      programs-ssh
       programs-terminals
       programs-tmux
       programs-vcs
-      ssh
     ];
   };
 }

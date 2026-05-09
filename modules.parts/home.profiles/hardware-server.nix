@@ -10,10 +10,10 @@
       programs-atuin-sync
       programs-coreutils
       programs-fish
+      programs-ssh
       programs-tmux
       programs-vcs
       secrets
-      ssh
     ];
   };
 }

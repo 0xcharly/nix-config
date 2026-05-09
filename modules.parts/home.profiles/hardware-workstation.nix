@@ -18,12 +18,11 @@
       programs-coreutils
       programs-fish
       programs-opencode
+      programs-ssh
       programs-terminals
       programs-tmux
       programs-vcs
       secrets
-      ssh
-      ssh-forgejo
       usb-auto-mount
     ];
   };
