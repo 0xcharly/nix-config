@@ -23,7 +23,7 @@
       programs-tmux
       programs-vcs
       secrets
-      usb-auto-mount
+      services-usb-auto-mount
     ];
   };
 }
