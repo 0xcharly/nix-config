@@ -2,9 +2,10 @@
 {
   flake.homeModules.profile-hardware-workstation = {
     imports = with self.homeModules; [
-      desktop-essentials
       environment
-      environment-dev
+      environment-desktop
+      environment-desktop-wayland
+      environment-development
       fonts
       git
       home-manager-nixos
@@ -24,10 +25,6 @@
       ssh
       ssh-forgejo
       usb-auto-mount
-      wayland-essentials
-      wayland-hyprland
-      wayland-notifications
-      wayland-quickshell
     ];
   };
 }

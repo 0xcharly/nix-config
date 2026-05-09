@@ -1,5 +1,5 @@
 {
-  flake.homeModules.environment-dev =
+  flake.homeModules.environment-development =
     {
       config,
       pkgs,

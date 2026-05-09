@@ -3,7 +3,7 @@
   flake.homeModules.profile-hardware-macbook = {
     imports = with self.homeModules; [
       environment
-      environment-dev
+      environment-development
       fonts
       git
       home-manager-nixos

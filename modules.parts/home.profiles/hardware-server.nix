@@ -3,7 +3,7 @@
   flake.homeModules.profile-hardware-server = {
     imports = with self.homeModules; [
       environment
-      environment-dev
+      environment-development
       git
       home-manager-nixos
       nixpkgs
