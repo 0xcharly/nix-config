@@ -11,9 +11,5 @@
 
   home.stateVersion = "24.05";
 
-  node = {
-    keychain.autoLoadTrustedKeys = false;
-    # TODO: agenix HM module on darwin create paths that require shell evaluation…
-    services.atuin.enableSync = false;
-  };
+  node.keychain.autoLoadTrustedKeys = false;
 }

@@ -1,10 +1,10 @@
 { flake, inputs, ... }:
 {
   imports = [
-    inputs.nix-config-secrets.homeModules.services-atuin
     inputs.nix-config-secrets.homeModules.ssh-keys-ring-0-tier
 
     flake.homeModules.account-essentials
+    flake.homeModules.atuin-sync
     flake.homeModules.browsers
     flake.homeModules.cachix
     flake.homeModules.desktop-essentials
@@ -29,7 +29,6 @@
 
   node = {
     openssh.trusted-tier.ring = 0;
-    services.atuin.enableSync = true;
     wayland = {
       hyprland.monitor = "DP-1, 3840x2160@59.997Hz, 0x0, 1.25";
 
