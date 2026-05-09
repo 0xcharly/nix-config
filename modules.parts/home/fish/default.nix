@@ -42,27 +42,14 @@
           functions = {
             fish_greeting = ""; # Disable greeting message.
             fish_mode_prompt = ""; # Disable prompt vi mode reporting.
-            prompt_template = ''
-              if not set -q __fish_prompt_template
-                # Cache the resulting template string since all of its content is
-                # static, and it shells out to lolcat for highlightings.
-                set -g __fish_prompt_template (
-                    # Reset all ANSI sequences before and after the prompt
-                    set_color normal
-                    # Create a template string starting with the hostname: "<hostname> %s $ ".
-                    # '%' is expanded into '%s' separately to avoid lolcat inserting escape sequences between '%' and 's'.
-                    printf (
-                          printf "%s %% \$ " (prompt_hostname) \
-                        | ${lib.getExe pkgs.lolcat} --force --seed=(printf "%d" 0x(bat /etc/machine-id 2>/dev/null |head -c8)) -p 0.5 \
-                        | sed "s/%/%s/"
-                    ) (set_color --italics brblack; echo -n %s; set_color normal))
-              end
-              echo -n $__fish_prompt_template
-            '';
             fish_prompt = ''
               # Format template string with CWD.
               # CWD: last component only (i.e. current directory name)
-              printf (prompt_template) (prompt_pwd | string split /)[-1]
+              printf "%s%s %s%s%s \$%s " \
+                (set_color normal; if set -q SSH_TTY; set_color $fish_color_host_remote; else set_color $fish_color_host; end) (prompt_hostname) \
+                (set_color normal; set_color $fish_color_cwd) (prompt_pwd | string split /)[-1] \
+                (set_color normal; if set -q SSH_TTY; set_color $fish_color_host_remote; else set_color $fish_color_host; end) \
+                (set_color normal)
             '';
           };
           shellAliases.nixsh = "nix-shell --run ${lib.getExe cfg.package}";

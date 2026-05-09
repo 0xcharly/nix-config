@@ -622,11 +622,11 @@
         "systems": "systems_4"
       },
       "locked": {
-        "lastModified": 1778071274,
-        "narHash": "sha256-tvIb441IeXEXL0kDfLyZ09ioGItstnYHUwqfO953JxM=",
+        "lastModified": 1778304340,
+        "narHash": "sha256-0p1SbJq8ZPs23sA92HNiBI7BAaQzNJUeRQncEqAfh8M=",
         "owner": "0xcharly",
         "repo": "nix-config-colorscheme",
-        "rev": "a2587d3a614b3107b71b19ba74cdc4e9885cbda6",
+        "rev": "ba79e4d3983772b4a1fd1d0b620c0732f2b51ee9",
         "type": "github"
       },
       "original": {
