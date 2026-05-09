@@ -1,5 +1,5 @@
 {
-  flake.homeModules.opencode =
+  flake.homeModules.programs-opencode =
     { pkgs', ... }:
     {
       programs.opencode = {

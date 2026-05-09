@@ -1,7 +1,6 @@
 { flake, ... }:
 {
   imports = with flake.homeModules; [
-    opencode
     pkgs-laptop-tui
 
     profile-hardware-workstation

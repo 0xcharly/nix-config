@@ -17,6 +17,7 @@
       programs-cachix
       programs-coreutils
       programs-fish
+      programs-opencode
       programs-terminals
       programs-tmux
       programs-vcs

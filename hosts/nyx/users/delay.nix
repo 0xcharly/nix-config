@@ -1,8 +1,6 @@
 { flake, ... }:
 {
   imports = with flake.homeModules; [
-    opencode
-
     profile-hardware-workstation
     profile-ssh-keys-ring-0-tier
   ];
