@@ -6,8 +6,8 @@
       environment-desktop
       environment-desktop-wayland
       environment-development
-      fonts
       home-manager-nixos
+      install-fonts
       nixpkgs
       pkgs-desktop-gui
       pkgs-desktop-tui

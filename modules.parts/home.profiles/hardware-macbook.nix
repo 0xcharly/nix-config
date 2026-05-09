@@ -4,8 +4,8 @@
     imports = with self.homeModules; [
       environment
       environment-development
-      fonts
       home-manager-nixos
+      install-fonts
       nixpkgs
       programs-atuin
       programs-coreutils
