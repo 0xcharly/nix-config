@@ -2,19 +2,27 @@
 {
   flake.homeModules.profile-hardware-workstation = {
     imports = with self.homeModules; [
-      account-essentials
       browsers
       desktop-essentials
+      devenv
+      env
       fonts
+      git
       home-manager-nixos
       nixpkgs
       pkgs-desktop-gui
       pkgs-desktop-tui
+      programs-atuin
       programs-atuin-sync
       programs-cachix
+      programs-coreutils
+      programs-fish
+      programs-jujutsu
       secrets
+      ssh
       ssh-forgejo
       terminals
+      tmux
       usb-auto-mount
       wayland-essentials
       wayland-hyprland
