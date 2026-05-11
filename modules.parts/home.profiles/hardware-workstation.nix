@@ -11,6 +11,7 @@
       home-manager-nix
       install-fonts
       nixpkgs
+      packages-nvim
       programs-atuin
       programs-atuin-sync
       programs-beeper

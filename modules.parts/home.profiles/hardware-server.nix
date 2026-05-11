@@ -8,6 +8,7 @@
       home-manager-age
       home-manager-nix
       nixpkgs
+      packages-nvim
       programs-atuin
       programs-atuin-sync
       programs-core-headless

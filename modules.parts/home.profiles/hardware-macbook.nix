@@ -8,6 +8,7 @@
       home-manager-nix
       install-fonts
       nixpkgs
+      packages-nvim
       programs-atuin
       programs-core-headless
       programs-fish

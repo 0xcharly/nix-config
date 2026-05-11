@@ -1,7 +1,6 @@
-{ moduleWithSystem, inputs, ... }:
+{ inputs, ... }:
 {
-  flake.homeModules.programs-core-headless = moduleWithSystem (
-    perSystem@{ config, ... }:
+  flake.homeModules.programs-core-headless =
     { pkgs, ... }:
     {
       imports = with inputs.nix-config-colorscheme.homeModules; [
@@ -18,8 +17,6 @@
         libqalculate # Multi-purpose calculator on the command line
         tree # List the content of directories in a tree-like format
         yazi # File explorer that supports Kitty image protocol
-
-        perSystem.config.packages.nvim # Our own package
       ];
 
       programs = {
@@ -29,6 +26,5 @@
         fzf.enable = true;
         ripgrep.enable = true;
       };
-    }
-  );
+    };
 }
