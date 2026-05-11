@@ -28,7 +28,6 @@
         };
 
         gc.automatic = true; # Run garbage collection periodically. Default is weekly.
-        optimise.automatic = true;
 
         # Add each flake input as a registry
         registry = builtins.mapAttrs (_: value: { flake = value; }) inputs;
