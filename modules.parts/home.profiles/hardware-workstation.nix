@@ -11,7 +11,6 @@
       home-manager-nix
       install-fonts
       nixpkgs
-      packages-nvim
       programs-atuin
       programs-atuin-sync
       programs-beeper
@@ -21,6 +20,7 @@
       programs-core-headless
       programs-file-managers
       programs-fish
+      programs-nvim
       programs-opencode
       programs-password-managers
       programs-ssh

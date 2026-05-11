@@ -8,11 +8,11 @@
       home-manager-nix
       install-fonts
       nixpkgs
-      packages-nvim
       programs-atuin
       programs-core-headless
       programs-fish
       programs-keychain
+      programs-nvim
       programs-ssh
       programs-terminals
       programs-tmux

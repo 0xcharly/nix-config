@@ -8,11 +8,11 @@
       home-manager-age
       home-manager-nix
       nixpkgs
-      packages-nvim
       programs-atuin
       programs-atuin-sync
       programs-core-headless
       programs-fish
+      programs-nvim
       programs-ssh
       programs-tmux
       programs-vcs
