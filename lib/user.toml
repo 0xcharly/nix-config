@@ -1,7 +1,7 @@
 # https://www.recursive.design/assets/arrowtype-recursive-sansmono-specimen-230407.pdf
 [gui.fonts.variable.mono]
 name = "Recursive"
-size = 11
+size = 12
 features = [
   "dlig",
   "ss01",
@@ -23,7 +23,7 @@ wght = 400
 
 [gui.fonts.terminal]
 name = "Recursive Mono Casual Static"
-size = 11
+size = 12
 features = [
   "dlig",
   "ss01",
@@ -38,7 +38,7 @@ features = [
 
 [gui.fonts.monospace]
 name = "Recursive Mono Casual Static"
-size = 12
+size = 13
 
 [gui.fonts.sansSerif]
 name = "Recursive Sans Casual Static"
