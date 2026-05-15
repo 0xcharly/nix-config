@@ -17,6 +17,18 @@ in
 {
   environment.defaultPackages = with pkgs; [
     (writeShellApplication {
+      name = "zfs-calculate-snapshot-size";
+      runtimeInputs = [ config.boot.zfs.package ];
+      text = ''
+        DATASET="$1"
+        SNAPSHOT_PREV="$2"
+        SNAPSHOT_NEXT="$3"
+
+        zfs send -nv -i "''${@:3}" "$DATASET@$SNAPSHOT_PREV" "$DATASET@$SNAPSHOT_NEXT"
+      '';
+    })
+
+    (writeShellApplication {
       name = "zfs-send-snapshot";
       runtimeInputs = [
         mbuffer
