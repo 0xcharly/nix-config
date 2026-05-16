@@ -15,8 +15,9 @@
     inputs.nix-config-secrets.nixosModules.services-tailscale
     inputs.nix-config-secrets.nixosModules.users-delay
 
+    flake.nixosModules.profile-hardware-workstation
+
     flake.nixosModules.bootloader-systemd-boot
-    flake.nixosModules.essentials-desktop
     flake.nixosModules.fs-zfs-system
     flake.nixosModules.fs-zfs-zpool-root
     flake.nixosModules.fs-zfs-zpool-root-home
