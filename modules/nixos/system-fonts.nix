@@ -1,3 +1,0 @@
-{
-  fonts.fontDir.enable = true;
-}

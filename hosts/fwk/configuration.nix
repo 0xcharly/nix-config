@@ -24,11 +24,10 @@
     flake.nixosModules.hardware-cpu-amd
     flake.nixosModules.hardware-framework-13
     flake.nixosModules.hardware-gpu-amd
-    flake.nixosModules.hardware-zmk-studio
     flake.nixosModules.networking-bluetooth
     flake.nixosModules.networking-wireless
-    flake.nixosModules.nix-build-aarch64
     flake.nixosModules.nix
+    flake.nixosModules.nix-build-aarch64
     flake.nixosModules.nixpkgs
     flake.nixosModules.programs-essentials
     flake.nixosModules.programs-gnome-calendar
@@ -46,6 +45,7 @@
     flake.nixosModules.services-openssh
     flake.nixosModules.services-removable-devices
     flake.nixosModules.services-tailscale
+    flake.nixosModules.services-zmk-studio
     flake.nixosModules.system-common
     flake.nixosModules.system-fonts
     flake.nixosModules.users-delay

@@ -25,7 +25,6 @@
     flake.nixosModules.hardware-cpu-amd
     flake.nixosModules.hardware-gpu-amd
     flake.nixosModules.hardware-wake-on-lan
-    flake.nixosModules.hardware-zmk-studio
     flake.nixosModules.networking-common
     flake.nixosModules.networking-resolved
     flake.nixosModules.nix
@@ -52,6 +51,7 @@
     flake.nixosModules.services-pipewire
     flake.nixosModules.services-removable-devices
     flake.nixosModules.services-tailscale
+    flake.nixosModules.services-zmk-studio
     flake.nixosModules.system-common
     flake.nixosModules.system-fonts
     flake.nixosModules.users-delay
