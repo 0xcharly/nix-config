@@ -120,10 +120,10 @@
                       # IMPORTANT: When `label=` is specified, Disko references to these partitions by
                       # label in /etc/fstab. They MUST be distinct per disk, otherwise this will mount
                       # the same partition twice.
-                      # This config originally assign the same label to both disk, causing a race when
-                      # mounting /boot and /boot-fallback, effectively causing one of these partitions
-                      # to be mounted twice, and /boot and /boot-fallback to point to it (/etc/fstab).
-                      # This caused sync-boot-fallback.service to be a noop.
+                      # This config originally assigned the same label to both disks, introducing a race when
+                      # mounting /boot and /boot-fallback, effectively causing one of these partitions to be
+                      # mounted twice, and /boot and /boot-fallback to point to it (/etc/fstab). This caused
+                      # sync-boot-fallback.service to be a noop.
                       # Luckily disko prefers using the partition UUID if specified. This permitted to
                       # safely untangle this mess remotly without crashing the system, since deploying
                       # a new configuration triggers boot.service and boot-fallback.service.
