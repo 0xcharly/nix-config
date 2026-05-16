@@ -1,0 +1,36 @@
+{ self, ... }:
+{
+  flake.nixosModules.selfhosted-calibre-web =
+    { config, lib, ... }:
+    {
+      options.node.services.calibre = with lib; {
+        enable = mkEnableOption "Spin up a Calibre Web service";
+      };
+
+      config =
+        let
+          cfg = config.node.services.calibre;
+          inherit (self.lib) facts;
+        in
+        {
+          node = lib.mkIf cfg.enable {
+            fs.zfs.zpool.root.datadirs.calibre-web = { };
+          };
+
+          services.calibre-web = {
+            inherit (cfg) enable;
+            dataDir = config.node.fs.zfs.zpool.root.datadirs.calibre-web.absolutePath;
+            listen = {
+              ip = "0.0.0.0";
+              inherit (facts.services.calibre-web) port;
+            };
+            options = {
+              enableBookUploading = true;
+              enableBookConversion = true;
+              enableKepubify = true;
+              calibreLibrary = "/tank/delay/media/books";
+            };
+          };
+        };
+    };
+}
