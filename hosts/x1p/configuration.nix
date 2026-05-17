@@ -17,6 +17,8 @@
     inputs.nix-config-secrets.nixosModules.users-delay
 
     flake.nixosModules.bootloader-systemd-boot
+    flake.nixosModules.fs-zfs-common
+    flake.nixosModules.fs-zfs-system-base
     flake.nixosModules.fs-zfs-system
     flake.nixosModules.fs-zfs-zpool-root
     flake.nixosModules.fs-zfs-zpool-root-data

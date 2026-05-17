@@ -25,6 +25,7 @@
     flake.nixosModules.access-directory
     flake.nixosModules.bootloader-systemd-boot
     flake.nixosModules.fs-zfs-backup-minisforum-n5
+    flake.nixosModules.fs-zfs-common
     flake.nixosModules.fs-zfs-mount-tank
     flake.nixosModules.fs-zfs-replication-primary
     flake.nixosModules.fs-zfs-system-minisforum-n5

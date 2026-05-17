@@ -19,6 +19,8 @@
     flake.nixosModules.profile-hardware-laptop
 
     flake.nixosModules.bootloader-systemd-boot
+    flake.nixosModules.fs-zfs-common
+    flake.nixosModules.fs-zfs-system-base
     flake.nixosModules.fs-zfs-system
     flake.nixosModules.fs-zfs-zpool-root
     flake.nixosModules.fs-zfs-zpool-root-home
