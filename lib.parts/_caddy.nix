@@ -1,7 +1,4 @@
-{ lib }:
-let
-  uri = import ./uri.nix lib;
-in
+{ uri }:
 rec {
   # Caddy’s Automatic HTTPS (ACME) certificate management.
   mkGandiTlsCertificateIssuanceConfig = virtualHost: {

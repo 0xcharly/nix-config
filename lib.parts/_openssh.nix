@@ -1,10 +1,9 @@
 {
   facts,
   lib,
+  uri,
 }:
 let
-  uri = import ./uri.nix lib;
-
   # Apply a function to each key in an attribute set, creating a new attribute
   # set. Like `lib.attrsets.mapAttr`, but transform keys instead of values.
   mapAttrsName =

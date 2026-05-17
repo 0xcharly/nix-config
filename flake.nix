@@ -9,7 +9,7 @@
 
       outputs = inputs.flake-parts.lib.mkFlake { inherit inputs; } (
         inputs.import-tree [
-          # ./lib.parts
+          ./lib.parts
           ./modules.parts
         ]
       );
