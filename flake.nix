@@ -9,6 +9,7 @@
 
       outputs = inputs.flake-parts.lib.mkFlake { inherit inputs; } (
         inputs.import-tree [
+          ./hosts.parts
           ./lib.parts
           ./modules.parts
         ]
@@ -27,7 +28,7 @@
 
     nixos-hardware.url = "github:NixOS/nixos-hardware";
 
-    # Manages home directory, dotfiles and base environment.
+    # Manages home directory, dotfiles and base environment
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -42,32 +43,32 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    deploy-rs.url = "github:serokell/deploy-rs"; # System deploy tool.
-    disko.url = "github:nix-community/disko"; # Filesystem management.
-    golink.url = "github:tailscale/golink"; # go/link service.
+    deploy-rs.url = "github:serokell/deploy-rs"; # System deploy tool
+    disko.url = "github:nix-community/disko"; # Filesystem management
+    golink.url = "github:tailscale/golink"; # go/link service
 
-    apdbctl.url = "github:0xcharly/apdbctl"; # Brightness control.
-    nix-config-colorscheme.url = "github:0xcharly/nix-config-colorscheme"; # Custom colorscheme.
-    nix-config-nvim.url = "github:0xcharly/nix-config-nvim"; # Neovim.
-    nix-config-secrets.url = "github:0xcharly/nix-config-secrets"; # Secrets management.
-    nix-config-shell.url = "github:0xcharly/nix-config-shell"; # Quickshell.
+    apdbctl.url = "github:0xcharly/apdbctl"; # Brightness control
+    nix-config-colorscheme.url = "github:0xcharly/nix-config-colorscheme"; # Custom colorscheme
+    nix-config-nvim.url = "github:0xcharly/nix-config-nvim"; # Neovim
+    nix-config-secrets.url = "github:0xcharly/nix-config-secrets"; # Secrets management
+    nix-config-shell.url = "github:0xcharly/nix-config-shell"; # Quickshell
 
-    # Out of the box mailserver.
+    # Out of the box mailserver
     simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-25.11";
 
-    # macOS only: system configuration with Nix.
+    # macOS only: system configuration with Nix
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
       inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
 
-    # macOS only: Homebrew for Nix.
+    # macOS only: Homebrew for Nix
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
 
     # pieceofenglish.fr
     pieceofenglish.url = "github:0xcharly/pieceofenglish";
 
-    # Formatting.
+    # Formatting
     treefmt-nix.url = "github:numtide/treefmt-nix";
   };
 

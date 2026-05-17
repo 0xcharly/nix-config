@@ -8,7 +8,7 @@
     with pkgs;
     [
       nixfmt
-      nix-output-monitor # Nix Output Monitor.
+      nix-output-monitor # Nix Output Monitor
 
       jq
     ]
@@ -46,7 +46,8 @@
         else
           ''
             if test $(grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"; then
-              ${inhibit "Rebuilding NixOS system" "sudo nixos-rebuild ${rebuildOptions} switch --flake ."}
+              ${inhibit "Rebuilding NixOS system" "sudo nixos-rebuild ${rebuildOptions} switch --flake ."} && \
+                ${lib.getExe pkgs.nvd} diff /run/current-system result
             else
               ${inhibit "Rebuilding home-manager config" "${lib.getExe pkgs.home-manager} ${rebuildOptions} switch -b hm.bak --flake ."}
             fi
