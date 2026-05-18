@@ -5,17 +5,18 @@
     inputs:
     let
       blueprint = inputs.blueprint { inherit inputs; };
-      deploy-rs = import ./hive inputs blueprint;
-
-      outputs = inputs.flake-parts.lib.mkFlake { inherit inputs; } (
+      parts-out = inputs.flake-parts.lib.mkFlake { inherit inputs; } (
         inputs.import-tree [
           ./hosts.parts
           ./lib.parts
           ./modules.parts
         ]
       );
+
+      outputs = inputs.nixpkgs.lib.recursiveUpdate blueprint parts-out;
+      deploy-rs = import ./hive inputs outputs;
     in
-    (inputs.nixpkgs.lib.recursiveUpdate blueprint outputs)
+    outputs
     // {
       inherit (deploy-rs) deploy;
       checks = blueprint.checks // deploy-rs.checks;
