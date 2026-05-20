@@ -1,15 +1,15 @@
 inputs: outputs:
 let
-  # Take advantage of the nixpkgs cache instead of building deploy-rs from the flake.
+  # Take advantage of the nixpkgs cache instead of building deploy-rs from the flake
   inherit (inputs) deploy-rs nixpkgs;
   inherit (inputs.nixpkgs.lib.attrsets) mergeAttrsList;
 
   system = "x86_64-linux";
 
-  # Unmodified nixpkgs.
+  # Unmodified nixpkgs
   pkgs = import nixpkgs { inherit system; };
 
-  # nixpkgs with deploy-rs overlay but force the nixpkgs package.
+  # nixpkgs with deploy-rs overlay but force the nixpkgs package
   pkgs' = import nixpkgs {
     inherit system;
     overlays = [
@@ -55,6 +55,6 @@ rec {
     in
     mergeAttrsList (map mkDeployConfiguration hosts);
 
-  # TODO: consider moving the checks to Blueprint's check directory.
+  # TODO: consider moving the checks to Blueprint's check directory
   checks = builtins.mapAttrs (system: lib': lib'.deployChecks deploy) deploy-rs.lib;
 }
