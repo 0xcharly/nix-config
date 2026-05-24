@@ -18,7 +18,7 @@
           ];
 
           # Enable flakes
-          experimental-features = "nix-command flakes";
+          experimental-features = "flakes nix-command pipe-operators";
           accept-flake-config = true;
 
           # Add community cache

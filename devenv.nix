@@ -24,7 +24,8 @@
       inhibit = why: command: ''
         ${lib.getExe' pkgs.systemd "systemd-inhibit"} --what=idle --who=$(whoami) --why='${why}' ${command}
       '';
-      rebuildOptions = "--option accept-flake-config true --show-trace";
+      nixExperimentalFeaturesOption = ''extra-experimental-features "flakes nix-command pipe-operators"'';
+      rebuildOptions = ''--sudo --show-trace --option ${nixExperimentalFeaturesOption}'';
     in
     {
       gc.exec = ''
@@ -38,15 +39,19 @@
       provision-linode.exec = builtins.readFile ./bin/provision-linode.sh;
       provision-nas.exec = builtins.readFile ./bin/provision-nas.sh;
 
+      check.exec = ''
+        nix flake check --show-trace --${nixExperimentalFeaturesOption}
+      '';
+
       build.exec =
         if pkgs.stdenv.isDarwin then
           ''
-            sudo darwin-rebuild ${rebuildOptions} switch --flake .
+            darwin-rebuild ${rebuildOptions} build --flake .
           ''
         else
           ''
             if test $(grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"; then
-              ${inhibit "Building NixOS system" "sudo nixos-rebuild ${rebuildOptions} build --flake ."}
+              ${inhibit "Building NixOS system" "nixos-rebuild ${rebuildOptions} build --flake ."}
 
               if test $? -eq 0; then
                 ${lib.getExe pkgs.nvd} diff /run/current-system result
@@ -59,12 +64,12 @@
       rebuild.exec =
         if pkgs.stdenv.isDarwin then
           ''
-            sudo darwin-rebuild ${rebuildOptions} switch --flake .
+            darwin-rebuild ${rebuildOptions} switch --flake .
           ''
         else
           ''
             if test $(grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"; then
-              ${inhibit "Rebuilding NixOS system" "sudo nixos-rebuild ${rebuildOptions} switch --flake ."}
+              ${inhibit "Rebuilding NixOS system" "nixos-rebuild ${rebuildOptions} switch --flake ."}
             else
               ${inhibit "Rebuilding home-manager config" "${lib.getExe pkgs.home-manager} ${rebuildOptions} switch -b hm.bak --flake ."}
             fi
