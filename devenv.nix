@@ -38,6 +38,24 @@
       provision-linode.exec = builtins.readFile ./bin/provision-linode.sh;
       provision-nas.exec = builtins.readFile ./bin/provision-nas.sh;
 
+      build.exec =
+        if pkgs.stdenv.isDarwin then
+          ''
+            sudo darwin-rebuild ${rebuildOptions} switch --flake .
+          ''
+        else
+          ''
+            if test $(grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"; then
+              ${inhibit "Building NixOS system" "sudo nixos-rebuild ${rebuildOptions} build --flake ."}
+
+              if test $? -eq 0; then
+                ${lib.getExe pkgs.nvd} diff /run/current-system result
+              fi
+            else
+              ${inhibit "Building home-manager config" "${lib.getExe pkgs.home-manager} ${rebuildOptions} build -b hm.bak --flake ."}
+            fi
+          '';
+
       rebuild.exec =
         if pkgs.stdenv.isDarwin then
           ''
@@ -46,8 +64,7 @@
         else
           ''
             if test $(grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"; then
-              ${inhibit "Rebuilding NixOS system" "sudo nixos-rebuild ${rebuildOptions} switch --flake ."} && \
-                ${lib.getExe pkgs.nvd} diff /run/current-system result
+              ${inhibit "Rebuilding NixOS system" "sudo nixos-rebuild ${rebuildOptions} switch --flake ."}
             else
               ${inhibit "Rebuilding home-manager config" "${lib.getExe pkgs.home-manager} ${rebuildOptions} switch -b hm.bak --flake ."}
             fi
