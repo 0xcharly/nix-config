@@ -67,7 +67,14 @@ with lib;
             imports = [ inputs.home-manager.nixosModules.default ];
 
             home-manager = {
-              inherit users;
+              # Injects home.stateVersion into the Home Manager module
+              users = flip mapAttrs users (
+                _: module:
+                mkMerge [
+                  module
+                  { home = { inherit stateVersion; }; }
+                ]
+              );
               useGlobalPkgs = true;
               useUserPackages = true;
             };
