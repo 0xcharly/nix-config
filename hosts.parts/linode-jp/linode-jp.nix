@@ -53,7 +53,7 @@
           self.nixosModules.users-delay
         ];
 
-        # System config.
+        # System config
         node = {
           fs.zfs = {
             hostId = "60eec752";
@@ -91,7 +91,7 @@
 
           users.delay.ssh = {
             authorizeTailscaleInternalKey = true;
-            # TODO: remove once bastion is deployed.
+            # TODO: remove once bastion is deployed
             authorizeTailscalePublicKey = true;
           };
         };

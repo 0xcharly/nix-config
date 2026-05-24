@@ -45,7 +45,7 @@
           self.nixosModules.users-delay
         ];
 
-        # System config.
+        # System config
         node = {
           fs.zfs = {
             hostId = "0db85ca6";
