@@ -24,13 +24,12 @@ with lib;
           stateVersion = mkOption {
             type = types.singleLineStr;
             description = ''
-              The first version of NixOS installed on this particular machine,
-              used to maintain compatibility with application data (e.g.
-              databases) created on older NixOS versions.
+              The first version of NixOS / Home-Manager installed on this
+              particular machine, used to maintain compatibility with app
+              data (e.g. databases) created on older NixOS versions.
 
               https://search.nixos.org/options?query=system.stateVersion
             '';
-            default = config.system.stateVersion;
           };
 
           nixosModule = mkOption {
@@ -62,24 +61,6 @@ with lib;
         modules = [
           nixosModule # NixOS module
 
-          # Home Manager module
-          {
-            imports = [ inputs.home-manager.nixosModules.default ];
-
-            home-manager = {
-              # Injects home.stateVersion into the Home Manager module
-              users = flip mapAttrs users (
-                _: module:
-                mkMerge [
-                  module
-                  { home = { inherit stateVersion; }; }
-                ]
-              );
-              useGlobalPkgs = true;
-              useUserPackages = true;
-            };
-          }
-
           # System module
           {
             networking = {
@@ -89,6 +70,24 @@ with lib;
 
             nixpkgs = { inherit hostPlatform; };
             system = { inherit stateVersion; };
+          }
+
+          # Home Manager module
+          {
+            imports = [ inputs.home-manager.nixosModules.default ];
+
+            home-manager = {
+              # Injects home.stateVersion into the Home Manager module
+              users = flip mapAttrs users (
+                _: userModule:
+                mkMerge [
+                  userModule
+                  { home = { inherit stateVersion; }; }
+                ]
+              );
+              useGlobalPkgs = true;
+              useUserPackages = true;
+            };
           }
         ];
       }

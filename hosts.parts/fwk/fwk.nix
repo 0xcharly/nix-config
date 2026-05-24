@@ -61,7 +61,7 @@
             system = {
               disk = "/dev/disk/by-id/nvme-WD_BLACK_SN850X_4000GB_251103801906";
               luksPasswordFile = "/tmp/root-disk-encryption.key";
-              swapSize = "72G"; # Size of RAM + square root of RAM for hibernate.
+              swapSize = "72G"; # Size of RAM + square root of RAM for hibernate
             };
           };
 
