@@ -45,13 +45,10 @@
 
         # System config.
         node = {
-          boot.initrd.ssh-unlock = {
-            kernelModules = [
-              "atlantic"
-              "r8169"
-            ];
-            kernelParams = [ "ip=192.168.1.231::192.168.1.1:255.255.255.0:dalmore-initrd:enp197s0:off" ];
-          };
+          boot.initrd.ssh-unlock.kernelModules = [
+            "atlantic"
+            "r8169"
+          ];
 
           fs.zfs = {
             hostId = "eb3cd4cb";
@@ -90,18 +87,9 @@
           "xhci_pci"
         ];
 
-        networking = {
-          interfaces.enp197s0.ipv4.addresses = [
-            {
-              address = "192.168.1.232";
-              prefixLength = 24;
-            }
-          ];
-          defaultGateway = "192.168.1.1";
-          nameservers = [
-            "1.1.1.1"
-            "8.8.8.8"
-          ];
+        networking.interfaces = {
+          eno1.useDHCP = true;
+          enp197s0.useDHCP = true;
         };
       };
 
