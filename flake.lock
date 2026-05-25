@@ -692,11 +692,11 @@
         "systems": "systems_8"
       },
       "locked": {
-        "lastModified": 1778294583,
-        "narHash": "sha256-gWKswla4yLPLsmQLmT5NNOsWKxPYQVugJh9g4n/ux7k=",
+        "lastModified": 1779726007,
+        "narHash": "sha256-R2ik1GfoIxDk72gbiC77PrbyxeMAaYR55AWK4o6dA8Q=",
         "owner": "0xcharly",
         "repo": "nix-config-secrets",
-        "rev": "c0db700ce5d9a2ec41226832179309b5d2c0a683",
+        "rev": "6696c2f501d2ab1333749510261644b4d84cfa36",
         "type": "github"
       },
       "original": {
