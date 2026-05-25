@@ -128,7 +128,7 @@
               exit 1
             fi
 
-            ${inhibit "Deploying NixOS systems" "${lib.getExe pkgs.deploy-rs} ''$@"}
+            ${inhibit "Deploying NixOS systems" "${lib.getExe pkgs.deploy-rs} ''$@ -- --show-trace --${nixExperimentalFeaturesOption}"}
           '';
 
       preview-avatar.exec =
