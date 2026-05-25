@@ -4,22 +4,13 @@
   outputs =
     inputs:
     let
-      blueprint = inputs.blueprint { inherit inputs; };
-      parts-out = inputs.flake-parts.lib.mkFlake { inherit inputs; } (
-        inputs.import-tree [
-          ./hosts.parts
-          ./lib.parts
-          ./modules.parts
-        ]
-      );
-
-      outputs = inputs.nixpkgs.lib.recursiveUpdate blueprint parts-out;
+      outputs = inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
       deploy-rs = import ./hive inputs outputs;
     in
     outputs
     // {
       inherit (deploy-rs) deploy;
-      checks = blueprint.checks // deploy-rs.checks;
+      checks = outputs.checks // deploy-rs.checks;
     };
 
   inputs = {
@@ -38,11 +29,6 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:vic/import-tree";
     systems.url = "github:nix-systems/default";
-
-    blueprint = {
-      url = "github:numtide/blueprint";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
 
     deploy-rs.url = "github:serokell/deploy-rs"; # System deploy tool
     disko.url = "github:nix-community/disko"; # Filesystem management
