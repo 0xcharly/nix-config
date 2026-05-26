@@ -54,11 +54,11 @@
             # with the ZFS version in use.
             # Compatible kernel versions are listed on the OpenZFS release page. Check
             # which ZFS version is in use for the current stable channel.
-            # The current stable channel is 25.05, which uses ZFS 2.4.0, and is compatible
-            # with 4.18 - 6.18 kernels.
+            # The current stable channel is 25.05, which uses ZFS 2.4.2, and is compatible
+            # with 4.18 - 7.0 kernels.
             # https://discourse.nixos.org/t/zfs-latestcompatiblelinuxpackages-is-deprecated/52540
             # https://github.com/openzfs/zfs/releases
-            kernelPackages = pkgs.linuxPackages_6_18;
+            kernelPackages = pkgs.linuxPackages_7_0;
             zfs.package = pkgs.zfs_2_4;
           };
 
