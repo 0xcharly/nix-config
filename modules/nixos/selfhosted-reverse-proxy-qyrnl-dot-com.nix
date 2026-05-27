@@ -39,7 +39,7 @@
               inherit (cfg) enable;
               package = pkgs.caddy.withPlugins {
                 plugins = [ "github.com/caddy-dns/gandi@v1.1.0" ];
-                hash = "sha256-p2ez5zWRY0NBlMwFrkCVylurYCh/RTxj0dvdNYpXsGI=";
+                hash = "sha256-wnDkbalEfmUKU4E8x88TWYLAzMJqo2+6aEw7rjh4jkE=";
               };
               environmentFile = config.age.secrets."services/gandi-creds.qyrnl.com".path;
               virtualHosts = {
