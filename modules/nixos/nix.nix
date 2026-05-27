@@ -33,7 +33,11 @@
           ];
         };
 
-        gc.automatic = true; # Run garbage collection periodically. Default is weekly.
+        gc = {
+          automatic = true;
+          dates = "weekly";
+          options = "--delete-older-than 7d";
+        };
         optimise.automatic = true;
 
         # Add each flake input as a registry
