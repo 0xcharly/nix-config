@@ -58,8 +58,8 @@
             # with 4.18 - 7.0 kernels.
             # https://discourse.nixos.org/t/zfs-latestcompatiblelinuxpackages-is-deprecated/52540
             # https://github.com/openzfs/zfs/releases
-            kernelPackages = pkgs.linuxPackages_7_0;
-            zfs.package = pkgs.zfs_2_4;
+            kernelPackages = lib.mkDefault pkgs.linuxPackages_7_0;
+            zfs.package = lib.mkDefault pkgs.zfs_2_4;
           };
 
           environment.systemPackages = [
