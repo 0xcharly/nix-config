@@ -22,7 +22,7 @@
             SNAPSHOT_PREV="$2"
             SNAPSHOT_NEXT="$3"
 
-            zfs send -nv -i "''${@:3}" "$DATASET@$SNAPSHOT_PREV" "$DATASET@$SNAPSHOT_NEXT"
+            zfs send -nv -i "''${@:4}" "$DATASET@$SNAPSHOT_PREV" "$DATASET@$SNAPSHOT_NEXT"
           '';
         })
 
@@ -34,9 +34,11 @@
           ];
           text = ''
             DATASET="$1"
-            SNAPSHOT="$2"
+            SNAPSHOT_PREV="$2"
+            SNAPSHOT_NEXT="$3"
 
-            sudo zfs send -Rwp "''${@:3}" "$DATASET@$SNAPSHOT" \
+            zfs send -nv -i "$DATASET@$SNAPSHOT_PREV" "$DATASET@$SNAPSHOT_NEXT"
+            sudo zfs send -Rwp "''${@:4}" -I "@$SNAPSHOT_PREV" "$DATASET@$SNAPSHOT_NEXT" \
               | ${mkBufferedSshCall "zfs receive -sF $DATASET"}
           '';
         })
@@ -48,8 +50,8 @@
             config.boot.zfs.package
           ];
           text = ''
-            DATASET=$1
-            RESUME_TOKEN=$2
+            DATASET="$1"
+            RESUME_TOKEN="$2"
 
             sudo zfs send -t "$RESUME_TOKEN" \
               | ${mkBufferedSshCall "zfs receive -s $DATASET"}
