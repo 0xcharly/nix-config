@@ -714,11 +714,11 @@
         "quickshell": "quickshell"
       },
       "locked": {
-        "lastModified": 1780142533,
-        "narHash": "sha256-U1jEFe0NNh61uKA4JnIUQ11enjX0yF0fo7VCu603m9k=",
+        "lastModified": 1780158417,
+        "narHash": "sha256-B4aGxbLO/U8iJ7yVIksL8Nw0bKvMDlMgyn0XajUS6go=",
         "owner": "0xcharly",
         "repo": "nix-config-shell",
-        "rev": "e450be0e25bc7feed24fd54f8cde78a54c70738c",
+        "rev": "b73fe00edad20556a42d8fafcbf5a36d44357327",
         "type": "github"
       },
       "original": {
