@@ -38,7 +38,12 @@
     nix-config-colorscheme.url = "github:0xcharly/nix-config-colorscheme"; # Custom colorscheme
     nix-config-nvim.url = "github:0xcharly/nix-config-nvim"; # Neovim
     nix-config-secrets.url = "github:0xcharly/nix-config-secrets"; # Secrets management
-    nix-config-shell.url = "github:0xcharly/nix-config-shell"; # Quickshell
+
+    # Quickshell
+    nix-config-shell = {
+      url = "github:0xcharly/nix-config-shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Out of the box mailserver
     simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-25.11";
