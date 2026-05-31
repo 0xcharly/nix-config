@@ -19,8 +19,8 @@
 
           self.nixosModules.bootloader-systemd-boot
           self.nixosModules.fs-zfs-common
-          self.nixosModules.fs-zfs-system-base
           self.nixosModules.fs-zfs-system
+          self.nixosModules.fs-zfs-system-base
           self.nixosModules.fs-zfs-zpool-root
           self.nixosModules.fs-zfs-zpool-root-home
           self.nixosModules.hardware-cpu-intel
