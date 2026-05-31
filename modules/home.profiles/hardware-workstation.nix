@@ -11,6 +11,7 @@
       home-manager-nix
       install-fonts
       nixpkgs
+      programs-antigravity
       programs-atuin
       programs-atuin-sync
       programs-beeper
