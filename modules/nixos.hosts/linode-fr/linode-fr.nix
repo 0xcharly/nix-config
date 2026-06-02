@@ -57,6 +57,8 @@
             zpool.root.reservation = "2GiB";
           };
 
+          networking.tailscale.enableSsh = true;
+
           services = {
             dns = {
               "pieceofenglish.fr" = {

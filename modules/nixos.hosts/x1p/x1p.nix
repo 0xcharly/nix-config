@@ -67,7 +67,10 @@
               powerOnBoot = true;
               enableFastConnectable = true;
             };
-            tailscale.acceptRoutes = true;
+            tailscale = {
+              acceptRoutes = true;
+              enableSsh = true;
+            };
           };
 
           users.delay.ssh.authorizeTailscaleInternalKey = true;

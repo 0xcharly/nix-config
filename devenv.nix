@@ -46,17 +46,20 @@
       build.exec =
         if pkgs.stdenv.isDarwin then
           ''
+            ${lib.getExe pkgs.gum} log --time=datetime --level=info "Building nix-darwin system."
             darwin-rebuild ${rebuildOptions} build --flake .
           ''
         else
           ''
             if test $(grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"; then
+              ${lib.getExe pkgs.gum} log --time=datetime --level=info "Building NixOS system."
               ${inhibit "Building NixOS system" "nixos-rebuild ${rebuildOptions} build --flake ."}
 
               if test $? -eq 0; then
                 ${lib.getExe pkgs.nvd} diff /run/current-system result
               fi
             else
+              ${lib.getExe pkgs.gum} log --time=datetime --level=info "Building home-manager config."
               ${inhibit "Building home-manager config" "${lib.getExe pkgs.home-manager} ${rebuildOptions} build -b hm.bak --flake ."}
             fi
           '';
@@ -64,13 +67,16 @@
       rebuild.exec =
         if pkgs.stdenv.isDarwin then
           ''
+            ${lib.getExe pkgs.gum} log --time=datetime --level=info "Rebuilding nix-darwin system."
             darwin-rebuild ${rebuildOptions} switch --flake .
           ''
         else
           ''
             if test $(grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"; then
+              ${lib.getExe pkgs.gum} log --time=datetime --level=info "Rebuilding NixOS system."
               ${inhibit "Rebuilding NixOS system" "nixos-rebuild ${rebuildOptions} switch --flake ."}
             else
+              ${lib.getExe pkgs.gum} log --time=datetime --level=info "Rebuilding home-manager config."
               ${inhibit "Rebuilding home-manager config" "${lib.getExe pkgs.home-manager} ${rebuildOptions} switch -b hm.bak --flake ."}
             fi
           '';
@@ -78,7 +84,7 @@
       rollback.exec =
         if pkgs.stdenv.isDarwin then
           ''
-            >&2 echo "`rollback` not available on darwin."
+            ${lib.getExe pkgs.gum} format -- '`rollback` not available on darwin.' | xargs -0 ${lib.getExe pkgs.gum} log --time=datetime --level=error
             exit 1
           ''
         else
@@ -88,13 +94,28 @@
               exit 1
             fi
 
+            ${lib.getExe pkgs.gum} log --time=datetime --level=info "Rolling back NixOS system."
             ${inhibit "Rolling back NixOS system" "sudo nixos-rebuild ${rebuildOptions} --rollback switch --flake ."}
+          '';
+
+      remote-rebuild.exec =
+        if pkgs.stdenv.isDarwin then
+          ''
+            ${lib.getExe pkgs.gum} format -- '`remote-rebuild` not available on darwin.' | xargs -0 ${lib.getExe pkgs.gum} log --time=datetime --level=error
+            exit 1
+          ''
+        else
+          ''
+            HOSTNAME=''${1}
+
+            ${lib.getExe pkgs.gum} log --structured --time=datetime --level=info "Rebuilding remote NixOS system." host $HOSTNAME
+            ${inhibit "Rebuilding NixOS system" "nixos-rebuild ${rebuildOptions} switch --flake .#$HOSTNAME --target-host root@$HOSTNAME"}
           '';
 
       cache.exec =
         if pkgs.stdenv.isDarwin then
           ''
-            >&2 echo "`cache` not available on darwin."
+            ${lib.getExe pkgs.gum} format -- '`cache` not available on darwin.' | xargs -0 ${lib.getExe pkgs.gum} log --time=datetime --level=error
             exit 1
           ''
         else
@@ -108,6 +129,7 @@
               CONFIG_PREFIX="homeConfigurations"
             fi
 
+            ${lib.getExe pkgs.gum} log --structured --time=datetime --level=info "Building and caching NixOS system closure." config $CONFIG
             ${inhibit "Building and caching NixOS system closure" ''
               nix build ".#$CONFIG_PREFIX.$CONFIG.config.system.build.toplevel" --json \
                 | ${lib.getExe pkgs.jq} -r '.[].outputs | to_entries[].value' \
@@ -118,23 +140,24 @@
       deploy.exec =
         if pkgs.stdenv.isDarwin then
           ''
-            >&2 echo "`deploy` not available on darwin."
+            ${lib.getExe pkgs.gum} format -- '`deploy` not available on darwin.' | xargs -0 ${lib.getExe pkgs.gum} log --time=datetime --level=error
             exit 1
           ''
         else
           ''
             if test $(grep ^NAME= /etc/os-release | cut -d= -f2) != "NixOS"; then
-              >&2 echo "`deploy` not available on non-NixOS systems."
+              ${lib.getExe pkgs.gum} format -- '`deploy` not available on non-NixOS systems.' | xargs -0 ${lib.getExe pkgs.gum} log --time=datetime --level=error
               exit 1
             fi
 
+            ${lib.getExe pkgs.gum} log --time=datetime --level=info "Deploying NixOS systems." host $HOSTNAME
             ${inhibit "Deploying NixOS systems" "${lib.getExe pkgs.deploy-rs} ''$@ -- --show-trace --${nixExperimentalFeaturesOption}"}
           '';
 
       preview-avatar.exec =
         if pkgs.stdenv.isDarwin then
           ''
-            >&2 echo "`preview-avatar` not available on darwin."
+            ${lib.getExe pkgs.gum} format -- '`preview-avatar` not available on darwin.' | xargs -0 ${lib.getExe pkgs.gum} log --time=datetime --level=error
             exit 1
           ''
         else

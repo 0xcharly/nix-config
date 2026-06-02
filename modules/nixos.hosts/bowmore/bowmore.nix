@@ -128,6 +128,8 @@
             # };
           };
 
+          networking.tailscale.enableSsh = true;
+
           services = {
             atuin.enable = true;
             cgit.enable = true;

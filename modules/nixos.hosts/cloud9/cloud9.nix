@@ -54,6 +54,7 @@
             zpool.root.reservation = "2GiB";
           };
 
+          networking.tailscale.enableSsh = true;
           users.delay.ssh.authorizeTailscaleInternalKey = true;
         };
       };
