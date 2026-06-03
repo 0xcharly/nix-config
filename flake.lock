@@ -731,11 +731,11 @@
         "systems": "systems_9"
       },
       "locked": {
-        "lastModified": 1780231862,
-        "narHash": "sha256-iHS4p1tybSEfCen3rnKDnpEDocgEZS4DBYZQkFhMtcA=",
+        "lastModified": 1780491357,
+        "narHash": "sha256-7tRxDJlUuAZzNE7O8k6XL1pystG4xG7nyoGpA9/r++0=",
         "owner": "0xcharly",
         "repo": "nix-config-secrets",
-        "rev": "c948cd0c4677d0ce13212a30698cccf2373ad646",
+        "rev": "2d09c98e9dfd8d594cb0fb394fecee8a09a2e371",
         "type": "github"
       },
       "original": {

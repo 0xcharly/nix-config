@@ -1,6 +1,6 @@
 { self, inputs, ... }:
 {
-  my.hosts.x1p = {
+  my.hosts.node-x1p = {
     stateVersion = "25.11";
 
     nixosModule =

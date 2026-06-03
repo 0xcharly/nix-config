@@ -1,6 +1,6 @@
 { self, inputs, ... }:
 {
-  my.hosts.linode-jp = {
+  my.hosts.gate-jp = {
     stateVersion = "25.05";
 
     nixosModule =

@@ -50,15 +50,18 @@
 
                   ; Hosts declaration.
                   bowmore       IN CNAME bowmore.${tailnetDomainName}.
+                  side-jp       IN CNAME bowmore.${tailnetDomainName}.
                   cloud9        IN CNAME cloud9.${tailnetDomainName}.
                   dalmore       IN CNAME dalmore.${tailnetDomainName}.
+                  site-fr       IN CNAME dalmore.${tailnetDomainName}.
                   fwk           IN CNAME fwk.${tailnetDomainName}.
-                  linode-fr     IN CNAME linode-fr.${tailnetDomainName}.
-                  linode-jp     IN CNAME linode-jp.${tailnetDomainName}.
+                  roam-fwk      IN CNAME fwk.${tailnetDomainName}.
+                  gate-fr       IN CNAME gate-fr.${tailnetDomainName}.
+                  gate-jp       IN CNAME gate-jp.${tailnetDomainName}.
                   nyx           IN CNAME nyx.${tailnetDomainName}.
-                  rip           IN CNAME rip.${tailnetDomainName}.
+                  node-nyx      IN CNAME nyx.${tailnetDomainName}.
                   skl           IN CNAME skl.${tailnetDomainName}.
-                  x1p           IN CNAME x1p.${tailnetDomainName}.
+                  node-x1p      IN CNAME node-x1p.${tailnetDomainName}.
 
                   ; Services declaration.
                   album         IN CNAME ${reverseProxyHostName}

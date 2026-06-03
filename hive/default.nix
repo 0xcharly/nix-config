@@ -30,10 +30,10 @@ rec {
         "bowmore"
         "cloud9"
         "dalmore"
-        "linode-fr"
-        "linode-jp"
+        "gate-fr"
+        "gate-jp"
+        "node-x1p"
         "skl"
-        "x1p"
       ];
 
       mkDeployConfiguration = hostname: {
