@@ -16,6 +16,7 @@
         duf # Modern `df` alternative
         libqalculate # Multi-purpose calculator on the command line
         tree # List the content of directories in a tree-like format
+        wormhole-rs # Securely transfer data between computers
         yazi # File explorer that supports Kitty image protocol
       ];
 
