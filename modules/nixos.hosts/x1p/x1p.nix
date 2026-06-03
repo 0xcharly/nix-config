@@ -58,7 +58,7 @@
             system = {
               disk = "/dev/disk/by-id/nvme-KINGSTON_OM8TAP41024K1-A00_50026B7383D8FFFF";
               luksPasswordFile = "/tmp/root-disk-encryption.key";
-              swapSize = "16G";
+              swapSize = "72G"; # Size of RAM + square root of RAM for hibernate
             };
           };
 
