@@ -113,7 +113,7 @@
           # | flipped + 180 degrees  | 6 |
           # | flipped + 270 degrees  | 7 |
           #
-          hyprland.monitor = "DP-1, 3840x2160@59.997Hz, 0x0, 1.25, transform, 1";
+          hyprland.monitor = "HDMI-A-1, 3840x2160@59.997Hz, 0x0, 1.25, transform, 1";
 
           display.logicalResolution = {
             width = 3072;
