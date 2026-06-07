@@ -45,12 +45,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Antigravity tool suite
-    antigravity-nix = {
-      url = "github:jacopone/antigravity-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # Out of the box mailserver
     simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-25.11";
 
