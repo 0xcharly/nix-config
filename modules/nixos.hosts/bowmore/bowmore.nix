@@ -4,7 +4,7 @@
     stateVersion = "25.05";
 
     nixosModule =
-      { modulesPath, ... }:
+      { modulesPath, config, ... }:
       {
         imports = [
           "${modulesPath}/installer/scan/not-detected.nix"
@@ -13,12 +13,12 @@
           inputs.nix-config-secrets.nixosModules.disk-encryption-keys
           inputs.nix-config-secrets.nixosModules.services-forgejo-ssh-host-keys
           inputs.nix-config-secrets.nixosModules.services-github-backup
+          inputs.nix-config-secrets.nixosModules.services-hoopsnake-site-jp
           inputs.nix-config-secrets.nixosModules.services-linkwarden
           inputs.nix-config-secrets.nixosModules.services-miniflux
           inputs.nix-config-secrets.nixosModules.services-msmtp
           inputs.nix-config-secrets.nixosModules.services-radicale
           inputs.nix-config-secrets.nixosModules.services-tailscale
-          inputs.nix-config-secrets.nixosModules.services-tailscale-initrd
           inputs.nix-config-secrets.nixosModules.services-vaultwarden
           inputs.nix-config-secrets.nixosModules.zfs-replication-keys
 
@@ -36,8 +36,7 @@
           # self.nixosModules.fs-zfs-snapshots
           self.nixosModules.hardware-cpu-amd
           self.nixosModules.hardware-gpu-intel
-          self.nixosModules.initrd-unlock-over-ssh
-          self.nixosModules.initrd-tailscale
+          self.nixosModules.initrd-hoopsnake
           self.nixosModules.networking-common
           self.nixosModules.nix
           self.nixosModules.nixpkgs
@@ -76,10 +75,15 @@
 
         # System config
         node = {
-          boot.initrd.ssh-unlock.kernelModules = [
-            "atlantic"
-            "r8169"
-          ];
+          boot.initrd.hoopsnake = {
+            clientIdFile = config.age.secrets."services/hoopsnake/site-jp/tailscale-client-id".path;
+            clientSecretFile = config.age.secrets."services/hoopsnake/site-jp/tailscale-client-secret".path;
+            privateHostKeyFile = config.age.secrets."services/hoopsnake/site-jp/ssh_host_ed25519_key".path;
+            kernelModules = [
+              "atlantic"
+              "r8169"
+            ];
+          };
 
           fs.zfs = {
             hostId = "71fe60d5";

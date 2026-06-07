@@ -12,9 +12,7 @@
         };
       };
 
-      config = {
-        home.packages = [ homeManager.config.my.programs.nvim.package ];
-      };
+      config.home.packages = [ homeManager.config.my.programs.nvim.package ];
     }
   );
 

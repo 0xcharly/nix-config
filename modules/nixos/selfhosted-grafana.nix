@@ -37,6 +37,19 @@
                 enabled = true;
                 org_role = "Admin";
               };
+              # Grafana's secret key doesn't have a default value anymore.
+              # Please generate your own and use a file-provider on this option!
+              # See also https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#secret_key
+              # for more information.
+              #
+              # See https://grafana.com/docs/grafana/latest/setup-grafana/configure-security/configure-database-encryption/#re-encrypt-secrets on how to re-encrypt.
+              #
+              # As stated in the NixOS changelog for 26.05, there's no official
+              # way to rotate. Either hard-code the old key if your setup
+              # doesn't have any secrets in the DB that need special protection
+              # or perform a rotation with a 3rd-party tool.
+              # (https://github.com/erooke/grafana-secretkey-rotation-tool/tree/d9dc788902fa5185e15cb15ce6129f7237ab6138).
+              security.secret_key = "SW2YcwTIb9zpOOhoPsMm";
             };
 
             provision = {

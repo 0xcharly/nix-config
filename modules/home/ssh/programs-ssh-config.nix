@@ -15,21 +15,21 @@
         {
           enable = true;
           enableDefaultConfig = false;
-          matchBlocks = {
+          settings = {
             "bitbucket.org" = {
-              user = "git";
-              identityFile = mkIdentityFile "bitbucket";
+              User = "git";
+              IdentityFile = mkIdentityFile "bitbucket";
             };
             "codeberg.org" = {
-              user = "git";
-              identityFile = mkIdentityFile "github";
+              User = "git";
+              IdentityFile = mkIdentityFile "github";
             };
             "github.com" = {
-              user = "git";
-              identityFile = mkIdentityFile "github";
+              User = "git";
+              IdentityFile = mkIdentityFile "github";
             };
             "*" = {
-              userKnownHostsFile = lib.concatStringsSep " " [
+              UserKnownHostsFile = lib.concatStringsSep " " [
                 "${config.home.homeDirectory}/.ssh/known_hosts"
                 # Install known SSH keys for trusted hosts
                 (pkgs.writeText "known_hosts.trusted" self.lib.openssh.knownHostsFile)
@@ -37,15 +37,15 @@
 
               # The following options used to be the default before 25.11 (when
               # `enableDefaultConfig` was introduced).
-              forwardAgent = false;
-              addKeysToAgent = "no";
-              compression = false;
-              serverAliveInterval = 0;
-              serverAliveCountMax = 3;
-              hashKnownHosts = false;
-              controlMaster = "no";
-              controlPath = "${config.home.homeDirectory}/.ssh/master-%r@%n:%p";
-              controlPersist = "no";
+              ForwardAgent = false;
+              AddKeysToAgent = "no";
+              Compression = false;
+              ServerAliveInterval = 0;
+              ServerAliveCountMax = 3;
+              HashKnownHosts = false;
+              ControlMaster = "no";
+              ControlPath = "${config.home.homeDirectory}/.ssh/master-%r@%n:%p";
+              ControlPersist = "no";
             };
           };
         };

@@ -9,10 +9,6 @@
           en_US
           fr_FR
         ];
-        extensions = [
-          { id = "nngceckbapebfimnlniiiahkandclblb"; } # Bitwarden
-          { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # uBlock Origin
-        ];
       };
     };
 }

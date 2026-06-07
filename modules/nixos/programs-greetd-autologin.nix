@@ -3,7 +3,7 @@
     {
       config,
       lib,
-      pkgs',
+      pkgs,
       ...
     }:
     {
@@ -43,13 +43,12 @@
               greetd = {
                 # Add pam_fde_boot_pw rule BEFORE gnome_keyring in the session phase
                 # This ensures the LUKS password is injected before gnome-keyring tries to unlock
-                # Order 12600: gnome_keyring is typically at 12700, so this runs before it
+                # Order 12599: gnome_keyring is typically at 12600, so this runs before it
                 rules.session.fde_boot_pw = {
-                  order = 12600;
+                  order = 12599;
                   enable = true;
                   control = "optional";
-                  # TODO: nixpkgs/26.05 - use package from stable channel.
-                  modulePath = "${pkgs'.pam_fde_boot_pw}/lib/security/pam_fde_boot_pw.so";
+                  modulePath = "${pkgs.pam_fde_boot_pw}/lib/security/pam_fde_boot_pw.so";
                   args = [ "inject_for=gkr" ];
                 };
               };

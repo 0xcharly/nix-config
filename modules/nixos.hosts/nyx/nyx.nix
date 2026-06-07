@@ -49,7 +49,6 @@
           self.nixosModules.services-adb
           self.nixosModules.services-deploy-rs
           self.nixosModules.services-fail2ban
-          self.nixosModules.services-ollama
           self.nixosModules.services-openssh
           self.nixosModules.services-pipewire
           self.nixosModules.services-removable-devices

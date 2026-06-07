@@ -81,6 +81,26 @@
             fi
           '';
 
+      sys-upgrade.exec =
+        if pkgs.stdenv.isDarwin then
+          ''
+            ${lib.getExe pkgs.gum} format -- '`sys-upgrade` not available on darwin.' | xargs -0 ${lib.getExe pkgs.gum} log --time=datetime --level=error
+            exit 1
+          ''
+        else
+          ''
+            if test $(grep ^NAME= /etc/os-release | cut -d= -f2) != "NixOS"; then
+              ${lib.getExe pkgs.gum} format -- '`sys-upgrade` not available with home-manager.' | xargs -0 ${lib.getExe pkgs.gum} log --time=datetime --level=error
+              exit 1
+            fi
+
+            ${lib.getExe pkgs.gum} log --time=datetime --level=info "Upgrading NixOS system."
+            ${inhibit "Upgrading NixOS system" "nixos-rebuild ${rebuildOptions} boot --flake ."}
+            if test $? -eq 0; then
+              ${lib.getExe pkgs.gum} log --time=datetime --level=info "NixOS system upgraded. Reboot to apply changes."
+            fi
+          '';
+
       rollback.exec =
         if pkgs.stdenv.isDarwin then
           ''
@@ -90,7 +110,7 @@
         else
           ''
             if test $(grep ^NAME= /etc/os-release | cut -d= -f2) != "NixOS"; then
-              echo "`rollback` not available with home-manager."
+              ${lib.getExe pkgs.gum} format -- '`rollback` not available with home-manager.' | xargs -0 ${lib.getExe pkgs.gum} log --time=datetime --level=error
               exit 1
             fi
 

@@ -1,5 +1,7 @@
 {
-  flake.nixosModules.services-adb = {
-    programs.adb.enable = true;
-  };
+  flake.nixosModules.services-adb =
+    { pkgs, ... }:
+    {
+      environment.defaultPackages = [ pkgs.android-tools ];
+    };
 }

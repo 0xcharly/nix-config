@@ -14,15 +14,15 @@
     };
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
-    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.11-darwin";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-26.05-darwin";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware";
 
     # Manages home directory, dotfiles and base environment
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -33,6 +33,17 @@
     deploy-rs.url = "github:serokell/deploy-rs"; # System deploy tool
     disko.url = "github:nix-community/disko"; # Filesystem management
     golink.url = "github:tailscale/golink"; # go/link service
+
+    # Tailscale SSH server for initrd
+    hoopsnake = {
+      url = "github:boinkor-net/hoopsnake";
+      inputs = {
+        flake-parts.follows = "flake-parts";
+        devshell.follows = "";
+        generate-go-sri.follows = "";
+        nixpkgs.follows = "nixpkgs";
+      };
+    };
 
     apdbctl.url = "github:0xcharly/apdbctl"; # Brightness control
     nix-config-colorscheme.url = "github:0xcharly/nix-config-colorscheme"; # Custom colorscheme
@@ -46,11 +57,11 @@
     };
 
     # Out of the box mailserver
-    simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-25.11";
+    simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-26.05";
 
     # macOS only: system configuration with Nix
     nix-darwin = {
-      url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
+      url = "github:nix-darwin/nix-darwin/nix-darwin-26.05";
       inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
 

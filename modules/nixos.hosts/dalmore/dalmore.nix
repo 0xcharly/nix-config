@@ -4,15 +4,15 @@
     stateVersion = "25.05";
 
     nixosModule =
-      { modulesPath, ... }:
+      { modulesPath, config, ... }:
       {
         imports = [
           "${modulesPath}/installer/scan/not-detected.nix"
 
           inputs.nix-config-secrets.nixosModules.default
           inputs.nix-config-secrets.nixosModules.disk-encryption-keys
+          inputs.nix-config-secrets.nixosModules.services-hoopsnake-site-fr
           inputs.nix-config-secrets.nixosModules.services-tailscale
-          inputs.nix-config-secrets.nixosModules.services-tailscale-initrd
 
           self.nixosModules.access-directory
           self.nixosModules.bootloader-systemd-boot
@@ -24,8 +24,7 @@
           self.nixosModules.fs-zfs-zpool-root
           self.nixosModules.fs-zfs-zpool-root-data
           self.nixosModules.hardware-cpu-amd
-          self.nixosModules.initrd-tailscale
-          self.nixosModules.initrd-unlock-over-ssh
+          self.nixosModules.initrd-hoopsnake
           self.nixosModules.networking-common
           self.nixosModules.nix
           self.nixosModules.nixpkgs
@@ -45,10 +44,15 @@
 
         # System config.
         node = {
-          boot.initrd.ssh-unlock.kernelModules = [
-            "atlantic"
-            "r8169"
-          ];
+          boot.initrd.hoopsnake = {
+            clientIdFile = config.age.secrets."services/hoopsnake/site-fr/tailscale-client-id".path;
+            clientSecretFile = config.age.secrets."services/hoopsnake/site-fr/tailscale-client-secret".path;
+            privateHostKeyFile = config.age.secrets."services/hoopsnake/site-fr/ssh_host_ed25519_key".path;
+            kernelModules = [
+              "atlantic"
+              "r8169"
+            ];
+          };
 
           fs.zfs = {
             hostId = "eb3cd4cb";

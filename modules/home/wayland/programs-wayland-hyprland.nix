@@ -68,7 +68,7 @@
 
             timeout = mkOption {
               type = types.int;
-              default = 5 * 60; # 5 minutes.
+              default = 5 * 60; # 5 minutes
               description = ''
                 The amount of idle time, in seconds, before enabling the screen saver.
               '';
@@ -86,7 +86,7 @@
 
             timeout = mkOption {
               type = types.int;
-              default = 10 * 60; # 10 minutes.
+              default = 10 * 60; # 10 minutes
               description = ''
                 The amount of idle time, in seconds, before enabling the lock screen.
               '';
@@ -102,7 +102,7 @@
 
             timeout = mkOption {
               type = types.int;
-              default = 30 * 60; # 30 minutes.
+              default = 30 * 60; # 30 minutes
               description = ''
                 The amount of idle time, in seconds, before suspending.
 
@@ -129,7 +129,7 @@
 
             timeout = mkOption {
               type = types.int;
-              default = 2 * 60 * 60; # 2 hours.
+              default = 2 * 60 * 60; # 2 hours
               description = ''
                 The amount of idle time, in seconds, before hibernating.
 
@@ -155,7 +155,7 @@
 
             timeout = mkOption {
               type = types.int;
-              default = 30 * 60; # 30 minutes.
+              default = 30 * 60; # 30 minutes
               description = ''
                 The amount of idle time, in seconds, before triggering hybrid-sleep.
 
@@ -183,24 +183,27 @@
           wayland.windowManager.hyprland = {
             enable = true;
 
-            # Set the Hyprland and XDPH packages to null to use the ones from the NixOS module.
+            # Set the Hyprland and XDPH packages to null to use the ones from the NixOS module
             package = lib.mkDefault null;
             portalPackage = lib.mkDefault null;
 
-            # Managed by UWSM.
+            # Managed by UWSM
             systemd.enable = false;
 
-            # Layout plugin.
+            # Layout plugin
             plugins = with pkgs.hyprlandPlugins; [ hy3 ];
 
-            # Hyprland configuration.
+            # TODO: try switching to "lua"
+            configType = "hyprlang";
+
+            # Hyprland configuration
             settings = {
               ecosystem = {
                 no_update_news = true;
                 no_donation_nag = true;
               };
 
-              # Open apps on startup.
+              # Open apps on startup
               exec-once =
                 let
                   mkEntry = workspace: pkg: "[workspace ${workspace}] ${uwsmGetExe pkg}";
@@ -210,13 +213,13 @@
                   "${uwsmGetExe config.node.wayland.hyprlauncher.package} --daemon"
                 ];
 
-              # Monitor config.
+              # Monitor config
               inherit (cfg.hyprland) monitor;
 
-              # Properly scale X11 applications (e.g. 1Password) by unscaling XWayland.
+              # Properly scale X11 applications (e.g. 1Password) by unscaling XWayland
               xwayland.force_zero_scaling = true;
 
-              # Keyboard input setup.
+              # Keyboard input setup
               input = {
                 kb_options = "ctrl:nocaps";
                 kb_layout = "us";
@@ -291,7 +294,7 @@
                   "workspaces,  0,   2, emphasizedDecel, slide"
                 ];
               };
-              # Keyboard bindings.
+              # Keyboard bindings
               bind =
                 let
                   set-aspect-ratio = pkgs.writeShellApplication {
@@ -344,8 +347,8 @@
                   "SUPER SHIFT, Q,      exec, ${uwsmGetExe' pkgs.systemd "loginctl"} terminate-session \"$XDG_SESSION_ID\""
                   "SUPER SHIFT, L,      exec, ${uwsmGetExe config.node.wayland.idle.screenlock.package}"
                   "SUPER,       V,      togglefloating"
-                  "SUPER,       F,      fullscreen, 1" # Maximize.
-                  "SUPER SHIFT, F,      fullscreen, 0" # Fullscreen.
+                  "SUPER,       F,      fullscreen, 1" # Maximize
+                  "SUPER SHIFT, F,      fullscreen, 0" # Fullscreen
                   "SUPER CTRL,  C,      exec, ${uwsmGetExe pkgs.hyprpicker} -a"
                   "SUPER,       P,      exec, ${uwsmGetExe pkgs.grimblast} save area - | ${uwsmGetExe screenshot-editor}"
                   "SUPER SHIFT, P,      exec, ${uwsmGetExe pkgs.grimblast} save active - | ${uwsmGetExe screenshot-editor}"
@@ -379,28 +382,28 @@
                 ++ (map-movements (dir: key: "SUPER SHIFT, ${dir}, hy3:movewindow, ${key}, once"))
                 ++ (map-workspaces (no: repr: "SUPER, ${no}, workspace, ${repr}"))
                 ++ (map-workspaces (no: repr: "SUPER SHIFT, ${no}, hy3:movetoworkspace, ${repr}"));
-              # Mouse bindings.
+              # Mouse bindings
               bindm = [
-                "SUPER, mouse:272, movewindow" # Left mouse button.
-                "SUPER, mouse:273, resizewindow" # Right mouse button.
+                "SUPER, mouse:272, movewindow" # Left mouse button
+                "SUPER, mouse:273, resizewindow" # Right mouse button
               ];
-              # Window rules.
+              # Window rules
               windowrulev2 =
                 let
-                  # Position the PiP window in the top right corner.
+                  # Position the PiP window in the top right corner
                   pipPosX = toString (cfg.display.logicalResolution.width - cfg.pip.width - cfg.pip.margin.x);
                   pipPosY = toString (cfg.pip.margin.y);
 
                   bitwardenExtId = "nngceckbapebfimnlniiiahkandclblb";
                 in
                 [
-                  # Thunar operation in progress dialog.
+                  # Thunar operation in progress dialog
                   "float, class:^thunar$, title:^File Operation Progress$"
-                  # Volume control.
+                  # Volume control
                   "float, class:^org.pulseaudio.pavucontrol$, title:^Volume Control$"
-                  # Bitwarden extension.
+                  # Bitwarden extension
                   "float, class:^chrome-${bitwardenExtId}-Default$, initialTitle:^_crx_${bitwardenExtId}$"
-                  # Chrome's Picture-in-Picture.
+                  # Chrome's Picture-in-Picture
                   "float, class:^$, title:^Picture in picture$"
                   "pin, class:^$, title:^Picture in picture$"
                   "move ${pipPosX} ${pipPosY}, class:^$, title:^Picture in picture$"
@@ -471,18 +474,18 @@
                   loginctl = uwsmGetExe' pkgs.systemd "loginctl";
                   systemctl = uwsmGetExe' pkgs.systemd "systemctl";
 
-                  # Avoid starting multiple screenlock instances.
+                  # Avoid starting multiple screenlock instances
                   lock = "${uwsmGetExe' pkgs.procps "pidof"} ${screenlock} || ${screenlock}";
                 in
                 {
                   general = {
-                    after_sleep_cmd = "${hyprctl} dispatch dpms on"; # To avoid having to press a key twice to turn on the display.
+                    after_sleep_cmd = "${hyprctl} dispatch dpms on"; # To avoid having to press a key twice to turn on the display
                   }
                   // lib.optionalAttrs cfg.screenlock.enable {
                     lock_cmd = lock;
                     unlock_cmd = "pkill -USR1 ${screenlock}";
 
-                    before_sleep_cmd = "${loginctl} lock-session"; # Lock before suspend.
+                    before_sleep_cmd = "${loginctl} lock-session"; # Lock before suspend
                   };
 
                   listener =

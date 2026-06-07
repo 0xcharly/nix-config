@@ -61,8 +61,9 @@ ssh_options=(
   -l root
   -o "IdentityFile=/run/agenix/keys/nixos_remote_unlock_ed25519_key"
   -o "PubkeyAuthentication=yes"
-  -o "UserKnownHostsFile=/dev/null"
+  -o "RequestTTY=force"
   -o "StrictHostKeyChecking=no"
+  -o "UserKnownHostsFile=/dev/null"
 )
 
 log_info "Unlocking system…"

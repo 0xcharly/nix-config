@@ -15,8 +15,8 @@
           inputs.nix-config-secrets.nixosModules.services-gatus
           inputs.nix-config-secrets.nixosModules.services-gatus-external-endpoints
           inputs.nix-config-secrets.nixosModules.services-gotify
+          inputs.nix-config-secrets.nixosModules.services-hoopsnake-gate-jp
           inputs.nix-config-secrets.nixosModules.services-tailscale
-          inputs.nix-config-secrets.nixosModules.services-tailscale-initrd
           inputs.nix-config-secrets.nixosModules.users-delay
 
           self.nixosModules.bootloader-grub
@@ -26,8 +26,7 @@
           self.nixosModules.fs-zfs-zpool-root
           self.nixosModules.fs-zfs-zpool-root-data
           self.nixosModules.fs-zfs-zpool-root-home
-          self.nixosModules.initrd-tailscale
-          self.nixosModules.initrd-unlock-over-ssh
+          self.nixosModules.initrd-hoopsnake
           self.nixosModules.nix
           self.nixosModules.nixpkgs
           self.nixosModules.programs-essentials

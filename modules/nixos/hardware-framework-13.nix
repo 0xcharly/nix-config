@@ -15,10 +15,9 @@
 { inputs, ... }:
 {
   flake.nixosModules.hardware-framework-13 =
-    { pkgs', ... }:
+    { pkgs, ... }:
     {
       imports = [ inputs.nixos-hardware.nixosModules.framework-amd-ai-300-series ];
-      # TODO(26.05): use stable version
-      environment.defaultPackages = [ pkgs'.framework-tool-tui ];
+      environment.defaultPackages = [ pkgs.framework-tool-tui ];
     };
 }

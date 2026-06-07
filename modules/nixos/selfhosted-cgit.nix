@@ -1,12 +1,7 @@
 { self, ... }:
 {
   flake.nixosModules.selfhosted-cgit =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
-    }:
+    { config, lib, ... }:
     {
       options.node.services.cgit = with lib; {
         enable = mkEnableOption "Spin up a cgit service";
@@ -21,7 +16,6 @@
           services = {
             cgit.github = {
               inherit (cfg) enable;
-              package = pkgs.cgit-pink;
               scanPath = "/tank/backups/github";
               nginx.virtualHost = facts.services.cgit.domain;
               gitHttpBackend.checkExportOkFiles = false; # Instance is private

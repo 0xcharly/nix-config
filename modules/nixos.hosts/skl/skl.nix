@@ -4,7 +4,7 @@
     stateVersion = "25.05";
 
     nixosModule =
-      { modulesPath, ... }:
+      { modulesPath, config, ... }:
       {
         imports = [
           "${modulesPath}/installer/scan/not-detected.nix"
@@ -12,8 +12,8 @@
           inputs.nix-config-colorscheme.nixosModules.console
 
           inputs.nix-config-secrets.nixosModules.default
+          inputs.nix-config-secrets.nixosModules.services-hoopsnake-node-skl
           inputs.nix-config-secrets.nixosModules.services-tailscale
-          inputs.nix-config-secrets.nixosModules.services-tailscale-initrd
           inputs.nix-config-secrets.nixosModules.users-delay
 
           self.nixosModules.profile-hardware-workstation
@@ -26,8 +26,7 @@
           self.nixosModules.fs-zfs-zpool-root-home
           self.nixosModules.hardware-cpu-intel
           self.nixosModules.hardware-gpu-intel
-          self.nixosModules.initrd-tailscale
-          self.nixosModules.initrd-unlock-over-ssh
+          self.nixosModules.initrd-hoopsnake
           self.nixosModules.nix
           self.nixosModules.nixpkgs
           self.nixosModules.programs-essentials
@@ -48,25 +47,23 @@
 
         # System config
         node = {
-          boot.initrd.ssh-unlock.kernelModules = [
-            "e1000e"
-          ];
+          boot.initrd.hoopsnake = {
+            clientIdFile = config.age.secrets."services/hoopsnake/node-skl/tailscale-client-id".path;
+            clientSecretFile = config.age.secrets."services/hoopsnake/node-skl/tailscale-client-secret".path;
+            privateHostKeyFile = config.age.secrets."services/hoopsnake/node-skl/ssh_host_ed25519_key".path;
+            kernelModules = [ "e1000e" ];
+          };
 
           fs.zfs = {
             hostId = "be2d9ac1";
             system = {
               disk = "/dev/disk/by-id/nvme-Samsung_SSD_950_PRO_512GB_S2GMNCAGB32083T";
               luksPasswordFile = "/tmp/root-disk-encryption.key";
-              swapSize = "16G"; # Size of RAM + square root of RAM for hibernate
+              swapSize = "16G";
             };
           };
 
-          networking = {
-            tailscale = {
-              enableSsh = true;
-            };
-          };
-
+          networking.tailscale.enableSsh = true;
           users.delay.ssh.authorizeTailscaleInternalKey = true;
         };
 
@@ -78,15 +75,9 @@
           "xhci_pci"
         ];
 
-        networking.interfaces = {
-          eno1.useDHCP = true;
-        };
+        networking.interfaces.eno1.useDHCP = true;
       };
 
-    users.delay = {
-      imports = with self.homeModules; [
-        profile-hardware-server
-      ];
-    };
+    users.delay.imports = with self.homeModules; [ profile-hardware-server ];
   };
 }
