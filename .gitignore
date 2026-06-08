@@ -3,6 +3,7 @@
 /result-*
 /.pre-commit-config.yaml
 /.justfile.incl
+/.luarc.json
 .direnv/
 target/
 

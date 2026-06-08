@@ -25,7 +25,7 @@
         ${lib.getExe' pkgs.systemd "systemd-inhibit"} --what=idle --who=$(whoami) --why='${why}' ${command}
       '';
       nixExperimentalFeaturesOption = ''extra-experimental-features "flakes nix-command pipe-operators"'';
-      rebuildOptions = ''--sudo --show-trace --option ${nixExperimentalFeaturesOption}'';
+      rebuildOptions = "--sudo --show-trace --option ${nixExperimentalFeaturesOption}";
     in
     {
       gc.exec = ''
@@ -40,6 +40,7 @@
       provision-nas.exec = builtins.readFile ./bin/provision-nas.sh;
 
       check.exec = ''
+        ${lib.getExe pkgs.gum} log --time=datetime --level=info "Validating configuration."
         nix flake check --show-trace --${nixExperimentalFeaturesOption}
       '';
 
@@ -51,16 +52,11 @@
           ''
         else
           ''
-            if test $(grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"; then
-              ${lib.getExe pkgs.gum} log --time=datetime --level=info "Building NixOS system."
-              ${inhibit "Building NixOS system" "nixos-rebuild ${rebuildOptions} build --flake ."}
+            ${lib.getExe pkgs.gum} log --time=datetime --level=info "Building NixOS system."
+            ${inhibit "Building NixOS system" "nixos-rebuild ${rebuildOptions} build --flake ."}
 
-              if test $? -eq 0; then
-                ${lib.getExe pkgs.nvd} diff /run/current-system result
-              fi
-            else
-              ${lib.getExe pkgs.gum} log --time=datetime --level=info "Building home-manager config."
-              ${inhibit "Building home-manager config" "${lib.getExe pkgs.home-manager} ${rebuildOptions} build -b hm.bak --flake ."}
+            if test $? -eq 0; then
+              ${lib.getExe pkgs.nvd} diff /run/current-system result
             fi
           '';
 
@@ -72,13 +68,8 @@
           ''
         else
           ''
-            if test $(grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"; then
-              ${lib.getExe pkgs.gum} log --time=datetime --level=info "Rebuilding NixOS system."
-              ${inhibit "Rebuilding NixOS system" "nixos-rebuild ${rebuildOptions} switch --flake ."}
-            else
-              ${lib.getExe pkgs.gum} log --time=datetime --level=info "Rebuilding home-manager config."
-              ${inhibit "Rebuilding home-manager config" "${lib.getExe pkgs.home-manager} ${rebuildOptions} switch -b hm.bak --flake ."}
-            fi
+            ${lib.getExe pkgs.gum} log --time=datetime --level=info "Rebuilding NixOS system."
+            ${inhibit "Rebuilding NixOS system" "nixos-rebuild ${rebuildOptions} switch --flake ."}
           '';
 
       sys-upgrade.exec =
@@ -89,11 +80,6 @@
           ''
         else
           ''
-            if test $(grep ^NAME= /etc/os-release | cut -d= -f2) != "NixOS"; then
-              ${lib.getExe pkgs.gum} format -- '`sys-upgrade` not available with home-manager.' | xargs -0 ${lib.getExe pkgs.gum} log --time=datetime --level=error
-              exit 1
-            fi
-
             ${lib.getExe pkgs.gum} log --time=datetime --level=info "Upgrading NixOS system."
             ${inhibit "Upgrading NixOS system" "nixos-rebuild ${rebuildOptions} boot --flake ."}
             if test $? -eq 0; then
@@ -109,11 +95,6 @@
           ''
         else
           ''
-            if test $(grep ^NAME= /etc/os-release | cut -d= -f2) != "NixOS"; then
-              ${lib.getExe pkgs.gum} format -- '`rollback` not available with home-manager.' | xargs -0 ${lib.getExe pkgs.gum} log --time=datetime --level=error
-              exit 1
-            fi
-
             ${lib.getExe pkgs.gum} log --time=datetime --level=info "Rolling back NixOS system."
             ${inhibit "Rolling back NixOS system" "sudo nixos-rebuild ${rebuildOptions} --rollback switch --flake ."}
           '';
@@ -143,35 +124,12 @@
             HOSTNAME=$(hostname)
             CONFIG=''${1:-$HOSTNAME}
 
-            if test $(grep ^NAME= /etc/os-release | cut -d= -f2) = "NixOS"; then
-              CONFIG_PREFIX="nixosConfigurations"
-            else
-              CONFIG_PREFIX="homeConfigurations"
-            fi
-
             ${lib.getExe pkgs.gum} log --structured --time=datetime --level=info "Building and caching NixOS system closure." config $CONFIG
             ${inhibit "Building and caching NixOS system closure" ''
-              nix build ".#$CONFIG_PREFIX.$CONFIG.config.system.build.toplevel" --json \
+              nix build ".#$nixosConfigurations.$CONFIG.config.system.build.toplevel" --json \
                 | ${lib.getExe pkgs.jq} -r '.[].outputs | to_entries[].value' \
                 | ${lib.getExe pkgs.cachix} push 0xcharly-nixos-config
             ''}
-          '';
-
-      deploy.exec =
-        if pkgs.stdenv.isDarwin then
-          ''
-            ${lib.getExe pkgs.gum} format -- '`deploy` not available on darwin.' | xargs -0 ${lib.getExe pkgs.gum} log --time=datetime --level=error
-            exit 1
-          ''
-        else
-          ''
-            if test $(grep ^NAME= /etc/os-release | cut -d= -f2) != "NixOS"; then
-              ${lib.getExe pkgs.gum} format -- '`deploy` not available on non-NixOS systems.' | xargs -0 ${lib.getExe pkgs.gum} log --time=datetime --level=error
-              exit 1
-            fi
-
-            ${lib.getExe pkgs.gum} log --time=datetime --level=info "Deploying NixOS systems." host $HOSTNAME
-            ${inhibit "Deploying NixOS systems" "${lib.getExe pkgs.deploy-rs} ''$@ -- --show-trace --${nixExperimentalFeaturesOption}"}
           '';
 
       preview-avatar.exec =

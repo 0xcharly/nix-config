@@ -7,7 +7,17 @@
       ...
     }:
     {
-      config = {
+      options.node.services.loginManager = with lib; {
+        command = mkOption {
+          type = types.str;
+          description = "The session command to run on login.";
+          default = "${getExe config.programs.uwsm.package} start -eD Hyprland hyprland-uwsm.desktop";
+        };
+      };
+
+      config = let
+        cfg = config.node.services.loginManager;
+      in {
         programs = {
           hyprland = {
             enable = true;
@@ -21,22 +31,17 @@
             waylandCompositors.hyprland = {
               prettyName = "Hyprland";
               comment = "Hyprland compositor managed by UWSM";
-              binPath = "/run/current-system/sw/bin/Hyprland";
+              binPath = "/run/current-system/sw/bin/start-hyprland";
             };
           };
         };
-
-        # Automatically launch UWSM on login
-        # environment.loginShellInit = ''
-        #   [[ "$(tty)" == "/dev/tty1" ]] && exec ${lib.getExe config.programs.uwsm.package} start default >/dev/null 2>&1
-        # '';
 
         # Greetd Login Manager daemon with tuigreet greeter
         services.greetd = {
           enable = true;
           useTextGreeter = true;
           settings.default_session.command = ''
-            ${lib.getExe pkgs.tuigreet} --time --cmd "${lib.getExe config.programs.uwsm.package} start default"
+            ${lib.getExe pkgs.tuigreet} --time --cmd "${cfg.command}"
           '';
         };
 

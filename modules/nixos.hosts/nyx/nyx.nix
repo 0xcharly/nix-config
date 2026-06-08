@@ -85,24 +85,9 @@
         networking.interfaces.enp115s0.useDHCP = true;
       };
 
-    users.delay = {
-      imports = with self.homeModules; [
-        profile-hardware-workstation
-        profile-ssh-keys-ring-0-tier
-      ];
-
-      node = {
-        wayland = {
-          hyprland.monitor = "DP-3, 6016x3384@60.00Hz, 0x0, 2.00";
-
-          display.logicalResolution = {
-            width = 3008;
-            height = 1692;
-          };
-
-          arcshell.wallpaper.animate = true;
-        };
-      };
-    };
+    users.delay.imports = with self.homeModules; [
+      profile-hardware-workstation
+      profile-ssh-keys-ring-0-tier
+    ];
   };
 }

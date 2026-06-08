@@ -9,20 +9,20 @@
     {
       options.node.wayland = with lib; {
         uwsm-wrapper = {
-          package = mkPackageOption pkgs "app2unit" {
+          package = mkPackageOption pkgs "runapp" {
             extraDescription = ''
               The uwsm wrapper script to use to spawn new processes.
 
-              Defaults to `app2unit`.
+              Defaults to `runapp`.
 
-              `app2unit` is a faster alternative to `uwsm` (shell implementation
-              over Python).
+              `runapp` is a faster alternative to `uwsm` or `app2unit` (C++
+              implementation over Python or shell).
             '';
           };
 
           prefix = mkOption {
             type = types.str;
-            default = "${lib.getExe config.node.wayland.uwsm-wrapper.package} -- ";
+            default = "${lib.getExe config.node.wayland.uwsm-wrapper.package}";
             description = ''
               The prefix command to spawn new processes.
 
@@ -36,7 +36,7 @@
             description = ''
               The wrapper function to spawn new processes.
 
-              This is used by hyprland to create new processes.
+              This is used by Hyprland to create new processes.
             '';
           };
         };

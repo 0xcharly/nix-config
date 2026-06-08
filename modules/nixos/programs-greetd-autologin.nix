@@ -11,22 +11,20 @@
         user = mkOption {
           type = types.str;
           default = "delay";
-          description = "The user to auto-login";
+          description = "The user to auto-login.";
         };
       };
 
       config =
         let
-          cfg = config.node.services.loginManager.autoLogin;
+          cfg = config.node.services.loginManager;
         in
         {
           # Greetd Login Manager daemon with tuigreet greeter
           services = {
-            greetd.settings = {
-              initial_session = {
-                command = "${lib.getExe config.programs.uwsm.package} start default";
-                inherit (cfg) user;
-              };
+            greetd.settings.initial_session = {
+              inherit (cfg) command;
+              inherit (cfg.autoLogin) user;
             };
 
             gnome.gnome-keyring.enable = true;

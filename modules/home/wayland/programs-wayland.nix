@@ -7,57 +7,40 @@
       ...
     }:
     {
-      options.node.wayland = with lib; {
-        display.logicalResolution = {
-          width = mkOption {
+      options.node.wayland.pip = with lib; {
+        margin = {
+          x = mkOption {
             type = types.int;
+            default = 16;
             description = ''
-              The amount of pixel in a row. Should match `node.wayland.hyprland.monitor` values.
+              The horizontal distance between the screen edge and the Picture-in-Picture window.
+
+              The Picture-in-Picture window is positioned in the top-right corner of the screen.
             '';
           };
-          height = mkOption {
+          y = mkOption {
             type = types.int;
+            default = 16;
             description = ''
-              The amount of pixel in a column. Should match `node.wayland.hyprland.monitor` values.
+              The vertical distance between the screen edge and the Picture-in-Picture window.
+
+              The Picture-in-Picture window is positioned in the top-right corner of the screen.
             '';
           };
         };
-
-        pip = {
-          margin = {
-            x = mkOption {
-              type = types.int;
-              default = 16;
-              description = ''
-                The horizontal distance between the screen edge and the Picture-in-Picture window.
-
-                The Picture-in-Picture window is positioned in the top-right corner of the screen.
-              '';
-            };
-            y = mkOption {
-              type = types.int;
-              default = 16;
-              description = ''
-                The vertical distance between the screen edge and the Picture-in-Picture window.
-
-                The Picture-in-Picture window is positioned in the top-right corner of the screen.
-              '';
-            };
-          };
-          width = mkOption {
-            type = types.int;
-            default = 640;
-            description = ''
-              The default width of the Picture-in-Picture window.
-            '';
-          };
-          height = mkOption {
-            type = types.int;
-            default = 360;
-            description = ''
-              The default height of the Picture-in-Picture window.
-            '';
-          };
+        width = mkOption {
+          type = types.int;
+          default = 640;
+          description = ''
+            The default width of the Picture-in-Picture window.
+          '';
+        };
+        height = mkOption {
+          type = types.int;
+          default = 360;
+          description = ''
+            The default height of the Picture-in-Picture window.
+          '';
         };
       };
 
@@ -121,6 +104,10 @@
 
                 HYPRCURSOR_THEME = "rose-pine-hyprcursor";
                 HYPRCURSOR_SIZE = config.home.pointerCursor.size;
+
+                XDG_CURRENT_DESKTOP = "Hyprland";
+                XDG_SESSION_TYPE = "wayland";
+                XDG_SESSION_DESKTOP = "Hyprland";
               };
 
               create-env =

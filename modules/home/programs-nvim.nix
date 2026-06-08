@@ -2,7 +2,7 @@
 {
   flake.homeModules.programs-nvim = moduleWithSystem (
     perSystem@{ config, ... }:
-    homeManager@{ lib, ... }:
+    homeManager@{ lib, pkgs, ... }:
     {
       options.my.programs.nvim = with lib; {
         package = mkOption {
@@ -12,7 +12,10 @@
         };
       };
 
-      config.home.packages = [ homeManager.config.my.programs.nvim.package ];
+      config.home.packages = [
+        homeManager.config.my.programs.nvim.package
+        pkgs.neovide
+      ];
     }
   );
 

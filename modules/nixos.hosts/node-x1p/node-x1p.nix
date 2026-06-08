@@ -113,12 +113,15 @@
           # | flipped + 180 degrees  | 6 |
           # | flipped + 270 degrees  | 7 |
           #
-          hyprland.monitor = "HDMI-A-1, 3840x2160@59.997Hz, 0x0, 1.25, transform, 1";
-
-          display.logicalResolution = {
-            width = 3072;
-            height = 1728;
-          };
+          hyprland.monitors = [
+            {
+              output = "HDMA-A-1";
+              mode = "3840x2160@59.997Hz";
+              position = "0x0";
+              scale = 2.0;
+              transform = 1;
+            }
+          ];
 
           idle = {
             screenlock.enable = true;
