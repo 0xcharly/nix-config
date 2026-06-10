@@ -2,6 +2,7 @@
 /result
 /result-*
 /.pre-commit-config.yaml
+/.luarc.json
 /.justfile.incl
 /.luarc.json
 .direnv/

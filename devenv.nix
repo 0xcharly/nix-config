@@ -1,4 +1,5 @@
 {
+  inputs,
   pkgs,
   lib,
   ...
@@ -11,6 +12,7 @@
       nix-output-monitor # Nix Output Monitor
 
       jq
+      stylua
     ]
     ++ lib.optionals pkgs.stdenv.isLinux [ pkgs.bitwarden-cli ];
 
@@ -19,6 +21,23 @@
     lsp.package = pkgs.nixd;
   };
 
+  enterShell =
+    let
+      inherit (pkgs.stdenv.hostPlatform) system;
+      pkgs' = import inputs.nixpkgs {
+        inherit (pkgs.stdenv.hostPlatform) system;
+        overlays = [ inputs.gen-luarc.overlays.default ];
+      };
+      luarc-json = pkgs'.mk-luarc-json {
+        plugins = pkgs.callPackage ./modules/home/nvim/_nvim-plugins.nix {
+          inherit (inputs.colorscheme.packages.${system}) colorscheme-nvim;
+        };
+        nvim = pkgs.neovim-unwrapped;
+      };
+    in
+    ''
+      ln -fs ${luarc-json} .luarc.json
+    '';
   scripts =
     let
       inhibit = why: command: ''

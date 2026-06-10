@@ -22,6 +22,19 @@
   perSystem =
     { pkgs, ... }:
     {
-      packages.nvim = inputs.nix-config-nvim.packages.${pkgs.stdenv.hostPlatform.system}.default;
+      # The entire neoviw configuration without any dependency
+      packages.nvim =
+        let
+          inherit (pkgs.stdenv.hostPlatform) system;
+          mkNvimDist = pkgs.callPackage ./nvim/_mk-nvim-dist.nix { };
+        in
+        mkNvimDist {
+          src = ./nvim/nvim-config;
+          runtime = [ ./nvim/nvim-runtime ];
+          patches = [ ];
+          plugins = pkgs.callPackage ./nvim/_nvim-plugins.nix {
+            inherit (inputs.nix-config-colorscheme.packages.${system}) colorscheme-nvim;
+          };
+        };
     };
 }
