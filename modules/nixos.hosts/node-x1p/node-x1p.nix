@@ -40,7 +40,6 @@
           self.nixosModules.prometheus-exporters-node
           self.nixosModules.prometheus-exporters-zfs
           self.nixosModules.services-adb
-          self.nixosModules.services-deploy-rs
           self.nixosModules.services-fail2ban
           self.nixosModules.services-openssh
           self.nixosModules.services-pipewire

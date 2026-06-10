@@ -1,17 +1,7 @@
 {
   description = "Nix systems and configs for delay";
 
-  outputs =
-    inputs:
-    let
-      outputs = inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
-      deploy-rs = import ./hive inputs outputs;
-    in
-    outputs
-    // {
-      inherit (deploy-rs) deploy;
-      checks = outputs.checks // deploy-rs.checks;
-    };
+  outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
@@ -30,7 +20,6 @@
     import-tree.url = "github:vic/import-tree";
     systems.url = "github:nix-systems/default";
 
-    deploy-rs.url = "github:serokell/deploy-rs"; # System deploy tool
     disko.url = "github:nix-community/disko"; # Filesystem management
     golink.url = "github:tailscale/golink"; # go/link service
 

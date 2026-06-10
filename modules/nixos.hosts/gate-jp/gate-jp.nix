@@ -43,7 +43,6 @@
           self.nixosModules.selfhosted-gotify
           self.nixosModules.selfhosted-immich-public-proxy
           self.nixosModules.selfhosted-reverse-proxy-qyrnl-dot-com
-          self.nixosModules.services-deploy-rs
           self.nixosModules.services-fail2ban
           self.nixosModules.services-openssh
           self.nixosModules.services-tailscale

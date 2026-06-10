@@ -62,7 +62,6 @@
           self.nixosModules.selfhosted-prometheus-tailscalesd
           self.nixosModules.selfhosted-radicale
           self.nixosModules.selfhosted-vaultwarden
-          self.nixosModules.services-deploy-rs
           self.nixosModules.services-fail2ban
           self.nixosModules.services-github-backup
           self.nixosModules.services-msmtp

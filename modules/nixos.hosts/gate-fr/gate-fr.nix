@@ -35,7 +35,6 @@
           self.nixosModules.selfhosted-dns-pieceofenglish-dot-fr
           self.nixosModules.selfhosted-dns-qyrnl-dot-com
           self.nixosModules.selfhosted-pieceofenglish
-          self.nixosModules.services-deploy-rs
           self.nixosModules.services-fail2ban
           self.nixosModules.services-openssh
           self.nixosModules.services-tailscale

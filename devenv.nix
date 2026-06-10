@@ -113,6 +113,23 @@
             ${inhibit "Rebuilding NixOS system" "nixos-rebuild ${rebuildOptions} switch --flake .#$HOSTNAME --target-host root@$HOSTNAME"}
           '';
 
+      remote-sys-upgrade.exec =
+        if pkgs.stdenv.isDarwin then
+          ''
+            ${lib.getExe pkgs.gum} format -- '`remote-sys-upgrade` not available on darwin.' | xargs -0 ${lib.getExe pkgs.gum} log --time=datetime --level=error
+            exit 1
+          ''
+        else
+          ''
+            HOSTNAME=''${1}
+
+            ${lib.getExe pkgs.gum} log --structured --time=datetime --level=info "Upgrading remote NixOS system." host $HOSTNAME
+            ${inhibit "Upgrading NixOS system" "nixos-rebuild ${rebuildOptions} boot --flake .#$HOSTNAME --target-host root@$HOSTNAME"}
+            if test $? -eq 0; then
+              ${lib.getExe pkgs.gum} log --time=datetime --level=info "NixOS system upgraded. Reboot to apply changes."
+            fi
+          '';
+
       cache.exec =
         if pkgs.stdenv.isDarwin then
           ''
