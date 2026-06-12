@@ -8,7 +8,7 @@
       ];
 
       programs.fish.interactiveShellInit = ''
-        ${lib.getExe pkgs.devenv} hook fish | source
+        ${lib.getExe pkgs.devenv} --no-tui hook fish | source
       '';
     };
 }
