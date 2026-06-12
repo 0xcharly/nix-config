@@ -1,11 +1,9 @@
-{ inputs, moduleWithSystem, ... }:
+{ moduleWithSystem, ... }:
 {
   flake.nixosModules.programs-apdbctl = moduleWithSystem (
     perSystem@{ config, ... }:
     {
-      environment.defaultPackages = [
-        perSystem.config.packages.apdbctl
-      ];
+      environment.defaultPackages = [ perSystem.config.packages.apdbctl ];
 
       # Studio Display (1114), Pro Display XDR (9243).
       # KERNEL=="hiddev*", ATTRS{idVendor}=="05ac", ATTRS{idProduct}=="1114", GROUP="users", OWNER="root", MODE="0660"
@@ -20,6 +18,6 @@
   perSystem =
     { pkgs, ... }:
     {
-      packages.apdbctl = inputs.apdbctl.packages.${pkgs.stdenv.hostPlatform.system}.default;
+      packages.apdbctl = pkgs.callPackage ./_apdbctl { };
     };
 }
