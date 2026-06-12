@@ -10,17 +10,6 @@ with lib;
     type = types.lazyAttrsOf (
       types.submodule {
         options = {
-          hostPlatform = mkOption {
-            type = import inputs.systems |> types.enum;
-            description = ''
-              The platform where the NixOS configuration will run.
-
-              https://search.nixos.org/options?query=nixpkgs.hostPlatform
-            '';
-            readOnly = true;
-            default = "x86_64-linux";
-          };
-
           stateVersion = mkOption {
             type = types.singleLineStr;
             description = ''
@@ -50,9 +39,7 @@ with lib;
     nixosConfigurations = flip mapAttrs config.my.hosts (
       hostName:
       {
-        hostPlatform,
         stateVersion,
-
         nixosModule,
         users,
         ...
@@ -68,7 +55,7 @@ with lib;
               domain = "qyrnl.com";
             };
 
-            nixpkgs = { inherit hostPlatform; };
+            nixpkgs.hostPlatform = "x86_64-linux";
             system = { inherit stateVersion; };
           }
 

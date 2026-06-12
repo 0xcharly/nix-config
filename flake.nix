@@ -17,7 +17,6 @@
 
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:vic/import-tree";
-    systems.url = "github:nix-systems/default";
 
     disko.url = "github:nix-community/disko"; # Filesystem management
     golink.url = "github:tailscale/golink"; # go/link service
