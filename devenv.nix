@@ -5,20 +5,14 @@
   ...
 }:
 {
-  packages =
-    with pkgs;
-    [
-      nixfmt
-      nix-output-monitor # Nix Output Monitor
+  packages = with pkgs; lib.optionals stdenv.isLinux [ bitwarden-cli ];
 
-      jq
-      stylua
-    ]
-    ++ lib.optionals pkgs.stdenv.isLinux [ pkgs.bitwarden-cli ];
-
-  languages.nix = {
-    enable = true;
-    lsp.package = pkgs.nixd;
+  languages = {
+    lua.enable = true;
+    nix = {
+      enable = true;
+      lsp.package = pkgs.nixd;
+    };
   };
 
   enterShell =
@@ -47,6 +41,20 @@
       rebuildOptions = "--sudo --show-trace --option ${nixExperimentalFeaturesOption}";
     in
     {
+      fmt.exec =
+        let
+          fmt-opts = {
+            projectRootFile = "flake.lock";
+            programs = {
+              nixfmt.enable = true;
+              prettier.enable = true;
+              shfmt.enable = true;
+              stylua.enable = true;
+            };
+          };
+          fmt = inputs.treefmt-nix.lib.mkWrapper pkgs fmt-opts;
+        in
+        lib.getExe fmt;
       gc.exec = ''
         nix-collect-garbage --delete-older-than 7d
       '';

@@ -1,2 +1,0 @@
-.gitattributes !diff
-flake.lock -diff
