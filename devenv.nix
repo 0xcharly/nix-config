@@ -71,121 +71,65 @@
         nix flake check --show-trace --${nixExperimentalFeaturesOption}
       '';
 
-      build.exec =
-        if pkgs.stdenv.isDarwin then
-          ''
-            ${lib.getExe pkgs.gum} log --time=datetime --level=info "Building nix-darwin system."
-            darwin-rebuild ${rebuildOptions} build --flake .
-          ''
-        else
-          ''
-            ${lib.getExe pkgs.gum} log --time=datetime --level=info "Building NixOS system."
-            ${inhibit "Building NixOS system" "nixos-rebuild ${rebuildOptions} build --flake ."}
+      build.exec = ''
+        ${lib.getExe pkgs.gum} log --time=datetime --level=info "Building NixOS system."
+        ${inhibit "Building NixOS system" "nixos-rebuild ${rebuildOptions} build --flake ."}
 
-            if test $? -eq 0; then
-              ${lib.getExe pkgs.nvd} diff /run/current-system result
-            fi
-          '';
+        if test $? -eq 0; then
+          ${lib.getExe pkgs.nvd} diff /run/current-system result
+        fi
+      '';
 
-      rebuild.exec =
-        if pkgs.stdenv.isDarwin then
-          ''
-            ${lib.getExe pkgs.gum} log --time=datetime --level=info "Rebuilding nix-darwin system."
-            darwin-rebuild ${rebuildOptions} switch --flake .
-          ''
-        else
-          ''
-            ${lib.getExe pkgs.gum} log --time=datetime --level=info "Rebuilding NixOS system."
-            ${inhibit "Rebuilding NixOS system" "nixos-rebuild ${rebuildOptions} switch --flake ."}
-          '';
+      rebuild.exec = ''
+        ${lib.getExe pkgs.gum} log --time=datetime --level=info "Rebuilding NixOS system."
+        ${inhibit "Rebuilding NixOS system" "nixos-rebuild ${rebuildOptions} switch --flake ."}
+      '';
 
-      sys-upgrade.exec =
-        if pkgs.stdenv.isDarwin then
-          ''
-            ${lib.getExe pkgs.gum} format -- '`sys-upgrade` not available on darwin.' | xargs -0 ${lib.getExe pkgs.gum} log --time=datetime --level=error
-            exit 1
-          ''
-        else
-          ''
-            ${lib.getExe pkgs.gum} log --time=datetime --level=info "Upgrading NixOS system."
-            ${inhibit "Upgrading NixOS system" "nixos-rebuild ${rebuildOptions} boot --flake ."}
-            if test $? -eq 0; then
-              ${lib.getExe pkgs.gum} log --time=datetime --level=info "NixOS system upgraded. Reboot to apply changes."
-            fi
-          '';
+      sys-upgrade.exec = ''
+        ${lib.getExe pkgs.gum} log --time=datetime --level=info "Upgrading NixOS system."
+        ${inhibit "Upgrading NixOS system" "nixos-rebuild ${rebuildOptions} boot --flake ."}
+        if test $? -eq 0; then
+          ${lib.getExe pkgs.gum} log --time=datetime --level=info "NixOS system upgraded. Reboot to apply changes."
+        fi
+      '';
 
-      rollback.exec =
-        if pkgs.stdenv.isDarwin then
-          ''
-            ${lib.getExe pkgs.gum} format -- '`rollback` not available on darwin.' | xargs -0 ${lib.getExe pkgs.gum} log --time=datetime --level=error
-            exit 1
-          ''
-        else
-          ''
-            ${lib.getExe pkgs.gum} log --time=datetime --level=info "Rolling back NixOS system."
-            ${inhibit "Rolling back NixOS system" "sudo nixos-rebuild ${rebuildOptions} --rollback switch --flake ."}
-          '';
+      rollback.exec = ''
+        ${lib.getExe pkgs.gum} log --time=datetime --level=info "Rolling back NixOS system."
+        ${inhibit "Rolling back NixOS system" "sudo nixos-rebuild ${rebuildOptions} --rollback switch --flake ."}
+      '';
 
-      remote-rebuild.exec =
-        if pkgs.stdenv.isDarwin then
-          ''
-            ${lib.getExe pkgs.gum} format -- '`remote-rebuild` not available on darwin.' | xargs -0 ${lib.getExe pkgs.gum} log --time=datetime --level=error
-            exit 1
-          ''
-        else
-          ''
-            HOSTNAME=''${1}
+      remote-rebuild.exec = ''
+        HOSTNAME=''${1}
 
-            ${lib.getExe pkgs.gum} log --structured --time=datetime --level=info "Rebuilding remote NixOS system." host $HOSTNAME
-            ${inhibit "Rebuilding NixOS system" "nixos-rebuild ${rebuildOptions} switch --flake .#$HOSTNAME --target-host root@$HOSTNAME"}
-          '';
+        ${lib.getExe pkgs.gum} log --structured --time=datetime --level=info "Rebuilding remote NixOS system." host $HOSTNAME
+        ${inhibit "Rebuilding NixOS system" "nixos-rebuild ${rebuildOptions} switch --flake .#$HOSTNAME --target-host root@$HOSTNAME"}
+      '';
 
-      remote-sys-upgrade.exec =
-        if pkgs.stdenv.isDarwin then
-          ''
-            ${lib.getExe pkgs.gum} format -- '`remote-sys-upgrade` not available on darwin.' | xargs -0 ${lib.getExe pkgs.gum} log --time=datetime --level=error
-            exit 1
-          ''
-        else
-          ''
-            HOSTNAME=''${1}
+      remote-sys-upgrade.exec = ''
+        HOSTNAME=''${1}
 
-            ${lib.getExe pkgs.gum} log --structured --time=datetime --level=info "Upgrading remote NixOS system." host $HOSTNAME
-            ${inhibit "Upgrading NixOS system" "nixos-rebuild ${rebuildOptions} boot --flake .#$HOSTNAME --target-host root@$HOSTNAME"}
-            if test $? -eq 0; then
-              ${lib.getExe pkgs.gum} log --time=datetime --level=info "NixOS system upgraded. Reboot to apply changes."
-            fi
-          '';
+        ${lib.getExe pkgs.gum} log --structured --time=datetime --level=info "Upgrading remote NixOS system." host $HOSTNAME
+        ${inhibit "Upgrading NixOS system" "nixos-rebuild ${rebuildOptions} boot --flake .#$HOSTNAME --target-host root@$HOSTNAME"}
+        if test $? -eq 0; then
+          ${lib.getExe pkgs.gum} log --time=datetime --level=info "NixOS system upgraded. Reboot to apply changes."
+        fi
+      '';
 
-      cache.exec =
-        if pkgs.stdenv.isDarwin then
-          ''
-            ${lib.getExe pkgs.gum} format -- '`cache` not available on darwin.' | xargs -0 ${lib.getExe pkgs.gum} log --time=datetime --level=error
-            exit 1
-          ''
-        else
-          ''
-            HOSTNAME=$(hostname)
-            CONFIG=''${1:-$HOSTNAME}
+      cache.exec = ''
+        HOSTNAME=$(hostname)
+        CONFIG=''${1:-$HOSTNAME}
 
-            ${lib.getExe pkgs.gum} log --structured --time=datetime --level=info "Building and caching NixOS system closure." config $CONFIG
-            ${inhibit "Building and caching NixOS system closure" ''
-              nix build ".#$nixosConfigurations.$CONFIG.config.system.build.toplevel" --json \
-                | ${lib.getExe pkgs.jq} -r '.[].outputs | to_entries[].value' \
-                | ${lib.getExe pkgs.cachix} push 0xcharly-nixos-config
-            ''}
-          '';
+        ${lib.getExe pkgs.gum} log --structured --time=datetime --level=info "Building and caching NixOS system closure." config $CONFIG
+        ${inhibit "Building and caching NixOS system closure" ''
+          nix build ".#$nixosConfigurations.$CONFIG.config.system.build.toplevel" --json \
+            | ${lib.getExe pkgs.jq} -r '.[].outputs | to_entries[].value' \
+            | ${lib.getExe pkgs.cachix} push 0xcharly-nixos-config
+        ''}
+      '';
 
-      preview-avatar.exec =
-        if pkgs.stdenv.isDarwin then
-          ''
-            ${lib.getExe pkgs.gum} format -- '`preview-avatar` not available on darwin.' | xargs -0 ${lib.getExe pkgs.gum} log --time=datetime --level=error
-            exit 1
-          ''
-        else
-          ''
-            ${lib.getExe pkgs.glslviewer} --uniform -h 1024 -w 1024 data/avatar.frag
-          '';
+      preview-avatar.exec = ''
+        ${lib.getExe pkgs.glslviewer} --uniform -h 1024 -w 1024 data/avatar.frag
+      '';
 
       ssh-copy-terminfo.exec = ''
         ${lib.getExe' pkgs.ncurses "infocmp"} -x | ssh -o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "$1" -- tic -x -
