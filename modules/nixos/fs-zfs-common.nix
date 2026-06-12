@@ -61,13 +61,10 @@
             kernelPackages = pkgs.linuxPackages_7_0;
             zfs.package = pkgs.zfs_2_4;
 
-            # Forcibly import the ZFS root pool(s) during early boot.
+            # When true, forcibly import the ZFS root pool(s) during early boot.
             # It is highly recommended to keep this option disabled as it
             # bypasses ZFS safeguard that protect your pools.
             # You should only need to do this after unclean shutdowns.
-            # TODO(26.11): Remove `lib.mkForce` once fix is submitted upstream.
-            # NOTE: currently forced to `true` by disko:
-            # https://github.com/nix-community/disko/issues/1255
             # This is `false` for every hosts in this configuration. The
             # `lib.mkForce` verifies that.
             zfs.forceImportRoot = lib.mkForce false;
