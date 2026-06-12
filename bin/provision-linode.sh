@@ -39,7 +39,8 @@ log_info "Syncing password vault…"
 bw sync # Sync vault.
 
 log_info "Unlocking password vault…"
-BW_SESSION=$(bw unlock --raw); export BW_SESSION # Open a new password session.
+BW_SESSION=$(bw unlock --raw)
+export BW_SESSION # Open a new password session.
 
 # Fetch keys in bulk to speed up lookups.
 log_info "Loading disk encryption keys…"
@@ -109,12 +110,12 @@ nixos_anywhere_ssh_options=(
 # Build and deploy the new system to the remote machine!
 log_info "Deploying new system…"
 nix run github:nix-community/nixos-anywhere -- \
-    "${nixos_anywhere_ssh_options[@]}" \
-    "${disk_encryption_keys[@]}" \
-    --build-on local \
-    --extra-files "$extra_system_files" \
-    --flake ".#$TARGET_HOST" \
-    --target-host "nixos@$REMOTE_ADDR"
+  "${nixos_anywhere_ssh_options[@]}" \
+  "${disk_encryption_keys[@]}" \
+  --build-on local \
+  --extra-files "$extra_system_files" \
+  --flake ".#$TARGET_HOST" \
+  --target-host "nixos@$REMOTE_ADDR"
 
 # System install completion notice.
 echo -e "System installation \033[32;1mcomplete\033[0m. System rebooting."

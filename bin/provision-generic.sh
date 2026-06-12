@@ -39,7 +39,8 @@ log_info "Syncing password vault…"
 bw sync # Sync vault.
 
 log_info "Unlocking password vault…"
-BW_SESSION=$(bw unlock --raw); export BW_SESSION # Open a new password session.
+BW_SESSION=$(bw unlock --raw)
+export BW_SESSION # Open a new password session.
 
 # Fetch keys in bulk to speed up lookups.
 log_info "Loading disk encryption keys…"
