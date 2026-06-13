@@ -301,36 +301,41 @@
             };
             extraConfig =
               let
-                set-aspect-ratio = pkgs.writeShellApplication {
-                  name = "set-aspect-ratio";
-                  runtimeInputs = with pkgs; [
-                    bc
-                    jq
-                  ];
-                  text = ''
-                    focused_window=$(hyprctl activewindow -j)
+                set-aspect-ratio =
+                  with pkgs;
+                  writeShellApplication {
+                    name = "set-aspect-ratio";
+                    runtimeInputs = [
+                      bc
+                      jq
+                    ];
+                    text = ''
+                      focused_window=$(hyprctl activewindow -j)
 
-                    width=$(echo "$focused_window" | jq -r '.size[0]')
-                    height=$(echo "scale=0; ($width * $2 / $1) / 1" | bc -l)
+                      width=$(echo "$focused_window" | jq -r '.size[0]')
+                      height=$(echo "scale=0; ($width * $2 / $1) / 1" | bc -l)
 
-                    hyprctl dispatch resizeactive exact "$width" "$height"
-                  '';
-                };
-                screenshot-editor = pkgs.writeShellApplication {
-                  name = "screenshot-editor";
-                  runtimeInputs = with pkgs; [
-                    wl-clipboard
-                    satty
-                  ];
-                  text = ''
-                    satty --filename - \
-                      --copy-command=wl-copy \
-                      --output-filename "${config.xdg.userDirs.download}/screenshot-$(date +'%Y-%m-%d_%H-%M-%S').png" \
-                      --early-exit \
-                      --action-on-enter save-to-clipboard \
-                      --save-after-copy
-                  '';
-                };
+                      hyprctl dispatch resizeactive exact "$width" "$height"
+                    '';
+                  };
+                capture-screenshot =
+                  with pkgs;
+                  writeShellApplication {
+                    name = "screenshot-editor";
+                    runtimeInputs = [
+                      grimblast
+                      wl-clipboard
+                      satty
+                    ];
+                    text = ''
+                      grimblast save "$@" - | satty --filename - \
+                        --copy-command=wl-copy \
+                        --output-filename "${config.xdg.userDirs.download}/screenshot-$(date +'%Y-%m-%d_%H-%M-%S').png" \
+                        --early-exit \
+                        --action-on-enter save-to-clipboard \
+                        --save-after-copy
+                    '';
+                  };
 
                 map-workspaces =
                   mapFn:
@@ -364,9 +369,9 @@
                 hl.bind("SUPER         + F",      hl.dsp.window.fullscreen({ mode = "maximized", action = "toggle" }))
                 hl.bind("SUPER + SHIFT + F",      hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }))
                 hl.bind("SUPER + CTRL  + C",      hl.dsp.exec_cmd("${uwsmGetExe pkgs.hyprpicker} -a"))
-                hl.bind("SUPER         + P",      hl.dsp.exec_cmd("${uwsmGetExe pkgs.grimblast} save area - | ${uwsmGetExe screenshot-editor}"))
-                hl.bind("SUPER + SHIFT + P",      hl.dsp.exec_cmd("${uwsmGetExe pkgs.grimblast} save active - | ${uwsmGetExe screenshot-editor}"))
-                hl.bind("SUPER + CTRL  + P",      hl.dsp.exec_cmd("${uwsmGetExe pkgs.grimblast} save screen - | ${uwsmGetExe screenshot-editor}"))
+                hl.bind("SUPER         + P",      hl.dsp.exec_cmd("${uwsmGetExe capture-screenshot} area"))
+                hl.bind("SUPER + SHIFT + P",      hl.dsp.exec_cmd("${uwsmGetExe capture-screenshot} active"))
+                hl.bind("SUPER + CTRL  + P",      hl.dsp.exec_cmd("${uwsmGetExe capture-screenshot} screen"))
 
                 hl.bind("SUPER + ALT   + R",      hl.dsp.exec_cmd("${uwsmGetExe set-aspect-ratio} 16 9"))
 
