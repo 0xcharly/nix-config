@@ -357,7 +357,7 @@
                 -- Keyboard bindings
                 hl.bind("SUPER         + Return", hl.dsp.exec_cmd("${uwsmGetExe config.user.terminal.default.package}"))
                 hl.bind("SUPER         + Space",  hl.dsp.exec_cmd("${uwsmGetExe config.node.wayland.hyprlauncher.package} --toggle"))
-                hl.bind("SUPER + SHIFT + X",      hl.dsp.window.kill())
+                hl.bind("SUPER + SHIFT + X",      hl.dsp.window.close())
                 hl.bind("SUPER + SHIFT + Q",      hl.dsp.exec_cmd("${lib.getExe pkgs.uwsm} stop"))
                 hl.bind("SUPER + SHIFT + L",      hl.dsp.exec_cmd("${uwsmGetExe config.node.wayland.idle.screenlock.package}"))
                 hl.bind("SUPER         + V",      hl.dsp.window.float({ action = "toggle" }))
