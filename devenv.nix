@@ -81,8 +81,14 @@
       '';
 
       rebuild.exec = ''
-        ${lib.getExe pkgs.gum} log --time=datetime --level=info "Rebuilding NixOS system."
-        ${inhibit "Rebuilding NixOS system" "nixos-rebuild ${rebuildOptions} switch --flake ."}
+        ${lib.getExe pkgs.gum} log --time=datetime --level=info "Building NixOS system."
+        ${inhibit "Building NixOS system" "nixos-rebuild ${rebuildOptions} build --flake ."}
+
+        if test $? -eq 0; then
+          ${lib.getExe pkgs.nvd} diff /run/current-system result
+          ${lib.getExe pkgs.gum} log --time=datetime --level=info "Switching to last NixOS system generation."
+          ${inhibit "Switching to last NixOS system generation" "nixos-rebuild ${rebuildOptions} switch --flake ."}
+        fi
       '';
 
       sys-upgrade.exec = ''
