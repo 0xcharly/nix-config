@@ -14,6 +14,8 @@
           inputs.nix-config-secrets.nixosModules.services-hoopsnake-site-fr
           inputs.nix-config-secrets.nixosModules.services-tailscale
 
+          self.nixosModules.profile-hardware-server
+
           self.nixosModules.access-directory
           self.nixosModules.bootloader-systemd-boot
           self.nixosModules.fs-zfs-backup-minisforum-n5

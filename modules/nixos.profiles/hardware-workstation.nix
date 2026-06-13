@@ -1,6 +1,9 @@
 { self, ... }:
 {
   flake.nixosModules.profile-hardware-workstation = {
-    imports = with self.nixosModules; [ programs-power-management ];
+    imports = with self.nixosModules; [
+      environment-man-pages
+      programs-power-management
+    ];
   };
 }

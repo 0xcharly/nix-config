@@ -15,6 +15,8 @@
           inputs.nix-config-secrets.nixosModules.services-tailscale
           inputs.nix-config-secrets.nixosModules.users-delay
 
+          self.nixosModules.profile-hardware-server
+
           self.nixosModules.bootloader-grub
           self.nixosModules.fs-zfs-common
           self.nixosModules.fs-zfs-system-base

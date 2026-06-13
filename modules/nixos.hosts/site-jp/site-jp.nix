@@ -22,6 +22,8 @@
           inputs.nix-config-secrets.nixosModules.services-vaultwarden
           inputs.nix-config-secrets.nixosModules.zfs-replication-keys
 
+          self.nixosModules.profile-hardware-server
+
           self.nixosModules.access-directory
           self.nixosModules.bootloader-systemd-boot
           self.nixosModules.fs-zfs-backup-minisforum-n5

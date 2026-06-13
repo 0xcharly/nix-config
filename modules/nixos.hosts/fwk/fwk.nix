@@ -4,7 +4,7 @@
     stateVersion = "25.05";
 
     nixosModule =
-      { modulesPath, pkgs, ... }:
+      { modulesPath, ... }:
       {
         imports = [
           "${modulesPath}/installer/scan/not-detected.nix"
@@ -17,7 +17,8 @@
           inputs.nix-config-secrets.nixosModules.ssh-keys-ring-0-tier
           inputs.nix-config-secrets.nixosModules.users-delay
 
-          self.nixosModules.profile-hardware-laptop
+          self.nixosModules.profile-hardware-workstation
+          self.nixosModules.profile-hardware-workstation-laptop
 
           self.nixosModules.bootloader-systemd-boot
           self.nixosModules.fs-zfs-common
