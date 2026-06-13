@@ -21,7 +21,7 @@ log_error() {
   echo -e "\033[33;1mINFO\033[0m: $1"
 }
 
-ping -c 1 "$TARGET_HOST-initrd" >/dev/null 2>&1
+ping -c 1 "$TARGET_HOST-unlock" >/dev/null 2>&1
 if [[ $? -ne 0 ]]; then
   log_error "Could not reach $TARGET_HOST… exiting."
   exit 1
@@ -41,4 +41,4 @@ ssh_options=(
 )
 
 log_info "Unlocking system…"
-ssh "${ssh_options[@]}" "$TARGET_HOST-initrd"
+ssh "${ssh_options[@]}" "$TARGET_HOST-unlock"

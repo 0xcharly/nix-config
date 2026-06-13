@@ -59,12 +59,29 @@
         nix-collect-garbage --delete-older-than 7d
       '';
 
-      remote-unlock.exec = builtins.readFile ./bin/remote-unlock.sh;
-      remote-unlock-emergency.exec = builtins.readFile ./bin/remote-unlock-emergency.sh;
+      unlock.exec = builtins.readFile ./bin/unlock.sh;
 
-      provision-generic.exec = builtins.readFile ./bin/provision-generic.sh;
-      provision-linode.exec = builtins.readFile ./bin/provision-linode.sh;
-      provision-nas.exec = builtins.readFile ./bin/provision-nas.sh;
+      provision-generic = {
+        exec = builtins.readFile ./bin/provision-generic.sh;
+        packages = with pkgs; [
+          bitwarden-cli
+          jq
+        ];
+      };
+      provision-linode = {
+        exec = builtins.readFile ./bin/provision-linode.sh;
+        packages = with pkgs; [
+          bitwarden-cli
+          jq
+        ];
+      };
+      provision-nas = {
+        exec = builtins.readFile ./bin/provision-nas.sh;
+        packages = with pkgs; [
+          bitwarden-cli
+          jq
+        ];
+      };
 
       check.exec = ''
         ${lib.getExe pkgs.gum} log --time=datetime --level=info "Validating configuration."
