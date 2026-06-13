@@ -107,11 +107,6 @@ host = "gate-fr"
 ipv4 = "172.233.245.4"
 ipv6 = "2600:3c07::2000:31ff:fe53:d2e1"
 
-[dns."pieceofenglish.fr"."@"]
-host = "gate-fr"
-ipv4 = "172.233.245.4"
-ipv6 = "2600:3c07::2000:31ff:fe53:d2e1"
-
 [reverse-proxy."qyrnl.com"]
 host = "gate-jp"
 tmpl = "tailscale_reverse_proxy"
@@ -204,11 +199,6 @@ port = 4533
 domain = "files.qyrnl.com"
 host = "site-jp.qyrnl.com"
 port = 28981
-
-[services.pieceofenglish]
-domain = "pieceofenglish.fr"
-host = "gate-fr.qyrnl.com"
-port = 20259
 
 [services.prometheus]
 domain = "prometheus.qyrnl.com"

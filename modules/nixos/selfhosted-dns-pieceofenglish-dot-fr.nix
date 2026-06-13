@@ -46,11 +46,6 @@
                   ns2     300   IN A     ${records.ns2.ipv4}
                   ns2     300   IN AAAA  ${records.ns2.ipv6}
 
-                  ; pieceofenglish.fr website records.
-                  @             IN A     ${records."@".ipv4}
-                  @             IN AAAA  ${records."@".ipv6}
-                  www           IN CNAME @
-
                   ; Protonmail domain configuration.
                   @                       10800 IN TXT   "protonmail-verification=002e45ea53d2d587fdbd680b84930481eb8ecf9a"
                   @                       10800 IN TXT   "v=spf1 include:_spf.protonmail.ch ~all"

@@ -9,29 +9,25 @@
       # be resolved, not that the domain can be resolved _over_ IPv6.
       # TODO: also check resolver over IPv6?
 
-      # NOTE: these checks only verify that @.pieceofenglish.fr and ns1.qyrnl.com
+      # NOTE: these checks only verify that ns1.pieceofenglish.fr and ns1.qyrnl.com
       # resolve against their respective nameservers.
-      pieceofenglish-checks =
-        let
-          inherit (facts.dns."pieceofenglish.fr") nameservers;
-          inherit (facts.dns."pieceofenglish.fr"."@") ipv4 ipv6;
 
-          # Domain to check.
-          domain = "pieceofenglish.fr";
-        in
+      pieceofenglish-checks =
+        domain:
+        { ipv4, ipv6, ... }:
         lib.concatLists (
           lib.mapAttrsToList
             (ip: fun: [
               (fun domain "ns1.pieceofenglish.fr" {
-                name = "pieceofenglish.fr 🎯 (via ns1)";
+                name = "${domain} 🎯 (via ns1)";
                 conditions = [ "[BODY] == ${ip}" ];
               })
               (fun domain "ns2.pieceofenglish.fr" {
-                name = "pieceofenglish.fr 🎯 (via ns2)";
+                name = "${domain} 🎯 (via ns2)";
                 conditions = [ "[BODY] == ${ip}" ];
               })
               (fun domain "8.8.8.8" {
-                name = "pieceofenglish.fr 🌐 (via Google)";
+                name = "${domain} 🌐 (via Google)";
                 conditions = [ "[BODY] == ${ip}" ];
               })
             ])
@@ -41,29 +37,25 @@
             }
         );
 
-      # NOTE: this currently only check that the IPv6 address (the AAAA record)
-      # can be resolved, not that the domain can be resolved _over_ IPv6.
       qyrnl-checks =
+        domain:
+        { ipv4, ipv6, ... }:
         let
           inherit (facts.dns."qyrnl.com") nameservers;
-          inherit (facts.dns."qyrnl.com".ns1) ipv4 ipv6;
-
-          # Domain to check.
-          domain = "ns1.qyrnl.com";
         in
         lib.concatLists (
           lib.mapAttrsToList
             (ip: fun: [
               (fun domain "ns1.qyrnl.com" {
-                name = "ns1.qyrnl.com 🎯 (via ns1)";
+                name = "${domain} 🎯 (via ns1)";
                 conditions = [ "[BODY] == ${ip}" ];
               })
               (fun domain "ns2.qyrnl.com" {
-                name = "ns1.qyrnl.com 🎯 (via ns2)";
+                name = "${domain} 🎯 (via ns2)";
                 conditions = [ "[BODY] == ${ip}" ];
               })
               (fun domain "8.8.8.8" {
-                name = "ns1.qyrnl.com 🌐 (via Google)";
+                name = "${domain} 🌐 (via Google)";
                 rcode = "NXDOMAIN"; # Should _not_ resolve publicly.
               })
             ])
@@ -76,8 +68,10 @@
     {
       services.gatus.settings = {
         endpoints =
-          qyrnl-checks
-          ++ pieceofenglish-checks
+          (qyrnl-checks "ns1.qyrnl.com" facts.dns."qyrnl.com".ns1)
+          ++ (qyrnl-checks "ns2.qyrnl.com" facts.dns."qyrnl.com".ns2)
+          ++ (pieceofenglish-checks "ns1.pieceofenglish.fr" facts.dns."pieceofenglish.fr".ns1)
+          ++ (pieceofenglish-checks "ns2.pieceofenglish.fr" facts.dns."pieceofenglish.fr".ns2)
           ++ (map gatus.mkPingHostCheck inventory.servers)
           ++ [
             (gatus.mkHttpServiceCheck "atuin" facts.services.atuin)
@@ -98,7 +92,6 @@
             (gatus.mkHttpServiceCheck "miniflux" facts.services.miniflux)
             (gatus.mkHttpServiceCheck "navidrome" facts.services.navidrome)
             (gatus.mkHttpServiceCheck "paperless" facts.services.paperless)
-            (gatus.mkHttpServiceCheck "Piece of English" facts.services.pieceofenglish)
             (gatus.mkHttpServiceCheck "prometheus" {
               domain = "${facts.services.prometheus.domain}/-/healthy";
             })

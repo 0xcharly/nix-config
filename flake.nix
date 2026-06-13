@@ -43,9 +43,6 @@
 
     # Out of the box mailserver
     simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-26.05";
-
-    # pieceofenglish.fr
-    pieceofenglish.url = "github:0xcharly/pieceofenglish";
   };
 
   nixConfig = {

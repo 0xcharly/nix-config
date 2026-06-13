@@ -36,7 +36,6 @@
           self.nixosModules.prometheus-exporters-zfs
           self.nixosModules.selfhosted-dns-pieceofenglish-dot-fr
           self.nixosModules.selfhosted-dns-qyrnl-dot-com
-          self.nixosModules.selfhosted-pieceofenglish
           self.nixosModules.services-fail2ban
           self.nixosModules.services-openssh
           self.nixosModules.services-tailscale
@@ -59,24 +58,13 @@
 
           networking.tailscale.enableSsh = true;
 
-          services = {
-            dns = {
-              "pieceofenglish.fr" = {
-                enable = true;
-                openFirewall = true;
-                bindInterface = "eth0";
-              };
-              "qyrnl.com".enable = true;
-            };
-
-            pieceofenglish = {
+          services.dns = {
+            "pieceofenglish.fr" = {
               enable = true;
-              reverse-proxy = {
-                enable = true;
-                openFirewall = true;
-                bindInterface = "eth0";
-              };
+              openFirewall = true;
+              bindInterface = "eth0";
             };
+            "qyrnl.com".enable = true;
           };
 
           users.delay.ssh.authorizeTailscaleInternalKey = true;

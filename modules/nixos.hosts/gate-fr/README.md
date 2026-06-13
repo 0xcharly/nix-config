@@ -1,5 +1,6 @@
 # EU Linode instance
 
-DNS server for `pieceofenglish.fr` zone as `ns2.pieceofenglish.fr`.
+DNS server for:
 
-Serves [pieceofenglish.fr](www.pieceofenglish.fr) website.
+- `qyrnl.com` zone as `ns2.qyrnl.com`
+- `xn--7ck8cva5eb.com` zone as `ns2.xn--7ck8cva5eb.com`
