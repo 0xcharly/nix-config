@@ -121,7 +121,7 @@
 
         ${lib.getExe pkgs.gum} log --structured --time=datetime --level=info "Building and caching NixOS system closure." config $CONFIG
         ${inhibit "Building and caching NixOS system closure" ''
-          nix build ".#$nixosConfigurations.$CONFIG.config.system.build.toplevel" --json \
+          nix build ".#nixosConfigurations.$CONFIG.config.system.build.toplevel" --json \
             | ${lib.getExe pkgs.jq} -r '.[].outputs | to_entries[].value' \
             | ${lib.getExe pkgs.cachix} push 0xcharly-nixos-config
         ''}
