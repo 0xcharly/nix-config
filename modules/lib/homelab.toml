@@ -117,37 +117,37 @@ host = "gate-jp"
 tmpl = "tailscale_reverse_proxy"
 
 [nas.primary]
-host = "bowmore.qyrnl.com"
+host = "site-jp.qyrnl.com"
 ipv4 = "100.64.0.120"
 
-[nas.replicas.dalmore]
-label = "dalmore"
-host = "dalmore.qyrnl.com"
+[nas.replicas.site-fr]
+label = "site-fr"
+host = "site-fr.qyrnl.com"
 ipv4 = "100.64.0.121"
 
 [services.atuin]
 domain = "atuin.qyrnl.com"
-host = "bowmore.qyrnl.com"
+host = "site-jp.qyrnl.com"
 port = 8888
 
 [services.cgit]
 domain = "github.qyrnl.com"
-host = "bowmore.qyrnl.com"
+host = "site-jp.qyrnl.com"
 port = 80
 
 [services.calibre-web]
 domain = "reads.qyrnl.com"
-host = "bowmore.qyrnl.com"
+host = "site-jp.qyrnl.com"
 port = 8083
 
 [services.forgejo]
 domain = "git.qyrnl.com"
-host = "bowmore.qyrnl.com"
+host = "site-jp.qyrnl.com"
 port = 3917
 
 [services.forgejo.ssh]
 domain = "git.qyrnl.com"
-hostname = "bowmore.qyrnl.com"
+hostname = "site-jp.qyrnl.com"
 port = 3922
 
 [services.gatus]
@@ -157,7 +157,7 @@ port = 8080
 
 [services.go]
 domain = "go.neko-danio.ts.net"
-host = "bowmore.qyrnl.com"
+host = "site-jp.qyrnl.com"
 # no port, self-advertising on the TS network.
 
 [services.gotify]
@@ -167,12 +167,12 @@ port = 6060
 
 [services.grafana]
 domain = "graphs.qyrnl.com"
-host = "bowmore.qyrnl.com"
+host = "site-jp.qyrnl.com"
 port = 3333
 
 [services.immich]
 domain = "album.qyrnl.com"
-host = "bowmore.qyrnl.com"
+host = "site-jp.qyrnl.com"
 port = 2283
 
 [services.immich-public-proxy]
@@ -182,27 +182,27 @@ port = 3000
 
 [services.jellyfin]
 domain = "jellyfin.qyrnl.com"
-host = "bowmore.qyrnl.com"
+host = "site-jp.qyrnl.com"
 port = 8096
 
 [services.linkwarden]
 domain = "readlater.qyrnl.com"
-host = "bowmore.qyrnl.com"
+host = "site-jp.qyrnl.com"
 port = 3001
 
 [services.miniflux]
 domain = "news.qyrnl.com"
-host = "bowmore.qyrnl.com"
+host = "site-jp.qyrnl.com"
 port = 8067
 
 [services.navidrome]
 domain = "music.qyrnl.com"
-host = "bowmore.qyrnl.com"
+host = "site-jp.qyrnl.com"
 port = 4533
 
 [services.paperless]
 domain = "files.qyrnl.com"
-host = "bowmore.qyrnl.com"
+host = "site-jp.qyrnl.com"
 port = 28981
 
 [services.pieceofenglish]
@@ -212,18 +212,18 @@ port = 20259
 
 [services.prometheus]
 domain = "prometheus.qyrnl.com"
-host = "bowmore.qyrnl.com"
+host = "site-jp.qyrnl.com"
 port = 9090
 
 [services.radicale]
 domain = "cal.qyrnl.com"
 aliases = ["contacts.qyrnl.com"]
-host = "bowmore.qyrnl.com"
+host = "site-jp.qyrnl.com"
 port = 5232
 
 [services.vaultwarden]
 domain = "vault.qyrnl.com"
-host = "bowmore.qyrnl.com"
+host = "site-jp.qyrnl.com"
 port = 8222
 
 [ssh.delay]
@@ -247,14 +247,8 @@ ssh-rsa = "AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+VTTvDP6mH
 [ssh.internet.knownHosts."git.qyrnl.com"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAILCvz0lTYUokMyuoq2gn+STcWY+EPCw+zzuyLOcj9nU0"
 
-[ssh.wireguard.tailscale.knownHosts."bowmore"]
-ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIBc7+svM9KE66X8lpQzYny0byI47Kr38LsYXVyJIZd+w"
-
 [ssh.wireguard.tailscale.knownHosts."site-jp"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIBc7+svM9KE66X8lpQzYny0byI47Kr38LsYXVyJIZd+w"
-
-[ssh.wireguard.tailscale.knownHosts."dalmore"]
-ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIPEQB+CwUB/zGI76uwH95mhwnhvHQKw1/J08ioDzw+W/"
 
 [ssh.wireguard.tailscale.knownHosts."site-fr"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIPEQB+CwUB/zGI76uwH95mhwnhvHQKw1/J08ioDzw+W/"
@@ -277,7 +271,7 @@ ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIHsn07q7SmdP1M09ZIrz0bD9Te+5OMVVlfGEtAP9+
 [ssh.wireguard.tailscale.knownHosts."node-nyx"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIHsn07q7SmdP1M09ZIrz0bD9Te+5OMVVlfGEtAP9+iP9"
 
-[ssh.wireguard.tailscale.knownHosts."skl"]
+[ssh.wireguard.tailscale.knownHosts."node-skl"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIBu+3cdkRlXUXS4MIwZNNKMo9Ia2XUZE7Ze6haIttCur"
 
 [ssh.wireguard.tailscale.knownHosts."node-x1p"]

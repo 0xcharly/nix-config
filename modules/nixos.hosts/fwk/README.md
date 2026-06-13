@@ -1,6 +1,6 @@
-# Framework 13
+# Primary laptop
 
-Primary laptop.
+Framework 13
 
 ## BIOS
 

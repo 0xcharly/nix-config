@@ -49,19 +49,17 @@
                   ns2     300   IN AAAA  ${records.ns2.ipv6}
 
                   ; Hosts declaration.
-                  bowmore       IN CNAME bowmore.${tailnetDomainName}.
-                  side-jp       IN CNAME bowmore.${tailnetDomainName}.
                   cloud9        IN CNAME cloud9.${tailnetDomainName}.
-                  dalmore       IN CNAME dalmore.${tailnetDomainName}.
-                  site-fr       IN CNAME dalmore.${tailnetDomainName}.
                   fwk           IN CNAME fwk.${tailnetDomainName}.
                   roam-fwk      IN CNAME fwk.${tailnetDomainName}.
                   gate-fr       IN CNAME gate-fr.${tailnetDomainName}.
                   gate-jp       IN CNAME gate-jp.${tailnetDomainName}.
                   nyx           IN CNAME nyx.${tailnetDomainName}.
                   node-nyx      IN CNAME nyx.${tailnetDomainName}.
-                  skl           IN CNAME skl.${tailnetDomainName}.
+                  node-skl      IN CNAME node-skl.${tailnetDomainName}.
                   node-x1p      IN CNAME node-x1p.${tailnetDomainName}.
+                  site-fr       IN CNAME site-fr.${tailnetDomainName}.
+                  site-jp       IN CNAME site-jp.${tailnetDomainName}.
 
                   ; Services declaration.
                   album         IN CNAME ${reverseProxyHostName}

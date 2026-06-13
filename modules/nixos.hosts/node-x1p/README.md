@@ -1,1 +1,3 @@
-# Minisforum X1 Pro
+# Corporate envoy
+
+Minisforum X1 Pro

@@ -1,6 +1,6 @@
 { self, inputs, ... }:
 {
-  my.hosts.dalmore = {
+  my.hosts.site-fr = {
     stateVersion = "25.05";
 
     nixosModule =

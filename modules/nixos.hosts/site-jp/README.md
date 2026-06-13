@@ -1,6 +1,6 @@
-# Daedalus - Minisforum N5 Pro
+# Japan NAS primary node
 
-Japan NAS primary node.
+Minisforum N5 Pro
 
 # Hardware Stability Note — ZFS Transfer Reboots
 

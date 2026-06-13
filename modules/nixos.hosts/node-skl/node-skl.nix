@@ -1,6 +1,6 @@
 { self, inputs, ... }:
 {
-  my.hosts.skl = {
+  my.hosts.node-skl = {
     stateVersion = "25.05";
 
     nixosModule =

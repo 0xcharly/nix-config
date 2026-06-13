@@ -1,10 +1,10 @@
 servers = [
-  "bowmore",
   "cloud9",
-  "dalmore",
   "gate-fr",
   "gate-jp",
+  "node-skl",
   "node-x1p",
-  "skl",
+  "site-fr",
+  "site-jp",
 ]
-workstations = ["fwk", "nyx"]
+workstations = ["roam-fwk", "node-nyx"]

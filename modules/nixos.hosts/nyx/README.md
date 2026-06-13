@@ -1,6 +1,6 @@
-# Basestar - SFF Workstation
+# Japan primary workstation
 
-Japan primary workstation.
+SFF Workstation
 
 ## BIOS
 

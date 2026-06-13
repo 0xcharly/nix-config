@@ -1,6 +1,6 @@
 { self, inputs, ... }:
 {
-  my.hosts.bowmore = {
+  my.hosts.site-jp = {
     stateVersion = "25.05";
 
     nixosModule =
