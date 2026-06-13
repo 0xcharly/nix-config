@@ -1,14 +1,19 @@
 {
   flake.homeModules.environment-development =
-    { lib, pkgs, ... }:
+    { config, pkgs, ... }:
     {
-      home.packages = with pkgs; [
-        devenv # Development environment management
-        git-get # Repository management
+      home.packages = [
+        pkgs.devenv # Development environment management
+        pkgs.git-get # Repository management
       ];
 
-      programs.fish.interactiveShellInit = ''
-        ${lib.getExe pkgs.devenv} --no-tui hook fish | source
-      '';
+      programs.direnv = {
+        enable = true;
+        nix-direnv.enable = true;
+        config = {
+          warn_timeout = 0;
+          whitelist.prefix = [ "${config.home.homeDirectory}/code" ];
+        };
+      };
     };
 }
