@@ -64,6 +64,19 @@
           cfg = config.node.boot.initrd.hoopsnake;
         in
         {
+          # https://nixos.org/manual/nixos/stable/release-notes#sec-release-26.05-highlights
+          # If you use LUKS disk encryption […]. If you need to disable the
+          # timeout before you can boot into the system, pass
+          # systemd.default_device_timeout_sec=infinity on the kernel command
+          # line.
+          #
+          # It is an alternate solution to setting this flag on fileSystems."/"
+          # instead:
+          #     fileSystems."/".options = [ "x-systemd.device-timeout=infinity" ];
+          #
+          # If the above option doesn't work, try the one below.
+          # kernelParams = [ "systemd.default_device_timeout_sec=infinity" ];
+
           initrd = {
             availableKernelModules = cfg.kernelModules;
             systemd.extraBin.ping = lib.getExe' pkgs.iputils "ping";

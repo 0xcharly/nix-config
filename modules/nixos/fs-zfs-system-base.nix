@@ -33,6 +33,10 @@
             supportedFilesystems.zfs = true;
           };
 
+          # Await LUKS prompt
+          # https://github.com/nix-community/disko/issues/1257
+          fileSystems."/".options = [ "x-systemd.device-timeout=infinity" ];
+
           disko.devices.disk.system = {
             type = "disk";
             device = cfg.disk;

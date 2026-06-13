@@ -79,6 +79,10 @@
           };
         };
 
+        # Await LUKS prompt
+        # https://github.com/nix-community/disko/issues/1257
+        fileSystems."/".options = [ "x-systemd.device-timeout=infinity" ];
+
         # "Sync /boot to /boot-fallback on activation
         system.activationScripts.syncBootFallback = {
           text = ''
