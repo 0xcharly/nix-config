@@ -1,6 +1,6 @@
 { self, inputs, ... }:
 {
-  my.hosts.cloud9 = {
+  my.hosts.mail-vt = {
     stateVersion = "25.11";
 
     nixosModule =
@@ -11,7 +11,7 @@
           "${modulesPath}/profiles/qemu-guest.nix"
 
           inputs.nix-config-secrets.nixosModules.default
-          inputs.nix-config-secrets.nixosModules.services-hoopsnake-cloud9
+          inputs.nix-config-secrets.nixosModules.services-hoopsnake-mail-vt
           inputs.nix-config-secrets.nixosModules.services-tailscale
           inputs.nix-config-secrets.nixosModules.users-delay
 

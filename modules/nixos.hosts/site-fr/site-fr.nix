@@ -4,7 +4,7 @@
     stateVersion = "25.05";
 
     nixosModule =
-      { modulesPath, config, ... }:
+      { modulesPath, ... }:
       {
         imports = [
           "${modulesPath}/installer/scan/not-detected.nix"
@@ -45,15 +45,10 @@
 
         # System config.
         node = {
-          boot.initrd.hoopsnake = {
-            clientIdFile = config.age.secrets."services/hoopsnake/site-fr/tailscale-client-id".path;
-            clientSecretFile = config.age.secrets."services/hoopsnake/site-fr/tailscale-client-secret".path;
-            privateHostKeyFile = config.age.secrets."services/hoopsnake/site-fr/ssh_host_ed25519_key".path;
-            kernelModules = [
-              "atlantic"
-              "r8169"
-            ];
-          };
+          boot.initrd.hoopsnake.kernelModules = [
+            "atlantic"
+            "r8169"
+          ];
 
           fs.zfs = {
             hostId = "eb3cd4cb";

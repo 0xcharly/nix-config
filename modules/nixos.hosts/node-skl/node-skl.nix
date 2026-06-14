@@ -46,12 +46,7 @@
 
         # System config
         node = {
-          boot.initrd.hoopsnake = {
-            clientIdFile = config.age.secrets."services/hoopsnake/node-skl/tailscale-client-id".path;
-            clientSecretFile = config.age.secrets."services/hoopsnake/node-skl/tailscale-client-secret".path;
-            privateHostKeyFile = config.age.secrets."services/hoopsnake/node-skl/ssh_host_ed25519_key".path;
-            kernelModules = [ "e1000e" ];
-          };
+          boot.initrd.hoopsnake.kernelModules = [ "e1000e" ];
 
           fs.zfs = {
             hostId = "be2d9ac1";

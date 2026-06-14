@@ -436,11 +436,11 @@
         "systems": "systems_4"
       },
       "locked": {
-        "lastModified": 1781106351,
-        "narHash": "sha256-Fatnssx1zPuF1wEvqoWUxAH22ez1WeUbyLT0nnGu+rE=",
+        "lastModified": 1781409840,
+        "narHash": "sha256-D926XBgpLTIN7kr+EBddF0+blKiHdTq5bk0XVkHVFt0=",
         "owner": "0xcharly",
         "repo": "nix-config-secrets",
-        "rev": "218d69bcf4dfc58a80e2aed4766e8abe558755d2",
+        "rev": "9590bd9716870c38c9831a86bac5bf0965853e07",
         "type": "github"
       },
       "original": {

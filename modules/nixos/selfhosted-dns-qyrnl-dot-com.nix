@@ -49,17 +49,18 @@
                   ns2     300   IN AAAA  ${records.ns2.ipv6}
 
                   ; Hosts declaration.
-                  cloud9        IN CNAME cloud9.${tailnetDomainName}.
-                  fwk           IN CNAME fwk.${tailnetDomainName}.
-                  roam-fwk      IN CNAME fwk.${tailnetDomainName}.
                   gate-fr       IN CNAME gate-fr.${tailnetDomainName}.
                   gate-jp       IN CNAME gate-jp.${tailnetDomainName}.
-                  nyx           IN CNAME nyx.${tailnetDomainName}.
-                  node-nyx      IN CNAME nyx.${tailnetDomainName}.
+                  mail-vt       IN CNAME mail-vt.${tailnetDomainName}.
                   node-skl      IN CNAME node-skl.${tailnetDomainName}.
-                  node-x1p      IN CNAME node-x1p.${tailnetDomainName}.
                   site-fr       IN CNAME site-fr.${tailnetDomainName}.
                   site-jp       IN CNAME site-jp.${tailnetDomainName}.
+                  nyx           IN CNAME nyx.${tailnetDomainName}.
+                  term-nyx      IN CNAME nyx.${tailnetDomainName}.
+                  fwk           IN CNAME fwk.${tailnetDomainName}.
+                  term-fwk      IN CNAME fwk.${tailnetDomainName}.
+                  node-x1p      IN CNAME node-x1p.${tailnetDomainName}.
+                  term-x1p      IN CNAME node-x1p.${tailnetDomainName}.
 
                   ; Services declaration.
                   album         IN CNAME ${reverseProxyHostName}

@@ -76,15 +76,10 @@
 
         # System config
         node = {
-          boot.initrd.hoopsnake = {
-            clientIdFile = config.age.secrets."services/hoopsnake/site-jp/tailscale-client-id".path;
-            clientSecretFile = config.age.secrets."services/hoopsnake/site-jp/tailscale-client-secret".path;
-            privateHostKeyFile = config.age.secrets."services/hoopsnake/site-jp/ssh_host_ed25519_key".path;
-            kernelModules = [
-              "atlantic"
-              "r8169"
-            ];
-          };
+          boot.initrd.hoopsnake.kernelModules = [
+            "atlantic"
+            "r8169"
+          ];
 
           fs.zfs = {
             hostId = "71fe60d5";

@@ -1,10 +1,10 @@
 servers = [
-  "cloud9",
   "gate-fr",
   "gate-jp",
+  "mail-vt",
   "node-skl",
-  "node-x1p",
+  "node-x1p", # TODO: term-x1p
   "site-fr",
   "site-jp",
 ]
-workstations = ["roam-fwk", "node-nyx"]
+workstations = ["term-fwk", "term-nyx"]

@@ -18,7 +18,7 @@ ipv4 = "172.233.245.4"
 ipv6 = "2600:3c07::2000:31ff:fe53:d2e1"
 
 [dns."xn--7ck8cva5eb.com".mx]
-host = "cloud9"
+host = "mail-vt"
 ipv4 = "172.237.13.18"
 ipv6 = "2600:3c18::2000:4fff:fe5e:fe68"
 
@@ -37,7 +37,7 @@ ipv4 = "172.233.245.4"
 ipv6 = "2600:3c07::2000:31ff:fe53:d2e1"
 
 [dns."0xcharly.com".mx]
-host = "cloud9"
+host = "mail-vt"
 ipv4 = "172.237.13.18"
 ipv6 = "2600:3c18::2000:4fff:fe5e:fe68"
 
@@ -56,7 +56,7 @@ ipv4 = "172.233.245.4"
 ipv6 = "2600:3c07::2000:31ff:fe53:d2e1"
 
 [dns."splicedpixel.com".mx]
-host = "cloud9"
+host = "mail-vt"
 ipv4 = "172.237.13.18"
 ipv6 = "2600:3c18::2000:4fff:fe5e:fe68"
 
@@ -75,7 +75,7 @@ ipv4 = "172.233.245.4"
 ipv6 = "2600:3c07::2000:31ff:fe53:d2e1"
 
 [dns."splicedpixel.xyz".mx]
-host = "cloud9"
+host = "mail-vt"
 ipv4 = "172.237.13.18"
 ipv6 = "2600:3c18::2000:4fff:fe5e:fe68"
 
@@ -246,7 +246,7 @@ ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIPEQB+CwUB/zGI76uwH95mhwnhvHQKw1/J08ioDzw
 [ssh.wireguard.tailscale.knownHosts."fwk"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIOOGCAJVRToabx32L6jIUdzDhU43QWa6dXm4sAN/H96m"
 
-[ssh.wireguard.tailscale.knownHosts."roam-fwk"]
+[ssh.wireguard.tailscale.knownHosts."term-fwk"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIOOGCAJVRToabx32L6jIUdzDhU43QWa6dXm4sAN/H96m"
 
 [ssh.wireguard.tailscale.knownHosts."gate-fr"]
@@ -258,7 +258,7 @@ ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAILb+AwJFckuzpo34rM9AhyuIMjPExUi+6svoZGWKV
 [ssh.wireguard.tailscale.knownHosts."nyx"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIHsn07q7SmdP1M09ZIrz0bD9Te+5OMVVlfGEtAP9+iP9"
 
-[ssh.wireguard.tailscale.knownHosts."node-nyx"]
+[ssh.wireguard.tailscale.knownHosts."term-nyx"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIHsn07q7SmdP1M09ZIrz0bD9Te+5OMVVlfGEtAP9+iP9"
 
 [ssh.wireguard.tailscale.knownHosts."node-skl"]
@@ -267,5 +267,8 @@ ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIBu+3cdkRlXUXS4MIwZNNKMo9Ia2XUZE7Ze6haItt
 [ssh.wireguard.tailscale.knownHosts."node-x1p"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIJGA1jfPuKCEaOfYh9H9wO/HTXiOTLxBCfgVXp5Sx/Ca"
 
-[ssh.wireguard.tailscale.knownHosts."cloud9"] # mail-vt0
+[ssh.wireguard.tailscale.knownHosts."term-x1p"]
+ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIJGA1jfPuKCEaOfYh9H9wO/HTXiOTLxBCfgVXp5Sx/Ca"
+
+[ssh.wireguard.tailscale.knownHosts."mail-vt"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIOF74XheqFzcb9eYwOh1mrTSUSFLtOVK2OIfDwCa1Uri"
