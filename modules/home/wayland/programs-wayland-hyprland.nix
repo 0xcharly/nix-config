@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ self, inputs, ... }:
 {
   flake.homeModules.programs-wayland-hyprland =
     {
@@ -23,7 +23,7 @@
               # Apple Pro Display XDR
               monitor = "DP-3, 6016x3384@60.00Hz, 0x0, 2.00";
             '';
-            example = lib.literalExpression ''
+            example = literalExpression ''
               {
                 output = "eDP-1";
                 mode = "2880x1920@120";
@@ -90,7 +90,7 @@
 
           exec-start = mkOption {
             type = types.attrsOf types.package;
-            example = lib.literalExpression ''
+            example = literalExpression ''
               {
                 "1" = config.programs.chromium.package;
                 "3" = config.programs.kitty.package;
@@ -116,7 +116,7 @@
             description = ''
               Launch prefix for each desktop app, e.g. `uwsm app -- `.
             '';
-            example = lib.literalExpression ''
+            example = literalExpression ''
               uwsm app --
             '';
           };
@@ -236,12 +236,10 @@
       config =
         let
           cfg = config.node.wayland;
-          uwsmGetExe = pkg: cfg.uwsm-wrapper.wrapper (lib.getExe pkg);
-          uwsmGetExe' = pkg: fname: cfg.uwsm-wrapper.wrapper (lib.getExe' pkg fname);
+          uwsmGetExe = pkg: lib.getExe pkg |> cfg.uwsm-wrapper.wrapper;
+          uwsmGetExe' = pkg: fname: lib.getExe' pkg fname |> cfg.uwsm-wrapper.wrapper;
         in
         {
-          home.packages = [ pkgs.hyprshutdown ];
-
           wayland.windowManager.hyprland = {
             enable = true;
             configType = "lua";
@@ -288,6 +286,7 @@
               };
               decoration = {
                 rounding = 12;
+                blur.enabled = false;
                 shadow = {
                   enabled = true;
                   range = 4;
@@ -402,7 +401,6 @@
                 -- Mouse
                 hl.bind("SUPER + mouse:272", hl.dsp.window.drag())   -- Left mouse button
                 hl.bind("SUPER + mouse:273", hl.dsp.window.resize()) -- Right mouse button
-
               ''
               + (map-movements (
                 dir: key: ''hl.bind("SUPER         + ${dir}", hy3.move_focus("${key}", { wrap = true }))''
@@ -429,7 +427,6 @@
                 })
               ''))
               + ''
-
                 hl.curve("expressiveFastSpatial",    { type = "bezier", points = { { 0.42, 1.67 }, { 0.21, 0.90 } } })
                 hl.curve("expressiveSlowSpatial",    { type = "bezier", points = { { 0.39, 1.29 }, { 0.35, 0.98 } } })
                 hl.curve("expressiveDefaultSpatial", { type = "bezier", points = { { 0.38, 1.21 }, { 0.22, 1.00 } } })
@@ -466,11 +463,6 @@
                   float = true,
                 })
                 hl.window_rule({
-                  name = "Volume control",
-                  match = { class = "^org.pulseaudio.pavucontrol$", title = "^Volume Control$" },
-                  float = true,
-                })
-                hl.window_rule({
                   name = "Bitwarden Chrome extension",
                   match = { class = "^chrome-nngceckbapebfimnlniiiahkandclblb-Default$", title = "^_crx_nngceckbapebfimnlniiiahkandclblb$" },
                   float = true,
@@ -487,9 +479,6 @@
                   size = { ${toString cfg.pip.width}, ${toString cfg.pip.height} },
                 })
               '';
-
-            # Monitor config
-            # inherit (cfg.hyprland) monitor;
           };
 
           programs.hyprlock =
