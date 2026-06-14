@@ -42,7 +42,11 @@
                 ".DS_STORE/*"
                 "desktop.ini"
               ];
-              PAPERLESS_OCR_LANGUAGE = "eng+fra+jpn";
+              # NOTE: Defining `PAPERLESS_OCR_LANGUAGE` causes a custom build of
+              # `pkgs.tesseract5` to be packaged into `pkgs.paperless-ng`, which
+              # forces a rebuild of the whole package.
+              # TODO: consider re-enabling `PAPERLESS_OCR_LANGUAGE`
+              # PAPERLESS_OCR_LANGUAGE = "eng+fra+jpn";
               PAPERLESS_OCR_USER_ARGS = {
                 optimize = 1;
                 pdfa_image_compression = "lossless";
