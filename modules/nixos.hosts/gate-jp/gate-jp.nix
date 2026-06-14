@@ -95,9 +95,6 @@
         };
       };
 
-    users.delay.imports = with self.homeModules; [
-      profile-hardware-server
-      profile-ssh-keys-ring-3-tier
-    ];
+    users.delay.imports = with self.homeModules; [ profile-hardware-server ];
   };
 }

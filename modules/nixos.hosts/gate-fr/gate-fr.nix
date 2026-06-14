@@ -73,6 +73,6 @@
         time.timeZone = "Europe/Paris";
       };
 
-    users.delay.imports = [ self.homeModules.profile-hardware-server ];
+    users.delay.imports = with self.homeModules; [ profile-hardware-server ];
   };
 }

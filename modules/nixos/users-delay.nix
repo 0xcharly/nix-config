@@ -12,11 +12,15 @@
 
       options.node.users.delay = with lib; {
         ssh = {
-          authorizeTailscaleInternalKey = mkEnableOption ''
-            Whether to add the tailscale-internal public SSH key to the user's authorized_keys.
-          '';
-          authorizeTailscalePublicKey = mkEnableOption ''
-            Whether to add the tailscale-internal public SSH key to the user's authorized_keys.
+          authorizeTailscaleInternalKey =
+            mkEnableOption ''
+              Whether to add the tailscale-internal public SSH key to the user's authorized_keys.
+            ''
+            // {
+              default = !config.node.networking.tailscale.enableSsh;
+            };
+          authorizeTailscaleExternalKey = mkEnableOption ''
+            Whether to add the tailscale-external public SSH key to the user's authorized_keys.
           '';
         };
       };
@@ -26,14 +30,14 @@
           cfg = config.node.users.delay;
         in
         {
-          # Main shell.
+          # Main shell
           programs.fish.enable = true;
 
           users = {
-            # Creates the group `delay`.
+            # Creates the group `delay`
             groups.delay = { };
 
-            # Creates the user `delay`.
+            # Creates the user `delay`
             users.delay = {
               isNormalUser = true;
               home = "/home/delay";
@@ -56,7 +60,7 @@
                 # above one should be limited to internal connections only, while this one
                 # should be limited to external connections only (such that it can be
                 # revoked without impacting internal connections).
-                ++ lib.optionals cfg.ssh.authorizeTailscalePublicKey [
+                ++ lib.optionals cfg.ssh.authorizeTailscaleExternalKey [
                   "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHjAzWFwcBBC1brhZPmtHs39UEQU0IRtlcS/BEwfmqFj tailscale-public"
                 ];
             };
