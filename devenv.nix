@@ -5,7 +5,7 @@
   ...
 }:
 {
-  packages = with pkgs; lib.optionals stdenv.isLinux [ bitwarden-cli ];
+  packages = with pkgs; [ kdePackages.qtdeclarative ];
 
   languages = {
     lua.enable = true;

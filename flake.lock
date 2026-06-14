@@ -21,27 +21,6 @@
         "type": "github"
       }
     },
-    "apdbctl": {
-      "inputs": {
-        "nixpkgs": [
-          "nix-config-shell",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1770542166,
-        "narHash": "sha256-qRfBocIelimalUaoS/c4tdyQy2a+VA5QH36ukuFb10A=",
-        "owner": "0xcharly",
-        "repo": "apdbctl",
-        "rev": "9fe5417b4ae602a4f869a1c2989170e7a80a69e3",
-        "type": "github"
-      },
-      "original": {
-        "owner": "0xcharly",
-        "repo": "apdbctl",
-        "type": "github"
-      }
-    },
     "blobs": {
       "flake": false,
       "locked": {
@@ -449,28 +428,6 @@
         "type": "github"
       }
     },
-    "nix-config-shell": {
-      "inputs": {
-        "apdbctl": "apdbctl",
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "quickshell": "quickshell"
-      },
-      "locked": {
-        "lastModified": 1780242634,
-        "narHash": "sha256-dK6tQLE5PRdqKI/rZQaimtxq0vMIqCSQt8y5GBD1aZs=",
-        "owner": "0xcharly",
-        "repo": "nix-config-shell",
-        "rev": "2f176c02d0979b21d7210ce36a5d88ea4f610837",
-        "type": "github"
-      },
-      "original": {
-        "owner": "0xcharly",
-        "repo": "nix-config-shell",
-        "type": "github"
-      }
-    },
     "nix-math": {
       "inputs": {
         "flake-parts": "flake-parts_3",
@@ -753,27 +710,6 @@
         "url": "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz"
       }
     },
-    "quickshell": {
-      "inputs": {
-        "nixpkgs": [
-          "nix-config-shell",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1779430452,
-        "narHash": "sha256-zTslhsxLqUlRTML506iougTGzyR38Fzhzn7t4KDEuuE=",
-        "ref": "refs/heads/master",
-        "rev": "4b4fca3224ab977dc515ac0bb78d00b3dfa71e00",
-        "revCount": 819,
-        "type": "git",
-        "url": "https://git.outfoxxed.me/outfoxxed/quickshell"
-      },
-      "original": {
-        "type": "git",
-        "url": "https://git.outfoxxed.me/outfoxxed/quickshell"
-      }
-    },
     "root": {
       "inputs": {
         "disko": "disko",
@@ -784,7 +720,6 @@
         "import-tree": "import-tree",
         "nix-config-colorscheme": "nix-config-colorscheme",
         "nix-config-secrets": "nix-config-secrets",
-        "nix-config-shell": "nix-config-shell",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_10",
         "nixpkgs-unstable": "nixpkgs-unstable",

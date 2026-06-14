@@ -1,17 +1,14 @@
-{ inputs, ... }:
+{ self, inputs, ... }:
 {
   flake.homeModules.programs-wayland-quickshell =
     { config, lib, ... }:
     {
-      imports = with inputs; [
-        nix-config-colorscheme.homeModules.arcshell
-        nix-config-shell.homeManagerModules.default
+      imports = [
+        inputs.nix-config-colorscheme.homeModules.arcshell
+        self.homeModules.programs-arcshell
       ];
 
       options.node.wayland.arcshell = with lib; {
-        wallpaper = {
-          animate = mkEnableOption "Enable wallpaper animations";
-        };
         modules = {
           power = mkEnableOption "Enable the power management module";
         };
@@ -25,10 +22,7 @@
           programs.arcshell = {
             enable = true;
             systemd.enable = true;
-            settings.theme = {
-              desktop.animateWallpaper = cfg.wallpaper.animate;
-              hud.bar.power.enable = cfg.modules.power;
-            };
+            settings.theme.hud.bar.power.enable = cfg.modules.power;
           };
         };
     };

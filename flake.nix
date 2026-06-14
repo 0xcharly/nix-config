@@ -35,12 +35,6 @@
     nix-config-colorscheme.url = "github:0xcharly/nix-config-colorscheme"; # Custom colorscheme
     nix-config-secrets.url = "github:0xcharly/nix-config-secrets"; # Secrets management
 
-    # Quickshell
-    nix-config-shell = {
-      url = "github:0xcharly/nix-config-shell";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # Out of the box mailserver
     simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-26.05";
   };
