@@ -7,7 +7,7 @@
   outputs =
     inputs:
     let
-      nixpkgs = inputs.nix-config.inputs.nixpkgs-unstable;
+      inherit (inputs.nix-config.inputs) nixpkgs;
       inherit (nixpkgs.lib.attrsets) mergeAttrsList;
 
       system = "x86_64-linux";
