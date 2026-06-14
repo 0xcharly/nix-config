@@ -91,11 +91,7 @@
             };
           };
 
-          users.delay.ssh = {
-            authorizeTailscaleInternalKey = true;
-            # TODO: remove once bastion is deployed
-            authorizeTailscalePublicKey = true;
-          };
+          users.delay.ssh.authorizeTailscaleInternalKey = true;
         };
       };
 
