@@ -72,7 +72,7 @@
           ++ (qyrnl-checks "ns2.qyrnl.com" facts.dns."qyrnl.com".ns2)
           ++ (pieceofenglish-checks "ns1.pieceofenglish.fr" facts.dns."pieceofenglish.fr".ns1)
           ++ (pieceofenglish-checks "ns2.pieceofenglish.fr" facts.dns."pieceofenglish.fr".ns2)
-          ++ (map gatus.mkPingHostCheck inventory.servers)
+          ++ (map gatus.mkPingHostCheck inventory.gatus)
           ++ [
             (gatus.mkHttpServiceCheck "atuin" facts.services.atuin)
             (gatus.mkHttpServiceCheck "CalDAV" facts.services.radicale)

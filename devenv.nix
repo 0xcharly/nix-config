@@ -138,6 +138,19 @@
         fi
       '';
 
+      deploy.exec = ''
+        HOSTNAME=''${1}
+        shift
+
+        ${lib.getExe pkgs.gum} log --structured --time=datetime --level=info "Updating deploy flake lock file" file hive/flake.lock
+        nix flake update --flake ?dir=hive nix-config
+
+        if test $? -eq 0; then
+          ${lib.getExe pkgs.gum} log --structured --time=datetime --level=info "Deploying NixOS systems." host $HOSTNAME
+          ${inhibit "Deploying NixOS systems" "${lib.getExe pkgs.deploy-rs} \"./hive#$HOSTNAME\" $@ -- --show-trace --${nixExperimentalFeaturesOption}"}
+        fi
+      '';
+
       cache.exec = ''
         HOSTNAME=$(hostname)
         CONFIG=''${1:-$HOSTNAME}
