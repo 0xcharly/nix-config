@@ -59,8 +59,7 @@
                   term-nyx      IN CNAME nyx.${tailnetDomainName}.
                   fwk           IN CNAME fwk.${tailnetDomainName}.
                   term-fwk      IN CNAME fwk.${tailnetDomainName}.
-                  node-x1p      IN CNAME node-x1p.${tailnetDomainName}.
-                  term-x1p      IN CNAME node-x1p.${tailnetDomainName}.
+                  term-x1p      IN CNAME term-x1p.${tailnetDomainName}.
 
                   ; Services declaration.
                   album         IN CNAME ${reverseProxyHostName}
