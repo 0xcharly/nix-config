@@ -52,7 +52,7 @@
                     description = "The position of the monitor relative to others.";
                   };
                   scale = mkOption {
-                    type = types.float;
+                    type = with types; oneOf [float int];
                     default = 1.0;
                     example = 2.0;
                     description = "The scale of the monitor.";
@@ -418,11 +418,13 @@
                 no: repr: ''hl.bind("SUPER + SHIFT + ${no}", hy3.move_to_workspace("${repr}"))''
               ))
               + (map-monitors (monitor: ''
+
+                -- Keep the blank line above
                 hl.monitor({
                   output = "${monitor.output}",
                   mode = "${monitor.mode}",
                   position = "${monitor.position}",
-                  scale = "${toString monitor.scale}",
+                  scale = ${toString monitor.scale},
                   transform = ${toString monitor.transform},
                 })
               ''))

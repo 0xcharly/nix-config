@@ -101,10 +101,10 @@
         wayland = {
           hyprland.monitors = [
             {
-              output = "HDMA-A-1";
-              mode = "3840x2160@59.997Hz";
+              output = "HDMI-A-1";
+              mode = "3840x2160@60";
               position = "0x0";
-              scale = 2.0;
+              scale = 2;
               transform = 1;
             }
           ];
