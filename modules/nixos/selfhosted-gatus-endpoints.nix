@@ -96,6 +96,7 @@
               domain = "${facts.services.prometheus.domain}/-/healthy";
             })
             (gatus.mkHttpServiceCheck "vaultwarden" facts.services.vaultwarden)
+            (gatus.mkHttpServiceCheck "vikunja" facts.services.vikunja)
           ];
 
         external-endpoints = [

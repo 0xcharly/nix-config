@@ -71,6 +71,7 @@
                     prometheus
                     radicale
                     vaultwarden
+                    vikunja
                   ];
                   reverse-proxy-configs = map caddy.mkReverseProxyConfig (
                     map (service: service // { import = tmpl; }) services

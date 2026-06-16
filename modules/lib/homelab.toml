@@ -216,6 +216,11 @@ domain = "vault.qyrnl.com"
 host = "site-jp.qyrnl.com"
 port = 8222
 
+[services.vikunja]
+domain = "tasks.qyrnl.com"
+host = "site-jp.qyrnl.com"
+port = 3456
+
 [ssh.delay]
 trusted-keys = ["github", "git_commit_signing", "tailscale"]
 

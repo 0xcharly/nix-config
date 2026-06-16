@@ -16,6 +16,7 @@
         inputs.nix-config-secrets.nixosModules.services-radicale
         inputs.nix-config-secrets.nixosModules.services-tailscale
         inputs.nix-config-secrets.nixosModules.services-vaultwarden
+        inputs.nix-config-secrets.nixosModules.services-vikunja
         inputs.nix-config-secrets.nixosModules.zfs-replication-keys
 
         self.nixosModules.profile-hardware-server
@@ -60,6 +61,7 @@
         self.nixosModules.selfhosted-prometheus-tailscalesd
         self.nixosModules.selfhosted-radicale
         self.nixosModules.selfhosted-vaultwarden
+        self.nixosModules.selfhosted-vikunja
         self.nixosModules.services-fail2ban
         self.nixosModules.services-github-backup
         self.nixosModules.services-msmtp
@@ -145,6 +147,7 @@
           };
           radicale.enable = true;
           vaultwarden.enable = true;
+          vikunja.enable = true;
         };
 
         users.delay.ssh.authorizeTailscaleInternalKey = true;
