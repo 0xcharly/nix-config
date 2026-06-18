@@ -9,8 +9,6 @@
         imports = [
           "${modulesPath}/installer/scan/not-detected.nix"
 
-          self.nixosModules.colors-console
-
           inputs.nix-config-secrets.nixosModules.default
           inputs.nix-config-secrets.nixosModules.jptax-fa5003-inputs
           inputs.nix-config-secrets.nixosModules.services-tailscale
