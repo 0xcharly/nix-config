@@ -1,17 +1,12 @@
 { self, inputs, ... }:
 {
   flake.homeModules.programs-ghostty =
-    { lib, pkgs', ... }:
-    let
-      inherit (pkgs'.stdenv) isDarwin isLinux;
-      package = if isLinux then pkgs'.ghostty else pkgs'.ghostty-bin;
-    in
+    { lib, ... }:
     {
       imports = [ inputs.nix-config-colorscheme.homeModules.ghostty ];
 
       programs.ghostty = {
         enable = true;
-        inherit package;
         enableBashIntegration = true;
         enableZshIntegration = true;
         enableFishIntegration = true;
@@ -41,6 +36,7 @@
             window-padding-balance = true;
             window-padding-color = "extend";
             window-inherit-working-directory = false;
+            window-show-tab-bar = "never";
             tab-inherit-working-directory = true;
             split-inherit-working-directory = true;
             unfocused-split-opacity = 1;
@@ -77,37 +73,20 @@
 
               "ctrl+a>n=next_tab"
               "ctrl+a>p=previous_tab"
-            ]
-            ++ (
-              let
-                mod = if isDarwin then "super" else "ctrl";
-              in
-              [
-                "${mod}+n=new_window"
-                "${mod}+t=last_tab"
-                "chain=new_tab"
-                "${mod}+shift+t=toggle_tab_overview"
-                "${mod}+shift+w=close_surface"
-                "${mod}+shift+c=copy_to_clipboard"
-                "${mod}+shift+v=paste_from_clipboard"
-                "${mod}+equal=increase_font_size:1"
-                "${mod}+minus=decrease_font_size:1"
-                "${mod}+zero=reset_font_size"
-                "${mod}+plus=increase_font_size:1"
-                "${mod}+backspace=text:\\x17" # Delete word.
-                "${mod}+delete=text:\\x15" # Delete line.
-              ]
-            )
-            ++ lib.optionals isDarwin [
-              "super+c=copy_to_clipboard"
-              "super+v=paste_from_clipboard"
+              "ctrl+n=new_window"
+              "ctrl+t=last_tab"
+              "chain=new_tab"
+              "ctrl+shift+t=toggle_tab_overview"
+              "ctrl+shift+w=close_surface"
+              "ctrl+shift+c=copy_to_clipboard"
+              "ctrl+shift+v=paste_from_clipboard"
+              "ctrl+equal=increase_font_size:1"
+              "ctrl+minus=decrease_font_size:1"
+              "ctrl+zero=reset_font_size"
+              "ctrl+plus=increase_font_size:1"
+              "ctrl+backspace=text:\\x17" # Delete word.
+              "ctrl+delete=text:\\x15" # Delete line.
             ];
-          }
-          // lib.optionalAttrs isLinux {
-            window-show-tab-bar = "never";
-          }
-          // lib.optionalAttrs isDarwin {
-            macos-titlebar-proxy-icon = "hidden";
           };
       };
     };
