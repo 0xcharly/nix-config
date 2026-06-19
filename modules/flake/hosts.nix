@@ -48,6 +48,16 @@ with lib;
         modules = [
           nixosModule # NixOS module
 
+          # Common modules
+          (
+            { modulesPath, ... }:
+            {
+              imports = [
+                "${modulesPath}/installer/scan/not-detected.nix"
+              ];
+            }
+          )
+
           # System module
           {
             networking = {
