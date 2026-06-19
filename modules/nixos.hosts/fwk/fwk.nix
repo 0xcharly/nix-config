@@ -89,7 +89,17 @@
         profile-ssh-keys-ring-0-tier
       ];
 
-      node.wayland.idle.screenlock.fingerprint.enable = true;
+      node.wayland = {
+        hyprland.monitors = [
+          {
+            output = "eDP-1";
+            mode = "2880x1920@120";
+            scale = 1.5;
+          }
+        ];
+
+        idle.screenlock.fingerprint.enable = true;
+      };
     };
   };
 }
