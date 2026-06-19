@@ -1,11 +1,11 @@
-{ self, inputs, ... }:
+{ self, ... }:
 {
   flake.homeModules.programs-wayland-quickshell =
     { config, lib, ... }:
     {
-      imports = [
-        inputs.nix-config-colorscheme.homeModules.arcshell
-        self.homeModules.programs-arcshell
+      imports = with self.homeModules; [
+        colors-arcshell
+        programs-arcshell
       ];
 
       options.node.wayland.arcshell = with lib; {

@@ -32,7 +32,6 @@
       };
     };
 
-    nix-config-colorscheme.url = "github:0xcharly/nix-config-colorscheme"; # Custom colorscheme
     nix-config-secrets.url = "github:0xcharly/nix-config-secrets"; # Secrets management
 
     # Out of the box mailserver

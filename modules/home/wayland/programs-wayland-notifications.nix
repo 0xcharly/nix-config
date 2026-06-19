@@ -1,7 +1,7 @@
-{ inputs, ... }:
+{ self, ... }:
 {
   flake.homeModules.programs-wayland-notifications = {
-    imports = [ inputs.nix-config-colorscheme.homeModules.mako ];
+    imports = [ self.homeModules.colors-mako ];
 
     services.mako = {
       enable = true;

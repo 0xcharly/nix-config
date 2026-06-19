@@ -11,6 +11,7 @@
 
       builders = import ./_builders.nix;
       caddy = import ./_caddy.nix { inherit uri; };
+      colors = import ./_colors { inherit lib; };
       fonts = import ./_fonts.nix { inherit lib; };
       gatus = import ./_gatus.nix { inherit lib; };
       homebrew = import ./_homebrew.nix;

@@ -1,9 +1,9 @@
-{ self, inputs, ... }:
+{ self, ... }:
 {
   flake.homeModules.programs-kitty =
     { lib, ... }:
     {
-      imports = [ inputs.nix-config-colorscheme.homeModules.kitty ];
+      imports = [ self.homeModules.colors-kitty ];
 
       programs.kitty =
         let

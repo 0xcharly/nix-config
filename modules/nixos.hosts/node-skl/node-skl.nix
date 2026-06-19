@@ -4,12 +4,12 @@
     stateVersion = "25.05";
 
     nixosModule =
-      { modulesPath, config, ... }:
+      { modulesPath, ... }:
       {
         imports = [
           "${modulesPath}/installer/scan/not-detected.nix"
 
-          inputs.nix-config-colorscheme.nixosModules.console
+          self.nixosModules.colors-console
 
           inputs.nix-config-secrets.nixosModules.default
           inputs.nix-config-secrets.nixosModules.services-hoopsnake-node-skl

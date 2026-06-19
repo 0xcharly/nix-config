@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ self, ... }:
 {
   flake.homeModules.programs-wayland-hyprland =
     {
@@ -8,7 +8,7 @@
       ...
     }:
     {
-      imports = [ inputs.nix-config-colorscheme.homeModules.hyprland ];
+      imports = [ self.homeModules.colors-hyprland ];
 
       options.node.wayland = with lib; {
         hyprland = {
@@ -52,7 +52,12 @@
                     description = "The position of the monitor relative to others.";
                   };
                   scale = mkOption {
-                    type = with types; oneOf [float int];
+                    type =
+                      with types;
+                      oneOf [
+                        float
+                        int
+                      ];
                     default = 1.0;
                     example = 2.0;
                     description = "The scale of the monitor.";

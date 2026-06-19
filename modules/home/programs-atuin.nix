@@ -1,7 +1,7 @@
-{ inputs, ... }:
+{ self, ... }:
 {
   flake.homeModules.programs-atuin = {
-    imports = [ inputs.nix-config-colorscheme.homeModules.atuin ];
+    imports = [ self.homeModules.colors-atuin ];
 
     programs.atuin = {
       enable = true;

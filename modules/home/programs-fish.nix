@@ -1,4 +1,4 @@
-{ moduleWithSystem, inputs, ... }:
+{ self, moduleWithSystem, ... }:
 {
   flake.homeModules.programs-fish = moduleWithSystem (
     perSystem@{ config, ... }:
@@ -7,7 +7,7 @@
       cfg = homeManager.config.programs.fish;
     in
     {
-      imports = [ inputs.nix-config-colorscheme.homeModules.fish ];
+      imports = [ self.homeModules.colors-fish ];
 
       programs = {
         eza.enableFishIntegration = true;

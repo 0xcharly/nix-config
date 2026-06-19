@@ -1,12 +1,12 @@
-{ inputs, ... }:
+{ self, ... }:
 {
   flake.homeModules.programs-core-headless =
     { pkgs, ... }:
     {
-      imports = with inputs.nix-config-colorscheme.homeModules; [
-        bat
-        bottom
-        fzf
+      imports = with self.homeModules; [
+        colors-bat
+        colors-bottom
+        colors-fzf
       ];
 
       # Packages I always want installed. Most packages I install using per-project

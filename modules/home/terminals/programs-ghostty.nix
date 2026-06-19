@@ -1,9 +1,9 @@
-{ self, inputs, ... }:
+{ self, ... }:
 {
   flake.homeModules.programs-ghostty =
     { lib, ... }:
     {
-      imports = [ inputs.nix-config-colorscheme.homeModules.ghostty ];
+      imports = [ self.homeModules.colors-ghostty ];
 
       programs.ghostty = {
         enable = true;

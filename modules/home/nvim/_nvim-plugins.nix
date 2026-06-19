@@ -1,4 +1,4 @@
-{ vimPlugins, colorscheme-nvim }:
+{ vimPlugins, colors-nvim }:
 with vimPlugins;
 [
   blink-cmp
@@ -13,4 +13,4 @@ with vimPlugins;
   snacks-nvim
   sqlite-lua
 ]
-++ [ colorscheme-nvim ]
+++ [ colors-nvim ]

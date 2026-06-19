@@ -24,7 +24,7 @@
       };
       luarc-json = pkgs'.mk-luarc-json {
         plugins = pkgs.callPackage ./modules/home/nvim/_nvim-plugins.nix {
-          inherit (inputs.colorscheme.packages.${system}) colorscheme-nvim;
+          colors-nvim = inputs.colorscheme.packages.${system}.colorscheme-nvim;
         };
         nvim = pkgs.neovim-unwrapped;
       };
@@ -170,5 +170,41 @@
       ssh-copy-terminfo.exec = ''
         ${lib.getExe' pkgs.ncurses "infocmp"} -x | ssh -o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "$1" -- tic -x -
       '';
+
+      generate-tailwind-palettes = {
+        exec = ''
+          generate_tailwind_palette() {
+            FORMAT="$1"
+            TRANSFORM="$2"
+
+            mkdir -p lib/colors
+            cat <<EOF > modules/lib/colors/_tailwind-palette-$FORMAT.nix
+          {
+          $(curl -sL "https://unpkg.com/@grida/tailwindcss-colors/json/$FORMAT.json" | jq -r "
+            to_entries[]
+            | .key as \$family
+            | .value
+            | to_entries[]
+            | \"  \\(\$family)-\\(.key) = $TRANSFORM;\"
+          ")
+          }
+          EOF
+          }
+
+          generate_tailwind_palette_as_nix_array() {
+            FORMAT="$1"
+            generate_tailwind_palette "$FORMAT" '[ \(.value | join(" ")) ]'
+          }
+
+          generate_tailwind_palette hex '\"\(.value | ltrimstr("#"))\"'
+          generate_tailwind_palette_as_nix_array rgb
+          generate_tailwind_palette_as_nix_array rgba
+          generate_tailwind_palette_as_nix_array oklch
+        '';
+        packages = with pkgs; [
+          curl
+          jq
+        ];
+      };
     };
 }

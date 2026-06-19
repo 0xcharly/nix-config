@@ -1,4 +1,9 @@
-{ inputs, moduleWithSystem, ... }:
+{
+  self,
+  inputs,
+  moduleWithSystem,
+  ...
+}:
 {
   flake.homeModules.programs-nvim = moduleWithSystem (
     perSystem@{ config, ... }:
@@ -25,7 +30,9 @@
       # The entire neoviw configuration without any dependency
       packages.nvim =
         let
-          inherit (pkgs.stdenv.hostPlatform) system;
+          colors-nvim = pkgs.callPackage ./vimPlugins/_colors-nvim {
+            inherit (self.lib) colors;
+          };
           mkNvimDist = pkgs.callPackage ./nvim/_mk-nvim-dist.nix { };
         in
         mkNvimDist {
@@ -33,7 +40,7 @@
           runtime = [ ./nvim/nvim-runtime ];
           patches = [ ];
           plugins = pkgs.callPackage ./nvim/_nvim-plugins.nix {
-            inherit (inputs.nix-config-colorscheme.packages.${system}) colorscheme-nvim;
+            inherit colors-nvim;
           };
         };
     };

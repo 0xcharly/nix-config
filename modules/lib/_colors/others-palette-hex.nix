@@ -1,0 +1,3 @@
+{
+  magenta = "ff00ff";
+}
