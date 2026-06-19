@@ -31,8 +31,8 @@
                 font_name
               ]
             );
-            window-padding-x = 2;
-            window-padding-y = 2;
+            window-padding-x = 0;
+            window-padding-y = 0;
             window-padding-balance = true;
             window-padding-color = "extend";
             window-inherit-working-directory = false;

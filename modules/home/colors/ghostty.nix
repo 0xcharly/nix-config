@@ -14,6 +14,7 @@ in
           selection-background = surface_visual;
           selection-foreground = on_surface_visual;
           cursor-color = surface_cursor;
+          cursor-text = on_surface_cursor;
           palette = map (index: "${toString index}=${colors."terminal_color_${toString index}"}") (
             lists.range 0 15
           );

@@ -283,21 +283,7 @@
                   scroll_factor = 0.25;
                 };
               };
-              general = {
-                layout = "hy3"; # Requires the hy3 plugin
-                border_size = 1;
-                gaps_in = 4;
-                gaps_out = 8;
-              };
-              decoration = {
-                rounding = 12;
-                blur.enabled = false;
-                shadow = {
-                  enabled = true;
-                  range = 4;
-                  render_power = 3;
-                };
-              };
+              general.layout = "hy3"; # Requires the hy3 plugin
               misc = {
                 disable_hyprland_logo = true;
                 force_default_wallpaper = 0;
@@ -498,38 +484,9 @@
                 general = {
                   disable_loading_bar = true;
                   grace = 0;
-                  hide_cursor = true;
-                  no_fade_in = false;
                 };
 
                 auth."fingerprint:enabled" = cfg.fingerprint.enable;
-
-                background = [
-                  {
-                    path = "screenshot";
-                    blur_passes = 3;
-                    blur_size = 8;
-                  }
-                ];
-
-                input-field = [
-                  {
-                    size = "720, 96";
-                    position = "0, 0";
-                    dots_center = true;
-                    dots_size = 0.2;
-                    dots_spacing = 0.4;
-                    fade_on_empty = false;
-                    font_color = "rgba(225, 232, 244, 1)";
-                    inner_color = "rgba(29, 37, 48, 1)";
-                    outer_color = "rgba(29, 41, 56, 1)";
-                    check_color = "rgba(137, 180, 250, 1)";
-                    fail_color = "rgba(254, 154, 164, 1)";
-                    outline_thickness = 2;
-                    placeholder_text = "<i><span foreground=\"##bac2deff\">×͜×</span></i>";
-                    shadow_passes = 0;
-                  }
-                ];
               };
             };
 

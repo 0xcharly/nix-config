@@ -50,33 +50,25 @@ rec {
   text_lineno = tailwind.zinc-700;
   text_lineno_cursor = tailwind.zinc-400;
 
-  accent = tailwind.violet-200;
-  accent_dark = tailwind.violet-300;
-  accent_darker = tailwind.violet-400;
-  accent_darkest = tailwind.violet-500;
+  accent = tailwind.blue-200;
+  accent_dark = tailwind.blue-300;
+  accent_darker = tailwind.blue-400;
+  accent_darkest = tailwind.blue-500;
 
-  accent_secondary = tailwind.sky-200;
-  accent_secondary_dark = tailwind.sky-300;
-  accent_secondary_darker = tailwind.sky-400;
-  accent_secondary_darkest = tailwind.sky-500;
+  accent_secondary = tailwind.amber-200;
+  accent_secondary_dark = tailwind.amber-300;
+  accent_secondary_darker = tailwind.amber-400;
+  accent_secondary_darkest = tailwind.amber-500;
 
   borders = tailwind.slate-500;
-  borders_active = tailwind.amber-400;
-  borders_inactive = tailwind.sky-400;
-  borders_focused_inactive = tailwind.violet-400;
+  borders_active = tailwind.zinc-500;
+  borders_inactive = tailwind.zinc-800;
+  borders_focused_inactive = tailwind.zinc-600;
   borders_urgent = tailwind.red-400;
-  borders_desktop_shell = tailwind.violet-400;
 
-  shadows = tailwind.slate-950;
-  shadows_active = tailwind.amber-600;
-  shadows_inactive = tailwind.blue-600;
-  shadows_focused_inactive = tailwind.violet-600;
-  shadows_urgent = tailwind.red-600;
-  shadows_desktop_shell = tailwind.violet-600;
-
-  surface_active = tailwind.amber-900;
-  surface_inactive = tailwind.blue-900;
-  surface_focused_inactive = tailwind.violet-900;
+  surface_active = tailwind.zinc-500;
+  surface_inactive = tailwind.zinc-800;
+  surface_focused_inactive = tailwind.zinc-600;
   surface_urgent = tailwind.red-900;
 
   surface_dark = tailwind.neutral-950;
@@ -96,7 +88,7 @@ rec {
   surface_scrollbar = blends.surface_lighter;
   surface_scrollbar_thumb = tailwind.neutral-800;
 
-  surface_cursor = tailwind.violet-400;
+  surface_cursor = tailwind.blue-400;
   on_surface_cursor = tailwind.neutral-900;
 
   surface_visual = tailwind.blue-800;

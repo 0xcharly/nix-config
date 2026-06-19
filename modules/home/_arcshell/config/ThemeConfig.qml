@@ -15,7 +15,7 @@ JsonObject {
     component Hud: JsonObject {
         property BorderValues border: BorderValues {
             color: Config.tokens.system.colors.surface
-            shape: Config.tokens.system.shapes.cornerExtraLarge
+            shape: Config.tokens.system.shapes.cornerMedium
             width: 0
         }
         property Bar bar: Bar {}

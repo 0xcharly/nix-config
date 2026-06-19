@@ -7,8 +7,6 @@ in
     programs.arcshell.settings.palette = with colors; {
       text = text_variant_dim;
       surface = surface;
-      inner_border = borders_desktop_shell;
-      inner_border_shadow = shadows_desktop_shell;
 
       surface_red = surface_red;
       on_surface_red = on_surface_red;
