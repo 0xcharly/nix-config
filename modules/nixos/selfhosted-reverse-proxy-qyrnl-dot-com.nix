@@ -46,7 +46,7 @@
                 "(${tmpl})".extraConfig = ''
                   bind ${cfg."qyrnl.com".bindIP}
                   tls {
-                    resolvers 1.1.1.1
+                    resolvers 194.242.2.2 1.1.1.1 8.8.8.8
                     dns gandi {env.GANDIV5_PERSONAL_ACCESS_TOKEN}
                   }
                 '';
