@@ -1,3 +1,66 @@
+# ARCHITECTURAL NOTE: DUAL BOOT PARTITION DESIGN
+#
+# To prevent catastrophic boot failures on LUKS-encrypted systems (especially
+# remote nodes), this machine maintains two mirrored EFI System Partitions
+# (ESPs): `/boot` (Primary) and `/boot-fallback` (Secondary).
+#
+# RISK PROFILE & BOOT PRIORITIZATION
+#
+# The motherboard/BIOS should be explicitly configured to attempt booting from
+# the SECONDARY partition (`/boot-fallback`) by default.
+#
+# During a `nixos-rebuild switch`, NixOS writes the new generation files
+# directly to `/boot`. A post-switch activation script then `rsync`s `/boot`
+# over to `/boot-fallback`. This makes `/boot` our immutable source of truth. By
+# booting off `/boot-fallback` for daily operations, any sudden power failures,
+# file system corruption, or emergency-mode lockouts will only impact the
+# fallback drive. If the fallback drive becomes corrupted, the hardware BIOS can
+# be configured to failover to the pristine, untouched primary `/boot`
+# partition.
+#
+# When booting off the fallback drive, systemd's `bootctl` will report a
+# partition UUID mismatch warning. This is expected and safe to ignore.
+#
+# RECOVERY PROCEDURE IN CASE OF CORRUPTION
+#
+# After rebooting the machine from to the primary `/boot` drive due to
+# corruption on the fallback drive:
+#
+# 1. Log into the system (which should boot successfully via the primary `/boot`
+#    drive).
+# 2. Rectify any underlying configuration issues that caused a system panic.
+# 3. Execute `sudo nixos-rebuild switch`.
+#
+# Because the activation script runs immediately after a successful switch, it
+# will read the healthy data from `/boot` and overwrite/repair the corrupted
+# `/boot-fallback` partition.
+#
+# No manual `fsck` or partition formatting should be required; the declarative
+# `switch` cycle should restore the mirror.
+#
+# MANUAL FILESYSTEM VERIFICATION & REPAIR (fsck)
+#
+# To manually inspect the partitions for structural or file allocation table
+# corruption (e.g., following a hard power cycle), use the following procedure.
+#
+# Note: Linux vFAT drivers flip the dirty bit to '1' immediately upon mounting,
+# so running a check on a mounted partition will always report a false-positive
+# dirty bit.
+#
+# 1. Inspect without modifying (Safe while mounted, ignores the dirty bit
+#    warning):
+#
+#    $ sudo fsck.vfat -n /dev/disk/by-partuuid/<UUID>
+#
+# 2. To safely repair errors or clear stale dirty bits, the target partition
+#    MUST be unmounted first to prevent filesystem collision:
+#
+#    $ sudo umount /boot         # Or /boot-fallback depending on the target
+#    $ sudo fsck.vfat -a /dev/disk/by-partuuid/<UUID>
+#    $ sudo mount /boot
+#
+# Part UUID are recorded in this config and show in /etc/fstab.
+
 { inputs, ... }:
 {
   flake.nixosModules.fs-zfs-system-minisforum-n5 =
