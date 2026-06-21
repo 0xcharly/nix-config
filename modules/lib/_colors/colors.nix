@@ -62,16 +62,16 @@ rec {
   accent_secondary_darkest = tailwind.blue-500;
   accent_secondary_surface = surface_blue;
 
-  borders = tailwind.zinc-400;
+  borders = tailwind.zinc-600;
   borders_active = borders;
   borders_inactive = tailwind.zinc-800;
-  borders_focused_inactive = tailwind.zinc-600;
+  borders_focused_inactive = tailwind.zinc-700;
   borders_accent = accent_secondary_darker;
   borders_urgent = tailwind.red-400;
 
-  surface_active = tailwind.zinc-400;
+  surface_active = tailwind.zinc-600;
   surface_inactive = tailwind.zinc-800;
-  surface_focused_inactive = tailwind.zinc-600;
+  surface_focused_inactive = tailwind.zinc-700;
   surface_urgent = tailwind.red-900;
 
   surface_dark = tailwind.neutral-950;
