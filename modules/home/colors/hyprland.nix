@@ -8,7 +8,7 @@
       wayland.windowManager.hyprland = {
         settings.config = with colors; {
           general = {
-            border_size = 1;
+            border_size = 2;
             gaps_in = 0;
             gaps_out = 0;
             "col.active_border" = borders_active;
