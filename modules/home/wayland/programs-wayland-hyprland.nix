@@ -365,17 +365,6 @@
 
                 hl.bind("SUPER + ALT   + R",      hl.dsp.exec_cmd("${uwsmGetExe set-aspect-ratio} 16 9"))
 
-                local hy3 = hl.plugin.hy3
-
-                hl.bind("SUPER         + D",      hy3.make_group("h"))
-                hl.bind("SUPER         + S",      hy3.make_group("v"))
-                hl.bind("SUPER         + Z",      hy3.make_group("tab"))
-                hl.bind("SUPER         + A",      hy3.change_focus("raise"))
-                hl.bind("SUPER + SHIFT + A",      hy3.change_focus("lower"))
-                hl.bind("SUPER         + E",      hy3.expand("expand"))
-                hl.bind("SUPER + SHIFT + E",      hy3.expand("base"))
-                hl.bind("SUPER         + R",      hy3.change_group("opposite"))
-
                 hl.bind("XF86AudioLowerVolume",  hl.dsp.exec_cmd("${uwsmGetExe' pkgs.swayosd "swayosd-client"} --output-volume lower"))
                 hl.bind("XF86AudioMute",         hl.dsp.exec_cmd("${uwsmGetExe' pkgs.swayosd "swayosd-client"} --output-volume mute-toggle"))
                 hl.bind("XF86AudioRaiseVolume",  hl.dsp.exec_cmd("${uwsmGetExe' pkgs.swayosd "swayosd-client"} --output-volume raise"))
@@ -392,13 +381,80 @@
                 -- Mouse
                 hl.bind("SUPER + mouse:272", hl.dsp.window.drag())   -- Left mouse button
                 hl.bind("SUPER + mouse:273", hl.dsp.window.resize()) -- Right mouse button
+
+                -- Layout
+                local hy3 = hl.plugin.hy3
+
+                hl.bind("SUPER         + D", hy3.make_group("h"))
+                hl.bind("SUPER         + S", hy3.make_group("v"))
+                hl.bind("SUPER         + Z", hy3.make_group("tab"))
+                hl.bind("SUPER         + A", hy3.change_focus("raise"))
+                hl.bind("SUPER + SHIFT + A", hy3.change_focus("lower"))
+                hl.bind("SUPER         + E", hy3.expand("expand"))
+                hl.bind("SUPER + SHIFT + E", hy3.expand("base"))
+
+                hl.bind("SUPER         + R", function()
+                  local layout = hl.get_config("general.layout")
+                  local dispatcher = ""
+
+                  if layout == "hy3" then
+                    hl.dispatch(hy3.change_group("opposite"))
+                  else
+                    local direction = hl.get_config("scrolling.direction")
+                    local next_direction = ""
+
+                    if direction == "right" then
+                      next_direction = "down"
+                    else
+                      next_direction = "right"
+                    end
+
+                    hl.config({ scrolling = { direction = next_direction } })
+                  end
+                end)
+
+                -- Toggle between scrolling/hy3 layout
+                hl.bind("SUPER + SHIFT + R", function()
+                  local layout = hl.get_config("general.layout")
+                  local next_layout = ""
+
+                  if layout == "hy3" then
+                    next_layout = "scrolling"
+                  else
+                    next_layout = "hy3"
+                  end
+
+                  hl.config({ general = { layout = next_layout } })
+                end)
               ''
               + (map-movements (
-                dir: key: ''hl.bind("SUPER         + ${dir}", hy3.move_focus("${key}", { wrap = true }))''
+                dir: key: ''hl.bind("SUPER         + ${dir}", function()
+                  local layout = hl.get_config("general.layout")
+                  local dispatcher = nil
+
+                  if layout == "hy3" then
+                    dispatcher = hy3.move_focus("${key}", { wrap = true })
+                  else
+                    dispatcher = hl.dsp.focus({ direction = "${key}" })
+                  end
+
+                  hl.dispatch(dispatcher)
+                end)''
               ))
               + ""
               + (map-movements (
-                dir: key: ''hl.bind("SUPER + SHIFT + ${dir}", hy3.move_window("${key}", { once = true }))''
+                dir: key: ''hl.bind("SUPER + SHIFT + ${dir}", function()
+                  local layout = hl.get_config("general.layout")
+                  local dispatcher = nil
+
+                  if layout == "hy3" then
+                    dispatcher = hy3.move_window("${key}")
+                  else
+                    dispatcher = hl.dsp.window.move({ direction = "${key}" })
+                  end
+
+                  hl.dispatch(dispatcher)
+                end)''
               ))
               + ""
               + (map-workspaces (
@@ -406,7 +462,18 @@
               ))
               + ""
               + (map-workspaces (
-                no: repr: ''hl.bind("SUPER + SHIFT + ${no}", hy3.move_to_workspace("${repr}"))''
+                no: repr: ''hl.bind("SUPER + SHIFT + ${no}", function()
+                  local layout = hl.get_config("general.layout")
+                  local dispatcher = nil
+
+                  if layout == "hy3" then
+                    dispatcher = hy3.move_to_workspace("${repr}", { follow = false })
+                  else
+                    dispatcher = hl.dsp.window.move({ workspace = "${repr}", follow = false })
+                  end
+
+                  hl.dispatch(dispatcher)
+                end)''
               ))
               + (map-monitors (monitor: ''
 
