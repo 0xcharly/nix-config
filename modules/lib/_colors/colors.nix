@@ -50,25 +50,28 @@ rec {
   text_lineno = tailwind.zinc-700;
   text_lineno_cursor = tailwind.zinc-400;
 
-  accent = tailwind.blue-200;
-  accent_dark = tailwind.blue-300;
-  accent_darker = tailwind.blue-400;
-  accent_darkest = tailwind.blue-500;
+  accent = tailwind.orange-200;
+  accent_dark = tailwind.orange-300;
+  accent_darker = tailwind.orange-400;
+  accent_darkest = tailwind.orange-500;
+  accent_surface = surface_amber;
 
-  accent_secondary = tailwind.amber-200;
-  accent_secondary_dark = tailwind.amber-300;
-  accent_secondary_darker = tailwind.amber-400;
-  accent_secondary_darkest = tailwind.amber-500;
+  accent_secondary = tailwind.blue-200;
+  accent_secondary_dark = tailwind.blue-300;
+  accent_secondary_darker = tailwind.blue-400;
+  accent_secondary_darkest = tailwind.blue-500;
+  accent_secondary_surface = surface_blue;
 
-  borders = tailwind.slate-500;
-  borders_active = tailwind.zinc-500;
+  borders = tailwind.zinc-500;
+  borders_active = borders;
   borders_inactive = tailwind.zinc-800;
   borders_focused_inactive = tailwind.zinc-600;
+  borders_accent = accent_secondary_darker;
   borders_urgent = tailwind.red-400;
 
-  surface_active = tailwind.zinc-500;
-  surface_inactive = tailwind.zinc-800;
-  surface_focused_inactive = tailwind.zinc-600;
+  surface_active = tailwind.slate-500;
+  surface_inactive = tailwind.slate-800;
+  surface_focused_inactive = tailwind.slate-600;
   surface_urgent = tailwind.red-900;
 
   surface_dark = tailwind.neutral-950;
@@ -88,7 +91,7 @@ rec {
   surface_scrollbar = blends.surface_lighter;
   surface_scrollbar_thumb = tailwind.neutral-800;
 
-  surface_cursor = tailwind.blue-400;
+  surface_cursor = accent_darker;
   on_surface_cursor = tailwind.neutral-900;
 
   surface_visual = tailwind.blue-800;
@@ -135,6 +138,11 @@ rec {
 
   terminal_color_7 = text;
   terminal_color_15 = text_dim;
+
+  shell_on_surface = text;
+  shell_on_surface_variant = text_dim;
+  shell_surface = tailwind.zinc-950;
+  shell_wallpaper = tailwind.zinc-900;
 
   UNUSED = others.magenta;
 }

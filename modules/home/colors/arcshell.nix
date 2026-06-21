@@ -4,25 +4,29 @@ let
 in
 {
   flake.homeModules.colors-arcshell = {
-    programs.arcshell.settings.palette = with colors; {
-      text = text_variant_dim;
-      surface = surface;
+    programs.arcshell.settings = {
+      theme = {
+        hud.border.shape = 0;
+      };
 
-      surface_red = surface_red;
-      on_surface_red = on_surface_red;
+      tokens.system.colors = with colors; {
+        on_surface = shell_on_surface;
+        on_surface_variant = shell_on_surface_variant;
+        surface = shell_surface;
+        wallpaper = shell_wallpaper;
 
-      surface_orange = surface_amber;
-      on_surface_orange = on_surface_amber;
+        surface_danger = surface_red;
+        on_surface_danger = on_surface_red;
 
-      surface_blue = surface_blue;
-      on_surface_blue = on_surface_blue;
+        surface_attention = surface_amber;
+        on_surface_attention = on_surface_amber;
 
-      surface_purple = surface_violet;
-      on_surface_purple = on_surface_violet;
+        surface_accent = surface_blue;
+        on_surface_accent = on_surface_blue;
 
-      slider_active_track = on_surface_violet;
-      slider_inactive_track = surface_violet;
-      slider_thumb = on_surface_violet;
+        surface_done = surface_violet;
+        on_surface_done = on_surface_violet;
+      };
     };
   };
 }
