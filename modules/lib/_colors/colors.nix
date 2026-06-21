@@ -50,10 +50,10 @@ rec {
   text_lineno = tailwind.zinc-700;
   text_lineno_cursor = tailwind.zinc-400;
 
-  accent = tailwind.orange-200;
-  accent_dark = tailwind.orange-300;
-  accent_darker = tailwind.orange-400;
-  accent_darkest = tailwind.orange-500;
+  accent = tailwind.orange-300;
+  accent_dark = tailwind.orange-400;
+  accent_darker = tailwind.orange-500;
+  accent_darkest = tailwind.orange-600;
   accent_surface = surface_amber;
 
   accent_secondary = tailwind.blue-200;
