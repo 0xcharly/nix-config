@@ -31,7 +31,7 @@ in
       fish_color_cwd ${text_dim} --italics # the current working directory in the default prompt
       fish_color_cwd_root ${text_amber} --italics # the current working directory in the default prompt for the root user
       fish_color_user ${text_teal} # the username in the default prompt
-      fish_color_host ${text_title} # the hostname in the default prompt
+      fish_color_host ${accent_dark} # the hostname in the default prompt
       fish_color_host_remote ${accent_secondary_dark} # the hostname in the default prompt for remote sessions (like ssh)
       fish_color_status ${text_red} --bold # the last command’s nonzero exit code in the default prompt
       fish_color_cancel ${text_amber} # the ‘^C’ indicator on a canceled command
