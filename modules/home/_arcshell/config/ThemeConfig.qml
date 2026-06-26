@@ -42,8 +42,22 @@ JsonObject {
         property FeatureTokens.Workspaces workspaces: FeatureTokens.Workspaces {}
     }
 
+    component Osd: JsonObject {
+        property int hideDelay: 2000
+        property int shape: Config.tokens.system.shapes.cornerMedium
+        property ComponentTokens.Slider slider: ComponentTokens.Slider {}
+        property PaddingValues padding: PaddingValues {
+            bottom: Config.tokens.system.measurements.large
+            left: Config.tokens.system.measurements.medium
+            right: Config.tokens.system.measurements.medium
+            top: Config.tokens.system.measurements.large
+        }
+        property int spacedBy: Config.tokens.system.measurements.medium
+    }
+
     component ControlCenter: JsonObject {
         property int hideDelay: 2000
+        property int shape: Config.tokens.system.shapes.cornerMedium
         property PaddingValues padding: PaddingValues {
             bottom: Config.tokens.system.measurements.extraSmall
             left: Config.tokens.system.measurements.medium
@@ -92,18 +106,6 @@ JsonObject {
             curveOut: Config.tokens.system.animations.curves.expressiveDefaultSpatial
             duration: Config.tokens.system.animations.durations.expressiveDefaultSpatial
         }
-    }
-
-    component Osd: JsonObject {
-        property int hideDelay: 2000
-        property ComponentTokens.Slider slider: ComponentTokens.Slider {}
-        property PaddingValues padding: PaddingValues {
-            bottom: Config.tokens.system.measurements.large
-            left: Config.tokens.system.measurements.medium
-            right: Config.tokens.system.measurements.medium
-            top: Config.tokens.system.measurements.large
-        }
-        property int spacedBy: Config.tokens.system.measurements.medium
     }
 
     component ComponentDefaults: JsonObject {

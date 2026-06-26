@@ -9,7 +9,7 @@ ShapePath {
 
     required property Osd.Wrapper wrapper
 
-    readonly property real rounding: Config.theme.hud.border.shape
+    readonly property real rounding: Config.theme.hud.osd.shape
     readonly property bool flatten: wrapper.width < rounding * 2
     readonly property real roundingX: flatten ? wrapper.width / 2 : rounding
 

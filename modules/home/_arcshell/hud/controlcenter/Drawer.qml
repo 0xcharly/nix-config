@@ -9,7 +9,7 @@ ShapePath {
 
     required property ControlCenter.Wrapper wrapper
 
-    readonly property real rounding: Config.theme.hud.border.shape
+    readonly property real rounding: Config.theme.hud.controlCenter.shape
     readonly property bool flatten: wrapper.height < rounding * 2
     readonly property real roundingY: flatten ? wrapper.height / 2 : rounding
 
