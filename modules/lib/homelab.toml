@@ -130,11 +130,6 @@ domain = "github.qyrnl.com"
 host = "site-jp.qyrnl.com"
 port = 80
 
-[services.calibre-web]
-domain = "reads.qyrnl.com"
-host = "site-jp.qyrnl.com"
-port = 8083
-
 [services.forgejo]
 domain = "git.qyrnl.com"
 host = "site-jp.qyrnl.com"

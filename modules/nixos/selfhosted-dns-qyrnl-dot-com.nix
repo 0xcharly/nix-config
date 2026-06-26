@@ -75,7 +75,6 @@
                   news          IN CNAME ${reverseProxyHostName}
                   prometheus    IN CNAME ${reverseProxyHostName}
                   push          IN CNAME ${reverseProxyHostName}
-                  reads         IN CNAME ${reverseProxyHostName}
                   readlater     IN CNAME ${reverseProxyHostName}
                   shared.album  IN CNAME ${reverseProxyHostName}
                   status        IN CNAME ${reverseProxyHostName}

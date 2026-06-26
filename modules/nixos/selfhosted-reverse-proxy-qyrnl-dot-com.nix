@@ -55,7 +55,6 @@
                 let
                   services = with facts.services; [
                     atuin
-                    calibre-web
                     cgit
                     forgejo
                     gatus
