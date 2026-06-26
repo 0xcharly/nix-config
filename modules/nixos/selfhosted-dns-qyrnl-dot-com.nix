@@ -79,7 +79,6 @@
                   readlater     IN CNAME ${reverseProxyHostName}
                   shared.album  IN CNAME ${reverseProxyHostName}
                   status        IN CNAME ${reverseProxyHostName}
-                  tasks         IN CNAME ${reverseProxyHostName}
                   vault         IN CNAME ${reverseProxyHostName}
                 '';
               in
