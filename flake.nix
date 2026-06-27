@@ -21,6 +21,12 @@
     disko.url = "github:nix-community/disko"; # Filesystem management
     golink.url = "github:tailscale/golink"; # go/link service
 
+    # Nix index database, comma, command-not-found.
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Tailscale SSH server for initrd
     hoopsnake = {
       url = "github:boinkor-net/hoopsnake";

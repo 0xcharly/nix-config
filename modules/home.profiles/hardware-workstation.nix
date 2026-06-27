@@ -28,6 +28,7 @@
     programs-vcs
     programs-zathura
     services-pipewire
+    services-nix-index
     services-usb-auto-mount
   ];
 }
