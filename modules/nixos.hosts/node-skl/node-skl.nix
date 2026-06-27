@@ -53,7 +53,10 @@
           };
         };
 
-        networking.tailscale.enableSsh = true;
+        networking.tailscale = {
+          enableSsh = true;
+          exitNode = "jp-tyo-wg-002.mullvad.ts.net.";
+        };
         users.delay.ssh.authorizeTailscaleInternalKey = true;
       };
 
