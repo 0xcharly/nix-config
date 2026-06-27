@@ -232,38 +232,58 @@ ssh-rsa = "AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+VTTvDP6mH
 [ssh.internet.knownHosts."git.qyrnl.com"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAILCvz0lTYUokMyuoq2gn+STcWY+EPCw+zzuyLOcj9nU0"
 
-[ssh.wireguard.tailscale.knownHosts."site-jp"]
-ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIBc7+svM9KE66X8lpQzYny0byI47Kr38LsYXVyJIZd+w"
-
-[ssh.wireguard.tailscale.knownHosts."site-fr"]
-ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIPEQB+CwUB/zGI76uwH95mhwnhvHQKw1/J08ioDzw+W/"
-
-[ssh.wireguard.tailscale.knownHosts."fwk"]
-ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIOOGCAJVRToabx32L6jIUdzDhU43QWa6dXm4sAN/H96m"
-
-[ssh.wireguard.tailscale.knownHosts."term-fwk"]
-ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIOOGCAJVRToabx32L6jIUdzDhU43QWa6dXm4sAN/H96m"
-
-[ssh.wireguard.tailscale.knownHosts."gate-fr"]
+[wireguard.tailscale.vlan."gate-fr"]
+ip = "100.64.0.141"
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIPIhfhgQwVE1yt7xVgZ5jz+3Z0omItxrhyOi+CvHcs0B"
 
-[ssh.wireguard.tailscale.knownHosts."gate-jp"]
+[wireguard.tailscale.vlan."gate-jp"]
+ip = "100.64.0.140"
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAILb+AwJFckuzpo34rM9AhyuIMjPExUi+6svoZGWKVKGN"
 
-[ssh.wireguard.tailscale.knownHosts."nyx"]
-ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIHsn07q7SmdP1M09ZIrz0bD9Te+5OMVVlfGEtAP9+iP9"
+[wireguard.tailscale.vlan."gl-be3600"]
+ip = "100.64.0.2"
 
-[ssh.wireguard.tailscale.knownHosts."term-nyx"]
-ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIHsn07q7SmdP1M09ZIrz0bD9Te+5OMVVlfGEtAP9+iP9"
+[wireguard.tailscale.vlan."gl-be9300"]
+ip = "100.64.0.1"
 
-[ssh.wireguard.tailscale.knownHosts."node-skl"]
+[wireguard.tailscale.vlan."mail-vt"]
+ip = "100.64.0.142"
+ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIOF74XheqFzcb9eYwOh1mrTSUSFLtOVK2OIfDwCa1Uri"
+
+[wireguard.tailscale.vlan."node-skl"]
+ip = "100.64.0.103"
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIBu+3cdkRlXUXS4MIwZNNKMo9Ia2XUZE7Ze6haIttCur"
 
-[ssh.wireguard.tailscale.knownHosts."node-x1p"]
-ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIJGA1jfPuKCEaOfYh9H9wO/HTXiOTLxBCfgVXp5Sx/Ca"
+[wireguard.tailscale.vlan."roam-iphone-air"]
+ip = "100.64.0.151"
 
-[ssh.wireguard.tailscale.knownHosts."term-x1p"]
-ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIJGA1jfPuKCEaOfYh9H9wO/HTXiOTLxBCfgVXp5Sx/Ca"
+[wireguard.tailscale.vlan."roam-mbp"]
+ip = "100.64.0.111"
 
-[ssh.wireguard.tailscale.knownHosts."mail-vt"]
-ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIOF74XheqFzcb9eYwOh1mrTSUSFLtOVK2OIfDwCa1Uri"
+[wireguard.tailscale.vlan."roam-pixel-11-pro"]
+ip = "100.64.0.153"
+
+[wireguard.tailscale.vlan."roam-pixel-9-pro"]
+ip = "100.64.0.152"
+
+[wireguard.tailscale.vlan."site-fr"]
+ip = "100.64.0.121"
+ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIPEQB+CwUB/zGI76uwH95mhwnhvHQKw1/J08ioDzw+W/"
+
+[wireguard.tailscale.vlan."site-jp"]
+ip = "100.64.0.120"
+ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIBc7+svM9KE66X8lpQzYny0byI47Kr38LsYXVyJIZd+w"
+
+[wireguard.tailscale.vlan."term-fwk"]
+alias = "fwk"
+ip = "100.64.0.110"
+ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIOOGCAJVRToabx32L6jIUdzDhU43QWa6dXm4sAN/H96m"
+
+[wireguard.tailscale.vlan."term-nyx"]
+alias = "nyx"
+ip = "100.64.0.100"
+ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIHsn07q7SmdP1M09ZIrz0bD9Te+5OMVVlfGEtAP9+iP9"
+
+[wireguard.tailscale.vlan."term-x1p"]
+ip = "100.64.0.130"
+ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIJGA1jfPuKCEaOfYh9H9wO/HTXiOTLxBCfgVXp5Sx/Ca"

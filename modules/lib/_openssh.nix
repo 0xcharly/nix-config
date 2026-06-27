@@ -3,37 +3,42 @@
   lib,
   uri,
 }:
+with lib;
 let
   # Apply a function to each key in an attribute set, creating a new attribute
   # set. Like `lib.attrsets.mapAttr`, but transform keys instead of values.
-  mapAttrsName =
-    transform: lib.mapAttrs' (hostName: value: lib.nameValuePair (transform hostName) value);
+  mapAttrsName = transform: mapAttrs' (hostName: value: nameValuePair (transform hostName) value);
 
   # Fully qualifies hostname keys in the given list of attribute sets.
   mapToFqn = domain: mapAttrsName (uri.mkFqn domain);
 
+  tailnetKnownHosts =
+    facts.wireguard.tailscale.vlan
+    # Filter out hosts without a key
+    |> filterAttrs (_: cfg: cfg ? ssh-ed25519)
+    # Rehydrate hosts with an alias
+    |> mapAttrsToList (
+      host: cfg: [ { ${host} = cfg; } ] ++ (if cfg ? alias then [ { ${cfg.alias} = cfg; } ] else [ ])
+    )
+    |> concatLists
+    |> mergeAttrsList
+    # Create the final map host → key
+    |> mapAttrs (_: cfg: { inherit (cfg) ssh-ed25519; });
   allKnownHosts =
     facts.ssh.internet.knownHosts
-    // facts.ssh.wireguard.tailscale.knownHosts
-    // (
-      # *.qyrnl.com
-      mapToFqn facts.domain facts.ssh.wireguard.tailscale.knownHosts
-    )
-    // (
-      # *.neko-danio.ts.net
-      mapToFqn facts.wireguard.tailscale.tailnet facts.ssh.wireguard.tailscale.knownHosts
-    );
+    // tailnetKnownHosts
+    // (mapToFqn facts.domain tailnetKnownHosts) # *.qyrnl.com
+    // (mapToFqn facts.wireguard.tailscale.tailnet tailnetKnownHosts) # *.neko-danio.ts.net
+  ;
 
   forEachKnownHostsEntry =
     fn: hosts:
-    lib.flatten (
-      lib.mapAttrsToList (host: keys: lib.mapAttrsToList (type: key: fn host type key) keys) hosts
-    );
+    flatten (mapAttrsToList (host: keys: mapAttrsToList (type: key: fn host type key) keys) hosts);
 
   mkNixosKnownHostAttrs = host: type: key: {
     "${host}/${type}" = {
-      hostNames = lib.singleton host;
-      publicKey = lib.concatStringsSep " " [
+      hostNames = singleton host;
+      publicKey = concatStringsSep " " [
         type
         key
       ];
@@ -44,9 +49,7 @@ let
     "${host} ${type} ${key}";
 in
 {
-  knownHosts = lib.mergeAttrsList (forEachKnownHostsEntry mkNixosKnownHostAttrs allKnownHosts);
-
-  knownHostsFile = lib.concatStringsSep "\n" (
-    forEachKnownHostsEntry mkKnownHostsFileEntry allKnownHosts
-  );
+  knownHosts = forEachKnownHostsEntry mkNixosKnownHostAttrs allKnownHosts |> mergeAttrsList;
+  knownHostsFile =
+    forEachKnownHostsEntry mkKnownHostsFileEntry allKnownHosts |> concatStringsSep "\n";
 }
