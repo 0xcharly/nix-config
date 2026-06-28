@@ -1,3 +1,3 @@
-# Mailserver Linode instance
+# Bastion Linode instance
 
 [NixOS Simple Mailserver](https://nixos-mailserver.readthedocs.io/)

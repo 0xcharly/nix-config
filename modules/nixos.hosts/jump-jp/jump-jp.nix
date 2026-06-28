@@ -1,12 +1,12 @@
 { self, inputs, ... }:
 {
-  my.hosts.mail-vt = {
+  my.hosts.jump-jp = {
     stateVersion = "25.11";
 
     nixosModule = {
       imports = [
         inputs.nix-config-secrets.nixosModules.default
-        inputs.nix-config-secrets.nixosModules.services-hoopsnake-mail-vt
+        inputs.nix-config-secrets.nixosModules.services-hoopsnake-jump-jp
         inputs.nix-config-secrets.nixosModules.services-tailscale
         inputs.nix-config-secrets.nixosModules.users-delay
 

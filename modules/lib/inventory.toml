@@ -1,5 +1,5 @@
-servers = ["gate-fr", "gate-jp", "mail-vt", "node-skl", "site-fr", "site-jp"]
+servers = ["gate-fr", "gate-jp", "jump-jp", "node-skl", "site-fr", "site-jp"]
 workstations = ["term-fwk", "term-nyx", "term-x1p"]
 
 # Monitored by Gatus
-gatus = ["gate-fr", "gate-jp", "mail-vt", "node-skl", "site-fr", "site-jp", "term-x1p"]
+gatus = ["gate-fr", "gate-jp", "jump-jp", "node-skl", "site-fr", "site-jp", "term-x1p"]

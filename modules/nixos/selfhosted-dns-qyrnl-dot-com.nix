@@ -51,7 +51,7 @@
                   ; Hosts declaration.
                   gate-fr       IN CNAME gate-fr.${tailnetDomainName}.
                   gate-jp       IN CNAME gate-jp.${tailnetDomainName}.
-                  mail-vt       IN CNAME mail-vt.${tailnetDomainName}.
+                  jump-jp       IN CNAME jump-jp.${tailnetDomainName}.
                   node-skl      IN CNAME node-skl.${tailnetDomainName}.
                   site-fr       IN CNAME site-fr.${tailnetDomainName}.
                   site-jp       IN CNAME site-jp.${tailnetDomainName}.
