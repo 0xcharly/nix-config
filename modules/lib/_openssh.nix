@@ -12,20 +12,25 @@ let
   # Fully qualifies hostname keys in the given list of attribute sets.
   mapToFqn = domain: mapAttrsName (uri.mkFqn domain);
 
-  tailnetKnownHosts =
-    facts.wireguard.tailscale.vlan
+  mkKnownHosts =
+    hosts:
+    hosts
     # Filter out hosts without a key
     |> filterAttrs (_: cfg: cfg ? ssh-ed25519)
-    # Rehydrate hosts with an alias
+    # Rehydrate hosts with aliases
     |> mapAttrsToList (
-      host: cfg: [ { ${host} = cfg; } ] ++ (if cfg ? alias then [ { ${cfg.alias} = cfg; } ] else [ ])
+      host: cfg: [ { ${host} = cfg; } ] ++ (map (alias: { ${alias} = cfg; }) (cfg.aliases or [ ]))
     )
     |> concatLists
     |> mergeAttrsList
     # Create the final map host → key
     |> mapAttrs (_: cfg: { inherit (cfg) ssh-ed25519; });
+
+  internetKnownHosts = mkKnownHosts facts.ssh.internet.knownHosts;
+  tailnetKnownHosts = mkKnownHosts facts.wireguard.tailscale.vlan;
+
   allKnownHosts =
-    facts.ssh.internet.knownHosts
+    internetKnownHosts
     // tailnetKnownHosts
     // (mapToFqn facts.domain tailnetKnownHosts) # *.qyrnl.com
     // (mapToFqn facts.wireguard.tailscale.tailnet tailnetKnownHosts) # *.neko-danio.ts.net

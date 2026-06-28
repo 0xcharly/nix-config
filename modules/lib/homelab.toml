@@ -212,6 +212,7 @@ host = "site-jp.qyrnl.com"
 port = 8222
 
 [ssh.delay]
+trusted-identities = ["0xcharly", "delay"]
 trusted-keys = ["github", "git_commit_signing", "tailscale"]
 
 [ssh.internet.knownHosts."bitbucket.org"]
@@ -229,7 +230,12 @@ ecdsa-sha2-nistp256 = "AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBEmKS
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl"
 ssh-rsa = "AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+VTTvDP6mHBL9j1aNUkY4Ue1gvwnGLVlOhGeYrnZaMgRK6+PKCUXaDbC7qtbW8gIkhL7aGCsOr/C56SJMy/BCZfxd1nWzAOxSDPgVsmerOBYfNqltV9/hWCqBywINIR+5dIg6JTJ72pcEpEjcYgXkE2YEFXV1JHnsKgbLWNlhScqb2UmyRkQyytRLtL+38TGxkxCflmO+5Z8CSSNY7GidjMIZ7Q4zMjA2n1nGrlTDkzwDCsw+wqFPGQA179cnfGWOWRVruj16z6XyvxvjJwbz0wQZ75XK5tKSb7FNyeIEs4TT4jk+S4dhPeAUC5y+bDYirYgM4GC7uEnztnZyaVWQ7B381AK4Qdrwt51ZqExKbQpTUNn+EjqoTwvqNj4kqx5QUCI0ThS/YkOxJCXmPUWZbhjpCg56i+2aB6CmK2JGhn57K5mj0MNdBXA4/WnwH6XoPWJzK5Nyu2zB3nAZp+S5hpQs+p1vN1/wsjk="
 
-[ssh.internet.knownHosts."git.qyrnl.com"]
+[ssh.internet.knownHosts."bastion.0xcharly.com"] # jump-jp
+aliases = ["git.0xcharly.com"]
+ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIOF74XheqFzcb9eYwOh1mrTSUSFLtOVK2OIfDwCa1Uri"
+
+[ssh.internet.knownHosts."git.qyrnl.com"] # site-jp
+aliases = ["[site-jp.qyrnl.com]:3922"]
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAILCvz0lTYUokMyuoq2gn+STcWY+EPCw+zzuyLOcj9nU0"
 
 [wireguard.tailscale.vlan."gate-fr"]
@@ -275,12 +281,12 @@ ip = "100.64.0.120"
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIBc7+svM9KE66X8lpQzYny0byI47Kr38LsYXVyJIZd+w"
 
 [wireguard.tailscale.vlan."term-fwk"]
-alias = "fwk"
+aliases = ["fwk"]
 ip = "100.64.0.110"
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIOOGCAJVRToabx32L6jIUdzDhU43QWa6dXm4sAN/H96m"
 
 [wireguard.tailscale.vlan."term-nyx"]
-alias = "nyx"
+aliases = ["nyx"]
 ip = "100.64.0.100"
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIHsn07q7SmdP1M09ZIrz0bD9Te+5OMVVlfGEtAP9+iP9"
 

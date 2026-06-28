@@ -16,10 +16,6 @@
           enable = true;
           enableDefaultConfig = false;
           settings = {
-            "bitbucket.org" = {
-              User = "git";
-              IdentityFile = mkIdentityFile "bitbucket";
-            };
             "codeberg.org" = {
               User = "git";
               IdentityFile = mkIdentityFile "github";

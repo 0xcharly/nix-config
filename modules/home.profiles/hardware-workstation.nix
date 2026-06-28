@@ -19,6 +19,7 @@
     programs-core-headless
     programs-file-managers
     programs-fish
+    programs-keychain
     programs-nvim
     programs-opencode
     programs-password-managers

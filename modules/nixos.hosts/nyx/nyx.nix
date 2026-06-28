@@ -12,6 +12,7 @@
         inputs.nix-config-secrets.nixosModules.users-delay
 
         self.nixosModules.profile-hardware-workstation
+        self.nixosModules.profile-ssh-identities-ring0
 
         self.nixosModules.bootloader-systemd-boot
         self.nixosModules.fs-zfs-common
@@ -80,6 +81,7 @@
 
     users.delay.imports = with self.homeModules; [
       profile-hardware-workstation
+      profile-ssh-identities-ring0
       profile-ssh-keys-ring-0-tier
     ];
   };

@@ -15,6 +15,13 @@
             This is only recommended on machines where ring-0 keys are installed.
           '';
         };
+
+        autoLoadTrustedIdentities = mkEnableOption ''
+          Loads trusted identities on startup.
+
+          NOTE: Requires trusted identities to be installed under ~/.ssh.
+          This is only recommended on machines where ring-0 keys are installed.
+        '';
       };
 
       config.programs.keychain =
@@ -26,7 +33,9 @@
           enableFishIntegration = true;
 
           # Clears ["id_rsa"] default either way
-          keys = lib.optionals cfg.autoLoadTrustedKeys self.lib.facts.ssh.delay.trusted-keys;
+          keys =
+            lib.optionals cfg.autoLoadTrustedKeys self.lib.facts.ssh.delay.trusted-keys
+            ++ lib.optionals cfg.autoLoadTrustedIdentities self.lib.facts.ssh.delay.trusted-identities;
         };
     };
 }

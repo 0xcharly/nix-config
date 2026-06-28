@@ -13,6 +13,7 @@
 
         self.nixosModules.profile-hardware-workstation
         self.nixosModules.profile-hardware-workstation-laptop
+        self.nixosModules.profile-ssh-identities-ring0
 
         self.nixosModules.bootloader-systemd-boot
         self.nixosModules.fs-zfs-common
@@ -86,6 +87,7 @@
         profile-hardware-laptop
         profile-hardware-wireless
         profile-hardware-workstation
+        profile-ssh-identities-ring0
         profile-ssh-keys-ring-0-tier
       ];
 
