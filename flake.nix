@@ -38,7 +38,14 @@
       };
     };
 
-    nix-config-secrets.url = "github:0xcharly/nix-config-secrets"; # Secrets management
+    # Antigravity tool suite
+    antigravity-nix = {
+      url = "github:jacopone/antigravity-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Secrets management
+    nix-config-secrets.url = "github:0xcharly/nix-config-secrets";
 
     # Out of the box mailserver
     simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-26.05";

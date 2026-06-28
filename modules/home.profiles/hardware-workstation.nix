@@ -11,6 +11,7 @@
     install-fonts
     nixpkgs
     programs-atuin
+    programs-antigravity
     programs-atuin-sync
     programs-beeper
     programs-browsers
@@ -28,8 +29,8 @@
     programs-tmux
     programs-vcs
     programs-zathura
-    services-pipewire
     services-nix-index
+    services-pipewire
     services-usb-auto-mount
   ];
 }
