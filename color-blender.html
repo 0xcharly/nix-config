@@ -1,0 +1,1205 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tailwind CSS Color Blender</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background:
+          radial-gradient(circle at 20% 8%, rgba(59, 130, 246, 0.24), transparent 34rem),
+          radial-gradient(circle at 80% 0%, rgba(245, 158, 11, 0.16), transparent 28rem),
+          radial-gradient(circle at 50% 100%, rgba(168, 85, 247, 0.12), transparent 34rem);
+      }
+
+      .checkerboard {
+        background-color: #111113;
+        background-image:
+          linear-gradient(45deg, rgba(255, 255, 255, 0.08) 25%, transparent 25%),
+          linear-gradient(-45deg, rgba(255, 255, 255, 0.08) 25%, transparent 25%),
+          linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.08) 75%),
+          linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.08) 75%);
+        background-position: 0 0, 0 14px, 14px -14px, -14px 0;
+        background-size: 28px 28px;
+      }
+
+      .combo-popover {
+        position: absolute;
+        z-index: 40;
+        top: calc(100% + 0.5rem);
+        left: 0;
+        right: 0;
+        max-height: min(22rem, 55vh);
+        overflow: auto;
+        border: 1px solid rgba(63, 63, 70, 0.9);
+        border-radius: 1rem;
+        background: rgba(24, 24, 27, 0.98);
+        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+        padding: 0.45rem;
+        backdrop-filter: blur(18px);
+      }
+
+      .combo-popover.hidden {
+        display: none;
+      }
+
+      .combo-option {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        gap: 0.75rem;
+        border-radius: 0.75rem;
+        padding: 0.65rem 0.7rem;
+        color: #e4e4e7;
+        text-align: left;
+        transition: background-color 150ms ease, color 150ms ease;
+      }
+
+      .combo-option:hover,
+      .combo-option.is-active {
+        background: rgba(39, 39, 42, 0.95);
+        color: #fff;
+      }
+
+      .combo-option[aria-selected="true"] {
+        background: rgba(59, 130, 246, 0.18);
+        color: #dbeafe;
+      }
+
+      .combo-empty {
+        padding: 1rem;
+        color: #a1a1aa;
+        font-size: 0.875rem;
+      }
+
+      .mini-swatch {
+        width: 1.5rem;
+        height: 1.5rem;
+        flex: none;
+        border-radius: 0.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+      }
+
+      .combo-name {
+        display: block;
+        font-weight: 650;
+        letter-spacing: -0.01em;
+      }
+
+      .combo-meta {
+        display: block;
+        color: #a1a1aa;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        font-size: 0.75rem;
+      }
+
+      .segment-button,
+      .mode-button {
+        border: 1px solid transparent;
+        color: #a1a1aa;
+        transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease, box-shadow 150ms ease;
+      }
+
+      .segment-button.is-active,
+      .mode-button.is-active {
+        border-color: rgba(96, 165, 250, 0.42);
+        background: rgba(37, 99, 235, 0.18);
+        color: #fff;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 12px 30px rgba(37, 99, 235, 0.12);
+      }
+
+      input[type="range"] {
+        accent-color: #60a5fa;
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        cursor: pointer;
+      }
+
+      input[type="range"]::-moz-range-thumb {
+        cursor: pointer;
+      }
+
+      .resolver-probe {
+        position: absolute;
+        left: -9999px;
+        top: -9999px;
+        width: 1px;
+        height: 1px;
+        pointer-events: none;
+      }
+
+      .transient-scrollbars {
+        scrollbar-width: none;
+      }
+
+      .transient-scrollbars.is-scrolling {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(113, 113, 122, 0.8) transparent;
+      }
+
+      .transient-scrollbars::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+      }
+
+      .transient-scrollbars.is-scrolling::-webkit-scrollbar {
+        width: 0.6rem;
+        height: 0.6rem;
+      }
+
+      .transient-scrollbars::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      .transient-scrollbars::-webkit-scrollbar-thumb {
+        border-radius: 9999px;
+        background: rgba(113, 113, 122, 0);
+      }
+
+      .transient-scrollbars.is-scrolling::-webkit-scrollbar-thumb {
+        background: rgba(113, 113, 122, 0.8);
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-zinc-950 font-sans text-zinc-100 antialiased selection:bg-blue-500/30 selection:text-white">
+    <main class="relative mx-auto flex min-h-screen max-w-[88rem] flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
+      <header class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div class="max-w-3xl">
+          <p class="mb-3 inline-flex rounded-full border border-blue-400/20 bg-blue-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-blue-200">
+            Tailwind v4 palette lab
+          </p>
+          <h1 class="text-4xl font-semibold tracking-tight text-white sm:text-5xl">Tailwind CSS Color Blender</h1>
+          <p class="mt-4 max-w-2xl text-base leading-7 text-zinc-400">
+            Pick two Tailwind colors, choose a syntax, and let the browser resolve the blend. No JavaScript color mixing math is used.
+          </p>
+        </div>
+        <div id="statusMessage" class="rounded-2xl border border-zinc-800/80 bg-zinc-900/60 px-4 py-3 text-sm text-zinc-300 shadow-2xl shadow-black/20 backdrop-blur-md" role="status">
+          Loading Tailwind color palettes...
+        </div>
+      </header>
+
+      <div class="grid gap-6 lg:grid-cols-[390px_minmax(0,1fr)]">
+        <aside class="h-fit rounded-3xl border border-zinc-800/80 bg-zinc-900/60 p-5 shadow-2xl shadow-black/30 backdrop-blur-md">
+          <div class="mb-5 flex items-center justify-between gap-3">
+            <div>
+              <h2 class="text-lg font-semibold text-white">Controls</h2>
+              <p class="mt-1 text-sm text-zinc-400">Search by name, shade, or hex.</p>
+            </div>
+          </div>
+
+          <div class="space-y-5">
+            <div id="color1Combo" class="relative">
+              <label for="color1Input" class="mb-2 block text-sm font-medium text-zinc-300">Color 1</label>
+              <div class="relative">
+                <span id="color1Dot" class="mini-swatch pointer-events-none absolute left-3 top-1/2 -translate-y-1/2"></span>
+                <input id="color1Input" type="text" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="color1List" class="w-full rounded-2xl border border-zinc-700/80 bg-zinc-950/60 py-3 pl-12 pr-4 font-mono text-sm text-zinc-100 outline-none transition focus:border-blue-400/70 focus:ring-4 focus:ring-blue-500/10 disabled:cursor-not-allowed disabled:opacity-60" />
+              </div>
+              <div id="color1List" class="combo-popover hidden" role="listbox"></div>
+            </div>
+
+            <div id="color2Combo" class="relative">
+              <label for="color2Input" class="mb-2 block text-sm font-medium text-zinc-300">Color 2</label>
+              <div class="relative">
+                <span id="color2Dot" class="mini-swatch pointer-events-none absolute left-3 top-1/2 -translate-y-1/2"></span>
+                <input id="color2Input" type="text" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="false" aria-controls="color2List" class="w-full rounded-2xl border border-zinc-700/80 bg-zinc-950/60 py-3 pl-12 pr-4 font-mono text-sm text-zinc-100 outline-none transition focus:border-amber-300/70 focus:ring-4 focus:ring-amber-500/10 disabled:cursor-not-allowed disabled:opacity-60" />
+              </div>
+              <div id="color2List" class="combo-popover hidden" role="listbox"></div>
+            </div>
+
+            <div class="rounded-2xl border border-zinc-800/80 bg-zinc-950/40 p-4">
+              <div class="mb-3 flex items-center justify-between">
+                <label for="alphaRange" class="text-sm font-medium text-zinc-300">Alpha / mix amount</label>
+                <span id="alphaPercent" class="font-mono text-sm text-blue-200">50%</span>
+              </div>
+              <div class="grid grid-cols-[1fr_5.5rem] items-center gap-3">
+                <input id="alphaRange" type="range" min="0" max="1" step="0.01" value="0.5" class="w-full disabled:cursor-not-allowed disabled:opacity-60" />
+                <input id="alphaNumber" type="number" min="0" max="1" step="0.01" value="0.50" class="rounded-xl border border-zinc-700/80 bg-zinc-900/80 px-3 py-2 font-mono text-sm text-zinc-100 outline-none transition focus:border-blue-400/70 focus:ring-4 focus:ring-blue-500/10 disabled:cursor-not-allowed disabled:opacity-60" />
+              </div>
+            </div>
+
+            <div>
+              <div class="mb-2 flex items-center justify-between gap-3">
+                <p class="text-sm font-medium text-zinc-300">Color syntax</p>
+                <p id="mixSpaceHint" class="text-xs text-zinc-500">OKLCH mix space</p>
+              </div>
+              <div class="grid grid-cols-4 gap-1 rounded-2xl border border-zinc-800/80 bg-zinc-950/50 p-1">
+                <button type="button" class="segment-button rounded-xl px-2 py-2 text-xs font-semibold" data-format="HEX" aria-pressed="false">HEX</button>
+                <button type="button" class="segment-button rounded-xl px-2 py-2 text-xs font-semibold" data-format="RGB" aria-pressed="false">RGB</button>
+                <button type="button" class="segment-button rounded-xl px-2 py-2 text-xs font-semibold" data-format="RGBA" aria-pressed="false">RGBA</button>
+                <button type="button" class="segment-button rounded-xl px-2 py-2 text-xs font-semibold is-active" data-format="OKLCH" aria-pressed="true">OKLCH</button>
+              </div>
+            </div>
+
+            <div>
+              <p class="mb-2 text-sm font-medium text-zinc-300">Mix mode</p>
+              <div class="grid grid-cols-2 gap-1 rounded-2xl border border-zinc-800/80 bg-zinc-950/50 p-1">
+                <button type="button" class="mode-button rounded-xl px-3 py-2 text-sm font-semibold is-active" data-mode="mix" aria-pressed="true">color-mix()</button>
+                <button type="button" class="mode-button rounded-xl px-3 py-2 text-sm font-semibold" data-mode="overlay" aria-pressed="false">Overlay</button>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <section class="grid min-w-0 gap-6">
+          <div class="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+            <article class="min-w-0 rounded-3xl border border-zinc-800/80 bg-zinc-900/60 p-5 shadow-2xl shadow-black/25 backdrop-blur-md">
+              <div class="flex items-start gap-4">
+                <div class="checkerboard h-32 w-32 flex-none overflow-hidden rounded-3xl border border-zinc-700/80 shadow-xl shadow-black/25">
+                  <div id="color1Swatch" class="h-full w-full"></div>
+                </div>
+                <div class="min-w-0 pt-1">
+                  <p class="text-sm uppercase tracking-[0.16em] text-zinc-500">Color 1</p>
+                  <h3 id="color1Name" class="mt-2 text-2xl font-semibold tracking-tight text-white">blue-500</h3>
+                  <dl class="mt-4 space-y-2 text-sm">
+                    <div>
+                      <dt class="text-zinc-500">Hex</dt>
+                      <dd id="color1Hex" class="break-all font-mono text-zinc-200">-</dd>
+                    </div>
+                    <div>
+                      <dt class="text-zinc-500">OKLCH</dt>
+                      <dd id="color1Oklch" class="break-all font-mono text-zinc-200">-</dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+            </article>
+
+            <article class="min-w-0 rounded-3xl border border-zinc-800/80 bg-zinc-900/60 p-5 shadow-2xl shadow-black/25 backdrop-blur-md">
+              <div class="flex items-start gap-4">
+                <div class="checkerboard h-32 w-32 flex-none overflow-hidden rounded-3xl border border-zinc-700/80 shadow-xl shadow-black/25">
+                  <div id="color2Swatch" class="h-full w-full"></div>
+                </div>
+                <div class="min-w-0 pt-1">
+                  <p class="text-sm uppercase tracking-[0.16em] text-zinc-500">Color 2</p>
+                  <h3 id="color2Name" class="mt-2 text-2xl font-semibold tracking-tight text-white">amber-500</h3>
+                  <dl class="mt-4 space-y-2 text-sm">
+                    <div>
+                      <dt class="text-zinc-500">Hex</dt>
+                      <dd id="color2Hex" class="break-all font-mono text-zinc-200">-</dd>
+                    </div>
+                    <div>
+                      <dt class="text-zinc-500">OKLCH</dt>
+                      <dd id="color2Oklch" class="break-all font-mono text-zinc-200">-</dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <article class="min-w-0 rounded-3xl border border-zinc-800/80 bg-zinc-900/60 p-5 shadow-2xl shadow-black/30 backdrop-blur-md">
+            <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h2 class="text-lg font-semibold text-white">Blend Canvas</h2>
+                <p id="blendSummary" class="mt-1 text-sm text-zinc-400">Color 2 mixed into Color 1 at 50%.</p>
+              </div>
+              <div class="flex flex-wrap gap-2 text-xs font-medium text-zinc-300">
+                <span id="modeBadge" class="rounded-full border border-zinc-700/80 bg-zinc-950/50 px-3 py-1">color-mix()</span>
+                <span id="spaceBadge" class="rounded-full border border-zinc-700/80 bg-zinc-950/50 px-3 py-1">oklch</span>
+              </div>
+            </div>
+
+            <div class="flex justify-center">
+              <div class="checkerboard relative h-64 w-full max-w-[512px] overflow-hidden rounded-[2rem] border border-zinc-700/80 shadow-2xl shadow-black/40 ring-1 ring-white/5">
+                <div id="blendBase" class="absolute inset-0"></div>
+                <div id="blendOverlay" class="absolute inset-0 pointer-events-none"></div>
+              </div>
+            </div>
+          </article>
+
+          <div class="grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,1fr)]">
+            <article class="flex min-w-0 flex-col rounded-3xl border border-zinc-800/80 bg-zinc-900/60 p-5 shadow-2xl shadow-black/25 backdrop-blur-md">
+              <div class="mb-4 flex items-center justify-between gap-3">
+                <div>
+                  <h2 class="text-lg font-semibold text-white">CSS Syntax</h2>
+                  <p class="mt-1 text-sm text-zinc-400">Generated from the current controls.</p>
+                </div>
+                <button id="copyButton" type="button" class="rounded-xl border border-blue-400/30 bg-blue-500/10 px-4 py-2 text-sm font-semibold text-blue-100 transition hover:bg-blue-500/20 focus:outline-none focus:ring-4 focus:ring-blue-500/20 disabled:cursor-not-allowed disabled:opacity-60">
+                  Copy
+                </button>
+              </div>
+              <pre id="cssScroller" class="transient-scrollbars min-w-0 max-h-80 w-full overflow-auto rounded-2xl border border-zinc-800/80 bg-zinc-950/80 p-4 text-sm leading-6 text-zinc-100"><code id="cssOutput">Loading...</code></pre>
+              <p id="cssCopyStatus" class="mt-3 min-h-5 text-sm text-zinc-500"></p>
+            </article>
+
+            <article class="min-w-0 rounded-3xl border border-zinc-800/80 bg-zinc-900/60 p-5 shadow-2xl shadow-black/25 backdrop-blur-md">
+              <div class="flex items-center justify-between gap-3">
+                <h2 class="text-lg font-semibold text-white">Computed Value</h2>
+                <button id="copyComputedButton" type="button" class="rounded-xl border border-blue-400/30 bg-blue-500/10 px-4 py-2 text-sm font-semibold text-blue-100 transition hover:bg-blue-500/20 focus:outline-none focus:ring-4 focus:ring-blue-500/20 disabled:cursor-not-allowed disabled:opacity-60">
+                  Copy
+                </button>
+              </div>
+              <p id="computedHint" class="mt-1 text-sm text-zinc-400">Read from window.getComputedStyle().</p>
+              <div class="mt-4 rounded-2xl border border-zinc-800/80 bg-zinc-950/80 p-4">
+                <p id="computedOutput" class="break-all font-mono text-sm leading-6 text-blue-100">Loading...</p>
+              </div>
+              <p id="computedCopyStatus" class="mt-3 min-h-5 text-sm text-zinc-500"></p>
+            </article>
+          </div>
+        </section>
+      </div>
+
+      <div id="resolverProbe" class="resolver-probe" aria-hidden="true"></div>
+    </main>
+
+    <script type="module">
+      const COLOR_URLS = {
+        oklch: "https://unpkg.com/@grida/tailwindcss-colors/json/oklch.json",
+        hex: "https://unpkg.com/@grida/tailwindcss-colors/json/hex.json",
+        rgb: "https://unpkg.com/@grida/tailwindcss-colors/json/rgb.json",
+      };
+
+      const FAMILY_ORDER = [
+        "slate",
+        "gray",
+        "zinc",
+        "neutral",
+        "stone",
+        "red",
+        "orange",
+        "amber",
+        "yellow",
+        "lime",
+        "green",
+        "emerald",
+        "teal",
+        "cyan",
+        "sky",
+        "blue",
+        "indigo",
+        "violet",
+        "purple",
+        "fuchsia",
+        "pink",
+        "rose",
+      ];
+
+      const SHADE_ORDER = ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "950"];
+
+      const state = {
+        color1: "blue-500",
+        color2: "amber-500",
+        alpha: 0.5,
+        format: "OKLCH",
+        mode: "mix",
+      };
+
+      const elements = {
+        statusMessage: document.getElementById("statusMessage"),
+        color1Combo: document.getElementById("color1Combo"),
+        color2Combo: document.getElementById("color2Combo"),
+        color1Input: document.getElementById("color1Input"),
+        color2Input: document.getElementById("color2Input"),
+        color1List: document.getElementById("color1List"),
+        color2List: document.getElementById("color2List"),
+        color1Dot: document.getElementById("color1Dot"),
+        color2Dot: document.getElementById("color2Dot"),
+        color1Swatch: document.getElementById("color1Swatch"),
+        color2Swatch: document.getElementById("color2Swatch"),
+        color1Name: document.getElementById("color1Name"),
+        color2Name: document.getElementById("color2Name"),
+        color1Hex: document.getElementById("color1Hex"),
+        color2Hex: document.getElementById("color2Hex"),
+        color1Oklch: document.getElementById("color1Oklch"),
+        color2Oklch: document.getElementById("color2Oklch"),
+        alphaRange: document.getElementById("alphaRange"),
+        alphaNumber: document.getElementById("alphaNumber"),
+        alphaPercent: document.getElementById("alphaPercent"),
+        mixSpaceHint: document.getElementById("mixSpaceHint"),
+        blendBase: document.getElementById("blendBase"),
+        blendOverlay: document.getElementById("blendOverlay"),
+        blendSummary: document.getElementById("blendSummary"),
+        modeBadge: document.getElementById("modeBadge"),
+        spaceBadge: document.getElementById("spaceBadge"),
+        cssScroller: document.getElementById("cssScroller"),
+        cssOutput: document.getElementById("cssOutput"),
+        cssCopyStatus: document.getElementById("cssCopyStatus"),
+        computedOutput: document.getElementById("computedOutput"),
+        computedHint: document.getElementById("computedHint"),
+        copyButton: document.getElementById("copyButton"),
+        copyComputedButton: document.getElementById("copyComputedButton"),
+        computedCopyStatus: document.getElementById("computedCopyStatus"),
+        resolverProbe: document.getElementById("resolverProbe"),
+      };
+
+      const formatButtons = Array.from(document.querySelectorAll("[data-format]"));
+      const modeButtons = Array.from(document.querySelectorAll("[data-mode]"));
+      const combos = {};
+      const copyStatusTimers = new WeakMap();
+      let colorMap = new Map();
+      let colors = [];
+
+      function trimNumber(value, digits = 3) {
+        return Number(value.toFixed(digits)).toString();
+      }
+
+      function formatPercent(value) {
+        return `${trimNumber(value * 100, 2)}%`;
+      }
+
+      function formatAlpha(value) {
+        return trimNumber(value, 2);
+      }
+
+      function clampAlpha(value) {
+        const number = Number(value);
+        if (!Number.isFinite(number)) {
+          return state.alpha;
+        }
+        return Math.min(1, Math.max(0, number));
+      }
+
+      function formatOklch(color) {
+        const [lightness, chroma, hue] = color.oklch;
+        return `oklch(${trimNumber(lightness)} ${trimNumber(chroma)} ${trimNumber(hue)})`;
+      }
+
+      function formatRgb(color) {
+        const [red, green, blue] = color.rgb;
+        return `rgb(${red}, ${green}, ${blue})`;
+      }
+
+      function formatRgba(color) {
+        const [red, green, blue] = color.rgb;
+        return `rgba(${red}, ${green}, ${blue}, 1)`;
+      }
+
+      function formatHexChannels(red, green, blue, alpha = 1) {
+        const toHex = (value) => value.toString(16).padStart(2, "0");
+        const hex = `#${toHex(red)}${toHex(green)}${toHex(blue)}`;
+        if (alpha >= 1) {
+          return hex;
+        }
+        return `${hex}${toHex(Math.round(clamp01(alpha) * 255))}`;
+      }
+
+      function formatRgbChannels(red, green, blue) {
+        return `rgb(${red}, ${green}, ${blue})`;
+      }
+
+      function formatRgbaChannels(red, green, blue, alpha) {
+        return `rgba(${red}, ${green}, ${blue}, ${formatAlpha(alpha)})`;
+      }
+
+      function formatOklchChannels(lightness, chroma, hue, alpha = 1) {
+        const alphaSuffix = alpha >= 1 ? "" : ` / ${formatAlpha(alpha)}`;
+        return `oklch(${trimNumber(lightness)} ${trimNumber(chroma)} ${trimNumber(hue)}${alphaSuffix})`;
+      }
+
+      function clamp01(value) {
+        return Math.min(1, Math.max(0, value));
+      }
+
+      function parseNumberToken(token) {
+        if (!token) {
+          return null;
+        }
+        const trimmed = token.trim();
+        if (trimmed.endsWith("%")) {
+          return Number(trimmed.slice(0, -1)) / 100;
+        }
+        return Number(trimmed);
+      }
+
+      function parseSrgbChannel(token) {
+        if (!token) {
+          return null;
+        }
+        const trimmed = token.trim();
+        if (trimmed.endsWith("%")) {
+          return Math.round(clamp01(Number(trimmed.slice(0, -1)) / 100) * 255);
+        }
+        return Math.round(Number(trimmed));
+      }
+
+      function parseAlphaToken(token) {
+        const value = parseNumberToken(token);
+        return value == null ? 1 : clamp01(value);
+      }
+
+      function parseAngleToken(token) {
+        if (!token) {
+          return null;
+        }
+        const trimmed = token.trim().toLowerCase();
+        if (trimmed.endsWith("deg")) {
+          return Number(trimmed.slice(0, -3));
+        }
+        if (trimmed.endsWith("turn")) {
+          return Number(trimmed.slice(0, -4)) * 360;
+        }
+        if (trimmed.endsWith("rad")) {
+          return (Number(trimmed.slice(0, -3)) * 180) / Math.PI;
+        }
+        return Number(trimmed);
+      }
+
+      function normalizeHue(hue) {
+        const normalized = hue % 360;
+        return normalized < 0 ? normalized + 360 : normalized;
+      }
+
+      function parseRgbLikeColor(value) {
+        const match = value.match(/^rgba?\((.+)\)$/i);
+        if (!match) {
+          return null;
+        }
+
+        const normalized = match[1].trim().replace(/\s*\/\s*/g, ",");
+        const parts = normalized.split(/[\s,]+/).filter(Boolean);
+        if (parts.length < 3) {
+          return null;
+        }
+
+        return {
+          space: "srgb",
+          red: parseSrgbChannel(parts[0]),
+          green: parseSrgbChannel(parts[1]),
+          blue: parseSrgbChannel(parts[2]),
+          alpha: parts[3] ? parseAlphaToken(parts[3]) : 1,
+        };
+      }
+
+      function parseSrgbFunctionColor(value) {
+        const match = value.match(/^color\(srgb\s+(.+)\)$/i);
+        if (!match) {
+          return null;
+        }
+
+        const [channelsPart, alphaPart] = match[1].trim().split(/\s+\/\s+/);
+        const channels = channelsPart.split(/\s+/).filter(Boolean);
+        if (channels.length < 3) {
+          return null;
+        }
+
+        return {
+          space: "srgb",
+          red: Math.round(clamp01(Number(channels[0])) * 255),
+          green: Math.round(clamp01(Number(channels[1])) * 255),
+          blue: Math.round(clamp01(Number(channels[2])) * 255),
+          alpha: alphaPart ? parseAlphaToken(alphaPart) : 1,
+        };
+      }
+
+      function parseOklchColor(value) {
+        const match = value.match(/^oklch\((.+)\)$/i);
+        if (!match) {
+          return null;
+        }
+
+        const [mainPart, alphaPart] = match[1].trim().split(/\s+\/\s+/);
+        const parts = mainPart.split(/\s+/).filter(Boolean);
+        if (parts.length < 3) {
+          return null;
+        }
+
+        const lightnessToken = parts[0].trim();
+        const lightness = lightnessToken.endsWith("%") ? Number(lightnessToken.slice(0, -1)) / 100 : Number(lightnessToken);
+        return {
+          space: "oklch",
+          lightness,
+          chroma: Number(parts[1]),
+          hue: normalizeHue(parseAngleToken(parts[2])),
+          alpha: alphaPart ? parseAlphaToken(alphaPart) : 1,
+        };
+      }
+
+      function parseHexColor(value) {
+        const match = value.trim().match(/^#([0-9a-f]{6}|[0-9a-f]{8})$/i);
+        if (!match) {
+          return null;
+        }
+
+        const hex = match[1];
+        return {
+          space: "srgb",
+          red: Number.parseInt(hex.slice(0, 2), 16),
+          green: Number.parseInt(hex.slice(2, 4), 16),
+          blue: Number.parseInt(hex.slice(4, 6), 16),
+          alpha: hex.length === 8 ? Number.parseInt(hex.slice(6, 8), 16) / 255 : 1,
+        };
+      }
+
+      function parseSerializedColor(value) {
+        if (!value) {
+          return null;
+        }
+        if (value === "transparent") {
+          return { space: "srgb", red: 0, green: 0, blue: 0, alpha: 0 };
+        }
+        return parseRgbLikeColor(value) ?? parseSrgbFunctionColor(value) ?? parseOklchColor(value) ?? parseHexColor(value);
+      }
+
+      function srgbChannelToLinear(channel) {
+        const value = clamp01(channel / 255);
+        return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+      }
+
+      function linearToSrgbChannel(value) {
+        const clamped = clamp01(value);
+        const converted = clamped <= 0.0031308 ? clamped * 12.92 : 1.055 * clamped ** (1 / 2.4) - 0.055;
+        return Math.round(clamp01(converted) * 255);
+      }
+
+      function srgbToOklch(color) {
+        const red = srgbChannelToLinear(color.red);
+        const green = srgbChannelToLinear(color.green);
+        const blue = srgbChannelToLinear(color.blue);
+
+        const l = 0.4122214708 * red + 0.5363325363 * green + 0.0514459929 * blue;
+        const m = 0.2119034982 * red + 0.6806995451 * green + 0.1073969566 * blue;
+        const s = 0.0883024619 * red + 0.2817188376 * green + 0.6299787005 * blue;
+
+        const lRoot = Math.cbrt(l);
+        const mRoot = Math.cbrt(m);
+        const sRoot = Math.cbrt(s);
+
+        const lightness = 0.2104542553 * lRoot + 0.793617785 * mRoot - 0.0040720468 * sRoot;
+        const a = 1.9779984951 * lRoot - 2.428592205 * mRoot + 0.4505937099 * sRoot;
+        const b = 0.0259040371 * lRoot + 0.7827717662 * mRoot - 0.808675766 * sRoot;
+
+        return {
+          space: "oklch",
+          lightness,
+          chroma: Math.sqrt(a * a + b * b),
+          hue: normalizeHue((Math.atan2(b, a) * 180) / Math.PI),
+          alpha: color.alpha,
+        };
+      }
+
+      function oklchToSrgb(color) {
+        const hueRadians = (normalizeHue(color.hue) * Math.PI) / 180;
+        const a = color.chroma * Math.cos(hueRadians);
+        const b = color.chroma * Math.sin(hueRadians);
+
+        const lRoot = color.lightness + 0.3963377774 * a + 0.2158037573 * b;
+        const mRoot = color.lightness - 0.1055613458 * a - 0.0638541728 * b;
+        const sRoot = color.lightness - 0.0894841775 * a - 1.291485548 * b;
+
+        const l = lRoot ** 3;
+        const m = mRoot ** 3;
+        const s = sRoot ** 3;
+
+        return {
+          space: "srgb",
+          red: linearToSrgbChannel(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s),
+          green: linearToSrgbChannel(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s),
+          blue: linearToSrgbChannel(-0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s),
+          alpha: color.alpha,
+        };
+      }
+
+      function serializeComputedColor(color) {
+        if (state.format === "OKLCH") {
+          const next = color.space === "oklch" ? color : srgbToOklch(color);
+          return formatOklchChannels(next.lightness, next.chroma, next.hue, next.alpha);
+        }
+
+        const next = color.space === "srgb" ? color : oklchToSrgb(color);
+        if (state.format === "HEX") {
+          return formatHexChannels(next.red, next.green, next.blue, next.alpha);
+        }
+        if (state.format === "RGBA") {
+          return formatRgbaChannels(next.red, next.green, next.blue, next.alpha);
+        }
+        return formatRgbChannels(next.red, next.green, next.blue);
+      }
+
+      function colorToken(color) {
+        if (state.format === "HEX") {
+          return color.hex;
+        }
+        if (state.format === "RGB") {
+          return formatRgb(color);
+        }
+        if (state.format === "RGBA") {
+          return formatRgba(color);
+        }
+        return formatOklch(color);
+      }
+
+      function mixSpace() {
+        return state.format === "OKLCH" ? "oklch" : "srgb";
+      }
+
+      function setStatus(message, type = "info") {
+        elements.statusMessage.textContent = message;
+        elements.statusMessage.classList.toggle("border-red-400/40", type === "error");
+        elements.statusMessage.classList.toggle("text-red-100", type === "error");
+      }
+
+      function setControlsDisabled(disabled) {
+        const controls = [elements.color1Input, elements.color2Input, elements.alphaRange, elements.alphaNumber, elements.copyButton, elements.copyComputedButton];
+        controls.forEach((control) => {
+          control.disabled = disabled;
+        });
+        formatButtons.forEach((button) => {
+          button.disabled = disabled;
+        });
+        modeButtons.forEach((button) => {
+          button.disabled = disabled;
+        });
+      }
+
+      async function fetchPalette(url) {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Request failed: ${response.status} ${response.statusText}`);
+        }
+        return response.json();
+      }
+
+      function orderedFamilies(hexPalette) {
+        const families = Object.keys(hexPalette);
+        const known = FAMILY_ORDER.filter((family) => families.includes(family));
+        const extra = families.filter((family) => !FAMILY_ORDER.includes(family)).sort();
+        return [...known, ...extra];
+      }
+
+      function orderedShades(shades) {
+        const known = SHADE_ORDER.filter((shade) => shades.includes(shade));
+        const extra = shades.filter((shade) => !SHADE_ORDER.includes(shade)).sort((a, b) => Number(a) - Number(b));
+        return [...known, ...extra];
+      }
+
+      function buildColors(palettes) {
+        const nextColors = [];
+        for (const family of orderedFamilies(palettes.hex)) {
+          const shades = orderedShades(Object.keys(palettes.hex[family] ?? {}));
+          for (const shade of shades) {
+            const hex = palettes.hex[family]?.[shade];
+            const rgb = palettes.rgb[family]?.[shade];
+            const oklch = palettes.oklch[family]?.[shade];
+            if (!hex || !rgb || !oklch) {
+              continue;
+            }
+            nextColors.push({
+              key: `${family}-${shade}`,
+              family,
+              shade,
+              hex,
+              rgb,
+              oklch,
+            });
+          }
+        }
+        return nextColors;
+      }
+
+      function setupCombo(name) {
+        const isFirst = name === "color1";
+        const combo = {
+          name,
+          stateKey: name,
+          root: isFirst ? elements.color1Combo : elements.color2Combo,
+          input: isFirst ? elements.color1Input : elements.color2Input,
+          list: isFirst ? elements.color1List : elements.color2List,
+          activeIndex: -1,
+          visibleOptions: [],
+        };
+        combos[name] = combo;
+
+        combo.input.value = state[name];
+        combo.input.addEventListener("focus", () => {
+          combo.input.select();
+          openCombo(combo, "");
+        });
+        combo.input.addEventListener("input", () => {
+          openCombo(combo, combo.input.value);
+        });
+        combo.input.addEventListener("keydown", (event) => handleComboKeydown(event, combo));
+      }
+
+      function openCombo(combo, query) {
+        combo.input.setAttribute("aria-expanded", "true");
+        combo.list.classList.remove("hidden");
+        renderCombo(combo, query);
+      }
+
+      function closeCombo(combo, restoreValue = true) {
+        combo.input.setAttribute("aria-expanded", "false");
+        combo.input.removeAttribute("aria-activedescendant");
+        combo.list.classList.add("hidden");
+        combo.activeIndex = -1;
+        if (restoreValue) {
+          combo.input.value = state[combo.stateKey];
+        }
+      }
+
+      function renderCombo(combo, query) {
+        const normalizedQuery = query.trim().toLowerCase();
+        combo.visibleOptions = colors.filter((color) => {
+          return color.key.includes(normalizedQuery) || color.family.includes(normalizedQuery) || color.hex.includes(normalizedQuery);
+        });
+
+        const selectedIndex = combo.visibleOptions.findIndex((color) => color.key === state[combo.stateKey]);
+        combo.activeIndex = selectedIndex >= 0 ? selectedIndex : combo.visibleOptions.length > 0 ? 0 : -1;
+
+        combo.list.textContent = "";
+        if (combo.visibleOptions.length === 0) {
+          const empty = document.createElement("div");
+          empty.className = "combo-empty";
+          empty.textContent = "No matching Tailwind colors.";
+          combo.list.append(empty);
+          return;
+        }
+
+        const fragment = document.createDocumentFragment();
+        combo.visibleOptions.forEach((color, index) => {
+          const option = document.createElement("button");
+          option.type = "button";
+          option.id = `${combo.name}-option-${index}`;
+          option.className = "combo-option";
+          option.setAttribute("role", "option");
+          option.setAttribute("aria-selected", color.key === state[combo.stateKey] ? "true" : "false");
+          if (index === combo.activeIndex) {
+            option.classList.add("is-active");
+          }
+
+          const swatch = document.createElement("span");
+          swatch.className = "mini-swatch";
+          swatch.style.backgroundColor = color.hex;
+
+          const text = document.createElement("span");
+          const name = document.createElement("span");
+          name.className = "combo-name";
+          name.textContent = color.key;
+          const meta = document.createElement("span");
+          meta.className = "combo-meta";
+          meta.textContent = color.hex;
+          text.append(name, meta);
+
+          option.append(swatch, text);
+          option.addEventListener("mousedown", (event) => event.preventDefault());
+          option.addEventListener("click", () => selectComboColor(combo, color.key));
+          fragment.append(option);
+        });
+
+        combo.list.append(fragment);
+        updateComboActive(combo);
+      }
+
+      function updateComboActive(combo) {
+        const options = Array.from(combo.list.querySelectorAll(".combo-option"));
+        options.forEach((option, index) => {
+          option.classList.toggle("is-active", index === combo.activeIndex);
+        });
+
+        const active = options[combo.activeIndex];
+        if (active) {
+          combo.input.setAttribute("aria-activedescendant", active.id);
+          active.scrollIntoView({ block: "nearest" });
+        } else {
+          combo.input.removeAttribute("aria-activedescendant");
+        }
+      }
+
+      function selectComboColor(combo, key) {
+        state[combo.stateKey] = key;
+        combo.input.value = key;
+        closeCombo(combo, false);
+        updateAll();
+      }
+
+      function handleComboKeydown(event, combo) {
+        if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+          event.preventDefault();
+          if (combo.list.classList.contains("hidden")) {
+            openCombo(combo, combo.input.value);
+            return;
+          }
+          const direction = event.key === "ArrowDown" ? 1 : -1;
+          const length = combo.visibleOptions.length;
+          if (length === 0) {
+            return;
+          }
+          combo.activeIndex = (combo.activeIndex + direction + length) % length;
+          updateComboActive(combo);
+          return;
+        }
+
+        if (event.key === "Enter") {
+          if (!combo.list.classList.contains("hidden") && combo.visibleOptions[combo.activeIndex]) {
+            event.preventDefault();
+            selectComboColor(combo, combo.visibleOptions[combo.activeIndex].key);
+          }
+          return;
+        }
+
+        if (event.key === "Escape") {
+          closeCombo(combo);
+          combo.input.blur();
+          return;
+        }
+
+        if (event.key === "Tab") {
+          closeCombo(combo);
+        }
+      }
+
+      function buildMixCss(color1, color2) {
+        return `color-mix(in ${mixSpace()}, ${colorToken(color2)} ${formatPercent(state.alpha)}, ${colorToken(color1)})`;
+      }
+
+      function buildOverlayResolverCss(color1, color2) {
+        return `color-mix(in srgb, ${colorToken(color2)} ${formatPercent(state.alpha)}, ${colorToken(color1)})`;
+      }
+
+      function buildCssOutput(color1, color2) {
+        if (state.mode === "mix") {
+          return `.blend {\n  background: ${buildMixCss(color1, color2)};\n}`;
+        }
+
+        return `.blend {\n  position: relative;\n  overflow: hidden;\n  background: ${colorToken(color1)};\n}\n\n.blend::after {\n  content: "";\n  position: absolute;\n  inset: 0;\n  background: ${colorToken(color2)};\n  opacity: ${formatAlpha(state.alpha)};\n}`;
+      }
+
+      function readComputedColor(cssColor) {
+        if (window.CSS && !CSS.supports("background-color", cssColor)) {
+          return "Unsupported by this browser";
+        }
+        elements.resolverProbe.style.backgroundColor = "transparent";
+        elements.resolverProbe.style.backgroundColor = cssColor;
+        return window.getComputedStyle(elements.resolverProbe).backgroundColor || "Unavailable";
+      }
+
+      function resolveComputedColor(cssColor) {
+        const browserColor = readComputedColor(cssColor);
+        if (browserColor === "Unsupported by this browser" || browserColor === "Unavailable") {
+          return browserColor;
+        }
+
+        const parsed = parseSerializedColor(browserColor);
+        return parsed ? serializeComputedColor(parsed) : browserColor;
+      }
+
+      function updateSegments() {
+        formatButtons.forEach((button) => {
+          const active = button.dataset.format === state.format;
+          button.classList.toggle("is-active", active);
+          button.setAttribute("aria-pressed", active ? "true" : "false");
+        });
+
+        modeButtons.forEach((button) => {
+          const active = button.dataset.mode === state.mode;
+          button.classList.toggle("is-active", active);
+          button.setAttribute("aria-pressed", active ? "true" : "false");
+        });
+
+        elements.mixSpaceHint.textContent = state.format === "OKLCH" ? "OKLCH mix space" : "sRGB mix space";
+      }
+
+      function updateAlphaControls() {
+        elements.alphaRange.value = String(state.alpha);
+        elements.alphaNumber.value = state.alpha.toFixed(2);
+        elements.alphaPercent.textContent = formatPercent(state.alpha);
+      }
+
+      function updateColorDetails(color1, color2) {
+        elements.color1Input.value = color1.key;
+        elements.color2Input.value = color2.key;
+        elements.color1Dot.style.backgroundColor = color1.hex;
+        elements.color2Dot.style.backgroundColor = color2.hex;
+        elements.color1Swatch.style.backgroundColor = color1.hex;
+        elements.color2Swatch.style.backgroundColor = color2.hex;
+        elements.color1Name.textContent = color1.key;
+        elements.color2Name.textContent = color2.key;
+        elements.color1Hex.textContent = color1.hex;
+        elements.color2Hex.textContent = color2.hex;
+        elements.color1Oklch.textContent = formatOklch(color1);
+        elements.color2Oklch.textContent = formatOklch(color2);
+      }
+
+      function updateBlend(color1, color2) {
+        const mixCss = buildMixCss(color1, color2);
+        const overlayResolverCss = buildOverlayResolverCss(color1, color2);
+        const color1Token = colorToken(color1);
+        const color2Token = colorToken(color2);
+
+        if (state.mode === "mix") {
+          elements.blendBase.style.background = mixCss;
+          elements.blendOverlay.style.background = "transparent";
+          elements.blendOverlay.style.opacity = "0";
+          elements.modeBadge.textContent = "color-mix()";
+          elements.spaceBadge.textContent = mixSpace();
+          elements.computedHint.textContent = "Resolved by the browser, then shown in the selected input format.";
+          elements.computedOutput.textContent = resolveComputedColor(mixCss);
+        } else {
+          elements.blendBase.style.background = color1Token;
+          elements.blendOverlay.style.background = color2Token;
+          elements.blendOverlay.style.opacity = String(state.alpha);
+          elements.modeBadge.textContent = "opacity overlay";
+          elements.spaceBadge.textContent = "normal compositing";
+          elements.computedHint.textContent = "Resolved by the browser, then shown in the selected input format.";
+          elements.computedOutput.textContent = resolveComputedColor(overlayResolverCss);
+        }
+
+        elements.blendSummary.textContent =
+          state.mode === "mix"
+            ? `${color2.key} mixed into ${color1.key} at ${formatPercent(state.alpha)} in ${mixSpace()}.`
+            : `${color2.key} overlays ${color1.key} at ${formatAlpha(state.alpha)} opacity.`;
+      }
+
+      function updateAll() {
+        if (colors.length === 0) {
+          return;
+        }
+
+        const color1 = colorMap.get(state.color1) ?? colors[0];
+        const color2 = colorMap.get(state.color2) ?? colors[1] ?? colors[0];
+        state.color1 = color1.key;
+        state.color2 = color2.key;
+
+        updateSegments();
+        updateAlphaControls();
+        updateColorDetails(color1, color2);
+        updateBlend(color1, color2);
+        elements.cssOutput.textContent = buildCssOutput(color1, color2);
+      }
+
+      function setAlpha(value) {
+        state.alpha = clampAlpha(value);
+        updateAll();
+      }
+
+      function setCopyStatus(element, message) {
+        element.textContent = message;
+        const previousTimer = copyStatusTimers.get(element);
+        if (previousTimer) {
+          window.clearTimeout(previousTimer);
+        }
+        const nextTimer = window.setTimeout(() => {
+          element.textContent = "";
+          copyStatusTimers.delete(element);
+        }, 2200);
+        copyStatusTimers.set(element, nextTimer);
+      }
+
+      async function copyText(text, statusElement, successMessage) {
+        if (!text || text === "Loading...") {
+          return;
+        }
+
+        try {
+          if (!navigator.clipboard?.writeText) {
+            throw new Error("Clipboard API unavailable");
+          }
+          await navigator.clipboard.writeText(text);
+          setCopyStatus(statusElement, successMessage);
+        } catch (_error) {
+          const textArea = document.createElement("textarea");
+          textArea.value = text;
+          textArea.setAttribute("readonly", "");
+          textArea.style.position = "fixed";
+          textArea.style.left = "-9999px";
+          document.body.append(textArea);
+          textArea.select();
+          const copied = document.execCommand("copy");
+          textArea.remove();
+          setCopyStatus(statusElement, copied ? successMessage : "Copy failed. Select the text manually.");
+        }
+      }
+
+      async function copyCss() {
+        await copyText(elements.cssOutput.textContent, elements.cssCopyStatus, "Copied CSS to clipboard.");
+      }
+
+      async function copyComputedValue() {
+        await copyText(elements.computedOutput.textContent, elements.computedCopyStatus, "Copied computed value.");
+      }
+
+      function setupTransientScrollbar(element) {
+        let hideTimer = 0;
+        element.addEventListener(
+          "scroll",
+          () => {
+            element.classList.add("is-scrolling");
+            window.clearTimeout(hideTimer);
+            hideTimer = window.setTimeout(() => {
+              element.classList.remove("is-scrolling");
+            }, 650);
+          },
+          { passive: true }
+        );
+      }
+
+      function attachEvents() {
+        elements.alphaRange.addEventListener("input", (event) => setAlpha(event.target.value));
+        elements.alphaNumber.addEventListener("input", (event) => {
+          if (event.target.value !== "") {
+            setAlpha(event.target.value);
+          }
+        });
+        elements.alphaNumber.addEventListener("blur", () => updateAlphaControls());
+
+        formatButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            state.format = button.dataset.format;
+            updateAll();
+          });
+        });
+
+        modeButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            state.mode = button.dataset.mode;
+            updateAll();
+          });
+        });
+
+        elements.copyButton.addEventListener("click", copyCss);
+        elements.copyComputedButton.addEventListener("click", copyComputedValue);
+        setupTransientScrollbar(elements.cssScroller);
+
+        document.addEventListener("pointerdown", (event) => {
+          Object.values(combos).forEach((combo) => {
+            if (!combo.root.contains(event.target)) {
+              closeCombo(combo);
+            }
+          });
+        });
+      }
+
+      async function init() {
+        setControlsDisabled(true);
+        attachEvents();
+
+        try {
+          const [oklch, hex, rgb] = await Promise.all([
+            fetchPalette(COLOR_URLS.oklch),
+            fetchPalette(COLOR_URLS.hex),
+            fetchPalette(COLOR_URLS.rgb),
+          ]);
+
+          colors = buildColors({ oklch, hex, rgb });
+          if (colors.length === 0) {
+            throw new Error("No colors were returned by the palette API.");
+          }
+
+          colorMap = new Map(colors.map((color) => [color.key, color]));
+          setupCombo("color1");
+          setupCombo("color2");
+          setControlsDisabled(false);
+          updateAll();
+          setStatus(`Loaded ${colors.length} Tailwind v4 colors.`);
+        } catch (error) {
+          setControlsDisabled(true);
+          elements.cssOutput.textContent = "Palette loading failed.";
+          elements.computedOutput.textContent = "Palette loading failed.";
+          setStatus(`Could not load palettes: ${error.message}`, "error");
+        }
+      }
+
+      init();
+    </script>
+  </body>
+</html>
