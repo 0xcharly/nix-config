@@ -18,11 +18,11 @@
           settings = {
             "codeberg.org" = {
               User = "git";
-              IdentityFile = mkIdentityFile "github";
+              IdentityFile = mkIdentityFile "0xcharly";
             };
             "github.com" = {
               User = "git";
-              IdentityFile = mkIdentityFile "github";
+              IdentityFile = mkIdentityFile "0xcharly";
             };
             "*" = {
               UserKnownHostsFile = lib.concatStringsSep " " [
