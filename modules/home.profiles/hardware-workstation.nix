@@ -18,6 +18,7 @@
     programs-cachix
     programs-core-display
     programs-core-headless
+    programs-cursor
     programs-file-managers
     programs-fish
     programs-keychain
