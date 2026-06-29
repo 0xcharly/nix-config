@@ -98,8 +98,8 @@
           hyprland.monitors = [
             {
               output = "HDMI-A-1";
-              mode = "3840x2160@60";
-              scale = 1.5;
+              mode = "2560x1440@60";
+              scale = 1;
               transform = 3;
             }
           ];
