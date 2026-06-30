@@ -22,8 +22,8 @@
     programs-file-managers
     programs-fish
     programs-keychain
+    programs-llm-agents
     programs-nvim
-    programs-opencode
     programs-password-managers
     programs-ssh
     programs-terminals

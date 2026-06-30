@@ -21,6 +21,12 @@
     disko.url = "github:nix-community/disko"; # Filesystem management
     golink.url = "github:tailscale/golink"; # go/link service
 
+    # Nix packages for AI coding agents and development tools
+    llm-agents.url = "github:numtide/llm-agents.nix";
+    # Antigravity tool suite
+    antigravity-nix.url = "github:jacopone/antigravity-nix";
+
+
     # Nix index database, comma, command-not-found.
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
@@ -38,12 +44,6 @@
       };
     };
 
-    # Antigravity tool suite
-    antigravity-nix = {
-      url = "github:jacopone/antigravity-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # Secrets management
     nix-config-secrets.url = "github:0xcharly/nix-config-secrets";
 
@@ -52,9 +52,13 @@
   };
 
   nixConfig = {
-    extra-substituters = [ "https://0xcharly-nixos-config.cachix.org" ];
+    extra-substituters = [
+      "https://0xcharly-nixos-config.cachix.org"
+      "https://cache.numtide.com"
+    ];
     extra-trusted-public-keys = [
       "0xcharly-nixos-config.cachix.org-1:qnguqEXJ4bEmJ8ceXbgB2R0rQbFqfWgxI+F7j4Bi6oU="
+      "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
     ];
   };
 }
