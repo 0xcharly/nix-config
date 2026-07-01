@@ -18,7 +18,7 @@ Shape {
     ControlCenter.Drawer {
         wrapper: root.panels.controlCenter
 
-        startX: root.width
+        startX: 0
         startY: root.height
     }
 

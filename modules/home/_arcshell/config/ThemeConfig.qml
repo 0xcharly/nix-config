@@ -59,10 +59,10 @@ JsonObject {
         property int hideDelay: 2000
         property int shape: Config.tokens.system.shapes.cornerMedium
         property PaddingValues padding: PaddingValues {
-            bottom: Config.tokens.system.measurements.extraSmall
-            left: Config.tokens.system.measurements.medium
-            right: Config.tokens.system.measurements.small
-            top: Config.tokens.system.measurements.medium
+            bottom: Config.tokens.system.measurements.medium
+            left: Config.tokens.system.measurements.large
+            right: Config.tokens.system.measurements.large
+            top: Config.tokens.system.measurements.large
         }
         property int spacedBy: Config.tokens.system.measurements.medium
 

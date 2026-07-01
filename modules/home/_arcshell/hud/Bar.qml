@@ -10,6 +10,8 @@ Item {
 
     required property ShellScreen screen
 
+    readonly property Item topWidgets: topWidgets
+    readonly property Item bottomWidgets: bottomWidgets
     readonly property int exclusiveZone: implicitWidth
 
     anchors.left: parent.left
@@ -23,12 +25,14 @@ Item {
         anchors.fill: parent
 
         BarTop {
+            id: topWidgets
             screen: root.screen
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
             Layout.topMargin: Config.theme.hud.border.width
         }
         BarBottom {
+            id: bottomWidgets
             screen: root.screen
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom

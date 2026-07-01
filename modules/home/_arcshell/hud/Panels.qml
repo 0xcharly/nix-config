@@ -23,7 +23,7 @@ Item {
         screen: root.screen
 
         anchors.bottom: parent.bottom
-        anchors.right: parent.right
+        anchors.left: parent.left
     }
 
     Osd.Wrapper {
