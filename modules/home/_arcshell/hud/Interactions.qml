@@ -35,11 +35,25 @@ MouseArea {
     }
 
     function inBottomLeftHotCorner(panel: Item, x: real, y: real): bool {
-      return y >= root.bar.height - root.bar.bottomWidgets.height && x <= root.bar.width
+      return y >= root.bar.height - root.bar.bottomWidgets.height && x <= root.bar.width;
     }
 
     function showControlCenterPanel(panel: Item, x: real, y: real): bool {
-      return inBottomLeftHotCorner(panel, x, y) || inControlCenterPanel(panel, x, y)
+      return inBottomLeftHotCorner(panel, x, y) || inControlCenterPanel(panel, x, y);
+    }
+
+    // Dynamic island
+    function withinDynamicIslandPanelWidth(panel: Item, x: real, y: real): bool {
+      const panelX = root.bar.width + panel.x;
+      return x >= panelX - Config.theme.hud.dynamicisland.shape && x <= panelX + panel.width + Config.theme.hud.dynamicisland.shape;
+    }
+
+    function inDynamicIslandPanel(panel: Item, x: real, y: real): bool {
+      return y <= panel.height && withinDynamicIslandPanelWidth(panel, x, y);
+    }
+
+    function showDynamicIslandPanel(panel: Item, x: real, y: real): bool {
+      return inDynamicIslandPanel(panel, x, y);
     }
 
     anchors.fill: parent
@@ -52,6 +66,9 @@ MouseArea {
 
             UiState.showOsd = false;
             root.panels.osd.hovered = false;
+
+            UiState.showDynamicIsland = false;
+            root.panels.dynamicisland.hovered = false;
         }
     }
 
@@ -61,5 +78,6 @@ MouseArea {
 
         UiState.showControlCenter = root.panels.controlCenter.hovered = showControlCenterPanel(panels.controlCenter, x, y);
         UiState.showOsd = root.panels.osd.hovered = showOsdPanel(panels.osd, x, y);
+        UiState.showDynamicIsland = root.panels.dynamicisland.hovered = showDynamicIslandPanel(panels.dynamicisland, x, y);
     }
 }

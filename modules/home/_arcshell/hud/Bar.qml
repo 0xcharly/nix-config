@@ -10,8 +10,8 @@ Item {
 
     required property ShellScreen screen
 
-    readonly property Item topWidgets: topWidgets
-    readonly property Item bottomWidgets: bottomWidgets
+    readonly property alias topWidgets: topWidgets
+    readonly property alias bottomWidgets: bottomWidgets
     readonly property int exclusiveZone: implicitWidth
 
     anchors.left: parent.left

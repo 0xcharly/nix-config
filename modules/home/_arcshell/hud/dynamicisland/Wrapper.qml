@@ -11,12 +11,23 @@ Item {
 
     required property ShellScreen screen
     property bool hovered
-    readonly property Brightness.Monitor monitor: Brightness.getMonitorForScreen(root.screen)
-    readonly property bool shouldBeActive: UiState.showControlCenter
+    readonly property bool shouldBeActive: UiState.showDynamicIsland
+
+    property real volume
+    property bool muted
+    property real sourceVolume
+    property bool sourceMuted
 
     function show(): void {
-        UiState.showControlCenter = true;
+        UiState.showDynamicIsland = true;
         timer.restart();
+    }
+
+    Component.onCompleted: {
+        volume = Audio.volume;
+        muted = Audio.muted;
+        sourceVolume = Audio.sourceVolume;
+        sourceMuted = Audio.sourceMuted;
     }
 
     visible: height > 0
@@ -56,20 +67,36 @@ Item {
     ]
 
     Connections {
-        target: root.monitor
+        target: Audio
 
-        function onBrightnessChanged(): void {
+        function onMutedChanged(): void {
             root.show();
+            root.muted = Audio.muted;
+        }
+
+        function onVolumeChanged(): void {
+            root.show();
+            root.volume = Audio.volume;
+        }
+
+        function onSourceMutedChanged(): void {
+            root.show();
+            root.sourceMuted = Audio.sourceMuted;
+        }
+
+        function onSourceVolumeChanged(): void {
+            root.show();
+            root.sourceVolume = Audio.sourceVolume;
         }
     }
 
     Timer {
         id: timer
 
-        interval: Config.theme.hud.controlCenter.hideDelay
+        interval: Config.theme.hud.dynamicisland.hideDelay
         onTriggered: {
             if (!root.hovered) {
-                UiState.showControlCenter = false;
+                UiState.showDynamicIsland = false;
             }
         }
     }
@@ -77,14 +104,17 @@ Item {
     Loader {
         id: content
 
-        anchors.left: parent.left
-        anchors.top: parent.top
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
 
         Component.onCompleted: active = Qt.binding(() => root.shouldBeActive || root.visible)
 
         sourceComponent: Content {
-            screen: root.screen
             implicitWidth: 512
+            volume: root.volume
+            muted: root.muted
+            sourceVolume: root.sourceVolume
+            sourceMuted: root.sourceMuted
         }
     }
 }

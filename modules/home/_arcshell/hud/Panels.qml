@@ -1,5 +1,6 @@
 import qs.config
 import qs.hud.controlcenter as ControlCenter
+import qs.hud.dynamicisland as DynamicIsland
 import qs.hud.osd as Osd
 import Quickshell
 import QtQuick
@@ -12,6 +13,7 @@ Item {
 
     readonly property alias osd: osd
     readonly property alias controlCenter: controlCenter
+    readonly property alias dynamicisland: dynamicisland
 
     anchors.fill: parent
     anchors.margins: Config.theme.hud.border.width
@@ -29,10 +31,18 @@ Item {
     Osd.Wrapper {
         id: osd
 
-        clip: false
         screen: root.screen
 
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
+    }
+
+    DynamicIsland.Wrapper {
+        id: dynamicisland
+
+        screen: root.screen
+
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
     }
 }

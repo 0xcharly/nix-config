@@ -1,4 +1,3 @@
-import qs.config
 import QtQuick
 
 NumberAnimation {

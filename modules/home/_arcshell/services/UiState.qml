@@ -6,6 +6,7 @@ import Quickshell
 Singleton {
     property bool showOsd: false
     property bool showControlCenter: false
+    property bool showDynamicIsland: false
 
     property var screens: new Map()
 
