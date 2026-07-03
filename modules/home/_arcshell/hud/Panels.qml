@@ -1,4 +1,5 @@
 import qs.config
+import qs.components.launcher as Launcher
 import qs.hud.controlcenter as ControlCenter
 import qs.hud.dynamicisland as DynamicIsland
 import qs.hud.notificationcenter as NotificationCenter
@@ -55,5 +56,16 @@ Item {
 
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
+    }
+
+    Launcher.Wrapper {
+        id: launcher
+
+        screen: root.screen
+
+        anchors.centerIn: parent
+        // Keep the top border where the list-less panel would have it, so
+        // candidate-list resizes only move the bottom border.
+        anchors.verticalCenterOffset: (launcher.height - launcher.restHeight) / 2
     }
 }

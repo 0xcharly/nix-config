@@ -28,7 +28,7 @@ Variants {
             name: "hud"
             screen: screen.modelData
             WlrLayershell.exclusionMode: ExclusionMode.Ignore
-            WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
+            WlrLayershell.keyboardFocus: UiState.showLauncher ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
 
             mask: Region {
                 x: bar.implicitWidth

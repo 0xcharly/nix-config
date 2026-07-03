@@ -23,6 +23,7 @@
             enable = true;
             systemd.enable = true;
             settings.theme.hud.bar.power.enable = cfg.modules.power;
+            settings.services.launcher.launchPrefix = [ config.node.wayland.uwsm-wrapper.prefix ];
           };
         };
     };
