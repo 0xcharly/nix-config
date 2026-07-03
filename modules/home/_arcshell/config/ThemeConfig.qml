@@ -20,8 +20,9 @@ JsonObject {
         }
         property Bar bar: Bar {}
         property ControlCenter controlCenter: ControlCenter {}
-        property DynamicIsland dynamicisland: DynamicIsland {}
+        property DynamicIsland dynamicIsland: DynamicIsland {}
         property Osd osd: Osd {}
+        property NotificationCenter notificationCenter: NotificationCenter {}
         property color scrim: Qt.alpha(border.color, 0.2)
         property BorderStrokeValues innerBorder: BorderStrokeValues {
             property color color: Config.tokens.system.colors.inner_border
@@ -83,6 +84,18 @@ JsonObject {
         property int spacedBy: Config.tokens.system.measurements.medium
     }
 
+    component NotificationCenter: JsonObject {
+        property int hideDelay: 2000
+        property int shape: Config.tokens.system.shapes.cornerMedium
+        property PaddingValues padding: PaddingValues {
+            bottom: Config.tokens.system.measurements.large
+            left: Config.tokens.system.measurements.large
+            right: Config.tokens.system.measurements.large
+            top: Config.tokens.system.measurements.medium
+        }
+        property int spacedBy: Config.tokens.system.measurements.medium
+    }
+
     component IdleInhibitor: JsonObject {
         property int verticalSpacing: Config.tokens.system.measurements.medium
         property PaddingValues padding: PaddingValues {
@@ -124,6 +137,7 @@ JsonObject {
 
     component ComponentDefaults: JsonObject {
         property ComponentTokens.QuickToggle quickToggles: ComponentTokens.QuickToggle {}
+        property ComponentTokens.Notification notifications: ComponentTokens.Notification {}
         property ComponentTokens.Switch switches: ComponentTokens.Switch {}
         property SurfaceTokens cards: SurfaceTokens {
             colors: SurfaceColorValues {

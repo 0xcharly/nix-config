@@ -26,7 +26,7 @@ ArcRectangle {
         ArcText {
             id: title
 
-            horizontalAlignment: Text.AlignRight
+            horizontalAlignment: Text.AlignLeft
 
             tabularFigures: true
             color: root.theme.colors.content
@@ -37,7 +37,7 @@ ArcRectangle {
         ArcText {
             id: body
 
-            horizontalAlignment: Text.AlignRight
+            horizontalAlignment: Text.AlignLeft
 
             tabularFigures: true
             color: root.theme.bodyContentColor

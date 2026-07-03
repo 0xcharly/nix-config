@@ -1,6 +1,7 @@
 import qs.config
 import qs.hud.controlcenter as ControlCenter
 import qs.hud.dynamicisland as DynamicIsland
+import qs.hud.notificationcenter as NotificationCenter
 import qs.hud.osd as Osd
 import Quickshell
 import QtQuick
@@ -11,9 +12,10 @@ Item {
     required property ShellScreen screen
     required property Item bar
 
-    readonly property alias osd: osd
     readonly property alias controlCenter: controlCenter
-    readonly property alias dynamicisland: dynamicisland
+    readonly property alias dynamicIsland: dynamicIsland
+    readonly property alias osd: osd
+    readonly property alias notificationCenter: notificationCenter
 
     anchors.fill: parent
     anchors.margins: Config.theme.hud.border.width
@@ -28,6 +30,24 @@ Item {
         anchors.left: parent.left
     }
 
+    DynamicIsland.Wrapper {
+        id: dynamicIsland
+
+        screen: root.screen
+
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+    }
+
+    NotificationCenter.Wrapper {
+        id: notificationCenter
+
+        screen: root.screen
+
+        anchors.top: parent.top
+        anchors.right: parent.right
+    }
+
     Osd.Wrapper {
         id: osd
 
@@ -35,14 +55,5 @@ Item {
 
         anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
-    }
-
-    DynamicIsland.Wrapper {
-        id: dynamicisland
-
-        screen: root.screen
-
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: parent.top
     }
 }
