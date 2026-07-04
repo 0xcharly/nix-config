@@ -45,7 +45,7 @@ MouseArea {
     // NotificationCenter
     function withinNotificationCenterPanelWidth(panel: Item, x: real, y: real): bool {
       const panelX = root.bar.width + panel.x;
-      return x >= panelX - Config.theme.hud.notificationCenter.shape && x <= panelX + panel.width + Config.theme.hud.notificationCenter.shape;
+      return x >= panelX - Config.theme.hud.notificationCenter.line.overshoot && x <= panelX + panel.width + Config.theme.hud.notificationCenter.line.overshoot;
     }
 
     function inNotificationCenterPanel(panel: Item, x: real, y: real): bool {

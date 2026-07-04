@@ -1,7 +1,5 @@
 import qs.config
-import qs.hud.controlcenter as ControlCenter
 import qs.hud.dynamicisland as DynamicIsland
-import qs.hud.notificationcenter as NotificationCenter
 import QtQuick
 import QtQuick.Shapes
 
@@ -16,24 +14,10 @@ Shape {
     anchors.leftMargin: bar.implicitWidth
     preferredRendererType: Shape.CurveRenderer
 
-    ControlCenter.Drawer {
-        wrapper: root.panels.controlCenter
-
-        startX: 0
-        startY: root.height
-    }
-
     DynamicIsland.Drawer {
         wrapper: root.panels.dynamicIsland
 
         startX: (root.width - wrapper.width) / 2 - rounding
-        startY: 0
-    }
-
-    NotificationCenter.Drawer {
-        wrapper: root.panels.notificationCenter
-
-        startX: root.width - wrapper.width - rounding
         startY: 0
     }
 }

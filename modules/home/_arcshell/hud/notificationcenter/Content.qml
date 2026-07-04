@@ -8,7 +8,7 @@ import Quickshell
 import QtQuick
 import QtQuick.Layouts
 
-Item {
+Rectangle {
     id: root
 
     required property ShellScreen screen
@@ -20,6 +20,12 @@ Item {
 
     implicitWidth: layout.implicitWidth + root.theme.padding.left + root.theme.padding.right - Config.theme.hud.border.width
     implicitHeight: layout.implicitHeight + root.theme.padding.top + root.theme.padding.bottom
+
+    color: Config.theme.hud.border.color
+
+    Behavior on color {
+        AnimatedColor {}
+    }
 
     ColumnLayout {
         id: layout

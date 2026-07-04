@@ -45,7 +45,11 @@ JsonObject {
 
     component ControlCenter: JsonObject {
         property int hideDelay: 2000
-        property int shape: Config.tokens.system.shapes.cornerMedium
+        property BorderLineValues line: BorderLineValues {}
+        property AnimationValues animation: AnimationValues {
+            curveIn: Config.tokens.system.animations.curves.emphasizedIn
+            curveOut: Config.tokens.system.animations.curves.emphasizedOut
+        }
         property ComponentTokens.Slider slider: ComponentTokens.Slider {}
         property PaddingValues padding: PaddingValues {
             bottom: Config.tokens.system.measurements.medium
@@ -76,7 +80,11 @@ JsonObject {
         // Most-recent notifications shown in the tray; the rest collapse
         // into an "x others" row.
         property int maxVisible: 3
-        property int shape: Config.tokens.system.shapes.cornerMedium
+        property BorderLineValues line: BorderLineValues {}
+        property AnimationValues animation: AnimationValues {
+            curveIn: Config.tokens.system.animations.curves.emphasizedIn
+            curveOut: Config.tokens.system.animations.curves.emphasizedOut
+        }
         property PaddingValues padding: PaddingValues {
             bottom: Config.tokens.system.measurements.large
             left: Config.tokens.system.measurements.large

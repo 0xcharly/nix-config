@@ -7,11 +7,7 @@ JsonObject {
     // Dimensions
     property int width: 512
     property int maxHeight: 360
-    property int lineWidth: 2
-    // Distance each border line extends past the panel corner, per line end.
-    property int lineOvershoot: 16
-    // Length of the fade-to-transparent gradient at each line end.
-    property int lineFade: 16
+    property BorderLineValues line: BorderLineValues {}
     property int spacedBy: Config.tokens.system.measurements.small
     property PaddingValues padding: PaddingValues {
         bottom: Config.tokens.system.measurements.medium
@@ -21,7 +17,6 @@ JsonObject {
     }
 
     // Colors
-    property color lineColor: Config.tokens.system.colors.on_surface
     property SurfaceColorValues colors: SurfaceColorValues {
         surface: Config.tokens.system.colors.surface
         content: Config.tokens.system.colors.on_surface

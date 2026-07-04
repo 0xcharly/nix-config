@@ -51,7 +51,7 @@ Item {
     implicitWidth: theme.width * widthProgress
     // Floored at the border thickness so the wrapper never collapses to
     // a zero-size item while the phase-1 line sweep is on screen.
-    implicitHeight: Math.max(theme.lineWidth, borderSpan)
+    implicitHeight: Math.max(theme.line.width, borderSpan)
 
     states: State {
         name: "visible"
@@ -105,62 +105,35 @@ Item {
         }
     }
 
-    // Border line that grows lengthwise and fades out at both ends.
-    component BorderLine: Rectangle {
-        id: line
-
-        required property bool horizontal
-        readonly property real length: (horizontal ? root.widthProgress : root.heightProgress) * ((horizontal ? root.theme.width : root.contentHeight) + 2 * root.theme.lineOvershoot)
-        // Fade fraction of the current length, clamped so both fades never overlap.
-        readonly property real fade: Math.min(0.5, root.theme.lineFade / Math.max(length, 1))
-
-        width: horizontal ? length : root.theme.lineWidth
-        height: horizontal ? root.theme.lineWidth : length
-
-        gradient: Gradient {
-            orientation: line.horizontal ? Gradient.Horizontal : Gradient.Vertical
-
-            GradientStop {
-                position: 0
-                color: Qt.alpha(root.theme.lineColor, 0)
-            }
-            GradientStop {
-                position: line.fade
-                color: root.theme.lineColor
-            }
-            GradientStop {
-                position: 1 - line.fade
-                color: root.theme.lineColor
-            }
-            GradientStop {
-                position: 1
-                color: Qt.alpha(root.theme.lineColor, 0)
-            }
-        }
+    component Line: BorderLine {
+        thickness: root.theme.line.width
+        lineColor: root.theme.line.color
+        fadeLength: root.theme.line.fade
+        length: (horizontal ? root.widthProgress : root.heightProgress) * ((horizontal ? root.theme.width : root.contentHeight) + 2 * root.theme.line.overshoot)
     }
 
-    BorderLine {
+    Line {
         // Top
         horizontal: true
         x: (root.width - width) / 2
-        y: (root.height - root.borderSpan) / 2 - root.theme.lineWidth / 2
+        y: (root.height - root.borderSpan) / 2 - root.theme.line.width / 2
     }
-    BorderLine {
+    Line {
         // Bottom
         horizontal: true
         x: (root.width - width) / 2
-        y: (root.height + root.borderSpan) / 2 - root.theme.lineWidth / 2
+        y: (root.height + root.borderSpan) / 2 - root.theme.line.width / 2
     }
-    BorderLine {
+    Line {
         // Left
         horizontal: false
-        x: -root.theme.lineWidth / 2
+        x: -root.theme.line.width / 2
         y: (root.height - height) / 2
     }
-    BorderLine {
+    Line {
         // Right
         horizontal: false
-        x: root.width - root.theme.lineWidth / 2
+        x: root.width - root.theme.line.width / 2
         y: (root.height - height) / 2
     }
 }

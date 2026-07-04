@@ -31,7 +31,7 @@ One `ArcWindow` (a `PanelWindow` with `WlrLayershell.namespace:
 Quickshell.screens }`. Inside it:
 
 - `Interactions` wraps `Panels` (the animated panel wrappers) and `Bar`.
-- `Drawers` draws each panel's chrome as `ShapePath`s in a single `Shape`.
+- `Drawers` draws the dynamic island's chrome as a `ShapePath` in a `Shape`.
 - `HudBorder` + a `Region` mask: the window covers the whole screen but only
   the bar/border/panel rects receive input; panel rects are subtracted
   dynamically from `panels.children`.
@@ -45,7 +45,7 @@ Quickshell.screens }`. Inside it:
 ### Panel pattern
 
 Every panel (controlcenter, dynamicisland, notificationcenter, launcher)
-is three files:
+is a Wrapper + Content pair:
 
 - **Wrapper.qml** — the state machine. Root `Item` sized by animated
   properties, `states: State { name: "visible"; when: <UiState or service
@@ -56,8 +56,18 @@ is three files:
 - **Content.qml** — the actual UI, loaded lazily. The launcher uses `Loader {
   Component.onCompleted: active = Qt.binding(() => root.shouldBeActive ||
   root.visible) }` so content exists while animating closed and unloads after.
-- **Drawer.qml** — a `ShapePath` (registered in `hud/Drawers.qml`) drawing the
-  panel background/chrome, sized off its `wrapper`.
+
+Chrome: controlcenter, notificationcenter, and launcher draw fading
+`BorderLine` items (`components/BorderLine.qml`, tokens =
+`BorderLineValues`) inside their Wrappers — lines only on the exposed
+edges, whiskers overshooting each corner. The corner panels scale width
+AND height off a single `progress` out of their screen corner
+(controlcenter: bottom-left; notificationcenter: top-right); the
+launcher runs a two-phase CRT sweep (`widthProgress`/`heightProgress`).
+Content paints its own background (`Config.theme.hud.border.color`).
+Only the dynamic island still has a **Drawer.qml** — a `ShapePath`
+registered in `hud/Drawers.qml` drawing rounded chrome sized off its
+`wrapper`.
 
 Panel geometry/anchoring lives in `hud/Panels.qml`.
 
