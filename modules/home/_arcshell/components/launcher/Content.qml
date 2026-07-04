@@ -16,11 +16,15 @@ Rectangle {
     // First character routes the mode: "." unicode/emoji search, "=" qalc
     // calculator, "$" run a shell command in a terminal, "!" run a $PATH
     // binary in a terminal, anything else application search.
-    readonly property bool glyphMode: input.text.startsWith(".")
-    readonly property bool calcMode: input.text.startsWith("=")
-    readonly property bool shellMode: input.text.startsWith("$")
-    readonly property bool binMode: input.text.startsWith("!")
-    readonly property string query: (glyphMode || calcMode || shellMode || binMode ? input.text.slice(1) : input.text).trim()
+    // Trimmed view of the input: routing and querying ignore leading and
+    // trailing whitespace ("   !  blue" is bin mode), while the field
+    // itself accepts and keeps it.
+    readonly property string trimmedText: input.text.trim()
+    readonly property bool glyphMode: trimmedText.startsWith(".")
+    readonly property bool calcMode: trimmedText.startsWith("=")
+    readonly property bool shellMode: trimmedText.startsWith("$")
+    readonly property bool binMode: trimmedText.startsWith("!")
+    readonly property string query: (glyphMode || calcMode || shellMode || binMode ? trimmedText.slice(1) : trimmedText).trim()
     readonly property bool queryEmpty: query.length === 0
 
     // Space left for the results list once the title and input rows are laid
@@ -45,7 +49,7 @@ Rectangle {
     function requery(): void {
         // Read input.text directly: this runs from onTextChanged, which can
         // fire before the mode/query bindings re-evaluate.
-        const text = input.text;
+        const text = input.text.trim();
         const glyph = text.startsWith(".");
         const calc = text.startsWith("=");
         const shell = text.startsWith("$");
@@ -199,10 +203,11 @@ Rectangle {
                 required property var modelData
                 required property int index
 
-                // Leading cell: app icon, the glyph itself, "=" for a
-                // calculator result, "$" for a shell command, or "!" for a
-                // binary.
-                readonly property string symbol: modelData.glyph ?? (modelData.result !== undefined ? "=" : modelData.shellCommand !== undefined ? "$" : modelData.binary !== undefined ? "!" : "")
+                readonly property bool binary: modelData.binary !== undefined
+                // Text cell content: the glyph itself, "=" for a calculator
+                // result, "$" for a shell command. App and binary rows use
+                // the boxed leading cell instead.
+                readonly property string symbol: modelData.glyph ?? (modelData.result !== undefined ? "=" : modelData.shellCommand !== undefined ? "$" : "")
 
                 width: list.width
                 height: root.theme.resultRowHeight
@@ -215,23 +220,47 @@ Rectangle {
                     anchors.rightMargin: root.theme.input.padding.right
                     spacing: root.theme.spacedBy
 
-                    Image {
-                        visible: row.symbol === ""
-                        Layout.preferredWidth: root.theme.resultIconSize
-                        Layout.preferredHeight: root.theme.resultIconSize
-                        sourceSize.width: root.theme.resultIconSize
-                        sourceSize.height: root.theme.resultIconSize
-                        asynchronous: true
-                        source: row.symbol === "" ? Quickshell.iconPath(row.modelData.icon, "application-x-executable") : ""
-                    }
+                    Rectangle {
+                        id: iconBox
 
-                    ArcText {
-                        visible: row.symbol !== ""
-                        Layout.preferredWidth: root.theme.resultIconSize
-                        horizontalAlignment: Text.AlignHCenter
-                        text: row.symbol
-                        style: root.theme.resultTypography
-                        color: root.theme.resultContentColor
+                        // Inner icon fits at 2/3 of the box (user-specified).
+                        readonly property int iconSize: Math.round(root.theme.resultIconBoxSize * 2 / 3)
+
+                        Layout.preferredWidth: root.theme.resultIconBoxSize
+                        Layout.preferredHeight: root.theme.resultIconBoxSize
+                        radius: root.theme.resultIconBoxShape
+                        // Boxed backdrop for app icons and the terminal
+                        // glyph; transparent behind plain text symbols.
+                        color: row.symbol === "" ? root.theme.resultIconBox.surface : "transparent"
+
+                        Image {
+                            visible: !row.binary && row.symbol === ""
+                            anchors.centerIn: parent
+                            width: iconBox.iconSize
+                            height: iconBox.iconSize
+                            sourceSize.width: iconBox.iconSize
+                            sourceSize.height: iconBox.iconSize
+                            asynchronous: true
+                            source: visible ? Quickshell.iconPath(row.modelData.icon, "application-x-executable") : ""
+                        }
+
+                        MaterialIcon {
+                            visible: row.binary
+                            anchors.centerIn: parent
+                            text: "terminal_2"
+                            color: root.theme.resultIconBox.content
+                            // Scale the glyph with the box: QML font resolves
+                            // pixelSize over the pointSize ArcText binds.
+                            font.pixelSize: iconBox.iconSize
+                        }
+
+                        ArcText {
+                            visible: row.symbol !== ""
+                            anchors.centerIn: parent
+                            text: row.symbol
+                            style: root.theme.resultTypography
+                            color: root.theme.resultContentColor
+                        }
                     }
 
                     ArcText {

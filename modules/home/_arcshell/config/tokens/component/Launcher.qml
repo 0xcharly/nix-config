@@ -51,7 +51,6 @@ JsonObject {
 
     // Results list
     property int resultRowHeight: 40
-    property int resultIconSize: 24
     property TypographyValues resultTypography: Config.tokens.system.typography.body
     property color resultContentColor: Config.tokens.system.colors.on_surface
     property SurfaceColorValues resultSelected: SurfaceColorValues {
@@ -59,6 +58,17 @@ JsonObject {
         content: Config.tokens.system.colors.on_surface_accent
     }
     property int resultShape: Config.tokens.system.shapes.cornerSmall
+
+    // Leading result cell: rounded box behind app icons and the bin-mode
+    // terminal glyph, so low-contrast/transparent app icons sit on a
+    // readable backdrop. Same accent pair as the active workspace chip.
+    // The box size is the sizing knob; the inner icon renders at 2/3 of it.
+    property int resultIconBoxSize: 32
+    property int resultIconBoxShape: Config.tokens.system.shapes.cornerSmall
+    property SurfaceColorValues resultIconBox: SurfaceColorValues {
+        surface: Config.tokens.system.colors.surface_accent
+        content: Config.tokens.system.colors.on_surface_accent
+    }
 
     // Animations
     property AnimationValues animation: AnimationValues {
