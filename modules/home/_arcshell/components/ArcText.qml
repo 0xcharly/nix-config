@@ -13,7 +13,7 @@ Text {
     property string animateProp: "scale"
     property real animateFrom: 0
     property real animateTo: 1
-    property int animateDuration: Config.tokens.system.animations.durations.normal
+    property int animateDuration: Config.tokens.system.animations.durations.medium
     property bool tabularFigures: false
 
     renderType: Text.NativeRendering

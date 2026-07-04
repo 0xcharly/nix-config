@@ -49,7 +49,7 @@ Item {
             AnimatedNumber {
                 target: root
                 property: "implicitHeight"
-                easing.bezierCurve: Config.tokens.system.animations.curves.emphasized
+                easing.bezierCurve: Config.tokens.system.animations.curves.emphasizedOut
             }
         }
     ]

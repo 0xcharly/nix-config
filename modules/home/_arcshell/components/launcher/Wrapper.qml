@@ -15,8 +15,19 @@ Item {
 
     property ComponentTokens.Launcher theme: Config.tokens.component.launcher
 
-    // 0 = collapsed, 1 = fully open.
+    // 0 = collapsed, 1 = fully open. CRT power-on: the first `sweepSplit`
+    // of the animation sweeps the horizontal border line out from the
+    // center (widthProgress); the remainder parts the borders vertically
+    // to reveal the content (heightProgress). One master value, so a
+    // mid-animation reversal retraces the same visual path exactly.
     property real progress: 0
+
+    // Clamped so neither phase degenerates if the token is misconfigured.
+    readonly property real sweepSplit: Math.min(0.9, Math.max(0.1, theme.lineSweepFraction))
+    readonly property real widthProgress: Math.min(1, progress / sweepSplit)
+    // Clamped at 1: easing overshoot must not stretch the panel past its
+    // natural size (a CRT does not bounce) — see the token comment.
+    readonly property real heightProgress: Math.min(1, Math.max(0, (progress - sweepSplit) / (1 - sweepSplit)))
 
     // Touching GlyphSearch at startup materializes the singleton, so its
     // data files load, parse, and index before the launcher first opens
@@ -31,9 +42,16 @@ Item {
     // panel's top border while the bottom one moves on list resizes.
     readonly property real restHeight: loader.item?.chromeHeight ?? 0
 
+    // Vertical span between the horizontal borders: zero while the
+    // phase-1 sweep runs (both borders overlap into a single line), the
+    // revealed content height as phase 2 parts them.
+    readonly property real borderSpan: contentHeight * heightProgress
+
     visible: progress > 0
-    implicitWidth: theme.width * progress
-    implicitHeight: contentHeight * progress
+    implicitWidth: theme.width * widthProgress
+    // Floored at the border thickness so the wrapper never collapses to
+    // a zero-size item while the phase-1 line sweep is on screen.
+    implicitHeight: Math.max(theme.lineWidth, borderSpan)
 
     states: State {
         name: "visible"
@@ -92,7 +110,7 @@ Item {
         id: line
 
         required property bool horizontal
-        readonly property real length: root.progress * ((horizontal ? root.theme.width : root.contentHeight) + 2 * root.theme.lineOvershoot)
+        readonly property real length: (horizontal ? root.widthProgress : root.heightProgress) * ((horizontal ? root.theme.width : root.contentHeight) + 2 * root.theme.lineOvershoot)
         // Fade fraction of the current length, clamped so both fades never overlap.
         readonly property real fade: Math.min(0.5, root.theme.lineFade / Math.max(length, 1))
 
@@ -125,13 +143,13 @@ Item {
         // Top
         horizontal: true
         x: (root.width - width) / 2
-        y: -root.theme.lineWidth / 2
+        y: (root.height - root.borderSpan) / 2 - root.theme.lineWidth / 2
     }
     BorderLine {
         // Bottom
         horizontal: true
         x: (root.width - width) / 2
-        y: root.height - root.theme.lineWidth / 2
+        y: (root.height + root.borderSpan) / 2 - root.theme.lineWidth / 2
     }
     BorderLine {
         // Left

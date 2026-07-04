@@ -64,7 +64,7 @@ Item {
             AnimatedNumber {
                 target: root
                 property: "implicitWidth"
-                easing.bezierCurve: Config.tokens.system.animations.curves.emphasized
+                easing.bezierCurve: Config.tokens.system.animations.curves.emphasizedOut
             }
         }
     ]

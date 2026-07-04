@@ -70,10 +70,21 @@ JsonObject {
         content: Config.tokens.system.colors.on_surface_accent
     }
 
-    // Animations
+    // Animations. `duration` spans the whole two-phase open/close. The
+    // wrapper clamps its per-phase progress at 1, so an overshooting
+    // (spatial/spring) curve here reads as dead time at the end of the
+    // open — keep these curves monotonic. Open runs the time-reverse of
+    // the close curve: a slow build that lingers on the phase-1 line
+    // sweep, then a fast finish — the tube warming up before the picture
+    // snaps in.
     property AnimationValues animation: AnimationValues {
-        curveIn: Config.tokens.system.animations.curves.expressiveDefaultSpatial
-        curveOut: Config.tokens.system.animations.curves.emphasized
-        duration: Config.tokens.system.animations.durations.small
+        curveIn: Config.tokens.system.animations.curves.emphasizedIn
+        curveOut: Config.tokens.system.animations.curves.emphasizedOut
+        // Both phases share this span; the default `medium` truncates them.
+        duration: Config.tokens.system.animations.durations.large
     }
+    // Share of the open/close spent sweeping the horizontal border line
+    // out from the center; the rest parts the borders to reveal the
+    // content. Lower = snappier line, longer reveal.
+    property real lineSweepFraction: 0.4
 }

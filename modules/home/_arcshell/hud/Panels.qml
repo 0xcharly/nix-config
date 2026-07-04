@@ -64,8 +64,9 @@ Item {
         screen: root.screen
 
         anchors.centerIn: parent
-        // Keep the top border where the list-less panel would have it, so
-        // candidate-list resizes only move the bottom border.
-        anchors.verticalCenterOffset: (launcher.height - launcher.restHeight) / 2
+        // Pin the top border at its list-less position while open (list
+        // resizes only move the bottom border), but keep the panel centered
+        // while opening/closing so the borders part and join symmetrically.
+        anchors.verticalCenterOffset: (launcher.height - launcher.restHeight * launcher.heightProgress) / 2
     }
 }
