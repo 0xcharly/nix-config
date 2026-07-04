@@ -14,12 +14,13 @@ Rectangle {
     property ComponentTokens.Launcher theme: Config.tokens.component.launcher
     property var results: []
     // First character routes the mode: "." unicode/emoji search, "=" qalc
-    // calculator, "$" run a shell command in a terminal, anything else
-    // application search.
+    // calculator, "$" run a shell command in a terminal, "!" run a $PATH
+    // binary in a terminal, anything else application search.
     readonly property bool glyphMode: input.text.startsWith(".")
     readonly property bool calcMode: input.text.startsWith("=")
     readonly property bool shellMode: input.text.startsWith("$")
-    readonly property string query: (glyphMode || calcMode || shellMode ? input.text.slice(1) : input.text).trim()
+    readonly property bool binMode: input.text.startsWith("!")
+    readonly property string query: (glyphMode || calcMode || shellMode || binMode ? input.text.slice(1) : input.text).trim()
     readonly property bool queryEmpty: query.length === 0
 
     // Space left for the results list once the title and input rows are laid
@@ -48,8 +49,9 @@ Rectangle {
         const glyph = text.startsWith(".");
         const calc = text.startsWith("=");
         const shell = text.startsWith("$");
-        const q = (glyph || calc || shell ? text.slice(1) : text).trim();
-        root.results = glyph ? GlyphSearch.query(q) : calc ? CalcSearch.query(q) : shell ? ShellSearch.query(q) : AppSearch.query(q);
+        const bin = text.startsWith("!");
+        const q = (glyph || calc || shell || bin ? text.slice(1) : text).trim();
+        root.results = glyph ? GlyphSearch.query(q) : calc ? CalcSearch.query(q) : shell ? ShellSearch.query(q) : bin ? BinSearch.query(q) : AppSearch.query(q);
         list.currentIndex = root.results.length > 0 ? 0 : -1;
     }
 
@@ -63,6 +65,8 @@ Rectangle {
             GlyphSearch.copy(item);
         else if (item.shellCommand !== undefined)
             ShellSearch.run(item);
+        else if (item.binary !== undefined)
+            BinSearch.run(item);
         else
             AppSearch.launch(item);
         UiState.showLauncher = false;
@@ -106,6 +110,15 @@ Rectangle {
         target: CalcSearch
 
         function onResultsChanged() {
+            root.requery();
+        }
+    }
+
+    // The PATH scan re-runs on every launcher open and lands asynchronously.
+    Connections {
+        target: BinSearch
+
+        function onEntriesChanged() {
             root.requery();
         }
     }
@@ -187,8 +200,9 @@ Rectangle {
                 required property int index
 
                 // Leading cell: app icon, the glyph itself, "=" for a
-                // calculator result, or "$" for a shell command.
-                readonly property string symbol: modelData.glyph ?? (modelData.result !== undefined ? "=" : modelData.shellCommand !== undefined ? "$" : "")
+                // calculator result, "$" for a shell command, or "!" for a
+                // binary.
+                readonly property string symbol: modelData.glyph ?? (modelData.result !== undefined ? "=" : modelData.shellCommand !== undefined ? "$" : modelData.binary !== undefined ? "!" : "")
 
                 width: list.width
                 height: root.theme.resultRowHeight
