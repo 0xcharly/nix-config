@@ -86,6 +86,9 @@ JsonObject {
 
     component NotificationCenter: JsonObject {
         property int hideDelay: 2000
+        // Most-recent notifications shown in the tray; the rest collapse
+        // into an "x others" row.
+        property int maxVisible: 3
         property int shape: Config.tokens.system.shapes.cornerMedium
         property PaddingValues padding: PaddingValues {
             bottom: Config.tokens.system.measurements.large

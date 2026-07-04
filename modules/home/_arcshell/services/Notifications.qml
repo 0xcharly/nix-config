@@ -5,19 +5,21 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Notifications
-import qs.services.notifications
+import qs.services.notifications as Tracked
 
 Singleton {
     id: root
 
-    property list<Notifications> list: []
-    readonly property list<Notifications> notClosed: list.filter(n => !n.closed)
-    readonly property list<Notifications> popups: list.filter(n => n.popup)
+    // Tracked notifications, newest first.
+    property list<Tracked.Notification> list: []
+    readonly property list<Tracked.Notification> notClosed: list.filter(n => !n.closed)
+    readonly property list<Tracked.Notification> popups: list.filter(n => n.popup)
     property alias doNotDisturb: props.doNotDisturb
 
-    property bool loaded
+    // Emitted after an incoming notification has been prepended to `list`.
+    signal received()
 
-     PersistentProperties {
+    PersistentProperties {
         id: props
 
         property bool doNotDisturb
@@ -48,6 +50,7 @@ Singleton {
                 notification: notif
             });
             root.list = [comp, ...root.list];
+            root.received();
         }
     }
 
@@ -79,6 +82,6 @@ Singleton {
     Component {
         id: notificationsC
 
-        Notification {}
+        Tracked.Notification {}
     }
 }

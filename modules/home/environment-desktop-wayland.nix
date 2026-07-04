@@ -4,7 +4,6 @@
     imports = with self.homeModules; [
       programs-wayland
       programs-wayland-hyprland
-      programs-wayland-notifications
       programs-wayland-quickshell
       programs-wayland-uwsm
     ];
