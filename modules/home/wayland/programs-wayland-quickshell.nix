@@ -26,6 +26,7 @@
             settings.services.launcher.launchPrefix = [ config.node.wayland.uwsm-wrapper.prefix ];
             settings.services.launcher.emojiData = "${pkgs.unicode-emoji}/share/unicode/emoji/emoji-test.txt";
             settings.services.launcher.unicodeData = "${pkgs.unicode-character-database}/share/unicode/UnicodeData.txt";
+            settings.services.launcher.qalcPath = "${pkgs.libqalculate}/bin/qalc";
           };
         };
     };

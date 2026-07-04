@@ -13,9 +13,11 @@ Rectangle {
 
     property ComponentTokens.Launcher theme: Config.tokens.component.launcher
     property var results: []
-    // First character "." switches from app search to unicode/emoji search.
+    // First character routes the mode: "." unicode/emoji search, "=" qalc
+    // calculator, anything else application search.
     readonly property bool glyphMode: input.text.startsWith(".")
-    readonly property string query: (glyphMode ? input.text.slice(1) : input.text).trim()
+    readonly property bool calcMode: input.text.startsWith("=")
+    readonly property string query: (glyphMode || calcMode ? input.text.slice(1) : input.text).trim()
     readonly property bool queryEmpty: query.length === 0
 
     // Space left for the results list once the title and input rows are laid
@@ -39,10 +41,12 @@ Rectangle {
 
     function requery(): void {
         // Read input.text directly: this runs from onTextChanged, which can
-        // fire before the glyphMode/query bindings re-evaluate.
+        // fire before the mode/query bindings re-evaluate.
         const text = input.text;
-        const q = (text.startsWith(".") ? text.slice(1) : text).trim();
-        root.results = text.startsWith(".") ? GlyphSearch.query(q) : AppSearch.query(q);
+        const glyph = text.startsWith(".");
+        const calc = text.startsWith("=");
+        const q = (glyph || calc ? text.slice(1) : text).trim();
+        root.results = glyph ? GlyphSearch.query(q) : calc ? CalcSearch.query(q) : AppSearch.query(q);
         list.currentIndex = root.results.length > 0 ? 0 : -1;
     }
 
@@ -50,7 +54,9 @@ Rectangle {
         if (list.currentIndex < 0)
             return;
         const item = root.results[list.currentIndex];
-        if (item.glyph !== undefined)
+        if (item.result !== undefined)
+            CalcSearch.copy(item);
+        else if (item.glyph !== undefined)
             GlyphSearch.copy(item);
         else
             AppSearch.launch(item);
@@ -86,6 +92,15 @@ Rectangle {
         target: GlyphSearch
 
         function onEntriesChanged() {
+            root.requery();
+        }
+    }
+
+    // qalc results land ~100ms after the keystroke that spawned the run.
+    Connections {
+        target: CalcSearch
+
+        function onResultsChanged() {
             root.requery();
         }
     }
@@ -166,7 +181,9 @@ Rectangle {
                 required property var modelData
                 required property int index
 
-                readonly property bool isGlyph: modelData.glyph !== undefined
+                // Leading cell: app icon, the glyph itself, or "=" for a
+                // calculator result.
+                readonly property string symbol: modelData.glyph ?? (modelData.result !== undefined ? "=" : "")
 
                 width: list.width
                 height: root.theme.resultRowHeight
@@ -180,20 +197,20 @@ Rectangle {
                     spacing: root.theme.spacedBy
 
                     Image {
-                        visible: !row.isGlyph
+                        visible: row.symbol === ""
                         Layout.preferredWidth: root.theme.resultIconSize
                         Layout.preferredHeight: root.theme.resultIconSize
                         sourceSize.width: root.theme.resultIconSize
                         sourceSize.height: root.theme.resultIconSize
                         asynchronous: true
-                        source: row.isGlyph ? "" : Quickshell.iconPath(row.modelData.icon, "application-x-executable")
+                        source: row.symbol === "" ? Quickshell.iconPath(row.modelData.icon, "application-x-executable") : ""
                     }
 
                     ArcText {
-                        visible: row.isGlyph
+                        visible: row.symbol !== ""
                         Layout.preferredWidth: root.theme.resultIconSize
                         horizontalAlignment: Text.AlignHCenter
-                        text: row.isGlyph ? row.modelData.glyph : ""
+                        text: row.symbol
                         style: root.theme.resultTypography
                         color: root.theme.resultContentColor
                     }

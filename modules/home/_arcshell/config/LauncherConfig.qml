@@ -8,4 +8,7 @@ JsonObject {
     // Data files for the "." (glyph) search mode; empty disables the mode.
     property string emojiData: ""
     property string unicodeData: ""
+
+    // qalc binary for the "=" (calculator) mode; empty disables the mode.
+    property string qalcPath: ""
 }
