@@ -14,10 +14,9 @@ Item {
     required property ShellScreen screen
     readonly property ThemeConfig.NotificationCenter theme: Config.theme.hud.notificationCenter
 
-    // The `maxVisible` most recent notifications; the service list is
-    // newest-first.
-    readonly property var visibleNotifications: Notifications.notClosed.slice(0, root.theme.maxVisible)
-    readonly property int overflow: Notifications.notClosed.length - visibleNotifications.length
+    // Rows beyond `maxVisible` collapse into the "x others" line; the
+    // service list is newest-first.
+    readonly property int overflow: Math.max(0, Notifications.notClosed.length - root.theme.maxVisible)
 
     implicitWidth: layout.implicitWidth + root.theme.padding.left + root.theme.padding.right - Config.theme.hud.border.width
     implicitHeight: layout.implicitHeight + root.theme.padding.top + root.theme.padding.bottom
@@ -33,7 +32,11 @@ Item {
         spacing: Config.theme.hud.notificationCenter.spacedBy
 
         Repeater {
-            model: root.visibleNotifications
+            model: ScriptModel {
+                // notClosed is a QQmlListReference (list<> property); ScriptModel
+                // wants a QVariantList, so materialize a plain JS array.
+                values: Array.from(Notifications.notClosed)
+            }
 
             Notification {}
         }
