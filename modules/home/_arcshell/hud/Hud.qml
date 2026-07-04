@@ -8,91 +8,114 @@ import Quickshell.Wayland
 import QtQuick
 import Quickshell.Hyprland
 
-Variants {
-    model: Quickshell.screens
+Scope {
+    // One grab whitelisting every screen's HUD window: Hyprland holds a
+    // single seat grab, so per-screen grabs driven by the same global
+    // showLauncher would replace — and thereby dismiss — each other.
+    HyprlandFocusGrab {
+        active: UiState.showLauncher
+        windows: huds.instances.map(scope => scope.hudWindow)
+        // Compositor-side dismissal only (e.g. click outside the HUD).
+        // Not emitted on programmatic `active = false`, so Escape/Enter
+        // closes never re-enter here. On grab end Hyprland restores
+        // keyboard focus to the previous toplevel.
+        onCleared: UiState.showLauncher = false
+    }
 
-    Scope {
-        id: screen
-        required property ShellScreen modelData
+    Variants {
+        id: huds
 
-        property HyprlandWorkspace workspace: Hypr.monitorFor(modelData).activeWorkspace
+        model: Quickshell.screens
 
-        HudExclusiveZones {
-            screen: screen.modelData
-            bar: bar
-        }
+        Scope {
+            id: screen
 
-        ArcWindow {
-            id: win
+            required property ShellScreen modelData
+            readonly property ArcWindow hudWindow: win
 
-            name: "hud"
-            screen: screen.modelData
-            WlrLayershell.exclusionMode: ExclusionMode.Ignore
-            WlrLayershell.keyboardFocus: UiState.showLauncher ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
+            property HyprlandWorkspace workspace: Hypr.monitorFor(modelData).activeWorkspace
 
-            mask: Region {
-                x: bar.implicitWidth
-                y: Config.theme.hud.border.width + 1
-                width: win.width - bar.implicitWidth - Config.theme.hud.border.width - 1
-                height: win.height - Config.theme.hud.border.width * 2 - 2
-                intersection: Intersection.Xor
-
-                regions: regions.instances
-            }
-
-            anchors.top: true
-            anchors.bottom: true
-            anchors.left: true
-            anchors.right: true
-
-            Variants {
-                id: regions
-
-                model: panels.children
-
-                Region {
-                    required property Item modelData
-
-                    x: modelData.x + bar.implicitWidth
-                    y: modelData.y + Config.theme.hud.border.width
-                    width: modelData.width
-                    height: modelData.height
-                    intersection: Intersection.Subtract
-                }
-            }
-
-            Item {
-                anchors.fill: parent
-                opacity: Config.theme.hud.opacity
-
-                Drawers {
-                    bar: bar
-                    panels: panels
-                }
-
-                HudBorder {
-                    bar: bar
-                }
-            }
-
-            Interactions {
+            HudExclusiveZones {
                 screen: screen.modelData
-                panels: panels
                 bar: bar
+            }
 
-                Panels {
-                    id: panels
+            ArcWindow {
+                id: win
 
-                    screen: screen.modelData
-                    bar: bar
+                name: "hud"
+                screen: screen.modelData
+                WlrLayershell.exclusionMode: ExclusionMode.Ignore
+                // OnDemand, never Exclusive: an exclusive layer registers in
+                // Hyprland's m_exclusiveLSes, which makes its focus-restore
+                // path bail when the launcher closes (keys eaten until the
+                // user clicks). Focus acquisition is done by the grab above.
+                WlrLayershell.keyboardFocus: UiState.showLauncher ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+
+                mask: Region {
+                    x: bar.implicitWidth
+                    y: Config.theme.hud.border.width + 1
+                    width: win.width - bar.implicitWidth - Config.theme.hud.border.width - 1
+                    height: win.height - Config.theme.hud.border.width * 2 - 2
+                    intersection: Intersection.Xor
+
+                    regions: regions.instances
                 }
 
-                Bar {
-                    id: bar
-                    screen: screen.modelData
+                anchors.top: true
+                anchors.bottom: true
+                anchors.left: true
+                anchors.right: true
 
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
+                Variants {
+                    id: regions
+
+                    model: panels.children
+
+                    Region {
+                        required property Item modelData
+
+                        x: modelData.x + bar.implicitWidth
+                        y: modelData.y + Config.theme.hud.border.width
+                        width: modelData.width
+                        height: modelData.height
+                        intersection: Intersection.Subtract
+                    }
+                }
+
+                Item {
+                    anchors.fill: parent
+                    opacity: Config.theme.hud.opacity
+
+                    Drawers {
+                        bar: bar
+                        panels: panels
+                    }
+
+                    HudBorder {
+                        bar: bar
+                    }
+                }
+
+                Interactions {
+                    screen: screen.modelData
+                    panels: panels
+                    bar: bar
+
+                    Panels {
+                        id: panels
+
+                        screen: screen.modelData
+                        bar: bar
+                    }
+
+                    Bar {
+                        id: bar
+                        screen: screen.modelData
+
+                        anchors.top: parent.top
+                        anchors.bottom: parent.bottom
+                    }
                 }
             }
         }
