@@ -18,7 +18,7 @@ services/        pragma Singleton state + hardware/IPC services
 ```
 
 Imports use Quickshell's shell-root-relative modules: `import qs.components`,
-`import qs.hud.osd as Osd`, etc. — the path after `qs.` is the directory.
+`import qs.hud.controlcenter as ControlCenter`, etc. — the path after `qs.` is the directory.
 Adding a file to a directory makes it available to that module; there are no
 qmldir files to maintain.
 
@@ -44,7 +44,7 @@ Quickshell.screens }`. Inside it:
 
 ### Panel pattern
 
-Every panel (controlcenter, dynamicisland, notificationcenter, osd, launcher)
+Every panel (controlcenter, dynamicisland, notificationcenter, launcher)
 is three files:
 
 - **Wrapper.qml** — the state machine. Root `Item` sized by animated

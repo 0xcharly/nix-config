@@ -21,7 +21,6 @@ JsonObject {
         property Bar bar: Bar {}
         property ControlCenter controlCenter: ControlCenter {}
         property DynamicIsland dynamicIsland: DynamicIsland {}
-        property Osd osd: Osd {}
         property NotificationCenter notificationCenter: NotificationCenter {}
         property color scrim: Qt.alpha(border.color, 0.2)
         property BorderStrokeValues innerBorder: BorderStrokeValues {
@@ -47,6 +46,7 @@ JsonObject {
     component ControlCenter: JsonObject {
         property int hideDelay: 2000
         property int shape: Config.tokens.system.shapes.cornerMedium
+        property ComponentTokens.Slider slider: ComponentTokens.Slider {}
         property PaddingValues padding: PaddingValues {
             bottom: Config.tokens.system.measurements.medium
             left: Config.tokens.system.measurements.large
@@ -67,19 +67,6 @@ JsonObject {
             left: Config.tokens.system.measurements.large
             right: Config.tokens.system.measurements.large
             top: Config.tokens.system.measurements.medium
-        }
-        property int spacedBy: Config.tokens.system.measurements.medium
-    }
-
-    component Osd: JsonObject {
-        property int hideDelay: 2000
-        property int shape: Config.tokens.system.shapes.cornerMedium
-        property ComponentTokens.Slider slider: ComponentTokens.Slider {}
-        property PaddingValues padding: PaddingValues {
-            bottom: Config.tokens.system.measurements.large
-            left: Config.tokens.system.measurements.medium
-            right: Config.tokens.system.measurements.medium
-            top: Config.tokens.system.measurements.large
         }
         property int spacedBy: Config.tokens.system.measurements.medium
     }

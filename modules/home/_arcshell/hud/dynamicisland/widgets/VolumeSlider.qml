@@ -40,7 +40,7 @@ Item {
 
                 anchors.left: parent.left
                 anchors.right: parent.right
-                implicitHeight: Config.theme.hud.osd.slider.width
+                implicitHeight: Config.theme.hud.dynamicIsland.slider.width
 
                 value: root.volume
                 labelValue: IconLibrary.getVolumeIcon(value, root.muted)

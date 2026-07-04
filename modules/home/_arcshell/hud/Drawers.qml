@@ -2,7 +2,6 @@ import qs.config
 import qs.hud.controlcenter as ControlCenter
 import qs.hud.dynamicisland as DynamicIsland
 import qs.hud.notificationcenter as NotificationCenter
-import qs.hud.osd as Osd
 import QtQuick
 import QtQuick.Shapes
 
@@ -36,12 +35,5 @@ Shape {
 
         startX: root.width - wrapper.width - rounding
         startY: 0
-    }
-
-    Osd.Drawer {
-        wrapper: root.panels.osd
-
-        startX: root.width
-        startY: (root.height - wrapper.height) / 2 - rounding
     }
 }

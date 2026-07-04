@@ -56,20 +56,6 @@ MouseArea {
       return inNotificationCenterPanel(panel, x, y);
     }
 
-    // OSD
-    function withinOsdPanelHeight(panel: Item, x: real, y: real): bool {
-        const panelY = Config.theme.hud.border.width + panel.y;
-        return y >= panelY - Config.theme.hud.osd.shape && y <= panelY + panel.height + Config.theme.hud.osd.shape;
-    }
-
-    function inOsdPanel(panel: Item, x: real, y: real): bool {
-        return x >= panel.x && withinOsdPanelHeight(panel, x, y);
-    }
-
-    function showOsdPanel(panel: Item, x: real, y: real): bool {
-      return inOsdPanel(panel, x, y);
-    }
-
     anchors.fill: parent
     hoverEnabled: true
 
@@ -83,9 +69,6 @@ MouseArea {
 
             UiState.showNotificationCenter = false;
             root.panels.notificationCenter.hovered = false;
-
-            UiState.showOsd = false;
-            root.panels.osd.hovered = false;
         }
     }
 
@@ -95,7 +78,6 @@ MouseArea {
 
         UiState.showControlCenter = root.panels.controlCenter.hovered = showControlCenterPanel(panels.controlCenter, x, y);
         UiState.showDynamicIsland = root.panels.dynamicIsland.hovered = showDynamicIslandPanel(panels.dynamicIsland, x, y);
-        UiState.showOsd = root.panels.osd.hovered = showOsdPanel(panels.osd, x, y);
         UiState.showNotificationCenter = root.panels.notificationCenter.hovered = showNotificationCenterPanel(panels.notificationCenter, x, y);
     }
 }

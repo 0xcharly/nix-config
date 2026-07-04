@@ -3,7 +3,6 @@ import qs.components.launcher as Launcher
 import qs.hud.controlcenter as ControlCenter
 import qs.hud.dynamicisland as DynamicIsland
 import qs.hud.notificationcenter as NotificationCenter
-import qs.hud.osd as Osd
 import Quickshell
 import QtQuick
 
@@ -15,7 +14,6 @@ Item {
 
     readonly property alias controlCenter: controlCenter
     readonly property alias dynamicIsland: dynamicIsland
-    readonly property alias osd: osd
     readonly property alias notificationCenter: notificationCenter
 
     anchors.fill: parent
@@ -46,15 +44,6 @@ Item {
         screen: root.screen
 
         anchors.top: parent.top
-        anchors.right: parent.right
-    }
-
-    Osd.Wrapper {
-        id: osd
-
-        screen: root.screen
-
-        anchors.verticalCenter: parent.verticalCenter
         anchors.right: parent.right
     }
 
