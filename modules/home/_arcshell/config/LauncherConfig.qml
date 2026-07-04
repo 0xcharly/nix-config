@@ -11,4 +11,9 @@ JsonObject {
 
     // qalc binary for the "=" (calculator) mode; empty disables the mode.
     property string qalcPath: ""
+
+    // Terminal argv prefix for the "$" (shell command) mode, e.g.
+    // ["/path/to/ghostty", "-e"]; the command argv is appended to it.
+    // Empty disables the mode.
+    property list<string> terminalCommand: []
 }

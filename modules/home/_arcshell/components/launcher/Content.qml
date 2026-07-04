@@ -14,10 +14,12 @@ Rectangle {
     property ComponentTokens.Launcher theme: Config.tokens.component.launcher
     property var results: []
     // First character routes the mode: "." unicode/emoji search, "=" qalc
-    // calculator, anything else application search.
+    // calculator, "$" run a shell command in a terminal, anything else
+    // application search.
     readonly property bool glyphMode: input.text.startsWith(".")
     readonly property bool calcMode: input.text.startsWith("=")
-    readonly property string query: (glyphMode || calcMode ? input.text.slice(1) : input.text).trim()
+    readonly property bool shellMode: input.text.startsWith("$")
+    readonly property string query: (glyphMode || calcMode || shellMode ? input.text.slice(1) : input.text).trim()
     readonly property bool queryEmpty: query.length === 0
 
     // Space left for the results list once the title and input rows are laid
@@ -45,8 +47,9 @@ Rectangle {
         const text = input.text;
         const glyph = text.startsWith(".");
         const calc = text.startsWith("=");
-        const q = (glyph || calc ? text.slice(1) : text).trim();
-        root.results = glyph ? GlyphSearch.query(q) : calc ? CalcSearch.query(q) : AppSearch.query(q);
+        const shell = text.startsWith("$");
+        const q = (glyph || calc || shell ? text.slice(1) : text).trim();
+        root.results = glyph ? GlyphSearch.query(q) : calc ? CalcSearch.query(q) : shell ? ShellSearch.query(q) : AppSearch.query(q);
         list.currentIndex = root.results.length > 0 ? 0 : -1;
     }
 
@@ -58,6 +61,8 @@ Rectangle {
             CalcSearch.copy(item);
         else if (item.glyph !== undefined)
             GlyphSearch.copy(item);
+        else if (item.shellCommand !== undefined)
+            ShellSearch.run(item);
         else
             AppSearch.launch(item);
         UiState.showLauncher = false;
@@ -181,9 +186,9 @@ Rectangle {
                 required property var modelData
                 required property int index
 
-                // Leading cell: app icon, the glyph itself, or "=" for a
-                // calculator result.
-                readonly property string symbol: modelData.glyph ?? (modelData.result !== undefined ? "=" : "")
+                // Leading cell: app icon, the glyph itself, "=" for a
+                // calculator result, or "$" for a shell command.
+                readonly property string symbol: modelData.glyph ?? (modelData.result !== undefined ? "=" : modelData.shellCommand !== undefined ? "$" : "")
 
                 width: list.width
                 height: root.theme.resultRowHeight

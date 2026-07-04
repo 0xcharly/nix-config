@@ -27,6 +27,18 @@
             settings.services.launcher.emojiData = "${pkgs.unicode-emoji}/share/unicode/emoji/emoji-test.txt";
             settings.services.launcher.unicodeData = "${pkgs.unicode-character-database}/share/unicode/UnicodeData.txt";
             settings.services.launcher.qalcPath = "${pkgs.libqalculate}/bin/qalc";
+            settings.services.launcher.terminalCommand =
+              let
+                terminal = config.user.terminal.default;
+                # Flag that makes the terminal exec the argv that follows it.
+                # kitty takes the command as positional argv with no flag;
+                # unknown terminals get the kitty treatment.
+                execFlags = {
+                  ghostty = [ "-e" ];
+                  kitty = [ ];
+                };
+              in
+              [ (lib.getExe terminal.package) ] ++ (execFlags.${terminal.name} or [ ]);
           };
         };
     };
