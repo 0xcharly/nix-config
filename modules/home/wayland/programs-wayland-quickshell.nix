@@ -1,7 +1,7 @@
 { self, ... }:
 {
   flake.homeModules.programs-wayland-quickshell =
-    { config, lib, ... }:
+    { config, lib, pkgs, ... }:
     {
       imports = with self.homeModules; [
         colors-arcshell
@@ -24,6 +24,8 @@
             systemd.enable = true;
             settings.theme.hud.bar.power.enable = cfg.modules.power;
             settings.services.launcher.launchPrefix = [ config.node.wayland.uwsm-wrapper.prefix ];
+            settings.services.launcher.emojiData = "${pkgs.unicode-emoji}/share/unicode/emoji/emoji-test.txt";
+            settings.services.launcher.unicodeData = "${pkgs.unicode-character-database}/share/unicode/UnicodeData.txt";
           };
         };
     };

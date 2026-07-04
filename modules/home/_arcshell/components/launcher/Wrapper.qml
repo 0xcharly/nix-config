@@ -18,6 +18,11 @@ Item {
     // 0 = collapsed, 1 = fully open.
     property real progress: 0
 
+    // Touching GlyphSearch at startup materializes the singleton, so its
+    // data files load, parse, and index before the launcher first opens
+    // and takes keystrokes.
+    Component.onCompleted: GlyphSearch.entries
+
     // Natural height of the loaded content; animated by Content itself,
     // so the panel and its border lines track candidate-list resizes.
     readonly property real contentHeight: loader.item?.implicitHeight ?? 0

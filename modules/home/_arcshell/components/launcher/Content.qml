@@ -13,7 +13,10 @@ Rectangle {
 
     property ComponentTokens.Launcher theme: Config.tokens.component.launcher
     property var results: []
-    readonly property bool queryEmpty: input.text.trim().length === 0
+    // First character "." switches from app search to unicode/emoji search.
+    readonly property bool glyphMode: input.text.startsWith(".")
+    readonly property string query: (glyphMode ? input.text.slice(1) : input.text).trim()
+    readonly property bool queryEmpty: query.length === 0
 
     // Space left for the results list once the title and input rows are laid
     // out, from the panel's maximum height.
@@ -35,14 +38,22 @@ Rectangle {
     }
 
     function requery(): void {
-        root.results = AppSearch.query(input.text);
+        // Read input.text directly: this runs from onTextChanged, which can
+        // fire before the glyphMode/query bindings re-evaluate.
+        const text = input.text;
+        const q = (text.startsWith(".") ? text.slice(1) : text).trim();
+        root.results = text.startsWith(".") ? GlyphSearch.query(q) : AppSearch.query(q);
         list.currentIndex = root.results.length > 0 ? 0 : -1;
     }
 
     function launchSelected(): void {
         if (list.currentIndex < 0)
             return;
-        AppSearch.launch(root.results[list.currentIndex]);
+        const item = root.results[list.currentIndex];
+        if (item.glyph !== undefined)
+            GlyphSearch.copy(item);
+        else
+            AppSearch.launch(item);
         UiState.showLauncher = false;
     }
 
@@ -66,6 +77,15 @@ Rectangle {
         target: AppSearch
 
         function onAppsChanged() {
+            root.requery();
+        }
+    }
+
+    // The glyph index rebuilds asynchronously as its data files land.
+    Connections {
+        target: GlyphSearch
+
+        function onEntriesChanged() {
             root.requery();
         }
     }
@@ -146,6 +166,8 @@ Rectangle {
                 required property var modelData
                 required property int index
 
+                readonly property bool isGlyph: modelData.glyph !== undefined
+
                 width: list.width
                 height: root.theme.resultRowHeight
                 radius: root.theme.resultShape
@@ -158,12 +180,22 @@ Rectangle {
                     spacing: root.theme.spacedBy
 
                     Image {
+                        visible: !row.isGlyph
                         Layout.preferredWidth: root.theme.resultIconSize
                         Layout.preferredHeight: root.theme.resultIconSize
                         sourceSize.width: root.theme.resultIconSize
                         sourceSize.height: root.theme.resultIconSize
                         asynchronous: true
-                        source: Quickshell.iconPath(row.modelData.icon, "application-x-executable")
+                        source: row.isGlyph ? "" : Quickshell.iconPath(row.modelData.icon, "application-x-executable")
+                    }
+
+                    ArcText {
+                        visible: row.isGlyph
+                        Layout.preferredWidth: root.theme.resultIconSize
+                        horizontalAlignment: Text.AlignHCenter
+                        text: row.isGlyph ? row.modelData.glyph : ""
+                        style: root.theme.resultTypography
+                        color: root.theme.resultContentColor
                     }
 
                     ArcText {
