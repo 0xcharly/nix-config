@@ -6,7 +6,7 @@ import qs.config.tokens.types
 JsonObject {
     property SurfaceColorValues colors: SurfaceColorValues {
         surface: Config.tokens.system.colors.transparent
-        content: Config.tokens.system.colors.on_surface_variant
+        content: Config.tokens.system.colors.on_surface_dim
     }
     property PaddingValues padding: PaddingValues {
         bottom: Config.tokens.system.measurements.none
@@ -21,7 +21,7 @@ JsonObject {
 
     property SurfaceColorValues timeColors: SurfaceColorValues {
         surface: Config.tokens.system.colors.surface_backdrop
-        content: Config.tokens.system.colors.on_surface_variant
+        content: Config.tokens.system.colors.on_surface_dim
     }
     property int timeShape: Config.tokens.system.shapes.cornerFull
     property PaddingValues timePadding: PaddingValues {

@@ -9,6 +9,5 @@ JsonObject {
         content: Config.tokens.system.colors.on_surface
     }
 
-    property DesktopClock clock: DesktopClock {}
     property DesktopLicense license: DesktopLicense {}
 }

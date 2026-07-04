@@ -15,6 +15,9 @@ in
         surface = shell_surface;
         wallpaper = shell_wallpaper;
 
+        borders = borders;
+        borders_active = borders_active;
+
         surface_danger = surface_red;
         on_surface_danger = on_surface_red;
 

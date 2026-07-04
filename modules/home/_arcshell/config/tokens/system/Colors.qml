@@ -6,9 +6,13 @@ JsonObject {
     property color transparent: "#00000000"
 
     property color on_surface: "#d4d4d8" // zinc-300
-    property color on_surface_variant: "#a1a1aa" // zinc-400
-    property color surface: "#09090b" // zinc-950
+    property color on_surface_dim: "#a1a1aa" // zinc-400
+    property color on_surface_variant: "#71717a" // zinc-500
+    property color surface: "#090b0c" // zinc-950
     property color wallpaper: "#18181b" // zinc-900
+
+    property color borders: "#52525b" // zinc-600
+    property color borders_active: "#52525b" // zinc-600
 
     property color surface_success: "#1a4ade80" // green-400 @ 10%
     property color on_surface_success: "#4ade80" // green-400

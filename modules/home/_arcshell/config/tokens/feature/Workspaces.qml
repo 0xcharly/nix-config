@@ -15,7 +15,7 @@ JsonObject {
     property Workspace inactive: Workspace {
         colors: SurfaceColorValues {
             surface: Config.tokens.system.colors.transparent
-            content: Config.tokens.system.colors.on_surface_variant
+            content: Config.tokens.system.colors.on_surface_dim
         }
     }
 
