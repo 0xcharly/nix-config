@@ -26,7 +26,6 @@
     # Antigravity tool suite
     antigravity-nix.url = "github:jacopone/antigravity-nix";
 
-
     # Nix index database, comma, command-not-found.
     nix-index-database = {
       url = "github:nix-community/nix-index-database";

@@ -41,20 +41,20 @@
       rebuildOptions = "--sudo --show-trace --option ${nixExperimentalFeaturesOption}";
     in
     {
-      fmt.exec =
+      format.exec =
         let
           fmt-opts = {
             projectRootFile = "flake.lock";
             programs = {
               nixfmt.enable = true;
-              prettier.enable = true;
               shfmt.enable = true;
               stylua.enable = true;
             };
           };
-          fmt = inputs.treefmt-nix.lib.mkWrapper pkgs fmt-opts;
+          format = inputs.treefmt-nix.lib.mkWrapper pkgs fmt-opts;
         in
-        lib.getExe fmt;
+        lib.getExe format;
+
       gc.exec = ''
         nix-collect-garbage --delete-older-than 7d
       '';

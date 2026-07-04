@@ -428,33 +428,35 @@
                 end)
               ''
               + (map-movements (
-                dir: key: ''hl.bind("SUPER         + ${dir}", function()
-                  local layout = hl.get_config("general.layout")
-                  local dispatcher = nil
+                dir: key: ''
+                  hl.bind("SUPER + ${dir}", function()
+                    local layout = hl.get_config("general.layout")
+                    local dispatcher = nil
 
-                  if layout == "hy3" then
-                    dispatcher = hy3.move_focus("${key}", { wrap = true })
-                  else
-                    dispatcher = hl.dsp.focus({ direction = "${key}" })
-                  end
+                    if layout == "hy3" then
+                      dispatcher = hy3.move_focus("${key}", { wrap = true })
+                    else
+                      dispatcher = hl.dsp.focus({ direction = "${key}" })
+                    end
 
-                  hl.dispatch(dispatcher)
-                end)''
+                    hl.dispatch(dispatcher)
+                  end)''
               ))
               + ""
               + (map-movements (
-                dir: key: ''hl.bind("SUPER + SHIFT + ${dir}", function()
-                  local layout = hl.get_config("general.layout")
-                  local dispatcher = nil
+                dir: key: ''
+                  hl.bind("SUPER + SHIFT + ${dir}", function()
+                    local layout = hl.get_config("general.layout")
+                    local dispatcher = nil
 
-                  if layout == "hy3" then
-                    dispatcher = hy3.move_window("${key}")
-                  else
-                    dispatcher = hl.dsp.window.move({ direction = "${key}" })
-                  end
+                    if layout == "hy3" then
+                      dispatcher = hy3.move_window("${key}")
+                    else
+                      dispatcher = hl.dsp.window.move({ direction = "${key}" })
+                    end
 
-                  hl.dispatch(dispatcher)
-                end)''
+                    hl.dispatch(dispatcher)
+                  end)''
               ))
               + ""
               + (map-workspaces (
@@ -462,18 +464,19 @@
               ))
               + ""
               + (map-workspaces (
-                no: repr: ''hl.bind("SUPER + SHIFT + ${no}", function()
-                  local layout = hl.get_config("general.layout")
-                  local dispatcher = nil
+                no: repr: ''
+                  hl.bind("SUPER + SHIFT + ${no}", function()
+                    local layout = hl.get_config("general.layout")
+                    local dispatcher = nil
 
-                  if layout == "hy3" then
-                    dispatcher = hy3.move_to_workspace("${repr}", { follow = false })
-                  else
-                    dispatcher = hl.dsp.window.move({ workspace = "${repr}", follow = false })
-                  end
+                    if layout == "hy3" then
+                      dispatcher = hy3.move_to_workspace("${repr}", { follow = false })
+                    else
+                      dispatcher = hl.dsp.window.move({ workspace = "${repr}", follow = false })
+                    end
 
-                  hl.dispatch(dispatcher)
-                end)''
+                    hl.dispatch(dispatcher)
+                  end)''
               ))
               + (map-monitors (monitor: ''
 

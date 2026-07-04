@@ -1,7 +1,12 @@
 { self, ... }:
 {
   flake.homeModules.programs-wayland-quickshell =
-    { config, lib, pkgs, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     {
       imports = with self.homeModules; [
         colors-arcshell

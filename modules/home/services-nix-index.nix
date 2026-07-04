@@ -1,4 +1,5 @@
-{ inputs, ... }: {
+{ inputs, ... }:
+{
   flake.homeModules.services-nix-index = {
     imports = [ inputs.nix-index-database.homeModules.default ];
 
