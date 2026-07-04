@@ -80,8 +80,7 @@ JsonObject {
     property AnimationValues animation: AnimationValues {
         curveIn: Config.tokens.system.animations.curves.emphasizedIn
         curveOut: Config.tokens.system.animations.curves.emphasizedOut
-        // Both phases share this span; the default `medium` truncates them.
-        duration: Config.tokens.system.animations.durations.large
+        duration: Config.tokens.system.animations.durations.medium
     }
     // Share of the open/close spent sweeping the horizontal border line
     // out from the center; the rest parts the borders to reveal the
