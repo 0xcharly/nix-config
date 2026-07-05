@@ -23,14 +23,6 @@ JsonObject {
         property DynamicIsland dynamicIsland: DynamicIsland {}
         property NotificationCenter notificationCenter: NotificationCenter {}
         property color scrim: Qt.alpha(border.color, 0.2)
-        property BorderStrokeValues innerBorder: BorderStrokeValues {
-            property color color: Config.tokens.system.colors.inner_border
-            property color shadow: Config.tokens.system.colors.inner_border_shadow
-        }
-        property BorderStrokeValues innerBorderFullscreen: BorderStrokeValues {
-            property color color: Config.tokens.system.colors.inner_border_fullscreen
-            property color shadow: Config.tokens.system.colors.inner_border_shadow_fullscreen
-        }
         property real opacity: 1
         property int barWidth: 32
     }
@@ -77,8 +69,6 @@ JsonObject {
 
     component NotificationCenter: JsonObject {
         property int hideDelay: 2000
-        // Most-recent notifications shown in the tray; the rest collapse
-        // into an "x others" row.
         property int maxVisible: 3
         property BorderLineValues line: BorderLineValues {}
         property AnimationValues animation: AnimationValues {
@@ -107,14 +97,14 @@ JsonObject {
                 surface: Config.tokens.system.colors.surface_accent
                 content: Config.tokens.system.colors.on_surface_accent
             }
-            property PaddingValues padding: PaddingValues {
+            padding: PaddingValues {
                 bottom: Config.tokens.system.measurements.small
                 left: Config.tokens.system.measurements.small
                 right: Config.tokens.system.measurements.small
                 top: Config.tokens.system.measurements.small
             }
-            property int shape: Config.tokens.system.shapes.cornerFull
-            property TypographyValues typography: Config.tokens.system.typography.icon
+            shape: Config.tokens.system.shapes.cornerFull
+            typography: Config.tokens.system.typography.icon
         }
         property SurfaceColorValues iconChecked: SurfaceColorValues {
             surface: Config.tokens.system.colors.surface_done
