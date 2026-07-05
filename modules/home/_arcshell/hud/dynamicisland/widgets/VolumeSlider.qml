@@ -1,52 +1,48 @@
-pragma ComponentBehavior: Bound
-
 import qs.components
 import qs.config
 import qs.services
 import QtQuick
-import QtQuick.Layouts
 
-Item {
+BufferedWheelEventMouseArea {
     id: root
 
     required property real volume
     required property bool muted
-    required property real sourceVolume
-    required property bool sourceMuted
 
-    Layout.fillWidth: true
+    implicitWidth: layout.implicitWidth
     implicitHeight: layout.implicitHeight
 
-    ColumnLayout {
+    function onWheel(event: WheelEvent) {
+        if (event.angleDelta.y > 0) {
+            Audio.incrementVolume(slider.stepSize);
+        } else if (event.angleDelta.y < 0) {
+            Audio.decrementVolume(slider.stepSize);
+        }
+    }
+
+    Row {
         id: layout
 
-        anchors.left: parent.left
-        anchors.right: parent.right
+        spacing: slider.theme.labelSpacing
 
-        BufferedWheelEventMouseArea {
-            implicitHeight: slider.implicitHeight
-            Layout.fillWidth: true
+        ArcMatrixSlider {
+            id: slider
 
-            function onWheel(event: WheelEvent) {
-                if (event.angleDelta.y > 0) {
-                    Audio.incrementVolume();
-                } else if (event.angleDelta.y < 0) {
-                    Audio.decrementVolume();
-                }
-            }
+            anchors.verticalCenter: parent.verticalCenter
 
-            ArcHorizontalSlider {
-                id: slider
+            value: root.volume
+            to: Config.services.audio.maxVolume
+            onMoved: Audio.setVolume(value)
+        }
 
-                anchors.left: parent.left
-                anchors.right: parent.right
-                implicitHeight: Config.theme.hud.dynamicIsland.slider.width
+        ArcSliderLabel {
+            anchors.verticalCenter: parent.verticalCenter
 
-                value: root.volume
-                labelValue: IconLibrary.getVolumeIcon(value, root.muted)
-                to: Config.services.audio.maxVolume
-                onMoved: Audio.setVolume(value)
-            }
+            value: slider.value
+            icon: IconLibrary.getVolumeIcon(slider.value, root.muted)
+            held: slider.pressed
+            // Requirement: label matches the lit squares' color.
+            color: slider.theme.highlightColor
         }
     }
 }

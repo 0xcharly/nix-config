@@ -12,8 +12,6 @@ Item {
 
     required property real volume
     required property bool muted
-    required property real sourceVolume
-    required property bool sourceMuted
 
     implicitWidth: layout.implicitWidth + root.theme.padding.left + root.theme.padding.right - Config.theme.hud.border.width
     implicitHeight: layout.implicitHeight + root.theme.padding.top + root.theme.padding.bottom
@@ -29,10 +27,8 @@ Item {
         spacing: Config.theme.hud.dynamicIsland.spacedBy
 
         VolumeSlider {
-          volume: root.volume
-          muted: root.muted
-          sourceVolume: root.sourceVolume
-          sourceMuted: root.sourceMuted
+            volume: root.volume
+            muted: root.muted
         }
     }
 }

@@ -16,6 +16,13 @@ JsonObject {
         italic: false
         underline: false
     }
+    property DotoTypographyValues doto: DotoTypographyValues {
+        family: root.families.doto
+        fontSize: 18 * root.scale
+        lineHeight: 22 * root.scale
+        weight: root.weights.demiBold
+        roundness: 40
+    }
     property TypographyValues smallLabel: TypographyValues {
         family: root.families.sansSerif
         fontSize: 8 * root.scale

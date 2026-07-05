@@ -112,6 +112,7 @@
           kdePackages.qtdeclarative
 
           material-symbols
+          self'.packages.arcshell.doto
           nerd-fonts.symbols-only
           recursive
           rubik

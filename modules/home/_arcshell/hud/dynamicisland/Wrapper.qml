@@ -15,8 +15,6 @@ Item {
 
     property real volume
     property bool muted
-    property real sourceVolume
-    property bool sourceMuted
 
     function show(): void {
         UiState.showDynamicIsland = true;
@@ -26,8 +24,6 @@ Item {
     Component.onCompleted: {
         volume = Audio.volume;
         muted = Audio.muted;
-        sourceVolume = Audio.sourceVolume;
-        sourceMuted = Audio.sourceMuted;
     }
 
     visible: height > 0
@@ -81,12 +77,10 @@ Item {
 
         function onSourceMutedChanged(): void {
             root.show();
-            root.sourceMuted = Audio.sourceMuted;
         }
 
         function onSourceVolumeChanged(): void {
             root.show();
-            root.sourceVolume = Audio.sourceVolume;
         }
     }
 
@@ -110,11 +104,8 @@ Item {
         Component.onCompleted: active = Qt.binding(() => root.shouldBeActive || root.visible)
 
         sourceComponent: Content {
-            implicitWidth: 512
             volume: root.volume
             muted: root.muted
-            sourceVolume: root.sourceVolume
-            sourceMuted: root.sourceMuted
         }
     }
 }

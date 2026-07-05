@@ -1,6 +1,8 @@
 {
   lib,
   stdenv,
+  stdenvNoCC,
+  fetchFromGitHub,
   makeFontsConf,
   makeWrapper,
   apdbctl,
@@ -27,8 +29,30 @@ let
     networkmanager
   ];
 
+  # A bitmap inspired, open-source, variable, monospace, geometric typeface.
+  doto = stdenvNoCC.mkDerivation {
+    pname = "doto";
+    version = "0-unstable-2024-10-06";
+
+    src = fetchFromGitHub {
+      owner = "oliverlalan";
+      repo = "Doto";
+      rev = "1c587f2eed62cb257055540ac2a15f356070414f";
+      hash = "sha256-ECcTx/qMZWr5iF6X5iouKV1tUt0xRCcoQUwma3FP7jU=";
+    };
+
+    installPhase = ''
+      runHook preInstall
+      install -Dm644 "fonts/variable/Doto[ROND,wght].ttf" -t "$out/share/fonts/truetype"
+      runHook postInstall
+    '';
+
+    meta.license = lib.licenses.ofl;
+  };
+
   fontconfig = makeFontsConf {
     fontDirectories = [
+      doto
       material-symbols
       nerd-fonts.symbols-only
       recursive
@@ -55,6 +79,8 @@ stdenv.mkDerivation {
     qt6.qtbase
   ];
   propagatedBuildInputs = runtimeInputs;
+
+  passthru = { inherit doto; };
 
   cmakeFlags = [
     (lib.cmakeFeature "ENABLE_MODULES" "shell")

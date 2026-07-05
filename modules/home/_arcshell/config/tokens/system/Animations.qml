@@ -27,6 +27,7 @@ JsonObject {
         property int large: 400 * scale
         property int extraLarge: 600 * scale
         property int twoExtraLarge: 800 * scale
+        property int threeExtraLarge: 800 * scale
         property int expressiveFastSpatial: 350 * scale
         property int expressiveDefaultSpatial: 500 * scale
         property int expressiveEffects: 200 * scale

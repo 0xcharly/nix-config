@@ -57,7 +57,6 @@ JsonObject {
     component DynamicIsland: JsonObject {
         property int hideDelay: 2000
         property int shape: Config.tokens.system.shapes.cornerMedium
-        property ComponentTokens.Slider slider: ComponentTokens.Slider {}
         property PaddingValues padding: PaddingValues {
             bottom: Config.tokens.system.measurements.large
             left: Config.tokens.system.measurements.large

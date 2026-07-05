@@ -14,6 +14,9 @@ JsonObject {
     property color borders: "#52525b" // zinc-600
     property color borders_active: "#52525b" // zinc-600
 
+    property color surface_control_slider_matrix_base: borders
+    property color surface_control_slider_matrix_highlight: on_surface
+
     property color on_surface_success: "#4ade80" // green-400
 
     property color surface_danger: "#1af87171" // red-400 @ 10%

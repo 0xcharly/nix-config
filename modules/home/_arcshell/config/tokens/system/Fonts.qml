@@ -3,6 +3,7 @@ import Quickshell.Io
 JsonObject {
     component Family: JsonObject {
         property string icon: "Material Symbols Rounded"
+        property string doto: "Doto"
         property string monospace: "monospace"
         property string sansSerif: "sansserif"
         property string serif: "serif"
