@@ -365,9 +365,9 @@
 
                 hl.bind("SUPER + ALT   + R",      hl.dsp.exec_cmd("${uwsmGetExe set-aspect-ratio} 16 9"))
 
-                hl.bind("XF86AudioLowerVolume",  hl.dsp.exec_cmd("${uwsmGetExe' pkgs.swayosd "swayosd-client"} --output-volume lower"))
-                hl.bind("XF86AudioMute",         hl.dsp.exec_cmd("${uwsmGetExe' pkgs.swayosd "swayosd-client"} --output-volume mute-toggle"))
-                hl.bind("XF86AudioRaiseVolume",  hl.dsp.exec_cmd("${uwsmGetExe' pkgs.swayosd "swayosd-client"} --output-volume raise"))
+                hl.bind("XF86AudioLowerVolume",  hl.dsp.exec_cmd("${uwsmGetExe' pkgs.wireplumber "wpctl"} set-volume @DEFAULT_AUDIO_SINK@ 5%-"))
+                hl.bind("XF86AudioMute",         hl.dsp.exec_cmd("${uwsmGetExe' pkgs.wireplumber "wpctl"} set-mute @DEFAULT_AUDIO_SINK@ toggle"))
+                hl.bind("XF86AudioRaiseVolume",  hl.dsp.exec_cmd("${uwsmGetExe' pkgs.wireplumber "wpctl"} set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+"))
                 hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("${uwsmGetExe pkgs.brightnessctl} set 10%-"))
                 hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("${uwsmGetExe pkgs.brightnessctl} set +10%"))
 
@@ -620,8 +620,6 @@
                     ];
                 };
             };
-
-            swayosd.enable = lib.mkDefault config.wayland.windowManager.hyprland.enable;
           };
 
           xdg.configFile."hypr/hyprlauncher.conf".text =
