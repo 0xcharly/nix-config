@@ -16,6 +16,7 @@
   qt6,
   quickshell,
   cmake,
+  curl,
   ninja,
 }:
 let
@@ -24,6 +25,7 @@ let
   runtimeInputs = [
     apdbctl
     brightnessctl
+    curl
     ddcutil
     hyprland
     networkmanager

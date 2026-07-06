@@ -16,6 +16,7 @@
       options.node.wayland.arcshell = with lib; {
         modules = {
           power = mkEnableOption "Enable the power management module";
+          vpn = mkEnableOption "Enable the VPN egress check module";
         };
       };
 
@@ -28,6 +29,7 @@
             enable = true;
             systemd.enable = true;
             settings.theme.hud.bar.power.enable = cfg.modules.power;
+            settings.theme.hud.bar.vpn.enable = cfg.modules.vpn;
             settings.services.launcher.launchPrefix = [ config.node.wayland.uwsm-wrapper.prefix ];
             settings.services.launcher.emojiData = "${pkgs.unicode-emoji}/share/unicode/emoji/emoji-test.txt";
             settings.services.launcher.unicodeData = "${pkgs.unicode-character-database}/share/unicode/UnicodeData.txt";

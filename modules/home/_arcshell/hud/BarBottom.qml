@@ -15,6 +15,21 @@ ColumnLayout {
 
     Loader {
         asynchronous: true
+        // active (not just visible): an inactive Loader never
+        // instantiates the widget, so the VpnCheck singleton never
+        // starts polling while the module is disabled.
+        active: Config.theme.hud.bar.vpn.enable
+        visible: Config.theme.hud.bar.vpn.enable
+
+        Layout.alignment: Qt.AlignHCenter
+
+        sourceComponent: Vpn {
+            theme: Config.theme.hud.bar.vpn
+        }
+    }
+
+    Loader {
+        asynchronous: true
         visible: Config.theme.hud.bar.power.enable
 
         Layout.alignment: Qt.AlignHCenter

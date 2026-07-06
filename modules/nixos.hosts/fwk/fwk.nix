@@ -92,6 +92,7 @@
       ];
 
       node.wayland = {
+        arcshell.modules.vpn = true;
         hyprland.monitors = [
           {
             output = "eDP-1";

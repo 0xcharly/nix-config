@@ -32,6 +32,7 @@ JsonObject {
 
         property FeatureTokens.Clock clock: FeatureTokens.Clock {}
         property FeatureTokens.PowerManagement power: FeatureTokens.PowerManagement {}
+        property FeatureTokens.Vpn vpn: FeatureTokens.Vpn {}
         property FeatureTokens.Workspaces workspaces: FeatureTokens.Workspaces {}
     }
 
