@@ -8,6 +8,7 @@
         inputs.nix-config-secrets.nixosModules.default
         inputs.nix-config-secrets.nixosModules.disk-encryption-keys
         inputs.nix-config-secrets.nixosModules.services-forgejo-ssh-host-keys
+        inputs.nix-config-secrets.nixosModules.services-gatus-external-endpoints
         inputs.nix-config-secrets.nixosModules.services-github-backup
         inputs.nix-config-secrets.nixosModules.services-hoopsnake-site-jp
         inputs.nix-config-secrets.nixosModules.services-linkwarden

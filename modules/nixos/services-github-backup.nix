@@ -1,13 +1,42 @@
 { self, ... }:
 {
   flake.nixosModules.services-github-backup =
-    { config, pkgs, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
+    let
+      inherit (self.lib) facts gatus;
+
+      mkPushRequest =
+        success:
+        gatus.mkPushBasedExternalPostRequest {
+          inherit pkgs success;
+          domain = facts.services.gatus.domain;
+          tokenFile = config.age.secrets."services/gatus-external-endpoints.token".path;
+          group = "cron";
+          endpoint = "GitHub backup";
+        };
+
+      reportResult = self.lib.builders.mkShellApplication pkgs {
+        name = "github-backup-report-result";
+        text = ''
+          if [ "''${SERVICE_RESULT:-}" = "success" ]; then
+            exec ${lib.getExe (mkPushRequest true)}
+          else
+            exec ${lib.getExe (mkPushRequest false)}
+          fi
+        '';
+      };
+    in
     {
       systemd.services.github-backup = {
         description = "Backup GitHub data";
 
         script = self.lib.builders.mkShellApplication pkgs {
-          name = "mount-tank";
+          name = "github-backup";
           runtimeInputs = with pkgs; [ github-backup ];
           text = ''
             set -euo pipefail
@@ -41,6 +70,9 @@
         serviceConfig = {
           Type = "oneshot";
           User = "git";
+          # "+" runs the hook as root: the Gatus token file is root-readable only,
+          # and $SERVICE_RESULT covers every outcome (non-zero exit, timeout, kill).
+          ExecStopPost = "+${reportResult}";
         };
         startAt = "02:00"; # Daily at 2am.
       };
