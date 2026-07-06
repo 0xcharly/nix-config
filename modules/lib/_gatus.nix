@@ -151,6 +151,8 @@ in
       duration ? null,
     }:
     let
+      # Mirrors Gatus' key generation (config/key/key.go, v5.35.0):
+      # each part is lowercased and sanitized separately, then joined with "_".
       forbidden = [
         ","
         "/"
@@ -158,12 +160,15 @@ in
         " "
         "."
         "#"
+        "+"
+        "&"
       ];
       substitutes = map (_: "-") (lib.range 1 (builtins.length forbidden));
-      key = builtins.replaceStrings forbidden substitutes "${group}_${endpoint}";
+      sanitize = s: builtins.replaceStrings forbidden substitutes (lib.toLower s);
+      key = "${sanitize group}_${sanitize endpoint}";
 
       parameters = {
-        inherit success;
+        success = lib.boolToString success;
       }
       // (lib.optionalAttrs (error != null) { inherit error; })
       // (lib.optionalAttrs (duration != null) { inherit duration; });
@@ -171,21 +176,20 @@ in
       url =
         let
           encoded_parameters = lib.concatStringsSep "&" (
-            lib.attrsToList (key: value: "${key}=${toString value}") parameters
+            lib.mapAttrsToList (key: value: "${key}=${toString value}") parameters
           );
         in
-        ''
-          https://${domain}/api/v1/endpoints/${key}/external?${encoded_parameters}
-        '';
+        "https://${domain}/api/v1/endpoints/${key}/external?${encoded_parameters}";
     in
     pkgs.writeShellApplication {
       name = "send-gatus-event-${key}";
       runtimeInputs = with pkgs; [ curl ];
       text = ''
-        TOKEN=$(<"${tokenFile}")
-        TOKEN="''${TOKEN//$'\n'/}"
+        # The token file is an env file declaring AUTH_TOKEN.
+        # shellcheck disable=SC1091
+        source "${tokenFile}"
 
-        curl -X POST -H "Authorization: Bearer ''${TOKEN}" "${url}"
+        curl -sS --fail-with-body -X POST -H "Authorization: Bearer ''${AUTH_TOKEN}" "${url}"
       '';
     };
 }

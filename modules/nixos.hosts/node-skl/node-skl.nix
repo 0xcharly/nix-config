@@ -8,6 +8,7 @@
         self.nixosModules.colors-console
 
         inputs.nix-config-secrets.nixosModules.default
+        inputs.nix-config-secrets.nixosModules.services-gatus-external-endpoints
         inputs.nix-config-secrets.nixosModules.services-hoopsnake-node-skl
         inputs.nix-config-secrets.nixosModules.services-tailscale
         inputs.nix-config-secrets.nixosModules.users-delay
@@ -34,6 +35,7 @@
         self.nixosModules.prometheus-exporters-node
         self.nixosModules.prometheus-exporters-zfs
         self.nixosModules.services-fail2ban
+        self.nixosModules.services-mullvad-exit-node-check
         self.nixosModules.services-openssh
         self.nixosModules.services-tailscale
         self.nixosModules.system-common
@@ -57,6 +59,7 @@
           enableSsh = true;
           exitNode = "jp-tyo-wg-002.mullvad.ts.net.";
         };
+        services.mullvad-exit-node-check.enable = true;
         users.delay.ssh.authorizeTailscaleInternalKey = true;
       };
 

@@ -99,6 +99,7 @@
 
         external-endpoints = [
           (gatus.mkPushBasedExternalEndpoint "GitHub backup" { heartbeat = "48h"; })
+          (gatus.mkPushBasedExternalEndpoint "node-skl exit node" { heartbeat = "6m"; })
         ];
       };
     };
