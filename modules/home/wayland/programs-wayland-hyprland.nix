@@ -143,7 +143,9 @@
           };
 
           screenlock = {
-            enable = mkEnableOption "Enable screenlock";
+            enable = mkEnableOption "Enable screenlock" // {
+              default = true;
+            };
 
             package = mkPackageOption pkgs "hyprlock" {
               extraDescription = ''
