@@ -13,6 +13,7 @@
     programs-atuin
     programs-antigravity
     programs-atuin-sync
+    programs-beans
     programs-beeper
     programs-browsers
     programs-cachix
