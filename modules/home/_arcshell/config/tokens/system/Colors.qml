@@ -16,6 +16,8 @@ JsonObject {
 
     property color surface_control_slider_matrix_base: borders
     property color surface_control_slider_matrix_highlight: on_surface
+    property color surface_control_slider_slanted_base: on_surface_variant
+    property color surface_control_slider_slanted_highlight: on_surface
 
     property color on_surface_success: "#4ade80" // green-400
 

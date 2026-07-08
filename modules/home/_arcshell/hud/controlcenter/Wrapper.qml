@@ -104,7 +104,6 @@ Item {
 
             sourceComponent: Content {
                 screen: root.screen
-                implicitWidth: 512
             }
         }
     }

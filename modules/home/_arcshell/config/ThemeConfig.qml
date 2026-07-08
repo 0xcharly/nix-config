@@ -43,7 +43,6 @@ JsonObject {
             curveIn: Config.tokens.system.animations.curves.emphasizedIn
             curveOut: Config.tokens.system.animations.curves.emphasizedOut
         }
-        property ComponentTokens.Slider slider: ComponentTokens.Slider {}
         property PaddingValues padding: PaddingValues {
             bottom: Config.tokens.system.measurements.medium
             left: Config.tokens.system.measurements.large

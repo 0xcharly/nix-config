@@ -1,55 +1,56 @@
-pragma ComponentBehavior: Bound
-
 import qs.components
 import qs.config
 import qs.services
 import Quickshell
 import QtQuick
-import QtQuick.Layouts
 
-Item {
+BufferedWheelEventMouseArea {
     id: root
 
     required property ShellScreen screen
     readonly property Brightness.Monitor monitor: Brightness.getMonitorForScreen(root.screen)
     property real brightness: root.monitor?.brightness ?? 0
 
-    Layout.fillWidth: true
+    implicitWidth: layout.implicitWidth
     implicitHeight: layout.implicitHeight
 
-    ColumnLayout {
+    function onWheel(event: WheelEvent) {
+        const monitor = root.monitor;
+        if (!monitor) {
+            return;
+        }
+        // setBrightness only clamps to [0, 1]; the slider's 5% floor
+        // must be enforced here.
+        if (event.angleDelta.y > 0) {
+            monitor.setBrightness(Math.min(slider.to, monitor.brightness + slider.stepSize));
+        } else if (event.angleDelta.y < 0) {
+            monitor.setBrightness(Math.max(slider.from, monitor.brightness - slider.stepSize));
+        }
+    }
+
+    Row {
         id: layout
 
-        anchors.left: parent.left
-        anchors.right: parent.right
+        spacing: slider.theme.labelSpacing
 
-        BufferedWheelEventMouseArea {
-            implicitHeight: slider.implicitHeight
-            Layout.fillWidth: true
+        ArcSlantedSlider {
+            id: slider
 
-            function onWheel(event: WheelEvent) {
-                const monitor = root.monitor;
-                if (!monitor) {
-                    return;
-                }
-                if (event.angleDelta.y > 0) {
-                    monitor.setBrightness(monitor.brightness + 0.1);
-                } else if (event.angleDelta.y < 0) {
-                    monitor.setBrightness(monitor.brightness - 0.1);
-                }
-            }
+            anchors.verticalCenter: parent.verticalCenter
 
-            ArcHorizontalSlider {
-                id: slider
+            value: root.brightness
+            rawValue: root.brightness
+            onMoved: root.monitor?.setBrightness(value)
+        }
 
-                anchors.left: parent.left
-                anchors.right: parent.right
-                implicitHeight: Config.theme.hud.controlCenter.slider.width
+        ArcSliderLabel {
+            anchors.verticalCenter: parent.verticalCenter
 
-                value: root.brightness
-                labelValue: IconLibrary.getBrightnessIcon(value)
-                onMoved: root.monitor?.setBrightness(value)
-            }
+            value: slider.value
+            icon: IconLibrary.getBrightnessIcon(slider.value)
+            held: slider.pressed
+            // Requirement: label matches the lit strokes' color.
+            color: slider.theme.highlightColor
         }
     }
 }
