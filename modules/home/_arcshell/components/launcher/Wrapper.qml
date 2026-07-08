@@ -11,7 +11,7 @@ Item {
     id: root
 
     required property ShellScreen screen
-    readonly property bool shouldBeActive: UiState.showLauncher
+    readonly property bool shouldBeActive: UiState.isLauncherTargetScreen(root.screen)
 
     property ComponentTokens.Launcher theme: Config.tokens.component.launcher
 

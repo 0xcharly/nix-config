@@ -50,7 +50,9 @@ Scope {
                 // Hyprland's m_exclusiveLSes, which makes its focus-restore
                 // path bail when the launcher closes (keys eaten until the
                 // user clicks). Focus acquisition is done by the grab above.
-                WlrLayershell.keyboardFocus: UiState.showLauncher ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
+                // Only the summon screen's window requests focus: Content is
+                // loaded only there, so keystrokes must not land elsewhere.
+                WlrLayershell.keyboardFocus: UiState.isLauncherTargetScreen(screen.modelData) ? WlrKeyboardFocus.OnDemand : WlrKeyboardFocus.None
 
                 mask: Region {
                     x: bar.implicitWidth
