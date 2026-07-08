@@ -1,5 +1,6 @@
 pragma ComponentBehavior: Bound
 
+import qs.config
 import qs.config.tokens.feature
 import qs.components
 import qs.services
@@ -16,19 +17,24 @@ ArcRectangle {
     property bool isHovered: false
     property bool needsAttention: false
 
+    readonly property bool isActive: Hypr.isWorkspaceActive(root.modelData)
+
     readonly property Workspace theme: {
         if (root.needsAttention) {
             root.parentTheme.needsAttention;
         } else if (root.isHovered) {
             root.parentTheme.hovered;
-        } else if (Hypr.isWorkspaceActive(modelData)) {
+        } else if (root.isActive) {
             root.parentTheme.active;
         } else {
             root.parentTheme.inactive;
         }
     }
 
-    color: root.theme.colors.surface
+    // The active surface is painted by the shared indicator in Workspaces.qml
+    // (decoupled so it can slide between items); hovered/needsAttention still
+    // paint locally, above the indicator.
+    color: root.theme === root.parentTheme.active ? Config.tokens.system.colors.transparent : root.theme.colors.surface
     radius: root.theme.shape
 
     implicitHeight: layout.implicitHeight

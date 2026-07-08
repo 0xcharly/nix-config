@@ -12,6 +12,10 @@ JsonObject {
         top: Config.tokens.system.measurements.none
     }
 
+    // Slide animation of the shared background indicator behind the active
+    // workspace. Defaults: standard curve, medium duration.
+    property AnimationValues animation: AnimationValues {}
+
     property Workspace inactive: Workspace {
         colors: SurfaceColorValues {
             surface: Config.tokens.system.colors.transparent
