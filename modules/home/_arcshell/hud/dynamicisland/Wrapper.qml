@@ -4,6 +4,7 @@ import qs.components
 import qs.services
 import qs.config
 import Quickshell
+import Quickshell.Hyprland
 import QtQuick
 
 Item {
@@ -11,13 +12,15 @@ Item {
 
     required property ShellScreen screen
     property bool hovered
-    readonly property bool shouldBeActive: UiState.showDynamicIsland
+    readonly property bool shouldBeActive: UiState.isDynamicIslandTargetScreen(root.screen)
 
     property real volume
     property bool muted
 
+    // Event-driven summon (every screen's instance fires): target the
+    // focused monitor; the latch in UiState makes the N calls idempotent.
     function show(): void {
-        UiState.showDynamicIsland = true;
+        UiState.setDynamicIslandShown(true, Hyprland.focusedMonitor);
         timer.restart();
     }
 
@@ -89,7 +92,11 @@ Item {
 
         interval: Config.theme.hud.dynamicIsland.hideDelay
         onTriggered: {
-            if (!root.hovered) {
+            // Every instance restarts this timer on the same global event;
+            // only the target screen's instance may close, else a never-
+            // hovered instance would hide the panel out from under the
+            // target screen's cursor.
+            if (!root.hovered && UiState.isDynamicIslandTargetScreen(root.screen)) {
                 UiState.showDynamicIsland = false;
             }
         }

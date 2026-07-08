@@ -4,6 +4,7 @@ import qs.components
 import qs.services
 import qs.config
 import Quickshell
+import Quickshell.Hyprland
 import QtQuick
 
 Item {
@@ -11,7 +12,7 @@ Item {
 
     required property ShellScreen screen
     property bool hovered
-    readonly property bool shouldBeActive: UiState.showNotificationCenter && Notifications.notClosed.length > 0
+    readonly property bool shouldBeActive: UiState.isNotificationCenterTargetScreen(root.screen) && Notifications.notClosed.length > 0
     readonly property ThemeConfig.NotificationCenter theme: Config.theme.hud.notificationCenter
 
     // 0 = collapsed, 1 = open. One master value scales width and height
@@ -19,8 +20,10 @@ Item {
     // mid-animation reversal retraces the same visual path.
     property real progress: 0
 
+    // Event-driven summon (every screen's instance fires): target the
+    // focused monitor; the latch in UiState makes the N calls idempotent.
     function show(): void {
-        UiState.showNotificationCenter = true;
+        UiState.setNotificationCenterShown(true, Hyprland.focusedMonitor);
         timer.restart();
     }
 
@@ -78,7 +81,11 @@ Item {
 
         interval: root.theme.hideDelay
         onTriggered: {
-            if (!root.hovered) {
+            // Every instance restarts this timer on the same global event;
+            // only the target screen's instance may close, else a never-
+            // hovered instance would hide the panel out from under the
+            // target screen's cursor.
+            if (!root.hovered && UiState.isNotificationCenterTargetScreen(root.screen)) {
                 UiState.showNotificationCenter = false;
             }
         }

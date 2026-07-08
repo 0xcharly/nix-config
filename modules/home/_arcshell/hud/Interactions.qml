@@ -61,13 +61,18 @@ MouseArea {
 
     onContainsMouseChanged: {
         if (!containsMouse) {
-            UiState.showControlCenter = false;
+            // Hide only panels this screen owns: another monitor's panel
+            // must survive mouse churn on this screen's HUD surfaces.
+            if (UiState.isControlCenterTargetScreen(root.screen))
+                UiState.showControlCenter = false;
             root.panels.controlCenter.hovered = false;
 
-            UiState.showDynamicIsland = false;
+            if (UiState.isDynamicIslandTargetScreen(root.screen))
+                UiState.showDynamicIsland = false;
             root.panels.dynamicIsland.hovered = false;
 
-            UiState.showNotificationCenter = false;
+            if (UiState.isNotificationCenterTargetScreen(root.screen))
+                UiState.showNotificationCenter = false;
             root.panels.notificationCenter.hovered = false;
         }
     }
@@ -75,9 +80,21 @@ MouseArea {
     onPositionChanged: event => {
         const x = event.x;
         const y = event.y;
+        const monitor = Hypr.monitorFor(root.screen);
 
-        UiState.showControlCenter = root.panels.controlCenter.hovered = showControlCenterPanel(panels.controlCenter, x, y);
-        UiState.showDynamicIsland = root.panels.dynamicIsland.hovered = showDynamicIslandPanel(panels.dynamicIsland, x, y);
-        UiState.showNotificationCenter = root.panels.notificationCenter.hovered = showNotificationCenterPanel(panels.notificationCenter, x, y);
+        // A show latches this screen as the panel's target; a hide is only
+        // honored from the current target, so mousing over this screen's
+        // HUD surfaces cannot dismiss another monitor's panel.
+        const controlCenter = root.panels.controlCenter.hovered = showControlCenterPanel(panels.controlCenter, x, y);
+        if (controlCenter || UiState.isControlCenterTargetScreen(root.screen))
+            UiState.setControlCenterShown(controlCenter, monitor);
+
+        const dynamicIsland = root.panels.dynamicIsland.hovered = showDynamicIslandPanel(panels.dynamicIsland, x, y);
+        if (dynamicIsland || UiState.isDynamicIslandTargetScreen(root.screen))
+            UiState.setDynamicIslandShown(dynamicIsland, monitor);
+
+        const notificationCenter = root.panels.notificationCenter.hovered = showNotificationCenterPanel(panels.notificationCenter, x, y);
+        if (notificationCenter || UiState.isNotificationCenterTargetScreen(root.screen))
+            UiState.setNotificationCenterShown(notificationCenter, monitor);
     }
 }
