@@ -1,5 +1,6 @@
 pragma Singleton
 
+import qs.components
 import qs.config
 import Quickshell
 import Quickshell.Services.Pipewire
@@ -49,6 +50,12 @@ Singleton {
 
     function decrementVolume(amount: real): void {
         setVolume(volume - (amount || Config.services.audio.volumeStep));
+    }
+
+    function toggleMute(): void {
+        if (sink?.ready && sink?.audio) {
+            sink.audio.muted = !sink.audio.muted;
+        }
     }
 
     function setSourceVolume(newVolume: real): void {
@@ -103,6 +110,24 @@ Singleton {
     Component.onCompleted: {
         previousSinkName = sink?.description || sink?.name || qsTr("Unknown Device");
         previousSourceName = source?.description || source?.name || qsTr("Unknown Device");
+    }
+
+    WaylandShortcut {
+        name: "volumeUp"
+        description: "Increase volume"
+        onPressed: root.incrementVolume()
+    }
+
+    WaylandShortcut {
+        name: "volumeDown"
+        description: "Decrease volume"
+        onPressed: root.decrementVolume()
+    }
+
+    WaylandShortcut {
+        name: "volumeMuteToggle"
+        description: "Toggle mute"
+        onPressed: root.toggleMute()
     }
 
     PwObjectTracker {

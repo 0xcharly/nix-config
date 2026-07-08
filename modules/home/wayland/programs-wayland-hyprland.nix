@@ -367,11 +367,11 @@
 
                 hl.bind("SUPER + ALT   + R",      hl.dsp.exec_cmd("${uwsmGetExe set-aspect-ratio} 16 9"))
 
-                hl.bind("XF86AudioLowerVolume",  hl.dsp.exec_cmd("${uwsmGetExe' pkgs.wireplumber "wpctl"} set-volume @DEFAULT_AUDIO_SINK@ 5%-"))
-                hl.bind("XF86AudioMute",         hl.dsp.exec_cmd("${uwsmGetExe' pkgs.wireplumber "wpctl"} set-mute @DEFAULT_AUDIO_SINK@ toggle"))
-                hl.bind("XF86AudioRaiseVolume",  hl.dsp.exec_cmd("${uwsmGetExe' pkgs.wireplumber "wpctl"} set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+"))
-                hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("${uwsmGetExe pkgs.brightnessctl} set 10%-"))
-                hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("${uwsmGetExe pkgs.brightnessctl} set +10%"))
+                hl.bind("XF86AudioLowerVolume",  hl.dsp.global("nix-config-shell:volumeDown"))
+                hl.bind("XF86AudioMute",         hl.dsp.global("nix-config-shell:volumeMuteToggle"))
+                hl.bind("XF86AudioRaiseVolume",  hl.dsp.global("nix-config-shell:volumeUp"))
+                hl.bind("XF86MonBrightnessDown", hl.dsp.global("nix-config-shell:brightnessDown"))
+                hl.bind("XF86MonBrightnessUp",   hl.dsp.global("nix-config-shell:brightnessUp"))
 
                 -- Media key
                 hl.bind("XF86AudioMedia", hl.dsp.exec_cmd("${uwsmGetExe pkgs.playerctl} play-pause"))
