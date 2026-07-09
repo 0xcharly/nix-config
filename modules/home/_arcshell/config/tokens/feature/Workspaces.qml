@@ -4,7 +4,7 @@ import qs.config
 import qs.config.tokens.types
 
 JsonObject {
-    property int spacedBy: Config.tokens.system.measurements.none
+    property int spacedBy: Config.tokens.system.measurements.extraSmall
     property PaddingValues padding: PaddingValues {
         bottom: Config.tokens.system.measurements.none
         left: Config.tokens.system.measurements.none
@@ -42,5 +42,29 @@ JsonObject {
             surface: Config.tokens.system.colors.surface_danger
             content: Config.tokens.system.colors.on_surface_danger
         }
+    }
+
+    property Workspace addButton: Workspace {
+        colors: SurfaceColorValues {
+            surface: Config.tokens.system.colors.surface_elevated
+            content: Config.tokens.system.colors.on_surface
+        }
+        // Icon family at the workspace-label metrics so the glyph button
+        // matches the numeral chips' size.
+        typography: TypographyValues {
+            family: Config.tokens.system.typography.icon.family
+            fontSize: Config.tokens.system.typography.body.fontSize
+            lineHeight: Config.tokens.system.typography.body.lineHeight
+            weight: Config.tokens.system.typography.body.weight
+        }
+    }
+
+    // Hover state of the add button: same metrics, brighter surface.
+    property Workspace addButtonHovered: Workspace {
+        colors: SurfaceColorValues {
+            surface: Config.tokens.system.colors.surface_elevated_hover
+            content: Config.tokens.system.colors.on_surface
+        }
+        typography: addButton.typography
     }
 }

@@ -78,7 +78,7 @@ Panel geometry/anchoring lives in `hud/Panels.qml`.
 - `UiState` — the `show*` booleans every panel's `when:` reads, plus global
   shortcuts (`WaylandShortcut` = `GlobalShortcut` with `appid:
   "nix-config-shell"`; bound to keys in the Hyprland nix config).
-- `Hypr`/`Compositor` — Hyprland glue (`Hypr.monitorFor(screen)`).
+- `Hypr` — Hyprland glue (`Hypr.monitorFor(screen)`).
 - Hardware: `Audio`, `Brightness` (ddcutil/brightnessctl via `Quickshell.Io`
   processes), `Network`, `IdleInhibitor`, `Clock`.
 - Launcher search providers: `AppSearch`, `BinSearch`, `ShellSearch`,
@@ -181,8 +181,11 @@ the minimum bar before shipping.
 - Token renames fail silently at the QML level (undefined binding + runtime
   warning, no hard error) — after renaming a token, grep for the old name AND
   scan the dev-instance log for `Unable to assign [undefined]`.
-- `hyprctl dispatch global …` (upstream syntax) does not work on this config;
-  use the Lua form above.
+- The Hyprland control socket evaluates Lua: `dispatch X` is wrapped as
+  `hl.dispatch(X)`, so ALL dispatches — `hyprctl dispatch …` AND Quickshell's
+  `Hyprland.dispatch()` — must pass `hl.dsp.*` dispatcher expressions (e.g.
+  `hl.dsp.focus({ workspace = 2 })`), never upstream dispatcher strings like
+  `workspace 2` or `global …` (those fail to parse, silently for QML).
 - The HUD input mask is computed from `panels.children` — a new panel gets
   mouse input for free, but anything outside `Panels` needs a mask `Region`.
 - Hyprland allows one seat grab: never add a second `HyprlandFocusGrab`

@@ -10,6 +10,8 @@ JsonObject {
     property color on_surface_variant: "#71717a" // zinc-500
     property color surface: "#090b0c" // zinc-950
     property color wallpaper: "#18181b" // zinc-900
+    property color surface_elevated: "#1ad4d4d8" // on_surface (zinc-300) @ 10%
+    property color surface_elevated_hover: "#33d4d4d8" // on_surface (zinc-300) @ 20%
 
     property color borders: "#52525b" // zinc-600
     property color borders_active: "#52525b" // zinc-600

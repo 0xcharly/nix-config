@@ -40,14 +40,21 @@ Singleton {
         if (Hyprland.focusedWorkspace?.id === workspaceId) {
             return;
         }
-        Hyprland.dispatch(`workspace ${workspaceId}`);
+        // This Hyprland's control socket evaluates Lua: `dispatch X` is wrapped
+        // as `hl.dispatch(X)`, so X must be an hl.dsp.* dispatcher expression.
+        // Upstream strings like "workspace 2" fail to parse.
+        Hyprland.dispatch(`hl.dsp.focus({ workspace = ${workspaceId} })`);
     }
 
     function goToNextOccupiedWorkspace(): void {
-        Hyprland.dispatch("workspace m+1");
+        Hyprland.dispatch('hl.dsp.focus({ workspace = "m+1" })');
     }
 
     function goToPreviousOccupiedWorkspace(): void {
-        Hyprland.dispatch("workspace m-1");
+        Hyprland.dispatch('hl.dsp.focus({ workspace = "m-1" })');
+    }
+
+    function goToFirstEmptyWorkspace(): void {
+        Hyprland.dispatch('hl.dsp.focus({ workspace = "empty" })');
     }
 }

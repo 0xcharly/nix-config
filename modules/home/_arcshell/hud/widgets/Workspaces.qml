@@ -56,6 +56,13 @@ ArcRectangle {
     Layout.rightMargin: root.theme.padding.right
     Layout.topMargin: root.theme.padding.top
 
+    // MouseArea.containsMouse would stay false while the cursor is over a
+    // delegate's own hover-enabled MouseArea (siblings block each other);
+    // HoverHandler sees hover events regardless.
+    HoverHandler {
+        id: hoverHandler
+    }
+
     BufferedWheelEventMouseArea {
         anchors.fill: layout
 
@@ -140,6 +147,46 @@ ArcRectangle {
             Workspace {
                 parentTheme: root.theme
                 Layout.alignment: Qt.AlignHCenter
+            }
+        }
+
+        // Switches to the first empty workspace (Hyprland creates it on focus;
+        // it lives only while focused, so the list stays clean when left).
+        ArcRectangle {
+            id: addButton
+
+            readonly property FeatureTokens.Workspace buttonTheme: buttonArea.containsMouse ? root.theme.addButtonHovered : root.theme.addButton
+
+            visible: hoverHandler.hovered
+            Layout.alignment: Qt.AlignHCenter
+
+            color: addButton.buttonTheme.colors.surface
+            radius: addButton.buttonTheme.shape
+
+            // Indicator-sized square: the numeral chips' height (line height
+            // + vertical padding), glyph centered instead of padded — the
+            // icon's advance plus horizontal padding would exceed the bar
+            // width and shift the bar content on hover.
+            implicitHeight: addButton.buttonTheme.typography.lineHeight + addButton.buttonTheme.padding.top + addButton.buttonTheme.padding.bottom
+            implicitWidth: addButton.implicitHeight
+
+            MouseArea {
+                id: buttonArea
+
+                anchors.fill: parent
+                hoverEnabled: true
+
+                onClicked: Hypr.goToFirstEmptyWorkspace()
+            }
+
+            MaterialIcon {
+                id: addLabel
+
+                anchors.centerIn: parent
+
+                color: addButton.buttonTheme.colors.content
+                style: addButton.buttonTheme.typography
+                text: "add"
             }
         }
     }
