@@ -31,5 +31,8 @@ JsonObject {
         property int expressiveFastSpatial: 350 * scale
         property int expressiveDefaultSpatial: 500 * scale
         property int expressiveEffects: 200 * scale
+        // Idle time before an auto-opened panel hides — a UX timeout, not an
+        // animation, so deliberately unscaled.
+        property int linger: 2000
     }
 }

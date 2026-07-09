@@ -68,7 +68,7 @@ Item {
     Timer {
         id: timer
 
-        interval: root.theme.hideDelay
+        interval: Config.tokens.system.animations.durations.linger
         onTriggered: {
             // Every instance restarts this timer on the same global event;
             // only the target screen's instance may close, else a never-

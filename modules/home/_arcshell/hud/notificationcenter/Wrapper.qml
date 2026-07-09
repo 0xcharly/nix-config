@@ -98,7 +98,7 @@ Item {
 
         function onReceived(): void {
             // Auto-open the tray on arrival unless do-not-disturb; the
-            // timer then hides it after `hideDelay` unless hovered.
+            // timer then hides it after the linger timeout unless hovered.
             if (Notifications.shouldShowPopup())
                 root.show();
         }
@@ -107,7 +107,7 @@ Item {
     Timer {
         id: timer
 
-        interval: root.theme.hideDelay
+        interval: Config.tokens.system.animations.durations.linger
         onTriggered: {
             // Every instance restarts this timer on the same global event;
             // only the target screen's instance may close, else a never-

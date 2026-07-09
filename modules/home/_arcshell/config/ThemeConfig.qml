@@ -37,7 +37,6 @@ JsonObject {
     }
 
     component ControlCenter: JsonObject {
-        property int hideDelay: 2000
         // Panel width floor: the remaining widgets (IdleInhibitor,
         // QuickToggles) are fill-width with no intrinsic width, so the
         // panel needs an explicit minimum to not collapse to its padding.
@@ -59,7 +58,6 @@ JsonObject {
     }
 
     component DynamicIsland: JsonObject {
-        property int hideDelay: 2000
         property int shape: Config.tokens.system.shapes.cornerMedium
         property PaddingValues padding: PaddingValues {
             bottom: Config.tokens.system.measurements.large
@@ -76,7 +74,6 @@ JsonObject {
     }
 
     component NotificationCenter: JsonObject {
-        property int hideDelay: 2000
         property int maxVisible: 3
         property BorderLineValues line: BorderLineValues {}
         property AnimationValues animation: AnimationValues {
