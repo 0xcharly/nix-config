@@ -1,22 +1,29 @@
 import qs.components
 import qs.config
 import qs.services
+import Quickshell
 import QtQuick
 
 BufferedWheelEventMouseArea {
     id: root
 
-    required property real volume
-    required property bool muted
+    required property ShellScreen screen
+    readonly property Brightness.Monitor monitor: Brightness.getMonitorForScreen(root.screen)
+    property real brightness: root.monitor?.brightness ?? 0
 
     implicitWidth: layout.implicitWidth
     implicitHeight: layout.implicitHeight
 
     function onWheel(event: WheelEvent) {
+        const monitor = root.monitor;
+        if (!monitor) {
+            return;
+        }
+        // Coarse step; setBrightness clamps to [0, 1].
         if (event.angleDelta.y > 0) {
-            Audio.incrementVolume(slider.stepSize);
+            monitor.setBrightness(monitor.brightness + Config.services.brightness.step);
         } else if (event.angleDelta.y < 0) {
-            Audio.decrementVolume(slider.stepSize);
+            monitor.setBrightness(monitor.brightness - Config.services.brightness.step);
         }
     }
 
@@ -30,7 +37,7 @@ BufferedWheelEventMouseArea {
             elide: Text.ElideRight
             style: Config.theme.hud.dynamicIsland.deviceLabelTypography
             color: Config.theme.hud.dynamicIsland.deviceLabelColor
-            text: Audio.sink?.description || Audio.sink?.name || qsTr("Unknown Device")
+            text: root.screen.model || root.screen.name
         }
 
         Row {
@@ -43,16 +50,15 @@ BufferedWheelEventMouseArea {
 
                 anchors.verticalCenter: parent.verticalCenter
 
-                value: root.volume
-                to: Config.services.audio.maxVolume
-                onMoved: Audio.setVolume(value)
+                value: root.brightness
+                onMoved: root.monitor?.setBrightness(value)
             }
 
             ArcSliderLabel {
                 anchors.verticalCenter: parent.verticalCenter
 
                 value: slider.value
-                icon: IconLibrary.getVolumeIcon(slider.value, root.muted)
+                icon: IconLibrary.getBrightnessIcon(slider.value)
                 held: slider.pressed
                 // Requirement: label matches the lit squares' color.
                 color: slider.theme.highlightColor

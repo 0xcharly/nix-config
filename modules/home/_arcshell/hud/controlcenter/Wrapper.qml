@@ -12,7 +12,6 @@ Item {
 
     required property ShellScreen screen
     property bool hovered
-    readonly property Brightness.Monitor monitor: Brightness.getMonitorForScreen(root.screen)
     readonly property bool shouldBeActive: UiState.isControlCenterTargetScreen(root.screen)
     readonly property ThemeConfig.ControlCenter theme: Config.theme.hud.controlCenter
 
@@ -66,14 +65,6 @@ Item {
         }
     ]
 
-    Connections {
-        target: root.monitor
-
-        function onBrightnessChanged(): void {
-            root.show();
-        }
-    }
-
     Timer {
         id: timer
 
@@ -102,9 +93,7 @@ Item {
 
             Component.onCompleted: active = Qt.binding(() => root.shouldBeActive || root.visible)
 
-            sourceComponent: Content {
-                screen: root.screen
-            }
+            sourceComponent: Content {}
         }
     }
 

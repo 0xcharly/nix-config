@@ -16,8 +16,6 @@ JsonObject {
 
     property color surface_control_slider_matrix_base: borders
     property color surface_control_slider_matrix_highlight: on_surface
-    property color surface_control_slider_slanted_base: on_surface_variant
-    property color surface_control_slider_slanted_highlight: on_surface
 
     property color on_surface_success: "#4ade80" // green-400
 
@@ -49,8 +47,4 @@ JsonObject {
     property color surface_control_thumb_hover: "#26262c36" // control-bgColor-hover
     property color surface_control_thumb_checked_active: "#332ea043"
     property color surface_control_thumb_checked_hover: "#262ea043" // bgColor-success-muted
-
-    property color surface_control_slider_active_track: "#1d4ed8" // blue-700
-    property color surface_control_slider_inactive_track: "#1a3b82f6" // blue-500 @ 10%
-    property color surface_control_slider_thumb: "#3b82f6" // blue-500
 }

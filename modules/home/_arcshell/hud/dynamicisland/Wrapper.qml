@@ -12,6 +12,7 @@ Item {
 
     required property ShellScreen screen
     property bool hovered
+    readonly property Brightness.Monitor monitor: Brightness.getMonitorForScreen(root.screen)
     readonly property bool shouldBeActive: UiState.isDynamicIslandTargetScreen(root.screen)
 
     property real volume
@@ -87,6 +88,14 @@ Item {
         }
     }
 
+    Connections {
+        target: root.monitor
+
+        function onBrightnessChanged(): void {
+            root.show();
+        }
+    }
+
     Timer {
         id: timer
 
@@ -111,6 +120,7 @@ Item {
         Component.onCompleted: active = Qt.binding(() => root.shouldBeActive || root.visible)
 
         sourceComponent: Content {
+            screen: root.screen
             volume: root.volume
             muted: root.muted
         }

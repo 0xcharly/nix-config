@@ -2,6 +2,7 @@ pragma ComponentBehavior: Bound
 
 import qs.hud.dynamicisland.widgets
 import qs.config
+import Quickshell
 import QtQuick
 import QtQuick.Layouts
 
@@ -10,6 +11,7 @@ Item {
 
     readonly property ThemeConfig.DynamicIsland theme: Config.theme.hud.dynamicIsland
 
+    required property ShellScreen screen
     required property real volume
     required property bool muted
 
@@ -29,6 +31,9 @@ Item {
         VolumeSlider {
             volume: root.volume
             muted: root.muted
+        }
+        BrightnessSlider {
+            screen: root.screen
         }
     }
 }

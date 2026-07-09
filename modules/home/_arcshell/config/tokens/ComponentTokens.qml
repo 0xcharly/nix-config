@@ -6,8 +6,6 @@ JsonObject {
     property ComponentTokens.Launcher launcher: ComponentTokens.Launcher {}
     property ComponentTokens.MatrixSlider matrixSlider: ComponentTokens.MatrixSlider {}
     property ComponentTokens.Notification notification: ComponentTokens.Notification {}
-    property ComponentTokens.SlantedSlider slantedSlider: ComponentTokens.SlantedSlider {}
-    property ComponentTokens.Slider slider: ComponentTokens.Slider {}
     property ComponentTokens.SliderLabel sliderLabel: ComponentTokens.SliderLabel {}
     property ComponentTokens.Switch switchC: ComponentTokens.Switch {}
 }

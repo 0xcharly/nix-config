@@ -38,6 +38,10 @@ JsonObject {
 
     component ControlCenter: JsonObject {
         property int hideDelay: 2000
+        // Panel width floor: the remaining widgets (IdleInhibitor,
+        // QuickToggles) are fill-width with no intrinsic width, so the
+        // panel needs an explicit minimum to not collapse to its padding.
+        property int width: 512
         property BorderLineValues line: BorderLineValues {}
         property AnimationValues animation: AnimationValues {
             curveIn: Config.tokens.system.animations.curves.emphasizedIn
@@ -64,6 +68,11 @@ JsonObject {
             top: Config.tokens.system.measurements.medium
         }
         property int spacedBy: Config.tokens.system.measurements.medium
+
+        // Device label shown above each slider (sink / monitor name).
+        property TypographyValues deviceLabelTypography: Config.tokens.system.typography.smallLabel
+        property color deviceLabelColor: Config.tokens.system.colors.on_surface_variant
+        property int deviceLabelSpacing: Config.tokens.system.measurements.extraSmall
     }
 
     component NotificationCenter: JsonObject {
