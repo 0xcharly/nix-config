@@ -15,11 +15,6 @@ Item {
     readonly property bool shouldBeActive: UiState.isNotificationCenterTargetScreen(root.screen) && Notifications.notClosed.length > 0
     readonly property ThemeConfig.NotificationCenter theme: Config.theme.hud.notificationCenter
 
-    // 0 = collapsed, 1 = open. One master value scales width and height
-    // together, so the panel grows out of its top-right corner and a
-    // mid-animation reversal retraces the same visual path.
-    property real progress: 0
-
     // Event-driven summon (every screen's instance fires): target the
     // focused monitor; the latch in UiState makes the N calls idempotent.
     function show(): void {
@@ -27,38 +22,71 @@ Item {
         timer.restart();
     }
 
-    visible: progress > 0
-    implicitWidth: content.implicitWidth * progress
-    implicitHeight: content.implicitHeight * progress
+    visible: implicitWidth > 0
+    implicitWidth: 0
+    implicitHeight: 0
 
-    states: State {
-        name: "visible"
-        when: root.shouldBeActive
+    states: [
+        State {
+            name: "open"
+            when: root.shouldBeActive
 
-        PropertyChanges {
-            root.progress: 1
+            PropertyChanges {
+                root.implicitWidth: content.implicitWidth
+                root.implicitHeight: content.implicitHeight
+                peek.opacity: 0
+                content.opacity: 1
+            }
+        },
+        State {
+            name: "peek"
+            when: Notifications.notClosed.length > 0
+
+            PropertyChanges {
+                root.implicitWidth: peek.implicitWidth
+                root.implicitHeight: peek.implicitHeight
+                peek.opacity: 1
+                content.opacity: 0
+            }
         }
-    }
+    ]
 
     transitions: [
         Transition {
             from: ""
-            to: "visible"
+            to: "peek,open"
 
             AnimatedNumber {
-                target: root
-                property: "progress"
+                properties: "implicitWidth,implicitHeight,opacity"
                 duration: root.theme.animation.duration
                 easing.bezierCurve: root.theme.animation.curveIn
             }
         },
         Transition {
-            from: "visible"
+            from: "peek"
+            to: "open"
+
+            AnimatedNumber {
+                properties: "implicitWidth,implicitHeight,opacity"
+                duration: root.theme.animation.duration
+                easing.bezierCurve: root.theme.animation.curveIn
+            }
+        },
+        Transition {
+            from: "open"
+            to: "peek"
+
+            AnimatedNumber {
+                properties: "implicitWidth,implicitHeight,opacity"
+                duration: root.theme.animation.duration
+                easing.bezierCurve: root.theme.animation.curveOut
+            }
+        },
+        Transition {
             to: ""
 
             AnimatedNumber {
-                target: root
-                property: "progress"
+                properties: "implicitWidth,implicitHeight,opacity"
                 duration: root.theme.animation.duration
                 easing.bezierCurve: root.theme.animation.curveOut
             }
@@ -102,6 +130,10 @@ Item {
             anchors.top: parent.top
             anchors.right: parent.right
 
+            // Notification rows carry MouseAreas and opacity-0 items still
+            // hit-test in QML, so hide the content outright while peeked.
+            visible: opacity > 0
+
             // Load as soon as a notification is tracked — before show() flips
             // the state — so the open transition binds an already-settled
             // content.implicitHeight (avoids an implicitHeight binding loop
@@ -115,13 +147,79 @@ Item {
                 implicitWidth: 512
             }
         }
+
+        // Collapsed count badge — the same panel container shrunk. Hovering it
+        // re-opens the full center: Interactions' show-zone tracks the wrapper's
+        // live width/height, so no interaction code is needed here.
+        Rectangle {
+            id: peek
+
+            anchors.top: parent.top
+            anchors.right: parent.right
+
+            color: Config.theme.hud.border.color
+            implicitHeight: root.theme.peek.size
+            implicitWidth: Math.max(root.theme.peek.size, countLabel.implicitWidth + 2 * root.theme.peek.countPadding)
+            opacity: 0
+            visible: opacity > 0
+
+            // Grow-and-fade ping behind the count, repeating every pulseInterval.
+            Rectangle {
+                id: pulse
+
+                anchors.centerIn: parent
+                width: parent.height
+                height: parent.height
+                radius: height / 2
+                color: root.theme.peek.pulseColor
+                // Off between pulses; the animation drives both scale and opacity.
+                opacity: 0
+                scale: 1 / 3
+
+                SequentialAnimation {
+                    running: root.state === "peek"
+                    loops: Animation.Infinite
+
+                    ParallelAnimation {
+                        AnimatedNumber {
+                            target: pulse
+                            property: "scale"
+                            from: 1 / 3
+                            to: 1
+                            duration: root.theme.peek.pulseAnimation.duration
+                            easing.bezierCurve: root.theme.peek.pulseAnimation.curveOut
+                        }
+                        AnimatedNumber {
+                            target: pulse
+                            property: "opacity"
+                            from: 1
+                            to: 0
+                            duration: root.theme.peek.pulseAnimation.duration
+                            easing.bezierCurve: root.theme.peek.pulseAnimation.curveOut
+                        }
+                    }
+                    PauseAnimation {
+                        duration: Math.max(0, root.theme.peek.pulseInterval - root.theme.peek.pulseAnimation.duration)
+                    }
+                }
+            }
+
+            ArcText {
+                id: countLabel
+
+                anchors.centerIn: parent
+                color: root.theme.peek.countColor
+                style: root.theme.peek.typography
+                text: Notifications.notClosed.length
+            }
+        }
     }
 
     component Line: BorderLine {
         thickness: root.theme.line.width
         lineColor: root.theme.line.color
         fadeLength: root.theme.line.fade
-        length: root.progress * ((horizontal ? content.implicitWidth : content.implicitHeight) + 2 * root.theme.line.overshoot)
+        length: (horizontal ? root.width : root.height) + 2 * root.theme.line.overshoot
     }
 
     Line {

@@ -90,6 +90,24 @@ JsonObject {
             top: Config.tokens.system.measurements.medium
         }
         property int spacedBy: Config.tokens.system.measurements.medium
+
+        property Peek peek: Peek {}
+    }
+
+    component Peek: JsonObject {
+        // Minimum edge of the collapsed count square; width grows for wide counts.
+        property int size: 48
+        // Milliseconds between pulse starts.
+        property int pulseInterval: 10000
+        // Grow-and-fade duration of one pulse.
+        property AnimationValues pulseAnimation: AnimationValues {
+            duration: Config.tokens.system.animations.durations.twoExtraLarge
+        }
+        property TypographyValues typography: Config.tokens.system.typography.body
+        property color countColor: Config.tokens.system.colors.on_surface
+        property color pulseColor: Config.tokens.system.colors.surface_accent
+        // Horizontal slack around the count once it outgrows `size`.
+        property int countPadding: Config.tokens.system.measurements.large
     }
 
     component IdleInhibitor: JsonObject {
