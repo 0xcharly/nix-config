@@ -28,24 +28,29 @@
           programs.arcshell = {
             enable = true;
             systemd.enable = true;
-            settings.theme.hud.bar.power.enable = cfg.modules.power;
-            settings.theme.hud.bar.vpn.enable = cfg.modules.vpn;
-            settings.services.launcher.launchPrefix = [ config.node.wayland.uwsm-wrapper.prefix ];
-            settings.services.launcher.emojiData = "${pkgs.unicode-emoji}/share/unicode/emoji/emoji-test.txt";
-            settings.services.launcher.unicodeData = "${pkgs.unicode-character-database}/share/unicode/UnicodeData.txt";
-            settings.services.launcher.qalcPath = "${pkgs.libqalculate}/bin/qalc";
-            settings.services.launcher.terminalCommand =
-              let
-                terminal = config.user.terminal.default;
-                # Flag that makes the terminal exec the argv that follows it.
-                # kitty takes the command as positional argv with no flag;
-                # unknown terminals get the kitty treatment.
-                execFlags = {
-                  ghostty = [ "-e" ];
-                  kitty = [ ];
-                };
-              in
-              [ (lib.getExe terminal.package) ] ++ (execFlags.${terminal.name} or [ ]);
+            settings.theme.hud.bar = {
+              power.enable = cfg.modules.power;
+              vpn.enable = cfg.modules.vpn;
+            };
+            settings.services.launcher = {
+              launchPrefix = lib.mkDefault [ config.node.wayland.uwsm-wrapper.prefix ];
+              emojiData = lib.mkDefault "${pkgs.unicode-emoji}/share/unicode/emoji/emoji-test.txt";
+              unicodeData = lib.mkDefault "${pkgs.unicode-character-database}/share/unicode/UnicodeData.txt";
+              qalcPath = lib.mkDefault "${pkgs.libqalculate}/bin/qalc";
+              terminalCommand = lib.mkDefault (
+                let
+                  terminal = config.user.terminal.default;
+                  # Flag that makes the terminal exec the argv that follows it.
+                  # kitty takes the command as positional argv with no flag;
+                  # unknown terminals get the kitty treatment.
+                  execFlags = {
+                    ghostty = [ "-e" ];
+                    kitty = [ ];
+                  };
+                in
+                [ (lib.getExe terminal.package) ] ++ (execFlags.${terminal.name} or [ ])
+              );
+            };
           };
         };
     };
