@@ -130,7 +130,7 @@ colors: with colors; ''
     Boolean = { fg = ${text_cyan} }, -- a boolean constant: TRUE, false
     Identifier = { fg = ${text} }, -- (preferred) any variable name
     Function = { fg = ${text_function} }, -- function name (also: methods for classes)
-    Statement = { fg = ${text}, bold = true }, -- (preferred) any statement
+    Statement = { link = 'Keyword' }, -- (preferred) any statement; matches treesitter's @keyword family
     Conditional = { fg = ${text_indigo} }, --  if, then, else, endif, switch, etc.
     Repeat = { link = 'Conditional' }, --   for, do, while, etc.
     Label = { fg = ${text_sky} }, --    case, default, etc.
@@ -144,11 +144,11 @@ colors: with colors; ''
     Macro = { fg = ${text_indigo} }, -- same as Define
     PreCondit = { link = 'PreProc' }, -- preprocessor #if, #else, #endif, etc.
 
-    StorageClass = { fg = ${text_emerald} }, -- static, register, volatile, etc.
-    Structure = { fg = ${text_emerald} }, --  struct, union, enum, etc.
+    StorageClass = { link = 'Keyword' }, -- static, register, volatile, etc.; treesitter maps these to @keyword.modifier -> Keyword
+    Structure = { link = 'Keyword' }, --  struct, union, enum, etc.; treesitter maps these to @keyword.type -> Keyword
     Special = { fg = ${text_pink} }, -- (preferred) any special symbol
     Type = { fg = ${text_emerald} }, -- (preferred) int, long, char, etc.
-    Typedef = { link = 'Type' }, --  A typedef
+    Typedef = { link = 'Keyword' }, --  A typedef; treesitter maps the keyword to @keyword.type -> Keyword
     SpecialChar = { link = 'Special' }, -- special character in a constant
     Tag = { fg = ${text_purple}, bold = true }, -- you can use CTRL-] on this
     Delimiter = { link = 'Punctuation' }, -- character that needs attention
@@ -306,7 +306,7 @@ colors: with colors; ''
     ['@type.definition'] = { link = 'Type' }, -- type definitions (e.g. `typedef` in C)
 
     ['@attribute'] = { link = 'Constant' }, -- attribute annotations (e.g. Python decorators)
-    ['@property'] = { fg = ${text_function} }, -- For fields, like accessing `bar` property on `foo.bar`. Overriden later for data languages and CSS.
+    ['@property'] = { link = '@variable.member' }, -- For fields: same concept as @variable.member, one color for both so LSP "property" tokens (default-linked to @property) match treesitter's field captures. Overriden later for data languages and CSS.
 
     -- Functions
     ['@function'] = { link = 'Function' }, -- For function (calls and definitions).
@@ -449,9 +449,51 @@ colors: with colors; ''
     -- }}}
     -- LSP semantic tokens {{{
 
-    -- Lua
-    ['@lsp.mod.defaultLibrary.lua'] = { link = '@function.builtin.lua' },
-    ['@lsp.typemod.function.defaultLibrary.lua'] = { link = '@function.builtin.lua' },
+    -- Semantic tokens paint OVER treesitter (priority 125 vs 100, see
+    -- vim.hl.priorities), so any token type whose default link resolves to
+    -- a different color than the treesitter capture on the same text makes
+    -- the buffer shift colors when the server attaches. Every entry below
+    -- either clears a token type that is coarser than treesitter's captures
+    -- (an empty definition stops the dotted fallback and lets treesitter
+    -- show through, see :h lsp-semantic-highlight), or pins it to the exact
+    -- group treesitter uses for the same token. Core defaults already align
+    -- the rest.
+
+    -- One flat "keyword" bucket vs treesitter's @keyword.function/.return/
+    -- .conditional/.import (indigo): without this, every keyword flattens
+    -- to the plain Keyword style on attach (rust-analyzer, lua_ls, zls).
+    ['@lsp.type.keyword'] = {},
+    -- Whole-comment tokens would paint over @comment.todo/.error/.warning.
+    ['@lsp.type.comment'] = {},
+    -- Plain "variable" would flatten @variable.builtin (self, vim) and
+    -- other granular captures back to the Normal fg.
+    ['@lsp.type.variable'] = {},
+    -- Defaults to @type.qualifier, which is undefined and falls back to
+    -- @type (emerald); modifier keywords (const, static, pub) belong with
+    -- Keyword, like treesitter's @keyword.modifier.
+    ['@lsp.type.modifier'] = { link = 'Keyword' },
+
+    -- Standard-library functions and methods (e.g. lua_ls on `print`,
+    -- `table.insert`): same color treesitter gives builtins.
+    ['@lsp.typemod.function.defaultLibrary'] = { link = '@function.builtin' },
+    ['@lsp.typemod.method.defaultLibrary'] = { link = '@function.builtin' },
+
+    -- Nix: nixd's token NAMES are arbitrary; it maps its own concepts onto
+    -- the standard legend (nixd/lib/Controller/SemanticTokens.cpp):
+    --   method    = attrset binding keys  -> @variable.member in treesitter
+    --   type      = select attrpath (a.b) -> @variable.member in treesitter
+    --   interface = variables from `with` -> plain @variable in treesitter
+    --   macro     = true/false literals   -> @boolean in treesitter
+    --   keyword   = builtins              -> covered by the global clear:
+    --               treesitter already colors builtins (@function.builtin),
+    --               import (@keyword.import), abort/throw (@keyword.exception).
+    --   regexp    = null + lambda args + lambda formals: three concepts on
+    --               one name; cleared, treesitter renders all three sites.
+    ['@lsp.type.method.nix'] = { link = '@variable.member' },
+    ['@lsp.type.type.nix'] = { link = '@variable.member' },
+    ['@lsp.type.interface.nix'] = { link = '@variable' },
+    ['@lsp.type.macro.nix'] = { link = '@boolean' },
+    ['@lsp.type.regexp.nix'] = {},
 
     -- }}}
     -- }}}
