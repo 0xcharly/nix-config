@@ -15,6 +15,9 @@ Rectangle {
     property bool pressed: false
     property ComponentTokens.QuickToggle theme: Config.theme.defaults.quickToggles
 
+    signal leftClicked
+    signal rightClicked
+
     radius: Config.tokens.system.shapes.cornerFull
     color: root.theme.surface.colors.surface
 
@@ -65,7 +68,8 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
-        enabled: false
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        onClicked: mouse => mouse.button === Qt.RightButton ? root.rightClicked() : root.leftClicked()
     }
 
     component PropAnim: PropertyAnimation {

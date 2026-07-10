@@ -5,6 +5,8 @@ import qs.services
 import qs.config
 import qs.config.tokens.component as ComponentTokens
 import Quickshell
+import Quickshell.Bluetooth
+import Quickshell.Networking
 import QtQuick
 import QtQuick.Layouts
 
@@ -20,10 +22,16 @@ Rectangle {
     // trailing whitespace ("   !  blue" is bin mode), while the field
     // itself accepts and keeps it.
     readonly property string trimmedText: input.text.trim()
-    readonly property bool glyphMode: trimmedText.startsWith(".")
-    readonly property bool calcMode: trimmedText.startsWith("=")
-    readonly property bool shellMode: trimmedText.startsWith("$")
-    readonly property bool binMode: trimmedText.startsWith("!")
+    // Selector modes ("wifi"/"bluetooth") disable the prefix routing below:
+    // a leading "."/"="/"$"/"!" is a plain filter character there.
+    readonly property bool selectorMode: UiState.launcherMode !== "default"
+    property var pendingWifiNetwork: null       // WifiNetwork awaiting a PSK
+    readonly property bool passwordMode: pendingWifiNetwork !== null
+    property string passwordError: ""
+    readonly property bool glyphMode: !selectorMode && trimmedText.startsWith(".")
+    readonly property bool calcMode: !selectorMode && trimmedText.startsWith("=")
+    readonly property bool shellMode: !selectorMode && trimmedText.startsWith("$")
+    readonly property bool binMode: !selectorMode && trimmedText.startsWith("!")
     readonly property string query: (glyphMode || calcMode || shellMode || binMode ? trimmedText.slice(1) : trimmedText).trim()
     readonly property bool queryEmpty: query.length === 0
 
@@ -47,6 +55,21 @@ Rectangle {
     }
 
     function requery(): void {
+        if (root.passwordMode) {
+            root.passwordError = "";
+            root.results = [];
+            return;
+        }
+        if (UiState.launcherMode === "wifi") {
+            root.results = WifiSearch.query(input.text);
+            list.currentIndex = root.results.length > 0 ? 0 : -1;
+            return;
+        }
+        if (UiState.launcherMode === "bluetooth") {
+            root.results = BluetoothSearch.query(input.text);
+            list.currentIndex = root.results.length > 0 ? 0 : -1;
+            return;
+        }
         // Read input.text directly: this runs from onTextChanged, which can
         // fire before the mode/query bindings re-evaluate.
         const text = input.text.trim();
@@ -62,6 +85,29 @@ Rectangle {
     function launchSelected(): void {
         if (list.currentIndex < 0)
             return;
+        if (UiState.launcherMode === "wifi") {
+            const network = root.results[list.currentIndex];
+            if (network.connected) {            // selecting the active network: no-op
+                UiState.showLauncher = false;
+            } else if (network.known || network.security === WifiSecurityType.Open) {
+                network.connect();
+                UiState.showLauncher = false;
+            } else {
+                // Unknown secured network: NM has no secrets, prompt inline.
+                root.pendingWifiNetwork = network;
+                input.text = "";
+                // Explicit: clearing an already-empty field fires no
+                // textChanged, so requery would never see password mode.
+                root.requery();
+            }
+            return;
+        }
+        if (UiState.launcherMode === "bluetooth") {
+            const device = root.results[list.currentIndex];
+            device.connected ? device.disconnect() : device.connect();
+            UiState.showLauncher = false;
+            return;
+        }
         const item = root.results[list.currentIndex];
         if (item.result !== undefined)
             CalcSearch.copy(item);
@@ -76,8 +122,34 @@ Rectangle {
         UiState.showLauncher = false;
     }
 
+    function submit(): void {
+        if (root.passwordMode) {
+            // Ignore Enter while a connect attempt is in flight or empty PSK.
+            if (!root.pendingWifiNetwork || root.pendingWifiNetwork.stateChanging || input.text.length === 0)
+                return;
+            root.passwordError = "";
+            root.pendingWifiNetwork.connectWithPsk(input.text);
+            return;
+        }
+        root.launchSelected();
+    }
+
+    // Password mode exits back to the network list; everything else closes.
+    function dismiss(): void {
+        if (root.passwordMode) {
+            root.pendingWifiNetwork = null;
+            root.passwordError = "";
+            input.text = "";
+            // Explicit: an untouched (still empty) field fires no
+            // textChanged, so the network list would stay stale.
+            root.requery();
+        } else {
+            UiState.showLauncher = false;
+        }
+    }
+
     // Fallback: dismiss on Escape if focus somehow leaves the text field.
-    Keys.onEscapePressed: UiState.showLauncher = false
+    Keys.onEscapePressed: root.dismiss()
 
     // Focus the text field whenever the launcher opens.
     Component.onCompleted: if (UiState.showLauncher) input.forceActiveFocus()
@@ -85,8 +157,23 @@ Rectangle {
         target: UiState
 
         function onShowLauncherChanged() {
-            if (UiState.showLauncher)
+            if (UiState.showLauncher) {
+                // A reopened, not-yet-unloaded Content must not resume a
+                // stale password prompt.
+                root.pendingWifiNetwork = null;
+                root.passwordError = "";
+                root.requery();
                 input.forceActiveFocus();
+            }
+        }
+
+        function onLauncherModeChanged() {
+            root.pendingWifiNetwork = null;
+            root.passwordError = "";
+            input.text = "";
+            // Explicit: clearing an already-empty field fires no
+            // textChanged.
+            root.requery();
         }
     }
 
@@ -127,6 +214,44 @@ Rectangle {
         }
     }
 
+    // Wifi networks appear/disappear while scanning; membership changes
+    // push through the ObjectModel. Per-row signalStrength/connected ticks
+    // update through direct QObject bindings without a requery (deliberate:
+    // resorting on every strength tick makes the list jumpy).
+    Connections {
+        target: Network.wifiDevice?.networks ?? null
+
+        function onValuesChanged() {
+            if (UiState.launcherMode === "wifi")
+                root.requery();
+        }
+    }
+
+    Connections {
+        target: Bluetooth.defaultAdapter?.devices ?? null
+
+        function onValuesChanged() {
+            if (UiState.launcherMode === "bluetooth")
+                root.requery();
+        }
+    }
+
+    // Outcome of a connectWithPsk attempt on the pending network.
+    Connections {
+        target: root.pendingWifiNetwork
+
+        function onConnectedChanged() {
+            if (root.pendingWifiNetwork.connected) {
+                root.pendingWifiNetwork = null;
+                UiState.showLauncher = false;
+            }
+        }
+
+        function onConnectionFailed(reason: int) {
+            root.passwordError = reason === ConnectionFailReason.NoSecrets ? qsTr("Wrong password") : ConnectionFailReason.toString(reason);
+        }
+    }
+
     ColumnLayout {
         id: column
 
@@ -141,7 +266,7 @@ Rectangle {
         ArcText {
             id: title
 
-            text: "Launcher"
+            text: root.passwordMode ? qsTr("Connect to \"%1\"").arg(root.pendingWifiNetwork?.name ?? "") : UiState.launcherMode === "wifi" ? qsTr("Select WiFi network") : UiState.launcherMode === "bluetooth" ? qsTr("Select Bluetooth device") : "Launcher"
             style: root.theme.titleTypography
             color: root.theme.titleContentColor
         }
@@ -161,6 +286,7 @@ Rectangle {
                 anchors.rightMargin: root.theme.input.padding.right
                 verticalAlignment: TextInput.AlignVCenter
                 clip: true
+                echoMode: root.passwordMode ? TextInput.Password : TextInput.Normal
                 color: root.theme.input.colors.content
                 font.family: root.theme.input.typography.family
                 font.pointSize: root.theme.input.typography.fontSize
@@ -170,10 +296,10 @@ Rectangle {
 
                 Keys.onUpPressed: list.currentIndex = Math.max(list.currentIndex - 1, 0)
                 Keys.onDownPressed: list.currentIndex = Math.min(list.currentIndex + 1, root.results.length - 1)
-                Keys.onReturnPressed: root.launchSelected()
-                Keys.onEnterPressed: root.launchSelected()
+                Keys.onReturnPressed: root.submit()
+                Keys.onEnterPressed: root.submit()
 
-                Keys.onEscapePressed: UiState.showLauncher = false
+                Keys.onEscapePressed: root.dismiss()
             }
 
             ArcText {
@@ -181,7 +307,7 @@ Rectangle {
                 anchors.leftMargin: root.theme.input.padding.left
                 anchors.verticalCenter: parent.verticalCenter
                 visible: input.text.length === 0
-                text: "Search"
+                text: root.passwordMode ? "Password" : "Search"
                 style: root.theme.input.typography
                 color: root.theme.inputPlaceholderColor
             }
@@ -204,6 +330,12 @@ Rectangle {
                 required property int index
 
                 readonly property bool binary: modelData.binary !== undefined
+                readonly property bool selectorRow: UiState.launcherMode !== "default"
+                // Wifi networks that require authentication get the locked
+                // signal variant. OWE ("enhanced open") encrypts without
+                // authenticating and Unknown means the backend has not
+                // resolved the AP yet — neither claims a lock.
+                readonly property bool wifiLocked: UiState.launcherMode === "wifi" && modelData.security !== WifiSecurityType.Open && modelData.security !== WifiSecurityType.Owe && modelData.security !== WifiSecurityType.Unknown
                 // Text cell content: the glyph itself, "=" for a calculator
                 // result, "$" for a shell command. App and binary rows use
                 // the boxed leading cell instead.
@@ -234,7 +366,7 @@ Rectangle {
                         color: row.symbol === "" ? root.theme.resultIconBox.surface : "transparent"
 
                         Image {
-                            visible: !row.binary && row.symbol === ""
+                            visible: !row.binary && !row.selectorRow && row.symbol === ""
                             anchors.centerIn: parent
                             width: iconBox.iconSize
                             height: iconBox.iconSize
@@ -245,9 +377,9 @@ Rectangle {
                         }
 
                         MaterialIcon {
-                            visible: row.binary
+                            visible: row.binary || row.selectorRow
                             anchors.centerIn: parent
-                            text: "terminal_2"
+                            text: row.binary ? "terminal_2" : UiState.launcherMode === "wifi" ? (row.modelData.connected ? "check" : "wifi") : IconLibrary.getBluetoothIcon(row.modelData.icon ?? "")
                             color: root.theme.resultIconBox.content
                             // Scale the glyph with the box: QML font resolves
                             // pixelSize over the pointSize ArcText binds.
@@ -270,6 +402,13 @@ Rectangle {
                         style: root.theme.resultTypography
                         color: row.ListView.isCurrentItem ? root.theme.resultSelected.content : root.theme.resultContentColor
                     }
+
+                    MaterialIcon {
+                        visible: row.selectorRow
+                        Layout.alignment: Qt.AlignVCenter
+                        text: !row.selectorRow ? "" : UiState.launcherMode === "wifi" ? IconLibrary.getWifiSignalIcon(row.modelData.signalStrength, row.wifiLocked) : row.modelData.batteryAvailable ? IconLibrary.getBatteryIcon(row.modelData.battery) : row.modelData.connected ? "bluetooth_connected" : "bluetooth"
+                        color: row.ListView.isCurrentItem ? root.theme.resultSelected.content : root.theme.resultContentColor
+                    }
                 }
 
                 MouseArea {
@@ -283,12 +422,25 @@ Rectangle {
         }
 
         ArcText {
-            visible: !root.queryEmpty && root.results.length === 0
+            visible: !root.passwordMode && !root.queryEmpty && root.results.length === 0
             Layout.fillWidth: true
             Layout.preferredHeight: root.theme.resultRowHeight
             leftPadding: root.theme.input.padding.left
             verticalAlignment: Text.AlignVCenter
             text: "No match"
+            style: root.theme.resultTypography
+            color: root.theme.inputPlaceholderColor
+        }
+
+        // Password prompt status: an error from the last attempt, or
+        // progress while NetworkManager works through the connect.
+        ArcText {
+            visible: root.passwordMode && text !== ""
+            Layout.fillWidth: true
+            Layout.preferredHeight: root.theme.resultRowHeight
+            leftPadding: root.theme.input.padding.left
+            verticalAlignment: Text.AlignVCenter
+            text: root.passwordError !== "" ? root.passwordError : root.pendingWifiNetwork?.stateChanging ? qsTr("Connecting…") : ""
             style: root.theme.resultTypography
             color: root.theme.inputPlaceholderColor
         }

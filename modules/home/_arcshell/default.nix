@@ -22,6 +22,18 @@
 let
   version = "0.0.1";
 
+  # Quickshell 0.3.0's NetworkManager wrapper segfaults when an access
+  # point disappears while a wifi network still references it (use-after-
+  # free in the AP/settings destroy handlers; reliably triggered by scan
+  # churn while the wifi selector is open). Cherry-pick of upstream
+  # ead3b00afdf603bb6d4c30fc9c9f582d8f712168 — drop the patch and this
+  # override when updating past 0.3.0.
+  quickshell' = quickshell.overrideAttrs (prev: {
+    patches = (prev.patches or [ ]) ++ [
+      ./patches/0001-networking-fix-uafs-in-nmwirelessnetwork-destroy-handlers.patch
+    ];
+  });
+
   runtimeInputs = [
     apdbctl
     brightnessctl
@@ -77,7 +89,7 @@ stdenv.mkDerivation {
     qt6.wrapQtAppsHook
   ];
   buildInputs = [
-    quickshell
+    quickshell'
     qt6.qtbase
   ];
   propagatedBuildInputs = runtimeInputs;
@@ -96,7 +108,7 @@ stdenv.mkDerivation {
   '';
 
   postInstall = ''
-    makeWrapper ${quickshell}/bin/qs $out/bin/arc-shell \
+    makeWrapper ${quickshell'}/bin/qs $out/bin/arc-shell \
     	--prefix PATH : "${lib.makeBinPath runtimeInputs}" \
     	--set FONTCONFIG_FILE "${fontconfig}" \
     	--add-flags "-p $out/share/arc-shell"

@@ -13,6 +13,11 @@ Singleton {
     property bool showNotificationCenter: false
     property bool showLauncher: false
 
+    // Launcher presentation: "default" (app search + prefix modes), "wifi"
+    // (network selector), "bluetooth" (device selector). Set at every open
+    // site, so it is never stale while visible.
+    property string launcherMode: "default"
+
     // Monitor each panel was summoned on. Latched by the set*Shown helpers
     // BEFORE the show flag flips, so per-screen bindings never observe a
     // shown panel with a stale target. Typed (not `var`) so QML nulls them
@@ -76,6 +81,11 @@ Singleton {
         root.showLauncher = shown;
     }
 
+    function openLauncher(mode: string, monitor: HyprlandMonitor): void {
+        root.launcherMode = mode;
+        root.setLauncherShown(true, monitor);
+    }
+
     property var screens: new Map()
 
     function load(screen: ShellScreen, state: var): void {
@@ -85,6 +95,6 @@ Singleton {
     WaylandShortcut {
         name: "launcherToggle"
         description: "Toggle the launcher"
-        onPressed: root.setLauncherShown(!root.showLauncher, Hyprland.focusedMonitor)
+        onPressed: root.showLauncher ? root.setLauncherShown(false, Hyprland.focusedMonitor) : root.openLauncher("default", Hyprland.focusedMonitor)
     }
 }

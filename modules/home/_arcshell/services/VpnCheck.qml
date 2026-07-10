@@ -33,8 +33,7 @@ Singleton {
         }
 
         onExited: code => { // qmllint disable signal-handler-parameters
-            // callLater lets the stdout collector finish first
-            // (same ordering trick as services/Network.qml).
+            // callLater lets the stdout collector finish first.
             Qt.callLater(() => {
                 if (code !== 0) {
                     root.status = "error";

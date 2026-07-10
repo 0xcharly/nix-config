@@ -63,16 +63,25 @@ Singleton {
         return fallback;
     }
 
-    function getNetworkIcon(strength: int): string {
-        if (strength >= 80)
-            return "signal_wifi_4_bar";
-        if (strength >= 60)
-            return "network_wifi_3_bar";
-        if (strength >= 40)
-            return "network_wifi_2_bar";
-        if (strength >= 20)
-            return "network_wifi_1_bar";
-        return "signal_wifi_0_bar";
+    function getWifiSignalIcon(strength: real, locked: bool): string {
+        // Material Symbols has no locked variant of signal_wifi_0_bar;
+        // report the (barely usable) strength honestly instead.
+        if (strength < 0.2)
+            return "signal_wifi_0_bar";
+        const suffix = locked ? "_locked" : "";
+        if (strength >= 0.8)
+            return `network_wifi${suffix}`;
+        if (strength >= 0.6)
+            return `network_wifi_3_bar${suffix}`;
+        if (strength >= 0.4)
+            return `network_wifi_2_bar${suffix}`;
+        return `network_wifi_1_bar${suffix}`;
+    }
+
+    function getBatteryIcon(level: real): string {
+        if (level >= 0.95)
+            return "battery_full";
+        return `battery_${Math.max(0, Math.round(level * 6))}_bar`;
     }
 
     function getBluetoothIcon(icon: string): string {
