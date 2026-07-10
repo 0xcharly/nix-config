@@ -313,57 +313,57 @@ T = {
   text_dimmest = P['zinc-600'],
   text_conceal = P['zinc-700'],
 
-  text_variant = P['gray-300'],
-  text_variant_dim = P['gray-400'],
-  text_variant_dimmer = P['gray-500'],
-  text_variant_dimmest = P['gray-600'],
-  text_variant_conceal = P['gray-700'],
+  text_variant = P['slate-300'],
+  text_variant_dim = P['slate-400'],
+  text_variant_dimmer = P['slate-500'],
+  text_variant_dimmest = P['slate-600'],
+  text_variant_conceal = P['slate-700'],
 
-  text_red = P['red-200'],
-  text_orange = P['orange-100'],
-  text_amber = P['amber-100'],
-  text_yellow = P['yellow-50'],
-  text_lime = P['lime-200'],
-  text_green = P['green-200'],
-  text_emerald = P['emerald-200'],
+  text_red = P['red-300'],
+  text_orange = P['orange-300'],
+  text_amber = P['amber-400'],
+  text_yellow = P['yellow-400'],
+  text_lime = P['lime-400'],
+  text_green = P['green-300'],
+  text_emerald = P['emerald-300'],
   text_teal = P['teal-300'],
-  text_cyan = P['cyan-200'],
+  text_cyan = P['cyan-300'],
   text_sky = P['sky-300'],
   text_blue = P['blue-300'],
-  text_indigo = P['indigo-200'],
-  text_violet = P['violet-200'],
-  text_purple = P['purple-200'],
-  text_fuchsia = P['fuchsia-200'],
-  text_pink = P['pink-200'],
-  text_rose = P['rose-200'],
+  text_indigo = P['indigo-300'],
+  text_violet = P['violet-300'],
+  text_purple = P['purple-300'],
+  text_fuchsia = P['fuchsia-300'],
+  text_pink = P['pink-300'],
+  text_rose = P['rose-300'],
 
-  text_title = P['slate-100'],
+  text_title = P['zinc-100'],
   text_link = P['blue-300'],
   text_function = P['blue-300'],
-  text_comment = P['gray-500'],
+  text_comment = P['slate-500'],
 
-  text_ok = P['green-200'],
-  text_error = P['red-200'],
-  text_warning = P['amber-100'],
+  text_ok = P['green-300'],
+  text_error = P['red-300'],
+  text_warning = P['amber-400'],
   text_info = P['blue-300'],
   text_hint = P['indigo-300'],
 
   text_lineno = P['zinc-700'],
   text_lineno_cursor = P['zinc-400'],
 
-  borders = P['slate-500'],
+  borders = P['zinc-600'],
 
-  surface_dark = P['neutral-950'],
-  surface = P['neutral-900'],
-  surface_cursorline = P['neutral-800'],
-  surface_menu = P['stone-900'],
-  surface_menu_cursorline = P['stone-800'],
+  surface_dark = P['zinc-950'],
+  surface = P['zinc-900'],
+  surface_cursorline = P['zinc-800'],
+  surface_menu = P['zinc-950'],
+  surface_menu_cursorline = P['zinc-800'],
 
   surface_scrollbar = 0x121212,
-  surface_scrollbar_thumb = P['neutral-800'],
+  surface_scrollbar_thumb = P['zinc-800'],
 
-  surface_cursor = P['red-600'],
-  on_surface_cursor = P['neutral-900'],
+  surface_cursor = P['orange-400'],
+  on_surface_cursor = P['zinc-900'],
 
   surface_visual = P['blue-800'],
   on_surface_visual = P['blue-50'],
@@ -378,7 +378,7 @@ T = {
 
   -- Same as `surface_amber`/`on_surface_amber`
   surface_search = 0x343121, -- surface + amber-300/15
-  on_surface_search = P['amber-100'],
+  on_surface_search = P['amber-200'],
 
   surface_red = 0x352932, -- surface + red-300/15
   on_surface_red = P['red-200'],
@@ -387,10 +387,10 @@ T = {
   on_surface_green = P['green-200'],
 
   surface_amber = 0x343121, -- surface + amber-300/15
-  on_surface_amber = P['amber-100'],
+  on_surface_amber = P['amber-200'],
 
   surface_blue = 0x232F41, -- surface + blue-300/15
-  on_surface_blue = P['blue-300'],
+  on_surface_blue = P['blue-200'],
 
   surface_violet = 0x2B2C41, -- surface + violet-300/15
   on_surface_violet = P['violet-200'],
@@ -403,28 +403,28 @@ T = {
 -- Terminal groups {{{
 
 vim.g.terminal_color_0 = T.surface
-vim.g.terminal_color_8 = T.surface_menu
+vim.g.terminal_color_8 = T.text_dimmer
 
 vim.g.terminal_color_1 = T.text_red
-vim.g.terminal_color_9 = T.text_orange
+vim.g.terminal_color_9 = P['red-200']
 
 vim.g.terminal_color_2 = T.text_green
-vim.g.terminal_color_10 = T.text_emerald
+vim.g.terminal_color_10 = P['green-200']
 
 vim.g.terminal_color_3 = T.text_amber
-vim.g.terminal_color_11 = T.text_yellow
+vim.g.terminal_color_11 = P['amber-300']
 
 vim.g.terminal_color_4 = T.text_blue
-vim.g.terminal_color_12 = T.text_sky
+vim.g.terminal_color_12 = P['blue-200']
 
-vim.g.terminal_color_13 = T.text_teal
-vim.g.terminal_color_5 = T.text_cyan
+vim.g.terminal_color_5 = T.text_fuchsia
+vim.g.terminal_color_13 = P['fuchsia-200']
 
-vim.g.terminal_color_6 = T.text_indigo
-vim.g.terminal_color_14 = T.text_violet
+vim.g.terminal_color_6 = T.text_cyan
+vim.g.terminal_color_14 = P['cyan-200']
 
 vim.g.terminal_color_7 = T.text
-vim.g.terminal_color_15 = T.text_dim
+vim.g.terminal_color_15 = P['zinc-100']
 
 --- }}}
 

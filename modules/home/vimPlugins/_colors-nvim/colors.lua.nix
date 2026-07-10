@@ -4,29 +4,29 @@
 colors: with colors; ''
   -- Terminal groups {{{
 
-  vim.g.terminal_color_0 = ${surface}
-  vim.g.terminal_color_8 = ${surface_menu}
+  vim.g.terminal_color_0 = ${terminal_color_0}
+  vim.g.terminal_color_8 = ${terminal_color_8}
 
-  vim.g.terminal_color_1 = ${text_red}
-  vim.g.terminal_color_9 = ${text_orange}
+  vim.g.terminal_color_1 = ${terminal_color_1}
+  vim.g.terminal_color_9 = ${terminal_color_9}
 
-  vim.g.terminal_color_2 = ${text_green}
-  vim.g.terminal_color_10 = ${text_emerald}
+  vim.g.terminal_color_2 = ${terminal_color_2}
+  vim.g.terminal_color_10 = ${terminal_color_10}
 
-  vim.g.terminal_color_3 = ${text_amber}
-  vim.g.terminal_color_11 = ${text_yellow}
+  vim.g.terminal_color_3 = ${terminal_color_3}
+  vim.g.terminal_color_11 = ${terminal_color_11}
 
-  vim.g.terminal_color_4 = ${text_blue}
-  vim.g.terminal_color_12 = ${text_sky}
+  vim.g.terminal_color_4 = ${terminal_color_4}
+  vim.g.terminal_color_12 = ${terminal_color_12}
 
-  vim.g.terminal_color_13 = ${text_teal}
-  vim.g.terminal_color_5 = ${text_cyan}
+  vim.g.terminal_color_5 = ${terminal_color_5}
+  vim.g.terminal_color_13 = ${terminal_color_13}
 
-  vim.g.terminal_color_6 = ${text_indigo}
-  vim.g.terminal_color_14 = ${text_violet}
+  vim.g.terminal_color_6 = ${terminal_color_6}
+  vim.g.terminal_color_14 = ${terminal_color_14}
 
-  vim.g.terminal_color_7 = ${text}
-  vim.g.terminal_color_15 = ${text_dim}
+  vim.g.terminal_color_7 = ${terminal_color_7}
+  vim.g.terminal_color_15 = ${terminal_color_15}
 
   --- }}}
 
@@ -144,10 +144,10 @@ colors: with colors; ''
     Macro = { fg = ${text_indigo} }, -- same as Define
     PreCondit = { link = 'PreProc' }, -- preprocessor #if, #else, #endif, etc.
 
-    StorageClass = { fg = ${text_amber} }, -- static, register, volatile, etc.
-    Structure = { fg = ${text_amber} }, --  struct, union, enum, etc.
+    StorageClass = { fg = ${text_emerald} }, -- static, register, volatile, etc.
+    Structure = { fg = ${text_emerald} }, --  struct, union, enum, etc.
     Special = { fg = ${text_pink} }, -- (preferred) any special symbol
-    Type = { fg = ${text_amber} }, -- (preferred) int, long, char, etc.
+    Type = { fg = ${text_emerald} }, -- (preferred) int, long, char, etc.
     Typedef = { link = 'Type' }, --  A typedef
     SpecialChar = { link = 'Special' }, -- special character in a constant
     Tag = { fg = ${text_purple}, bold = true }, -- you can use CTRL-] on this
