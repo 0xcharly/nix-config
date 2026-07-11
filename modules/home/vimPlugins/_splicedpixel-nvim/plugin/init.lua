@@ -145,7 +145,7 @@ load_colorscheme {
   StorageClass = { link = 'Keyword' }, -- static, register, volatile, etc.; treesitter maps these to @keyword.modifier -> Keyword
   Structure = { link = 'Keyword' }, --  struct, union, enum, etc.; treesitter maps these to @keyword.type -> Keyword
   Special = { fg = T.text_pink }, -- (preferred) any special symbol
-  Type = { fg = T.text_emerald }, -- (preferred) int, long, char, etc.
+  Type = { fg = T.text_yellow }, -- (preferred) int, long, char, etc.
   Typedef = { link = 'Keyword' }, --  A typedef; treesitter maps the keyword to @keyword.type -> Keyword
   SpecialChar = { link = 'Special' }, -- special character in a constant
   Tag = { fg = T.text_purple, bold = true }, -- you can use CTRL-] on this
@@ -185,7 +185,7 @@ load_colorscheme {
   DiffAdd = { bg = T.surface_green }, -- diff mode: Added line |diff.txt|
   DiffChange = { bg = T.surface_blue }, -- diff mode: Changed line |diff.txt|
   DiffDelete = { bg = T.surface_red }, -- diff mode: Deleted line |diff.txt|
-  DiffText = { bg = T.surface_violet }, -- diff mode: Changed text within a changed line |diff.txt|
+  DiffText = { bg = T.surface_purple }, -- diff mode: Changed text within a changed line |diff.txt|
 
   -- NeoVim
   healthError = { fg = T.text_error },
@@ -246,7 +246,7 @@ load_colorscheme {
   DiagnosticUnderlineWarn = { sp = T.text_warning, undercurl = true },
   DiagnosticUnderlineError = { sp = T.text_error, undercurl = true },
   DiagnosticVirtualTextOk = { fg = T.on_surface_green, bg = T.surface_green }, -- Used as the mantle highlight group. Other Diagnostic highlights link to this by default
-  DiagnosticVirtualTextHint = { fg = T.on_surface_violet, bg = T.surface_violet },
+  DiagnosticVirtualTextHint = { fg = T.on_surface_purple, bg = T.surface_purple },
   DiagnosticVirtualTextInfo = { fg = T.on_surface_blue, bg = T.surface_blue },
   DiagnosticVirtualTextWarn = { fg = T.on_surface_amber, bg = T.surface_amber },
   DiagnosticVirtualTextError = { fg = T.on_surface_red, bg = T.surface_red },

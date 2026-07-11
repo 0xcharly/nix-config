@@ -43,9 +43,24 @@ name = "splicedpixel"
 base = "zinc"
 variant = "slate"
 
-# [palette]
 # Custom named colors; may reference [palette] entries and the base palette.
-# rust = "darken(orange-600, 10%)"
+[palette]
+# Softened yellows, targeting Catppuccin yellow hsl(41, 86%, 83%) = #f9e1ae.
+# amber-400 carries the matching hue (84.4 vs 85.7); lighten to text
+# brightness (chroma falls proportionally), then trim residual chroma.
+soft_amber = "desaturate(lighten(amber-400, 50%), 25%)"
+soft_yellow = "desaturate(lighten(yellow-400, 45%), 35%)"
+# Bright/-200 role: mirrors the family relation lighten(X-300, 40%) ~= X-200.
+soft_amber_bright = "lighten(soft_amber, 40%)"
+
+# Gentoo purple (https://wiki.gentoo.org/wiki/Project:Artwork/Colors).
+# Tailwind's violet family sits on Gentoo's hue (~293.5deg) — e.g.
+# desaturate(violet-800, 65%) ~= #54487a (Gentoo purple) and
+# desaturate(darken(violet-500, 14%), 36%) ~= #6e56af (purple light2).
+# The variants below keep that hue at readable lightness with Gentoo's
+# reduced chroma.
+gentoo_purple = "desaturate(violet-300, 35%)"
+gentoo_purple_bright = "desaturate(violet-200, 35%)"
 
 # Palette inspired by https://github.com/catppuccin/catppuccin
 # MIT License: Copyright (c) 2021 Catppuccin
@@ -64,8 +79,8 @@ text_variant_conceal = "variant-700"
 
 text_red = "red-300"
 text_orange = "orange-300"
-text_amber = "amber-200"
-text_yellow = "yellow-200"
+text_amber = "soft_amber"
+text_yellow = "soft_yellow"
 text_lime = "lime-400"
 text_green = "green-300"
 text_emerald = "emerald-300"
@@ -75,7 +90,7 @@ text_sky = "sky-300"
 text_blue = "blue-300"
 text_indigo = "indigo-300"
 text_violet = "violet-300"
-text_purple = "purple-300"
+text_purple = "gentoo_purple"
 text_fuchsia = "fuchsia-300"
 text_pink = "pink-300"
 text_rose = "rose-300"
@@ -151,13 +166,13 @@ surface_green = "blend(green-300/15, surface)"
 on_surface_green = "green-200"
 
 surface_amber = "blend(amber-300/15, surface)"
-on_surface_amber = "amber-200"
+on_surface_amber = "soft_amber_bright"
 
 surface_blue = "blend(blue-300/15, surface)"
 on_surface_blue = "blue-200"
 
-surface_violet = "blend(violet-300/15, surface)"
-on_surface_violet = "violet-200"
+surface_purple = "blend(gentoo_purple/15, surface)"
+on_surface_purple = "gentoo_purple_bright"
 
 terminal_color_0 = "surface"
 terminal_color_8 = "text_dimmer"
@@ -169,13 +184,13 @@ terminal_color_2 = "text_green"
 terminal_color_10 = "green-200"
 
 terminal_color_3 = "text_amber"
-terminal_color_11 = "amber-200"
+terminal_color_11 = "soft_amber_bright"
 
 terminal_color_4 = "text_blue"
 terminal_color_12 = "blue-200"
 
-terminal_color_5 = "text_fuchsia"
-terminal_color_13 = "fuchsia-200"
+terminal_color_5 = "text_purple"
+terminal_color_13 = "gentoo_purple_bright"
 
 terminal_color_6 = "text_cyan"
 terminal_color_14 = "cyan-200"

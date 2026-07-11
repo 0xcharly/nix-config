@@ -138,11 +138,11 @@
       ]
     },
     "on_surface_amber": {
-      "hex": "fee685",
+      "hex": "fbecce",
       "rgb": [
-        254,
-        230,
-        133
+        251,
+        236,
+        206
       ]
     },
     "on_surface_blue": {
@@ -169,6 +169,14 @@
         207
       ]
     },
+    "on_surface_purple": {
+      "hex": "dcd8f3",
+      "rgb": [
+        220,
+        216,
+        243
+      ]
+    },
     "on_surface_red": {
       "hex": "ffc9c9",
       "rgb": [
@@ -178,11 +186,11 @@
       ]
     },
     "on_surface_search": {
-      "hex": "fee685",
+      "hex": "fbecce",
       "rgb": [
-        254,
-        230,
-        133
+        251,
+        236,
+        206
       ]
     },
     "on_surface_statusline": {
@@ -215,14 +223,6 @@
         82,
         82,
         92
-      ]
-    },
-    "on_surface_violet": {
-      "hex": "ddd6ff",
-      "rgb": [
-        221,
-        214,
-        255
       ]
     },
     "on_surface_visual": {
@@ -361,6 +361,14 @@
         42
       ]
     },
+    "surface_purple": {
+      "hex": "32303a",
+      "rgb": [
+        50,
+        48,
+        58
+      ]
+    },
     "surface_red": {
       "hex": "3b2d2f",
       "rgb": [
@@ -425,14 +433,6 @@
         26
       ]
     },
-    "surface_violet": {
-      "hex": "322f3d",
-      "rgb": [
-        50,
-        47,
-        61
-      ]
-    },
     "surface_visual": {
       "hex": "193cb8",
       "rgb": [
@@ -466,11 +466,11 @@
       ]
     },
     "terminal_color_11": {
-      "hex": "fee685",
+      "hex": "fbecce",
       "rgb": [
-        254,
-        230,
-        133
+        251,
+        236,
+        206
       ]
     },
     "terminal_color_12": {
@@ -482,11 +482,11 @@
       ]
     },
     "terminal_color_13": {
-      "hex": "f6cfff",
+      "hex": "dcd8f3",
       "rgb": [
-        246,
-        207,
-        255
+        220,
+        216,
+        243
       ]
     },
     "terminal_color_14": {
@@ -514,11 +514,11 @@
       ]
     },
     "terminal_color_3": {
-      "hex": "fee685",
+      "hex": "f9e0ad",
       "rgb": [
-        254,
-        230,
-        133
+        249,
+        224,
+        173
       ]
     },
     "terminal_color_4": {
@@ -530,11 +530,11 @@
       ]
     },
     "terminal_color_5": {
-      "hex": "f4a8ff",
+      "hex": "c3b9ec",
       "rgb": [
-        244,
-        168,
-        255
+        195,
+        185,
+        236
       ]
     },
     "terminal_color_6": {
@@ -578,11 +578,11 @@
       ]
     },
     "text_amber": {
-      "hex": "fee685",
+      "hex": "f9e0ad",
       "rgb": [
-        254,
-        230,
-        133
+        249,
+        224,
+        173
       ]
     },
     "text_blue": {
@@ -762,11 +762,11 @@
       ]
     },
     "text_purple": {
-      "hex": "dab2ff",
+      "hex": "c3b9ec",
       "rgb": [
-        218,
-        178,
-        255
+        195,
+        185,
+        236
       ]
     },
     "text_red": {
@@ -858,19 +858,19 @@
       ]
     },
     "text_warning": {
-      "hex": "fee685",
+      "hex": "f9e0ad",
       "rgb": [
-        254,
-        230,
-        133
+        249,
+        224,
+        173
       ]
     },
     "text_yellow": {
-      "hex": "fff085",
+      "hex": "f5e3ae",
       "rgb": [
-        255,
-        240,
-        133
+        245,
+        227,
+        174
       ]
     }
   }

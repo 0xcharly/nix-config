@@ -27,8 +27,8 @@ in
         surface_accent = surface_blue;
         on_surface_accent = on_surface_blue;
 
-        surface_done = surface_violet;
-        on_surface_done = on_surface_violet;
+        surface_done = surface_purple;
+        on_surface_done = on_surface_purple;
       };
     };
   };

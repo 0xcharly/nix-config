@@ -27,7 +27,7 @@ in
         # Background blocks
         selectedBg = surface_cursorline;
         userMessageBg = surface_blue;
-        customMessageBg = surface_violet;
+        customMessageBg = surface_purple;
         toolPendingBg = surface_cursorline;
         toolSuccessBg = surface_green;
         toolErrorBg = surface_red;
@@ -36,7 +36,7 @@ in
         # Message/tool text
         userMessageText = text;
         customMessageText = text;
-        customMessageLabel = on_surface_violet;
+        customMessageLabel = on_surface_purple;
         toolTitle = text_title;
         toolOutput = text_dim;
 
