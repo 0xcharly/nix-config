@@ -1,5 +1,4 @@
 {
-  self,
   inputs,
   moduleWithSystem,
   ...
@@ -25,13 +24,13 @@
   );
 
   perSystem =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
     {
       # The entire neoviw configuration without any dependency
       packages.nvim =
         let
-          colors-nvim = pkgs.callPackage ./vimPlugins/_colors-nvim {
-            inherit (self.lib) colors;
+          splicedpixel-nvim = pkgs.callPackage ./vimPlugins/_splicedpixel-nvim {
+            inherit (config.packages) splicedpixel;
           };
           mkNvimDist = pkgs.callPackage ./nvim/_mk-nvim-dist.nix { };
         in
@@ -40,7 +39,7 @@
           runtime = [ ./nvim/nvim-runtime ];
           patches = [ ];
           plugins = pkgs.callPackage ./nvim/_nvim-plugins.nix {
-            inherit colors-nvim;
+            inherit splicedpixel-nvim;
           };
         };
     };

@@ -17,14 +17,15 @@
 
   enterShell =
     let
-      inherit (pkgs.stdenv.hostPlatform) system;
       pkgs' = import inputs.nixpkgs {
         inherit (pkgs.stdenv.hostPlatform) system;
         overlays = [ inputs.gen-luarc.overlays.default ];
       };
       luarc-json = pkgs'.mk-luarc-json {
         plugins = pkgs.callPackage ./modules/home/nvim/_nvim-plugins.nix {
-          colors-nvim = inputs.colorscheme.packages.${system}.colorscheme-nvim;
+          splicedpixel-nvim = pkgs.callPackage ./modules/home/vimPlugins/_splicedpixel-nvim {
+            splicedpixel = pkgs.callPackage ./modules/lib/_splicedpixel { };
+          };
         };
         nvim = pkgs.neovim-unwrapped;
       };
@@ -171,40 +172,12 @@
         ${lib.getExe' pkgs.ncurses "infocmp"} -x | ssh -o PubkeyAuthentication=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "$1" -- tic -x -
       '';
 
-      generate-tailwind-palettes = {
-        exec = ''
-          generate_tailwind_palette() {
-            FORMAT="$1"
-            TRANSFORM="$2"
+      generate-colorscheme.exec = ''
+        nix run .#splicedpixel -- render --config modules/lib/_colors/theme.toml --format json -o modules/lib/_colors/colors.json
+      '';
 
-            mkdir -p lib/colors
-            cat <<EOF > modules/lib/colors/_tailwind-palette-$FORMAT.nix
-          {
-          $(curl -sL "https://unpkg.com/@grida/tailwindcss-colors/json/$FORMAT.json" | jq -r "
-            to_entries[]
-            | .key as \$family
-            | .value
-            | to_entries[]
-            | \"  \\(\$family)-\\(.key) = $TRANSFORM;\"
-          ")
-          }
-          EOF
-          }
-
-          generate_tailwind_palette_as_nix_array() {
-            FORMAT="$1"
-            generate_tailwind_palette "$FORMAT" '[ \(.value | join(" ")) ]'
-          }
-
-          generate_tailwind_palette hex '\"\(.value | ltrimstr("#"))\"'
-          generate_tailwind_palette_as_nix_array rgb
-          generate_tailwind_palette_as_nix_array rgba
-          generate_tailwind_palette_as_nix_array oklch
-        '';
-        packages = with pkgs; [
-          curl
-          jq
-        ];
-      };
+      update-tailwind-palette.exec = ''
+        nix run .#splicedpixel -- update-palette -o modules/lib/_splicedpixel/tailwind.json
+      '';
     };
 }

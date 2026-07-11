@@ -1,7 +1,35 @@
--- Helpers {{{
+local T = require('splicedpixel.palette')
+
+-- Terminal groups {{{
+
+vim.g.terminal_color_0 = T.terminal_color_0
+vim.g.terminal_color_8 = T.terminal_color_8
+
+vim.g.terminal_color_1 = T.terminal_color_1
+vim.g.terminal_color_9 = T.terminal_color_9
+
+vim.g.terminal_color_2 = T.terminal_color_2
+vim.g.terminal_color_10 = T.terminal_color_10
+
+vim.g.terminal_color_3 = T.terminal_color_3
+vim.g.terminal_color_11 = T.terminal_color_11
+
+vim.g.terminal_color_4 = T.terminal_color_4
+vim.g.terminal_color_12 = T.terminal_color_12
+
+vim.g.terminal_color_5 = T.terminal_color_5
+vim.g.terminal_color_13 = T.terminal_color_13
+
+vim.g.terminal_color_6 = T.terminal_color_6
+vim.g.terminal_color_14 = T.terminal_color_14
+
+vim.g.terminal_color_7 = T.terminal_color_7
+vim.g.terminal_color_15 = T.terminal_color_15
+
+--- }}}
 
 ---@param groups {[string]: table}
-local function generate_colorscheme(groups)
+local function load_colorscheme(groups)
   if type(groups) ~= 'table' then
     error('generate_colorscheme: invalid parameter: expected a table, got ' .. type(groups))
   end
@@ -11,424 +39,7 @@ local function generate_colorscheme(groups)
   end
 end
 
--- }}}
--- Palette {{{
-
-local P = {
-  ['amber-100'] = 0xFEF3C6,
-  ['amber-200'] = 0xFEE685,
-  ['amber-300'] = 0xFFD230,
-  ['amber-400'] = 0xFFB900,
-  ['amber-50'] = 0xFFFBEB,
-  ['amber-500'] = 0xFE9A00,
-  ['amber-600'] = 0xE17100,
-  ['amber-700'] = 0xBB4D00,
-  ['amber-800'] = 0x973C00,
-  ['amber-900'] = 0x7B3306,
-  ['amber-950'] = 0x461901,
-  ['blue-100'] = 0xDBEAFE,
-  ['blue-200'] = 0xBEDBFF,
-  ['blue-300'] = 0x8EC5FF,
-  ['blue-400'] = 0x51A2FF,
-  ['blue-50'] = 0xEFF6FF,
-  ['blue-500'] = 0x2B7FFF,
-  ['blue-600'] = 0x155DFC,
-  ['blue-700'] = 0x1447E6,
-  ['blue-800'] = 0x193CB8,
-  ['blue-900'] = 0x1C398E,
-  ['blue-950'] = 0x162456,
-  ['cyan-100'] = 0xCEFAFE,
-  ['cyan-200'] = 0xA2F4FD,
-  ['cyan-300'] = 0x53EAFD,
-  ['cyan-400'] = 0x00D3F2,
-  ['cyan-50'] = 0xECFEFF,
-  ['cyan-500'] = 0x00B8DB,
-  ['cyan-600'] = 0x0092B8,
-  ['cyan-700'] = 0x007595,
-  ['cyan-800'] = 0x005F78,
-  ['cyan-900'] = 0x104E64,
-  ['cyan-950'] = 0x053345,
-  ['emerald-100'] = 0xD0FAE5,
-  ['emerald-200'] = 0xA4F4CF,
-  ['emerald-300'] = 0x5EE9B5,
-  ['emerald-400'] = 0x00D492,
-  ['emerald-50'] = 0xECFDF5,
-  ['emerald-500'] = 0x00BC7D,
-  ['emerald-600'] = 0x009966,
-  ['emerald-700'] = 0x007A55,
-  ['emerald-800'] = 0x006045,
-  ['emerald-900'] = 0x004F3B,
-  ['emerald-950'] = 0x002C22,
-  ['fuchsia-100'] = 0xFAE8FF,
-  ['fuchsia-200'] = 0xF6CFFF,
-  ['fuchsia-300'] = 0xF4A8FF,
-  ['fuchsia-400'] = 0xED6AFF,
-  ['fuchsia-50'] = 0xFDF4FF,
-  ['fuchsia-500'] = 0xE12AFB,
-  ['fuchsia-600'] = 0xC800DE,
-  ['fuchsia-700'] = 0xA800B7,
-  ['fuchsia-800'] = 0x8A0194,
-  ['fuchsia-900'] = 0x721378,
-  ['fuchsia-950'] = 0x4B004F,
-  ['gray-100'] = 0xF3F4F6,
-  ['gray-200'] = 0xE5E7EB,
-  ['gray-300'] = 0xD1D5DC,
-  ['gray-400'] = 0x99A1AF,
-  ['gray-50'] = 0xF9FAFB,
-  ['gray-500'] = 0x6A7282,
-  ['gray-600'] = 0x4A5565,
-  ['gray-700'] = 0x364153,
-  ['gray-800'] = 0x1E2939,
-  ['gray-900'] = 0x101828,
-  ['gray-950'] = 0x030712,
-  ['green-100'] = 0xDCFCE7,
-  ['green-200'] = 0xB9F8CF,
-  ['green-300'] = 0x7BF1A8,
-  ['green-400'] = 0x05DF72,
-  ['green-50'] = 0xF0FDF4,
-  ['green-500'] = 0x00C950,
-  ['green-600'] = 0x00A63E,
-  ['green-700'] = 0x008236,
-  ['green-800'] = 0x016630,
-  ['green-900'] = 0x0D542B,
-  ['green-950'] = 0x032E15,
-  ['indigo-100'] = 0xE0E7FF,
-  ['indigo-200'] = 0xC6D2FF,
-  ['indigo-300'] = 0xA3B3FF,
-  ['indigo-400'] = 0x7C86FF,
-  ['indigo-50'] = 0xEEF2FF,
-  ['indigo-500'] = 0x615FFF,
-  ['indigo-600'] = 0x4F39F6,
-  ['indigo-700'] = 0x432DD7,
-  ['indigo-800'] = 0x372AAC,
-  ['indigo-900'] = 0x312C85,
-  ['indigo-950'] = 0x1E1A4D,
-  ['lime-100'] = 0xECFCCA,
-  ['lime-200'] = 0xD8F999,
-  ['lime-300'] = 0xBBF451,
-  ['lime-400'] = 0x9AE600,
-  ['lime-50'] = 0xF7FEE7,
-  ['lime-500'] = 0x7CCF00,
-  ['lime-600'] = 0x5EA500,
-  ['lime-700'] = 0x497D00,
-  ['lime-800'] = 0x3C6300,
-  ['lime-900'] = 0x35530E,
-  ['lime-950'] = 0x192E03,
-  ['mauve-100'] = 0xF3F1F3,
-  ['mauve-200'] = 0xE7E4E7,
-  ['mauve-300'] = 0xD7D0D7,
-  ['mauve-400'] = 0xA89EA9,
-  ['mauve-50'] = 0xFAFAFA,
-  ['mauve-500'] = 0x79697B,
-  ['mauve-600'] = 0x594C5B,
-  ['mauve-700'] = 0x463947,
-  ['mauve-800'] = 0x2A212C,
-  ['mauve-900'] = 0x1D161E,
-  ['mauve-950'] = 0x070B0A,
-  ['mist-100'] = 0xF1F3F3,
-  ['mist-200'] = 0xE3E7E8,
-  ['mist-300'] = 0xD0D6D8,
-  ['mist-400'] = 0x9CA8AB,
-  ['mist-50'] = 0xF9FBFB,
-  ['mist-500'] = 0x67787C,
-  ['mist-600'] = 0x4B585B,
-  ['mist-700'] = 0x3A4542,
-  ['mist-800'] = 0x22292B,
-  ['mist-900'] = 0x161B1D,
-  ['mist-950'] = 0x090B0C,
-  ['neutral-100'] = 0xF5F5F5,
-  ['neutral-200'] = 0xE5E5E5,
-  ['neutral-300'] = 0xD4D4D4,
-  ['neutral-400'] = 0xA1A1A1,
-  ['neutral-50'] = 0xFAFAFA,
-  ['neutral-500'] = 0x737373,
-  ['neutral-600'] = 0x525252,
-  ['neutral-700'] = 0x404040,
-  ['neutral-800'] = 0x262626,
-  ['neutral-900'] = 0x171717,
-  ['neutral-950'] = 0x0A0A0A,
-  ['olive-100'] = 0xF4F4F0,
-  ['olive-200'] = 0xE8E8E3,
-  ['olive-300'] = 0xD8D8D0,
-  ['olive-400'] = 0xABAB9C,
-  ['olive-50'] = 0xFBFBF9,
-  ['olive-500'] = 0x7C7C67,
-  ['olive-600'] = 0x5B5B4B,
-  ['olive-700'] = 0x474739,
-  ['olive-800'] = 0x2B2B22,
-  ['olive-900'] = 0x1D1D16,
-  ['olive-950'] = 0x0C0C09,
-  ['orange-100'] = 0xFFEDD4,
-  ['orange-200'] = 0xFFD6A7,
-  ['orange-300'] = 0xFFB86A,
-  ['orange-400'] = 0xFF8904,
-  ['orange-50'] = 0xFFF7ED,
-  ['orange-500'] = 0xFF6900,
-  ['orange-600'] = 0xF54900,
-  ['orange-700'] = 0xCA3500,
-  ['orange-800'] = 0x9F2D00,
-  ['orange-900'] = 0x7E2A0C,
-  ['orange-950'] = 0x441306,
-  ['pink-100'] = 0xFCE7F3,
-  ['pink-200'] = 0xFCCEE8,
-  ['pink-300'] = 0xFDA5D5,
-  ['pink-400'] = 0xFB64B6,
-  ['pink-50'] = 0xFDF2F8,
-  ['pink-500'] = 0xF6339A,
-  ['pink-600'] = 0xE60076,
-  ['pink-700'] = 0xC6005C,
-  ['pink-800'] = 0xA3004C,
-  ['pink-900'] = 0x861043,
-  ['pink-950'] = 0x510424,
-  ['purple-100'] = 0xF3E8FF,
-  ['purple-200'] = 0xE9D4FF,
-  ['purple-300'] = 0xDAB2FF,
-  ['purple-400'] = 0xC27AFF,
-  ['purple-50'] = 0xFAF5FF,
-  ['purple-500'] = 0xAD46FF,
-  ['purple-600'] = 0x9810FA,
-  ['purple-700'] = 0x8200DB,
-  ['purple-800'] = 0x6E11B0,
-  ['purple-900'] = 0x59168B,
-  ['purple-950'] = 0x3C0366,
-  ['red-100'] = 0xFFE2E2,
-  ['red-200'] = 0xFFC9C9,
-  ['red-300'] = 0xFFA2A2,
-  ['red-400'] = 0xFF6467,
-  ['red-50'] = 0xFEF2F2,
-  ['red-500'] = 0xFB2C36,
-  ['red-600'] = 0xE7000B,
-  ['red-700'] = 0xC10007,
-  ['red-800'] = 0x9F0712,
-  ['red-900'] = 0x82181A,
-  ['red-950'] = 0x460809,
-  ['rose-100'] = 0xFFE4E6,
-  ['rose-200'] = 0xFFCCD3,
-  ['rose-300'] = 0xFFA1AD,
-  ['rose-400'] = 0xFF637E,
-  ['rose-50'] = 0xFFF1F2,
-  ['rose-500'] = 0xFF2056,
-  ['rose-600'] = 0xEC003F,
-  ['rose-700'] = 0xC70036,
-  ['rose-800'] = 0xA50036,
-  ['rose-900'] = 0x8B0836,
-  ['rose-950'] = 0x4D0218,
-  ['sky-100'] = 0xDFF2FE,
-  ['sky-200'] = 0xB8E6FE,
-  ['sky-300'] = 0x74D4FF,
-  ['sky-400'] = 0x00BCFF,
-  ['sky-50'] = 0xF0F9FF,
-  ['sky-500'] = 0x00A6F4,
-  ['sky-600'] = 0x0084D1,
-  ['sky-700'] = 0x0069A8,
-  ['sky-800'] = 0x00598A,
-  ['sky-900'] = 0x024A70,
-  ['sky-950'] = 0x052F4A,
-  ['slate-100'] = 0xF1F5F9,
-  ['slate-200'] = 0xE2E8F0,
-  ['slate-300'] = 0xCAD5E2,
-  ['slate-400'] = 0x90A1B9,
-  ['slate-50'] = 0xF8FAFC,
-  ['slate-500'] = 0x62748E,
-  ['slate-600'] = 0x45556C,
-  ['slate-700'] = 0x314158,
-  ['slate-800'] = 0x1D293D,
-  ['slate-900'] = 0x0F172B,
-  ['slate-950'] = 0x020618,
-  ['stone-100'] = 0xF5F5F4,
-  ['stone-200'] = 0xE7E5E4,
-  ['stone-300'] = 0xD6D3D1,
-  ['stone-400'] = 0xA6A09B,
-  ['stone-50'] = 0xFAFAF9,
-  ['stone-500'] = 0x79716B,
-  ['stone-600'] = 0x57534D,
-  ['stone-700'] = 0x44403B,
-  ['stone-800'] = 0x292524,
-  ['stone-900'] = 0x1C1917,
-  ['stone-950'] = 0x0C0A09,
-  ['taupe-100'] = 0xF3F1F1,
-  ['taupe-200'] = 0xE8E4E3,
-  ['taupe-300'] = 0xD8D2D0,
-  ['taupe-400'] = 0xABA09C,
-  ['taupe-50'] = 0xFBFAF9,
-  ['taupe-500'] = 0x7C6D67,
-  ['taupe-600'] = 0x5B4F4B,
-  ['taupe-700'] = 0x473C39,
-  ['taupe-800'] = 0x2B2422,
-  ['taupe-900'] = 0x1D1816,
-  ['taupe-950'] = 0x0C0A09,
-  ['teal-100'] = 0xCBFBF1,
-  ['teal-200'] = 0x96F7E4,
-  ['teal-300'] = 0x46ECD5,
-  ['teal-400'] = 0x00D5BE,
-  ['teal-50'] = 0xF0FDFA,
-  ['teal-500'] = 0x00BBA7,
-  ['teal-600'] = 0x009689,
-  ['teal-700'] = 0x00786F,
-  ['teal-800'] = 0x005F5A,
-  ['teal-900'] = 0x0B4F4A,
-  ['teal-950'] = 0x022F2E,
-  ['violet-100'] = 0xEDE9FE,
-  ['violet-200'] = 0xDDD6FF,
-  ['violet-300'] = 0xC4B4FF,
-  ['violet-400'] = 0xA684FF,
-  ['violet-50'] = 0xF5F3FF,
-  ['violet-500'] = 0x8E51FF,
-  ['violet-600'] = 0x7F22FE,
-  ['violet-700'] = 0x7008E7,
-  ['violet-800'] = 0x5D0EC0,
-  ['violet-900'] = 0x4D179A,
-  ['violet-950'] = 0x2F0D68,
-  ['yellow-100'] = 0xFEF9C2,
-  ['yellow-200'] = 0xFFF085,
-  ['yellow-300'] = 0xFFDF20,
-  ['yellow-400'] = 0xFDC700,
-  ['yellow-50'] = 0xFEFCE8,
-  ['yellow-500'] = 0xF0B100,
-  ['yellow-600'] = 0xD08700,
-  ['yellow-700'] = 0xA65F00,
-  ['yellow-800'] = 0x894B00,
-  ['yellow-900'] = 0x733E0A,
-  ['yellow-950'] = 0x432004,
-  ['zinc-100'] = 0xF4F4F5,
-  ['zinc-200'] = 0xE4E4E7,
-  ['zinc-300'] = 0xD4D4D8,
-  ['zinc-400'] = 0x9F9FA9,
-  ['zinc-50'] = 0xFAFAFA,
-  ['zinc-500'] = 0x71717B,
-  ['zinc-600'] = 0x52525C,
-  ['zinc-700'] = 0x3F3F46,
-  ['zinc-800'] = 0x27272A,
-  ['zinc-900'] = 0x18181B,
-  ['zinc-950'] = 0x09090B,
-}
-
--- }}}
--- Theme {{{
-
-T = {
-  text = P['zinc-300'],
-  text_dim = P['zinc-400'],
-  text_dimmer = P['zinc-500'],
-  text_dimmest = P['zinc-600'],
-  text_conceal = P['zinc-700'],
-
-  text_variant = P['slate-300'],
-  text_variant_dim = P['slate-400'],
-  text_variant_dimmer = P['slate-500'],
-  text_variant_dimmest = P['slate-600'],
-  text_variant_conceal = P['slate-700'],
-
-  text_red = P['red-300'],
-  text_orange = P['orange-300'],
-  text_amber = P['amber-400'],
-  text_yellow = P['yellow-400'],
-  text_lime = P['lime-400'],
-  text_green = P['green-300'],
-  text_emerald = P['emerald-300'],
-  text_teal = P['teal-300'],
-  text_cyan = P['cyan-300'],
-  text_sky = P['sky-300'],
-  text_blue = P['blue-300'],
-  text_indigo = P['indigo-300'],
-  text_violet = P['violet-300'],
-  text_purple = P['purple-300'],
-  text_fuchsia = P['fuchsia-300'],
-  text_pink = P['pink-300'],
-  text_rose = P['rose-300'],
-
-  text_title = P['zinc-100'],
-  text_link = P['blue-300'],
-  text_function = P['blue-300'],
-  text_comment = P['slate-500'],
-
-  text_ok = P['green-300'],
-  text_error = P['red-300'],
-  text_warning = P['amber-400'],
-  text_info = P['blue-300'],
-  text_hint = P['indigo-300'],
-
-  text_lineno = P['zinc-700'],
-  text_lineno_cursor = P['zinc-400'],
-
-  borders = P['zinc-600'],
-
-  surface_dark = P['zinc-950'],
-  surface = P['zinc-900'],
-  surface_cursorline = P['zinc-800'],
-  surface_menu = P['zinc-950'],
-  surface_menu_cursorline = P['zinc-800'],
-
-  surface_scrollbar = 0x121212,
-  surface_scrollbar_thumb = P['zinc-800'],
-
-  surface_cursor = P['orange-400'],
-  on_surface_cursor = P['zinc-900'],
-
-  surface_visual = P['blue-800'],
-  on_surface_visual = P['blue-50'],
-
-  surface_statusline = P['zinc-800'],
-  surface_statusline_dim = P['zinc-700'],
-  surface_statusline_dimmer = P['zinc-600'],
-  on_surface_statusline = P['zinc-300'],
-  on_surface_statusline_dim = P['zinc-400'],
-  on_surface_statusline_dimmer = P['zinc-500'],
-  on_surface_statusline_dimmest = P['zinc-600'],
-
-  -- Same as `surface_amber`/`on_surface_amber`
-  surface_search = 0x343121, -- surface + amber-300/15
-  on_surface_search = P['amber-200'],
-
-  surface_red = 0x352932, -- surface + red-300/15
-  on_surface_red = P['red-200'],
-
-  surface_green = 0x203533, -- surface + green-300/15
-  on_surface_green = P['green-200'],
-
-  surface_amber = 0x343121, -- surface + amber-300/15
-  on_surface_amber = P['amber-200'],
-
-  surface_blue = 0x232F41, -- surface + blue-300/15
-  on_surface_blue = P['blue-200'],
-
-  surface_violet = 0x2B2C41, -- surface + violet-300/15
-  on_surface_violet = P['violet-200'],
-
-  NONE = 'NONE',
-  UNUSED = 0xFF00FF,
-}
-
--- }}}
--- Terminal groups {{{
-
-vim.g.terminal_color_0 = T.surface
-vim.g.terminal_color_8 = T.text_dimmer
-
-vim.g.terminal_color_1 = T.text_red
-vim.g.terminal_color_9 = P['red-200']
-
-vim.g.terminal_color_2 = T.text_green
-vim.g.terminal_color_10 = P['green-200']
-
-vim.g.terminal_color_3 = T.text_amber
-vim.g.terminal_color_11 = P['amber-300']
-
-vim.g.terminal_color_4 = T.text_blue
-vim.g.terminal_color_12 = P['blue-200']
-
-vim.g.terminal_color_5 = T.text_fuchsia
-vim.g.terminal_color_13 = P['fuchsia-200']
-
-vim.g.terminal_color_6 = T.text_cyan
-vim.g.terminal_color_14 = P['cyan-200']
-
-vim.g.terminal_color_7 = T.text
-vim.g.terminal_color_15 = P['zinc-100']
-
---- }}}
-
-generate_colorscheme {
+load_colorscheme {
 
   -- Editor {{{
 
@@ -460,9 +71,9 @@ generate_colorscheme {
   NormalNC = { link = 'Normal' }, -- normal text in non-current windows
   NormalSB = { link = 'Normal' }, -- normal text in non-current windows
   NormalFloat = { link = 'Normal' }, -- normal text in floating windows
-  FloatBorder = { fg = T.borders, bg = T.NONE },
+  FloatBorder = { fg = T.borders, bg = 'NONE' },
   FloatTitle = { link = 'Title' }, -- Title of floating windows
-  FloatShadow = { fg = T.NONE },
+  FloatShadow = { fg = 'NONE' },
   Pmenu = { fg = T.text, bg = T.surface_menu }, -- Popup menu: normal item.
   PmenuSel = { bg = T.surface_menu_cursorline }, -- Popup menu: selected item.
   PmenuMatch = { fg = T.text, bold = true }, -- Popup menu: matching text.
@@ -512,12 +123,12 @@ generate_colorscheme {
   Constant = { fg = T.text_orange }, -- (preferred) any constant
   String = { fg = T.text_green }, -- a string constant: "this is a string"
   Character = { fg = T.text_teal }, --  a character constant: 'c', '\n'
-  Number = { fg = T.text_red }, --   a number constant: 234, 0xff
+  Number = { link = 'Constant' }, --   a number constant: 234, 0xff
   Float = { link = 'Number' }, -- a floating point constant: 2.3e10
-  Boolean = { fg = T.text_cyan }, -- a boolean constant: TRUE, false
+  Boolean = { link = 'Constant' }, -- a boolean constant: TRUE, false
   Identifier = { fg = T.text }, -- (preferred) any variable name
-  Function = { fg = T.text_function }, -- function name (also: methods for classes)
-  Statement = { fg = T.text, bold = true }, -- (preferred) any statement
+  Function = { fg = T.text_blue }, -- function name (also: methods for classes)
+  Statement = { link = 'Keyword' }, -- (preferred) any statement; matches treesitter's @keyword family
   Conditional = { fg = T.text_indigo }, --  if, then, else, endif, switch, etc.
   Repeat = { link = 'Conditional' }, --   for, do, while, etc.
   Label = { fg = T.text_sky }, --    case, default, etc.
@@ -531,11 +142,11 @@ generate_colorscheme {
   Macro = { fg = T.text_indigo }, -- same as Define
   PreCondit = { link = 'PreProc' }, -- preprocessor #if, #else, #endif, etc.
 
-  StorageClass = { fg = T.text_amber }, -- static, register, volatile, etc.
-  Structure = { fg = T.text_amber }, --  struct, union, enum, etc.
+  StorageClass = { link = 'Keyword' }, -- static, register, volatile, etc.; treesitter maps these to @keyword.modifier -> Keyword
+  Structure = { link = 'Keyword' }, --  struct, union, enum, etc.; treesitter maps these to @keyword.type -> Keyword
   Special = { fg = T.text_pink }, -- (preferred) any special symbol
-  Type = { fg = T.text_amber }, -- (preferred) int, long, char, etc.
-  Typedef = { link = 'Type' }, --  A typedef
+  Type = { fg = T.text_emerald }, -- (preferred) int, long, char, etc.
+  Typedef = { link = 'Keyword' }, --  A typedef; treesitter maps the keyword to @keyword.type -> Keyword
   SpecialChar = { link = 'Special' }, -- special character in a constant
   Tag = { fg = T.text_purple, bold = true }, -- you can use CTRL-] on this
   Delimiter = { link = 'Punctuation' }, -- character that needs attention
@@ -659,8 +270,8 @@ generate_colorscheme {
   -- Identifiers
   ['@variable'] = { fg = T.text }, -- Any variable name that does not have another highlight.
   ['@variable.builtin'] = { fg = T.text_purple }, -- Variable names that are defined by the languages, like this or self.
-  ['@variable.parameter'] = { fg = T.text_red, italic = true }, -- For parameters of a function.
-  ['@variable.member'] = { fg = T.text_pink }, -- For fields.
+  ['@variable.parameter'] = { fg = T.text_pink, italic = true }, -- For parameters of a function. Declaration only: highlights.scm captures the signature; usages in the body are plain @variable (LSP semantic tokens, which would repaint usages, are disabled globally in plugin/lsp.lua).
+  ['@variable.member'] = { link = '@property' }, -- For fields: same concept as @property; one color (blue) for both.
 
   ['@constant'] = { link = 'Constant' }, -- For constants
   ['@constant.builtin'] = { fg = T.text_orange }, -- For constant that are built in the language: nil in Lua.
@@ -693,16 +304,16 @@ generate_colorscheme {
   ['@type.definition'] = { link = 'Type' }, -- type definitions (e.g. `typedef` in C)
 
   ['@attribute'] = { link = 'Constant' }, -- attribute annotations (e.g. Python decorators)
-  ['@property'] = { fg = T.text_function }, -- For fields, like accessing `bar` property on `foo.bar`. Overriden later for data languages and CSS.
+  ['@property'] = { fg = T.text_blue }, -- For fields, like accessing `bar` property on `foo.bar`. Overriden later for CSS.
 
   -- Functions
   ['@function'] = { link = 'Function' }, -- For function (calls and definitions).
   ['@function.builtin'] = { fg = T.text_orange }, -- For builtin functions: table.insert in Lua.
-  ['@function.call'] = { link = 'Function' }, -- function calls
+  ['@function.call'] = { fg = T.text, bold = true }, -- function calls: bold plain text, mimicking fish_color_command; only definitions carry the function color.
   ['@function.macro'] = { link = 'Macro' }, -- For macro defined functions (calls and definitions): each macro_rules in Rust.
 
   ['@function.method'] = { link = 'Function' }, -- For method definitions.
-  ['@function.method.call'] = { link = 'Function' }, -- For method calls.
+  ['@function.method.call'] = { fg = T.text, bold = true }, -- method calls: bold plain, like @function.call.
 
   ['@constructor'] = { fg = T.text_amber }, -- For constructor calls and definitions: = { } in Lua, and Java constructors.
   ['@operator'] = { link = 'Operator' }, -- For any operator: +, but also -> and * in C.
@@ -834,20 +445,13 @@ generate_colorscheme {
   ['@string.special.path.gitignore'] = { fg = T.text },
 
   -- }}}
-  -- LSP semantic tokens {{{
-
-  -- Lua
-  ['@lsp.mod.defaultLibrary.lua'] = { link = '@function.builtin.lua' },
-  ['@lsp.typemod.function.defaultLibrary.lua'] = { link = '@function.builtin.lua' },
-
-  -- }}}
   -- }}}
   -- StatusLine {{{
 
   StatusLineFocusedPrimary = { fg = T.on_surface_statusline, bold = true },
-  StatusLineFocusedSecondary = { fg = T.on_surface_statusline_dim },
+  StatusLineFocusedSecondary = { fg = T.on_surface_statusline_dimmer },
 
-  StatusLineUnfocusedPrimary = { fg = T.on_surface_statusline_dim, bold = true },
+  StatusLineUnfocusedPrimary = { fg = T.on_surface_statusline_dimmer, bold = true },
   StatusLineUnfocusedSecondary = { fg = T.on_surface_statusline_dimmer },
 
   -- }}}

@@ -1,33 +1,18 @@
+# Projections over the generated colors.json (see theme.toml for the source
+# of truth; regenerate with the `generate-colorscheme` devenv script).
 { lib }:
 let
   inherit (lib.attrsets) mapAttrs;
-  inherit (lib.strings) concatStringsSep;
-  inherit (lib.trivial) id;
+  inherit (lib.strings) concatMapStringsSep;
+  inherit (lib.importJSON ./colors.json) name tokens;
 
-  transformColorValues =
-    format: transform:
-    let
-      fn = mapAttrs (_: transform);
-      palettes = mapAttrs (_: fn) {
-        blends = import ./blends-palette-${format}.nix;
-        others = import ./others-palette-${format}.nix;
-        tailwind = import ./tailwind-palette-${format}.nix;
-      };
-    in
-    import ./colors.nix palettes;
+  project = f: mapAttrs (_: f) tokens;
+  joinRgb = c: concatMapStringsSep ", " toString c.rgb;
 in
 {
-  name = "splicedpixel";
-  noPrefix = transformColorValues "hex" id;
-  asHexLiterals = transformColorValues "hex" (value: "0x${value}");
-  asHexStrings = transformColorValues "hex" (value: "#${value}");
-  asRgbLiterals = transformColorValues "rgb" (
-    value: "rgb(${map toString value |> concatStringsSep ", "})"
-  );
-  asRgbaLiterals = transformColorValues "rgba" (
-    value: "rgba(${map toString value |> concatStringsSep ", "})"
-  );
-  asOklchLiterals = transformColorValues "oklch" (
-    value: "oklch(${map toString value |> concatStringsSep ", "})"
-  );
+  inherit name;
+  noPrefix = project (c: c.hex);
+  asHexStrings = project (c: "#${c.hex}");
+  asRgbLiterals = project (c: "rgb(${joinRgb c})");
+  asRgbaLiterals = project (c: "rgba(${joinRgb c}, 1)");
 }

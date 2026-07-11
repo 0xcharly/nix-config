@@ -1,0 +1,191 @@
+# splicedpixel theme definition.
+#
+# This file is the single source of truth for the colorscheme. It is resolved
+# by the `splicedpixel` binary (modules/lib/_splicedpixel) against the
+# vendored Tailwind v4 OKLCH palette (modules/lib/_splicedpixel/tailwind.json).
+#
+# After editing, regenerate the committed colors.json consumed by nix:
+#
+#   generate-colorscheme    # devenv script
+#
+# The nvim colorscheme plugin renders directly from this file at build time:
+# edit, then `nix run .#nvim` — no intermediate step.
+#
+# Every value is an expression:
+#
+#   expr    := IDENT | HEX | call
+#   call    := FNAME '(' arg (',' arg)* ')'
+#   arg     := expr [ '/' ALPHA ]     -- alpha suffix valid only on blend's 1st arg
+#            | PERCENT
+#   HEX     := '#' [0-9a-fA-F]{6}
+#   IDENT   := [A-Za-z][A-Za-z0-9_-]*
+#   PERCENT := number '%'             -- '%' required for amount args
+#   ALPHA   := number ['%']           -- bare number = percent (Tailwind: amber-300/15)
+#
+# Functions:
+#
+#   darken(c, p%)      OKLab mix toward black by p
+#   lighten(c, p%)     OKLab mix toward white by p
+#   saturate(c, p%)    OKLCH chroma x (1 + p)
+#   desaturate(c, p%)  OKLCH chroma x (1 - p)
+#   mix(a, b [, p%])   OKLab lerp, p = weight of b, defaults to 50%
+#   blend(fg[/a], bg)  gamma-sRGB compositing of fg over bg, a defaults to 50%
+#
+# Identifiers resolve in order: [tokens] entry (token scope only), [palette]
+# entry, family-alias rewrite (prefix before the last '-' matched against
+# [families]), then direct base palette lookup (e.g. "zinc-300", "white").
+# Alias names must not collide with a base palette family (e.g. "neutral",
+# which is a real Tailwind family) — the resolver rejects such shadowing.
+
+name = "splicedpixel"
+
+[families]
+base = "zinc"
+variant = "slate"
+
+# [palette]
+# Custom named colors; may reference [palette] entries and the base palette.
+# rust = "darken(orange-600, 10%)"
+
+# Palette inspired by https://github.com/catppuccin/catppuccin
+# MIT License: Copyright (c) 2021 Catppuccin
+[tokens]
+text = "base-300"
+text_dim = "base-400"
+text_dimmer = "base-500"
+text_dimmest = "base-600"
+text_conceal = "base-700"
+
+text_variant = "variant-300"
+text_variant_dim = "variant-400"
+text_variant_dimmer = "variant-500"
+text_variant_dimmest = "variant-600"
+text_variant_conceal = "variant-700"
+
+text_red = "red-300"
+text_orange = "orange-300"
+text_amber = "amber-200"
+text_yellow = "yellow-200"
+text_lime = "lime-400"
+text_green = "green-300"
+text_emerald = "emerald-300"
+text_teal = "teal-300"
+text_cyan = "cyan-300"
+text_sky = "sky-300"
+text_blue = "blue-300"
+text_indigo = "indigo-300"
+text_violet = "violet-300"
+text_purple = "purple-300"
+text_fuchsia = "fuchsia-300"
+text_pink = "pink-300"
+text_rose = "rose-300"
+
+text_title = "base-100"
+text_link = "text_blue"
+text_function = "text_blue"
+text_comment = "text_variant_dimmer"
+
+text_ok = "text_green"
+text_error = "text_red"
+text_warning = "text_amber"
+text_info = "text_blue"
+text_hint = "text_indigo"
+
+text_lineno = "base-700"
+text_lineno_cursor = "base-400"
+
+accent = "orange-300"
+accent_dark = "orange-400"
+accent_darker = "orange-500"
+accent_darkest = "orange-600"
+accent_surface = "surface_amber"
+
+accent_secondary = "blue-300"
+accent_secondary_dark = "blue-400"
+accent_secondary_darker = "blue-500"
+accent_secondary_darkest = "blue-600"
+accent_secondary_surface = "surface_blue"
+
+borders = "base-600"
+borders_active = "borders"
+borders_inactive = "base-800"
+borders_focused_inactive = "base-700"
+borders_accent = "accent_secondary_darker"
+borders_urgent = "red-400"
+
+surface_active = "base-600"
+surface_inactive = "base-800"
+surface_focused_inactive = "base-700"
+surface_urgent = "red-900"
+
+surface_dark = "base-950"
+surface = "base-900"
+surface_cursorline = "base-800"
+surface_menu = "base-950"
+surface_menu_cursorline = "base-800"
+
+surface_statusline = "base-800"
+surface_statusline_dim = "base-700"
+surface_statusline_dimmer = "base-600"
+on_surface_statusline = "base-300"
+on_surface_statusline_dim = "base-400"
+on_surface_statusline_dimmer = "base-500"
+on_surface_statusline_dimmest = "base-600"
+
+surface_scrollbar = "blend(white/5, base-950)"
+surface_scrollbar_thumb = "base-800"
+
+surface_cursor = "accent_dark"
+on_surface_cursor = "base-900"
+
+surface_visual = "blue-800"
+on_surface_visual = "blue-50"
+
+surface_search = "blend(amber-300/15, surface)"
+on_surface_search = "on_surface_amber"
+
+surface_red = "blend(red-300/15, surface)"
+on_surface_red = "red-200"
+
+surface_green = "blend(green-300/15, surface)"
+on_surface_green = "green-200"
+
+surface_amber = "blend(amber-300/15, surface)"
+on_surface_amber = "amber-200"
+
+surface_blue = "blend(blue-300/15, surface)"
+on_surface_blue = "blue-200"
+
+surface_violet = "blend(violet-300/15, surface)"
+on_surface_violet = "violet-200"
+
+terminal_color_0 = "surface"
+terminal_color_8 = "text_dimmer"
+
+terminal_color_1 = "text_red"
+terminal_color_9 = "red-200"
+
+terminal_color_2 = "text_green"
+terminal_color_10 = "green-200"
+
+terminal_color_3 = "text_amber"
+terminal_color_11 = "amber-200"
+
+terminal_color_4 = "text_blue"
+terminal_color_12 = "blue-200"
+
+terminal_color_5 = "text_fuchsia"
+terminal_color_13 = "fuchsia-200"
+
+terminal_color_6 = "text_cyan"
+terminal_color_14 = "cyan-200"
+
+terminal_color_7 = "text"
+terminal_color_15 = "base-100"
+
+shell_on_surface = "text"
+shell_on_surface_variant = "text_dim"
+shell_surface = "base-950"
+shell_wallpaper = "base-900"
+
+UNUSED = "#ff00ff"

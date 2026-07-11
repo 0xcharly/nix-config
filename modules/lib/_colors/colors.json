@@ -1,0 +1,877 @@
+{
+  "name": "splicedpixel",
+  "tokens": {
+    "UNUSED": {
+      "hex": "ff00ff",
+      "rgb": [
+        255,
+        0,
+        255
+      ]
+    },
+    "accent": {
+      "hex": "ffb86a",
+      "rgb": [
+        255,
+        184,
+        106
+      ]
+    },
+    "accent_dark": {
+      "hex": "ff8904",
+      "rgb": [
+        255,
+        137,
+        4
+      ]
+    },
+    "accent_darker": {
+      "hex": "ff6900",
+      "rgb": [
+        255,
+        105,
+        0
+      ]
+    },
+    "accent_darkest": {
+      "hex": "f54900",
+      "rgb": [
+        245,
+        73,
+        0
+      ]
+    },
+    "accent_secondary": {
+      "hex": "8ec5ff",
+      "rgb": [
+        142,
+        197,
+        255
+      ]
+    },
+    "accent_secondary_dark": {
+      "hex": "51a2ff",
+      "rgb": [
+        81,
+        162,
+        255
+      ]
+    },
+    "accent_secondary_darker": {
+      "hex": "2b7fff",
+      "rgb": [
+        43,
+        127,
+        255
+      ]
+    },
+    "accent_secondary_darkest": {
+      "hex": "155dfc",
+      "rgb": [
+        21,
+        93,
+        252
+      ]
+    },
+    "accent_secondary_surface": {
+      "hex": "2a323d",
+      "rgb": [
+        42,
+        50,
+        61
+      ]
+    },
+    "accent_surface": {
+      "hex": "3b341e",
+      "rgb": [
+        59,
+        52,
+        30
+      ]
+    },
+    "borders": {
+      "hex": "52525c",
+      "rgb": [
+        82,
+        82,
+        92
+      ]
+    },
+    "borders_accent": {
+      "hex": "2b7fff",
+      "rgb": [
+        43,
+        127,
+        255
+      ]
+    },
+    "borders_active": {
+      "hex": "52525c",
+      "rgb": [
+        82,
+        82,
+        92
+      ]
+    },
+    "borders_focused_inactive": {
+      "hex": "3f3f46",
+      "rgb": [
+        63,
+        63,
+        70
+      ]
+    },
+    "borders_inactive": {
+      "hex": "27272a",
+      "rgb": [
+        39,
+        39,
+        42
+      ]
+    },
+    "borders_urgent": {
+      "hex": "ff6467",
+      "rgb": [
+        255,
+        100,
+        103
+      ]
+    },
+    "on_surface_amber": {
+      "hex": "fee685",
+      "rgb": [
+        254,
+        230,
+        133
+      ]
+    },
+    "on_surface_blue": {
+      "hex": "bedbff",
+      "rgb": [
+        190,
+        219,
+        255
+      ]
+    },
+    "on_surface_cursor": {
+      "hex": "18181b",
+      "rgb": [
+        24,
+        24,
+        27
+      ]
+    },
+    "on_surface_green": {
+      "hex": "b9f8cf",
+      "rgb": [
+        185,
+        248,
+        207
+      ]
+    },
+    "on_surface_red": {
+      "hex": "ffc9c9",
+      "rgb": [
+        255,
+        201,
+        201
+      ]
+    },
+    "on_surface_search": {
+      "hex": "fee685",
+      "rgb": [
+        254,
+        230,
+        133
+      ]
+    },
+    "on_surface_statusline": {
+      "hex": "d4d4d8",
+      "rgb": [
+        212,
+        212,
+        216
+      ]
+    },
+    "on_surface_statusline_dim": {
+      "hex": "9f9fa9",
+      "rgb": [
+        159,
+        159,
+        169
+      ]
+    },
+    "on_surface_statusline_dimmer": {
+      "hex": "71717b",
+      "rgb": [
+        113,
+        113,
+        123
+      ]
+    },
+    "on_surface_statusline_dimmest": {
+      "hex": "52525c",
+      "rgb": [
+        82,
+        82,
+        92
+      ]
+    },
+    "on_surface_violet": {
+      "hex": "ddd6ff",
+      "rgb": [
+        221,
+        214,
+        255
+      ]
+    },
+    "on_surface_visual": {
+      "hex": "eff6ff",
+      "rgb": [
+        239,
+        246,
+        255
+      ]
+    },
+    "shell_on_surface": {
+      "hex": "d4d4d8",
+      "rgb": [
+        212,
+        212,
+        216
+      ]
+    },
+    "shell_on_surface_variant": {
+      "hex": "9f9fa9",
+      "rgb": [
+        159,
+        159,
+        169
+      ]
+    },
+    "shell_surface": {
+      "hex": "09090b",
+      "rgb": [
+        9,
+        9,
+        11
+      ]
+    },
+    "shell_wallpaper": {
+      "hex": "18181b",
+      "rgb": [
+        24,
+        24,
+        27
+      ]
+    },
+    "surface": {
+      "hex": "18181b",
+      "rgb": [
+        24,
+        24,
+        27
+      ]
+    },
+    "surface_active": {
+      "hex": "52525c",
+      "rgb": [
+        82,
+        82,
+        92
+      ]
+    },
+    "surface_amber": {
+      "hex": "3b341e",
+      "rgb": [
+        59,
+        52,
+        30
+      ]
+    },
+    "surface_blue": {
+      "hex": "2a323d",
+      "rgb": [
+        42,
+        50,
+        61
+      ]
+    },
+    "surface_cursor": {
+      "hex": "ff8904",
+      "rgb": [
+        255,
+        137,
+        4
+      ]
+    },
+    "surface_cursorline": {
+      "hex": "27272a",
+      "rgb": [
+        39,
+        39,
+        42
+      ]
+    },
+    "surface_dark": {
+      "hex": "09090b",
+      "rgb": [
+        9,
+        9,
+        11
+      ]
+    },
+    "surface_focused_inactive": {
+      "hex": "3f3f46",
+      "rgb": [
+        63,
+        63,
+        70
+      ]
+    },
+    "surface_green": {
+      "hex": "273930",
+      "rgb": [
+        39,
+        57,
+        48
+      ]
+    },
+    "surface_inactive": {
+      "hex": "27272a",
+      "rgb": [
+        39,
+        39,
+        42
+      ]
+    },
+    "surface_menu": {
+      "hex": "09090b",
+      "rgb": [
+        9,
+        9,
+        11
+      ]
+    },
+    "surface_menu_cursorline": {
+      "hex": "27272a",
+      "rgb": [
+        39,
+        39,
+        42
+      ]
+    },
+    "surface_red": {
+      "hex": "3b2d2f",
+      "rgb": [
+        59,
+        45,
+        47
+      ]
+    },
+    "surface_scrollbar": {
+      "hex": "151517",
+      "rgb": [
+        21,
+        21,
+        23
+      ]
+    },
+    "surface_scrollbar_thumb": {
+      "hex": "27272a",
+      "rgb": [
+        39,
+        39,
+        42
+      ]
+    },
+    "surface_search": {
+      "hex": "3b341e",
+      "rgb": [
+        59,
+        52,
+        30
+      ]
+    },
+    "surface_statusline": {
+      "hex": "27272a",
+      "rgb": [
+        39,
+        39,
+        42
+      ]
+    },
+    "surface_statusline_dim": {
+      "hex": "3f3f46",
+      "rgb": [
+        63,
+        63,
+        70
+      ]
+    },
+    "surface_statusline_dimmer": {
+      "hex": "52525c",
+      "rgb": [
+        82,
+        82,
+        92
+      ]
+    },
+    "surface_urgent": {
+      "hex": "82181a",
+      "rgb": [
+        130,
+        24,
+        26
+      ]
+    },
+    "surface_violet": {
+      "hex": "322f3d",
+      "rgb": [
+        50,
+        47,
+        61
+      ]
+    },
+    "surface_visual": {
+      "hex": "193cb8",
+      "rgb": [
+        25,
+        60,
+        184
+      ]
+    },
+    "terminal_color_0": {
+      "hex": "18181b",
+      "rgb": [
+        24,
+        24,
+        27
+      ]
+    },
+    "terminal_color_1": {
+      "hex": "ffa2a2",
+      "rgb": [
+        255,
+        162,
+        162
+      ]
+    },
+    "terminal_color_10": {
+      "hex": "b9f8cf",
+      "rgb": [
+        185,
+        248,
+        207
+      ]
+    },
+    "terminal_color_11": {
+      "hex": "fee685",
+      "rgb": [
+        254,
+        230,
+        133
+      ]
+    },
+    "terminal_color_12": {
+      "hex": "bedbff",
+      "rgb": [
+        190,
+        219,
+        255
+      ]
+    },
+    "terminal_color_13": {
+      "hex": "f6cfff",
+      "rgb": [
+        246,
+        207,
+        255
+      ]
+    },
+    "terminal_color_14": {
+      "hex": "a2f4fd",
+      "rgb": [
+        162,
+        244,
+        253
+      ]
+    },
+    "terminal_color_15": {
+      "hex": "f4f4f5",
+      "rgb": [
+        244,
+        244,
+        245
+      ]
+    },
+    "terminal_color_2": {
+      "hex": "7bf1a8",
+      "rgb": [
+        123,
+        241,
+        168
+      ]
+    },
+    "terminal_color_3": {
+      "hex": "fee685",
+      "rgb": [
+        254,
+        230,
+        133
+      ]
+    },
+    "terminal_color_4": {
+      "hex": "8ec5ff",
+      "rgb": [
+        142,
+        197,
+        255
+      ]
+    },
+    "terminal_color_5": {
+      "hex": "f4a8ff",
+      "rgb": [
+        244,
+        168,
+        255
+      ]
+    },
+    "terminal_color_6": {
+      "hex": "53eafd",
+      "rgb": [
+        83,
+        234,
+        253
+      ]
+    },
+    "terminal_color_7": {
+      "hex": "d4d4d8",
+      "rgb": [
+        212,
+        212,
+        216
+      ]
+    },
+    "terminal_color_8": {
+      "hex": "71717b",
+      "rgb": [
+        113,
+        113,
+        123
+      ]
+    },
+    "terminal_color_9": {
+      "hex": "ffc9c9",
+      "rgb": [
+        255,
+        201,
+        201
+      ]
+    },
+    "text": {
+      "hex": "d4d4d8",
+      "rgb": [
+        212,
+        212,
+        216
+      ]
+    },
+    "text_amber": {
+      "hex": "fee685",
+      "rgb": [
+        254,
+        230,
+        133
+      ]
+    },
+    "text_blue": {
+      "hex": "8ec5ff",
+      "rgb": [
+        142,
+        197,
+        255
+      ]
+    },
+    "text_comment": {
+      "hex": "62748e",
+      "rgb": [
+        98,
+        116,
+        142
+      ]
+    },
+    "text_conceal": {
+      "hex": "3f3f46",
+      "rgb": [
+        63,
+        63,
+        70
+      ]
+    },
+    "text_cyan": {
+      "hex": "53eafd",
+      "rgb": [
+        83,
+        234,
+        253
+      ]
+    },
+    "text_dim": {
+      "hex": "9f9fa9",
+      "rgb": [
+        159,
+        159,
+        169
+      ]
+    },
+    "text_dimmer": {
+      "hex": "71717b",
+      "rgb": [
+        113,
+        113,
+        123
+      ]
+    },
+    "text_dimmest": {
+      "hex": "52525c",
+      "rgb": [
+        82,
+        82,
+        92
+      ]
+    },
+    "text_emerald": {
+      "hex": "5ee9b5",
+      "rgb": [
+        94,
+        233,
+        181
+      ]
+    },
+    "text_error": {
+      "hex": "ffa2a2",
+      "rgb": [
+        255,
+        162,
+        162
+      ]
+    },
+    "text_fuchsia": {
+      "hex": "f4a8ff",
+      "rgb": [
+        244,
+        168,
+        255
+      ]
+    },
+    "text_function": {
+      "hex": "8ec5ff",
+      "rgb": [
+        142,
+        197,
+        255
+      ]
+    },
+    "text_green": {
+      "hex": "7bf1a8",
+      "rgb": [
+        123,
+        241,
+        168
+      ]
+    },
+    "text_hint": {
+      "hex": "a3b3ff",
+      "rgb": [
+        163,
+        179,
+        255
+      ]
+    },
+    "text_indigo": {
+      "hex": "a3b3ff",
+      "rgb": [
+        163,
+        179,
+        255
+      ]
+    },
+    "text_info": {
+      "hex": "8ec5ff",
+      "rgb": [
+        142,
+        197,
+        255
+      ]
+    },
+    "text_lime": {
+      "hex": "9ae600",
+      "rgb": [
+        154,
+        230,
+        0
+      ]
+    },
+    "text_lineno": {
+      "hex": "3f3f46",
+      "rgb": [
+        63,
+        63,
+        70
+      ]
+    },
+    "text_lineno_cursor": {
+      "hex": "9f9fa9",
+      "rgb": [
+        159,
+        159,
+        169
+      ]
+    },
+    "text_link": {
+      "hex": "8ec5ff",
+      "rgb": [
+        142,
+        197,
+        255
+      ]
+    },
+    "text_ok": {
+      "hex": "7bf1a8",
+      "rgb": [
+        123,
+        241,
+        168
+      ]
+    },
+    "text_orange": {
+      "hex": "ffb86a",
+      "rgb": [
+        255,
+        184,
+        106
+      ]
+    },
+    "text_pink": {
+      "hex": "fda5d5",
+      "rgb": [
+        253,
+        165,
+        213
+      ]
+    },
+    "text_purple": {
+      "hex": "dab2ff",
+      "rgb": [
+        218,
+        178,
+        255
+      ]
+    },
+    "text_red": {
+      "hex": "ffa2a2",
+      "rgb": [
+        255,
+        162,
+        162
+      ]
+    },
+    "text_rose": {
+      "hex": "ffa1ad",
+      "rgb": [
+        255,
+        161,
+        173
+      ]
+    },
+    "text_sky": {
+      "hex": "74d4ff",
+      "rgb": [
+        116,
+        212,
+        255
+      ]
+    },
+    "text_teal": {
+      "hex": "46ecd5",
+      "rgb": [
+        70,
+        236,
+        213
+      ]
+    },
+    "text_title": {
+      "hex": "f4f4f5",
+      "rgb": [
+        244,
+        244,
+        245
+      ]
+    },
+    "text_variant": {
+      "hex": "cad5e2",
+      "rgb": [
+        202,
+        213,
+        226
+      ]
+    },
+    "text_variant_conceal": {
+      "hex": "314158",
+      "rgb": [
+        49,
+        65,
+        88
+      ]
+    },
+    "text_variant_dim": {
+      "hex": "90a1b9",
+      "rgb": [
+        144,
+        161,
+        185
+      ]
+    },
+    "text_variant_dimmer": {
+      "hex": "62748e",
+      "rgb": [
+        98,
+        116,
+        142
+      ]
+    },
+    "text_variant_dimmest": {
+      "hex": "45556c",
+      "rgb": [
+        69,
+        85,
+        108
+      ]
+    },
+    "text_violet": {
+      "hex": "c4b4ff",
+      "rgb": [
+        196,
+        180,
+        255
+      ]
+    },
+    "text_warning": {
+      "hex": "fee685",
+      "rgb": [
+        254,
+        230,
+        133
+      ]
+    },
+    "text_yellow": {
+      "hex": "fff085",
+      "rgb": [
+        255,
+        240,
+        133
+      ]
+    }
+  }
+}
