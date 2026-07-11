@@ -76,8 +76,8 @@
           ++ [
             (gatus.mkHttpServiceCheck "atuin" facts.services.atuin)
             (gatus.mkHttpServiceCheck "CalDAV" facts.services.radicale)
-            (gatus.mkHttpServiceCheck "cgit" facts.services.cgit)
             (gatus.mkHttpServiceCheck "forgejo" facts.services.forgejo)
+            (gatus.mkHttpServiceCheck "ggit" facts.services.ggit)
             (gatus.mkHttpServiceCheck "go/link" facts.services.go)
             (gatus.mkHttpServiceCheck "gotify" facts.services.gotify)
             (gatus.mkApiCheck "grafana" {

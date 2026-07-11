@@ -1,0 +1,56 @@
+{{define "content"}}
+  <section
+    class="rounded-3xl border border-zinc-800/80 bg-zinc-900/60 p-5 shadow-2xl shadow-black/30 backdrop-blur-md"
+  >
+    <nav class="mb-4 flex flex-wrap items-center gap-1 font-mono text-sm">
+      <span class="mr-2 rounded-full border border-blue-400/20 bg-blue-400/10 px-2 py-0.5 text-xs text-blue-200">{{.RefName}}</span>
+      {{range $i, $c := .Crumbs}}
+        {{if $i}}<span class="text-zinc-600">/</span>{{end}}
+        <a class="text-blue-200 hover:underline" href="{{$c.URL}}">{{$c.Name}}</a>
+      {{end}}
+    </nav>
+
+    {{if .IsBlob}}
+      {{if .Binary}}
+        <p class="py-10 text-center text-zinc-500">
+          Binary or oversized file ({{bytesize .BlobSize}}).
+        </p>
+      {{else if .Lines}}
+        <pre class="overflow-x-auto text-sm leading-6 text-zinc-200"><code>{{range .Lines}}<span class="block"><span class="mr-4 inline-block w-10 select-none text-right text-zinc-600">{{.Num}}</span>{{.Text}}</span>{{end}}</code></pre>
+      {{else}}
+        <p class="py-10 text-center text-zinc-500">Empty file.</p>
+      {{end}}
+    {{else}}
+      {{if .Entries}}
+        <table class="w-full text-left text-sm">
+          <thead>
+            <tr class="text-xs uppercase tracking-[0.15em] text-zinc-500">
+              <th class="pb-2 pr-4 font-medium">mode</th>
+              <th class="pb-2 pr-4 font-medium">name</th>
+              <th class="pb-2 text-right font-medium">size</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{range .Entries}}
+              <tr class="border-b border-zinc-800/60 last:border-0">
+                <td class="py-2 pr-4 font-mono text-zinc-500">{{.Mode}}</td>
+                <td class="py-2 pr-4 font-mono">
+                  {{if .URL}}
+                    <a class="text-blue-200 hover:underline" href="{{.URL}}"
+                      >{{.Name}}{{if eq .Type "tree"}}/{{end}}</a
+                    >
+                  {{else}}
+                    <span class="text-zinc-400">{{.Name}} @ {{.Type}}</span>
+                  {{end}}
+                </td>
+                <td class="whitespace-nowrap py-2 text-right font-mono text-zinc-400">{{.Size}}</td>
+              </tr>
+            {{end}}
+          </tbody>
+        </table>
+      {{else}}
+        <p class="py-4 text-center text-sm text-zinc-500">Empty directory.</p>
+      {{end}}
+    {{end}}
+  </section>
+{{end}}

@@ -1,0 +1,65 @@
+{{define "content"}}
+  <section
+    class="rounded-3xl border border-zinc-800/80 bg-zinc-900/60 p-5 shadow-2xl shadow-black/30 backdrop-blur-md"
+  >
+    <h2 class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">Branches</h2>
+    {{if .Branches}}
+      <table class="w-full text-left text-sm">
+        <thead>
+          <tr class="text-xs uppercase tracking-[0.15em] text-zinc-500">
+            <th class="pb-2 pr-4 font-medium">branch</th>
+            <th class="pb-2 pr-4 font-medium">commit</th>
+            <th class="pb-2 pr-4 font-medium">author</th>
+            <th class="pb-2 font-medium">age</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{range .Branches}}
+            <tr class="border-b border-zinc-800/60 last:border-0">
+              <td class="py-2 pr-4 font-mono text-blue-200">{{.Name}}</td>
+              <td class="py-2 pr-4">
+                <a class="text-zinc-200 hover:text-blue-200 hover:underline" href="{{.CommitURL}}">{{.Subject}}</a>
+              </td>
+              <td class="py-2 pr-4 text-zinc-400">{{.Author}}</td>
+              <td class="whitespace-nowrap py-2 font-mono text-zinc-400">{{reltime .Time}}</td>
+            </tr>
+          {{end}}
+        </tbody>
+      </table>
+    {{else}}
+      <p class="py-4 text-center text-sm text-zinc-500">No branches.</p>
+    {{end}}
+  </section>
+
+  <section
+    class="rounded-3xl border border-zinc-800/80 bg-zinc-900/60 p-5 shadow-2xl shadow-black/30 backdrop-blur-md"
+  >
+    <h2 class="mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">Tags</h2>
+    {{if .Tags}}
+      <table class="w-full text-left text-sm">
+        <thead>
+          <tr class="text-xs uppercase tracking-[0.15em] text-zinc-500">
+            <th class="pb-2 pr-4 font-medium">tag</th>
+            <th class="pb-2 pr-4 font-medium">subject</th>
+            <th class="pb-2 pr-4 font-medium">author</th>
+            <th class="pb-2 font-medium">age</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{range .Tags}}
+            <tr class="border-b border-zinc-800/60 last:border-0">
+              <td class="py-2 pr-4 font-mono text-blue-200">{{.Name}}</td>
+              <td class="py-2 pr-4">
+                <a class="text-zinc-200 hover:text-blue-200 hover:underline" href="{{.CommitURL}}">{{.Subject}}</a>
+              </td>
+              <td class="py-2 pr-4 text-zinc-400">{{.Author}}</td>
+              <td class="whitespace-nowrap py-2 font-mono text-zinc-400">{{reltime .Time}}</td>
+            </tr>
+          {{end}}
+        </tbody>
+      </table>
+    {{else}}
+      <p class="py-4 text-center text-sm text-zinc-500">No tags.</p>
+    {{end}}
+  </section>
+{{end}}

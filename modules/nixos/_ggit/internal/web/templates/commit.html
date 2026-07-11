@@ -1,0 +1,73 @@
+{{define "content"}}
+  <section
+    class="rounded-3xl border border-zinc-800/80 bg-zinc-900/60 p-5 shadow-2xl shadow-black/30 backdrop-blur-md"
+  >
+    <table class="w-full text-left text-sm">
+      <tbody>
+        <tr class="border-b border-zinc-800/60">
+          <td class="w-28 py-2 pr-4 text-xs uppercase tracking-[0.15em] text-zinc-500">commit</td>
+          <td class="py-2 font-mono text-zinc-200">{{.Hash}}</td>
+        </tr>
+        <tr class="border-b border-zinc-800/60">
+          <td class="py-2 pr-4 text-xs uppercase tracking-[0.15em] text-zinc-500">author</td>
+          <td class="py-2 text-zinc-300">
+            {{.Author}}
+            <span class="ml-2 font-mono text-zinc-500">{{reltime .AuthorTime}}</span>
+          </td>
+        </tr>
+        <tr class="border-b border-zinc-800/60">
+          <td class="py-2 pr-4 text-xs uppercase tracking-[0.15em] text-zinc-500">committer</td>
+          <td class="py-2 text-zinc-300">
+            {{.Committer}}
+            <span class="ml-2 font-mono text-zinc-500">{{reltime .CommitTime}}</span>
+          </td>
+        </tr>
+        {{if .Parents}}
+          <tr class="border-b border-zinc-800/60">
+            <td class="py-2 pr-4 text-xs uppercase tracking-[0.15em] text-zinc-500">parent</td>
+            <td class="py-2 font-mono">
+              {{range .Parents}}
+                <a class="mr-3 text-blue-200 hover:underline" href="{{.CommitURL}}">{{.Abbrev}}</a>
+              {{end}}
+            </td>
+          </tr>
+        {{end}}
+        <tr>
+          <td class="py-2 pr-4 text-xs uppercase tracking-[0.15em] text-zinc-500">tree</td>
+          <td class="py-2 font-mono">
+            <a class="text-blue-200 hover:underline" href="{{.TreeURL}}">browse</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section
+    class="rounded-3xl border border-zinc-800/80 bg-zinc-900/60 p-5 shadow-2xl shadow-black/30 backdrop-blur-md"
+  >
+    <pre class="whitespace-pre-wrap text-sm leading-6 text-zinc-200">{{.Message}}</pre>
+  </section>
+
+  {{if .Truncated}}
+    <section
+      class="rounded-3xl border border-zinc-800/80 bg-zinc-900/60 p-5 text-center text-zinc-500 shadow-2xl shadow-black/30 backdrop-blur-md"
+    >
+      Diff output truncated.
+    </section>
+  {{else}}
+    {{if .Stat}}
+      <section
+        class="rounded-3xl border border-zinc-800/80 bg-zinc-900/60 p-5 shadow-2xl shadow-black/30 backdrop-blur-md"
+      >
+        <pre class="overflow-x-auto text-xs leading-5 text-zinc-400">{{.Stat}}</pre>
+      </section>
+    {{end}}
+    {{if .Diff}}
+      <section
+        class="rounded-3xl border border-zinc-800/80 bg-zinc-900/60 p-5 shadow-2xl shadow-black/30 backdrop-blur-md"
+      >
+        <pre class="overflow-x-auto text-xs leading-5"><code>{{range .Diff}}<span class="block {{.Class}}">{{.Text}}</span>{{end}}</code></pre>
+      </section>
+    {{end}}
+  {{end}}
+{{end}}

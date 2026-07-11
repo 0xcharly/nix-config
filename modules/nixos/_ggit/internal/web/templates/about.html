@@ -1,0 +1,11 @@
+{{define "content"}}
+  <section
+    class="rounded-3xl border border-zinc-800/80 bg-zinc-900/60 p-5 shadow-2xl shadow-black/30 backdrop-blur-md"
+  >
+    {{if .HasReadme}}
+      <pre class="whitespace-pre-wrap text-sm leading-6 text-zinc-200">{{.Readme}}</pre>
+    {{else}}
+      <p class="py-10 text-center text-zinc-500">No README.</p>
+    {{end}}
+  </section>
+{{end}}

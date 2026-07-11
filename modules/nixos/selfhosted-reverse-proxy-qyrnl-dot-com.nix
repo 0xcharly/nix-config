@@ -55,9 +55,9 @@
                 let
                   services = with facts.services; [
                     atuin
-                    cgit
                     forgejo
                     gatus
+                    ggit
                     gotify
                     grafana
                     immich-public-proxy

@@ -125,11 +125,6 @@ domain = "atuin.qyrnl.com"
 host = "site-jp.qyrnl.com"
 port = 8888
 
-[services.cgit]
-domain = "github.qyrnl.com"
-host = "site-jp.qyrnl.com"
-port = 80
-
 [services.forgejo]
 domain = "git.qyrnl.com"
 host = "site-jp.qyrnl.com"
@@ -139,6 +134,11 @@ port = 3917
 domain = "git.qyrnl.com"
 hostname = "site-jp.qyrnl.com"
 port = 3922
+
+[services.ggit]
+domain = "github.qyrnl.com"
+host = "site-jp.qyrnl.com"
+port = 9917
 
 [services.gatus]
 domain = "status.qyrnl.com"

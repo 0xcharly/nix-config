@@ -47,8 +47,8 @@
         self.nixosModules.prometheus-exporters-node
         self.nixosModules.prometheus-exporters-zfs
         self.nixosModules.selfhosted-atuin
-        self.nixosModules.selfhosted-cgit
         self.nixosModules.selfhosted-forgejo
+        self.nixosModules.selfhosted-ggit
         self.nixosModules.selfhosted-golink
         self.nixosModules.selfhosted-grafana
         self.nixosModules.selfhosted-immich
@@ -129,8 +129,8 @@
 
         services = {
           atuin.enable = true;
-          cgit.enable = true;
           forgejo.enable = true;
+          ggit.enable = true;
           golink.enable = true;
           grafana.enable = true;
           immich.enable = true;

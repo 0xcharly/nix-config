@@ -67,7 +67,10 @@
           cgit = {
             uid = 3004;
             isSystemUser = true;
-            extraGroups = [ "_vcs" ];
+            extraGroups = [
+              "git"
+              "_vcs"
+            ];
             group = lib.mkDefault "cgit";
           };
           radicale = {

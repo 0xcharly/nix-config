@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{.Title}}</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2/dist/htmx.min.js"></script>
+    <style type="text/tailwindcss">
+      @theme {
+        --font-sans: system-ui, sans-serif;
+        --font-mono: ui-monospace, monospace;
+      }
+    </style>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      /* Fallback in case the browser CDN build ignores the @theme block:
+         system fonts only, no webfonts. */
+      body {
+        font-family: system-ui, sans-serif;
+      }
+      pre,
+      code,
+      .font-mono {
+        font-family: ui-monospace, monospace !important;
+      }
+
+      /* Stable, thin scrollbars everywhere — no layout shift when content
+         changes scrollability (e.g. the index filter), including the
+         horizontal scrollbars of file/diff <pre> previews. Equivalent to the
+         Tailwind v4.3 scrollbar-gutter-stable / scrollbar-thin /
+         scrollbar-thumb-* utilities, applied globally so the CDN build
+         version does not matter. */
+      html {
+        scrollbar-gutter: stable;
+      }
+      * {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(82, 82, 91, 0.7) transparent; /* zinc-600/70 */
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background:
+          radial-gradient(circle at 20% 8%, rgba(59, 130, 246, 0.24), transparent 34rem),
+          radial-gradient(circle at 80% 0%, rgba(245, 158, 11, 0.16), transparent 28rem),
+          radial-gradient(circle at 50% 100%, rgba(168, 85, 247, 0.12), transparent 34rem);
+      }
+    </style>
+  </head>
+  <body
+    hx-boost="true"
+    class="min-h-screen bg-zinc-950 font-sans text-zinc-100 antialiased selection:bg-blue-500/30 selection:text-white"
+  >
+    <main class="relative mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
+      <header class="flex flex-col gap-4">
+        {{if .Repo}}
+          <h1 class="text-2xl font-semibold tracking-tight">
+            <a href="/" class="text-zinc-400 transition hover:text-white">{{.Owner}}</a>
+            <span class="text-zinc-600">/</span>
+            <a
+              href="/{{.Owner}}/{{.Repo}}/summary"
+              class="text-white transition hover:text-blue-200"
+              >{{.Repo}}</a
+            >
+          </h1>
+          <nav class="flex flex-wrap gap-2 text-sm">
+            {{range $t := tabs}}
+              <a
+                href="/{{$.Owner}}/{{$.Repo}}/{{$t}}"
+                class="rounded-full border px-3 py-1 transition {{if eq $.ActiveTab $t}}border-blue-400/40 bg-blue-500/15 text-blue-200{{else}}border-transparent text-zinc-400 hover:border-zinc-700 hover:text-zinc-100{{end}}"
+                >{{$t}}</a
+              >
+            {{end}}
+          </nav>
+        {{else}}
+          <h1 class="text-2xl font-semibold tracking-tight text-white">
+            <a href="/" class="transition hover:text-blue-200">github backups</a>
+          </h1>
+        {{end}}
+      </header>
+      {{block "content" .}}{{end}}
+      <footer class="mt-auto pt-6 text-xs text-zinc-600">read-only github backup viewer</footer>
+    </main>
+  </body>
+</html>

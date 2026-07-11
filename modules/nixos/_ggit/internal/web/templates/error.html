@@ -1,0 +1,8 @@
+{{define "content"}}
+  <section
+    class="rounded-3xl border border-zinc-800/80 bg-zinc-900/60 p-10 text-center shadow-2xl shadow-black/30 backdrop-blur-md"
+  >
+    {{if .Status}}<p class="font-mono text-sm text-zinc-500">{{.Status}}</p>{{end}}
+    <p class="mt-2 text-lg text-zinc-200">{{.Message}}</p>
+  </section>
+{{end}}
