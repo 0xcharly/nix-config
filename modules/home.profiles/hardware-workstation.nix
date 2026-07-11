@@ -22,6 +22,7 @@
     programs-cursor
     programs-file-managers
     programs-fish
+    programs-hunk
     programs-keychain
     programs-llm-agents
     programs-nvim
