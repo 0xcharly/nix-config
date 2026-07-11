@@ -1,8 +1,15 @@
-{ inputs, moduleWithSystem, ... }:
+{
+  self,
+  inputs,
+  moduleWithSystem,
+  ...
+}:
 {
   flake.homeModules.programs-llm-agents = moduleWithSystem (
     perSystem@{ config, ... }:
     {
+      imports = [ self.homeModules.colors-oh-my-pi ];
+
       home.packages = with perSystem.config.packages; [
         antigravity-cli
         omp
