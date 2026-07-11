@@ -8,6 +8,16 @@
         {{if $i}}<span class="text-zinc-600">/</span>{{end}}
         <a class="text-blue-200 hover:underline" href="{{$c.URL}}">{{$c.Name}}</a>
       {{end}}
+      {{if .IsBlob}}
+        <span class="ml-auto flex items-center gap-3 text-xs">
+          {{if .SourceURL}}
+            <a class="text-blue-200 hover:underline" href="{{.SourceURL}}">source</a>
+          {{else if .RenderedURL}}
+            <a class="text-blue-200 hover:underline" href="{{.RenderedURL}}">rendered</a>
+          {{end}}
+          <a class="text-blue-200 hover:underline" href="{{.RawFileURL}}">raw</a>
+        </span>
+      {{end}}
     </nav>
 
     {{if .IsBlob}}
@@ -15,6 +25,8 @@
         <p class="py-10 text-center text-zinc-500">
           Binary or oversized file ({{bytesize .BlobSize}}).
         </p>
+      {{else if .Markdown}}
+        <div class="markdown text-sm leading-6 text-zinc-200">{{.Markdown}}</div>
       {{else if .Lines}}
         <pre class="overflow-x-auto text-sm leading-6 text-zinc-200"><code>{{range .Lines}}<span class="block"><span class="mr-4 inline-block w-10 select-none text-right text-zinc-600">{{.Num}}</span>{{.Text}}</span>{{end}}</code></pre>
       {{else}}

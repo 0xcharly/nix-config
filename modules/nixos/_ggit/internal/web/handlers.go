@@ -48,6 +48,7 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("GET /{owner}/{repo}/refs", s.handleRefs)
 	mux.HandleFunc("GET /{owner}/{repo}/log", s.handleLog)
 	mux.HandleFunc("GET /{owner}/{repo}/tree", s.handleTree)
+	mux.HandleFunc("GET /{owner}/{repo}/raw", s.handleRaw)
 	mux.HandleFunc("GET /{owner}/{repo}/commit", s.handleCommit)
 	return logRequests(mux)
 }
@@ -463,7 +464,7 @@ func (s *Server) handleSummary(w http.ResponseWriter, r *http.Request) {
 type aboutData struct {
 	page
 	HasReadme bool
-	Readme    string
+	Readme    template.HTML
 }
 
 func (s *Server) handleAbout(w http.ResponseWriter, r *http.Request) {
@@ -481,7 +482,11 @@ func (s *Server) handleAbout(w http.ResponseWriter, r *http.Request) {
 	data := aboutData{page: pg}
 	if out, err := s.git.Run(ctx, repo.GitDir, "cat-file", "blob", ref+":README.md"); err == nil {
 		data.HasReadme = true
-		data.Readme = string(out)
+		res := mdResolver{owner: repo.Owner, repo: repo.Name}
+		if r.URL.Query().Get("ref") != "" {
+			res.refParam = url.Values{"ref": {ref}}
+		}
+		data.Readme = markdownHTML(out, res)
 	}
 	s.render(w, http.StatusOK, "about", data)
 }
@@ -597,14 +602,18 @@ type blobLine struct {
 
 type treeData struct {
 	page
-	RefName  string
-	Path     string
-	Crumbs   []crumb
-	Entries  []treeEntry
-	IsBlob   bool
-	Binary   bool
-	BlobSize int64
-	Lines    []blobLine
+	RefName     string
+	Path        string
+	Crumbs      []crumb
+	Entries     []treeEntry
+	IsBlob      bool
+	Binary      bool
+	BlobSize    int64
+	Lines       []blobLine
+	Markdown    template.HTML
+	SourceURL   string // markdown blob: line view (?source=1)
+	RenderedURL string // markdown blob source view: back to rendered
+	RawFileURL  string // any blob: raw endpoint
 }
 
 // cleanTreePath normalizes ?path= and rejects traversal. Returns the cleaned
@@ -722,6 +731,19 @@ func (s *Server) handleTree(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) renderBlob(ctx context.Context, w http.ResponseWriter, r *http.Request, repo backup.Repo, ref, treePath string, entry lsEntry, data treeData) {
 	data.IsBlob = true
+	refParam := url.Values{}
+	if r.URL.Query().Get("ref") != "" {
+		refParam.Set("ref", ref)
+	}
+	blobQuery := func() url.Values {
+		q := url.Values{}
+		for k, v := range refParam {
+			q[k] = v
+		}
+		q.Set("path", treePath)
+		return q
+	}
+	data.RawFileURL = repoURL(repo.Owner, repo.Name, "raw", blobQuery())
 	size, _ := strconv.ParseInt(entry.Size, 10, 64)
 	data.BlobSize = size
 	if size > maxBlobRender {
@@ -743,6 +765,24 @@ func (s *Server) renderBlob(ctx context.Context, w http.ResponseWriter, r *http.
 		s.render(w, http.StatusOK, "tree", data)
 		return
 	}
+	if ext := strings.ToLower(path.Ext(treePath)); ext == ".md" || ext == ".markdown" {
+		if r.URL.Query().Get("source") == "1" {
+			data.RenderedURL = repoURL(repo.Owner, repo.Name, "tree", blobQuery()) // fall through to the line view
+		} else {
+			dir := path.Dir(treePath)
+			if dir == "." {
+				dir = ""
+			}
+			q := blobQuery()
+			q.Set("source", "1")
+			data.SourceURL = repoURL(repo.Owner, repo.Name, "tree", q)
+			data.Markdown = markdownHTML(out, mdResolver{
+				owner: repo.Owner, repo: repo.Name, refParam: refParam, dir: dir,
+			})
+			s.render(w, http.StatusOK, "tree", data)
+			return
+		}
+	}
 	text := strings.TrimSuffix(string(out), "\n")
 	if text != "" {
 		for i, line := range strings.Split(text, "\n") {
@@ -750,6 +790,46 @@ func (s *Server) renderBlob(ctx context.Context, w http.ResponseWriter, r *http.
 		}
 	}
 	s.render(w, http.StatusOK, "tree", data)
+}
+
+// handleRaw serves blob bytes directly. Sniffed text is always served as
+// text/plain (never text/html) and every response carries nosniff, so
+// backed-up repo content cannot become scriptable on this origin; images
+// keep their sniffed type so direct viewing works.
+func (s *Server) handleRaw(w http.ResponseWriter, r *http.Request) {
+	ctx, cancel := context.WithTimeout(r.Context(), requestTimeout)
+	defer cancel()
+	repo, ok := s.resolveRepo(w, r)
+	if !ok {
+		return
+	}
+	pg := s.repoPage(repo, "tree")
+	ref, ok := s.resolveRef(ctx, w, r, repo, pg)
+	if !ok {
+		return
+	}
+	treePath, ok := cleanTreePath(r.URL.Query().Get("path"))
+	if !ok || treePath == "" {
+		s.notFound(w, pg, "Invalid path.")
+		return
+	}
+	out, err := s.git.Run(ctx, repo.GitDir, "cat-file", "blob", ref+":"+treePath)
+	if err != nil {
+		s.notFound(w, pg, fmt.Sprintf("File %q not found at %s.", treePath, ref))
+		return
+	}
+	ct := http.DetectContentType(out)
+	switch {
+	case strings.HasPrefix(ct, "image/"):
+		// Keep the sniffed image type.
+	case strings.HasPrefix(ct, "text/"):
+		ct = "text/plain; charset=utf-8"
+	default:
+		ct = "application/octet-stream"
+	}
+	w.Header().Set("Content-Type", ct)
+	w.Header().Set("X-Content-Type-Options", "nosniff")
+	w.Write(out)
 }
 
 // --- commit ---

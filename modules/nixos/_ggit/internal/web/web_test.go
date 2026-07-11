@@ -86,8 +86,9 @@ func newFixture(t *testing.T) *fixture {
 	}
 	root := t.TempDir()
 	hash := mirrorRepo(t, root, "testowner", "demo", map[string]string{
-		"README.md":    fixtureReadme + "\n",
-		"dir/file.txt": fixtureFileBody + "\n",
+		"README.md":     fixtureReadme + "\n",
+		"dir/file.txt":  fixtureFileBody + "\n",
+		"docs/guide.md": "# guide\n\nsee [readme](../README.md), [ext](https://example.com/x)\n\n![logo](img/logo.png) ![ext](https://example.com/e.png)\n\n<script>alert(1)</script>\n",
 	})
 	mirrorRepo(t, root, "testowner", "noreadme", map[string]string{
 		"x.txt": "no readme here\n",
@@ -197,9 +198,83 @@ func TestAbout(t *testing.T) {
 	if !strings.Contains(body, "demo fixture readme") {
 		t.Error("about missing README content")
 	}
+	if !strings.Contains(body, `<h1 id="demo-fixture-readme">demo fixture readme</h1>`) {
+		t.Error("about README not rendered as HTML")
+	}
 	body = f.mustGet(t, "/testowner/noreadme/about", http.StatusOK)
 	if !strings.Contains(body, "No README") {
 		t.Error("about for repo without README should say so")
+	}
+}
+
+func TestMarkdownBlob(t *testing.T) {
+	f := newFixture(t)
+	body := f.mustGet(t, "/testowner/demo/tree?path=docs/guide.md", http.StatusOK)
+	if !strings.Contains(body, `<h1 id="guide">guide</h1>`) {
+		t.Error("markdown blob not rendered as HTML")
+	}
+	if !strings.Contains(body, `href="/testowner/demo/tree?path=README.md"`) {
+		t.Error("relative link not rewritten to tree URL")
+	}
+	if !strings.Contains(body, `href="https://example.com/x"`) {
+		t.Error("absolute link should be untouched")
+	}
+	if strings.Contains(body, "<script>alert") {
+		t.Error("raw HTML must not pass through")
+	}
+	if !strings.Contains(body, "source=1") {
+		t.Error("rendered view missing source toggle")
+	}
+	if !strings.Contains(body, `href="/testowner/demo/raw?path=docs%2Fguide.md"`) {
+		t.Error("rendered view missing raw file link")
+	}
+	if !strings.Contains(body, `src="/testowner/demo/raw?path=docs%2Fimg%2Flogo.png"`) {
+		t.Error("relative image src not rewritten to raw URL")
+	}
+	if !strings.Contains(body, `src="https://example.com/e.png"`) {
+		t.Error("absolute image src should be untouched")
+	}
+
+	body = f.mustGet(t, "/testowner/demo/tree?path=docs/guide.md&source=1", http.StatusOK)
+	if !strings.Contains(body, "[readme](../README.md)") {
+		t.Error("source view should show markdown source")
+	}
+	if !strings.Contains(body, ">rendered</a>") {
+		t.Error("source view missing rendered toggle")
+	}
+}
+
+func TestRawFile(t *testing.T) {
+	f := newFixture(t)
+
+	rec := f.get(t, "/testowner/demo/raw?path=dir/file.txt")
+	if rec.Code != http.StatusOK {
+		t.Fatalf("raw file = %d, want 200", rec.Code)
+	}
+	if got := rec.Body.String(); got != fixtureFileBody+"\n" {
+		t.Errorf("raw body = %q, want file content verbatim", got)
+	}
+	if ct := rec.Header().Get("Content-Type"); ct != "text/plain; charset=utf-8" {
+		t.Errorf("raw text Content-Type = %q", ct)
+	}
+	if rec.Header().Get("X-Content-Type-Options") != "nosniff" {
+		t.Error("raw response missing nosniff")
+	}
+
+	// Markdown must not come back as text/html either: same text/plain policy.
+	rec = f.get(t, "/testowner/demo/raw?path=docs/guide.md")
+	if ct := rec.Header().Get("Content-Type"); !strings.HasPrefix(ct, "text/plain") {
+		t.Errorf("raw markdown Content-Type = %q, want text/plain", ct)
+	}
+
+	f.mustGet(t, "/testowner/demo/raw?path=does/not/exist", http.StatusNotFound)
+	f.mustGet(t, "/testowner/demo/raw?path=dir", http.StatusNotFound)
+	f.mustGet(t, "/testowner/demo/raw", http.StatusNotFound)
+
+	// Every blob preview page links to the raw endpoint.
+	body := f.mustGet(t, "/testowner/demo/tree?path=dir/file.txt", http.StatusOK)
+	if !strings.Contains(body, `href="/testowner/demo/raw?path=dir%2Ffile.txt"`) {
+		t.Error("line-view blob page missing raw file link")
 	}
 }
 

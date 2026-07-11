@@ -5,7 +5,7 @@ buildGoModule {
 
   src = ./.;
 
-  vendorHash = "sha256-CVycV7wxo7nOHm7qjZKfJrIkNcIApUNzN1mSIIwQN0g=";
+  vendorHash = "sha256-bPJUKyJiagqDgs6PEu9NajmaIfmClICLRt+qq19Upb4=";
 
   # The web handler tests shell out to git to build their fixture repos.
   nativeCheckInputs = [ git ];
