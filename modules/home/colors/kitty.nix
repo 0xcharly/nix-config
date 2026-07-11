@@ -1,6 +1,7 @@
 { self, inputs, ... }:
 let
   inherit (inputs.nixpkgs.lib) concatStringsSep lists;
+  inherit (self.lib.colors) name;
   colors = self.lib.colors.asHexStrings;
 in
 {
@@ -29,7 +30,7 @@ in
     in
     {
       programs.kitty.extraConfig = ''
-        include ${pkgs.writeText "pixel.conf" content}
+        include ${pkgs.writeText "${name}.conf" content}
       '';
     };
 }

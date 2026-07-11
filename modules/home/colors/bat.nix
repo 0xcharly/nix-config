@@ -4,13 +4,17 @@
 { self, ... }:
 let
   inherit (self.lib.colors) name;
+  colors = self.lib.colors.asHexStrings;
 in
 {
-  flake.homeModules.colors-bat = {
-    programs.bat = {
-      config.theme = name;
-      # TODO: Create theme file from template.
-      themes.${name}.src = ./pixel.tmTheme;
+  flake.homeModules.colors-bat =
+    { pkgs, ... }:
+    {
+      programs.bat = {
+        config.theme = name;
+        themes.${name}.src =
+          import ./_splicedpixel.tmTheme.nix { inherit name colors; }
+          |> pkgs.writeText "${name}.tmTheme";
+      };
     };
-  };
 }

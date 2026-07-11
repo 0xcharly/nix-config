@@ -17,7 +17,7 @@ let
     import ./colors.nix palettes;
 in
 {
-  name = "pixel";
+  name = "splicedpixel";
   noPrefix = transformColorValues "hex" id;
   asHexLiterals = transformColorValues "hex" (value: "0x${value}");
   asHexStrings = transformColorValues "hex" (value: "#${value}");
