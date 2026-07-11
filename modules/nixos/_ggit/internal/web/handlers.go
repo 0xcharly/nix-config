@@ -768,6 +768,7 @@ type commitData struct {
 	CommitTime int64
 	Message    string
 	TreeURL    string
+	GitHubURL  string
 	Stat       string
 	Diff       []diffLine
 	Truncated  bool
@@ -817,6 +818,7 @@ func (s *Server) handleCommit(w http.ResponseWriter, r *http.Request) {
 		CommitTime: ctime,
 		Message:    strings.TrimSpace(string(fields[6])),
 		TreeURL:    repoURL(repo.Owner, repo.Name, "tree", url.Values{"ref": {sha}}),
+		GitHubURL:  "https://github.com/" + url.PathEscape(repo.Owner) + "/" + url.PathEscape(repo.Name) + "/commit/" + sha,
 	}
 	data.Title = repo.FullName() + " · " + data.Hash[:12]
 	for _, p := range strings.Fields(string(fields[1])) {

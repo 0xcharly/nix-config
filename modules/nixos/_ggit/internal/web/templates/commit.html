@@ -6,7 +6,12 @@
       <tbody>
         <tr class="border-b border-zinc-800/60">
           <td class="w-28 py-2 pr-4 text-xs uppercase tracking-[0.15em] text-zinc-500">commit</td>
-          <td class="py-2 font-mono text-zinc-200">{{.Hash}}</td>
+          <td class="py-2">
+            <span class="flex items-baseline justify-between gap-4">
+              <span class="font-mono text-zinc-200">{{.Hash}}</span>
+              <a class="text-blue-200 hover:underline" href="{{.GitHubURL}}">GitHub</a>
+            </span>
+          </td>
         </tr>
         <tr class="border-b border-zinc-800/60">
           <td class="py-2 pr-4 text-xs uppercase tracking-[0.15em] text-zinc-500">author</td>

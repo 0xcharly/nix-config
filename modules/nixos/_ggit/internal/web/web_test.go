@@ -247,6 +247,9 @@ func TestCommit(t *testing.T) {
 	if !strings.Contains(html.UnescapeString(body), "+"+fixtureFileBody) {
 		t.Error("commit page missing added diff line")
 	}
+	if !strings.Contains(body, "https://github.com/testowner/demo/commit/"+f.commit) {
+		t.Error("commit page missing GitHub link")
+	}
 }
 
 func TestNotFound(t *testing.T) {
