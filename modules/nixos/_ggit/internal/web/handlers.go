@@ -147,10 +147,24 @@ func repoURL(owner, repo, pageName string, q url.Values) string {
 func (s *Server) resolveRepo(w http.ResponseWriter, r *http.Request) (backup.Repo, bool) {
 	owner, name := r.PathValue("owner"), r.PathValue("repo")
 	pg := page{Owner: owner, Repo: name}
-	owners, err := backup.Scan(s.root)
+	repo, found, err := s.lookupRepo(owner, name)
 	if err != nil {
 		s.fail(w, r, pg, err)
 		return backup.Repo{}, false
+	}
+	if !found {
+		s.notFound(w, pg, fmt.Sprintf("Unknown repository %s/%s.", owner, name))
+		return backup.Repo{}, false
+	}
+	return repo, true
+}
+
+// lookupRepo is the render-free core of resolveRepo, shared with the
+// plain-text raw endpoint.
+func (s *Server) lookupRepo(owner, name string) (backup.Repo, bool, error) {
+	owners, err := backup.Scan(s.root)
+	if err != nil {
+		return backup.Repo{}, false, err
 	}
 	for _, o := range owners {
 		if o.Name != owner {
@@ -158,12 +172,11 @@ func (s *Server) resolveRepo(w http.ResponseWriter, r *http.Request) (backup.Rep
 		}
 		for _, repo := range o.Repos {
 			if repo.Name == name {
-				return repo, true
+				return repo, true, nil
 			}
 		}
 	}
-	s.notFound(w, pg, fmt.Sprintf("Unknown repository %s/%s.", owner, name))
-	return backup.Repo{}, false
+	return backup.Repo{}, false, nil
 }
 
 func (s *Server) repoPage(repo backup.Repo, tab string) page {
@@ -463,8 +476,10 @@ func (s *Server) handleSummary(w http.ResponseWriter, r *http.Request) {
 
 type aboutData struct {
 	page
-	HasReadme bool
-	Readme    template.HTML
+	HasReadme  bool
+	Readme     template.HTML
+	SourceURL  string // README line view on the tree page
+	RawFileURL string // README bytes on the raw endpoint
 }
 
 func (s *Server) handleAbout(w http.ResponseWriter, r *http.Request) {
@@ -487,6 +502,13 @@ func (s *Server) handleAbout(w http.ResponseWriter, r *http.Request) {
 			res.refParam = url.Values{"ref": {ref}}
 		}
 		data.Readme = markdownHTML(out, res)
+		q := url.Values{"path": {"README.md"}}
+		for k, v := range res.refParam {
+			q[k] = v
+		}
+		data.RawFileURL = repoURL(repo.Owner, repo.Name, "raw", q)
+		q.Set("source", "1")
+		data.SourceURL = repoURL(repo.Owner, repo.Name, "tree", q)
 	}
 	s.render(w, http.StatusOK, "about", data)
 }
@@ -792,30 +814,46 @@ func (s *Server) renderBlob(ctx context.Context, w http.ResponseWriter, r *http.
 	s.render(w, http.StatusOK, "tree", data)
 }
 
-// handleRaw serves blob bytes directly. Sniffed text is always served as
-// text/plain (never text/html) and every response carries nosniff, so
+// handleRaw serves blob bytes directly, raw.githubusercontent-style: no
+// HTML is ever emitted, not even for errors. Sniffed text is always served
+// as text/plain (never text/html) and every response carries nosniff, so
 // backed-up repo content cannot become scriptable on this origin; images
 // keep their sniffed type so direct viewing works.
 func (s *Server) handleRaw(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(r.Context(), requestTimeout)
 	defer cancel()
-	repo, ok := s.resolveRepo(w, r)
-	if !ok {
+	repo, found, err := s.lookupRepo(r.PathValue("owner"), r.PathValue("repo"))
+	if err != nil {
+		log.Printf("ERROR %s %s: %v", r.Method, r.URL.RequestURI(), err)
+		rawError(w, http.StatusInternalServerError)
 		return
 	}
-	pg := s.repoPage(repo, "tree")
-	ref, ok := s.resolveRef(ctx, w, r, repo, pg)
-	if !ok {
+	if !found {
+		rawError(w, http.StatusNotFound)
+		return
+	}
+	ref := r.URL.Query().Get("ref")
+	if ref != "" {
+		if _, err := s.git.Run(ctx, repo.GitDir, "rev-parse", "--verify", "--quiet", "--end-of-options", ref+"^{commit}"); err != nil {
+			rawError(w, http.StatusNotFound)
+			return
+		}
+	} else if ref, err = s.defaultRef(ctx, repo.GitDir); err != nil {
+		log.Printf("ERROR %s %s: %v", r.Method, r.URL.RequestURI(), err)
+		rawError(w, http.StatusInternalServerError)
+		return
+	} else if ref == "" { // empty repository
+		rawError(w, http.StatusNotFound)
 		return
 	}
 	treePath, ok := cleanTreePath(r.URL.Query().Get("path"))
 	if !ok || treePath == "" {
-		s.notFound(w, pg, "Invalid path.")
+		rawError(w, http.StatusNotFound)
 		return
 	}
 	out, err := s.git.Run(ctx, repo.GitDir, "cat-file", "blob", ref+":"+treePath)
 	if err != nil {
-		s.notFound(w, pg, fmt.Sprintf("File %q not found at %s.", treePath, ref))
+		rawError(w, http.StatusNotFound)
 		return
 	}
 	ct := http.DetectContentType(out)
@@ -830,6 +868,14 @@ func (s *Server) handleRaw(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", ct)
 	w.Header().Set("X-Content-Type-Options", "nosniff")
 	w.Write(out)
+}
+
+// rawError writes a bare plain-text status line ("404: Not Found").
+func rawError(w http.ResponseWriter, status int) {
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	w.Header().Set("X-Content-Type-Options", "nosniff")
+	w.WriteHeader(status)
+	fmt.Fprintf(w, "%d: %s\n", status, http.StatusText(status))
 }
 
 // --- commit ---

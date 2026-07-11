@@ -3,6 +3,10 @@
     class="rounded-3xl border border-zinc-800/80 bg-zinc-900/60 p-5 shadow-2xl shadow-black/30 backdrop-blur-md"
   >
     {{if .HasReadme}}
+      <div class="mb-4 flex items-center justify-end gap-3 font-mono text-xs">
+        <a class="text-blue-200 hover:underline" href="{{.SourceURL}}">source</a>
+        <a class="text-blue-200 hover:underline" href="{{.RawFileURL}}" hx-boost="false">raw</a>
+      </div>
       <div class="markdown text-sm leading-6 text-zinc-200">{{.Readme}}</div>
     {{else}}
       <p class="py-10 text-center text-zinc-500">No README.</p>

@@ -15,7 +15,7 @@
           {{else if .RenderedURL}}
             <a class="text-blue-200 hover:underline" href="{{.RenderedURL}}">rendered</a>
           {{end}}
-          <a class="text-blue-200 hover:underline" href="{{.RawFileURL}}">raw</a>
+          <a class="text-blue-200 hover:underline" href="{{.RawFileURL}}" hx-boost="false">raw</a>
         </span>
       {{end}}
     </nav>

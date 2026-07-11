@@ -201,6 +201,12 @@ func TestAbout(t *testing.T) {
 	if !strings.Contains(body, `<h1 id="demo-fixture-readme">demo fixture readme</h1>`) {
 		t.Error("about README not rendered as HTML")
 	}
+	if !strings.Contains(body, `href="/testowner/demo/tree?path=README.md&amp;source=1"`) {
+		t.Error("about missing source link")
+	}
+	if !strings.Contains(body, `href="/testowner/demo/raw?path=README.md" hx-boost="false"`) {
+		t.Error("about missing unboosted raw link")
+	}
 	body = f.mustGet(t, "/testowner/noreadme/about", http.StatusOK)
 	if !strings.Contains(body, "No README") {
 		t.Error("about for repo without README should say so")
@@ -267,14 +273,32 @@ func TestRawFile(t *testing.T) {
 		t.Errorf("raw markdown Content-Type = %q, want text/plain", ct)
 	}
 
-	f.mustGet(t, "/testowner/demo/raw?path=does/not/exist", http.StatusNotFound)
-	f.mustGet(t, "/testowner/demo/raw?path=dir", http.StatusNotFound)
-	f.mustGet(t, "/testowner/demo/raw", http.StatusNotFound)
+	// Errors are bare plain text, raw.githubusercontent-style — never the
+	// HTML layout (which hx-boost would also swap into the page).
+	for _, u := range []string{
+		"/testowner/demo/raw?path=does/not/exist",
+		"/testowner/demo/raw?path=dir", // a directory
+		"/testowner/demo/raw",          // no path
+		"/testowner/nosuchrepo/raw?path=x",
+		"/testowner/demo/raw?path=dir/file.txt&ref=nosuchref",
+	} {
+		rec = f.get(t, u)
+		if rec.Code != http.StatusNotFound {
+			t.Errorf("GET %s = %d, want 404", u, rec.Code)
+		}
+		if got := rec.Body.String(); got != "404: Not Found\n" {
+			t.Errorf("GET %s body = %q, want bare status line", u, got)
+		}
+		if ct := rec.Header().Get("Content-Type"); ct != "text/plain; charset=utf-8" {
+			t.Errorf("GET %s Content-Type = %q", u, ct)
+		}
+	}
 
-	// Every blob preview page links to the raw endpoint.
+	// Every blob preview page links to the raw endpoint, unboosted so the
+	// browser navigates instead of htmx swapping text into the layout.
 	body := f.mustGet(t, "/testowner/demo/tree?path=dir/file.txt", http.StatusOK)
-	if !strings.Contains(body, `href="/testowner/demo/raw?path=dir%2Ffile.txt"`) {
-		t.Error("line-view blob page missing raw file link")
+	if !strings.Contains(body, `href="/testowner/demo/raw?path=dir%2Ffile.txt" hx-boost="false"`) {
+		t.Error("line-view blob page missing unboosted raw file link")
 	}
 }
 
