@@ -120,7 +120,7 @@ load_colorscheme {
 
   Comment = { fg = T.text_comment },
   SpecialComment = { link = 'Special' }, -- special things inside a comment
-  Constant = { fg = T.text_orange }, -- (preferred) any constant
+  Constant = { fg = T.text_red }, -- (preferred) any constant
   String = { fg = T.text_green }, -- a string constant: "this is a string"
   Character = { fg = T.text_teal }, --  a character constant: 'c', '\n'
   Number = { link = 'Constant' }, --   a number constant: 234, 0xff

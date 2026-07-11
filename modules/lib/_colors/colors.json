@@ -514,11 +514,11 @@
       ]
     },
     "terminal_color_1": {
-      "hex": "ffa2a2",
+      "hex": "f3aaaa",
       "rgb": [
-        255,
-        162,
-        162
+        243,
+        170,
+        170
       ]
     },
     "terminal_color_10": {
@@ -714,11 +714,11 @@
       ]
     },
     "text_error": {
-      "hex": "ffa2a2",
+      "hex": "f3aaaa",
       "rgb": [
-        255,
-        162,
-        162
+        243,
+        170,
+        170
       ]
     },
     "text_fuchsia": {
@@ -818,11 +818,11 @@
       ]
     },
     "text_pink": {
-      "hex": "fda5d5",
+      "hex": "f1aed1",
       "rgb": [
-        253,
-        165,
-        213
+        241,
+        174,
+        209
       ]
     },
     "text_purple": {
@@ -834,11 +834,11 @@
       ]
     },
     "text_red": {
-      "hex": "ffa2a2",
+      "hex": "f3aaaa",
       "rgb": [
-        255,
-        162,
-        162
+        243,
+        170,
+        170
       ]
     },
     "text_rose": {
