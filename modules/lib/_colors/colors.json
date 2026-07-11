@@ -153,6 +153,22 @@
         255
       ]
     },
+    "on_surface_control_thumb": {
+      "hex": "27272a",
+      "rgb": [
+        39,
+        39,
+        42
+      ]
+    },
+    "on_surface_control_thumb_checked": {
+      "hex": "032e15",
+      "rgb": [
+        3,
+        46,
+        21
+      ]
+    },
     "on_surface_cursor": {
       "hex": "18181b",
       "rgb": [
@@ -241,12 +257,20 @@
         216
       ]
     },
-    "shell_on_surface_variant": {
+    "shell_on_surface_dim": {
       "hex": "9f9fa9",
       "rgb": [
         159,
         159,
         169
+      ]
+    },
+    "shell_on_surface_variant": {
+      "hex": "71717b",
+      "rgb": [
+        113,
+        113,
+        123
       ]
     },
     "shell_surface": {
@@ -295,6 +319,38 @@
         42,
         50,
         61
+      ]
+    },
+    "surface_control_checked_tint": {
+      "hex": "00a63e",
+      "rgb": [
+        0,
+        166,
+        62
+      ]
+    },
+    "surface_control_thumb": {
+      "hex": "71717b",
+      "rgb": [
+        113,
+        113,
+        123
+      ]
+    },
+    "surface_control_thumb_checked": {
+      "hex": "008236",
+      "rgb": [
+        0,
+        130,
+        54
+      ]
+    },
+    "surface_control_track": {
+      "hex": "27272a",
+      "rgb": [
+        39,
+        39,
+        42
       ]
     },
     "surface_cursor": {
@@ -375,6 +431,14 @@
         59,
         45,
         47
+      ]
+    },
+    "surface_scrim": {
+      "hex": "27272a",
+      "rgb": [
+        39,
+        39,
+        42
       ]
     },
     "surface_scrollbar": {

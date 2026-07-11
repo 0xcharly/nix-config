@@ -1,52 +1,55 @@
 import QtQuick
 import Quickshell.Io
 
-// Defaults from https://primer.style/primitives/storybook/
+// No palette defaults on purpose: every token is set from Nix
+// (modules/home/colors/arcshell.nix) through shell.json. A missing override
+// resolves to an invalid QColor and renders visibly broken — fix the Nix
+// mapping, do not add a default here.
 JsonObject {
     property color transparent: "#00000000"
 
-    property color on_surface: "#d4d4d8" // zinc-300
-    property color on_surface_dim: "#a1a1aa" // zinc-400
-    property color on_surface_variant: "#71717a" // zinc-500
-    property color surface: "#090b0c" // zinc-950
-    property color wallpaper: "#18181b" // zinc-900
-    property color surface_elevated: "#1ad4d4d8" // on_surface (zinc-300) @ 10%
-    property color surface_elevated_hover: "#33d4d4d8" // on_surface (zinc-300) @ 20%
+    property color on_surface
+    property color on_surface_dim
+    property color on_surface_variant
+    property color surface
+    property color wallpaper
+    property color surface_elevated
+    property color surface_elevated_hover
 
-    property color borders: "#52525b" // zinc-600
-    property color borders_active: "#52525b" // zinc-600
+    property color borders
+    property color borders_active
 
-    property color surface_control_slider_matrix_base: borders
-    property color surface_control_slider_matrix_highlight: on_surface
+    property color surface_control_slider_matrix_base
+    property color surface_control_slider_matrix_highlight
 
-    property color on_surface_success: "#4ade80" // green-400
+    property color on_surface_success
 
-    property color surface_danger: "#1af87171" // red-400 @ 10%
-    property color on_surface_danger: "#f87171" // red-400
+    property color surface_danger
+    property color on_surface_danger
 
-    property color surface_attention: "#26fb923c" // orange-400 @ 38%
-    property color on_surface_attention: "#fb923c" // orange-400
+    property color surface_attention
+    property color on_surface_attention
 
-    property color surface_accent: "#1a60a5fa" // blue-400 @ 10%
-    property color on_surface_accent: "#60a5fa" // blue-400
+    property color surface_accent
+    property color on_surface_accent
 
-    property color surface_done: "#26a78bfa" // violet-400 @ 38%
-    property color on_surface_done: "#a78bfa" // violet-400
+    property color surface_done
+    property color on_surface_done
 
-    property color surface_backdrop: "#66212830" // overlay-backdrop-bgColor
+    property color surface_backdrop
 
-    property color on_surface_control_placeholder: "#9198a1" // control-fgColor-placeholder
+    property color on_surface_control_placeholder
 
-    property color surface_control_track_rest: "#262c36" // controlTrack-bgColor-rest
-    property color surface_control_track_checked: "#262ea043" // bgColor-success-muted
+    property color surface_control_track_rest
+    property color surface_control_track_checked
 
-    property color on_surface_control_thumb_rest: "#262c36" // bgColor-neutral-muted
-    property color surface_control_thumb_rest: "#656c76" // bgColor-neutral-emphasis
-    property color surface_control_thumb_checked: "#238636" // bgColor-success-emphasis
-    property color on_surface_control_thumb_checked: "#1e3226" // bgColor-success-muted
+    property color on_surface_control_thumb_rest
+    property color surface_control_thumb_rest
+    property color surface_control_thumb_checked
+    property color on_surface_control_thumb_checked
 
-    property color surface_control_thumb_active: "#332a313c" // control-bgColor-active
-    property color surface_control_thumb_hover: "#26262c36" // control-bgColor-hover
-    property color surface_control_thumb_checked_active: "#332ea043"
-    property color surface_control_thumb_checked_hover: "#262ea043" // bgColor-success-muted
+    property color surface_control_thumb_active
+    property color surface_control_thumb_hover
+    property color surface_control_thumb_checked_active
+    property color surface_control_thumb_checked_hover
 }

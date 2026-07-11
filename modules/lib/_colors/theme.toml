@@ -199,8 +199,20 @@ terminal_color_7 = "text"
 terminal_color_15 = "base-100"
 
 shell_on_surface = "text"
-shell_on_surface_variant = "text_dim"
+shell_on_surface_dim = "text_dim"
+shell_on_surface_variant = "text_dimmer"
 shell_surface = "base-950"
 shell_wallpaper = "base-900"
+
+# Desktop-shell scrim and switch/toggle vocabulary. Tint tokens are bases
+# for state layers; the consumer applies its own alpha
+# (modules/home/colors/arcshell.nix).
+surface_scrim = "base-800"
+surface_control_track = "base-800"
+surface_control_thumb = "base-500"
+on_surface_control_thumb = "base-800"
+surface_control_thumb_checked = "green-700"
+on_surface_control_thumb_checked = "green-950"
+surface_control_checked_tint = "green-600"
 
 UNUSED = "#ff00ff"
