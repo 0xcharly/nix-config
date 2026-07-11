@@ -13,8 +13,7 @@ in
       programs.bat = {
         config.theme = name;
         themes.${name}.src =
-          import ./_splicedpixel.tmTheme.nix { inherit name colors; }
-          |> pkgs.writeText "${name}.tmTheme";
+          import ./_splicedpixel.tmTheme.nix { inherit name colors; } |> pkgs.writeText "${name}.tmTheme";
       };
     };
 }
