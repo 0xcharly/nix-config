@@ -8,7 +8,7 @@ let
   colors = self.lib.colors.asHexStrings;
 in
 {
-  flake.homeModules.colors-oh-my-pi = {
+  flake.homeModules.colors-omp = {
     home.file.".omp/agent/themes/${name}.json".text = builtins.toJSON {
       inherit name;
       colors = with colors; {

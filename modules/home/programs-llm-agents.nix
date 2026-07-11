@@ -8,11 +8,10 @@
   flake.homeModules.programs-llm-agents = moduleWithSystem (
     perSystem@{ config, ... }:
     {
-      imports = [ self.homeModules.colors-oh-my-pi ];
+      imports = [ self.homeModules.programs-omp ];
 
       home.packages = with perSystem.config.packages; [
         antigravity-cli
-        omp
       ];
 
       # Daily pre-built binaries are available from the Numtide binary cache.
@@ -32,7 +31,7 @@
     { pkgs, ... }:
     {
       packages = with inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}; {
-        inherit antigravity-cli omp opencode;
+        inherit antigravity-cli opencode;
       };
     };
 }
