@@ -273,7 +273,7 @@ colors: with colors; ''
     ['@variable'] = { fg = ${text} }, -- Any variable name that does not have another highlight.
     ['@variable.builtin'] = { fg = ${text_purple} }, -- Variable names that are defined by the languages, like this or self.
     ['@variable.parameter'] = { fg = ${text_red}, italic = true }, -- For parameters of a function.
-    ['@variable.member'] = { fg = ${text_pink} }, -- For fields.
+    ['@variable.member'] = { link = '@property' }, -- For fields: same concept as @property; one color (blue) for both.
 
     ['@constant'] = { link = 'Constant' }, -- For constants
     ['@constant.builtin'] = { fg = ${text_orange} }, -- For constant that are built in the language: nil in Lua.
@@ -306,7 +306,7 @@ colors: with colors; ''
     ['@type.definition'] = { link = 'Type' }, -- type definitions (e.g. `typedef` in C)
 
     ['@attribute'] = { link = 'Constant' }, -- attribute annotations (e.g. Python decorators)
-    ['@property'] = { link = '@variable.member' }, -- For fields: same concept as @variable.member, one color for both so LSP "property" tokens (default-linked to @property) match treesitter's field captures. Overriden later for data languages and CSS.
+    ['@property'] = { fg = ${text_function} }, -- For fields, like accessing `bar` property on `foo.bar`. Overriden later for CSS.
 
     -- Functions
     ['@function'] = { link = 'Function' }, -- For function (calls and definitions).
@@ -445,55 +445,6 @@ colors: with colors; ''
 
     -- gitignore
     ['@string.special.path.gitignore'] = { fg = ${text} },
-
-    -- }}}
-    -- LSP semantic tokens {{{
-
-    -- Semantic tokens paint OVER treesitter (priority 125 vs 100, see
-    -- vim.hl.priorities), so any token type whose default link resolves to
-    -- a different color than the treesitter capture on the same text makes
-    -- the buffer shift colors when the server attaches. Every entry below
-    -- either clears a token type that is coarser than treesitter's captures
-    -- (an empty definition stops the dotted fallback and lets treesitter
-    -- show through, see :h lsp-semantic-highlight), or pins it to the exact
-    -- group treesitter uses for the same token. Core defaults already align
-    -- the rest.
-
-    -- One flat "keyword" bucket vs treesitter's @keyword.function/.return/
-    -- .conditional/.import (indigo): without this, every keyword flattens
-    -- to the plain Keyword style on attach (rust-analyzer, lua_ls, zls).
-    ['@lsp.type.keyword'] = {},
-    -- Whole-comment tokens would paint over @comment.todo/.error/.warning.
-    ['@lsp.type.comment'] = {},
-    -- Plain "variable" would flatten @variable.builtin (self, vim) and
-    -- other granular captures back to the Normal fg.
-    ['@lsp.type.variable'] = {},
-    -- Defaults to @type.qualifier, which is undefined and falls back to
-    -- @type (emerald); modifier keywords (const, static, pub) belong with
-    -- Keyword, like treesitter's @keyword.modifier.
-    ['@lsp.type.modifier'] = { link = 'Keyword' },
-
-    -- Standard-library functions and methods (e.g. lua_ls on `print`,
-    -- `table.insert`): same color treesitter gives builtins.
-    ['@lsp.typemod.function.defaultLibrary'] = { link = '@function.builtin' },
-    ['@lsp.typemod.method.defaultLibrary'] = { link = '@function.builtin' },
-
-    -- Nix: nixd's token NAMES are arbitrary; it maps its own concepts onto
-    -- the standard legend (nixd/lib/Controller/SemanticTokens.cpp):
-    --   method    = attrset binding keys  -> @variable.member in treesitter
-    --   type      = select attrpath (a.b) -> @variable.member in treesitter
-    --   interface = variables from `with` -> plain @variable in treesitter
-    --   macro     = true/false literals   -> @boolean in treesitter
-    --   keyword   = builtins              -> covered by the global clear:
-    --               treesitter already colors builtins (@function.builtin),
-    --               import (@keyword.import), abort/throw (@keyword.exception).
-    --   regexp    = null + lambda args + lambda formals: three concepts on
-    --               one name; cleared, treesitter renders all three sites.
-    ['@lsp.type.method.nix'] = { link = '@variable.member' },
-    ['@lsp.type.type.nix'] = { link = '@variable.member' },
-    ['@lsp.type.interface.nix'] = { link = '@variable' },
-    ['@lsp.type.macro.nix'] = { link = '@boolean' },
-    ['@lsp.type.regexp.nix'] = {},
 
     -- }}}
     -- }}}

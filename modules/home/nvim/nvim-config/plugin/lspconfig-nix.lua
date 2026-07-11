@@ -1,5 +1,5 @@
 vim.lsp.config('nixd', {
-  cmd = { 'nixd', '--inlay-hints', '--semantic-tokens' },
+  cmd = { 'nixd', '--inlay-hints' },
   settings = {
     nixd = {
       formatting = {
