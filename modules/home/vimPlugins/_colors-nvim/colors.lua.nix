@@ -125,11 +125,11 @@ colors: with colors; ''
     Constant = { fg = ${text_orange} }, -- (preferred) any constant
     String = { fg = ${text_green} }, -- a string constant: "this is a string"
     Character = { fg = ${text_teal} }, --  a character constant: 'c', '\n'
-    Number = { fg = ${text_red} }, --   a number constant: 234, 0xff
+    Number = { link = 'Constant' }, --   a number constant: 234, 0xff
     Float = { link = 'Number' }, -- a floating point constant: 2.3e10
-    Boolean = { fg = ${text_cyan} }, -- a boolean constant: TRUE, false
+    Boolean = { link = 'Constant' }, -- a boolean constant: TRUE, false
     Identifier = { fg = ${text} }, -- (preferred) any variable name
-    Function = { fg = ${text_function} }, -- function name (also: methods for classes)
+    Function = { fg = ${text_blue} }, -- function name (also: methods for classes)
     Statement = { link = 'Keyword' }, -- (preferred) any statement; matches treesitter's @keyword family
     Conditional = { fg = ${text_indigo} }, --  if, then, else, endif, switch, etc.
     Repeat = { link = 'Conditional' }, --   for, do, while, etc.
@@ -272,7 +272,7 @@ colors: with colors; ''
     -- Identifiers
     ['@variable'] = { fg = ${text} }, -- Any variable name that does not have another highlight.
     ['@variable.builtin'] = { fg = ${text_purple} }, -- Variable names that are defined by the languages, like this or self.
-    ['@variable.parameter'] = { fg = ${text_red}, italic = true }, -- For parameters of a function.
+    ['@variable.parameter'] = { fg = ${text_pink}, italic = true }, -- For parameters of a function. Declaration only: highlights.scm captures the signature; usages in the body are plain @variable (LSP semantic tokens, which would repaint usages, are disabled globally in plugin/lsp.lua).
     ['@variable.member'] = { link = '@property' }, -- For fields: same concept as @property; one color (blue) for both.
 
     ['@constant'] = { link = 'Constant' }, -- For constants
@@ -306,16 +306,16 @@ colors: with colors; ''
     ['@type.definition'] = { link = 'Type' }, -- type definitions (e.g. `typedef` in C)
 
     ['@attribute'] = { link = 'Constant' }, -- attribute annotations (e.g. Python decorators)
-    ['@property'] = { fg = ${text_function} }, -- For fields, like accessing `bar` property on `foo.bar`. Overriden later for CSS.
+    ['@property'] = { fg = ${text_blue} }, -- For fields, like accessing `bar` property on `foo.bar`. Overriden later for CSS.
 
     -- Functions
     ['@function'] = { link = 'Function' }, -- For function (calls and definitions).
     ['@function.builtin'] = { fg = ${text_orange} }, -- For builtin functions: table.insert in Lua.
-    ['@function.call'] = { link = 'Function' }, -- function calls
+    ['@function.call'] = { fg = ${text}, bold = true }, -- function calls: bold plain text, mimicking fish_color_command; only definitions carry the function color.
     ['@function.macro'] = { link = 'Macro' }, -- For macro defined functions (calls and definitions): each macro_rules in Rust.
 
     ['@function.method'] = { link = 'Function' }, -- For method definitions.
-    ['@function.method.call'] = { link = 'Function' }, -- For method calls.
+    ['@function.method.call'] = { fg = ${text}, bold = true }, -- method calls: bold plain, like @function.call.
 
     ['@constructor'] = { fg = ${text_amber} }, -- For constructor calls and definitions: = { } in Lua, and Java constructors.
     ['@operator'] = { link = 'Operator' }, -- For any operator: +, but also -> and * in C.
