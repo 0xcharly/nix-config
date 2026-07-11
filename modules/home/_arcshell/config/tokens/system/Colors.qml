@@ -13,6 +13,7 @@ JsonObject {
     property color on_surface_variant
     property color surface
     property color wallpaper
+    property color accent
     property color surface_elevated
     property color surface_elevated_hover
 

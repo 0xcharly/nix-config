@@ -20,4 +20,5 @@ JsonObject {
 
     property color baseColor: Config.tokens.system.colors.surface_control_slider_matrix_base
     property color highlightColor: Config.tokens.system.colors.surface_control_slider_matrix_highlight
+    property color currentColor: Config.tokens.system.colors.accent
 }

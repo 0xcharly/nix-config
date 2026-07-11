@@ -45,7 +45,7 @@ Slider {
                 width: root.theme.square
                 height: root.theme.square
                 radius: root.theme.square * root.theme.squareRoundness
-                color: index < root.lit ? root.theme.highlightColor : root.theme.baseColor
+                color: index === root.lit - 1 ? root.theme.currentColor : index < root.lit ? root.theme.highlightColor : root.theme.baseColor
             }
         }
     }
