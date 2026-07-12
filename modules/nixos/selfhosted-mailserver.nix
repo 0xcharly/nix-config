@@ -18,7 +18,7 @@
         in
         {
           disko.devices.zpool.root.datasets = {
-            mail = self.lib.zfs.mkLegacyDataset "/var/mail/boxes" {
+            "var/mail/boxes" = self.lib.zfs.mkLegacyDataset "/var/mail/boxes" {
               recordsize = "16K"; # Maildir files are small (often 1–50KB)
               compression = "lz4"; # Emails compress extremely well (headers + text)
               atime = "off"; # Metadata savings for IMAP access
@@ -31,7 +31,7 @@
             # Extremely write-heavy
             # Small random I/O
             # Safe to lose / rebuildable
-            index = self.lib.zfs.mkLegacyDataset "/var/mail/index" {
+            "var/mail/index" = self.lib.zfs.mkLegacyDataset "/var/mail/index" {
               recordsize = "16K"; # Mixed workload: small regular + large FTS indexes
               compression = "lz4";
               atime = "off";
@@ -40,13 +40,13 @@
               logbias = "throughput"; # Indexes are not latency-critical
             };
             # Small files rarely written
-            sieve = self.lib.zfs.mkLegacyDataset "/var/mail/sieve" {
+            "var/mail/sieve" = self.lib.zfs.mkLegacyDataset "/var/mail/sieve" {
               recordsize = "16K";
               compression = "lz4";
               atime = "off";
             };
             # Tiny private keys with high entropy. Small recordsize avoids read amplification.
-            dkim = self.lib.zfs.mkLegacyDataset "/var/mail/dkim" {
+            "var/mail/dkim" = self.lib.zfs.mkLegacyDataset "/var/mail/dkim" {
               recordsize = "4K";
               compression = "off";
               atime = "off";
