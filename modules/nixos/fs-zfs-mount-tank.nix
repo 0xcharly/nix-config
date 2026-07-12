@@ -64,6 +64,7 @@
               install -v -d --mode 751 --owner delay --group users       /tank/delay
               install -v -d --mode 770 --owner delay --group immich      /tank/delay/album
               install -v -d --mode 750 --owner delay --group delay       /tank/delay/beans
+              install -v -d --mode 750 --owner delay --group delay       /tank/delay/email
               install -v -d --mode 770 --owner delay --group paperless   /tank/delay/files
               install -v -d --mode 751 --owner delay --group _media      /tank/delay/media
               install -v -d --mode 750 --owner delay --group _music      /tank/delay/music

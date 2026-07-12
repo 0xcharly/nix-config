@@ -165,6 +165,15 @@
                     recordsize = "16K"; # Smaller blocks are better for small text files.
                   };
 
+                  # A dataset for email backups (Maildir format).
+                  # mkEmailDataset :: String -> AttrSet
+                  mkEmailDataset = mkEncryptedDataset {
+                    atime = "off"; # Disables updating access times.
+                    compression = "lz4"; # Fast and space-efficient.
+                    recordsize = "16K"; # Smaller blocks are better for small text files.
+                    xattr = "sa"; # Store extended attributes (xaatr) as system attributes inside the file's inode, rather than in separate hidden directories.
+                  };
+
                   # A dataset for media files. Better suited for large files.
                   # mkMediaDataset :: String -> AttrSet
                   mkMediaDataset = mkEncryptedDataset {
@@ -211,6 +220,7 @@
                     datasets = {
                       album = mkAlbumDataset;
                       beans = mkGenericDataset;
+                      email = mkEmailDataset;
                       files = mkGenericDataset;
                       forge = mkForgeDatasets;
                       media = mkMediaDataset;
