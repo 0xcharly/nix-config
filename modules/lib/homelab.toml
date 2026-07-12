@@ -22,6 +22,25 @@ host = "jump-jp"
 ipv4 = "172.237.13.18"
 ipv6 = "2600:3c18::2000:4fff:fe5e:fe68"
 
+# delay.email
+[dns."delay.email"]
+nameservers = ["ns1.delay.email", "ns2.delay.email"]
+
+[dns."delay.email".ns1]
+host = "gate-jp"
+ipv4 = "172.237.20.186"
+ipv6 = "2600:3c18::2000:a4ff:fe80:d6d4"
+
+[dns."delay.email".ns2]
+host = "gate-fr"
+ipv4 = "172.233.245.4"
+ipv6 = "2600:3c07::2000:31ff:fe53:d2e1"
+
+[dns."delay.email".mx]
+host = "jump-jp"
+ipv4 = "172.237.13.18"
+ipv6 = "2600:3c18::2000:4fff:fe5e:fe68"
+
 # 0xcharly.com
 [dns."0xcharly.com"]
 nameservers = ["ns1.0xcharly.com", "ns2.0xcharly.com"]
@@ -106,6 +125,13 @@ ipv6 = "2600:3c18::2000:a4ff:fe80:d6d4"
 host = "gate-fr"
 ipv4 = "172.233.245.4"
 ipv6 = "2600:3c07::2000:31ff:fe53:d2e1"
+
+[mail]
+fqdn = "mx.delay.email"
+domains = [
+  "delay.email",
+  "xn--7ck8cva5eb.com",
+]
 
 [reverse-proxy."qyrnl.com"]
 host = "gate-jp"

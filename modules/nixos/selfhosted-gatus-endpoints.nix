@@ -95,11 +95,20 @@
               domain = "${facts.services.prometheus.domain}/-/healthy";
             })
             (gatus.mkHttpServiceCheck "vaultwarden" facts.services.vaultwarden)
+            # NOTE: the smtp/submissions checks originate from gate-jp, a
+            # Linode, so they stay red (and alert) until Linode lifts the
+            # account's outbound 25/465/587 restriction — expected during the
+            # bring-up window.
+            (gatus.mkTcpCheck "imaps" "${facts.mail.fqdn}:993")
+            (gatus.mkTcpCheck "smtp" "${facts.mail.fqdn}:25")
+            (gatus.mkTcpCheck "submissions" "${facts.mail.fqdn}:465")
           ];
 
         external-endpoints = [
           (gatus.mkPushBasedExternalEndpoint "GitHub backup" { heartbeat = "48h"; })
           (gatus.mkPushBasedExternalEndpoint "node-skl exit node" { heartbeat = "6m"; })
+          (gatus.mkPushBasedExternalEndpoint "Mail archive" { heartbeat = "2h"; })
+          (gatus.mkPushBasedExternalEndpoint "Mail retention purge" { heartbeat = "48h"; })
         ];
       };
     };

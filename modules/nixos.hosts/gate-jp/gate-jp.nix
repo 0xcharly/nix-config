@@ -34,8 +34,10 @@
         self.nixosModules.programs-terminfo
         self.nixosModules.prometheus-exporters-node
         self.nixosModules.prometheus-exporters-zfs
+        self.nixosModules.selfhosted-dns-delay-dot-email
         self.nixosModules.selfhosted-dns-pieceofenglish-dot-fr
         self.nixosModules.selfhosted-dns-qyrnl-dot-com
+        self.nixosModules.selfhosted-dns-xn--7ck8cva5eb-dot-com
         self.nixosModules.selfhosted-gatus
         self.nixosModules.selfhosted-gatus-endpoints
         self.nixosModules.selfhosted-gotify
@@ -65,12 +67,22 @@
 
         services = {
           dns = {
+            "delay.email" = {
+              enable = true;
+              openFirewall = true;
+              bindInterface = "eth0";
+            };
             "pieceofenglish.fr" = {
               enable = true;
               openFirewall = true;
               bindInterface = "eth0";
             };
             "qyrnl.com".enable = true;
+            "xn--7ck8cva5eb.com" = {
+              enable = true;
+              openFirewall = true;
+              bindInterface = "eth0";
+            };
           };
 
           gatus.enable = true;

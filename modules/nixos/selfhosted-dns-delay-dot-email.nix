@@ -1,6 +1,6 @@
 { self, ... }:
 {
-  flake.nixosModules.selfhosted-dns-xn--7ck8cva5eb-dot-com =
+  flake.nixosModules.selfhosted-dns-delay-dot-email =
     {
       config,
       lib,
@@ -8,7 +8,7 @@
       ...
     }:
     let
-      domainName = "xn--7ck8cva5eb.com"; # チャーリー.com
+      domainName = "delay.email";
     in
     {
       options.node.services.dns.${domainName} = with lib; {
@@ -47,10 +47,12 @@
                   ns2     300   IN AAAA  ${records.ns2.ipv6}
 
                   ; Mailserver configuration.
+                  mx      300   IN A     ${records.mx.ipv4}
+                  mx      300   IN AAAA  ${records.mx.ipv6}
                   @       10800 IN MX    10 mx.delay.email.
                   @       10800 IN TXT   "v=spf1 mx ~all"
                   _dmarc  10800 IN TXT   "v=DMARC1; p=quarantine"
-                  ; TODO(post-deploy): paste from jump-jp:/var/mail/dkim/xn--7ck8cva5eb.com.mail.txt
+                  ; TODO(post-deploy): paste from jump-jp:/var/mail/dkim/delay.email.mail.txt
                   ; mail._domainkey  10800 IN TXT   "v=DKIM1; k=rsa; p=<pubkey>"
                 '';
               in

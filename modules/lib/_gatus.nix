@@ -88,6 +88,15 @@ in
       alerts = mkShortAlerts;
     };
 
+  mkTcpCheck = name: target: {
+    inherit name;
+    url = "tcp://${target}";
+    group = "mail";
+    interval = "5m";
+    conditions = [ "[CONNECTED] == true" ];
+    alerts = mkShortAlerts;
+  };
+
   mkPingHostCheck = hostName: {
     name = hostName;
     url = "icmp://${hostName}.qyrnl.com";

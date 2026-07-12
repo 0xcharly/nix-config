@@ -12,6 +12,7 @@
         inputs.nix-config-secrets.nixosModules.services-github-backup
         inputs.nix-config-secrets.nixosModules.services-hoopsnake-site-jp
         inputs.nix-config-secrets.nixosModules.services-linkwarden
+        inputs.nix-config-secrets.nixosModules.services-mail-archive
         inputs.nix-config-secrets.nixosModules.services-miniflux
         inputs.nix-config-secrets.nixosModules.services-msmtp
         inputs.nix-config-secrets.nixosModules.services-radicale
@@ -63,6 +64,7 @@
         self.nixosModules.selfhosted-vaultwarden
         self.nixosModules.services-fail2ban
         self.nixosModules.services-github-backup
+        self.nixosModules.services-mail-archive
         self.nixosModules.services-msmtp
         self.nixosModules.services-openssh
         # self.nixosModules.services-samba-ayako
@@ -114,6 +116,7 @@
           #     "tank/backups/github"
           #     "tank/backups/homelab"
           #     "tank/delay/album"
+          #     "tank/delay/email"
           #     "tank/delay/files"
           #     "tank/delay/forge/data"
           #     "tank/delay/forge/repo"
@@ -136,6 +139,7 @@
           immich.enable = true;
           jellyfin.enable = true;
           linkwarden.enable = true;
+          mail-archive.enable = true;
           miniflux.enable = true;
           msmtp.enable = true;
           navidrome.enable = true;

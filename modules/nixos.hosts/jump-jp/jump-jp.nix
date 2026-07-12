@@ -6,7 +6,9 @@
     nixosModule = {
       imports = [
         inputs.nix-config-secrets.nixosModules.default
+        inputs.nix-config-secrets.nixosModules.services-gatus-external-endpoints
         inputs.nix-config-secrets.nixosModules.services-hoopsnake-jump-jp
+        inputs.nix-config-secrets.nixosModules.services-mailserver
         inputs.nix-config-secrets.nixosModules.services-tailscale
 
         self.nixosModules.profile-hardware-linode
@@ -30,6 +32,7 @@
         self.nixosModules.programs-terminfo
         self.nixosModules.prometheus-exporters-node
         self.nixosModules.prometheus-exporters-zfs
+        self.nixosModules.selfhosted-mailserver
         self.nixosModules.services-fail2ban
         self.nixosModules.services-openssh
         self.nixosModules.services-tailscale
@@ -50,6 +53,9 @@
         };
 
         networking.tailscale.enableSsh = true;
+
+        services.mailserver.enable = true;
+
         users.delay.ssh.authorizeTailscaleInternalKey = true;
       };
     };
