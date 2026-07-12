@@ -145,12 +145,22 @@ Singleton {
             run: () => Quickshell.execDetached(["uwsm", "stop"])
         },
         Command {
-            name: qsTr("Restart")
+            name: qsTr("Suspend")
+            icon: "bedtime"
+            run: () => Quickshell.execDetached(["systemctl", "suspend"])
+        },
+        Command {
+            name: qsTr("Hibernate")
+            icon: "ac_unit"
+            run: () => Quickshell.execDetached(["systemctl", "hibernate"])
+        },
+        Command {
+            name: qsTr("Reboot")
             icon: "restart_alt"
             run: () => Quickshell.execDetached(["systemctl", "reboot"])
         },
         Command {
-            name: qsTr("Turn off")
+            name: qsTr("Power off")
             icon: "power_settings_new"
             run: () => Quickshell.execDetached(["systemctl", "poweroff"])
         },
