@@ -103,6 +103,18 @@
         };
         networking.firewall.allowedTCPPorts = [ 80 ]; # HTTP-01 challenge
 
+        # SNM's localDnsResolver (kresd, on by default) takes over
+        # /etc/resolv.conf so rspamd can run DNSBL lookups through a private
+        # recursive resolver (Spamhaus & co refuse shared/public resolvers).
+        # kresd recurses from the roots, which breaks tailnet-internal names:
+        # the homelab domain is split-horizon (NXDOMAIN publicly by design)
+        # and the tailnet domain is MagicDNS. Stub both to tailscaled's
+        # MagicDNS listener, which serves them regardless of who owns
+        # resolv.conf.
+        services.kresd.extraConfig = ''
+          policy.add(policy.suffix(policy.STUB('100.100.100.100'), policy.todnames({'${facts.domain}', '${facts.wireguard.tailscale.tailnet}'})))
+        '';
+
         # Retention: the archive on site-jp pulls every 30 minutes; anything
         # older than 30 days (and not flagged) is expunged from the hot server.
         systemd.services.mailserver-retention = {
