@@ -4,9 +4,9 @@ import qs.config
 import qs.config.tokens.types
 
 JsonObject {
-    property int verticalSpacing: Config.tokens.system.measurements.medium
+    property int verticalSpacing: Config.tokens.system.measurements.small
     // Gap between the title and the timestamp on the first row.
-    property int horizontalSpacing: Config.tokens.system.measurements.medium
+    property int horizontalSpacing: Config.tokens.system.measurements.small
     property SurfaceTokens surface: Config.theme.defaults.cards
 
     property TypographyValues titleTypography: Config.tokens.system.typography.smallTitle
@@ -15,7 +15,7 @@ JsonObject {
     property TypographyValues timestampTypography: Config.tokens.system.typography.mediumLabel
     property color timestampContentColor: Config.tokens.system.colors.on_surface_variant
 
-    property int bodyMaxLines: 3
+    property int bodyMaxLines: 2
 
     property SurfaceColorValues colors: SurfaceColorValues {
         surface: Config.tokens.system.colors.transparent
@@ -23,10 +23,10 @@ JsonObject {
     }
 
     property PaddingValues padding: PaddingValues {
-        bottom: Config.tokens.system.measurements.medium
-        left: Config.tokens.system.measurements.medium
-        right: Config.tokens.system.measurements.medium
-        top: Config.tokens.system.measurements.medium
+        bottom: Config.tokens.system.measurements.large
+        left: Config.tokens.system.measurements.large
+        right: Config.tokens.system.measurements.large
+        top: Config.tokens.system.measurements.large
     }
 
     // Reveal/dismiss motion: curveIn grows a row in (and springs a dragged
