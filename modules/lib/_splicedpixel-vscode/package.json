@@ -1,0 +1,19 @@
+{
+  "name": "splicedpixel",
+  "displayName": "splicedpixel",
+  "description": "splicedpixel color theme, rendered from modules/lib/_colors/theme.toml.",
+  "publisher": "0xcharly",
+  "version": "0.0.1",
+  "license": "MIT",
+  "engines": { "vscode": "^1.75.0" },
+  "categories": ["Themes"],
+  "contributes": {
+    "themes": [
+      {
+        "label": "splicedpixel",
+        "uiTheme": "vs-dark",
+        "path": "./themes/splicedpixel-color-theme.json"
+      }
+    ]
+  }
+}

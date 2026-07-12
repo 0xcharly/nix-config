@@ -1,0 +1,570 @@
+{
+  "name": "splicedpixel",
+  "type": "dark",
+  "semanticHighlighting": true,
+  "colors": {
+    "focusBorder": "$borders_accent",
+    "foreground": "$text",
+    "disabledForeground": "$text_dimmest",
+    "descriptionForeground": "$text_dim",
+    "errorForeground": "$text_red",
+    "icon.foreground": "$text_dim",
+    "selection.background": "$surface_visual",
+    "widget.shadow": "#00000080",
+    "sash.hoverBorder": "$borders_accent",
+
+    "textLink.foreground": "$text_link",
+    "textLink.activeForeground": "$text_link",
+    "textCodeBlock.background": "$surface_dark",
+    "textPreformat.foreground": "$text_rose",
+    "textBlockQuote.background": "$surface_dark",
+    "textSeparator.foreground": "$borders",
+
+    "button.background": "$accent_secondary_darker",
+    "button.foreground": "$text_title",
+    "button.hoverBackground": "$accent_secondary_dark",
+    "button.secondaryBackground": "$surface_focused_inactive",
+    "button.secondaryForeground": "$text",
+    "button.secondaryHoverBackground": "$surface_active",
+    "badge.background": "$surface_active",
+    "badge.foreground": "$text_title",
+
+    "input.background": "$surface_menu",
+    "input.foreground": "$text",
+    "input.placeholderForeground": "$text_dimmer",
+    "input.border": "$borders_inactive",
+    "inputOption.activeBorder": "$borders_accent",
+    "inputOption.activeBackground": "$surface_blue",
+    "inputOption.activeForeground": "$on_surface_blue",
+    "inputValidation.errorBackground": "$surface_red",
+    "inputValidation.errorForeground": "$on_surface_red",
+    "inputValidation.errorBorder": "$borders_urgent",
+    "inputValidation.warningBackground": "$surface_amber",
+    "inputValidation.warningForeground": "$on_surface_amber",
+    "inputValidation.warningBorder": "$accent_dark",
+    "inputValidation.infoBackground": "$surface_blue",
+    "inputValidation.infoForeground": "$on_surface_blue",
+    "inputValidation.infoBorder": "$accent_secondary_darker",
+    "dropdown.background": "$surface_menu",
+    "dropdown.listBackground": "$surface_menu",
+    "dropdown.foreground": "$text",
+    "dropdown.border": "$borders_inactive",
+    "checkbox.background": "$surface_menu",
+    "checkbox.foreground": "$text",
+    "checkbox.border": "$borders_inactive",
+
+    "editor.background": "$surface",
+    "editor.foreground": "$text",
+    "editorLineNumber.foreground": "$text_lineno",
+    "editorLineNumber.activeForeground": "$text_lineno_cursor",
+    "editorCursor.foreground": "$surface_cursor",
+    "editorCursor.background": "$on_surface_cursor",
+    "editor.selectionBackground": "$surface_visual",
+    "editor.inactiveSelectionBackground": "$surface_visual/80",
+    "editor.selectionHighlightBackground": "$surface_menu",
+    "editor.wordHighlightBackground": "$surface_menu",
+    "editor.wordHighlightStrongBackground": "$surface_menu",
+    "editor.findMatchBackground": "$surface_search",
+    "editor.findMatchBorder": "$accent_dark",
+    "editor.findMatchHighlightBackground": "$surface_search",
+    "editor.hoverHighlightBackground": "$surface_cursorline",
+    "editor.lineHighlightBackground": "$surface_cursorline",
+    "editor.rangeHighlightBackground": "$surface_cursorline",
+    "editor.foldBackground": "$surface_blue",
+    "editorWhitespace.foreground": "$text_variant_conceal",
+    "editorIndentGuide.background1": "$surface",
+    "editorIndentGuide.activeBackground1": "$text_variant_conceal",
+    "editorRuler.foreground": "$surface_amber",
+    "editorBracketMatch.background": "$surface_menu_cursorline",
+    "editorBracketMatch.border": "#00000000",
+    "editorBracketHighlight.foreground1": "$text_red",
+    "editorBracketHighlight.foreground2": "$text_orange",
+    "editorBracketHighlight.foreground3": "$text_yellow",
+    "editorBracketHighlight.foreground4": "$text_green",
+    "editorBracketHighlight.foreground5": "$text_sky",
+    "editorBracketHighlight.foreground6": "$text_violet",
+    "editorCodeLens.foreground": "$text_variant_dimmer",
+    "editorInlayHint.background": "$surface_cursorline",
+    "editorInlayHint.foreground": "$text_variant_dimmer",
+    "editorInlayHint.typeBackground": "$surface_cursorline",
+    "editorInlayHint.typeForeground": "$text_variant_dimmer",
+    "editorInlayHint.parameterBackground": "$surface_cursorline",
+    "editorInlayHint.parameterForeground": "$text_variant_dimmer",
+    "editorLink.activeForeground": "$text_link",
+    "editorGutter.foldingControlForeground": "$text_variant_dimmer",
+    "editorStickyScroll.background": "$surface",
+    "editorStickyScrollHover.background": "$surface_cursorline",
+
+    "diffEditor.insertedLineBackground": "$surface_green",
+    "diffEditor.insertedTextBackground": "$surface_green",
+    "diffEditor.removedLineBackground": "$surface_red",
+    "diffEditor.removedTextBackground": "$surface_red",
+    "diffEditor.diagonalFill": "$surface_cursorline",
+    "editorGutter.addedBackground": "$text_green",
+    "editorGutter.modifiedBackground": "$text_blue",
+    "editorGutter.deletedBackground": "$text_red",
+    "minimapGutter.addedBackground": "$text_green",
+    "minimapGutter.modifiedBackground": "$text_blue",
+    "minimapGutter.deletedBackground": "$text_red",
+    "editorOverviewRuler.addedForeground": "$text_green",
+    "editorOverviewRuler.modifiedForeground": "$text_blue",
+    "editorOverviewRuler.deletedForeground": "$text_red",
+    "editorOverviewRuler.errorForeground": "$text_red",
+    "editorOverviewRuler.warningForeground": "$text_amber",
+    "editorOverviewRuler.infoForeground": "$text_blue",
+    "editorOverviewRuler.findMatchForeground": "$on_surface_search/80",
+    "editorOverviewRuler.border": "#00000000",
+
+    "editorError.foreground": "$text_red",
+    "editorWarning.foreground": "$text_amber",
+    "editorInfo.foreground": "$text_blue",
+    "editorHint.foreground": "$text_indigo",
+    "problemsErrorIcon.foreground": "$text_red",
+    "problemsWarningIcon.foreground": "$text_amber",
+    "problemsInfoIcon.foreground": "$text_blue",
+
+    "editorWidget.background": "$surface_menu",
+    "editorWidget.foreground": "$text",
+    "editorWidget.border": "$borders",
+    "editorSuggestWidget.background": "$surface_menu",
+    "editorSuggestWidget.border": "$borders",
+    "editorSuggestWidget.foreground": "$text_dim",
+    "editorSuggestWidget.selectedBackground": "$surface_menu_cursorline",
+    "editorSuggestWidget.selectedForeground": "$text",
+    "editorSuggestWidget.highlightForeground": "$text_title",
+    "editorSuggestWidget.focusHighlightForeground": "$text_title",
+    "editorHoverWidget.background": "$surface_menu",
+    "editorHoverWidget.foreground": "$text",
+    "editorHoverWidget.border": "$borders",
+    "editorMarkerNavigation.background": "$surface_menu",
+    "editorMarkerNavigationError.background": "$text_red",
+    "editorMarkerNavigationWarning.background": "$text_amber",
+    "editorMarkerNavigationInfo.background": "$text_blue",
+    "debugToolBar.background": "$surface_menu",
+
+    "quickInput.background": "$surface_menu",
+    "quickInput.foreground": "$text",
+    "quickInputTitle.background": "$surface_dark",
+    "quickInputList.focusBackground": "$surface_menu_cursorline",
+    "quickInputList.focusForeground": "$text",
+    "pickerGroup.foreground": "$text_title",
+    "pickerGroup.border": "$borders",
+    "keybindingLabel.background": "$surface_active/80",
+    "keybindingLabel.foreground": "$text",
+    "keybindingLabel.border": "$borders",
+    "keybindingLabel.bottomBorder": "$borders",
+
+    "list.activeSelectionBackground": "$surface_cursorline",
+    "list.activeSelectionForeground": "$text",
+    "list.inactiveSelectionBackground": "$surface_cursorline/80",
+    "list.focusBackground": "$surface_cursorline",
+    "list.hoverBackground": "$surface_cursorline/60",
+    "list.highlightForeground": "$text_blue",
+    "list.focusHighlightForeground": "$text_blue",
+    "list.errorForeground": "$text_red",
+    "list.warningForeground": "$text_amber",
+    "listFilterWidget.background": "$surface_menu",
+    "tree.indentGuidesStroke": "$text_variant_conceal",
+
+    "activityBar.background": "$surface_dark",
+    "activityBar.foreground": "$text",
+    "activityBar.inactiveForeground": "$text_dimmest",
+    "activityBar.activeBorder": "$accent",
+    "activityBarBadge.background": "$accent_secondary_darker",
+    "activityBarBadge.foreground": "$text_title",
+
+    "sideBar.background": "$surface_dark",
+    "sideBar.foreground": "$text_dim",
+    "sideBar.border": "$borders_inactive",
+    "sideBarTitle.foreground": "$text_title",
+    "sideBarSectionHeader.background": "$surface_dark",
+    "sideBarSectionHeader.foreground": "$text",
+
+    "statusBar.background": "$surface_statusline",
+    "statusBar.foreground": "$on_surface_statusline",
+    "statusBar.noFolderBackground": "$surface_statusline",
+    "statusBar.debuggingBackground": "$surface_purple",
+    "statusBar.debuggingForeground": "$on_surface_purple",
+    "statusBarItem.hoverBackground": "$surface_statusline_dim",
+    "statusBarItem.activeBackground": "$surface_statusline_dimmer",
+    "statusBarItem.prominentBackground": "$surface_statusline_dim",
+    "statusBarItem.remoteBackground": "$accent_secondary_darker",
+    "statusBarItem.remoteForeground": "$text_title",
+    "statusBarItem.errorBackground": "$surface_red",
+    "statusBarItem.errorForeground": "$on_surface_red",
+    "statusBarItem.warningBackground": "$surface_amber",
+    "statusBarItem.warningForeground": "$on_surface_amber",
+
+    "titleBar.activeBackground": "$surface_dark",
+    "titleBar.activeForeground": "$text",
+    "titleBar.inactiveBackground": "$surface_dark",
+    "titleBar.inactiveForeground": "$text_dimmer",
+
+    "editorGroupHeader.tabsBackground": "$surface_dark",
+    "editorGroupHeader.noTabsBackground": "$surface",
+    "editorGroup.border": "$text_variant_conceal",
+    "tab.activeBackground": "$surface",
+    "tab.activeForeground": "$text",
+    "tab.inactiveBackground": "$surface_dark",
+    "tab.inactiveForeground": "$text_dimmer",
+    "tab.hoverBackground": "$surface",
+    "tab.border": "$surface_dark",
+    "tab.unfocusedActiveForeground": "$text_dim",
+    "tab.unfocusedInactiveForeground": "$text_dimmest",
+
+    "panel.background": "$surface",
+    "panel.border": "$text_variant_conceal",
+    "panelTitle.activeForeground": "$text",
+    "panelTitle.activeBorder": "$accent",
+    "panelTitle.inactiveForeground": "$text_dimmer",
+
+    "terminal.background": "$terminal_color_0",
+    "terminal.foreground": "$terminal_color_7",
+    "terminal.selectionBackground": "$surface_visual",
+    "terminalCursor.foreground": "$surface_cursor",
+    "terminalCursor.background": "$on_surface_cursor",
+    "terminal.ansiBlack": "$terminal_color_0",
+    "terminal.ansiRed": "$terminal_color_1",
+    "terminal.ansiGreen": "$terminal_color_2",
+    "terminal.ansiYellow": "$terminal_color_3",
+    "terminal.ansiBlue": "$terminal_color_4",
+    "terminal.ansiMagenta": "$terminal_color_5",
+    "terminal.ansiCyan": "$terminal_color_6",
+    "terminal.ansiWhite": "$terminal_color_7",
+    "terminal.ansiBrightBlack": "$terminal_color_8",
+    "terminal.ansiBrightRed": "$terminal_color_9",
+    "terminal.ansiBrightGreen": "$terminal_color_10",
+    "terminal.ansiBrightYellow": "$terminal_color_11",
+    "terminal.ansiBrightBlue": "$terminal_color_12",
+    "terminal.ansiBrightMagenta": "$terminal_color_13",
+    "terminal.ansiBrightCyan": "$terminal_color_14",
+    "terminal.ansiBrightWhite": "$terminal_color_15",
+
+    "menu.background": "$surface_menu",
+    "menu.foreground": "$text",
+    "menu.selectionBackground": "$surface_menu_cursorline",
+    "menu.selectionForeground": "$text",
+    "menu.separatorBackground": "$borders",
+    "menubar.selectionBackground": "$surface_cursorline",
+
+    "notificationCenterHeader.background": "$surface_dark",
+    "notifications.background": "$surface_menu",
+    "notifications.foreground": "$text",
+    "notifications.border": "$borders",
+    "notificationLink.foreground": "$text_link",
+    "notificationsErrorIcon.foreground": "$text_red",
+    "notificationsWarningIcon.foreground": "$text_amber",
+    "notificationsInfoIcon.foreground": "$text_blue",
+
+    "gitDecoration.addedResourceForeground": "$text_green",
+    "gitDecoration.modifiedResourceForeground": "$text_blue",
+    "gitDecoration.deletedResourceForeground": "$text_red",
+    "gitDecoration.renamedResourceForeground": "$text_teal",
+    "gitDecoration.stageModifiedResourceForeground": "$text_blue",
+    "gitDecoration.stageDeletedResourceForeground": "$text_red",
+    "gitDecoration.untrackedResourceForeground": "$text_green",
+    "gitDecoration.ignoredResourceForeground": "$text_dimmest",
+    "gitDecoration.conflictingResourceForeground": "$text_orange",
+    "gitDecoration.submoduleResourceForeground": "$text_amber",
+
+    "merge.currentHeaderBackground": "$surface_green",
+    "merge.currentContentBackground": "$surface_green/80",
+    "merge.incomingHeaderBackground": "$surface_blue",
+    "merge.incomingContentBackground": "$surface_blue/80",
+    "merge.commonHeaderBackground": "$surface_cursorline",
+    "merge.commonContentBackground": "$surface_cursorline/80",
+
+    "scrollbar.shadow": "#00000000",
+    "scrollbarSlider.background": "$surface_scrollbar_thumb/80",
+    "scrollbarSlider.hoverBackground": "$surface_scrollbar_thumb",
+    "scrollbarSlider.activeBackground": "$surface_active/80",
+    "minimap.background": "$surface",
+    "minimap.selectionHighlight": "$surface_visual",
+    "minimap.findMatchHighlight": "$on_surface_search/80",
+    "minimap.errorHighlight": "$text_red/80",
+    "minimap.warningHighlight": "$text_amber/80",
+
+    "peekView.border": "$borders_accent",
+    "peekViewEditor.background": "$surface_dark",
+    "peekViewEditor.matchHighlightBackground": "$surface_search",
+    "peekViewResult.background": "$surface_menu",
+    "peekViewResult.selectionBackground": "$surface_cursorline",
+    "peekViewResult.matchHighlightBackground": "$surface_search",
+    "peekViewResult.lineForeground": "$text",
+    "peekViewResult.fileForeground": "$text_blue",
+    "peekViewTitle.background": "$surface_dark",
+    "peekViewTitleLabel.foreground": "$text_title",
+    "peekViewTitleDescription.foreground": "$text_dim",
+
+    "breadcrumb.background": "$surface",
+    "breadcrumb.foreground": "$text_dimmer",
+    "breadcrumb.focusForeground": "$text",
+    "breadcrumb.activeSelectionForeground": "$text",
+    "breadcrumbPicker.background": "$surface_menu",
+
+    "progressBar.background": "$accent",
+    "banner.background": "$surface_statusline",
+    "banner.foreground": "$on_surface_statusline",
+    "toolbar.hoverBackground": "$surface_cursorline",
+    "commandCenter.background": "$surface_dark",
+    "commandCenter.foreground": "$text_dim",
+    "commandCenter.border": "$borders_inactive",
+    "settings.headerForeground": "$text_title",
+    "settings.modifiedItemIndicator": "$accent",
+    "extensionButton.prominentBackground": "$accent_secondary_darker",
+    "extensionButton.prominentForeground": "$text_title",
+    "extensionButton.prominentHoverBackground": "$accent_secondary_dark",
+    "debugIcon.breakpointForeground": "$text_red"
+  },
+  "tokenColors": [
+    {
+      "scope": ["comment", "punctuation.definition.comment"],
+      "settings": { "foreground": "$text_comment" }
+    },
+    {
+      "scope": ["string", "punctuation.definition.string"],
+      "settings": { "foreground": "$text_green" }
+    },
+    {
+      "scope": "constant.character",
+      "settings": { "foreground": "$text_teal" }
+    },
+    {
+      "scope": [
+        "constant.character.escape",
+        "string.regexp",
+        "constant.other.symbol"
+      ],
+      "settings": { "foreground": "$text_pink" }
+    },
+    {
+      "scope": [
+        "constant.numeric",
+        "constant.other",
+        "entity.name.constant",
+        "variable.other.constant",
+        "variable.other.enummember"
+      ],
+      "settings": { "foreground": "$text_red" }
+    },
+    {
+      "scope": "constant.language",
+      "settings": { "foreground": "$text_orange" }
+    },
+    {
+      "scope": "constant.language.boolean",
+      "settings": { "foreground": "$text_red" }
+    },
+    {
+      "scope": "variable",
+      "settings": { "foreground": "$text" }
+    },
+    {
+      "scope": "variable.parameter",
+      "settings": { "foreground": "$text_pink", "fontStyle": "italic" }
+    },
+    {
+      "scope": "variable.language",
+      "settings": { "foreground": "$text_purple" }
+    },
+    {
+      "scope": [
+        "variable.other.property",
+        "variable.other.member",
+        "variable.other.object.property",
+        "support.type.property-name"
+      ],
+      "settings": { "foreground": "$text_blue" }
+    },
+    {
+      "scope": ["entity.name.function", "support.function"],
+      "settings": { "foreground": "$text_blue" }
+    },
+    {
+      "scope": ["keyword", "storage", "storage.modifier"],
+      "settings": { "foreground": "$text_variant", "fontStyle": "bold" }
+    },
+    {
+      "scope": [
+        "keyword.control.conditional",
+        "keyword.control.loop",
+        "keyword.control.repeat",
+        "keyword.control.return",
+        "keyword.control.flow",
+        "keyword.control.import",
+        "keyword.control.include",
+        "keyword.control.export",
+        "keyword.control.from",
+        "storage.type.function"
+      ],
+      "settings": { "foreground": "$text_indigo", "fontStyle": "" }
+    },
+    {
+      "scope": "keyword.operator",
+      "settings": { "foreground": "$text_dimmer", "fontStyle": "" }
+    },
+    {
+      "scope": [
+        "keyword.operator.new",
+        "keyword.operator.expression",
+        "keyword.operator.logical.python",
+        "keyword.operator.wordlike"
+      ],
+      "settings": { "foreground": "$text_indigo" }
+    },
+    {
+      "scope": [
+        "entity.name.type",
+        "entity.name.class",
+        "support.class",
+        "support.type",
+        "entity.other.inherited-class"
+      ],
+      "settings": { "foreground": "$text_yellow" }
+    },
+    {
+      "scope": [
+        "storage.type.primitive",
+        "support.type.primitive",
+        "support.type.builtin"
+      ],
+      "settings": { "foreground": "$text_purple", "fontStyle": "italic" }
+    },
+    {
+      "scope": ["entity.name.namespace", "entity.name.module"],
+      "settings": { "foreground": "$text_amber", "fontStyle": "italic" }
+    },
+    {
+      "scope": ["punctuation", "meta.brace", "keyword.operator.assignment"],
+      "settings": { "foreground": "$text_dimmer" }
+    },
+    {
+      "scope": "entity.name.label",
+      "settings": { "foreground": "$text_sky" }
+    },
+    {
+      "scope": ["meta.preprocessor", "keyword.control.directive"],
+      "settings": { "foreground": "$text_pink" }
+    },
+    {
+      "scope": [
+        "keyword.control.directive.include",
+        "entity.name.function.preprocessor"
+      ],
+      "settings": { "foreground": "$text_indigo" }
+    },
+    {
+      "scope": [
+        "entity.name.function.decorator",
+        "meta.decorator punctuation.decorator",
+        "punctuation.definition.decorator"
+      ],
+      "settings": { "foreground": "$text_red" }
+    },
+    {
+      "scope": "entity.name.tag",
+      "settings": { "foreground": "$text_blue" }
+    },
+    {
+      "scope": "entity.other.attribute-name",
+      "settings": { "foreground": "$text_amber", "fontStyle": "italic" }
+    },
+    {
+      "scope": "punctuation.definition.tag",
+      "settings": { "foreground": "$text_teal" }
+    },
+    {
+      "scope": ["heading.1.markdown", "markup.heading.setext.1.markdown"],
+      "settings": { "foreground": "$text_red", "fontStyle": "bold" }
+    },
+    {
+      "scope": ["heading.2.markdown", "markup.heading.setext.2.markdown"],
+      "settings": { "foreground": "$text_orange", "fontStyle": "bold" }
+    },
+    {
+      "scope": "heading.3.markdown",
+      "settings": { "foreground": "$text_yellow", "fontStyle": "bold" }
+    },
+    {
+      "scope": "heading.4.markdown",
+      "settings": { "foreground": "$text_green", "fontStyle": "bold" }
+    },
+    {
+      "scope": "heading.5.markdown",
+      "settings": { "foreground": "$text_sky", "fontStyle": "bold" }
+    },
+    {
+      "scope": "heading.6.markdown",
+      "settings": { "foreground": "$text_violet", "fontStyle": "bold" }
+    },
+    {
+      "scope": "markup.bold",
+      "settings": { "fontStyle": "bold" }
+    },
+    {
+      "scope": "markup.italic",
+      "settings": { "fontStyle": "italic" }
+    },
+    {
+      "scope": "markup.strikethrough",
+      "settings": { "fontStyle": "strikethrough" }
+    },
+    {
+      "scope": "markup.underline",
+      "settings": { "fontStyle": "underline" }
+    },
+    {
+      "scope": ["markup.inline.raw", "markup.fenced_code.block"],
+      "settings": { "foreground": "$text_green" }
+    },
+    {
+      "scope": ["markup.underline.link", "string.other.link"],
+      "settings": { "foreground": "$text_link", "fontStyle": "underline" }
+    },
+    {
+      "scope": ["markup.inserted", "punctuation.definition.inserted"],
+      "settings": { "foreground": "$text_green" }
+    },
+    {
+      "scope": ["markup.deleted", "punctuation.definition.deleted"],
+      "settings": { "foreground": "$text_red" }
+    },
+    {
+      "scope": ["markup.changed", "punctuation.definition.changed"],
+      "settings": { "foreground": "$text_blue" }
+    },
+    {
+      "scope": "punctuation.definition.list.begin.markdown",
+      "settings": { "foreground": "$text_teal" }
+    },
+    {
+      "scope": "meta.diff.header",
+      "settings": { "foreground": "$text_blue" }
+    },
+    {
+      "scope": ["invalid", "invalid.illegal"],
+      "settings": { "foreground": "$text_red" }
+    }
+  ],
+  "semanticTokenColors": {
+    "function": { "foreground": "$text", "bold": true },
+    "function.declaration": { "foreground": "$text_blue", "bold": false },
+    "method": { "foreground": "$text", "bold": true },
+    "method.declaration": { "foreground": "$text_blue", "bold": false },
+    "parameter": { "foreground": "$text_pink", "italic": true },
+    "selfParameter": { "foreground": "$text_purple" },
+    "variable": { "foreground": "$text" },
+    "variable.readonly": { "foreground": "$text_red" },
+    "variable.defaultLibrary": { "foreground": "$text_purple" },
+    "property": { "foreground": "$text_blue" },
+    "enumMember": { "foreground": "$text_red" },
+    "type": { "foreground": "$text_yellow" },
+    "type.defaultLibrary": { "foreground": "$text_purple", "italic": true },
+    "class": { "foreground": "$text_yellow" },
+    "class.defaultLibrary": { "foreground": "$text_purple", "italic": true },
+    "typeParameter": { "foreground": "$text_yellow" },
+    "namespace": { "foreground": "$text_amber", "italic": true },
+    "macro": { "foreground": "$text_indigo" },
+    "decorator": { "foreground": "$text_red" }
+  }
+}
