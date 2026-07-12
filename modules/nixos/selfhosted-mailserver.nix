@@ -54,7 +54,12 @@
           inherit (facts.mail) fqdn domains;
           systemDomain = "delay.email";
 
-          accounts."delay" = {
+          # Full address, not a bare login: the catch-all aliases resolve to
+          # this name verbatim in postfix's virtual map, and a domainless
+          # result gets $myorigin (mx.delay.email) appended — which is not a
+          # served mail domain, so delivery relays to itself and bounces with
+          # "mail for mx.delay.email loops back to myself".
+          accounts."delay@delay.email" = {
             hashedPasswordFile = config.age.secrets."services/mail/delay.passwd".path;
             # "@<domain>" = catch-all for the domain + permission to send from
             # any address in it.
@@ -121,7 +126,7 @@
           description = "Expunge mail older than 30 days (excluding flagged)";
           script = ''
             ${lib.getExe' config.services.dovecot2.package "doveadm"} \
-              expunge -u delay mailbox '*' savedbefore 30d not flagged
+              expunge -u delay@delay.email mailbox '*' savedbefore 30d not flagged
           '';
           serviceConfig = {
             Type = "oneshot";

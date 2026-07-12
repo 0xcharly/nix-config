@@ -37,7 +37,7 @@
         IMAPAccount jump-jp
         Host ${facts.mail.fqdn}
         Port 993
-        User delay
+        User delay@delay.email
         PassCmd "cat ${config.age.secrets."services/mail-archive/delay.passwd".path}"
         TLSType IMAPS
 
