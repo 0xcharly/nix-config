@@ -12,25 +12,30 @@
       inherit (self.lib) facts gatus;
 
       mkPushRequest =
-        success:
+        group: endpoint: success:
         gatus.mkPushBasedExternalPostRequest {
-          inherit pkgs success;
+          inherit
+            pkgs
+            success
+            group
+            endpoint
+            ;
           domain = facts.services.gatus.domain;
           tokenFile = config.age.secrets."services/gatus-external-endpoints.token".path;
-          group = "cron";
-          endpoint = "Mail retention purge";
         };
 
-      reportResult = self.lib.builders.mkShellApplication pkgs {
-        name = "mailserver-retention-report-result";
-        text = ''
-          if [ "''${SERVICE_RESULT:-}" = "success" ]; then
-            exec ${lib.getExe (mkPushRequest true)}
-          else
-            exec ${lib.getExe (mkPushRequest false)}
-          fi
-        '';
-      };
+      mkReportResult =
+        name: group: endpoint:
+        self.lib.builders.mkShellApplication pkgs {
+          inherit name;
+          text = ''
+            if [ "''${SERVICE_RESULT:-}" = "success" ]; then
+              exec ${lib.getExe (mkPushRequest group endpoint true)}
+            else
+              exec ${lib.getExe (mkPushRequest group endpoint false)}
+            fi
+          '';
+        };
     in
     {
       imports = [
@@ -110,11 +115,33 @@
             Type = "oneshot";
             # "+" runs the hook as root: the Gatus token file is root-readable
             # only, and $SERVICE_RESULT covers every outcome.
-            ExecStopPost = "+${reportResult}";
+            ExecStopPost = "+${
+              mkReportResult "mailserver-retention-report-result" "cron" "Mail retention purge"
+            }";
           };
           # Daily, UTC; the archive runs every 30 min, so mail is at most
           # 30 min un-archived when purged.
           startAt = "03:30";
+        };
+
+        # Outbound-SMTP (port 25) probe: Linode blocks egress on 25 until
+        # support lifts the restriction, so this check stays red on Gatus and
+        # turns green (with a resolved notification) the moment direct
+        # delivery becomes possible. Full TCP + EHLO dialog with a real MX;
+        # never sends mail. Also catches any future egress regression.
+        systemd.services.mailserver-egress-probe = {
+          description = "Probe outbound SMTP (port 25) reachability";
+          script = ''
+            ${lib.getExe pkgs.curl} -sS --connect-timeout 10 --max-time 20 \
+              smtp://gmail-smtp-in.l.google.com:25 > /dev/null
+          '';
+          serviceConfig = {
+            Type = "oneshot";
+            # "+" runs the hook as root: the Gatus token file is root-readable
+            # only, and $SERVICE_RESULT covers every outcome.
+            ExecStopPost = "+${mkReportResult "mailserver-egress-probe-report-result" "mail" "Mail egress"}";
+          };
+          startAt = "*:20"; # hourly
         };
       };
     };

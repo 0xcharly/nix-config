@@ -110,6 +110,10 @@
           (gatus.mkPushBasedExternalEndpoint "GitHub backup" { heartbeat = "48h"; })
           (gatus.mkPushBasedExternalEndpoint "node-skl exit node" { heartbeat = "6m"; })
           (gatus.mkPushBasedExternalEndpoint "Mail archive" { heartbeat = "2h"; })
+          (gatus.mkPushBasedExternalEndpoint "Mail egress" {
+            group = "mail";
+            heartbeat = "2h";
+          })
           (gatus.mkPushBasedExternalEndpoint "Mail retention purge" { heartbeat = "48h"; })
         ];
       };
