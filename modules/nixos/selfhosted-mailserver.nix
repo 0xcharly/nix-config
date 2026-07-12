@@ -56,7 +56,7 @@
             aliases = map (domain: "@${domain}") facts.mail.domains;
           };
 
-          indexDir = "/var/mail/index";
+          indexDir = "/var/lib/dovecot/indices";
           fullTextSearch = {
             enable = true;
             languages = [
@@ -76,10 +76,7 @@
             gid = 3000;
             owner = "mail";
             group = "mail";
-            path = "/var/mail/boxes";
           };
-
-          dkim.keyDirectory = "/var/mail/dkim";
 
           useUTF8FolderNames = true;
           hierarchySeparator = "/";
