@@ -12,7 +12,7 @@ Item {
 
     required property ShellScreen screen
     property bool hovered
-    readonly property bool shouldBeActive: UiState.isNotificationCenterTargetScreen(root.screen) && Notifications.notClosed.length > 0
+    readonly property bool shouldBeActive: UiState.isNotificationCenterTargetScreen(root.screen)
     readonly property ThemeConfig.NotificationCenter theme: Config.theme.hud.notificationCenter
 
     // Event-driven summon (every screen's instance fires): target the
@@ -137,10 +137,12 @@ Item {
             // Load as soon as a notification is tracked — before show() flips
             // the state — so the open transition binds an already-settled
             // content.implicitHeight (avoids an implicitHeight binding loop
-            // through visible -> active -> load). `root.visible` keeps the
-            // content alive through the collapse animation after the last
-            // notification is dismissed.
-            Component.onCompleted: active = Qt.binding(() => Notifications.notClosed.length > 0 || root.visible)
+            // through visible -> active -> load). `root.shouldBeActive` (not
+            // the panel's size) is what makes an empty hot-corner summon load
+            // content — routing through `visible` alone would recreate that
+            // loop. `root.visible` keeps the content alive through the
+            // collapse animation after the last notification is dismissed.
+            Component.onCompleted: active = Qt.binding(() => Notifications.notClosed.length > 0 || root.shouldBeActive || root.visible)
 
             sourceComponent: Content {
                 screen: root.screen

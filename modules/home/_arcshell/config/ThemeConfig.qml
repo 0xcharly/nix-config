@@ -76,6 +76,8 @@ JsonObject {
 
     component NotificationCenter: JsonObject {
         property int maxVisible: 3
+        // Reach of the top-right hot corner along the screen's top edge.
+        property int hotCornerSize: 48
         property BorderLineValues line: BorderLineValues {}
         property AnimationValues animation: AnimationValues {
             curveIn: Config.tokens.system.animations.curves.emphasizedIn

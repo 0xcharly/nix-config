@@ -7,7 +7,22 @@ JsonObject {
     property int verticalSpacing: Config.tokens.system.measurements.small
     // Gap between the title and the timestamp on the first row.
     property int horizontalSpacing: Config.tokens.system.measurements.small
-    property SurfaceTokens surface: Config.theme.defaults.cards
+    // Dedicated surface (not theme.defaults.cards, which is shared with the
+    // control center): full-bleed cards are square, so shape is 0.
+    property SurfaceTokens surface: SurfaceTokens {
+        colors: SurfaceColorValues {
+            content: Config.tokens.system.colors.on_surface
+            surface: Config.tokens.system.colors.surface_backdrop
+        }
+        padding: PaddingValues {
+            bottom: Config.tokens.system.measurements.large
+            left: Config.tokens.system.measurements.large
+            right: Config.tokens.system.measurements.large
+            top: Config.tokens.system.measurements.large
+        }
+        shape: 0
+        typography: Config.tokens.system.typography.body
+    }
 
     property TypographyValues titleTypography: Config.tokens.system.typography.smallTitle
     property color titleContentColor: Config.tokens.system.colors.on_surface

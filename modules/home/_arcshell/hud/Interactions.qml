@@ -52,8 +52,12 @@ MouseArea {
       return y <= panel.height && withinNotificationCenterPanelWidth(panel, x, y);
     }
 
+    function inTopRightHotCorner(panel: Item, x: real, y: real): bool {
+      return y <= Config.theme.hud.border.width + 1 && x >= root.width - Config.theme.hud.notificationCenter.hotCornerSize;
+    }
+
     function showNotificationCenterPanel(panel: Item, x: real, y: real): bool {
-      return inNotificationCenterPanel(panel, x, y);
+      return inTopRightHotCorner(panel, x, y) || inNotificationCenterPanel(panel, x, y);
     }
 
     anchors.fill: parent

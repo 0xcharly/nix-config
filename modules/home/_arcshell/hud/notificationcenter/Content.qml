@@ -32,10 +32,20 @@ Rectangle {
 
         anchors.fill: parent
         anchors.bottomMargin: root.theme.padding.bottom
-        anchors.leftMargin: root.theme.padding.left
-        anchors.rightMargin: root.theme.padding.right
+        anchors.leftMargin: 0
+        anchors.rightMargin: 0
         anchors.topMargin: root.theme.padding.top
         spacing: Config.theme.hud.notificationCenter.spacedBy
+
+        ArcText {
+            Layout.fillWidth: true
+            Layout.leftMargin: root.theme.padding.left
+            Layout.rightMargin: root.theme.padding.right
+            elide: Text.ElideRight
+            color: Config.tokens.system.colors.on_surface
+            style: Config.tokens.system.typography.mediumTitle
+            text: qsTr("Notification Center")
+        }
 
         Repeater {
             model: ScriptModel {
@@ -48,8 +58,21 @@ Rectangle {
         }
 
         ArcText {
+            visible: Notifications.notClosed.length === 0
+            Layout.fillWidth: true
+            Layout.topMargin: Config.tokens.system.measurements.medium
+            Layout.bottomMargin: Config.tokens.system.measurements.medium
+            horizontalAlignment: Text.AlignHCenter
+            color: Config.tokens.system.colors.on_surface_variant
+            style: Config.tokens.system.typography.body
+            text: qsTr("No notifications.")
+        }
+
+        ArcText {
             visible: root.overflow > 0
             Layout.fillWidth: true
+            Layout.leftMargin: root.theme.padding.left
+            Layout.rightMargin: root.theme.padding.right
             horizontalAlignment: Text.AlignHCenter
             color: Config.tokens.system.colors.on_surface_variant
             style: Config.tokens.system.typography.smallLabel
