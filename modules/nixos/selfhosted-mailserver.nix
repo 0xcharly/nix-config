@@ -103,6 +103,7 @@
 
           storage = {
             uid = 3000;
+            gid = 3000;
             owner = "mail";
             group = "mail";
             path = "/var/mail/boxes";
