@@ -13,6 +13,7 @@
   material-symbols,
   networkmanager,
   systemd,
+  tailscale,
   uwsm,
   nerd-fonts,
   qt6,
@@ -44,6 +45,7 @@ let
     hyprland
     networkmanager
     systemd
+    tailscale
     uwsm
   ];
 

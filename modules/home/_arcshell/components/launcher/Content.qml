@@ -71,6 +71,11 @@ Rectangle {
             list.currentIndex = root.results.length > 0 ? 0 : -1;
             return;
         }
+        if (UiState.launcherMode === "exit-node") {
+            root.results = ExitNodeSearch.query(input.text);
+            list.currentIndex = root.results.length > 0 ? 0 : -1;
+            return;
+        }
         // Read input.text directly: this runs from onTextChanged, which can
         // fire before the mode/query bindings re-evaluate.
         const text = input.text.trim();
@@ -107,6 +112,13 @@ Rectangle {
         if (UiState.launcherMode === "bluetooth") {
             const device = root.results[list.currentIndex];
             device.connected ? device.disconnect() : device.connect();
+            UiState.showLauncher = false;
+            return;
+        }
+        if (UiState.launcherMode === "exit-node") {
+            const node = root.results[list.currentIndex];
+            if (!node.selected)             // selecting the active entry: no-op
+                ExitNodeSearch.select(node);
             UiState.showLauncher = false;
             return;
         }
@@ -247,6 +259,22 @@ Rectangle {
         }
     }
 
+    // Exit-node rows and the suggestion land asynchronously after the
+    // tailscale CLI calls finish.
+    Connections {
+        target: ExitNodeSearch
+
+        function onEntriesChanged() {
+            if (UiState.launcherMode === "exit-node")
+                root.requery();
+        }
+
+        function onSuggestedChanged() {
+            if (UiState.launcherMode === "exit-node")
+                root.requery();
+        }
+    }
+
     // Media player arrivals/departures change command availability while the
     // palette is open. Toggle *state* needs no requery: the delegate binds
     // the Command's reactive `checked` directly.
@@ -289,7 +317,7 @@ Rectangle {
         ArcText {
             id: title
 
-            text: root.passwordMode ? qsTr("Connect to \"%1\"").arg(root.pendingWifiNetwork?.name ?? "") : UiState.launcherMode === "wifi" ? qsTr("Select WiFi network") : UiState.launcherMode === "bluetooth" ? qsTr("Select Bluetooth device") : "Launcher"
+            text: root.passwordMode ? qsTr("Connect to \"%1\"").arg(root.pendingWifiNetwork?.name ?? "") : UiState.launcherMode === "wifi" ? qsTr("Select WiFi network") : UiState.launcherMode === "bluetooth" ? qsTr("Select Bluetooth device") : UiState.launcherMode === "exit-node" ? qsTr("Select Exit Node") : "Launcher"
             style: root.theme.titleTypography
             color: root.theme.titleContentColor
         }
@@ -413,9 +441,9 @@ Rectangle {
                         }
 
                         MaterialIcon {
-                            visible: row.binary || row.selectorRow || row.command
+                            visible: (row.binary || row.selectorRow || row.command) && row.symbol === ""
                             anchors.centerIn: parent
-                            text: row.command ? row.modelData.icon : row.binary ? "terminal_2" : UiState.launcherMode === "wifi" ? (row.modelData.connected ? "check" : "wifi") : IconLibrary.getBluetoothIcon(row.modelData.icon ?? "")
+                            text: row.command ? row.modelData.icon : row.binary ? "terminal_2" : UiState.launcherMode === "wifi" ? (row.modelData.connected ? "check" : "wifi") : UiState.launcherMode === "exit-node" ? (row.modelData.hostname === "" ? "vpn_key_off" : "language") : IconLibrary.getBluetoothIcon(row.modelData.icon ?? "")
                             color: root.theme.resultIconBox.content
                             // Scale the glyph with the box: QML font resolves
                             // pixelSize over the pointSize ArcText binds.
@@ -428,6 +456,13 @@ Rectangle {
                             text: row.symbol
                             style: root.theme.resultTypography
                             color: root.theme.resultContentColor
+                            // Emoji symbols (country flags) resolve through a
+                            // fallback font with a taller ascent than the UI
+                            // face: inside the token-fixed line height the
+                            // glyph rides above the visual center. Natural
+                            // line height re-centers the run's own metrics.
+                            lineHeightMode: Text.ProportionalHeight
+                            lineHeight: 1
                         }
                     }
 
@@ -442,7 +477,7 @@ Rectangle {
                     MaterialIcon {
                         visible: row.selectorRow
                         Layout.alignment: Qt.AlignVCenter
-                        text: !row.selectorRow ? "" : UiState.launcherMode === "wifi" ? IconLibrary.getWifiSignalIcon(row.modelData.signalStrength, row.wifiLocked) : row.modelData.batteryAvailable ? IconLibrary.getBatteryIcon(row.modelData.battery) : row.modelData.connected ? "bluetooth_connected" : "bluetooth"
+                        text: !row.selectorRow ? "" : UiState.launcherMode === "wifi" ? IconLibrary.getWifiSignalIcon(row.modelData.signalStrength, row.wifiLocked) : UiState.launcherMode === "exit-node" ? (row.modelData.selected ? "check" : row.modelData.suggested ? "bolt_boost" : "") : row.modelData.batteryAvailable ? IconLibrary.getBatteryIcon(row.modelData.battery) : row.modelData.connected ? "bluetooth_connected" : "bluetooth"
                         color: row.ListView.isCurrentItem ? root.theme.resultSelected.content : root.theme.resultContentColor
                     }
 

@@ -8,6 +8,14 @@
       options.node.networking.tailscale = with lib; {
         enableSsh = mkEnableOption "Whether to enable Tailscale SSH";
         acceptRoutes = mkEnableOption "Whether to accept routes advertised by other peers";
+        operator = {
+          enable = mkEnableOption "Whether to let a local user operate tailscaled without sudo";
+          user = mkOption {
+            type = types.str;
+            default = "delay";
+            description = "The local user allowed to operate tailscaled (tailscale set ...) without sudo.";
+          };
+        };
         exitNode = mkOption {
           type = types.nullOr types.str;
           default = null;
@@ -49,6 +57,7 @@
               })
               (mkFlags stringFlag {
                 "--exit-node" = cfg.exitNode;
+                "--operator" = if cfg.operator.enable then cfg.operator.user else null;
               })
             ];
         };

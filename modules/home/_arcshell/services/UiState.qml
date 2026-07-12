@@ -14,8 +14,9 @@ Singleton {
     property bool showLauncher: false
 
     // Launcher presentation: "default" (app search + prefix modes), "wifi"
-    // (network selector), "bluetooth" (device selector). Set at every open
-    // site, so it is never stale while visible.
+    // (network selector), "bluetooth" (device selector), "exit-node"
+    // (Tailscale exit-node selector). Set at every open site, so it is
+    // never stale while visible.
     property string launcherMode: "default"
 
     // Monitor each panel was summoned on. Latched by the set*Shown helpers

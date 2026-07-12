@@ -87,6 +87,12 @@ Singleton {
             }
         },
         Command {
+            name: qsTr("Select Exit Node")
+            icon: "vpn_lock"
+            keepOpen: true
+            run: () => UiState.launcherMode = "exit-node"
+        },
+        Command {
             name: qsTr("Play")
             icon: "play_arrow"
             available: root.activePlayer !== null

@@ -6,5 +6,7 @@
       environment-man-pages
       programs-power-management
     ];
+
+    node.networking.tailscale.operator.enable = true;
   };
 }
