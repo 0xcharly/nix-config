@@ -9,7 +9,7 @@ JsonObject {
     property int horizontalSpacing: Config.tokens.system.measurements.medium
     property SurfaceTokens surface: Config.theme.defaults.cards
 
-    property TypographyValues titleTypography: Config.tokens.system.typography.title
+    property TypographyValues titleTypography: Config.tokens.system.typography.smallTitle
     property color titleContentColor: Config.tokens.system.colors.on_surface
 
     property TypographyValues timestampTypography: Config.tokens.system.typography.mediumLabel

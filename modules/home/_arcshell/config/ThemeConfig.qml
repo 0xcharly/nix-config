@@ -133,7 +133,7 @@ JsonObject {
             surface: Config.tokens.system.colors.surface_done
             content: Config.tokens.system.colors.on_surface_done
         }
-        property TypographyValues titleTypography: Config.tokens.system.typography.title
+        property TypographyValues titleTypography: Config.tokens.system.typography.smallTitle
         property TypographyValues bodyTypography: Config.tokens.system.typography.body
         property color bodyContentColor: Config.tokens.system.colors.on_surface_variant
         property SurfaceTokens surface: Config.theme.defaults.cards

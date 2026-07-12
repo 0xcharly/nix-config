@@ -5,7 +5,7 @@ import qs.config.tokens.types
 
 JsonObject {
     property int verticalSpacing: Config.tokens.system.measurements.medium
-    property TypographyValues typography: Config.tokens.system.typography.title
+    property TypographyValues typography: Config.tokens.system.typography.smallTitle
     property SurfaceTokens surface: Config.theme.defaults.cards
     property PaddingValues padding: PaddingValues {
         bottom: Config.tokens.system.measurements.medium
@@ -22,14 +22,14 @@ JsonObject {
             surface: Config.tokens.system.colors.surface_accent
             content: Config.tokens.system.colors.on_surface_accent
         }
-        property PaddingValues padding: PaddingValues {
+        padding: PaddingValues {
             bottom: Config.tokens.system.measurements.small
             left: Config.tokens.system.measurements.small
             right: Config.tokens.system.measurements.small
             top: Config.tokens.system.measurements.small
         }
-        property int shape: Config.tokens.system.shapes.cornerFull
-        property TypographyValues typography: Config.tokens.system.typography.icon
+        shape: Config.tokens.system.shapes.cornerFull
+        typography: Config.tokens.system.typography.icon
     }
     property SurfaceColorValues iconChecked: SurfaceColorValues {
         surface: Config.tokens.system.colors.surface_done
