@@ -38,7 +38,7 @@
                   $ORIGIN ${domainName}.
                   $TTL    3600
 
-                  @             IN SOA   ns.${domainName}. hostmaster.${domainName}. 2026071200 86400 10800 3600000 3600
+                  @             IN SOA   ns.${domainName}. hostmaster.${domainName}. 2026071300 86400 10800 3600000 3600
                   @       300   IN NS    ns1.${domainName}.
                   @       300   IN NS    ns2.${domainName}.
                   ns1     300   IN A     ${records.ns1.ipv4}
@@ -50,8 +50,7 @@
                   @       10800 IN MX    10 mx.delay.email.
                   @       10800 IN TXT   "v=spf1 mx ~all"
                   _dmarc  10800 IN TXT   "v=DMARC1; p=quarantine"
-                  ; TODO(post-deploy): paste from jump-jp:/var/mail/dkim/xn--7ck8cva5eb.com.mail.txt
-                  ; mail._domainkey  10800 IN TXT   "v=DKIM1; k=rsa; p=<pubkey>"
+                  mail._domainkey  10800 IN TXT   "v=DKIM1; k=rsa; " "p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtGa7NIZwCGzHjrr9ZJywnRXqSJNK27CqlQH3cZ/uX5GKQfI8s9oJ3iPpZ5ttIpfZlRxZCy4jsEzS/c5DYe0CNbgtqJxmLJnCrWAVSWx8+68Q+lOj6SnF5BTwh37R0a1SW5jZkz8fMQI29VwTYvAd0BfqnmWrmqFJ9ZQW90V3xWujrkpcjkYkG19aiAUK6IO/+9H0lVx5UMMcXOFJR" "kOZ4R55mpZX1/8zcspL14jUgGc31DgSJn0kuNWk8y2gHf4iO4wgvmM7fEdVmmEAbInm+55sD53ROT9wJgagU+Jx7uCPadF2NbmByYuceb9wxMgUkc9CPBm2XN2LYd5l0v5NoQIDAQAB"
                 '';
               in
               ''
