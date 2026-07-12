@@ -34,7 +34,7 @@ Singleton {
     NotificationServer {
         id: server
 
-        keepOnReload: false
+        keepOnReload: true
         actionsSupported: true
         bodyHyperlinksSupported: true
         bodyImagesSupported: true
@@ -46,11 +46,13 @@ Singleton {
             notif.tracked = true;
 
             const comp = notificationsC.createObject(root, {
-                popup: root.shouldShowPopup(),
+                // Re-emitted pre-reload notifications must not re-open the tray.
+                popup: root.shouldShowPopup() && !notif.lastGeneration,
                 notification: notif
             });
             root.list = [comp, ...root.list];
-            root.received();
+            if (!notif.lastGeneration)
+                root.received();
         }
     }
 

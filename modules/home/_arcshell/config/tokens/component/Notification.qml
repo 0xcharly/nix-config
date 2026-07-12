@@ -34,4 +34,14 @@ JsonObject {
     property AnimationValues animation: AnimationValues {
         duration: Config.tokens.system.animations.durations.small
     }
+
+    // Critical-urgency card surface. Only `surface` is consumed — the card
+    // keeps the normal foreground colors; `content` is defined for
+    // completeness only.
+    property SurfaceColorValues surfaceCritical: SurfaceColorValues {
+        surface: Config.tokens.system.colors.surface_danger
+        content: Config.tokens.system.colors.on_surface_danger
+    }
+    // Vertical finger travel (px) that expands a collapsed card on drag-down.
+    property int expandDragThreshold: 24
 }

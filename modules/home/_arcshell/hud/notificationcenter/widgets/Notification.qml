@@ -3,7 +3,9 @@ pragma ComponentBehavior: Bound
 import qs.components
 import qs.config
 import qs.config.tokens.component as ComponentTokens
+import Quickshell.Services.Notifications
 import QtQuick
+import QtQuick.Effects
 import QtQuick.Layouts
 
 Item {
@@ -40,7 +42,7 @@ Item {
 
     function dismiss(): void {
         // Capture the exit edge once: the side the drag was headed for, or
-        // the right edge for a plain right-click (x still 0).
+        // the right edge for a plain middle-click (x still 0).
         dismissSlide.to = card.x < 0 ? -card.width : card.width;
         dismissAnim.restart();
     }
@@ -80,16 +82,76 @@ Item {
         width: root.width
         implicitHeight: layout.implicitHeight + root.theme.padding.top + root.theme.padding.bottom
 
-        color: root.theme.surface.colors.surface
+        color: root.modelData.urgency === NotificationUrgency.Critical ? root.theme.surfaceCritical.surface : root.theme.surface.colors.surface
         radius: root.theme.surface.shape
         // Fade with the reveal state and as the card slides toward dismissal.
         opacity: root.reveal * (1 - Math.abs(x) / width)
 
+        Behavior on implicitHeight {
+            // Animate expand/collapse only. During the initial reveal (and the
+            // dismiss collapse) the root's `reveal` Behavior owns the height —
+            // enabling this one there would double-animate.
+            enabled: root.reveal === 1
+
+            PropAnim {}
+        }
+
+        // Declared before `layout` so the interactive items inside it
+        // (chevron, action buttons) sit above the drag area; text items
+        // don't accept mouse events, so presses elsewhere still fall
+        // through to it.
+        MouseArea {
+            id: dragArea
+
+            // Drag-down on a collapsed card expands it. Guard `expandedByDrag`:
+            // a right-button drag-down would otherwise expand via positionChanged
+            // and immediately collapse again via the same press's clicked event.
+            property real pressY: 0
+            property bool expandedByDrag: false
+
+            anchors.fill: parent
+            enabled: root.shown && !dismissAnim.running
+            acceptedButtons: Qt.LeftButton | Qt.MiddleButton | Qt.RightButton
+            drag.target: card
+            drag.axis: Drag.XAxis
+
+            onPressed: mouse => {
+                pressY = mouse.y;
+                expandedByDrag = false;
+            }
+            onPositionChanged: mouse => {
+                if (!root.modelData.expanded && mouse.y - pressY > root.theme.expandDragThreshold) {
+                    root.modelData.expanded = true;
+                    expandedByDrag = true;
+                }
+            }
+            onClicked: mouse => {
+                if (mouse.button === Qt.MiddleButton)
+                    root.dismiss();
+                else if (mouse.button === Qt.RightButton && !expandedByDrag)
+                    root.modelData.expanded = !root.modelData.expanded;
+            }
+            // Swipe: past a third of the card's width in either direction
+            // dismisses; anything less springs back.
+            onReleased: {
+                if (Math.abs(card.x) > card.width / 3)
+                    root.dismiss();
+                else
+                    card.x = 0;
+            }
+        }
+
         ColumnLayout {
             id: layout
 
-            anchors.fill: parent
-            anchors.bottomMargin: root.theme.padding.bottom
+            // Top + sides only, never bottom: while the expand/collapse
+            // Behavior animates the card height, the body has already
+            // snapped to its target line count — filling the card would
+            // let the ColumnLayout center that short content in the
+            // surplus height and make it jump mid-animation.
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
             anchors.leftMargin: root.theme.padding.left
             anchors.rightMargin: root.theme.padding.right
             anchors.topMargin: root.theme.padding.top
@@ -116,40 +178,155 @@ Item {
                     style: root.theme.timestampTypography
                     text: root.modelData.timeStr
                 }
+
+                // Expand/collapse chevron. MaterialIcon's default icon typography and
+                // the timestamp color keep it visually paired with the timestamp.
+                // Glyph swaps follow the ArcSliderLabel recipe: fade+shrink+blur out,
+                // flip the glyph while invisible, animate back in.
+                Item {
+                    id: chevron
+
+                    // Rendered direction; flips at the animation midpoint. Deliberately
+                    // NOT a binding: the ScriptAction below owns updates after init.
+                    property bool displayedExpanded: root.modelData.expanded
+
+                    Layout.alignment: Qt.AlignVCenter
+                    implicitWidth: chevronIcon.implicitWidth
+                    implicitHeight: chevronIcon.implicitHeight
+
+                    Connections {
+                        target: root.modelData
+
+                        function onExpandedChanged(): void {
+                            chevronAnim.restart();
+                        }
+                    }
+
+                    SequentialAnimation {
+                        id: chevronAnim
+
+                        ParallelAnimation {
+                            AnimatedNumber {
+                                target: chevronContent
+                                property: "opacity"
+                                to: 0
+                                duration: root.theme.animation.duration
+                                easing.bezierCurve: root.theme.animation.curveIn
+                            }
+                            AnimatedNumber {
+                                target: chevronContent
+                                property: "scale"
+                                to: 0.25
+                                duration: root.theme.animation.duration
+                                easing.bezierCurve: root.theme.animation.curveIn
+                            }
+                            AnimatedNumber {
+                                target: chevronContent
+                                property: "blurAmount"
+                                to: 1
+                                duration: root.theme.animation.duration
+                                easing.bezierCurve: root.theme.animation.curveIn
+                            }
+                        }
+                        ScriptAction {
+                            script: chevron.displayedExpanded = root.modelData.expanded
+                        }
+                        ParallelAnimation {
+                            AnimatedNumber {
+                                target: chevronContent
+                                property: "opacity"
+                                to: 1
+                                duration: root.theme.animation.duration
+                                easing.bezierCurve: root.theme.animation.curveOut
+                            }
+                            AnimatedNumber {
+                                target: chevronContent
+                                property: "scale"
+                                to: 1
+                                duration: root.theme.animation.duration
+                                easing.bezierCurve: root.theme.animation.curveOut
+                            }
+                            AnimatedNumber {
+                                target: chevronContent
+                                property: "blurAmount"
+                                to: 0
+                                duration: root.theme.animation.duration
+                                easing.bezierCurve: root.theme.animation.curveOut
+                            }
+                        }
+                    }
+
+                    Item {
+                        id: chevronContent
+
+                        // Normalized blur driven by the swap animation; ~4px visible
+                        // blur mid-transition (blurMax 8 x blur 0.5).
+                        property real blurAmount: 0
+
+                        anchors.fill: parent
+                        layer.enabled: true
+                        layer.effect: MultiEffect {
+                            blurEnabled: true
+                            blur: chevronContent.blurAmount
+                            blurMax: 8
+                        }
+
+                        MaterialIcon {
+                            id: chevronIcon
+
+                            anchors.centerIn: parent
+                            text: chevron.displayedExpanded ? "expand_less" : "expand_more"
+                            color: root.theme.timestampContentColor
+                        }
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        // Enlarge the hit target beyond the glyph.
+                        anchors.margins: -Config.tokens.system.measurements.small
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: root.modelData.expanded = !root.modelData.expanded
+                    }
+                }
             }
 
             ArcText {
                 Layout.fillWidth: true
                 visible: text !== ""
                 wrapMode: Text.Wrap
-                maximumLineCount: root.theme.bodyMaxLines
-                elide: Text.ElideRight
+                // INT_MAX: Text has no "unset" for maximumLineCount in a binding.
+                maximumLineCount: root.modelData.expanded ? 2147483647 : root.theme.bodyMaxLines
+                elide: root.modelData.expanded ? Text.ElideNone : Text.ElideRight
                 color: root.theme.surface.colors.content
                 style: root.theme.surface.typography
                 text: root.modelData.body
             }
-        }
 
-        MouseArea {
-            id: dragArea
+            // Actions as a wrapping button row, only while expanded. invoke()
+            // auto-dismisses non-resident notifications server-side; the tracked
+            // wrapper's onClosed connection then removes the row — never call
+            // close() here as well.
+            Flow {
+                Layout.fillWidth: true
+                visible: root.modelData.expanded && (root.modelData.notification?.actions.length ?? 0) > 0
+                spacing: root.theme.horizontalSpacing
 
-            anchors.fill: parent
-            enabled: root.shown && !dismissAnim.running
-            acceptedButtons: Qt.LeftButton | Qt.RightButton
-            drag.target: card
-            drag.axis: Drag.XAxis
+                Repeater {
+                    model: root.modelData.notification?.actions ?? []
 
-            onClicked: mouse => {
-                if (mouse.button === Qt.RightButton)
-                    root.dismiss();
-            }
-            // Swipe: past a third of the card's width in either direction
-            // dismisses; anything less springs back.
-            onReleased: {
-                if (Math.abs(card.x) > card.width / 3)
-                    root.dismiss();
-                else
-                    card.x = 0;
+                    ArcChip {
+                        id: actionChip
+
+                        required property var modelData
+                        text: modelData.text || modelData.identifier
+
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: actionChip.modelData.invoke()
+                        }
+                    }
+                }
             }
         }
 

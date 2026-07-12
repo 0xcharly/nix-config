@@ -9,6 +9,9 @@ QtObject {
 
     property bool popup
     property bool closed
+    // Card expansion (full body + action row). Lives here, not on the
+    // delegate, so it survives delegate recreation when the list changes.
+    property bool expanded
     property var locks: new Set()
 
     property date time: new Date()
