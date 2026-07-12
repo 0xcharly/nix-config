@@ -53,7 +53,7 @@ load_colorscheme {
   Directory = { fg = T.text_blue }, -- directory names (and other special names in listings)
   EndOfBuffer = { fg = T.text_conceal }, -- filler lines (~) after the end of the buffer.  By default, this is highlighted like |hl-NonText|.
   ErrorMsg = { fg = T.text_error }, -- error messages on the command line
-  VertSplit = { fg = T.surface }, -- the column separating vertically split windows
+  VertSplit = { link = 'WinSeparator' }, -- the column separating vertically split windows
   Folded = { fg = T.on_surface_blue, bg = T.surface_blue }, -- line used for closed folds
   FoldColumn = { fg = T.text_variant_dimmer }, -- 'foldcolumn'
   SignColumn = { fg = T.text_variant_dim }, -- column where |signs| are displayed
@@ -111,7 +111,7 @@ load_colorscheme {
   WildMenu = { bg = T.UNUSED }, -- current match in 'wildmenu' completion
   WinBar = { fg = T.UNUSED },
   WinBarNC = { link = 'WinBar' },
-  WinSeparator = { fg = T.text_variant_conceal },
+  WinSeparator = { fg = T.borders },
 
   -- }}}
   -- Syntax {{{
