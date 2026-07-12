@@ -102,6 +102,8 @@
             (gatus.mkTcpCheck "imaps" "${facts.mail.fqdn}:993")
             (gatus.mkTcpCheck "smtp" "${facts.mail.fqdn}:25")
             (gatus.mkTcpCheck "submissions" "${facts.mail.fqdn}:465")
+            (gatus.mkRdnsCheck "rdns IPv4" facts.dns."delay.email".mx.ipv4 facts.mail.fqdn)
+            (gatus.mkRdnsCheck "rdns IPv6" facts.dns."delay.email".mx.ipv6 facts.mail.fqdn)
           ];
 
         external-endpoints = [

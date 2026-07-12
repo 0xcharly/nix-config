@@ -36,6 +36,28 @@ let
     map (type: params // { inherit type; }) alert-providers;
 
   mkShortAlerts = map (type: { inherit type; }) alert-providers;
+
+  # PTR query names. Gatus claims to convert a bare IP automatically
+  # (client/client.go, v5.35.0), but its config validation FQDNs the
+  # query-name first ("172.237.13.18." fails net.ParseIP), so the conversion
+  # never fires — derive the .arpa form here instead.
+  # "172.237.13.18" -> "18.13.237.172.in-addr.arpa"
+  ipv4PtrName =
+    ip: lib.concatStringsSep "." (lib.reverseList (lib.splitString "." ip)) + ".in-addr.arpa";
+  # "2600:3c18::2000:4fff:fe5e:fe68" -> "8.6.e.f.<...>.8.1.c.3.0.0.6.2.ip6.arpa"
+  ipv6PtrName =
+    ip:
+    let
+      halves = lib.splitString "::" ip;
+      groups = s: lib.filter (g: g != "") (lib.splitString ":" s);
+      left = groups (builtins.elemAt halves 0);
+      right = if builtins.length halves > 1 then groups (builtins.elemAt halves 1) else [ ];
+      zeros = lib.genList (_: "0") (8 - builtins.length left - builtins.length right);
+      nibbles = lib.stringToCharacters (
+        lib.toLower (lib.concatMapStrings (lib.fixedWidthString 4 "0") (left ++ zeros ++ right))
+      );
+    in
+    lib.concatStringsSep "." (lib.reverseList nibbles) + ".ip6.arpa";
 in
 {
   inherit mkAlertParams;
@@ -94,6 +116,25 @@ in
     group = "mail";
     interval = "5m";
     conditions = [ "[CONNECTED] == true" ];
+    alerts = mkShortAlerts;
+  };
+
+  # Reverse-DNS (PTR) check against a public resolver; [BODY] is the
+  # dot-terminated PTR target. Accepts a bare IPv4 or IPv6 address.
+  mkRdnsCheck = name: ip: fqdn: {
+    inherit name;
+    url = "8.8.8.8";
+    group = "mail";
+    dns = {
+      query-name = if lib.hasInfix ":" ip then ipv6PtrName ip else ipv4PtrName ip;
+      query-type = "PTR";
+    };
+    interval = "10m";
+    conditions = [
+      "[CONNECTED] == true"
+      "[DNS_RCODE] == NOERROR"
+      "[BODY] == ${fqdn}."
+    ];
     alerts = mkShortAlerts;
   };
 
