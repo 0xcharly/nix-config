@@ -19,6 +19,7 @@ in
         surface = shell_surface;
         wallpaper = shell_wallpaper;
         accent = accent;
+        accent_dark = accent_dark;
 
         surface_elevated = alpha "1a" raw.shell_on_surface;
         surface_elevated_hover = alpha "33" raw.shell_on_surface;

@@ -11,5 +11,5 @@ JsonObject {
     property int overshoot: 5
     // Length of the fade-to-transparent gradient at each edge end.
     property int fade: 6
-    property color color: Config.tokens.system.colors.accent
+    property color color: Config.tokens.system.colors.accent_dark
 }
