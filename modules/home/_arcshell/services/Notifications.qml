@@ -31,6 +31,11 @@ Singleton {
         return !props.doNotDisturb;
     }
 
+    function clear(): void {
+        for (const notif of root.list.slice())
+            notif.close();
+    }
+
     NotificationServer {
         id: server
 
@@ -58,8 +63,7 @@ Singleton {
 
     IpcHandler {
         function clear(): void {
-            for (const notif of root.list.slice())
-                notif.close();
+            root.clear();
         }
 
         function isDndEnabled(): bool {

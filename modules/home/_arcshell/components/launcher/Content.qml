@@ -32,7 +32,8 @@ Rectangle {
     readonly property bool calcMode: !selectorMode && trimmedText.startsWith("=")
     readonly property bool shellMode: !selectorMode && trimmedText.startsWith("$")
     readonly property bool binMode: !selectorMode && trimmedText.startsWith("!")
-    readonly property string query: (glyphMode || calcMode || shellMode || binMode ? trimmedText.slice(1) : trimmedText).trim()
+    readonly property bool paletteMode: !selectorMode && trimmedText.startsWith(">")
+    readonly property string query: (glyphMode || calcMode || shellMode || binMode || paletteMode ? trimmedText.slice(1) : trimmedText).trim()
     readonly property bool queryEmpty: query.length === 0
 
     // Space left for the results list once the title and input rows are laid
@@ -77,8 +78,9 @@ Rectangle {
         const calc = text.startsWith("=");
         const shell = text.startsWith("$");
         const bin = text.startsWith("!");
-        const q = (glyph || calc || shell || bin ? text.slice(1) : text).trim();
-        root.results = glyph ? GlyphSearch.query(q) : calc ? CalcSearch.query(q) : shell ? ShellSearch.query(q) : bin ? BinSearch.query(q) : AppSearch.query(q);
+        const palette = text.startsWith(">");
+        const q = (glyph || calc || shell || bin || palette ? text.slice(1) : text).trim();
+        root.results = palette ? CommandSearch.query(q) : glyph ? GlyphSearch.query(q) : calc ? CalcSearch.query(q) : shell ? ShellSearch.query(q) : bin ? BinSearch.query(q) : AppSearch.query(q);
         list.currentIndex = root.results.length > 0 ? 0 : -1;
     }
 
@@ -109,6 +111,15 @@ Rectangle {
             return;
         }
         const item = root.results[list.currentIndex];
+        if (item.toggle !== undefined) {
+            // Palette command. Selector-entering commands (keepOpen) leave
+            // the launcher up: launcherMode has already flipped and
+            // onLauncherModeChanged cleared the input.
+            item.run();
+            if (!item.keepOpen)
+                UiState.showLauncher = false;
+            return;
+        }
         if (item.result !== undefined)
             CalcSearch.copy(item);
         else if (item.glyph !== undefined)
@@ -236,6 +247,18 @@ Rectangle {
         }
     }
 
+    // Media player arrivals/departures change command availability while the
+    // palette is open. Toggle *state* needs no requery: the delegate binds
+    // the Command's reactive `checked` directly.
+    Connections {
+        target: CommandSearch
+
+        function onPlayersChanged() {
+            if (root.paletteMode)
+                root.requery();
+        }
+    }
+
     // Outcome of a connectWithPsk attempt on the pending network.
     Connections {
         target: root.pendingWifiNetwork
@@ -330,6 +353,7 @@ Rectangle {
                 required property int index
 
                 readonly property bool binary: modelData.binary !== undefined
+                readonly property bool command: modelData.toggle !== undefined
                 readonly property bool selectorRow: UiState.launcherMode !== "default"
                 // Wifi networks that require authentication get the locked
                 // signal variant. OWE ("enhanced open") encrypts without
@@ -345,6 +369,18 @@ Rectangle {
                 height: root.theme.resultRowHeight
                 radius: root.theme.resultShape
                 color: ListView.isCurrentItem ? root.theme.resultSelected.surface : "transparent"
+
+                // Declared before the RowLayout so interactive children of
+                // the layout (the palette ArcSwitch) stack above the
+                // row-activation area; text/icon items don't accept mouse
+                // events, so row clicks elsewhere still fall through.
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        list.currentIndex = row.index;
+                        root.launchSelected();
+                    }
+                }
 
                 RowLayout {
                     anchors.fill: parent
@@ -366,7 +402,7 @@ Rectangle {
                         color: row.symbol === "" ? root.theme.resultIconBox.surface : "transparent"
 
                         Image {
-                            visible: !row.binary && !row.selectorRow && row.symbol === ""
+                            visible: !row.binary && !row.selectorRow && !row.command && row.symbol === ""
                             anchors.centerIn: parent
                             width: iconBox.iconSize
                             height: iconBox.iconSize
@@ -377,9 +413,9 @@ Rectangle {
                         }
 
                         MaterialIcon {
-                            visible: row.binary || row.selectorRow
+                            visible: row.binary || row.selectorRow || row.command
                             anchors.centerIn: parent
-                            text: row.binary ? "terminal_2" : UiState.launcherMode === "wifi" ? (row.modelData.connected ? "check" : "wifi") : IconLibrary.getBluetoothIcon(row.modelData.icon ?? "")
+                            text: row.command ? row.modelData.icon : row.binary ? "terminal_2" : UiState.launcherMode === "wifi" ? (row.modelData.connected ? "check" : "wifi") : IconLibrary.getBluetoothIcon(row.modelData.icon ?? "")
                             color: root.theme.resultIconBox.content
                             // Scale the glyph with the box: QML font resolves
                             // pixelSize over the pointSize ArcText binds.
@@ -409,13 +445,16 @@ Rectangle {
                         text: !row.selectorRow ? "" : UiState.launcherMode === "wifi" ? IconLibrary.getWifiSignalIcon(row.modelData.signalStrength, row.wifiLocked) : row.modelData.batteryAvailable ? IconLibrary.getBatteryIcon(row.modelData.battery) : row.modelData.connected ? "bluetooth_connected" : "bluetooth"
                         color: row.ListView.isCurrentItem ? root.theme.resultSelected.content : root.theme.resultContentColor
                     }
-                }
 
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: {
-                        list.currentIndex = row.index;
-                        root.launchSelected();
+                    // Right-aligned live toggle for boolean commands. Mirrors
+                    // the IdleInhibitor pattern: the switch owns its click;
+                    // run() derives the new state from the service, so
+                    // switch-click and Enter stay coherent.
+                    ArcSwitch {
+                        visible: row.command && row.modelData.toggle
+                        Layout.alignment: Qt.AlignVCenter
+                        checked: row.command ? row.modelData.checked : false
+                        onToggled: row.modelData.run()
                     }
                 }
             }

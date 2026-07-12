@@ -12,6 +12,8 @@
   recursive,
   material-symbols,
   networkmanager,
+  systemd,
+  uwsm,
   nerd-fonts,
   qt6,
   quickshell,
@@ -41,6 +43,8 @@ let
     ddcutil
     hyprland
     networkmanager
+    systemd
+    uwsm
   ];
 
   # A bitmap inspired, open-source, variable, monospace, geometric typeface.
