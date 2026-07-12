@@ -13,6 +13,11 @@ ColumnLayout {
 
     spacing: Config.theme.hud.bar.spacedBy
 
+    BarDecorator {
+        theme: Config.theme.hud.bar.decorator
+        Layout.alignment: Qt.AlignHCenter
+    }
+
     Workspaces {
         id: workspaces
         theme: Config.theme.hud.bar.workspaces

@@ -31,6 +31,7 @@ JsonObject {
         property int spacedBy: Config.tokens.system.measurements.small
 
         property FeatureTokens.Clock clock: FeatureTokens.Clock {}
+        property FeatureTokens.BarDecorator decorator: FeatureTokens.BarDecorator {}
         property FeatureTokens.PowerManagement power: FeatureTokens.PowerManagement {}
         property FeatureTokens.PowerProfile powerProfile: FeatureTokens.PowerProfile {}
         property FeatureTokens.Vpn vpn: FeatureTokens.Vpn {}
