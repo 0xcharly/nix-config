@@ -12,16 +12,6 @@ MaterialIcon {
 
     animate: true
     text: {
-        if (!UPower.displayDevice.isLaptopBattery) {
-            if (PowerProfiles.profile === PowerProfile.PowerSaver) {
-                return "energy_savings_leaf";
-            }
-            if (PowerProfiles.profile === PowerProfile.Performance) {
-                return "rocket_launch";
-            }
-            return "balance";
-        }
-
         const charging = [UPowerDeviceState.Charging, UPowerDeviceState.FullyCharged, UPowerDeviceState.PendingCharge].includes(UPower.displayDevice.state);
         if (charging) {
           if (UPower.displayDevice.percentage === 1) {

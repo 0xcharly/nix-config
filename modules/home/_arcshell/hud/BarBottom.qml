@@ -5,6 +5,7 @@ import qs.hud.widgets
 import Quickshell
 import QtQuick
 import QtQuick.Layouts
+import Quickshell.Services.UPower
 
 ColumnLayout {
     id: layout
@@ -25,6 +26,20 @@ ColumnLayout {
 
         sourceComponent: Vpn {
             theme: Config.theme.hud.bar.vpn
+        }
+    }
+
+    Loader {
+        asynchronous: true
+        // Config-enabled by default, but only shown when profile switching
+        // is actually possible: hasPerformanceProfile is 0.3.0's only
+        // signal that power-profiles-daemon is present.
+        visible: Config.theme.hud.bar.powerProfile.enable && PowerProfiles.hasPerformanceProfile
+
+        Layout.alignment: Qt.AlignHCenter
+
+        sourceComponent: PowerProfileIcon {
+            theme: Config.theme.hud.bar.powerProfile
         }
     }
 

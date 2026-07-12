@@ -16,6 +16,9 @@
       options.node.wayland.arcshell = with lib; {
         modules = {
           power = mkEnableOption "Enable the power management module";
+          powerProfile = mkEnableOption "Enable the power profile indicator module" // {
+            default = true;
+          };
           vpn = mkEnableOption "Enable the VPN egress check module";
         };
       };
@@ -30,6 +33,7 @@
             systemd.enable = true;
             settings.theme.hud.bar = {
               power.enable = cfg.modules.power;
+              powerProfile.enable = cfg.modules.powerProfile;
               vpn.enable = cfg.modules.vpn;
             };
             settings.services.launcher = {
