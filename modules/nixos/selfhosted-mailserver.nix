@@ -42,36 +42,6 @@
       };
 
       config = lib.mkIf cfg.enable {
-        disko.devices.zpool.root.datasets = {
-          "var/mail/boxes" = self.lib.zfs.mkLegacyDataset "/var/mail/boxes" {
-            recordsize = "16K"; # Maildir files are small (often 1–50KB)
-            compression = "lz4"; # Emails compress extremely well (headers + text)
-            atime = "off"; # Metadata savings for IMAP access
-            xattr = "sa"; # Faster metadata (when Dovecot uses xattrs)
-            acltype = "posixacl";
-            dnodesize = "auto"; # Helps with lots of small files and metadata density
-            logbias = "latency"; # Mail delivery is sync-heavy (fsync on every mail)
-          };
-          # Indexes are disposable cache
-          # Extremely write-heavy
-          # Small random I/O
-          # Safe to lose / rebuildable
-          "var/mail/index" = self.lib.zfs.mkLegacyDataset "/var/mail/index" {
-            recordsize = "16K"; # Mixed workload: small regular + large FTS indexes
-            compression = "lz4";
-            atime = "off";
-            sync = "disabled"; # Indexes are disposable
-            primarycache = "metadata"; # Prevents index blobs from evicting useful ARC data (low RAM VPS)
-            logbias = "throughput"; # Indexes are not latency-critical
-          };
-          # Tiny private keys with high entropy. Small recordsize avoids read amplification.
-          "var/mail/dkim" = self.lib.zfs.mkLegacyDataset "/var/mail/dkim" {
-            recordsize = "4K";
-            compression = "off";
-            atime = "off";
-          };
-        };
-
         mailserver = {
           inherit (cfg) enable;
           stateVersion = 5;
