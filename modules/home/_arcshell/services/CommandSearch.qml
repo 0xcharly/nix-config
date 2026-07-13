@@ -63,6 +63,17 @@ Singleton {
             run: () => Bluetooth.defaultAdapter.enabled = !Bluetooth.defaultAdapter.enabled
         },
         Command {
+            name: qsTr("Caffeinate")
+            icon: "coffee"
+            toggle: true
+            checked: IdleInhibitor.enabled
+            run: () => {
+                const enabled = !IdleInhibitor.enabled;
+                IdleInhibitor.enabled = enabled;
+                Quickshell.execDetached(["notify-send", "-a", "arc-shell", enabled ? qsTr("Caffeinate enabled") : qsTr("Caffeinate disabled"), enabled ? qsTr("Preventing sleep mode") : qsTr("Normal power management")]);
+            }
+        },
+        Command {
             name: qsTr("Select WiFi network")
             icon: "wifi_find"
             keepOpen: true

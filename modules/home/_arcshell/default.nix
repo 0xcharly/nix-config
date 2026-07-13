@@ -9,6 +9,7 @@
   brightnessctl,
   ddcutil,
   hyprland,
+  libnotify,
   recursive,
   material-symbols,
   networkmanager,
@@ -43,6 +44,7 @@ let
     curl
     ddcutil
     hyprland
+    libnotify
     networkmanager
     systemd
     tailscale
