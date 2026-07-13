@@ -40,6 +40,19 @@ direnv, run them through `devenv shell -- <command>`.
 - `rebuild`, `sys-upgrade`, `rollback`, `deploy`, and `remote-*` change
   running systems. Do not run them unless the user explicitly asks.
 
+## Vendored patches
+
+Unreleased upstream fixes are vendored as `.patch` files committed next to
+the consuming module, in a subdirectory named after the package — e.g.
+`modules/nixos/github-backup/pr-521-watched-repositories-endpoint.patch`.
+Name GitHub PR patches `pr-<N>-<slug>.patch`. Apply them with
+`overrideAttrs (attrs: { patches = (attrs.patches or [ ]) ++ [ ./… ]; })`
+at the consuming site, preceded by a comment explaining the why and a
+`TODO(<release>): Drop this override once …` marker, where `<release>` is
+the NixOS release expected to ship the fix (e.g. `TODO(26.11)`). When
+upgrading to a release, grep for its `TODO(` marker to find overrides due
+for removal.
+
 ## Arcshell
 
 `modules/home/_arcshell/` contains arc-shell, a bespoke Quickshell (Qt6/QML)

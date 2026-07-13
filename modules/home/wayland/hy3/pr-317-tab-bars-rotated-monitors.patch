@@ -1,0 +1,53 @@
+From 72b401b48de85bc0e2882f17f1b10a1ec2757b6d Mon Sep 17 00:00:00 2001
+From: Hannes Leutloff <hannes.leutloff@yeldirium.de>
+Date: Mon, 8 Jun 2026 18:24:27 +0200
+Subject: [PATCH] fix: tab bars rendered in wrong orientation on rotated
+ monitors
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+projectBoxToTarget internally composes getScaleMatrix() with
+targetProjection.projectBox(), where targetProjection (m_projMatrix)
+already contains the monitor's WL transform rotation. Passing
+monitor_inverted as the transform parameter applies the inverse
+rotation inside projectBox(), cancelling out the rotation already
+present in m_projMatrix — reproducing the double-rotation bug that
+was originally fixed in 0525702.
+
+Pass HYPRUTILS_TRANSFORM_NORMAL instead, leaving m_projMatrix's
+rotation intact, which is equivalent to the pre-refactor fix of
+rdata.projection * monitorProjection.projectBox(monitorBox, NORMAL).
+
+Assisted-by: Copilot <223556219+Copilot@users.noreply.github.com>
+---
+ src/render.cpp | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
+
+diff --git a/src/render.cpp b/src/render.cpp
+index 167decf..b507605 100644
+--- a/src/render.cpp
++++ b/src/render.cpp
+@@ -1,7 +1,6 @@
+ #include "render.hpp"
+ 
+ #include <GLES2/gl2.h>
+-#include <hyprland/src/helpers/math/Math.hpp>
+ #include <hyprland/src/render/OpenGL.hpp>
+ #include <hyprland/src/render/gl/GLTexture.hpp>
+ #include <hyprland/src/render/Shader.hpp>
+@@ -34,13 +33,7 @@ void Hy3Render::renderTab(
+ 	const auto& monitorSize = rdata.pMonitor->m_transformedSize;
+ 	auto monitorBox = CBox {Vector2D(), monitorSize};
+ 
+-	const auto monitor_inverted = Math::wlTransformToHyprutils(
+-			Math::invertTransform(g_pHyprRenderer->m_renderData.pMonitor->m_transform)
+-	);
+-
+-	Hyprutils::Math::eTransform transform = monitor_inverted;
+-
+-	auto glMatrix = g_pHyprRenderer->projectBoxToTarget(monitorBox, transform);
++	auto glMatrix = g_pHyprRenderer->projectBoxToTarget(monitorBox, Hyprutils::Math::HYPRUTILS_TRANSFORM_NORMAL);
+ 
+ 	g_pHyprOpenGL->useShader(shader.program);
+ 

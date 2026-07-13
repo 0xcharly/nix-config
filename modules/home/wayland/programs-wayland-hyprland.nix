@@ -258,8 +258,18 @@
             # Managed by UWSM
             systemd.enable = false;
 
-            # Layout plugin
-            plugins = with pkgs.hyprlandPlugins; [ hy3 ];
+            # Layout plugin.
+            # PR outfoxxed/hy3#317: tab bars render in the wrong orientation on
+            # rotated monitors (regression of upstream #314 introduced in hy3
+            # 76010d9, present in 0.55.0).
+            # TODO(26.11): Drop this override once the PR lands in a hy3 release.
+            plugins = [
+              (pkgs.hyprlandPlugins.hy3.overrideAttrs (attrs: {
+                patches = (attrs.patches or [ ]) ++ [
+                  ./hy3/pr-317-tab-bars-rotated-monitors.patch
+                ];
+              }))
+            ];
 
             # Hyprland configuration
             settings.config = {
