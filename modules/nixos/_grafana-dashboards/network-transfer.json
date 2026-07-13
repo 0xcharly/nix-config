@@ -1,0 +1,169 @@
+{
+  "uid": "network-transfer",
+  "title": "Network transfer",
+  "description": "Per-host network transfer from node_exporter. Job filter .*_system_stats avoids double-counting tailscalesd-discovered duplicates. Set the time range to the current month for the Linode billing view.",
+  "tags": ["network"],
+  "timezone": "browser",
+  "editable": true,
+  "graphTooltip": 1,
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "",
+  "time": { "from": "now-30d", "to": "now" },
+  "panels": [
+    {
+      "id": 1,
+      "type": "timeseries",
+      "title": "Egress rate by host",
+      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "min": 0,
+          "custom": { "fillOpacity": 10, "showPoints": "never" }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": ["mean", "max"]
+        },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (host) (rate(node_network_transmit_bytes_total{job=~\".*_system_stats\", device!~\"lo|tailscale0\"}[$__rate_interval]))",
+          "legendFormat": "{{host}}"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "Ingress rate by host",
+      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "min": 0,
+          "custom": { "fillOpacity": 10, "showPoints": "never" }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": ["mean", "max"]
+        },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (host) (rate(node_network_receive_bytes_total{job=~\".*_system_stats\", device!~\"lo|tailscale0\"}[$__rate_interval]))",
+          "legendFormat": "{{host}}"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "bargauge",
+      "title": "Egress volume over range, by host",
+      "gridPos": { "h": 9, "w": 8, "x": 0, "y": 9 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "blue", "value": null }]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "sizing": "auto"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "instant": true,
+          "expr": "sum by (host) (increase(node_network_transmit_bytes_total{job=~\".*_system_stats\", device!~\"lo|tailscale0\"}[$__range]))",
+          "legendFormat": "{{host}}"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "gauge",
+      "title": "Linode pooled egress vs 1 TB/mo",
+      "description": "Akamai/Linode bills public-interface (eth0) egress only and pools the allowance across the account's instances. Uses the dashboard time range, not the billing cycle: set it to the current month for an exact reading.",
+      "gridPos": { "h": 9, "w": 8, "x": 8, "y": 9 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "min": 0,
+          "max": 1e12,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "orange", "value": 8e11 },
+              { "color": "red", "value": 9.5e11 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "instant": true,
+          "expr": "sum(increase(node_network_transmit_bytes_total{job=~\".*_system_stats\", host=~\"gate-jp|gate-fr|jump-jp\", device=\"eth0\"}[$__range]))"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "jump-jp relay payload",
+      "description": "Cumulative tailscale0 egress on jump-jp over the dashboard range: isolates ProxyJump/replication relay volume from mailserver traffic on eth0. Legend shows the range total.",
+      "gridPos": { "h": 9, "w": 8, "x": 16, "y": 9 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "min": 0,
+          "custom": { "fillOpacity": 10, "showPoints": "never" }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": ["lastNotNull"]
+        },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "increase(node_network_transmit_bytes_total{job=~\".*_system_stats\", host=\"jump-jp\", device=\"tailscale0\"}[$__range])",
+          "legendFormat": "relay payload"
+        }
+      ]
+    }
+  ]
+}

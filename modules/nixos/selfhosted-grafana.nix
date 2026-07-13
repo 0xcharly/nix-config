@@ -63,6 +63,14 @@
                   editable = false;
                 }
               ];
+              dashboards.settings.providers = [
+                {
+                  name = "nix-config";
+                  # Copied to the store: dashboards ship with the closure;
+                  # edit the JSON and redeploy site-jp to update.
+                  options.path = ./_grafana-dashboards;
+                }
+              ];
             };
           };
         };

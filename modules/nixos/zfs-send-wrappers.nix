@@ -8,8 +8,9 @@
               -o IdentitiesOnly=yes \
               -o PasswordAuthentication=no \
               -o KbdInteractiveAuthentication=no \
+              -o ProxyJump=syncoid@jump-jp \
               -o IdentityFile=${config.age.secrets."keys/zfs_replication_ed25519_key".path} \
-              syncoid@site-fr.qyrnl.com "mbuffer -m 1G -s 1M | ${remote_command}"
+              syncoid@site-fr "mbuffer -m 1G -s 1M | ${remote_command}"
       '';
     in
     {

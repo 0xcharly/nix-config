@@ -24,6 +24,16 @@
               User = "git";
               IdentityFile = mkIdentityFile "0xcharly";
             };
+            # KDDI (home ISP) peering to Linode Paris / Orange is ~15x slower
+            # than hopping through Linode Tokyo (measured 2026-07: 0.4 MB/s
+            # direct vs 5-9 MB/s via jump-jp). Neutral-to-better from other
+            # networks. jump-jp down? `ssh -o ProxyJump=none <host>`.
+            "site-fr" = {
+              ProxyJump = "jump-jp";
+            };
+            "gate-fr" = {
+              ProxyJump = "jump-jp";
+            };
             "*" = {
               UserKnownHostsFile = lib.concatStringsSep " " [
                 "${config.home.homeDirectory}/.ssh/known_hosts"

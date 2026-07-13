@@ -58,6 +58,25 @@
 
         users.delay.ssh.authorizeTailscaleInternalKey = true;
       };
+
+      # Jump-only relay hop for the site-jp -> site-fr ZFS replication
+      # (syncoid --sshoption ProxyJump=syncoid@jump-jp). The user itself
+      # comes from access-directory; here it only needs the replication
+      # key and TCP forwarding — never a shell.
+      users.users.syncoid = {
+        shell = "/run/current-system/sw/bin/nologin";
+        openssh.authorizedKeys.keys = [
+          # keys/zfs_replication_ed25519 — same key authorized on site-fr.
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIf1BY82EBfuIPmqzPhA0SXNRQ9z7zdCzE99TiqdjWmg"
+        ];
+      };
+
+      services.openssh.extraConfig = ''
+        Match User syncoid
+          AllowTcpForwarding yes
+          PermitTTY no
+          ForceCommand /run/current-system/sw/bin/nologin
+      '';
     };
 
     users.delay.imports = with self.homeModules; [ profile-hardware-server ];

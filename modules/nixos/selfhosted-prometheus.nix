@@ -26,6 +26,9 @@
               inherit (cfg) enable;
               stateDir = "prometheus";
               webExternalUrl = "https://${facts.services.prometheus.domain}";
+              # Long enough to read monthly transfer windows (Linode 1 TB/mo
+              # egress allowance) off the network-transfer dashboard.
+              retentionTime = "180d";
 
               scrapeConfigs =
                 let

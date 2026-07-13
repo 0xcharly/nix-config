@@ -17,6 +17,7 @@
         "rollback"
         "snapshot"
         "userprop"
+        "xattr" # `zfs send -R` streams carry the locally-set xattr=sa property
       ];
 
       # Create service user on the replicas (it is automatically created on the sender side).
