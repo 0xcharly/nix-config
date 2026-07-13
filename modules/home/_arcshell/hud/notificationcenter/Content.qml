@@ -78,5 +78,17 @@ Rectangle {
             style: Config.tokens.system.typography.smallLabel
             text: root.overflow === 1 ? qsTr("1 other") : qsTr("%1 others").arg(root.overflow)
         }
+
+        ArcChip {
+            visible: Notifications.notClosed.length > 0
+            Layout.alignment: Qt.AlignHCenter
+            text: qsTr("Clear all")
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked: Notifications.clear()
+            }
+        }
     }
 }
