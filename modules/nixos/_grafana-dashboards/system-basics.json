@@ -1,0 +1,265 @@
+{
+  "uid": "system-basics",
+  "title": "System basics",
+  "description": "CPU, load, memory, swap, and disk I/O from node_exporter. Job filter .*_system_stats avoids double-counting tailscalesd-discovered duplicates.",
+  "tags": ["system"],
+  "timezone": "browser",
+  "editable": true,
+  "graphTooltip": 1,
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "",
+  "time": { "from": "now-24h", "to": "now" },
+  "panels": [
+    {
+      "id": 1,
+      "type": "timeseries",
+      "title": "CPU usage",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1,
+          "custom": { "fillOpacity": 10, "showPoints": "never" }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": ["mean", "max"]
+        },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "1 - avg by (host) (rate(node_cpu_seconds_total{job=~\".*_system_stats\", mode=\"idle\"}[$__rate_interval]))",
+          "legendFormat": "{{host}}"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "Load (per core)",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "min": 0,
+          "custom": {
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "thresholdsStyle": { "mode": "line" }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "orange", "value": 1 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": ["mean", "max"]
+        },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "node_load5{job=~\".*_system_stats\"} / count by (host) (node_cpu_seconds_total{job=~\".*_system_stats\", mode=\"idle\"})",
+          "legendFormat": "{{host}}"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "Memory usage",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1,
+          "custom": {
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "thresholdsStyle": { "mode": "line" }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 0.9 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": ["mean", "max"]
+        },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "1 - node_memory_MemAvailable_bytes{job=~\".*_system_stats\"} / node_memory_MemTotal_bytes{job=~\".*_system_stats\"}",
+          "legendFormat": "{{host}}"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Swap used",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "min": 0,
+          "custom": { "fillOpacity": 10, "showPoints": "never" }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": ["mean", "max"]
+        },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "node_memory_SwapTotal_bytes{job=~\".*_system_stats\"} - node_memory_SwapFree_bytes{job=~\".*_system_stats\"}",
+          "legendFormat": "{{host}}"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Swap activity (thrashing)",
+      "description": "Pages swapped in + out per second. Sustained >100 pages/s indicates thrashing.",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "pps",
+          "min": 0,
+          "custom": {
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "thresholdsStyle": { "mode": "line" }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "orange", "value": 100 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": ["mean", "max"]
+        },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "rate(node_vmstat_pswpin{job=~\".*_system_stats\"}[$__rate_interval]) + rate(node_vmstat_pswpout{job=~\".*_system_stats\"}[$__rate_interval])",
+          "legendFormat": "{{host}}"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "Disk read/write latency",
+      "description": "Average time per completed I/O. Gaps when a disk is idle are expected.",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "min": 0,
+          "custom": { "fillOpacity": 10, "showPoints": "never" }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": ["mean", "max"]
+        },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "rate(node_disk_read_time_seconds_total{job=~\".*_system_stats\", device=~\"sd[a-z]+|nvme[0-9]+n[0-9]+\"}[$__rate_interval]) / rate(node_disk_reads_completed_total{job=~\".*_system_stats\", device=~\"sd[a-z]+|nvme[0-9]+n[0-9]+\"}[$__rate_interval])",
+          "legendFormat": "{{host}} {{device}} read"
+        },
+        {
+          "refId": "B",
+          "expr": "rate(node_disk_write_time_seconds_total{job=~\".*_system_stats\", device=~\"sd[a-z]+|nvme[0-9]+n[0-9]+\"}[$__rate_interval]) / rate(node_disk_writes_completed_total{job=~\".*_system_stats\", device=~\"sd[a-z]+|nvme[0-9]+n[0-9]+\"}[$__rate_interval])",
+          "legendFormat": "{{host}} {{device}} write"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "type": "timeseries",
+      "title": "Disk throughput",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 24 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "Bps",
+          "min": 0,
+          "custom": { "fillOpacity": 10, "showPoints": "never" }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": ["mean", "max"]
+        },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "rate(node_disk_read_bytes_total{job=~\".*_system_stats\", device=~\"sd[a-z]+|nvme[0-9]+n[0-9]+\"}[$__rate_interval])",
+          "legendFormat": "{{host}} {{device}} read"
+        },
+        {
+          "refId": "B",
+          "expr": "rate(node_disk_written_bytes_total{job=~\".*_system_stats\", device=~\"sd[a-z]+|nvme[0-9]+n[0-9]+\"}[$__rate_interval])",
+          "legendFormat": "{{host}} {{device}} write"
+        }
+      ]
+    }
+  ]
+}

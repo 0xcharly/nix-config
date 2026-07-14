@@ -3,3 +3,6 @@ workstations = ["term-fwk", "term-nyx", "term-x1p"]
 
 # Monitored by Gatus
 gatus = ["gate-fr", "gate-jp", "jump-jp", "node-skl", "site-fr", "site-jp", "term-x1p"]
+
+# Physical hosts running smartctl_exporter (Linode VMs excluded)
+smartctl = ["node-skl", "site-fr", "site-jp", "term-fwk", "term-nyx", "term-x1p"]

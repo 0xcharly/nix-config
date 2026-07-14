@@ -1,0 +1,220 @@
+{
+  "uid": "fs-storage",
+  "title": "FS storage",
+  "description": "ZFS pool capacity, health, and tank dataset usage from zfs_exporter. Job filter .*_zfs_stats avoids double-counting tailscalesd-discovered duplicates.",
+  "tags": ["storage", "zfs"],
+  "timezone": "browser",
+  "editable": true,
+  "graphTooltip": 1,
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "",
+  "time": { "from": "now-24h", "to": "now" },
+  "panels": [
+    {
+      "id": 1,
+      "type": "timeseries",
+      "title": "Pool capacity used",
+      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1,
+          "custom": {
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "thresholdsStyle": { "mode": "line" }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "orange", "value": 0.8 },
+              { "color": "red", "value": 0.9 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": ["lastNotNull"]
+        },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "zfs_pool_allocated_bytes{job=~\".*_zfs_stats\"} / zfs_pool_size_bytes{job=~\".*_zfs_stats\"}",
+          "legendFormat": "{{host}} {{pool}}"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Pool health",
+      "gridPos": { "h": 9, "w": 6, "x": 12, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": { "text": "ONLINE", "color": "green", "index": 0 },
+                "1": { "text": "DEGRADED", "color": "orange", "index": 1 },
+                "2": { "text": "FAULTED", "color": "red", "index": 2 },
+                "3": { "text": "OFFLINE", "color": "red", "index": 3 },
+                "4": { "text": "UNAVAIL", "color": "red", "index": 4 },
+                "5": { "text": "REMOVED", "color": "red", "index": 5 },
+                "6": { "text": "SUSPENDED", "color": "red", "index": 6 }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "value_and_name"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "max by (host, pool) (zfs_pool_health{job=~\".*_zfs_stats\"})",
+          "legendFormat": "{{host}} {{pool}}"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "tank available",
+      "gridPos": { "h": 9, "w": 6, "x": 18, "y": 0 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "blue", "value": null }]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "value_and_name"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "min by (host) (zfs_dataset_available_bytes{job=~\".*_zfs_stats\", name=\"tank\"})",
+          "legendFormat": "{{host}}"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Pool free space",
+      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 9 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "min": 0,
+          "custom": { "fillOpacity": 10, "showPoints": "never" }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": ["lastNotNull"]
+        },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "zfs_pool_free_bytes{job=~\".*_zfs_stats\"}",
+          "legendFormat": "{{host}} {{pool}}"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Fragmentation",
+      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 9 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "custom": { "fillOpacity": 10, "showPoints": "never" }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": ["lastNotNull"]
+        },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "zfs_pool_fragmentation_ratio{job=~\".*_zfs_stats\"}",
+          "legendFormat": "{{host}} {{pool}}"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "bargauge",
+      "title": "tank datasets by usage",
+      "description": "Includes parent dataset rollups; the sorted view is the point.",
+      "gridPos": { "h": 12, "w": 24, "x": 0, "y": 18 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "blue", "value": null }]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "sizing": "auto"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "instant": true,
+          "expr": "sum by (host, name) (zfs_dataset_used_bytes{job=~\".*_zfs_stats\", pool=\"tank\", type=\"filesystem\"})",
+          "legendFormat": "{{host}} {{name}}"
+        }
+      ]
+    }
+  ]
+}

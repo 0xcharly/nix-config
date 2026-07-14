@@ -45,7 +45,9 @@
         self.nixosModules.programs-packages-common
         self.nixosModules.programs-sudo
         self.nixosModules.programs-terminfo
+        self.nixosModules.prometheus-exporters-blackbox
         self.nixosModules.prometheus-exporters-node
+        self.nixosModules.prometheus-exporters-smartctl
         self.nixosModules.prometheus-exporters-zfs
         self.nixosModules.selfhosted-atuin
         self.nixosModules.selfhosted-forgejo

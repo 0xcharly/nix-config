@@ -39,6 +39,7 @@
         self.nixosModules.programs-sudo
         self.nixosModules.programs-terminfo
         self.nixosModules.prometheus-exporters-node
+        self.nixosModules.prometheus-exporters-smartctl
         self.nixosModules.prometheus-exporters-zfs
         self.nixosModules.services-fail2ban
         self.nixosModules.services-openssh
