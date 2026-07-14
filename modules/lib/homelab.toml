@@ -133,6 +133,15 @@ domains = [
   "xn--7ck8cva5eb.com",
 ]
 
+# U-label (UTF-8) forms of the IDN mail domains above, mapped to their
+# A-label (punycode) form. Not served domains: accepted as catch-all/sender
+# aliases (postfix does not IDN-normalize before map lookups, so SMTPUTF8
+# submissions need the UTF-8 key), and canonicalized back to the A-label at
+# submission so outgoing mail is plain ASCII (DKIM-signable, DMARC-aligned,
+# deliverable to non-SMTPUTF8 receivers).
+[mail.unicode-domains]
+"チャーリー.com" = "xn--7ck8cva5eb.com"
+
 [reverse-proxy."qyrnl.com"]
 host = "gate-jp"
 tmpl = "tailscale_reverse_proxy"

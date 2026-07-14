@@ -62,8 +62,13 @@
           accounts."delay@delay.email" = {
             hashedPasswordFile = config.age.secrets."services/mail/delay.passwd".path;
             # "@<domain>" = catch-all for the domain + permission to send from
-            # any address in it.
-            aliases = map (domain: "@${domain}") facts.mail.domains;
+            # any address in it. The unicode-domains U-labels are included so
+            # SMTPUTF8 submissions (client identity like mail@チャーリー.com)
+            # pass reject_sender_login_mismatch — postfix looks the sender up
+            # verbatim, without IDN normalization.
+            aliases = map (domain: "@${domain}") (
+              facts.mail.domains ++ lib.attrNames facts.mail.unicode-domains
+            );
           };
 
           indexDir = "/var/lib/dovecot/indices";
@@ -107,6 +112,32 @@
           virtualHosts.${config.mailserver.fqdn}.enableACME = true;
         };
         networking.firewall.allowedTCPPorts = [ 80 ]; # HTTP-01 challenge
+
+        # Canonicalize U-label (UTF-8) sender domains back to their A-label
+        # form at submission: iOS Apple Mail refuses to keep a punycode
+        # identity and submits MAIL FROM / From: with the Unicode domain.
+        # Rewriting both (sender_canonical_classes defaults to
+        # envelope_sender + header_sender) makes outgoing mail plain ASCII:
+        # rspamd finds the A-label DKIM key, DMARC aligns, and postfix can
+        # deliver to non-SMTPUTF8 receivers (it only *requires* SMTPUTF8 when
+        # envelope or headers actually contain UTF-8).
+        services.postfix = {
+          mapFiles."sender_canonical" = pkgs.writeText "sender_canonical" (
+            lib.concatStringsSep "\n" (
+              lib.mapAttrsToList (ulabel: alabel: "@${ulabel} @${alabel}") facts.mail.unicode-domains
+            )
+          );
+          settings.main = {
+            sender_canonical_maps = "hash:/etc/postfix/sender_canonical";
+            # Header rewriting only applies to clients matching this list;
+            # the default (permit_inet_interfaces) excludes remote submission
+            # clients, which would leave the UTF-8 From: header in place.
+            local_header_rewrite_clients = [
+              "permit_inet_interfaces"
+              "permit_sasl_authenticated"
+            ];
+          };
+        };
 
         # SNM's localDnsResolver (kresd, on by default) takes over
         # /etc/resolv.conf so rspamd can run DNSBL lookups through a private
