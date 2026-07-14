@@ -30,6 +30,13 @@ QtObject {
     property string body
     property int urgency: NotificationUrgency.Normal
 
+    // True when the body contains fdo-spec/HTML markup or entities.
+    readonly property bool bodyIsHtml: /<\/?(?:b|strong|i|em|u|s|a|img|br|p|div|span|font|h[1-6]|ul|ol|li|pre|code|tt|blockquote)\b[^>]*\/?>|&(?:[a-zA-Z]+|#\d+|#x[0-9a-fA-F]+);/.test(body)
+    // Conservative Markdown detection: only unambiguous constructs.
+    readonly property bool bodyIsMarkdown: !bodyIsHtml && /\*\*[^*\n]+\*\*|__[^_\n]+__|`[^`\n]+`|\[[^\]\n]+\]\([^)\s]+\)|^#{1,6}\s+\S|^[-*]\s+\S/m.test(body)
+    readonly property int bodyFormat: bodyIsHtml || bodyIsMarkdown ? Text.StyledText : Text.PlainText
+    readonly property string bodyText: bodyIsMarkdown ? markdownToStyledText(body) : body
+
     readonly property Connections conn: Connections {
         function onClosed(): void {
             root.close();
@@ -72,6 +79,23 @@ QtObject {
                 timeStrTimer.interval = m < 10 ? 30000 : 60000;
             }
         }
+    }
+
+    // Converts a Markdown subset to Text.StyledText HTML. StyledText has no
+    // monospace tag, so code spans keep their content unstyled (backticks
+    // stripped). Headings render bold: StyledText's <h1>-<h6> sizes are
+    // oversized for a notification card.
+    function markdownToStyledText(md: string): string {
+        let s = md.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        s = s.replace(/`([^`\n]+)`/g, "$1");
+        s = s.replace(/\*\*([^*\n]+)\*\*/g, "<b>$1</b>");
+        s = s.replace(/__([^_\n]+)__/g, "<b>$1</b>");
+        // Italic content must not start/end with whitespace ("2 * 3 * 4" stays plain).
+        s = s.replace(/\*(\S(?:[^*\n]*\S)?)\*/g, "<i>$1</i>");
+        s = s.replace(/\[([^\]\n]+)\]\(([^)\s]+)\)/g, '<a href="$2">$1</a>');
+        s = s.replace(/^#{1,6}\s+(.+)$/gm, "<b>$1</b>");
+        s = s.replace(/^[-*]\s+/gm, "\u2022 ");
+        return s.replace(/\n/g, "<br/>");
     }
 
     function lock(item: Item): void {

@@ -98,8 +98,8 @@ Item {
 
         // Declared before `layout` so the interactive items inside it
         // (chevron, action buttons) sit above the drag area; text items
-        // don't accept mouse events, so presses elsewhere still fall
-        // through to it.
+        // only accept mouse events over link areas (body markup), so
+        // presses anywhere else still fall through to it.
         MouseArea {
             id: dragArea
 
@@ -299,7 +299,10 @@ Item {
                 elide: root.modelData.expanded ? Text.ElideNone : Text.ElideRight
                 color: root.theme.surface.colors.content
                 style: root.theme.surface.typography
-                text: root.modelData.body
+                textFormat: root.modelData.bodyFormat
+                text: root.modelData.bodyText
+                linkColor: root.theme.bodyLinkColor
+                onLinkActivated: link => Qt.openUrlExternally(link)
             }
 
             // Actions as a wrapping button row, only while expanded. invoke()

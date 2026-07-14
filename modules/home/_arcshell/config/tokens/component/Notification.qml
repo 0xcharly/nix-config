@@ -31,6 +31,7 @@ JsonObject {
     property color timestampContentColor: Config.tokens.system.colors.on_surface_variant
 
     property int bodyMaxLines: 2
+    property color bodyLinkColor: Config.tokens.system.colors.accent
 
     property SurfaceColorValues colors: SurfaceColorValues {
         surface: Config.tokens.system.colors.transparent
