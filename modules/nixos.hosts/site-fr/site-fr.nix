@@ -7,6 +7,7 @@
       imports = [
         inputs.nix-config-secrets.nixosModules.default
         inputs.nix-config-secrets.nixosModules.disk-encryption-keys
+        inputs.nix-config-secrets.nixosModules.services-gatus-external-endpoints
         inputs.nix-config-secrets.nixosModules.services-hoopsnake-site-fr
         inputs.nix-config-secrets.nixosModules.services-tailscale
 
@@ -16,8 +17,10 @@
         self.nixosModules.bootloader-systemd-boot
         self.nixosModules.fs-zfs-backup-minisforum-n5
         self.nixosModules.fs-zfs-common
+        self.nixosModules.fs-zfs-encryption-check
         self.nixosModules.fs-zfs-mount-tank
         self.nixosModules.fs-zfs-replication-replica
+        self.nixosModules.fs-zfs-snapshots-tank
         self.nixosModules.fs-zfs-system-minisforum-n5
         self.nixosModules.fs-zfs-zpool-root
         self.nixosModules.fs-zfs-zpool-root-data
@@ -50,6 +53,8 @@
 
         fs.zfs = {
           hostId = "eb3cd4cb";
+          # Replica: never snapshot locally, only prune received snapshots.
+          snapshots.autosnap = false;
           system = {
             # System drives
             disk0 = {

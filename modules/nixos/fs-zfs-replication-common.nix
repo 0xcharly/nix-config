@@ -30,7 +30,13 @@
           systemd.services."syncoid-zfs-permissions" = {
             description = "Delegate ZFS permissions to the `syncoid` user";
             wantedBy = [ "multi-user.target" ];
-            after = [ "zfs.target" ];
+            # `tank` is only imported by zfs-mount-tank.service (no boot.zfs.extraPools),
+            # so ordering after zfs.target alone races the pool import at boot.
+            after = [
+              "zfs.target"
+              "zfs-mount-tank.service"
+            ];
+            wants = [ "zfs-mount-tank.service" ];
             serviceConfig = {
               Type = "oneshot";
               ExecStart =

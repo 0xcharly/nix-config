@@ -115,7 +115,18 @@
             heartbeat = "2h";
           })
           (gatus.mkPushBasedExternalEndpoint "Mail retention purge" { heartbeat = "48h"; })
-        ];
+        ]
+        # 48h ≈ two missed daily runs, matching the "GitHub backup" convention.
+        # NOTE: alerts fire after 48h without a push, so while the syncoid timer
+        # is still disarmed, run a manual validation pass within that window (or
+        # expect one heartbeat alert).
+        ++ lib.mapAttrsToList (
+          _: replica:
+          gatus.mkPushBasedExternalEndpoint "ZFS replication ${replica.label}" { heartbeat = "48h"; }
+        ) facts.nas.replicas
+        ++ map (
+          host: gatus.mkPushBasedExternalEndpoint "ZFS encryption ${host}" { heartbeat = "48h"; }
+        ) inventory.nas;
       };
     };
 }

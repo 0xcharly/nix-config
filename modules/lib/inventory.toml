@@ -6,3 +6,6 @@ gatus = ["gate-fr", "gate-jp", "jump-jp", "node-skl", "site-fr", "site-jp", "ter
 
 # Physical hosts running smartctl_exporter (Linode VMs excluded)
 smartctl = ["node-skl", "site-fr", "site-jp", "term-fwk", "term-nyx", "term-x1p"]
+
+# NAS hosts with a `tank` pool (ZFS encryption check)
+nas = ["site-fr", "site-jp"]

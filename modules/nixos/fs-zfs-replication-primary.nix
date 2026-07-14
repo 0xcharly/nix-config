@@ -1,13 +1,46 @@
 { self, ... }:
 {
   flake.nixosModules.fs-zfs-replication-primary =
-    { config, lib, ... }:
+    {
+      config,
+      lib,
+      pkgs,
+      ...
+    }:
     {
       imports = with self.nixosModules; [ fs-zfs-replication-common ];
 
       config =
         let
-          inherit (self.lib.facts.nas) replicas;
+          inherit (self.lib) facts;
+          inherit (facts.nas) replicas;
+
+          # Reports the unit's outcome to Gatus. "+" runs the hook as root: the
+          # token file is root-readable only, and $SERVICE_RESULT covers every
+          # outcome (non-zero exit, timeout, kill).
+          mkReportResult =
+            label:
+            let
+              mkPushRequest =
+                success:
+                self.lib.gatus.mkPushBasedExternalPostRequest {
+                  inherit pkgs success;
+                  domain = facts.services.gatus.domain;
+                  tokenFile = config.age.secrets."services/gatus-external-endpoints.token".path;
+                  group = "cron";
+                  endpoint = "ZFS replication ${label}";
+                };
+            in
+            self.lib.builders.mkShellApplication pkgs {
+              name = "zfs-replication-report-result-${label}";
+              text = ''
+                if [ "''${SERVICE_RESULT:-}" = "success" ]; then
+                  exec ${lib.getExe (mkPushRequest true)}
+                else
+                  exec ${lib.getExe (mkPushRequest false)}
+                fi
+              '';
+            };
         in
         {
           node.fs.zfs.replication.permissions = [
@@ -23,13 +56,18 @@
 
           # https://github.com/jimsalterjrs/sanoid/wiki/Syncoid#options
           services.syncoid = {
-            # TODO: enable once the config has been validated
-            enable = false;
+            enable = true;
 
-            # Run the replication everyday 15 minutes after midnight in France
-            # - Runs at midnight to reduce the risks of saturating the bandwidth of the receiving network
-            # - Runs 15 mins after the hour to reduce the risks of the snapshotting job not being done
-            interval = "Mon,Thu *-*-* 00:00:00 Europe/Paris";
+            # Target cadence: daily at 00:15 Europe/Paris.
+            # - Midnight Paris keeps the transfer inside FR off-hours; at ~5 MB/s
+            #   via jump-jp a 100 GB delta lands in ~6h, before FR morning.
+            # - :15 clears sanoid's hourly :00 run so the newest snapshots exist
+            #   before syncoid scans the tree.
+            # - systemd skips triggers while the unit is active: oversized
+            #   transfers delay the next run instead of overlapping it.
+            # TODO: arm the timer once the manual validation steps pass:
+            #   interval = "*-*-* 00:15:00 Europe/Paris";
+            interval = [ ];
 
             sshKey = config.age.secrets."keys/zfs_replication_ed25519_key".path;
 
@@ -42,22 +80,6 @@
               "release"
               "send"
               "snapshot"
-            ];
-
-            localTargetAllow = [
-              "atime"
-              "change-key"
-              "compression"
-              "create"
-              "keylocation"
-              "mount"
-              "mountpoint"
-              "receive"
-              "recordsize"
-              "rollback"
-              "snapshot"
-              "userprop"
-              "xattr"
             ];
 
             commands =
@@ -82,6 +104,7 @@
                       "--no-sync-snap" # Use existing snapshots instead of creating ephemeral ones
                       "--skip-parent"
                     ];
+                    service.serviceConfig.ExecStopPost = "+${mkReportResult replica.label}";
                   };
               in
               lib.mapAttrs' mkReplicationCommand replicas;

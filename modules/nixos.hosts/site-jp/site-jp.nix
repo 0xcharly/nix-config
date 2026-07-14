@@ -26,14 +26,14 @@
         self.nixosModules.bootloader-systemd-boot
         self.nixosModules.fs-zfs-backup-minisforum-n5
         self.nixosModules.fs-zfs-common
+        self.nixosModules.fs-zfs-encryption-check
         self.nixosModules.fs-zfs-mount-tank
         self.nixosModules.fs-zfs-replication-primary
+        self.nixosModules.fs-zfs-snapshots-tank
         self.nixosModules.fs-zfs-system-minisforum-n5
         self.nixosModules.fs-zfs-zpool-root
         self.nixosModules.fs-zfs-zpool-root-data
         self.nixosModules.fs-zfs-zpool-root-data-postgresql
-        # TODO: Enable on primary
-        # self.nixosModules.fs-zfs-snapshots
         self.nixosModules.hardware-cpu-amd
         self.nixosModules.hardware-gpu-intel
         self.nixosModules.initrd-hoopsnake
@@ -105,29 +105,8 @@
             disk3 = "/dev/disk/by-id/ata-ST24000NT002-3N1101_ZYD160A1";
             disk4 = "/dev/disk/by-id/ata-ST24000NT002-3N1101_WYD05N6H";
           };
-          # snapshots = {
-          #   hourly = [
-          #     "tank/delay/beans"
-          #   ];
-          #   daily = [
-          #     "tank/ayako/files"
-          #     "tank/ayako/media"
-          #     "tank/backups/ayako"
-          #     "tank/backups/dad"
-          #     "tank/backups/delay"
-          #     "tank/backups/github"
-          #     "tank/backups/homelab"
-          #     "tank/delay/album"
-          #     "tank/delay/email"
-          #     "tank/delay/files"
-          #     "tank/delay/forge/data"
-          #     "tank/delay/forge/repo"
-          #     "tank/delay/media"
-          #     "tank/delay/music"
-          #     "tank/delay/notes"
-          #     "tank/delay/vault"
-          #   ];
-          # };
+          # Snapshot primary: sanoid takes and prunes snapshots (fs-zfs-snapshots-tank).
+          snapshots.autosnap = true;
         };
 
         networking.tailscale.enableSsh = true;
