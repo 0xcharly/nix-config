@@ -43,7 +43,7 @@
               # CWD: last component only (i.e. current directory name)
               printf "%s%s %s%s%s " \
                 (set_color normal; if set -q SSH_TTY; set_color $fish_color_host_remote; else set_color $fish_color_host; end) \
-                (if set -q SSH_TTY; prompt_hostname; else echo "▲"; end) \
+                (if set -q SSH_TTY; prompt_hostname; else echo "▼"; end) \
                 (set_color normal; set_color $fish_color_cwd) (prompt_pwd | string split /)[-1] \
                 (set_color normal)
             '';
