@@ -53,9 +53,10 @@
           ];
 
           # Bulk / infrequently-written data, plus the empty container
-          # datasets: syncoid --no-sync-snap exits non-zero for any recursed
-          # dataset without snapshots (--skip-parent only covers `tank`
-          # itself), so the containers get (free) snapshots too.
+          # datasets. The containers are excluded from replication
+          # (fs-zfs-replication-primary), but still get (free) local
+          # snapshots so every dataset in the pool carries an explicit
+          # policy (see the coverage assertion above).
           daily = [
             "tank/ayako"
             "tank/ayako/files"
