@@ -8,9 +8,11 @@ in
     { pkgs, ... }:
     let
       content = with colors; ''
-        # RGB (#rrggbb) colours need $color_directcolor; terminfo auto-detection
-        # fails behind tmux (tmux-256color has no RGB capability) even though the
-        # chain supports it (terminal-overrides sets Tc).
+        # RGB (#rrggbb) colours require direct-colour support: ncurses must
+        # report 16M colours, which only happens under a terminfo entry with
+        # the `RGB` capability. The neomutt package is wrapped to force
+        # TERM=xterm-direct (see programs-neomutt.nix); keep directcolor
+        # explicit rather than relying on terminfo auto-detection.
         set color_directcolor = yes
 
         # UI chrome
