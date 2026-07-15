@@ -148,6 +148,9 @@
       networking.interfaces.enp197s0.useDHCP = true;
     };
 
-    users.delay.imports = [ self.homeModules.profile-hardware-server ];
+    users.delay.imports = [
+      self.homeModules.profile-hardware-server
+      self.homeModules.programs-neomutt
+    ];
   };
 }

@@ -24,6 +24,7 @@
       programs-file-managers
       programs-fish
       programs-hunk
+      programs-inbox
       programs-keychain
       programs-llm-agents
       programs-nvim
