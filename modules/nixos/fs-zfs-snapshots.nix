@@ -3,6 +3,24 @@
     { config, lib, ... }:
     let
       cfg = config.node.fs.zfs.snapshots;
+
+      # Freshness thresholds for `sanoid --monitor-snapshots`
+      # (fs-zfs-snapshots-check). The primary uses sanoid's defaults (hourly
+      # 90m/360m, daily 28h/32h, monthly 32d/40d). On replicas snapshots
+      # arrive in one daily replication batch, so freshness is bounded by
+      # the replication cadence instead: just before the next run the newest
+      # received hourly is ~24h old and the newest daily ~46h. Warn past one
+      # transfer-delay margin, crit past roughly one missed replication —
+      # which turns the replica-side monitor into an end-to-end RPO check.
+      replicaMonitorThresholds = {
+        hourly_warn = "26h";
+        hourly_crit = "50h";
+        daily_warn = "50h";
+        daily_crit = "74h";
+        # Monthlies are taken on the 1st and replicated within a day: the
+        # default 32d warn would trip after 31-day months.
+        monthly_warn = "33d";
+      };
     in
     {
       options.node.fs.zfs.snapshots = with lib; {
@@ -72,7 +90,8 @@
               yearly = 2;
               autoprune = true;
               inherit (cfg) autosnap;
-            };
+            }
+            // lib.optionalAttrs (!cfg.autosnap) replicaMonitorThresholds;
 
             # Snapshot retention policy for frequently written datasets
             hourly = {
@@ -82,7 +101,8 @@
               yearly = 2;
               autoprune = true;
               inherit (cfg) autosnap;
-            };
+            }
+            // lib.optionalAttrs (!cfg.autosnap) replicaMonitorThresholds;
           };
 
           datasets =

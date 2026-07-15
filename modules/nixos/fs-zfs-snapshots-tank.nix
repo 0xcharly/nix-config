@@ -5,6 +5,18 @@
   # prune) and by replicas (prune only, via `snapshots.autosnap = false`).
   flake.nixosModules.fs-zfs-snapshots-tank =
     { config, lib, ... }:
+    let
+      # Empty structural parents. Excluded from replication
+      # (fs-zfs-replication-primary), but still snapshotted locally so every
+      # dataset in the pool carries an explicit policy (see the coverage
+      # assertion below).
+      containers = [
+        "tank/ayako"
+        "tank/backups"
+        "tank/delay"
+        "tank/delay/forge"
+      ];
+    in
     {
       imports = with self.nixosModules; [ fs-zfs-snapshots ];
 
@@ -39,6 +51,15 @@
             }
           ];
 
+        # The containers never replicate, so on a replica they have no (or
+        # only stale, pre-exclusion) snapshots: `sanoid --monitor-snapshots`
+        # (fs-zfs-snapshots-check) would report a permanent CRIT for them.
+        services.sanoid.datasets = lib.mkIf (!config.node.fs.zfs.snapshots.autosnap) (
+          lib.genAttrs containers (_: {
+            monitor = false;
+          })
+        );
+
         node.fs.zfs.snapshots = {
           # Daily-written, user-authored, high-criticality data: recent-change
           # recovery matters, and the datasets are small.
@@ -52,24 +73,16 @@
             "tank/delay/vault"
           ];
 
-          # Bulk / infrequently-written data, plus the empty container
-          # datasets. The containers are excluded from replication
-          # (fs-zfs-replication-primary), but still get (free) local
-          # snapshots so every dataset in the pool carries an explicit
-          # policy (see the coverage assertion above).
-          daily = [
-            "tank/ayako"
+          # Bulk / infrequently-written data, plus the container datasets.
+          daily = containers ++ [
             "tank/ayako/files"
             "tank/ayako/media"
-            "tank/backups"
             "tank/backups/ayako"
             "tank/backups/dad"
             "tank/backups/delay"
             "tank/backups/github"
             "tank/backups/homelab"
-            "tank/delay"
             "tank/delay/album"
-            "tank/delay/forge"
             "tank/delay/media"
             "tank/delay/music"
           ];

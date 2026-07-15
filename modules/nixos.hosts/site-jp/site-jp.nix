@@ -29,6 +29,7 @@
         self.nixosModules.fs-zfs-encryption-check
         self.nixosModules.fs-zfs-mount-tank
         self.nixosModules.fs-zfs-replication-primary
+        self.nixosModules.fs-zfs-snapshots-check
         self.nixosModules.fs-zfs-snapshots-tank
         self.nixosModules.fs-zfs-system-minisforum-n5
         self.nixosModules.fs-zfs-zpool-root
