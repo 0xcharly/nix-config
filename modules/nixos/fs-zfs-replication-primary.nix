@@ -70,16 +70,14 @@
           services.syncoid = {
             enable = true;
 
-            # Target cadence: daily at 00:15 Europe/Paris.
+            # Daily at 00:15 Europe/Paris (validated 2026-07-15).
             # - Midnight Paris keeps the transfer inside FR off-hours; at ~5 MB/s
             #   via jump-jp a 100 GB delta lands in ~6h, before FR morning.
             # - :15 clears sanoid's hourly :00 run so the newest snapshots exist
             #   before syncoid scans the tree.
             # - systemd skips triggers while the unit is active: oversized
             #   transfers delay the next run instead of overlapping it.
-            # TODO: arm the timer once the manual validation steps pass:
-            #   interval = "*-*-* 00:15:00 Europe/Paris";
-            interval = [ ];
+            interval = "*-*-* 00:15:00 Europe/Paris";
 
             sshKey = config.age.secrets."keys/zfs_replication_ed25519_key".path;
 
