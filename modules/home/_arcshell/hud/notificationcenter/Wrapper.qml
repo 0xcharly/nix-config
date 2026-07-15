@@ -124,6 +124,15 @@ Item {
         anchors.fill: parent
         clip: true
 
+        // Opaque backdrop under the crossfading content/peek layers: the
+        // wrapper's size animates at full opacity (the border lines track it),
+        // so without this the desktop shows through wherever the fading layer
+        // hasn't reached alpha 1 yet.
+        Rectangle {
+            anchors.fill: parent
+            color: Config.theme.hud.border.color
+        }
+
         Loader {
             id: content
 
