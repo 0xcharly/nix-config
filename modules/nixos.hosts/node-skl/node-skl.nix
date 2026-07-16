@@ -38,6 +38,9 @@
         self.nixosModules.services-fail2ban
         self.nixosModules.services-mullvad-exit-node-check
         self.nixosModules.services-openssh
+        self.nixosModules.services-qbittorrent
+        self.nixosModules.services-qui
+        self.nixosModules.services-servarr
         self.nixosModules.services-tailscale
         self.nixosModules.system-common
         self.nixosModules.users-delay
@@ -60,7 +63,15 @@
           enableSsh = true;
           exitNode = "jp-tyo-wg-002.mullvad.ts.net.";
         };
-        services.mullvad-exit-node-check.enable = true;
+        services.mullvad-exit-node-check = {
+          enable = true;
+          killswitch.units = [ "qbittorrent.service" ];
+          # killswitch.mode defaults to "latch"; flip to "gate" for auto-recovery
+          # once confidence is built.
+        };
+        services.qbittorrent.enable = true;
+        services.qui.enable = true;
+        services.servarr.enable = true;
         users.delay.ssh.authorizeTailscaleInternalKey = true;
       };
 

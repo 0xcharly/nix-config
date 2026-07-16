@@ -119,6 +119,18 @@ in
     alerts = mkShortAlerts;
   };
 
+  mkHttpCheck =
+    name: url:
+    {
+      group ? "services",
+    }:
+    {
+      inherit name group url;
+      interval = "1m";
+      conditions = [ "[STATUS] == 200" ];
+      alerts = mkShortAlerts;
+    };
+
   # Reverse-DNS (PTR) check against a public resolver; [BODY] is the
   # dot-terminated PTR target. Accepts a bare IPv4 or IPv6 address.
   mkRdnsCheck = name: ip: fqdn: {
@@ -149,11 +161,14 @@ in
 
   mkHttpServiceCheck =
     name:
-    { domain, ... }:
     {
-      inherit name;
+      domain,
+      group ? "services",
+      ...
+    }:
+    {
+      inherit name group;
       url = "https://${domain}";
-      group = "services";
       interval = "5m";
       conditions = [
         "[STATUS] == 200"

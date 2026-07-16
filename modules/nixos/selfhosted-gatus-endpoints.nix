@@ -87,6 +87,7 @@
             (gatus.mkHttpServiceCheck "immich-public-proxy" facts.services.immich-public-proxy)
             (gatus.mkHttpServiceCheck "immich" facts.services.immich)
             (gatus.mkHttpServiceCheck "jellyfin" facts.services.jellyfin)
+            (gatus.mkHttpServiceCheck "lidarr" (facts.services.lidarr // { group = "servarr"; }))
             (gatus.mkHttpServiceCheck "linkwarden" facts.services.linkwarden)
             (gatus.mkHttpServiceCheck "miniflux" facts.services.miniflux)
             (gatus.mkHttpServiceCheck "navidrome" facts.services.navidrome)
@@ -94,6 +95,10 @@
             (gatus.mkHttpServiceCheck "prometheus" {
               domain = "${facts.services.prometheus.domain}/-/healthy";
             })
+            (gatus.mkHttpCheck "qbittorrent" "http://node-skl.qyrnl.com:8080" { group = "servarr"; })
+            (gatus.mkHttpServiceCheck "qui" (facts.services.qui // { group = "servarr"; }))
+            (gatus.mkHttpServiceCheck "radarr" (facts.services.radarr // { group = "servarr"; }))
+            (gatus.mkHttpServiceCheck "sonarr" (facts.services.sonarr // { group = "servarr"; }))
             (gatus.mkHttpServiceCheck "vaultwarden" facts.services.vaultwarden)
             # NOTE: the smtp/submissions checks originate from gate-jp, a
             # Linode, so they stay red (and alert) until Linode lifts the
@@ -108,7 +113,7 @@
 
         external-endpoints = [
           (gatus.mkPushBasedExternalEndpoint "GitHub backup" { heartbeat = "48h"; })
-          (gatus.mkPushBasedExternalEndpoint "node-skl exit node" { heartbeat = "6m"; })
+          (gatus.mkPushBasedExternalEndpoint "node-skl exit node" { heartbeat = "5m"; })
           (gatus.mkPushBasedExternalEndpoint "Mail archive" { heartbeat = "2h"; })
           (gatus.mkPushBasedExternalEndpoint "Mail egress" {
             group = "mail";

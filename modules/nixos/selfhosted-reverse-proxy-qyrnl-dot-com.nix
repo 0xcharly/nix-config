@@ -63,12 +63,16 @@
                     immich-public-proxy
                     immich
                     jellyfin
+                    lidarr
                     linkwarden
                     miniflux
                     navidrome
                     paperless
                     prometheus
+                    qui
+                    radarr
                     radicale
+                    sonarr
                     vaultwarden
                   ];
                   reverse-proxy-configs = map caddy.mkReverseProxyConfig (

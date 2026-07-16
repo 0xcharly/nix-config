@@ -210,6 +210,11 @@ domain = "jellyfin.qyrnl.com"
 host = "site-jp.qyrnl.com"
 port = 8096
 
+[services.lidarr]
+domain = "lidarr.qyrnl.com"
+host = "node-skl.qyrnl.com"
+port = 8686
+
 [services.linkwarden]
 domain = "readlater.qyrnl.com"
 host = "site-jp.qyrnl.com"
@@ -235,11 +240,26 @@ domain = "prometheus.qyrnl.com"
 host = "site-jp.qyrnl.com"
 port = 9090
 
+[services.qui]
+domain = "torrents.qyrnl.com"
+host = "node-skl.qyrnl.com"
+port = 7476
+
+[services.radarr]
+domain = "radarr.qyrnl.com"
+host = "node-skl.qyrnl.com"
+port = 7878
+
 [services.radicale]
 domain = "cal.qyrnl.com"
 aliases = ["contacts.qyrnl.com"]
 host = "site-jp.qyrnl.com"
 port = 5232
+
+[services.sonarr]
+domain = "sonarr.qyrnl.com"
+host = "node-skl.qyrnl.com"
+port = 8989
 
 [services.vaultwarden]
 domain = "vault.qyrnl.com"
