@@ -12,6 +12,7 @@
       install-fonts
       nixpkgs
       programs-atuin
+      programs-alexandria
       programs-antigravity
       programs-atuin-sync
       programs-beans
@@ -24,9 +25,9 @@
       programs-file-managers
       programs-fish
       programs-hunk
-      programs-inbox
       programs-keychain
       programs-llm-agents
+      programs-neomutt
       programs-nvim
       programs-password-managers
       programs-ssh

@@ -6,6 +6,7 @@
     nixosModule = {
       imports = [
         inputs.nix-config-secrets.nixosModules.default
+        inputs.nix-config-secrets.nixosModules.mail-account-delay
         inputs.nix-config-secrets.nixosModules.services-tailscale
         inputs.nix-config-secrets.nixosModules.users-delay
 

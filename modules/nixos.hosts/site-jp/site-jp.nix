@@ -7,12 +7,12 @@
       imports = [
         inputs.nix-config-secrets.nixosModules.default
         inputs.nix-config-secrets.nixosModules.disk-encryption-keys
+        inputs.nix-config-secrets.nixosModules.mail-account-delay
         inputs.nix-config-secrets.nixosModules.services-forgejo-ssh-host-keys
         inputs.nix-config-secrets.nixosModules.services-gatus-external-endpoints
         inputs.nix-config-secrets.nixosModules.services-github-backup
         inputs.nix-config-secrets.nixosModules.services-hoopsnake-site-jp
         inputs.nix-config-secrets.nixosModules.services-linkwarden
-        inputs.nix-config-secrets.nixosModules.services-mail-archive
         inputs.nix-config-secrets.nixosModules.services-miniflux
         inputs.nix-config-secrets.nixosModules.services-msmtp
         inputs.nix-config-secrets.nixosModules.services-radicale
@@ -150,7 +150,7 @@
 
     users.delay.imports = [
       self.homeModules.profile-hardware-server
-      self.homeModules.programs-neomutt
+      self.homeModules.programs-neomutt-archive
     ];
   };
 }

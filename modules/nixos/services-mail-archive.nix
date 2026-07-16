@@ -38,7 +38,7 @@
         Host ${facts.mail.fqdn}
         Port 993
         User delay@delay.email
-        PassCmd "cat ${config.age.secrets."services/mail-archive/delay.passwd".path}"
+        PassCmd "cat ${config.age.secrets."mail-account/delay.passwd".path}"
         TLSType IMAPS
 
         IMAPStore remote
