@@ -1,0 +1,220 @@
+{
+  "uid": "home",
+  "title": "Home",
+  "description": "Homelab overview. Panels are duplicated from FS storage, Hardware health, and Network transfer. The Linode gauge uses the dashboard time range, not the billing cycle: set it to the current month for an exact reading.",
+  "tags": ["home"],
+  "timezone": "browser",
+  "editable": true,
+  "graphTooltip": 1,
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "",
+  "time": { "from": "now-30d", "to": "now" },
+  "panels": [
+    {
+      "id": 10,
+      "type": "row",
+      "title": "NAS",
+      "collapsed": false,
+      "panels": [],
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 }
+    },
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "SMART overall status",
+      "gridPos": { "h": 9, "w": 6, "x": 0, "y": 1 },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": { "text": "FAILED", "color": "red", "index": 0 },
+                "1": { "text": "PASSED", "color": "green", "index": 1 }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "value_and_name"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "min by (host, device) (smartctl_device_smart_status{job=\"smartctl_stats\"})",
+          "legendFormat": "{{host}} {{device}}"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Pool health",
+      "gridPos": { "h": 9, "w": 6, "x": 6, "y": 1 },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": { "text": "ONLINE", "color": "green", "index": 0 },
+                "1": { "text": "DEGRADED", "color": "orange", "index": 1 },
+                "2": { "text": "FAULTED", "color": "red", "index": 2 },
+                "3": { "text": "OFFLINE", "color": "red", "index": 3 },
+                "4": { "text": "UNAVAIL", "color": "red", "index": 4 },
+                "5": { "text": "REMOVED", "color": "red", "index": 5 },
+                "6": { "text": "SUSPENDED", "color": "red", "index": 6 }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "value_and_name"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "max by (host, pool) (zfs_pool_health{job=~\".*_zfs_stats\"})",
+          "legendFormat": "{{host}} {{pool}}"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "Pool capacity used",
+      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 1 },
+      "timeFrom": "90d",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1,
+          "custom": {
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "thresholdsStyle": { "mode": "line" }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "orange", "value": 0.8 },
+              { "color": "red", "value": 0.9 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": ["lastNotNull"]
+        },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "zfs_pool_allocated_bytes{job=~\".*_zfs_stats\", host=~\"site-jp|site-fr\"} / zfs_pool_size_bytes{job=~\".*_zfs_stats\", host=~\"site-jp|site-fr\"}",
+          "legendFormat": "{{host}} {{pool}}"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "type": "row",
+      "title": "Network",
+      "collapsed": false,
+      "panels": [],
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 10 }
+    },
+    {
+      "id": 4,
+      "type": "gauge",
+      "title": "Linode pooled egress vs 1 TB/mo",
+      "description": "Akamai/Linode bills public-interface (eth0) egress only and pools the allowance across the account's instances. Uses the dashboard time range, not the billing cycle: set it to the current month for an exact reading.",
+      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 11 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "min": 0,
+          "max": 1e12,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "orange", "value": 8e11 },
+              { "color": "red", "value": 9.5e11 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "instant": true,
+          "expr": "sum(increase(node_network_transmit_bytes_total{job=~\".*_system_stats\", host=~\"gate-jp|gate-fr|jump-jp\", device=\"eth0\"}[$__range]))"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "jump-jp relay payload",
+      "description": "Cumulative tailscale0 egress on jump-jp over the dashboard range: isolates ProxyJump/replication relay volume from mailserver traffic on eth0. Legend shows the range total.",
+      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 11 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "min": 0,
+          "custom": { "fillOpacity": 10, "showPoints": "never" }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": ["lastNotNull"]
+        },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "increase(node_network_transmit_bytes_total{job=~\".*_system_stats\", host=\"jump-jp\", device=\"tailscale0\"}[$__range])",
+          "legendFormat": "relay payload"
+        }
+      ]
+    }
+  ]
+}

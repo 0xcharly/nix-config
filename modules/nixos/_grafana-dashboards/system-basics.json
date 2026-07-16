@@ -76,7 +76,7 @@
       "targets": [
         {
           "refId": "A",
-          "expr": "node_load5{job=~\".*_system_stats\"} / count by (host) (node_cpu_seconds_total{job=~\".*_system_stats\", mode=\"idle\"})",
+          "expr": "avg by (host) (node_load5{job=~\".*_system_stats\"}) / count by (host) (node_cpu_seconds_total{job=~\".*_system_stats\", mode=\"idle\"})",
           "legendFormat": "{{host}}"
         }
       ]

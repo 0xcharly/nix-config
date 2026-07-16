@@ -37,6 +37,8 @@
                 enabled = true;
                 org_role = "Admin";
               };
+              # Land on the homelab overview instead of Grafana's onboarding page.
+              dashboards.default_home_dashboard_path = "${./_grafana-dashboards}/home.json";
               # Grafana's secret key doesn't have a default value anymore.
               # Please generate your own and use a file-provider on this option!
               # See also https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#secret_key
