@@ -46,7 +46,11 @@
                 "(${tmpl})".extraConfig = ''
                   bind ${cfg."qyrnl.com".bindIP}
                   tls {
-                    resolvers 194.242.2.2 1.1.1.1 8.8.8.8
+                    # No Mullvad DNS (194.242.2.2) here: it refuses plain
+                    # port-53 queries from outside the VPN, and certmagic's
+                    # ACME propagation check fails hard on a REFUSED instead
+                    # of trying the next resolver.
+                    resolvers 1.1.1.1 8.8.8.8
                     dns gandi {env.GANDIV5_PERSONAL_ACCESS_TOKEN}
                   }
                 '';
