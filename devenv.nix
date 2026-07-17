@@ -5,7 +5,24 @@
   ...
 }:
 {
-  packages = with pkgs; [ kdePackages.qtdeclarative ];
+  packages = with pkgs; [
+    kdePackages.qtdeclarative
+
+    # CLI tooling for coding agents (see AGENTS.md).
+    curl # HTTP checks
+    dnsutils # dig, nslookup
+    file
+    jq # JSON
+    openssl # cert / TLS debugging
+    python3
+    sqlite # sqlite3 CLI
+    unzip
+    yq-go # YAML (installs `yq`)
+
+    # FFF MCP server (fast frecency-ranked file/content search) for coding
+    # agents; wired up in .omp/mcp.json.
+    inputs.fff.packages.${stdenv.hostPlatform.system}.fff-mcp
+  ];
 
   languages = {
     lua.enable = true;

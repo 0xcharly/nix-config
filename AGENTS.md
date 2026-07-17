@@ -62,6 +62,12 @@ documents the layout, panel architecture, design tokens, QML conventions, the
 dev workflow for running an instance against the working tree, and hard-won
 Hyprland gotchas.
 
+## File search MCP
+
+The devenv ships `fff-mcp` (wired in `.omp/mcp.json`), exposing frecency-ranked
+`find_files` / `grep` / `multi_grep` MCP tools — prefer them for filename and
+content search when available.
+
 ## Version control: Jujutsu (jj)
 
 This repository is a [jj](https://jj-vcs.github.io/jj/) repo colocated with
