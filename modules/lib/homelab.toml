@@ -5,7 +5,9 @@ tailnet = "neko-danio.ts.net"
 
 # チャーリー.com
 [dns."xn--7ck8cva5eb.com"]
-nameservers = ["ns1.xn--7ck8cva5eb.com", "ns2.xn--7ck8cva5eb.com"]
+# Delegated out-of-bailiwick: Verisign rejects xn-- labels in .com host
+# objects (EPP 2306), so IDN domains cannot have in-bailiwick glue.
+nameservers = ["ns1.delay.email", "ns2.delay.email"]
 
 [dns."xn--7ck8cva5eb.com".ns1]
 host = "gate-jp"

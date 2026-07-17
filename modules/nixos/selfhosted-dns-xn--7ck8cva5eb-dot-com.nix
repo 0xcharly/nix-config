@@ -33,18 +33,19 @@
 
             config =
               let
-                records = facts.dns.${domainName};
+                # Delegated to the delay.email nameservers (out-of-bailiwick).
+                # In-bailiwick NS would need registry glue, and Verisign's EPP
+                # host mapping rejects any xn-- label in host objects for
+                # .com/.net (2306 "Host name contains an invalid character or
+                # prefix reserved for IDN") — IDN domains cannot carry their
+                # own nameservers there. External NS names need no glue.
                 zoneFile = pkgs.writeText domainName ''
                   $ORIGIN ${domainName}.
                   $TTL    3600
 
-                  @             IN SOA   ns.${domainName}. hostmaster.${domainName}. 2026071300 86400 10800 3600000 3600
-                  @       300   IN NS    ns1.${domainName}.
-                  @       300   IN NS    ns2.${domainName}.
-                  ns1     300   IN A     ${records.ns1.ipv4}
-                  ns1     300   IN AAAA  ${records.ns1.ipv6}
-                  ns2     300   IN A     ${records.ns2.ipv4}
-                  ns2     300   IN AAAA  ${records.ns2.ipv6}
+                  @             IN SOA   ns1.delay.email. hostmaster.${domainName}. 2026071700 86400 10800 3600000 3600
+                  @       300   IN NS    ns1.delay.email.
+                  @       300   IN NS    ns2.delay.email.
 
                   ; Mailserver configuration.
                   @       10800 IN MX    10 mx.delay.email.
