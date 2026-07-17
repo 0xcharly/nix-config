@@ -42,6 +42,13 @@
         };
       };
 
+      # Quick-send aliases (`m todo<Tab>` / To: todo). NeoMutt is built with
+      # libidn2 and idn_encode defaults on, so the UTF-8 domain is punycoded
+      # (xn--7ck8cva5eb.com) on send.
+      programs.neomutt.extraConfig = ''
+        alias todo todo@チャーリー.com
+      '';
+
       programs.mbsync.enable = true;
       services.mbsync.enable = true; # systemd user timer, every 5 min (HM default "*:0/5")
     };
