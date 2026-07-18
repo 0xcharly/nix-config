@@ -76,7 +76,13 @@
                   };
                 in
                 mkScrapeConfigs {
-                  gatus = lib.singleton { targets = [ facts.services.gatus.domain ]; };
+                  # Scrape Gatus directly over the tailnet rather than through the
+                  # Caddy reverse proxy: the availability pipeline must not depend on
+                  # the proxy being up.
+                  gatus = lib.singleton {
+                    targets = [ "${facts.services.gatus.host}:${toString facts.services.gatus.port}" ];
+                    labels.host = builtins.head (lib.splitString "." facts.services.gatus.host);
+                  };
                   servers_system_stats = map mkNodeExporterConfig inventory.servers;
                   servers_zfs_stats = map mkZfsExporterConfig inventory.servers;
                   workstations_system_stats = map mkNodeExporterConfig inventory.workstations;
