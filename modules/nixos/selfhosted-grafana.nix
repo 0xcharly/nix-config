@@ -56,15 +56,29 @@
 
             provision = {
               enable = true;
-              datasources.settings.datasources = [
-                {
-                  name = "Prometheus";
-                  type = "prometheus";
-                  url = config.services.prometheus.webExternalUrl;
-                  isDefault = true;
-                  editable = false;
-                }
-              ];
+              datasources.settings = {
+                # The datasource row pre-dates the pinned uid: Grafana's
+                # provisioner updates by uid and fails startup with
+                # "data source not found" when the DB row carries the older
+                # auto-generated uid. Deleting by name first makes the
+                # re-create (with the pinned uid) idempotent.
+                deleteDatasources = [
+                  {
+                    name = "Prometheus";
+                    orgId = 1;
+                  }
+                ];
+                datasources = [
+                  {
+                    name = "Prometheus";
+                    uid = "prometheus";
+                    type = "prometheus";
+                    url = config.services.prometheus.webExternalUrl;
+                    isDefault = true;
+                    editable = false;
+                  }
+                ];
+              };
               dashboards.settings.providers = [
                 {
                   name = "nix-config";

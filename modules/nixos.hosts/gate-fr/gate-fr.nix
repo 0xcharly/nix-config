@@ -67,7 +67,10 @@
             openFirewall = true;
             bindInterface = "eth0";
           };
-          "qyrnl.com".enable = true;
+          "qyrnl.com" = {
+            enable = true;
+            blocking.enable = true;
+          };
           "xn--7ck8cva5eb.com" = {
             enable = true;
             openFirewall = true;

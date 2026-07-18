@@ -64,12 +64,12 @@ in
     domain: nameserver:
     {
       name ? domain,
+      group ? "dns IPv4",
       rcode ? "NOERROR",
       conditions ? [ ],
     }:
     {
-      inherit name;
-      group = "dns IPv4";
+      inherit name group;
       url = nameserver;
       dns = {
         query-name = domain;

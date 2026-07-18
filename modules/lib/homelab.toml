@@ -162,6 +162,9 @@ domain = "atuin.qyrnl.com"
 host = "site-jp.qyrnl.com"
 port = 8888
 
+[services.blocky]
+port = 4000
+
 [services.forgejo]
 domain = "git.qyrnl.com"
 host = "site-jp.qyrnl.com"

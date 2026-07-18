@@ -88,6 +88,16 @@
                   workstations_system_stats = map mkNodeExporterConfig inventory.workstations;
                   workstations_zfs_stats = map mkZfsExporterConfig inventory.workstations;
                   smartctl_stats = map mkSmartctlExporterConfig inventory.smartctl;
+                  dns_blocky_stats =
+                    map
+                      (host: {
+                        targets = [ "${host}.qyrnl.com:${toString facts.services.blocky.port}" ];
+                        labels = { inherit host; };
+                      })
+                      [
+                        facts.dns."qyrnl.com".ns1.host # gate-jp
+                        facts.dns."qyrnl.com".ns2.host # gate-fr
+                      ];
                 }
                 ++ [
                   {

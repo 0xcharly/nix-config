@@ -109,6 +109,21 @@
             (gatus.mkTcpCheck "submissions" "${facts.mail.fqdn}:465")
             (gatus.mkRdnsCheck "rdns IPv4" facts.dns."delay.email".mx.ipv4 facts.mail.fqdn)
             (gatus.mkRdnsCheck "rdns IPv6" facts.dns."delay.email".mx.ipv6 facts.mail.fqdn)
+            # Blocking-active probes: adnxs.com (AppNexus/Xandr adtech apex)
+            # is exact-listed on Hagezi Pro (doubleclick.net is NOT — only
+            # subdomains are, and Blocky only matches listed entries downward).
+            # Blocky's default blockType answers 0.0.0.0; alerts if ad-blocking
+            # silently stops working.
+            (gatus.mkDnsIPv4Endpoint "adnxs.com" "ns1.qyrnl.com" {
+              name = "adblock (via ns1)";
+              group = "adblock";
+              conditions = [ "[BODY] == 0.0.0.0" ];
+            })
+            (gatus.mkDnsIPv4Endpoint "adnxs.com" "ns2.qyrnl.com" {
+              name = "adblock (via ns2)";
+              group = "adblock";
+              conditions = [ "[BODY] == 0.0.0.0" ];
+            })
           ];
 
         external-endpoints = [

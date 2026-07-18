@@ -21,6 +21,16 @@
           default = config.services.tailscale.interfaceName;
           description = "The network interface to bind to.";
         };
+
+        blocking = {
+          enable = mkEnableOption "Filter ads/tracking domains through a local Blocky instance";
+
+          listenAddress = mkOption {
+            type = types.str;
+            default = "127.0.0.1:5301";
+            description = "Loopback ip:port Blocky serves DNS on; CoreDNS forwards non-authoritative queries here.";
+          };
+        };
       };
 
       config =
@@ -102,9 +112,42 @@
                   errors
                   log stdout
                   bind ${cfg.bindInterface}
-                  forward . 1.1.1.1:53
+                  forward . ${if cfg.blocking.enable then cfg.blocking.listenAddress else "1.1.1.1:53"}
                 }
               '';
+          };
+
+          services.blocky = {
+            enable = cfg.blocking.enable;
+            settings = {
+              ports = {
+                dns = cfg.blocking.listenAddress;
+                # Wildcard bind: reachable over the tailnet via tailscaled's
+                # ts-input chain for Prometheus scraping; the default-deny
+                # firewall keeps it closed on eth0 (do NOT open it).
+                http = ":${toString facts.services.blocky.port}";
+              };
+              upstreams.groups.default = [
+                "1.1.1.1"
+                "1.0.0.1"
+              ];
+              # Resolve blocklist URLs without depending on the host resolver.
+              bootstrapDns = "tcp+udp:1.1.1.1";
+              blocking = {
+                denylists.ads = [
+                  # Hagezi Pro: balanced ads/tracking/telemetry list (plain-domain format).
+                  "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/domains/pro.txt"
+                ];
+                # To un-break a site, add an allowlists.ads entry mirroring the shape above.
+                clientGroupsBlock.default = [ "ads" ];
+                loading = {
+                  # Serve DNS immediately at boot; lists load/refresh in the background.
+                  strategy = "fast";
+                  refreshPeriod = "24h";
+                };
+              };
+              prometheus.enable = true; # /metrics on the http port
+            };
           };
 
           systemd.services.coredns = {
