@@ -1,7 +1,7 @@
 {
   "uid": "housekeeping",
   "title": "Housekeeping",
-  "description": "Uptime, reboots, clock drift, NixOS generation state (node exporter textfile metrics), and Prometheus self-monitoring. Node metrics filter job .*_system_stats.",
+  "description": "Uptime, reboots, clock drift, NixOS generation state (node exporter textfile metrics), /boot headroom, and Prometheus self-monitoring. Node metrics filter job .*_system_stats.",
   "tags": ["housekeeping"],
   "timezone": "browser",
   "editable": true,
@@ -300,6 +300,84 @@
           "refId": "A",
           "expr": "max by (job) (scrape_duration_seconds)",
           "legendFormat": "{{job}}"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "type": "timeseries",
+      "title": "/boot available",
+      "description": "ESP headroom. GC only frees /boot indirectly: old generations are pruned at the next nixos-rebuild boot/switch. A host trending toward the red line will fail its next deploy.",
+      "gridPos": { "h": 8, "w": 16, "x": 0, "y": 28 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "min": 0,
+          "custom": {
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "thresholdsStyle": { "mode": "line" }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "orange", "value": 100000000 },
+              { "color": "green", "value": 200000000 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": ["lastNotNull"]
+        },
+        "tooltip": { "mode": "multi", "sort": "asc" }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "node_filesystem_avail_bytes{job=~\".*_system_stats\", mountpoint=\"/boot\"}",
+          "legendFormat": "{{host}}"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "type": "bargauge",
+      "title": "/boot used",
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 28 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "orange", "value": 0.8 },
+              { "color": "red", "value": 0.9 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "sizing": "auto"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "instant": true,
+          "expr": "1 - node_filesystem_avail_bytes{job=~\".*_system_stats\", mountpoint=\"/boot\"} / node_filesystem_size_bytes{job=~\".*_system_stats\", mountpoint=\"/boot\"}",
+          "legendFormat": "{{host}}"
         }
       ]
     }
