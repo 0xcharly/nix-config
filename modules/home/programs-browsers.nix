@@ -1,7 +1,10 @@
 { self, ... }:
 {
   flake.homeModules.programs-browsers = {
-    imports = [ self.homeModules.programs-google-chrome ];
+    imports = [
+      self.homeModules.programs-google-chrome
+      self.homeModules.programs-google-chrome-web-apps
+    ];
 
     xdg.mimeApps =
       let
