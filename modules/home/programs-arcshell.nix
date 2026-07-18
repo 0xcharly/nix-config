@@ -101,7 +101,7 @@
   perSystem =
     { self', pkgs, ... }:
     {
-      packages.arcshell = pkgs.callPackage ./_arcshell {
+      packages.arcshell = pkgs.callPackage ./arcshell {
         inherit (self'.packages) apdbctl;
         stdenv = pkgs.clangStdenv;
       };

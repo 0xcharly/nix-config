@@ -1,7 +1,7 @@
 {
   "name": "splicedpixel",
   "displayName": "splicedpixel",
-  "description": "splicedpixel color theme, rendered from modules/lib/_colors/theme.toml.",
+  "description": "splicedpixel color theme, rendered from modules/lib/internal/colors/theme.toml.",
   "publisher": "0xcharly",
   "version": "0.0.1",
   "license": "MIT",

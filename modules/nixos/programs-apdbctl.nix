@@ -18,6 +18,6 @@
   perSystem =
     { pkgs, ... }:
     {
-      packages.apdbctl = pkgs.callPackage ./_apdbctl { };
+      packages.apdbctl = pkgs.callPackage ./apdbctl { };
     };
 }

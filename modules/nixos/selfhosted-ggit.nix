@@ -53,6 +53,6 @@
   perSystem =
     { pkgs, ... }:
     {
-      packages.ggit = pkgs.callPackage ./_ggit { };
+      packages.ggit = pkgs.callPackage ./ggit { };
     };
 }

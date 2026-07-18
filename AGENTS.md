@@ -6,13 +6,17 @@ delay's hosts.
 
 ## Repository layout
 
-`flake.nix` uses [flake-parts](https://flake.parts) with
-[import-tree](https://github.com/vic/import-tree): every `.nix` file under
-`modules/` is imported automatically. Adding a file wires it in; there is no
-central import list to update.
+`flake.nix` uses [flake-parts](https://flake.parts) with in-repo module
+auto-discovery (`modules/flake/module-tree.nix`): every `.nix` file under
+`modules/` is imported automatically. Adding a file wires it in; there is
+no central import list to update. A directory containing a
+`.skip-subtree` sentinel file is excluded from discovery — use it for
+support material (packages, helper libs, data) that is not a flake-parts
+module.
 
 - `modules/flake/` — flake-level wiring (systems, overlays, checks)
-- `modules/lib/` — shared helpers exposed as `self.lib.*`
+- `modules/lib/` — shared helpers exposed as `self.lib.*`; implementation
+  files live under `modules/lib/internal/`
 - `modules/nixos/` — NixOS modules (`flake.nixosModules.*`)
 - `modules/nixos.profiles/` — profiles composing NixOS modules
 - `modules/nixos.hosts/` — one directory per host: `fwk`, `nyx`, `term-x1p`,
@@ -55,9 +59,9 @@ for removal.
 
 ## Arcshell
 
-`modules/home/_arcshell/` contains arc-shell, a bespoke Quickshell (Qt6/QML)
+`modules/home/arcshell/` contains arc-shell, a bespoke Quickshell (Qt6/QML)
 desktop shell for Hyprland. Before working in that directory, read
-[`modules/home/_arcshell/SKILL.md`](modules/home/_arcshell/SKILL.md) — it
+[`modules/home/arcshell/SKILL.md`](modules/home/arcshell/SKILL.md) — it
 documents the layout, panel architecture, design tokens, QML conventions, the
 dev workflow for running an instance against the working tree, and hard-won
 Hyprland gotchas.

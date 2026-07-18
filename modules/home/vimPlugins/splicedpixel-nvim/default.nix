@@ -14,7 +14,7 @@ vimUtils.buildVimPlugin {
   postInstall = ''
     mkdir -p $out/lua/splicedpixel
     ${lib.getExe splicedpixel} render \
-      --config ${../../../lib/_colors/theme.toml} \
+      --config ${../../../lib/internal/colors/theme.toml} \
       --format lua > $out/lua/splicedpixel/palette.lua
   '';
 }

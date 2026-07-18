@@ -1,7 +1,7 @@
 .DS_Store
 /result
 /result-*
-/modules/nixos/_ggit/result
+/modules/nixos/ggit/result
 /.pre-commit-config.yaml
 /.luarc.json
 /.justfile.incl

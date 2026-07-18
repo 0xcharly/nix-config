@@ -39,9 +39,9 @@
         overlays = [ inputs.gen-luarc.overlays.default ];
       };
       luarc-json = pkgs'.mk-luarc-json {
-        plugins = pkgs.callPackage ./modules/home/nvim/_nvim-plugins.nix {
-          splicedpixel-nvim = pkgs.callPackage ./modules/home/vimPlugins/_splicedpixel-nvim {
-            splicedpixel = pkgs.callPackage ./modules/lib/_splicedpixel { };
+        plugins = pkgs.callPackage ./modules/home/nvim/nvim-plugins.nix {
+          splicedpixel-nvim = pkgs.callPackage ./modules/home/vimPlugins/splicedpixel-nvim {
+            splicedpixel = pkgs.callPackage ./modules/lib/internal/splicedpixel { };
           };
         };
         nvim = pkgs.neovim-unwrapped;
@@ -190,11 +190,11 @@
       '';
 
       generate-colorscheme.exec = ''
-        nix run .#splicedpixel -- render --config modules/lib/_colors/theme.toml --format json -o modules/lib/_colors/colors.json
+        nix run .#splicedpixel -- render --config modules/lib/internal/colors/theme.toml --format json -o modules/lib/internal/colors/colors.json
       '';
 
       update-tailwind-palette.exec = ''
-        nix run .#splicedpixel -- update-palette -o modules/lib/_splicedpixel/tailwind.json
+        nix run .#splicedpixel -- update-palette -o modules/lib/internal/splicedpixel/tailwind.json
       '';
     };
 }

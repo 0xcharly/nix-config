@@ -1,8 +1,8 @@
 # splicedpixel theme definition.
 #
 # This file is the single source of truth for the colorscheme. It is resolved
-# by the `splicedpixel` binary (modules/lib/_splicedpixel) against the
-# vendored Tailwind v4 OKLCH palette (modules/lib/_splicedpixel/tailwind.json).
+# by the `splicedpixel` binary (modules/lib/internal/splicedpixel) against the
+# vendored Tailwind v4 OKLCH palette (modules/lib/internal/splicedpixel/tailwind.json).
 #
 # After editing, regenerate the committed colors.json consumed by nix:
 #

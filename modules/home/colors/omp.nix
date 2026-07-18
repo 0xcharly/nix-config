@@ -58,7 +58,7 @@ in
         toolDiffContext = text_dimmer;
 
         # Syntax highlighting: mirrors the nvim colorscheme's role mapping
-        # (modules/home/vimPlugins/_splicedpixel-nvim/plugin/init.lua).
+        # (modules/home/vimPlugins/splicedpixel-nvim/plugin/init.lua).
         syntaxComment = text_comment;
         syntaxKeyword = text_variant;
         syntaxFunction = text_function;

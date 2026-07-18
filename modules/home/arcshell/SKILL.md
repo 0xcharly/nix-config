@@ -1,4 +1,4 @@
-# Working in _arcshell
+# Working in arcshell
 
 arc-shell is a bespoke Quickshell (Qt6/QML) desktop shell for Hyprland. It is
 packaged by `default.nix` (CMake installs `shell.qml` + the four QML dirs into
@@ -151,7 +151,7 @@ nix-store build, not your edits):
 ```sh
 systemctl --user stop arcshell && pkill -f 'bin/quickshell'
 nix develop .#arcshell -c sh -c \
-  'export PATH=$PATH:/etc/profiles/per-user/$USER/bin; exec qs -p modules/home/_arcshell' \
+  'export PATH=$PATH:/etc/profiles/per-user/$USER/bin; exec qs -p modules/home/arcshell' \
   > /tmp/arcshell.log 2>&1 &
 ```
 

@@ -29,16 +29,16 @@
       # The entire neoviw configuration without any dependency
       packages.nvim =
         let
-          splicedpixel-nvim = pkgs.callPackage ./vimPlugins/_splicedpixel-nvim {
+          splicedpixel-nvim = pkgs.callPackage ./vimPlugins/splicedpixel-nvim {
             inherit (config.packages) splicedpixel;
           };
-          mkNvimDist = pkgs.callPackage ./nvim/_mk-nvim-dist.nix { };
+          mkNvimDist = pkgs.callPackage ./nvim/mk-nvim-dist.nix { };
         in
         mkNvimDist {
           src = ./nvim/nvim-config;
           runtime = [ ./nvim/nvim-runtime ];
           patches = [ ];
-          plugins = pkgs.callPackage ./nvim/_nvim-plugins.nix {
+          plugins = pkgs.callPackage ./nvim/nvim-plugins.nix {
             inherit splicedpixel-nvim;
           };
         };

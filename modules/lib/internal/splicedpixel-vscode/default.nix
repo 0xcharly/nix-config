@@ -14,7 +14,7 @@ vscode-utils.buildVscodeExtension {
 
   # No src archive: the extension is assembled from checked-in files, with
   # the palette rendered from theme.toml at build time (same idea as
-  # modules/home/vimPlugins/_splicedpixel-nvim: editing the theme only
+  # modules/home/vimPlugins/splicedpixel-nvim: editing the theme only
   # rebuilds this derivation, not the splicedpixel binary).
   dontUnpack = true;
 
@@ -27,7 +27,7 @@ vscode-utils.buildVscodeExtension {
     cp ${./package.json} "$out/$installPrefix/package.json"
 
     ${lib.getExe splicedpixel} render \
-      --config ${../_colors/theme.toml} \
+      --config ${../colors/theme.toml} \
       --format json > tokens.json
 
     # Substitute "$token" / "$token/AA" string values with "#rrggbb[AA]".
