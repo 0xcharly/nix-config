@@ -21,3 +21,6 @@ devenv.local.nix
 
 # QML
 .qmlls.ini
+
+# Agents
+WATCHDOG.yml
