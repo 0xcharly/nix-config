@@ -8,14 +8,22 @@
     }:
     let
       # Icons from the dashboard-icons collection, pinned to a commit for
-      # reproducible fetches (512x512 RGBA PNGs, verified 2026-07-18).
+      # reproducible fetches. Not all upstream PNGs are square, so pad each to
+      # 512x512 to honor the hicolor directory below. PNG32: pins the output
+      # to truecolor RGBA — otherwise ImageMagick palettizes low-color icons
+      # (indexed + tRNS), which Quickshell's launcher fails to render.
       iconRev = "46b860c70e866212311aef2f98da3775c17f5068";
       fetchIcon =
         name: hash:
-        pkgs.fetchurl {
-          url = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons@${iconRev}/png/${name}.png";
-          inherit hash;
-        };
+        let
+          src = pkgs.fetchurl {
+            url = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons@${iconRev}/png/${name}.png";
+            inherit hash;
+          };
+        in
+        pkgs.runCommand "webapp-icon-${name}.png" { nativeBuildInputs = [ pkgs.imagemagick ]; } ''
+          magick ${src} -resize 512x512 -background none -gravity center -extent 512x512 PNG32:$out
+        '';
 
       webApps = {
         claude = {
@@ -32,6 +40,21 @@
           name = "Gemini";
           url = "https://gemini.google.com";
           icon = fetchIcon "google-gemini" "sha256-5sV/u5bwvqZULMiGLjbyXZ8D7y7K6fJ0sPgJAYFwV+8=";
+        };
+        x = {
+          name = "X";
+          url = "https://x.com";
+          icon = fetchIcon "x" "sha256-Mqfi3t5eKflHJKJn+WdD/ekxA4w/O+E4At4Vm1SHkeI=";
+        };
+        youtube = {
+          name = "YouTube";
+          url = "https://www.youtube.com";
+          icon = fetchIcon "youtube" "sha256-IXEiZv0BxEfja0Rh/4YSRzXEg8iSElLAEfCkNUcDFVI=";
+        };
+        twitch = {
+          name = "Twitch";
+          url = "https://www.twitch.tv";
+          icon = fetchIcon "twitch" "sha256-cEEqlsGKyDIQ2Q5zbTYBLn9k6i/f5a+2FUbebaywYVg=";
         };
       };
 
