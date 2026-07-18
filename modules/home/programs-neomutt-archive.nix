@@ -53,6 +53,11 @@
         };
       };
 
+      programs.neomutt.sidebar = {
+        enable = true;
+        width = 28;
+      };
+
       # Pull-only mirror of the mailserver: open everything read-only so
       # nothing can be deleted by accident (deletions on the server are
       # never propagated here either — see services-mail-archive.nix).

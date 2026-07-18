@@ -27,10 +27,6 @@
         editor = "nvim";
         # vimKeys = true;
         sort = "reverse-threads"; # newest thread first
-        sidebar = {
-          enable = true;
-          width = 28;
-        };
         checkStatsInterval = 60; # unread counts in the sidebar
         extraConfig = ''
           # Render HTML-only mail inline.
