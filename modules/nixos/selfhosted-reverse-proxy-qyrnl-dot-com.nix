@@ -42,6 +42,19 @@
                 hash = "sha256-A2sDEDV7gchcMlCIbyxyidBfUubyWLyG0Bsu8l7TuIA=";
               };
               environmentFile = config.age.secrets."services/gandi-creds.qyrnl.com".path;
+              # HTTP/3 has never been reachable here: the firewall below only
+              # opens TCP 80/443, and QUIC datagrams from tailnet clients
+              # exceed the tailscale0 MTU (1280) and fail client-side with
+              # EMSGSIZE. Advertising `Alt-Svc: h3` breaks HTTP/3-capable
+              # clients that trust it — notably python-caldav >= 2.2.5
+              # (niquests), used by Errands, whose authenticated retry after a
+              # 401 switches to h3 and aborts. Restrict Caddy to TCP protocols
+              # so Alt-Svc is not emitted.
+              globalConfig = ''
+                servers {
+                  protocols h1 h2
+                }
+              '';
               virtualHosts = {
                 "(${tmpl})".extraConfig = ''
                   bind ${cfg."qyrnl.com".bindIP}
