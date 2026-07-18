@@ -17,10 +17,10 @@
           {{range .Branches}}
             <tr class="border-b border-zinc-800/60 last:border-0">
               <td class="py-2 pr-4 font-mono text-blue-200">{{.Name}}</td>
-              <td class="py-2 pr-4">
-                <a class="text-zinc-200 hover:text-blue-200 hover:underline" href="{{.CommitURL}}">{{.Subject}}</a>
+              <td class="w-full max-w-0 py-2 pr-4">
+                <a class="block truncate text-zinc-200 hover:text-blue-200 hover:underline" href="{{.CommitURL}}" title="{{.Subject}}">{{.Subject}}</a>
               </td>
-              <td class="py-2 pr-4 text-zinc-400">{{.Author}}</td>
+              <td class="whitespace-nowrap py-2 pr-4 text-zinc-400">{{.Author}}</td>
               <td class="whitespace-nowrap py-2 font-mono text-zinc-400">{{reltime .Time}}</td>
             </tr>
           {{end}}
@@ -49,10 +49,10 @@
           {{range .Tags}}
             <tr class="border-b border-zinc-800/60 last:border-0">
               <td class="py-2 pr-4 font-mono text-blue-200">{{.Name}}</td>
-              <td class="py-2 pr-4">
-                <a class="text-zinc-200 hover:text-blue-200 hover:underline" href="{{.CommitURL}}">{{.Subject}}</a>
+              <td class="w-full max-w-0 py-2 pr-4">
+                <a class="block truncate text-zinc-200 hover:text-blue-200 hover:underline" href="{{.CommitURL}}" title="{{.Subject}}">{{.Subject}}</a>
               </td>
-              <td class="py-2 pr-4 text-zinc-400">{{.Author}}</td>
+              <td class="whitespace-nowrap py-2 pr-4 text-zinc-400">{{.Author}}</td>
               <td class="whitespace-nowrap py-2 font-mono text-zinc-400">{{reltime .Time}}</td>
             </tr>
           {{end}}
@@ -82,10 +82,10 @@
           {{range .Commits}}
             <tr class="border-b border-zinc-800/60 last:border-0">
               <td class="whitespace-nowrap py-2 pr-4 font-mono text-zinc-400">{{reltime .Time}}</td>
-              <td class="py-2 pr-4">
-                <a class="text-zinc-200 hover:text-blue-200 hover:underline" href="{{.CommitURL}}">{{.Subject}}</a>
+              <td class="w-full max-w-0 py-2 pr-4">
+                <a class="block truncate text-zinc-200 hover:text-blue-200 hover:underline" href="{{.CommitURL}}" title="{{.Subject}}">{{.Subject}}</a>
               </td>
-              <td class="py-2 text-zinc-400">{{.Author}}</td>
+              <td class="whitespace-nowrap py-2 text-zinc-400">{{.Author}}</td>
             </tr>
           {{end}}
         </tbody>
