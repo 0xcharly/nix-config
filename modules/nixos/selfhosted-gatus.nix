@@ -50,11 +50,6 @@
                 gotify = {
                   server-url = "https://${facts.services.gotify.domain}";
                   token = "$GOTIFY_TOKEN";
-                  body = builtins.toJSON {
-                    type = "note";
-                    title = "Gatus [ALERT_TRIGGERED_OR_RESOLVED]: [ENDPOINT_NAME]";
-                    body = "[ALERT_DESCRIPTION] - [ENDPOINT_URL]";
-                  };
                   default-alert = self.lib.gatus.mkAlertParams { failure-threshold = 2; };
                 };
                 pushover = {

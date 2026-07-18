@@ -13,7 +13,6 @@ let
   mkAlertParams =
     {
       enabled ? true,
-      description ? "Healthcheck failed",
       send-on-resolved ? true,
       success-threshold ? 1,
       failure-threshold ? 1,
@@ -21,7 +20,6 @@ let
     {
       inherit
         enabled
-        description
         send-on-resolved
         success-threshold
         failure-threshold
