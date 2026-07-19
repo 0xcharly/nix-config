@@ -56,6 +56,16 @@
           url = "https://www.twitch.tv";
           icon = fetchIcon "twitch" "sha256-cEEqlsGKyDIQ2Q5zbTYBLn9k6i/f5a+2FUbebaywYVg=";
         };
+        proton-mail = {
+          name = "Proton Mail";
+          url = "https://mail.proton.me";
+          icon = fetchIcon "proton-mail" "sha256-JPOsxYjYUXGB6QKr2uarhjlr87UI/cvYmx2SvgBNXos=";
+        };
+        proton-calendar = {
+          name = "Proton Calendar";
+          url = "https://calendar.proton.me";
+          icon = fetchIcon "proton-calendar" "sha256-W+xEWoVQlBe3yr0j5LMRQeQug8+CLCUrLg01D5YyAyo=";
+        };
       };
 
       chrome = lib.getExe config.programs.chromium.package;
