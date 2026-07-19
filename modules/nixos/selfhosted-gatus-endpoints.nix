@@ -77,6 +77,7 @@
             (gatus.mkHttpServiceCheck "atuin" facts.services.atuin)
             (gatus.mkHttpServiceCheck "CalDAV" facts.services.radicale)
             (gatus.mkHttpServiceCheck "forgejo" facts.services.forgejo)
+            (gatus.mkHttpCheck "flaresolverr" "http://node-skl.qyrnl.com:8191" { group = "servarr"; })
             (gatus.mkHttpServiceCheck "ggit" facts.services.ggit)
             (gatus.mkHttpServiceCheck "go/link" facts.services.go)
             (gatus.mkHttpServiceCheck "gotify" facts.services.gotify)

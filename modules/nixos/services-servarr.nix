@@ -12,7 +12,7 @@
     in
     {
       options.node.services.servarr = with lib; {
-        enable = mkEnableOption "Spin up radarr, sonarr, lidarr, and prowlarr";
+        enable = mkEnableOption "Spin up radarr, sonarr, lidarr, prowlarr, and flaresolverr";
       };
 
       config = lib.mkIf cfg.enable {
@@ -31,6 +31,14 @@
         services.prowlarr = {
           enable = true;
           settings.server.port = facts.services.prowlarr.port;
+        };
+        # Cloudflare-challenge solver for prowlarr (registered in prowlarr's UI as
+        # an indexer proxy at http://127.0.0.1:8191). Headless API: no domain, no
+        # reverse proxy, no auth; tailnet-only exposure via tailscaled's ts-input
+        # chain, like every other service on this host.
+        services.flaresolverr = {
+          enable = true;
+          port = 8191;
         };
 
         users.users.radarr.extraGroups = [ "media" ];
