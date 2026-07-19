@@ -245,6 +245,11 @@ domain = "prometheus.qyrnl.com"
 host = "site-jp.qyrnl.com"
 port = 9090
 
+[services.prowlarr]
+domain = "prowlarr.qyrnl.com"
+host = "node-skl.qyrnl.com"
+port = 9696
+
 [services.qui]
 domain = "torrents.qyrnl.com"
 host = "node-skl.qyrnl.com"

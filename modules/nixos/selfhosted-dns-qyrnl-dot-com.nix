@@ -85,6 +85,7 @@
                   music         IN CNAME ${reverseProxyHostName}
                   news          IN CNAME ${reverseProxyHostName}
                   prometheus    IN CNAME ${reverseProxyHostName}
+                  prowlarr      IN CNAME ${reverseProxyHostName}
                   push          IN CNAME ${reverseProxyHostName}
                   radarr        IN CNAME ${reverseProxyHostName}
                   readlater     IN CNAME ${reverseProxyHostName}

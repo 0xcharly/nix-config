@@ -12,7 +12,7 @@
     in
     {
       options.node.services.servarr = with lib; {
-        enable = mkEnableOption "Spin up radarr, sonarr, and lidarr";
+        enable = mkEnableOption "Spin up radarr, sonarr, lidarr, and prowlarr";
       };
 
       config = lib.mkIf cfg.enable {
@@ -27,6 +27,10 @@
         services.lidarr = {
           enable = true;
           settings.server.port = facts.services.lidarr.port;
+        };
+        services.prowlarr = {
+          enable = true;
+          settings.server.port = facts.services.prowlarr.port;
         };
 
         users.users.radarr.extraGroups = [ "media" ];

@@ -94,6 +94,7 @@
                     navidrome
                     paperless
                     prometheus
+                    prowlarr
                     qui
                     radarr
                     radicale
