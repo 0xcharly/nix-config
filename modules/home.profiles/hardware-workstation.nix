@@ -19,6 +19,7 @@
       programs-beeper
       programs-browsers
       programs-cachix
+      programs-cfait
       programs-core-display
       programs-core-headless
       programs-cursor

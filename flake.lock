@@ -524,11 +524,11 @@
         "systems": "systems_6"
       },
       "locked": {
-        "lastModified": 1784205108,
-        "narHash": "sha256-rVo8b3C/u5cWhj88gXHw12ZlrUiscnukiZCu3Siz8u4=",
+        "lastModified": 1784440460,
+        "narHash": "sha256-dO5EjuaIHqQElAavwK64QQ25DM5y7A8lCZrawmLJvZo=",
         "owner": "0xcharly",
         "repo": "nix-config-secrets",
-        "rev": "c8dd20340879f277c9a9dd6bf0b47c9cf846e82c",
+        "rev": "ddea70866c4699dcc514fe3d845c7eaa614b483e",
         "type": "github"
       },
       "original": {
