@@ -4,7 +4,7 @@
     {
       config,
       lib,
-      pkgs,
+      pkgs',
       ...
     }:
     {
@@ -21,7 +21,13 @@
           services.gatus = {
             inherit (cfg) enable;
 
-            package = pkgs.gatus.overrideAttrs (attrs: {
+            # gatus >= 5.36.0 (unstable; 26.05 ships 5.35.0) for the email subject fix
+            # from https://github.com/TwiN/gatus/pull/1586: subjects like
+            # "[group/name] Alert resolved" get their bracketed prefix stripped by
+            # conversation-threading heuristics (Proton, Gmail), so unrelated alerts
+            # thread together. 5.36.0 uses "group/name: Alert resolved" instead.
+            # TODO(26.11): Switch back to pkgs.gatus once it ships gatus >= 5.36.0.
+            package = pkgs'.gatus.overrideAttrs (attrs: {
               patches = (attrs.patches or [ ]) ++ [
                 ./gatus/0001-feat-pushover-add-support-for-custom-endpoint-URLs.patch
               ];
