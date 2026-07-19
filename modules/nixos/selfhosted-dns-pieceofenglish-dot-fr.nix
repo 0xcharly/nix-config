@@ -64,12 +64,6 @@
                   bind ${cfg.bindInterface}
                   file ${zoneFile}
                 }
-                .:53 {
-                  errors
-                  log stdout
-                  bind ${cfg.bindInterface}
-                  forward . 1.1.1.1:53
-                }
               '';
           };
 

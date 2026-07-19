@@ -34,6 +34,7 @@
         self.nixosModules.programs-terminfo
         self.nixosModules.prometheus-exporters-node
         self.nixosModules.prometheus-exporters-zfs
+        self.nixosModules.selfhosted-dns-catchall
         self.nixosModules.selfhosted-dns-delay-dot-email
         self.nixosModules.selfhosted-dns-pieceofenglish-dot-fr
         self.nixosModules.selfhosted-dns-qyrnl-dot-com
@@ -67,6 +68,11 @@
 
         services = {
           dns = {
+            catchall = {
+              enable = true;
+              openFirewall = true;
+              bindInterface = "eth0";
+            };
             "delay.email" = {
               enable = true;
               openFirewall = true;
