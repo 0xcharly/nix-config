@@ -60,10 +60,18 @@
                   bind ${cfg."qyrnl.com".bindIP}
                   tls {
                     # No Mullvad DNS (194.242.2.2) here: it refuses plain
-                    # port-53 queries from outside the VPN, and certmagic's
-                    # ACME propagation check fails hard on a REFUSED instead
-                    # of trying the next resolver.
+                    # port-53 queries from outside the VPN. Resolvers are only
+                    # used for zone detection: the local propagation check is
+                    # disabled (propagation_timeout -1) because polling public
+                    # recursives right after record creation negative-caches
+                    # the answer (Gandi SOA minimum 300s) for longer than the
+                    # check window, failing every first issuance. Let's
+                    # Encrypt validates against Gandi's authoritative servers
+                    # directly; the fixed delay covers the Gandi API ->
+                    # authoritative propagation lag.
                     resolvers 1.1.1.1 8.8.8.8
+                    propagation_delay 30s
+                    propagation_timeout -1
                     dns gandi {env.GANDIV5_PERSONAL_ACCESS_TOKEN}
                   }
                 '';
