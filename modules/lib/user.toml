@@ -5,8 +5,8 @@ features = []
 
 [gui.fonts.variable.mono.variations]
 slnt = 0
-wdth = 85
-wght = 400
+wdth = 87.5
+wght = 450
 
 [gui.fonts.terminal]
 name = "TX-02-Variable"
