@@ -18,10 +18,6 @@
     sqlite # sqlite3 CLI
     unzip
     yq-go # YAML (installs `yq`)
-
-    # FFF MCP server (fast frecency-ranked file/content search) for coding
-    # agents; wired up in .omp/mcp.json.
-    inputs.fff.packages.${stdenv.hostPlatform.system}.fff-mcp
   ];
 
   languages = {

@@ -6,5 +6,3 @@ inputs:
     url: github:numtide/treefmt-nix
   gen-luarc:
     url: github:mrcjkb/nix-gen-luarc-json
-  fff:
-    url: github:dmtrKovalenko/fff

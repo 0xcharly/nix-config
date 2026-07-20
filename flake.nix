@@ -27,6 +27,8 @@
     antigravity-nix.url = "github:jacopone/antigravity-nix";
     # Review-first terminal diff viewer for agentic coders
     hunk.url = "github:modem-dev/hunk";
+    # Fast frecency-ranked file/content search; ships the fff-mcp MCP server.
+    fff.url = "github:dmtrKovalenko/fff";
 
     # Nix index database, comma, command-not-found.
     nix-index-database = {

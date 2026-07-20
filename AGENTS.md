@@ -68,9 +68,10 @@ Hyprland gotchas.
 
 ## File search MCP
 
-The devenv ships `fff-mcp` (wired in `.omp/mcp.json`), exposing frecency-ranked
-`find_files` / `grep` / `multi_grep` MCP tools — prefer them for filename and
-content search when available.
+The workstation home-manager config ships `fff-mcp` globally (wired in
+`~/.omp/agent/mcp.json` via `modules/home/llm-agents/programs-omp.nix`),
+exposing frecency-ranked `find_files` / `grep` / `multi_grep` MCP tools —
+prefer them for filename and content search when available.
 
 ## Version control: Jujutsu (jj)
 
