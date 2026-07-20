@@ -148,7 +148,36 @@
                 };
               };
               prometheus.enable = true; # /metrics on the http port
+              # Ship the query log to PostgreSQL on site-jp
+              # (selfhosted-blocky-query-log): Grafana charts top
+              # queried/blocked domains from it. Writes are batched (30s
+              # flush) and pruned after logRetentionDays. If the database is
+              # unreachable at startup, blocky retries 3x2s and then falls
+              # back to console logging: DNS never depends on site-jp being
+              # up (which is also why creationAttempts stays at its low
+              # default: the retry loop blocks startup).
+              queryLog =
+                let
+                  ql = facts.services.blocky.query-log;
+                in
+                {
+                  type = "postgresql";
+                  # sslmode=disable: the server does not offer TLS; skip the
+                  # doomed negotiation attempt.
+                  target = "postgres://${ql.user}@${ql.host}:${toString ql.port}/${ql.database}?sslmode=disable";
+                  logRetentionDays = 30;
+                };
             };
+          };
+
+          # Give the query-log writer a tailnet route at boot; without it the
+          # initial connection attempts race tailscaled and blocky silently
+          # falls back to console logging until restarted.
+          systemd.services.blocky = lib.mkIf cfg.blocking.enable {
+            after = [
+              "tailscaled.service"
+              "tailscaled-autoconnect.service"
+            ];
           };
 
           systemd.services.coredns = {

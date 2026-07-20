@@ -77,6 +77,21 @@
                     isDefault = true;
                     editable = false;
                   }
+                  {
+                    name = "Blocky query log";
+                    uid = "blocky-query-log";
+                    type = "postgres";
+                    # Loopback TCP: the pg_hba trust entry for the blocky user
+                    # is host-scoped (selfhosted-blocky-query-log), and peer
+                    # auth would not apply to the grafana OS user anyway.
+                    url = "127.0.0.1:${toString facts.services.blocky.query-log.port}";
+                    user = facts.services.blocky.query-log.user;
+                    jsonData = {
+                      inherit (facts.services.blocky.query-log) database;
+                      sslmode = "disable";
+                    };
+                    editable = false;
+                  }
                 ];
               };
               dashboards.settings.providers = [

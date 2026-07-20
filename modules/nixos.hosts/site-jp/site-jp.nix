@@ -51,6 +51,7 @@
         self.nixosModules.prometheus-exporters-smartctl
         self.nixosModules.prometheus-exporters-zfs
         self.nixosModules.selfhosted-atuin
+        self.nixosModules.selfhosted-blocky-query-log
         self.nixosModules.selfhosted-forgejo
         self.nixosModules.selfhosted-ggit
         self.nixosModules.selfhosted-golink
@@ -114,6 +115,7 @@
 
         services = {
           atuin.enable = true;
+          blocky-query-log.enable = true;
           forgejo.enable = true;
           ggit.enable = true;
           golink.enable = true;

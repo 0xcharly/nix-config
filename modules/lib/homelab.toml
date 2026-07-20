@@ -165,6 +165,17 @@ port = 8888
 [services.blocky]
 port = 4000
 
+# Central DNS query-log store: PostgreSQL on site-jp, reached over the
+# tailnet. Both gates' Blocky instances batch-write here; Grafana (same host
+# as the database) reads it back for the top queried/blocked domains panels.
+[services.blocky.query-log]
+# IP literal, not a hostname: blocky is the resolver on the gates and cannot
+# resolve names through itself while it is still starting up.
+host = "100.64.0.120" # site-jp
+port = 5432
+database = "blocky"
+user = "blocky"
+
 [services.forgejo]
 domain = "git.qyrnl.com"
 host = "site-jp.qyrnl.com"
