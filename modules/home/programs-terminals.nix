@@ -22,13 +22,9 @@
         };
       };
 
-      config = {
-        home.packages = [
-          config.programs.ghostty.package.terminfo
-          config.programs.kitty.package.terminfo
-        ];
-
-        programs.tmux.terminal = lib.mkDefault "xterm-${config.user.terminal.default.name}";
-      };
+      config.home.packages = [
+        config.programs.ghostty.package.terminfo
+        config.programs.kitty.package.terminfo
+      ];
     };
 }
