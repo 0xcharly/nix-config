@@ -1,40 +1,17 @@
-# https://www.recursive.design/assets/arrowtype-recursive-sansmono-specimen-230407.pdf
 [gui.fonts.variable.mono]
-name = "Recursive"
+name = "TX-02-Variable"
 size = 12
-features = [
-  "dlig",
-  "ss01",
-  "ss02",
-  "ss03",
-  "ss04",
-  "ss05",
-  "ss06",
-  "ss11",
-  "ss12",
-]
+features = []
 
 [gui.fonts.variable.mono.variations]
-casl = 1
-crsv = 0
-mono = 1
 slnt = 0
+wdth = 85
 wght = 400
 
 [gui.fonts.terminal]
-name = "Recursive Mono Casual Static"
+name = "TX-02-Variable"
 size = 12
-features = [
-  "dlig",
-  "ss01",
-  "ss02",
-  "ss03",
-  "ss04",
-  "ss05",
-  "ss06",
-  "ss11",
-  "ss12",
-]
+features = []
 
 [gui.fonts.monospace]
 name = "Recursive Mono Casual Static"
@@ -51,3 +28,43 @@ size = 13
 [gui.fonts.emoji]
 name = "Noto Color Emoji"
 size = 13
+
+# Recursive typeface values.
+# https://www.recursive.design/assets/arrowtype-recursive-sansmono-specimen-230407.pdf
+
+# [gui.fonts.variable.mono]
+# name = "Recursive"
+# size = 12
+# features = [
+#   "dlig",
+#   "ss01",
+#   "ss02",
+#   "ss03",
+#   "ss04",
+#   "ss05",
+#   "ss06",
+#   "ss11",
+#   "ss12",
+# ]
+#
+# [gui.fonts.variable.mono.variations]
+# casl = 1
+# crsv = 0
+# mono = 1
+# slnt = 0
+# wght = 400
+#
+# [gui.fonts.terminal]
+# name = "Recursive Mono Casual Static"
+# size = 12
+# features = [
+#   "dlig",
+#   "ss01",
+#   "ss02",
+#   "ss03",
+#   "ss04",
+#   "ss05",
+#   "ss06",
+#   "ss11",
+#   "ss12",
+# ]

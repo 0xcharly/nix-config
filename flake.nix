@@ -47,6 +47,8 @@
 
     # Secrets management
     nix-config-secrets.url = "github:0xcharly/nix-config-secrets";
+    # Unfree software.
+    nix-config-unfree.url = "github:0xcharly/nix-config-unfree";
 
     # Out of the box mailserver
     simple-nixos-mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver/nixos-26.05";

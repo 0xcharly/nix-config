@@ -1,6 +1,11 @@
-{ self, ... }:
 {
-  flake.homeModules.install-fonts =
+  moduleWithSystem,
+  self,
+  ...
+}:
+{
+  flake.homeModules.install-fonts = moduleWithSystem (
+    perSystem@{ config, ... }:
     { pkgs, ... }:
     {
       fonts.fontconfig = {
@@ -22,12 +27,20 @@
           };
       };
 
-      home.packages = with pkgs; [
-        material-design-icons
-        nerd-fonts.symbols-only
-        noto-fonts-cjk-sans
-        noto-fonts-color-emoji
-        recursive
-      ];
-    };
+      home.packages =
+        with pkgs;
+        [
+          material-design-icons
+          nerd-fonts.symbols-only
+          noto-fonts-cjk-sans
+          noto-fonts-color-emoji
+          recursive
+        ]
+        ++ [ perSystem.config.packages.tx-02 ];
+    }
+  );
+
+  perSystem = { inputs', ... }: {
+    packages.tx-02 = inputs'.nix-config-unfree.packages.tx-02;
+  };
 }

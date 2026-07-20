@@ -15,7 +15,7 @@
           let
             inherit (self.lib.fonts) mapFontCodepoints;
             inherit (self.lib.user.gui) fonts;
-            font = fonts.terminal;
+            font = fonts.variable.mono;
           in
           {
             font-family = [
@@ -24,6 +24,7 @@
             ];
             font-size = font.size;
             font-feature = font.features;
+            font-variation = lib.mapAttrsToList (axis: value: "${axis}=${toString value}") font.variations;
             font-codepoint-map = mapFontCodepoints (
               font_name: codepoints:
               lib.concatStringsSep "=" [
