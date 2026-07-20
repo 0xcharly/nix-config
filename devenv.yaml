@@ -8,4 +8,3 @@ inputs:
     url: github:mrcjkb/nix-gen-luarc-json
   fff:
     url: github:dmtrKovalenko/fff
-# allowUnfree: true
