@@ -37,14 +37,31 @@ Rectangle {
         anchors.topMargin: root.theme.padding.top
         spacing: Config.theme.hud.notificationCenter.spacedBy
 
-        ArcText {
+        RowLayout {
             Layout.fillWidth: true
             Layout.leftMargin: root.theme.padding.left
             Layout.rightMargin: root.theme.padding.right
-            elide: Text.ElideRight
-            color: Config.tokens.system.colors.on_surface
-            style: Config.tokens.system.typography.mediumTitle
-            text: qsTr("Notification Center")
+            spacing: Config.theme.hud.notificationCenter.spacedBy
+
+            ArcText {
+                Layout.fillWidth: true
+                elide: Text.ElideRight
+                color: Config.tokens.system.colors.on_surface
+                style: Config.tokens.system.typography.mediumTitle
+                text: qsTr("Notification Center")
+            }
+
+            ArcChip {
+                visible: Notifications.notClosed.length > 0
+                Layout.alignment: Qt.AlignVCenter
+                text: qsTr("Clear all")
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: Notifications.clear()
+                }
+            }
         }
 
         Repeater {
@@ -77,18 +94,6 @@ Rectangle {
             color: Config.tokens.system.colors.on_surface_variant
             style: Config.tokens.system.typography.smallLabel
             text: root.overflow === 1 ? qsTr("1 other") : qsTr("%1 others").arg(root.overflow)
-        }
-
-        ArcChip {
-            visible: Notifications.notClosed.length > 0
-            Layout.alignment: Qt.AlignHCenter
-            text: qsTr("Clear all")
-
-            MouseArea {
-                anchors.fill: parent
-                cursorShape: Qt.PointingHandCursor
-                onClicked: Notifications.clear()
-            }
         }
     }
 }
