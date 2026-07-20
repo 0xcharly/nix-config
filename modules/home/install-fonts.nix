@@ -40,7 +40,9 @@
     }
   );
 
-  perSystem = { inputs', ... }: {
-    packages.tx-02 = inputs'.nix-config-unfree.packages.tx-02;
-  };
+  perSystem =
+    { inputs', ... }:
+    {
+      packages.tx-02 = inputs'.nix-config-unfree.packages.tx-02;
+    };
 }
