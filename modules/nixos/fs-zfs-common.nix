@@ -70,6 +70,9 @@
             zfs.forceImportRoot = lib.mkForce false;
           };
 
+          # Scrub all pools, monthly by default
+          services.zfs.autoScrub.enable = true;
+
           environment.systemPackages = [
             pkgs.httm # Snapshot browsing
             config.boot.zfs.package
