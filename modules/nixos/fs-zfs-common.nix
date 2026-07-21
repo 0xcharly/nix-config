@@ -50,15 +50,11 @@
             kernelModules = [ "zfs" ];
             supportedFilesystems.zfs = true;
 
-            # IMPORTANT NOTE: Carefully check the latest kernel version that is compatible
-            # with the ZFS version in use.
-            # Compatible kernel versions are listed on the OpenZFS release page. Check
-            # which ZFS version is in use for the current stable channel.
-            # The current stable channel is 25.05, which uses ZFS 2.4.2, and is compatible
-            # with 4.18 - 7.0 kernels.
+            # IMPORTANT NOTE: LTS Linux Kernel is the recommended setup for ZFS
+            # (also NixOS default).
             # https://discourse.nixos.org/t/zfs-latestcompatiblelinuxpackages-is-deprecated/52540
             # https://github.com/openzfs/zfs/releases
-            kernelPackages = pkgs.linuxPackages_7_0;
+            kernelPackages = pkgs.linuxPackages;
             zfs.package = pkgs.zfs_2_4;
 
             # When true, forcibly import the ZFS root pool(s) during early boot.
