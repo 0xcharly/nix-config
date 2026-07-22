@@ -61,7 +61,7 @@
 
         networking.tailscale = {
           enableSsh = true;
-          exitNode = "jp-tyo-wg-002.mullvad.ts.net.";
+          exitNode = "jp-tyo-wg-001.mullvad.ts.net.";
         };
         services.mullvad-exit-node-check = {
           enable = true;
