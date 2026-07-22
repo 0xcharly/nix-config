@@ -1,7 +1,7 @@
 {
   "uid": "fs-storage",
   "title": "FS storage",
-  "description": "ZFS pool capacity, health, and tank dataset usage from zfs_exporter. Job filter .*_zfs_stats avoids double-counting tailscalesd-discovered duplicates.",
+  "description": "ZFS pool capacity, health, and tank dataset usage from zfs_exporter; scrub state and error counters from the zfs-scrub textfile collector (node exporter, job .*_system_stats). Job filter .*_zfs_stats avoids double-counting tailscalesd-discovered duplicates.",
   "tags": ["storage", "zfs"],
   "timezone": "browser",
   "editable": true,
@@ -213,6 +213,143 @@
           "instant": true,
           "expr": "sum by (host, name) (zfs_dataset_used_bytes{job=~\".*_zfs_stats\", pool=\"tank\", type=\"filesystem\"})",
           "legendFormat": "{{host}} {{name}}"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "type": "stat",
+      "title": "Scrub state",
+      "description": "Last scrub per pool. NEVER also shows when the most recent scan was a resilver.",
+      "gridPos": { "h": 9, "w": 6, "x": 0, "y": 30 },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": { "text": "NEVER", "color": "orange", "index": 0 },
+                "1": { "text": "SCRUBBING", "color": "blue", "index": 1 },
+                "2": { "text": "FINISHED", "color": "green", "index": 2 },
+                "3": { "text": "CANCELED", "color": "red", "index": 3 }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "value_and_name"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "max by (host, pool) (zfs_pool_scrub_state{job=~\".*_system_stats\"})",
+          "legendFormat": "{{host}} {{pool}}"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "type": "stat",
+      "title": "Time since last scrub",
+      "description": "Pools that never completed a scrub are omitted (see Scrub state). autoScrub runs monthly.",
+      "gridPos": { "h": 9, "w": 6, "x": 6, "y": 30 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "orange", "value": 3024000 },
+              { "color": "red", "value": 5184000 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "textMode": "value_and_name"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "time() - (max by (host, pool) (zfs_pool_scrub_end_timestamp_seconds{job=~\".*_system_stats\"}) > 0)",
+          "legendFormat": "{{host}} {{pool}}"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "type": "timeseries",
+      "title": "Pool errors",
+      "description": "Errors found by the last scrub, known data errors, and root-vdev I/O error counters.",
+      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 30 },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "min": 0,
+          "custom": {
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "thresholdsStyle": { "mode": "line" }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 1 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": ["lastNotNull"]
+        },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "zfs_pool_scrub_errors{job=~\".*_system_stats\"}",
+          "legendFormat": "{{host}} {{pool}} scrub"
+        },
+        {
+          "refId": "B",
+          "expr": "zfs_pool_data_errors{job=~\".*_system_stats\"}",
+          "legendFormat": "{{host}} {{pool}} data"
+        },
+        {
+          "refId": "C",
+          "expr": "zfs_pool_read_errors{job=~\".*_system_stats\"}",
+          "legendFormat": "{{host}} {{pool}} read"
+        },
+        {
+          "refId": "D",
+          "expr": "zfs_pool_write_errors{job=~\".*_system_stats\"}",
+          "legendFormat": "{{host}} {{pool}} write"
+        },
+        {
+          "refId": "E",
+          "expr": "zfs_pool_checksum_errors{job=~\".*_system_stats\"}",
+          "legendFormat": "{{host}} {{pool}} cksum"
         }
       ]
     }
