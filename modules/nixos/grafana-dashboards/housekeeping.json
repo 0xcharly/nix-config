@@ -1,7 +1,7 @@
 {
   "uid": "housekeeping",
   "title": "Housekeeping",
-  "description": "Uptime, reboots, clock drift, NixOS generation state (node exporter textfile metrics), /boot headroom, and Prometheus self-monitoring. Node metrics filter job .*_system_stats.",
+  "description": "Uptime, reboots, clock drift, NixOS generation state (node exporter textfile metrics), kernel versions, /boot headroom, and Prometheus self-monitoring. Node metrics filter job .*_system_stats.",
   "tags": ["housekeeping"],
   "timezone": "browser",
   "editable": true,
@@ -378,6 +378,43 @@
           "instant": true,
           "expr": "1 - node_filesystem_avail_bytes{job=~\".*_system_stats\", mountpoint=\"/boot\"} / node_filesystem_size_bytes{job=~\".*_system_stats\", mountpoint=\"/boot\"}",
           "legendFormat": "{{host}}"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "type": "table",
+      "title": "Kernel version",
+      "description": "Running kernel per host, from node_uname_info. Compare against Pending reboot: a host on an old kernel with no pending reboot needs a rebuild, not a reboot.",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 36 },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "align": "left", "filterable": false }
+        },
+        "overrides": []
+      },
+      "options": {
+        "sortBy": [{ "displayName": "Host" }]
+      },
+      "transformations": [
+        {
+          "id": "filterFieldsByName",
+          "options": { "include": { "names": ["host", "release"] } }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "indexByName": { "host": 0, "release": 1 },
+            "renameByName": { "host": "Host", "release": "Kernel" }
+          }
+        }
+      ],
+      "targets": [
+        {
+          "refId": "A",
+          "instant": true,
+          "format": "table",
+          "expr": "node_uname_info{job=~\".*_system_stats\"}"
         }
       ]
     }
