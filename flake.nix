@@ -23,8 +23,6 @@
 
     # Nix packages for AI coding agents and development tools
     llm-agents.url = "github:numtide/llm-agents.nix";
-    # Antigravity tool suite
-    antigravity-nix.url = "github:jacopone/antigravity-nix";
     # Review-first terminal diff viewer for agentic coders
     hunk.url = "github:modem-dev/hunk";
     # Fast frecency-ranked file/content search; ships the fff-mcp MCP server.
