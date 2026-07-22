@@ -13,7 +13,6 @@
       nixpkgs
       programs-atuin
       programs-alexandria
-      programs-antigravity
       programs-atuin-sync
       programs-beans
       programs-beeper

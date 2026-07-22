@@ -10,10 +10,6 @@
     {
       imports = [ self.homeModules.programs-omp ];
 
-      home.packages = with perSystem.config.packages; [
-        antigravity-cli
-      ];
-
       # Daily pre-built binaries are available from the Numtide binary cache.
       nix.settings = {
         extra-substituters = [ "https://cache.numtide.com" ];
@@ -31,7 +27,7 @@
     { pkgs, ... }:
     {
       packages = with inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}; {
-        inherit antigravity-cli opencode;
+        inherit opencode;
       };
     };
 }
