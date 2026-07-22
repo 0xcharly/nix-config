@@ -130,12 +130,12 @@
           paperless.enable = true;
           prometheus = {
             enable = true;
+            report-zfs-scrub.enable = true;
             tailscalesd.enable = true;
           };
           radicale.enable = true;
           vaultwarden.enable = true;
         };
-
         users.delay.ssh.authorizeTailscaleInternalKey = true;
       };
 

@@ -81,6 +81,7 @@
         };
 
         networking.tailscale.enableSsh = true;
+        services.prometheus.report-zfs-scrub.enable = true;
         users.delay.ssh.authorizeTailscaleInternalKey = true;
       };
 
