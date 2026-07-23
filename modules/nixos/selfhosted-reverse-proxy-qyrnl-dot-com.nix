@@ -39,7 +39,7 @@
               inherit (cfg) enable;
               package = pkgs.caddy.withPlugins {
                 plugins = [ "github.com/caddy-dns/gandi@v1.1.0" ];
-                hash = "sha256-A2sDEDV7gchcMlCIbyxyidBfUubyWLyG0Bsu8l7TuIA=";
+                hash = "sha256-gY3Fo9nH9iJsd1ziwXH/TWFXYz622JSL0LIeigSWnUE=";
               };
               environmentFile = config.age.secrets."services/gandi-creds.qyrnl.com".path;
               # HTTP/3 has never been reachable here: the firewall below only
