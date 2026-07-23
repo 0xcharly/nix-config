@@ -45,8 +45,10 @@
         fs.zfs = {
           hostId = "df18314a";
           system = {
-            disk = "/dev/sda";
-            linode.swapDisk = "/dev/sdb";
+            # by-id paths: /dev/sdX enumeration order is not stable across
+            # boots, which intermittently broke swap activation.
+            disk = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi-disk-0";
+            linode.swapDisk = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi-disk-1";
             luksPasswordFile = "/tmp/root-disk-encryption.key";
           };
           zpool.root.reservation = "2GiB";
