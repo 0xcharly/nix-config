@@ -9,9 +9,11 @@
 # The motherboard/BIOS should be explicitly configured to attempt booting from
 # the SECONDARY partition (`/boot-fallback`) by default.
 #
-# During a `nixos-rebuild switch`, NixOS writes the new generation files
-# directly to `/boot`. A post-switch activation script then `rsync`s `/boot`
-# over to `/boot-fallback`. This makes `/boot` our immutable source of truth. By
+# When NixOS installs the bootloader (`nixos-rebuild switch` or
+# `nixos-rebuild boot`), it writes the new generation files directly to
+# `/boot`. The systemd-boot installer (via
+# `boot.loader.systemd-boot.extraInstallCommands`) then `rsync`s `/boot` over
+# to `/boot-fallback`. This makes `/boot` our immutable source of truth. By
 # booting off `/boot-fallback` for daily operations, any sudden power failures,
 # file system corruption, or emergency-mode lockouts will only impact the
 # fallback drive. If the fallback drive becomes corrupted, the hardware BIOS can
@@ -29,14 +31,14 @@
 # 1. Log into the system (which should boot successfully via the primary `/boot`
 #    drive).
 # 2. Rectify any underlying configuration issues that caused a system panic.
-# 3. Execute `sudo nixos-rebuild switch`.
+# 3. Execute `sudo nixos-rebuild switch` (or `sudo nixos-rebuild boot`).
 #
-# Because the activation script runs immediately after a successful switch, it
-# will read the healthy data from `/boot` and overwrite/repair the corrupted
-# `/boot-fallback` partition.
+# Because the sync runs as part of the bootloader installer, it will read the
+# healthy data from `/boot` and overwrite/repair the corrupted `/boot-fallback`
+# partition whenever the bootloader is (re)installed.
 #
 # No manual `fsck` or partition formatting should be required; the declarative
-# `switch` cycle should restore the mirror.
+# rebuild cycle should restore the mirror.
 #
 # MANUAL FILESYSTEM VERIFICATION & REPAIR (fsck)
 #
@@ -146,19 +148,23 @@
         # https://github.com/nix-community/disko/issues/1257
         fileSystems."/".options = [ "x-systemd.device-timeout=infinity" ];
 
-        # "Sync /boot to /boot-fallback on activation
-        system.activationScripts.syncBootFallback = {
-          text = ''
+        # Sync /boot to /boot-fallback whenever the bootloader is (re)installed.
+        # Unlike activation scripts (which only run on `switch`/`test`),
+        # `extraInstallCommands` is appended to the bootloader installer that
+        # switch-to-configuration runs for BOTH the `switch` and `boot` actions,
+        # so the mirror stays in sync on `nixos-rebuild boot` and `deploy --boot`.
+        boot.loader.systemd-boot.extraInstallCommands = ''
+          if ${lib.getExe' pkgs.util-linux "mountpoint"} -q /boot \
+              && ${lib.getExe' pkgs.util-linux "mountpoint"} -q /boot-fallback; then
             echo "[nix-config] syncing /boot and /boot-fallback"
-
-            # Keep /boot and /boot-fallback in sync on each activation.
             # -a: archive mode (preserves permissions, symlinks, timestamps)
             # -H: preserve hardlinks
             # --delete: remove files on fallback that were deleted on primary
             ${lib.getExe pkgs.rsync} -aH --delete /boot/ /boot-fallback/
-          '';
-          deps = [ "specialfs" ]; # Ensure /boot and /boot-fallback are mounted
-        };
+          else
+            echo "[nix-config] WARNING: /boot or /boot-fallback not mounted; skipping ESP mirror sync" >&2
+          fi
+        '';
 
         disko.devices =
           let

@@ -156,6 +156,10 @@
         HOSTNAME=''${1}
         shift
 
+        # Pass --boot to stage the generation for next reboot without touching
+        # the running system (deploy-rs runs `switch-to-configuration boot`;
+        # magic rollback is skipped in this mode): `deploy <host> --boot`
+
         ${lib.getExe pkgs.gum} log --structured --time=datetime --level=info "Updating deploy flake lock file" file hive/flake.lock
         nix flake update --flake ?dir=hive nix-config
 
