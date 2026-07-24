@@ -30,6 +30,7 @@
       programs-neomutt
       programs-nvim
       programs-password-managers
+      programs-poolside
       programs-ssh
       programs-terminals
       programs-tmux
