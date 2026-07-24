@@ -73,8 +73,6 @@
         nix-collect-garbage --delete-older-than 7d
       '';
 
-      unlock.exec = builtins.readFile ./bin/unlock.sh;
-
       provision-generic = {
         exec = builtins.readFile ./bin/provision-generic.sh;
         packages = with pkgs; [
