@@ -32,6 +32,7 @@
         self.nixosModules.programs-secrets
         self.nixosModules.programs-sudo
         self.nixosModules.programs-terminfo
+        self.nixosModules.programs-wakeonlan
         self.nixosModules.prometheus-exporters-node
         self.nixosModules.prometheus-exporters-smartctl
         self.nixosModules.prometheus-exporters-zfs

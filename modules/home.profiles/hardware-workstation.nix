@@ -34,6 +34,7 @@
       programs-terminals
       programs-tmux
       programs-vcs
+      programs-wake
       programs-zathura
       services-nix-index
       services-pipewire

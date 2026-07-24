@@ -3,6 +3,11 @@ domain = "qyrnl.com"
 [wireguard.tailscale]
 tailnet = "neko-danio.ts.net"
 
+# Physical LAN (10.0.0.0/24) facts, for wake-on-LAN.
+[lan."nyx"]
+mac = "60:cf:84:84:31:c4"
+broadcast = "10.0.0.255"
+
 # チャーリー.com
 [dns."xn--7ck8cva5eb.com"]
 # Delegated out-of-bailiwick: Verisign rejects xn-- labels in .com host
