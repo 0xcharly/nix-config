@@ -8,6 +8,7 @@
         inputs.nix-config-secrets.nixosModules.default
         inputs.nix-config-secrets.nixosModules.jptax-fa5003-inputs
         inputs.nix-config-secrets.nixosModules.mail-account-delay
+        inputs.nix-config-secrets.nixosModules.services-hoopsnake-term-nyx
         inputs.nix-config-secrets.nixosModules.services-tailscale
         inputs.nix-config-secrets.nixosModules.ssh-keys-ring-0-tier
         inputs.nix-config-secrets.nixosModules.users-delay
