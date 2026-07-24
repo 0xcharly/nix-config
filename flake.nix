@@ -45,6 +45,15 @@
       };
     };
 
+    # kexec installer tarballs (nixos-anywhere compatible)
+    nixos-images = {
+      url = "github:nix-community/nixos-images";
+      inputs = {
+        nixos-stable.follows = "nixpkgs";
+        nixos-unstable.follows = "nixpkgs-unstable";
+      };
+    };
+
     # Secrets management
     nix-config-secrets.url = "github:0xcharly/nix-config-secrets";
     # Unfree software.

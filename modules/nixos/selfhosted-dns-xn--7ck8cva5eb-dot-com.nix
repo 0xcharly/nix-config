@@ -43,9 +43,20 @@
                   $ORIGIN ${domainName}.
                   $TTL    3600
 
-                  @             IN SOA   ns1.delay.email. hostmaster.${domainName}. 2026071700 86400 10800 3600000 3600
+                  @             IN SOA   ns1.delay.email. hostmaster.${domainName}. 2026072401 86400 10800 3600000 3600
                   @       300   IN NS    ns1.delay.email.
                   @       300   IN NS    ns2.delay.email.
+
+                  ; Public reverse proxy on gate-jp (see
+                  ; selfhosted-reverse-proxy-xn--7ck8cva5eb-dot-com.nix):
+                  ; the apex serves /public (aliased by `public`), `album`
+                  ; the Immich public proxy.
+                  @       300   IN A     ${facts.reverse-proxy.${domainName}.ipv4}
+                  @       300   IN AAAA  ${facts.reverse-proxy.${domainName}.ipv6}
+                  album   300   IN A     ${facts.reverse-proxy.${domainName}.ipv4}
+                  album   300   IN AAAA  ${facts.reverse-proxy.${domainName}.ipv6}
+                  public  300   IN A     ${facts.reverse-proxy.${domainName}.ipv4}
+                  public  300   IN AAAA  ${facts.reverse-proxy.${domainName}.ipv6}
 
                   ; Mailserver configuration.
                   @       10800 IN MX    10 mx.delay.email.

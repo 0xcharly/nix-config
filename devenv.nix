@@ -179,6 +179,18 @@
         ''}
       '';
 
+      publish-kexec.exec = ''
+        ${lib.getExe pkgs.gum} log --time=datetime --level=info "Building kexec installer tarball."
+        OUT=$(${inhibit "Building kexec installer tarball" "nix build .#kexec-installer --no-link --print-out-paths"})
+
+        if test $? -eq 0; then
+          ${lib.getExe pkgs.gum} log --structured --time=datetime --level=info "Publishing kexec installer tarball." host site-jp
+          ${lib.getExe pkgs.rsync} --copy-links --chmod=F644 --progress \
+            "$OUT/nixos-kexec-installer-x86_64-linux.tar.gz" \
+            delay@site-jp.qyrnl.com:/tank/delay/files/public/nixos-kexec.tar.gz
+        fi
+      '';
+
       preview-avatar.exec = ''
         ${lib.getExe pkgs.glslviewer} --uniform -h 1024 -w 1024 data/avatar.frag
       '';

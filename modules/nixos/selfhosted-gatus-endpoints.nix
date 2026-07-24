@@ -97,6 +97,9 @@
               domain = "${facts.services.prometheus.domain}/-/healthy";
             })
             (gatus.mkHttpServiceCheck "prowlarr" (facts.services.prowlarr // { group = "servarr"; }))
+            (gatus.mkHttpServiceCheck "public files" {
+              domain = "xn--7ck8cva5eb.com/public/";
+            })
             (gatus.mkHttpCheck "qbittorrent" "http://node-skl.qyrnl.com:8080" { group = "servarr"; })
             (gatus.mkHttpServiceCheck "qui" (facts.services.qui // { group = "servarr"; }))
             (gatus.mkHttpServiceCheck "radarr" (facts.services.radarr // { group = "servarr"; }))

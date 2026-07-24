@@ -135,6 +135,10 @@
           _pics.gid = 4004;
           _vcs.gid = 4005;
           _dav.gid = 4006;
+          # Static-web-server's native group (the upstream unit runs with
+          # SupplementaryGroups=www-data); grants read access to the public
+          # file share on tank.
+          www-data.gid = 4007;
 
           # TODO: Migrate the remaining groups
           forgejo = { };

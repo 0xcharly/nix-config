@@ -64,6 +64,7 @@
         self.nixosModules.selfhosted-paperless
         self.nixosModules.selfhosted-prometheus
         self.nixosModules.selfhosted-prometheus-tailscalesd
+        self.nixosModules.selfhosted-public-files
         self.nixosModules.selfhosted-radicale
         self.nixosModules.selfhosted-vaultwarden
         self.nixosModules.services-fail2ban
@@ -133,6 +134,7 @@
             report-zfs-scrub.enable = true;
             tailscalesd.enable = true;
           };
+          public-files.enable = true;
           radicale.enable = true;
           vaultwarden.enable = true;
         };

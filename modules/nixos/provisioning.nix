@@ -1,25 +1,18 @@
-# Modules used to create a NixOS image.
-{ moduleWithSystem, ... }:
+# Modules used to create NixOS installer images.
 {
-  flake.nixosModules.iso-provisioning = moduleWithSystem (
+  self,
+  inputs,
+  moduleWithSystem,
+  ...
+}:
+{
+  # Shared provisioning payload: SSH access for the provisioning key and a
+  # comfortable rescue toolbox. Imported by both the ISO image
+  # (iso-provisioning below) and the kexec installer package.
+  flake.nixosModules.provisioning-base = moduleWithSystem (
     perSystem@{ config, ... }:
+    { lib, pkgs, ... }:
     {
-      lib,
-      pkgs,
-      modulesPath,
-      ...
-    }:
-    {
-      imports = [
-        # Base ISO content.
-        (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
-        # Provide an initial copy of the NixOS channel so that the user
-        # doesn't need to run "nix-channel --update" first.
-        (modulesPath + "/installer/cd-dvd/channel.nix")
-      ];
-
-      networking.useDHCP = lib.mkForce true;
-
       # Setup SSH to disable password authentication.
       services.openssh = {
         enable = true;
@@ -49,4 +42,42 @@
       ];
     }
   );
+
+  flake.nixosModules.iso-provisioning =
+    { lib, modulesPath, ... }:
+    {
+      imports = [
+        self.nixosModules.provisioning-base
+        # Base ISO content.
+        (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
+        # Provide an initial copy of the NixOS channel so that the user
+        # doesn't need to run "nix-channel --update" first.
+        (modulesPath + "/installer/cd-dvd/channel.nix")
+      ];
+
+      networking.useDHCP = lib.mkForce true;
+    };
+
+  perSystem =
+    { system, ... }:
+    {
+      # nixos-anywhere-compatible kexec installer (kexec/run layout) sharing
+      # the provisioning payload with the ISO. Published at
+      # https://xn--7ck8cva5eb.com/public/nixos-kexec.tar.gz by the
+      # `publish-kexec` devenv script.
+      packages.kexec-installer =
+        (inputs.nixpkgs.lib.nixosSystem {
+          modules = [
+            self.nixosModules.provisioning-base
+            inputs.nixos-images.nixosModules.kexec-installer
+            {
+              nixpkgs.hostPlatform = system;
+
+              # TODO(26.11): Set to `false` to silence build warning. Remove
+              # once fix is submitted upstream.
+              boot.zfs.forceImportRoot = false;
+            }
+          ];
+        }).config.system.build.kexecInstallerTarball;
+    };
 }

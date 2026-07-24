@@ -153,6 +153,14 @@ domains = [
 host = "gate-jp"
 tmpl = "tailscale_reverse_proxy"
 
+# Public (internet-facing) reverse proxy for チャーリー.com, bound to
+# gate-jp's public addresses (the same ones the ns1 records point at).
+[reverse-proxy."xn--7ck8cva5eb.com"]
+host = "gate-jp"
+tmpl = "public_reverse_proxy"
+ipv4 = "172.237.20.186"
+ipv6 = "2600:3c18::2000:a4ff:fe80:d6d4"
+
 [nas.primary]
 host = "site-jp.qyrnl.com"
 ipv4 = "100.64.0.120"
@@ -222,7 +230,8 @@ host = "site-jp.qyrnl.com"
 port = 2283
 
 [services.immich-public-proxy]
-domain = "shared.album.qyrnl.com"
+# Public endpoint: served by the internet-facing reverse proxy on gate-jp.
+domain = "album.xn--7ck8cva5eb.com"
 host = "gate-jp.qyrnl.com"
 port = 3000
 
@@ -265,6 +274,12 @@ port = 9090
 domain = "prowlarr.qyrnl.com"
 host = "node-skl.qyrnl.com"
 port = 9696
+
+# Read-only public file share (/tank/delay/files/public on site-jp), exposed
+# at https://xn--7ck8cva5eb.com/public through the public reverse proxy.
+[services.public-files]
+host = "site-jp.qyrnl.com"
+port = 8787
 
 [services.qui]
 domain = "torrents.qyrnl.com"

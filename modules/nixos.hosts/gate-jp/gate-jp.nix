@@ -43,7 +43,9 @@
         self.nixosModules.selfhosted-gatus-endpoints
         self.nixosModules.selfhosted-gotify
         self.nixosModules.selfhosted-immich-public-proxy
+        self.nixosModules.selfhosted-reverse-proxy-preamble
         self.nixosModules.selfhosted-reverse-proxy-qyrnl-dot-com
+        self.nixosModules.selfhosted-reverse-proxy-xn--7ck8cva5eb-dot-com
         self.nixosModules.services-fail2ban
         self.nixosModules.services-openssh
         self.nixosModules.services-tailscale
@@ -106,6 +108,11 @@
               enable = true;
               # TODO: this should be read from the homelab config
               bindIP = "100.64.0.140";
+            };
+            "xn--7ck8cva5eb.com" = {
+              enable = true;
+              openFirewall = true;
+              bindInterface = "eth0";
             };
           };
         };

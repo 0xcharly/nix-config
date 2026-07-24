@@ -65,7 +65,14 @@
               install -v -d --mode 770 --owner delay --group immich      /tank/delay/album
               install -v -d --mode 750 --owner delay --group delay       /tank/delay/beans
               install -v -d --mode 750 --owner delay --group delay       /tank/delay/email
-              install -v -d --mode 770 --owner delay --group paperless   /tank/delay/files
+              # World-traversable (--x) so the static-web-server unit can
+              # reach the public share below; the directory itself stays
+              # unlistable/unreadable for others.
+              install -v -d --mode 771 --owner delay --group paperless   /tank/delay/files
+              # Public file share: group `www-data` grants the
+              # static-web-server unit read access; see
+              # selfhosted-public-files.nix.
+              install -v -d --mode 750 --owner delay --group www-data    /tank/delay/files/public
               install -v -d --mode 751 --owner delay --group _media      /tank/delay/media
               install -v -d --mode 750 --owner delay --group _music      /tank/delay/music
               install -v -d --mode 750 --owner delay --group delay       /tank/delay/notes

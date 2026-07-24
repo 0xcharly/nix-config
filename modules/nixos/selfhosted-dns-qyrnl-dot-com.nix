@@ -89,7 +89,6 @@
                   push          IN CNAME ${reverseProxyHostName}
                   radarr        IN CNAME ${reverseProxyHostName}
                   readlater     IN CNAME ${reverseProxyHostName}
-                  shared.album  IN CNAME ${reverseProxyHostName}
                   sonarr        IN CNAME ${reverseProxyHostName}
                   status        IN CNAME ${reverseProxyHostName}
                   torrents      IN CNAME ${reverseProxyHostName}
