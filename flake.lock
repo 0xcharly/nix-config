@@ -550,11 +550,11 @@
         "systems": "systems_7"
       },
       "locked": {
-        "lastModified": 1784872839,
-        "narHash": "sha256-e1ByOAeV6ULOsXa0hjspLjy/Cj/8p5OeIEU+7ed2jeY=",
+        "lastModified": 1784873238,
+        "narHash": "sha256-R16qFYox59qY+Gzwbi1ZH7Zacqcx8e+Fyp9UvJu2Rk4=",
         "owner": "0xcharly",
         "repo": "nix-config-secrets",
-        "rev": "96adf72b1191d4c2dfeae0b2db6f229036f61fcd",
+        "rev": "a34f70e7927bdcffb406d775e7334afadf8d8df4",
         "type": "github"
       },
       "original": {
