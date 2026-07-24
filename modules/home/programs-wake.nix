@@ -65,7 +65,9 @@
             # fall back to fetching it at runtime — slower, but survives the
             # package being dropped from node-skl. The nixpkgs registry entry is
             # pinned to the flake input on every host, so no channel fetch occurs.
-            if ! ssh "$RELAY_HOST" -- "if command -v wakeonlan >/dev/null 2>&1; then wakeonlan -i $BROADCAST $MAC; else nix run nixpkgs#wakeonlan -- -i $BROADCAST $MAC; fi"; then
+            # Wrapped in `sh -c`: the remote command runs under the login shell
+            # (fish for delay), which does not parse `if …; then`.
+            if ! ssh "$RELAY_HOST" -- "sh -c 'if command -v wakeonlan >/dev/null 2>&1; then wakeonlan -i $BROADCAST $MAC; else nix run nixpkgs#wakeonlan -- -i $BROADCAST $MAC; fi'"; then
               log_error "Could not send the magic packet through $RELAY_HOST."
               exit 1
             fi
