@@ -608,6 +608,7 @@
         "nix-config-unfree": "nix-config-unfree",
         "nix-index-database": "nix-index-database",
         "nixos-hardware": "nixos-hardware",
+        "nixos-images": "nixos-images",
         "nixpkgs": "nixpkgs_12",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "simple-nixos-mailserver": "simple-nixos-mailserver"
@@ -632,11 +633,11 @@
         "systems": "systems_8"
       },
       "locked": {
-        "lastModified": 1784440460,
-        "narHash": "sha256-dO5EjuaIHqQElAavwK64QQ25DM5y7A8lCZrawmLJvZo=",
+        "lastModified": 1784873238,
+        "narHash": "sha256-R16qFYox59qY+Gzwbi1ZH7Zacqcx8e+Fyp9UvJu2Rk4=",
         "owner": "0xcharly",
         "repo": "nix-config-secrets",
-        "rev": "ddea70866c4699dcc514fe3d845c7eaa614b483e",
+        "rev": "a34f70e7927bdcffb406d775e7334afadf8d8df4",
         "type": "github"
       },
       "original": {
@@ -700,6 +701,31 @@
       "original": {
         "owner": "NixOS",
         "repo": "nixos-hardware",
+        "type": "github"
+      }
+    },
+    "nixos-images": {
+      "inputs": {
+        "nixos-stable": [
+          "nix-config",
+          "nixpkgs"
+        ],
+        "nixos-unstable": [
+          "nix-config",
+          "nixpkgs-unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1784802994,
+        "narHash": "sha256-4PcD0Ibzdkh85G+70w5dLlR9YgQ2bmNIjiPPMSzO57w=",
+        "owner": "nix-community",
+        "repo": "nixos-images",
+        "rev": "6ece16b0c97986fe085122e796044add4cc3ff64",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "nixos-images",
         "type": "github"
       }
     },
