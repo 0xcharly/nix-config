@@ -110,6 +110,7 @@
       packages.unlock = pkgs.writeShellApplication {
         name = "unlock";
         runtimeInputs = [
+          pkgs.expect
           pkgs.gum
           pkgs.iputils
           pkgs.openssh
@@ -163,7 +164,22 @@
 
           if test -r "$PASSFILE"; then
             log_info "Unlocking $TARGET_HOST with the stored passphrase..."
-            printf '%s\n' "$(cat "$PASSFILE")" | ssh "''${ssh_options[@]}" "$TARGET_HOST-unlock"
+            # Send the passphrase only once the prompt is up: systemd-ask-password
+            # disables tty echo when prompting, but input piped in earlier sits in
+            # the pty buffer with echo still on and is printed back in clear text.
+            # The passphrase travels via the environment, not argv (ps-visible).
+            PASSPHRASE=$(cat "$PASSFILE") expect -f - ssh "''${ssh_options[@]}" "$TARGET_HOST-unlock" <<'EOF'
+          set timeout 60
+          spawn {*}$argv
+          expect {
+            -re {[Pp]assphrase|[Pp]assword} { send -- "$env(PASSPHRASE)\r" }
+            timeout { puts stderr "Timed out waiting for the passphrase prompt."; exit 1 }
+            eof { exit 1 }
+          }
+          expect eof
+          catch wait result
+          exit [lindex $result 3]
+          EOF
           else
             log_info "No stored passphrase for $TARGET_HOST; unlocking interactively..."
             ssh "''${ssh_options[@]}" "$TARGET_HOST-unlock"
