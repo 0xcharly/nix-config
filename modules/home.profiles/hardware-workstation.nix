@@ -28,6 +28,7 @@
       programs-keychain
       programs-llm-agents
       programs-neomutt
+      programs-nightride
       programs-nvim
       programs-password-managers
       programs-poolside
