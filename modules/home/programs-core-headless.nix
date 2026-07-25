@@ -4,9 +4,9 @@
     { pkgs, ... }:
     {
       imports = with self.homeModules; [
-        colors-bat
-        colors-bottom
-        colors-fzf
+        theme-bat
+        theme-bottom
+        theme-fzf
       ];
 
       # Packages I always want installed. Most packages I install using per-project

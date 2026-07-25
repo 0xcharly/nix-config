@@ -1,10 +1,10 @@
 { self, ... }:
 let
-  inherit (self.lib.colors) name;
-  colors = self.lib.colors.asHexStrings;
+  inherit (self.lib.theme.colors) name;
+  colors = self.lib.theme.colors.asHexStrings;
 in
 {
-  flake.homeModules.colors-neomutt =
+  flake.homeModules.theme-neomutt =
     { pkgs, ... }:
     let
       content = with colors; ''

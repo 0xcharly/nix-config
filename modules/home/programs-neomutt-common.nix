@@ -3,7 +3,7 @@
   flake.homeModules.programs-neomutt-common =
     { pkgs, lib, ... }:
     {
-      imports = [ self.homeModules.colors-neomutt ];
+      imports = [ self.homeModules.theme-neomutt ];
 
       programs.neomutt = {
         enable = true;

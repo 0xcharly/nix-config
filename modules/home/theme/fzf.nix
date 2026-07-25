@@ -3,10 +3,10 @@
 
 { self, ... }:
 let
-  colors = self.lib.colors.asHexStrings;
+  colors = self.lib.theme.colors.asHexStrings;
 in
 {
-  flake.homeModules.colors-fzf = {
+  flake.homeModules.theme-fzf = {
     programs.fzf.colors = with colors; {
       "bg+" = surface_cursorline;
       "fg+" = text_title;

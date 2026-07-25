@@ -1,12 +1,12 @@
 { self, ... }:
 let
-  colors = self.lib.colors.asHexStrings;
-  raw = self.lib.colors.noPrefix;
+  colors = self.lib.theme.colors.asHexStrings;
+  raw = self.lib.theme.colors.noPrefix;
   # State layers / scrims: alpha byte over an opaque palette base (#AARRGGBB).
   alpha = a: c: "#${a}${c}";
 in
 {
-  flake.homeModules.colors-arcshell = {
+  flake.homeModules.theme-arcshell = {
     programs.arcshell.settings = {
       theme = {
         hud.border.shape = 0;

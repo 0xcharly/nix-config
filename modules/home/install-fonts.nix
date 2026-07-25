@@ -12,7 +12,7 @@
         enable = true;
         defaultFonts =
           let
-            inherit (self.lib.user.gui.fonts)
+            inherit (self.lib.theme.font)
               emoji
               monospace
               sansSerif
@@ -32,17 +32,35 @@
         [
           material-design-icons
           nerd-fonts.symbols-only
-          noto-fonts-cjk-sans
           noto-fonts-color-emoji
           recursive
+          sarasa-gothic
         ]
-        ++ [ perSystem.config.packages.tx-02 ];
+        ++ (with perSystem.config.packages; [
+          iosevka
+          iosevka-aile
+          iosevka-etoile
+          tx-02
+        ]);
     }
   );
 
   perSystem =
-    { inputs', ... }:
+    { inputs', pkgs, ... }:
     {
+      packages.iosevka = pkgs.callPackage ./iosevka {
+        set = "Custom";
+        family = "Iosevka";
+        spacing = "term";
+      };
+      # Quasi-proportional build of the same custom flavor, for UI text.
+      packages.iosevka-aile = pkgs.callPackage ./iosevka {
+        set = "CustomAile";
+        family = "Iosevka Aile";
+        spacing = "quasi-proportional";
+      };
+      packages.iosevka-bin = pkgs.callPackage ./iosevka-bin { };
+      packages.iosevka-etoile = pkgs.callPackage ./iosevka-bin { variant = "Etoile"; };
       packages.tx-02 = inputs'.nix-config-unfree.packages.tx-02;
     };
 }

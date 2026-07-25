@@ -1,8 +1,8 @@
 { self, ... }:
 {
-  flake.homeModules.colors-hyprland =
+  flake.homeModules.theme-hyprland =
     let
-      colors = self.lib.colors.asRgbLiterals;
+      colors = self.lib.theme.colors.asRgbLiterals;
     in
     {
       wayland.windowManager.hyprland = {
@@ -51,8 +51,8 @@
 
       programs.hyprlock.settings =
         let
-          rgba = self.lib.colors.asRgbaLiterals;
-          hex = self.lib.colors.asHexStrings;
+          rgba = self.lib.theme.colors.asRgbaLiterals;
+          hex = self.lib.theme.colors.asHexStrings;
         in
         {
           general = {

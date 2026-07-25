@@ -3,8 +3,8 @@
   flake.homeModules.environment-desktop =
     { pkgs, ... }:
     let
-      inherit (self.lib.user.gui.fonts) monospace sansSerif;
-      inherit (self.lib.fonts) mkFontName;
+      inherit (self.lib.theme.font) monospace sansSerif;
+      inherit (self.lib.theme) mkFontName;
     in
     {
       dconf = {

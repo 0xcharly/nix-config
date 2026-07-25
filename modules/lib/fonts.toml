@@ -1,0 +1,87 @@
+# Font roles: each key maps a role to a preset id from [preset.*].
+# A role may instead be a table { preset = "<id>", ... } whose extra keys
+# override the preset's attributes (e.g. a different size).
+terminal = "iosevka"
+sansSerif = "iosevka-aile"
+serif = "iosevka-etoile"
+emoji = "noto-color-emoji"
+# CJK fallback for the terminal codepoint maps (modules/lib/internal/
+# codepoints.toml): Sarasa's latin half *is* Iosevka, so its ideographs are
+# metrically matched to the terminal font.
+cjk = "sarasa-term-j"
+
+[monospace]
+preset = "iosevka"
+size = 13
+
+# Presets. Optional attributes and their defaults:
+#   features = []             # raw OpenType feature tags, e.g. "dlig"
+#   stylisticSets = []        # "ssNN" tags
+#   characterVariants = []    # "cvNN" or "cvNN=value" tags
+#   variations = {}           # variable-font axes; omit for static fonts
+[preset.iosevka]
+name = "Iosevka"
+size = 13
+# https://github.com/be5invis/Iosevka/blob/main/doc/language-specific-ligation-sets.md
+features = ["dlig"]
+# Character variants are baked into the source-built font — see the build
+# plan in modules/home/iosevka/default.nix. Runtime cvNN=k lists of that size
+# overflow HarfBuzz's 32-bit feature mask and get silently dropped.
+
+# Quasi-proportional build of the same custom flavor — see
+# modules/home/install-fonts.nix (packages.iosevka-aile).
+[preset.iosevka-aile]
+name = "Iosevka Aile"
+size = 13
+
+# Upstream quasi-proportional slab-serif, from the SuperTTC release
+# (packages.iosevka-etoile).
+[preset.iosevka-etoile]
+name = "Iosevka Etoile"
+size = 13
+
+[preset.sarasa-term-j]
+name = "Sarasa Term J"
+size = 13
+
+[preset.tx-02]
+name = "TX-02-Variable"
+size = 13
+
+[preset.tx-02.variations]
+slnt = 0
+wdth = 87.5
+wght = 450
+
+# Recursive typeface values.
+# https://www.recursive.design/assets/arrowtype-recursive-sansmono-specimen-230407.pdf
+[preset.recursive-variable]
+name = "Recursive"
+size = 12
+features = ["dlig"]
+stylisticSets = ["ss01", "ss02", "ss03", "ss04", "ss05", "ss06", "ss11", "ss12"]
+
+[preset.recursive-variable.variations]
+casl = 1
+crsv = 0
+mono = 1
+slnt = 0
+wght = 400
+
+[preset.recursive-mono-casual]
+name = "Recursive Mono Casual Static"
+size = 13
+features = ["dlig"]
+stylisticSets = ["ss01", "ss02", "ss03", "ss04", "ss05", "ss06", "ss11", "ss12"]
+
+[preset.recursive-sans-casual]
+name = "Recursive Sans Casual Static"
+size = 13
+
+[preset.recursive-sans-linear]
+name = "Recursive Sans Linear Static"
+size = 13
+
+[preset.noto-color-emoji]
+name = "Noto Color Emoji"
+size = 13

@@ -1,7 +1,7 @@
 { self, inputs, ... }:
 let
   inherit (inputs.nixpkgs.lib) lists;
-  colors = self.lib.colors.noPrefix;
+  colors = self.lib.theme.colors.noPrefix;
 in
 {
   flake.nixosModules.colors-console = {

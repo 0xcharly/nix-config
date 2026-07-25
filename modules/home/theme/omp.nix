@@ -4,11 +4,11 @@
 # that every `colors` token below is present.
 { self, ... }:
 let
-  inherit (self.lib.colors) name;
-  colors = self.lib.colors.asHexStrings;
+  inherit (self.lib.theme.colors) name;
+  colors = self.lib.theme.colors.asHexStrings;
 in
 {
-  flake.homeModules.colors-omp = {
+  flake.homeModules.theme-omp = {
     home.file.".omp/agent/themes/${name}.json".text = builtins.toJSON {
       inherit name;
       colors = with colors; {

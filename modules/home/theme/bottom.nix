@@ -3,10 +3,10 @@
 
 { self, ... }:
 let
-  colors = self.lib.colors.asHexStrings;
+  colors = self.lib.theme.colors.asHexStrings;
 in
 {
-  flake.homeModules.colors-bottom = {
+  flake.homeModules.theme-bottom = {
     programs.bottom.settings = with colors; {
       "styles.cpu" = {
         all_entry_color = text_rose;

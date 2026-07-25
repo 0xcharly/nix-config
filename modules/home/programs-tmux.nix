@@ -1,7 +1,7 @@
 { self, ... }:
 {
   flake.homeModules.programs-tmux = {
-    imports = [ self.homeModules.colors-tmux ];
+    imports = [ self.homeModules.theme-tmux ];
 
     programs.tmux = {
       enable = true;

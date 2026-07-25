@@ -3,11 +3,11 @@
 
 { self, ... }:
 let
-  inherit (self.lib.colors) name;
-  colors = self.lib.colors.noPrefix;
+  inherit (self.lib.theme.colors) name;
+  colors = self.lib.theme.colors.noPrefix;
 in
 {
-  flake.homeModules.colors-fish = {
+  flake.homeModules.theme-fish = {
     xdg.configFile."fish/themes/${name}.theme".text = with colors; ''
       # name: '${name}'
       # url: 'https://github.com/0xcharly/nix-config'

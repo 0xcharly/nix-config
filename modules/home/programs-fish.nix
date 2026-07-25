@@ -7,7 +7,7 @@
       cfg = homeManager.config.programs.fish;
     in
     {
-      imports = [ self.homeModules.colors-fish ];
+      imports = [ self.homeModules.theme-fish ];
 
       programs = {
         eza.enableFishIntegration = true;

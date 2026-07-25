@@ -1,10 +1,10 @@
 { self, inputs, ... }:
 let
   inherit (inputs.nixpkgs.lib) mkBefore;
-  colors = self.lib.colors.asHexStrings;
+  colors = self.lib.theme.colors.asHexStrings;
 in
 {
-  flake.homeModules.colors-tmux = with colors; {
+  flake.homeModules.theme-tmux = with colors; {
     programs.tmux.extraConfig = mkBefore ''
       set -ogq @text "${on_surface_statusline}"
       set -ogq @text_session_name "${on_surface_statusline}"

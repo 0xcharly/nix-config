@@ -1,10 +1,10 @@
 { self, ... }:
 let
-  colors = self.lib.colors.noPrefix;
+  colors = self.lib.theme.colors.noPrefix;
   no-color = "00000000";
 in
 {
-  flake.homeModules.colors-swaylock = {
+  flake.homeModules.theme-swaylock = {
     programs.swaylock.settings = with colors; {
       color = surface;
       bs-hl-color = text_rose;

@@ -1,18 +1,7 @@
-# https://github.com/ryanoasis/nerd-fonts/wiki/Glyph-Sets-and-Code-Points#powerline-symbols
-[default]
-codepoints = [
-  "U+E0A0-U+E0A2,U+E0B0-U+E0B3",                      # Powerline Symbols
-  "U+E0A3,U+E0B4-U+E0C8,U+E0CA,U+E0CC-U+E0D7,U+2630", # Powerline Extra Symbols
-  "U+2713",                                           # Checkmark emoji ✓
-  "U+276C-U+2771",                                    # Heavy Angle Brackets
-  "U+2500-U+259F",                                    # Box Drawing
-  "U+EE00-U+EE0B",                                    # Progress
-]
-
 # Based off https://stackoverflow.com/a/53807563.
 # https://www.localizingjapan.com/blog/2012/01/20/regular-expressions-for-japanese-text/
 [cjk]
-font_name = "Noto Sans Mono CJK JP"
+# Font resolved from the `cjk` role in modules/lib/fonts.toml.
 codepoints = [
   "U+3041-U+3096",                             # Hiragana
   "U+30A0-U+30FF",                             # Katakana (full width)
@@ -48,7 +37,7 @@ codepoints = [
 ]
 
 [emojis]
-font_name = "Noto Emoji"
+font_name = "Noto Color Emoji"
 codepoints = [
   # "U+2700-U+27BF",   # Dingbats
   "U+1F600-U+1F64F", # Emoticons

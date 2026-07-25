@@ -8,7 +8,7 @@
       ...
     }:
     {
-      imports = [ self.homeModules.colors-hyprland ];
+      imports = [ self.homeModules.theme-hyprland ];
 
       options.node.wayland = with lib; {
         hyprland = {

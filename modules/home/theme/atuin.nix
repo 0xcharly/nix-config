@@ -3,11 +3,11 @@
 
 { self, ... }:
 let
-  inherit (self.lib.colors) name;
-  colors = self.lib.colors.asHexStrings;
+  inherit (self.lib.theme.colors) name;
+  colors = self.lib.theme.colors.asHexStrings;
 in
 {
-  flake.homeModules.colors-atuin =
+  flake.homeModules.theme-atuin =
     { pkgs, ... }:
     {
       programs.atuin.settings.theme.name = name;

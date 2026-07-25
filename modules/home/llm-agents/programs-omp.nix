@@ -8,7 +8,7 @@
   flake.homeModules.programs-omp = moduleWithSystem (
     perSystem@{ config, ... }:
     {
-      imports = [ self.homeModules.colors-omp ];
+      imports = [ self.homeModules.theme-omp ];
 
       home.packages = with perSystem.config.packages; [
         omp
@@ -21,7 +21,7 @@
         setupVersion: 1
         symbolPreset: nerd
         theme:
-          dark: ${self.lib.colors.name}
+          dark: ${self.lib.theme.colors.name}
         providers:
           webSearch: auto
         modelRoles:

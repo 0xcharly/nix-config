@@ -9,7 +9,7 @@
     }:
     {
       imports = with self.homeModules; [
-        colors-arcshell
+        theme-arcshell
         programs-arcshell
       ];
 
