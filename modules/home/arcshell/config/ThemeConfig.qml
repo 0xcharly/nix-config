@@ -33,7 +33,6 @@ JsonObject {
         property FeatureTokens.Clock clock: FeatureTokens.Clock {}
         property FeatureTokens.BarDecorator decorator: FeatureTokens.BarDecorator {}
         property FeatureTokens.PowerManagement power: FeatureTokens.PowerManagement {}
-        property FeatureTokens.Vpn vpn: FeatureTokens.Vpn {}
         property FeatureTokens.Workspaces workspaces: FeatureTokens.Workspaces {}
     }
 
@@ -57,6 +56,7 @@ JsonObject {
 
         property ComponentTokens.IdleInhibitor idleInhibitor: ComponentTokens.IdleInhibitor {}
         property PowerProfileSwitch powerProfile: PowerProfileSwitch {}
+        property Vpn vpn: Vpn {}
     }
 
     component DynamicIsland: JsonObject {
@@ -117,6 +117,13 @@ JsonObject {
         // is the only signal that power-profiles-daemon is present).
         property bool enable: true
         property ComponentTokens.SegmentedControl control: ComponentTokens.SegmentedControl {}
+    }
+
+    component Vpn: JsonObject {
+        // Off by default: the widget's Loader stays inactive so the
+        // VpnCheck singleton never starts polling am.i.mullvad.net on
+        // hosts without the module.
+        property bool enable: false
     }
 
     component ComponentDefaults: JsonObject {

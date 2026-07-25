@@ -19,7 +19,7 @@
           powerProfile = mkEnableOption "Enable the power profile switcher module" // {
             default = true;
           };
-          vpn = mkEnableOption "Enable the VPN egress check module";
+          vpn = mkEnableOption "Enable the VPN exit-node module";
         };
       };
 
@@ -31,11 +31,11 @@
           programs.arcshell = {
             enable = true;
             systemd.enable = true;
-            settings.theme.hud.bar = {
-              power.enable = cfg.modules.power;
+            settings.theme.hud.bar.power.enable = cfg.modules.power;
+            settings.theme.hud.controlCenter = {
+              powerProfile.enable = cfg.modules.powerProfile;
               vpn.enable = cfg.modules.vpn;
             };
-            settings.theme.hud.controlCenter.powerProfile.enable = cfg.modules.powerProfile;
             settings.services.launcher = {
               launchPrefix = lib.mkDefault [ config.node.wayland.uwsm-wrapper.prefix ];
               emojiData = lib.mkDefault "${pkgs.unicode-emoji}/share/unicode/emoji/emoji-test.txt";

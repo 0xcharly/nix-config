@@ -32,6 +32,19 @@ Rectangle {
 
         IdleInhibitor {}
         QuickToggles {}
+
+        Loader {
+            // active (not just visible): an inactive Loader never
+            // instantiates the widget, so the VpnCheck singleton never
+            // starts polling while the module is disabled.
+            active: Config.theme.hud.controlCenter.vpn.enable
+            visible: active
+
+            Layout.fillWidth: true
+
+            sourceComponent: Vpn {}
+        }
+
         PowerProfileSwitch {}
     }
 }

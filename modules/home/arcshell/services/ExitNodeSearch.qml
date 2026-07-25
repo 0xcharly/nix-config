@@ -17,6 +17,8 @@ Singleton {
     // Dot-trimmed FQDN of `tailscale exit-node suggest`, "" while
     // unknown/unavailable.
     property string suggested: ""
+    // Currently selected exit node row, null while none is active.
+    readonly property var selectedNode: root.entries.find(e => e.selected) ?? null
 
     // Flag emoji from the ISO country prefix of Mullvad node names
     // ("jp-tyo-wg-002..." -> regional indicators J+P).
@@ -80,16 +82,19 @@ Singleton {
             Quickshell.execDetached(["tailscale", "set", "--exit-node=" + node.hostname + ".", "--exit-node-allow-lan-access=true"]);
     }
 
+    function refresh(): void {
+        listProc.running = true;
+        suggestProc.running = true;
+    }
+
     // Refresh on every entry into the mode: launcherMode is reset to
     // "default" at every open site, so entering always fires this.
     Connections {
         target: UiState
 
         function onLauncherModeChanged() {
-            if (UiState.launcherMode === "exit-node") {
-                listProc.running = true;
-                suggestProc.running = true;
-            }
+            if (UiState.launcherMode === "exit-node")
+                root.refresh();
         }
     }
 
