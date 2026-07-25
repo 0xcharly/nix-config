@@ -8,10 +8,10 @@ JsonObject {
     property TypographyValues typography: Config.tokens.system.typography.smallTitle
     property SurfaceTokens surface: Config.theme.defaults.cards
     property PaddingValues padding: PaddingValues {
-        bottom: Config.tokens.system.measurements.medium
-        left: Config.tokens.system.measurements.medium
-        right: Config.tokens.system.measurements.medium
-        top: Config.tokens.system.measurements.medium
+        bottom: Config.tokens.system.measurements.small
+        left: Config.tokens.system.measurements.small
+        right: Config.tokens.system.measurements.small
+        top: Config.tokens.system.measurements.small
     }
 
     property color trackColorRest: Config.tokens.system.colors.surface_control_track_rest
@@ -23,10 +23,10 @@ JsonObject {
             content: Config.tokens.system.colors.on_surface_accent
         }
         padding: PaddingValues {
-            bottom: Config.tokens.system.measurements.small
-            left: Config.tokens.system.measurements.small
-            right: Config.tokens.system.measurements.small
-            top: Config.tokens.system.measurements.small
+            bottom: Config.tokens.system.measurements.extraSmall
+            left: Config.tokens.system.measurements.extraSmall
+            right: Config.tokens.system.measurements.extraSmall
+            top: Config.tokens.system.measurements.extraSmall
         }
         shape: Config.tokens.system.shapes.cornerFull
         typography: Config.tokens.system.typography.icon

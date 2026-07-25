@@ -47,7 +47,7 @@ JsonObject {
         family: root.families.sansSerif
         fontSize: 14 * root.scale
         lineHeight: 18 * root.scale
-        weight: root.weights.normal
+        weight: root.weights.medium
         italic: false
         underline: false
     }
