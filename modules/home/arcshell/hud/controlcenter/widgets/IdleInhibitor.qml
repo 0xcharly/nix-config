@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import qs.components
 import qs.services
 import qs.config
+import qs.config.tokens.component as ComponentTokens
 import QtQuick
 import QtQuick.Layouts
 
@@ -12,7 +13,7 @@ ArcRectangle {
     Layout.fillWidth: true
     implicitHeight: layout.implicitHeight + root.theme.padding.top + root.theme.padding.bottom
 
-    readonly property ThemeConfig.IdleInhibitor theme: Config.theme.hud.controlCenter.idleInhibitor
+    readonly property ComponentTokens.IdleInhibitor theme: Config.theme.hud.controlCenter.idleInhibitor
 
     radius: root.theme.surface.shape
     color: root.theme.surface.colors.surface
