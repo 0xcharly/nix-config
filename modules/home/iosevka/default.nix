@@ -47,8 +47,6 @@ iosevka.override {
       capital-r = "straight-top-left-serifed";
       capital-s = "unilateral-inward-serifed";
       capital-u = "toothed-serifless";
-      capital-v = "straight-motion-serifed";
-      capital-w = "straight-motion-serifed";
       capital-z = "straight-top-serifed";
       a = "single-storey-top-cut-serifless";
       b = "toothed-motion-serifed";
