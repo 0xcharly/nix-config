@@ -4,8 +4,10 @@ JsonObject {
     component Family: JsonObject {
         property string icon: "Material Symbols Rounded"
         property string doto: "Doto"
+        // Generic fontconfig families: resolved through the session's
+        // fontconfig preferences (fonts.fontconfig.defaultFonts).
         property string monospace: "monospace"
-        property string sansSerif: "sansserif"
+        property string sansSerif: "sans-serif"
         property string serif: "serif"
     }
 

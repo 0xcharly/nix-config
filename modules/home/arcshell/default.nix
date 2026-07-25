@@ -3,14 +3,13 @@
   stdenv,
   stdenvNoCC,
   fetchFromGitHub,
-  makeFontsConf,
+  writeText,
   makeWrapper,
   apdbctl,
   brightnessctl,
   ddcutil,
   hyprland,
   libnotify,
-  recursive,
   material-symbols,
   networkmanager,
   systemd,
@@ -72,14 +71,23 @@ let
     meta.license = lib.licenses.ofl;
   };
 
-  fontconfig = makeFontsConf {
-    fontDirectories = [
-      doto
-      material-symbols
-      nerd-fonts.symbols-only
-      recursive
-    ];
-  };
+  # Overlay the bundled glyph fonts (icons, Doto) on top of the host
+  # fontconfig instead of replacing it: generic families ("monospace",
+  # "sans-serif", "serif") in the QML tokens then resolve through the
+  # session's fontconfig preferences (fonts.fontconfig.defaultFonts, driven
+  # by modules/lib/fonts.toml), while the shell's bespoke glyph fonts are
+  # guaranteed regardless of what the user installs.
+  fontconfig = writeText "arc-shell-fonts.conf" ''
+    <?xml version="1.0"?>
+    <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+    <fontconfig>
+      <include ignore_missing="yes">/etc/fonts/fonts.conf</include>
+      <dir>${doto}/share/fonts</dir>
+      <dir>${material-symbols}/share/fonts</dir>
+      <dir>${nerd-fonts.symbols-only}/share/fonts</dir>
+      <cachedir prefix="xdg">fontconfig</cachedir>
+    </fontconfig>
+  '';
 
   cmakeVersionFlags = [
     (lib.cmakeFeature "VERSION" version)

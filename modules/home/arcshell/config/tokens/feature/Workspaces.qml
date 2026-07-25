@@ -44,18 +44,13 @@ JsonObject {
         }
     }
 
+    // The add button renders an ASCII "+" with the Workspace default
+    // typography — same metrics as the numeral chips, so the hover-only
+    // button cannot change the widget's width.
     property Workspace addButton: Workspace {
         colors: SurfaceColorValues {
             surface: Config.tokens.system.colors.surface_elevated
             content: Config.tokens.system.colors.on_surface
-        }
-        // Icon family at the workspace-label metrics so the glyph button
-        // matches the numeral chips' size.
-        typography: TypographyValues {
-            family: Config.tokens.system.typography.icon.family
-            fontSize: Config.tokens.system.typography.body.fontSize
-            lineHeight: Config.tokens.system.typography.body.lineHeight
-            weight: Config.tokens.system.typography.body.weight
         }
     }
 
@@ -65,6 +60,5 @@ JsonObject {
             surface: Config.tokens.system.colors.surface_elevated_hover
             content: Config.tokens.system.colors.on_surface
         }
-        typography: addButton.typography
     }
 }

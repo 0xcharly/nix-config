@@ -163,12 +163,13 @@ ArcRectangle {
             color: addButton.buttonTheme.colors.surface
             radius: addButton.buttonTheme.shape
 
-            // Indicator-sized square: the numeral chips' height (line height
-            // + vertical padding), glyph centered instead of padded — the
-            // icon's advance plus horizontal padding would exceed the bar
-            // width and shift the bar content on hover.
-            implicitHeight: addButton.buttonTheme.typography.lineHeight + addButton.buttonTheme.padding.top + addButton.buttonTheme.padding.bottom
-            implicitWidth: addButton.implicitHeight
+            // Shaped exactly like a numeral chip: padded ArcText driving the
+            // implicit size. The ASCII "+" has the same 500-unit advance as
+            // the digits in the label face, so showing the button on hover
+            // never widens the widget (a centered icon glyph's square used
+            // to exceed narrow chip widths and shift the bar content).
+            implicitHeight: addLabel.implicitHeight
+            implicitWidth: addLabel.implicitWidth
 
             MouseArea {
                 id: buttonArea
@@ -179,14 +180,19 @@ ArcRectangle {
                 onClicked: Hypr.goToFirstEmptyWorkspace()
             }
 
-            MaterialIcon {
+            ArcText {
                 id: addLabel
 
-                anchors.centerIn: parent
+                anchors.fill: parent
+                bottomPadding: addButton.buttonTheme.padding.bottom
+                leftPadding: addButton.buttonTheme.padding.left
+                rightPadding: addButton.buttonTheme.padding.right
+                topPadding: addButton.buttonTheme.padding.top
 
+                tabularFigures: true
                 color: addButton.buttonTheme.colors.content
                 style: addButton.buttonTheme.typography
-                text: "add"
+                text: "+"
             }
         }
     }
