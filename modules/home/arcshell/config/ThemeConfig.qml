@@ -33,7 +33,6 @@ JsonObject {
         property FeatureTokens.Clock clock: FeatureTokens.Clock {}
         property FeatureTokens.BarDecorator decorator: FeatureTokens.BarDecorator {}
         property FeatureTokens.PowerManagement power: FeatureTokens.PowerManagement {}
-        property FeatureTokens.PowerProfile powerProfile: FeatureTokens.PowerProfile {}
         property FeatureTokens.Vpn vpn: FeatureTokens.Vpn {}
         property FeatureTokens.Workspaces workspaces: FeatureTokens.Workspaces {}
     }
@@ -57,6 +56,7 @@ JsonObject {
         property int spacedBy: Config.tokens.system.measurements.medium
 
         property IdleInhibitor idleInhibitor: IdleInhibitor {}
+        property PowerProfileSwitch powerProfile: PowerProfileSwitch {}
     }
 
     component DynamicIsland: JsonObject {
@@ -109,6 +109,14 @@ JsonObject {
         property color pulseColor: Config.tokens.system.colors.surface_accent
         // Horizontal slack around the count once it outgrows `size`.
         property int countPadding: Config.tokens.system.measurements.large
+    }
+
+    component PowerProfileSwitch: JsonObject {
+        // Config-enabled by default; the widget additionally hides itself at
+        // runtime when profile switching is unavailable (hasPerformanceProfile
+        // is the only signal that power-profiles-daemon is present).
+        property bool enable: true
+        property ComponentTokens.SegmentedControl control: ComponentTokens.SegmentedControl {}
     }
 
     component IdleInhibitor: JsonObject {

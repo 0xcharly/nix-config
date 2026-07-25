@@ -32,5 +32,6 @@ Rectangle {
 
         IdleInhibitor {}
         QuickToggles {}
+        PowerProfileSwitch {}
     }
 }

@@ -7,5 +7,6 @@ JsonObject {
     property ComponentTokens.MatrixSlider matrixSlider: ComponentTokens.MatrixSlider {}
     property ComponentTokens.Notification notification: ComponentTokens.Notification {}
     property ComponentTokens.SliderLabel sliderLabel: ComponentTokens.SliderLabel {}
+    property ComponentTokens.SegmentedControl segmentedControl: ComponentTokens.SegmentedControl {}
     property ComponentTokens.Switch switchC: ComponentTokens.Switch {}
 }
