@@ -1,6 +1,7 @@
 // Command nightride plays nightride.fm through mpv and shows an interactive
-// TUI: live SSE metadata, now-playing track, client-derived history,
-// station switching, and pause/volume/mute controls.
+// TUI: live SSE metadata, per-station listener counts, album art (kitty
+// graphics with an ANSI fallback), client-derived history, station
+// switching, and pause/volume/mute controls.
 package main
 
 import (

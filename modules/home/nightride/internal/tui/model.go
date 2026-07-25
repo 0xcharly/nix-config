@@ -3,6 +3,9 @@ package tui
 
 import (
 	"context"
+	"os"
+	"slices"
+	"strings"
 	"time"
 
 	"charm.land/bubbles/v2/help"
@@ -10,12 +13,21 @@ import (
 	"charm.land/bubbles/v2/spinner"
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
+	uv "github.com/charmbracelet/ultraviolet"
 
+	"github.com/0xcharly/nix-config/nightride/internal/art"
 	"github.com/0xcharly/nix-config/nightride/internal/meta"
 	"github.com/0xcharly/nix-config/nightride/internal/player"
 )
 
-const volumeStep = 5
+const (
+	volumeStep = 5
+	// listenersInterval paces the Icecast listener-count poll.
+	listenersInterval = 15 * time.Second
+	// kittyProbeID tags the graphics-capability query so its response is
+	// distinguishable from image-slot traffic (slots use 1..len(stations)).
+	kittyProbeID = 99
+)
 
 // nowPlaying is the latest track seen for one station.
 type nowPlaying struct {
@@ -26,14 +38,23 @@ type nowPlaying struct {
 
 // Model is the top-level bubbletea model.
 type Model struct {
-	station string // tuned station name
-	mpvPath string
+	station  string   // tuned station name
+	stations []string // displayed order: cycle + custom -station, fixed at startup
+	mpvPath  string
 
 	metaCh    <-chan meta.Msg         // SSE subscription, created in New
 	connected bool                    // feed state → LIVE/OFFLINE badge
 	metaErr   error                   // last SSE error, cleared on Connected
 	now       map[string]nowPlaying   // latest track per station
 	history   map[string][]meta.Track // per station, newest first, cap historyLimit
+	listeners map[string]int          // per-station listener counts, nil until first poll
+	artCache  map[string]art.Cover    // trackID → fetched cover (zero value = no art)
+	artBusy   map[string]bool         // trackID → cover fetch in flight
+
+	kittyOK     bool              // terminal renders kitty Unicode placeholders
+	kittyProbed bool              // capability query sent
+	tmux        bool              // wrap graphics escapes in a passthrough envelope
+	kittySlots  map[string]string // station → trackID held by its image slot
 
 	player    *player.Player // nil when stopped
 	starting  bool           // startPlayerCmd in flight
@@ -52,13 +73,22 @@ type Model struct {
 // goroutine lives for the whole process (killed at exit); no explicit
 // cancellation is needed.
 func New(station, mpvPath string) Model {
+	stations := meta.Stations[:]
+	if !slices.Contains(stations, station) {
+		stations = append(stations[:len(stations):len(stations)], station)
+	}
 	return Model{
-		station: station,
-		mpvPath: mpvPath,
-		metaCh:  (&meta.Client{}).Subscribe(context.Background()),
-		now:     map[string]nowPlaying{},
-		history: map[string][]meta.Track{},
-		volume:  100,
+		station:    station,
+		stations:   stations,
+		mpvPath:    mpvPath,
+		metaCh:     (&meta.Client{}).Subscribe(context.Background()),
+		now:        map[string]nowPlaying{},
+		history:    map[string][]meta.Track{},
+		artCache:   map[string]art.Cover{},
+		artBusy:    map[string]bool{},
+		kittySlots: map[string]string{},
+		tmux:       insideTmux(),
+		volume:     100,
 		spin: spinner.New(
 			spinner.WithSpinner(spinner.Dot),
 			spinner.WithStyle(lipgloss.NewStyle().Foreground(mint)),
@@ -79,10 +109,26 @@ func (m Model) Cleanup() {
 type (
 	metaMsg          meta.Msg
 	tickMsg          time.Time
+	listenersMsg     map[string]int
+	listenersTickMsg time.Time
+	artMsg           struct {
+		station string
+		trackID string
+		cover   art.Cover
+	}
 	playerStartedMsg struct{ p *player.Player }
 	playerErrMsg     struct{ err error }
 	playerExitedMsg  struct{ err error }
 )
+
+// insideTmux reports whether graphics escapes must be wrapped in a tmux
+// passthrough envelope.
+func insideTmux() bool {
+	term := os.Getenv("TERM")
+	return os.Getenv("TMUX") != "" ||
+		strings.HasPrefix(term, "tmux") ||
+		strings.HasPrefix(term, "screen")
+}
 
 // waitForMeta delivers the next SSE message; re-armed on every metaMsg.
 func waitForMeta(ch <-chan meta.Msg) tea.Cmd {
@@ -97,6 +143,49 @@ func waitForMeta(ch <-chan meta.Msg) tea.Cmd {
 
 func tickCmd() tea.Cmd {
 	return tea.Tick(time.Second, func(t time.Time) tea.Msg { return tickMsg(t) })
+}
+
+// fetchListenersCmd polls the Icecast status endpoint once. Failures keep
+// the previous counts; the next tick retries.
+func fetchListenersCmd() tea.Cmd {
+	return func() tea.Msg {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		counts, err := meta.FetchListeners(ctx, "")
+		if err != nil {
+			return listenersMsg(nil)
+		}
+		return listenersMsg(counts)
+	}
+}
+
+func listenersTickCmd() tea.Cmd {
+	return tea.Tick(listenersInterval, func(t time.Time) tea.Msg { return listenersTickMsg(t) })
+}
+
+// requestArt starts one cover fetch for a station's current track,
+// deduplicated via artBusy/artCache. Only displayed stations fetch.
+func (m Model) requestArt(t meta.Track) tea.Cmd {
+	if !slices.Contains(m.stations, t.Station) {
+		return nil
+	}
+	if _, done := m.artCache[t.TrackID]; done || m.artBusy[t.TrackID] {
+		return nil
+	}
+	m.artBusy[t.TrackID] = true
+	return fetchArtCmd(t.Station, t.TrackID)
+}
+
+func fetchArtCmd(station, trackID string) tea.Cmd {
+	return func() tea.Msg {
+		ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+		defer cancel()
+		cover, err := art.Fetch(ctx, trackID)
+		if err != nil {
+			return artMsg{station: station, trackID: trackID} // zero cover → placeholder, no refetch
+		}
+		return artMsg{station: station, trackID: trackID, cover: cover}
+	}
 }
 
 func (m Model) startPlayerCmd() tea.Cmd {
@@ -128,9 +217,46 @@ func playerCmd(fn func() error) tea.Cmd {
 	}
 }
 
+// probeKitty sends the graphics-capability query once. Inside tmux the
+// response is not reliably routed back to the pane, so outer-terminal env
+// hints (kitty and ghostty both implement Unicode placeholders) enable the
+// protocol directly; the probe response handles the direct case.
+func (m *Model) probeKitty() {
+	m.kittyProbed = true
+	if m.tmux && (os.Getenv("KITTY_WINDOW_ID") != "" || os.Getenv("GHOSTTY_RESOURCES_DIR") != "") {
+		m.enableKitty()
+	}
+	_ = art.Query(os.Stdout, kittyProbeID, m.tmux)
+}
+
+// enableKitty switches covers to kitty graphics and transmits every cover
+// already cached for an on-air track.
+func (m *Model) enableKitty() {
+	m.kittyOK = true
+	for i, s := range m.stations {
+		np, ok := m.now[s]
+		if !ok {
+			continue
+		}
+		if cover, ok := m.artCache[np.track.TrackID]; ok && cover.PNG != nil {
+			m.transmitCover(i, s, np.track.TrackID, cover.PNG)
+		}
+	}
+}
+
+// transmitCover pushes a cover into a station's kitty image slot. Runs on
+// the update goroutine — bubbletea renders frames on the same goroutine,
+// so the escape bytes never interleave with a frame.
+func (m *Model) transmitCover(idx int, station, trackID string, png []byte) {
+	if err := art.Transmit(os.Stdout, idx+1, png, m.tmux); err != nil {
+		return
+	}
+	m.kittySlots[station] = trackID
+}
+
 // Init implements tea.Model.
 func (m Model) Init() tea.Cmd {
-	return tea.Batch(waitForMeta(m.metaCh), tickCmd(), m.spin.Tick)
+	return tea.Batch(waitForMeta(m.metaCh), tickCmd(), fetchListenersCmd(), m.spin.Tick)
 }
 
 // Update implements tea.Model.
@@ -139,6 +265,15 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		m.width, m.height = msg.Width, msg.Height
 		m.help.SetWidth(msg.Width)
+		if !m.kittyProbed {
+			(&m).probeKitty()
+		}
+		return m, nil
+
+	case uv.KittyGraphicsEvent:
+		if !m.kittyOK && msg.Options.ID == kittyProbeID && strings.HasPrefix(string(msg.Payload), "OK") {
+			(&m).enableKitty()
+		}
 		return m, nil
 
 	case tea.KeyPressMsg:
@@ -150,6 +285,27 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tickMsg:
 		// Re-render only: drives the elapsed-time display.
 		return m, tickCmd()
+
+	case listenersMsg:
+		if msg != nil {
+			m.listeners = msg
+		}
+		return m, listenersTickCmd()
+
+	case listenersTickMsg:
+		return m, fetchListenersCmd()
+
+	case artMsg:
+		delete(m.artBusy, msg.trackID)
+		m.artCache[msg.trackID] = msg.cover
+		if m.kittyOK && msg.cover.PNG != nil {
+			if np, ok := m.now[msg.station]; ok && np.track.TrackID == msg.trackID {
+				if idx := slices.Index(m.stations, msg.station); idx >= 0 {
+					(&m).transmitCover(idx, msg.station, msg.trackID, msg.cover.PNG)
+				}
+			}
+		}
+		return m, nil
 
 	case playerStartedMsg:
 		m.starting = false
@@ -212,6 +368,13 @@ func (m Model) handleMeta(msg meta.Msg) (tea.Model, tea.Cmd) {
 				}
 				m.history[t.Station] = hist
 				m.now[t.Station] = nowPlaying{track: t, since: time.Now(), sinceKnown: true}
+				// The replaced track's cover can never be shown again.
+				delete(m.artCache, prev.track.TrackID)
+			default:
+				continue // same track re-announced
+			}
+			if cmd := m.requestArt(t); cmd != nil {
+				cmds = append(cmds, cmd)
 			}
 		}
 		// First track batch starts playback (mirrors poolside's first

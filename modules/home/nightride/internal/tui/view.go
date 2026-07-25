@@ -2,13 +2,14 @@ package tui
 
 import (
 	"fmt"
+	"image/color"
 	"strings"
 	"time"
 
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 
-	"github.com/0xcharly/nix-config/nightride/internal/meta"
+	"github.com/0xcharly/nix-config/nightride/internal/art"
 )
 
 // nightride.fm palette (static/css/main.css): neon purple, magenta, and hot
@@ -19,6 +20,9 @@ var (
 	hotpink = lipgloss.Color("#FD0090")
 	mint    = lipgloss.Color("#3dcd9a")
 	aqua    = lipgloss.Color("#7bfde0")
+	sunset  = lipgloss.Color("#FFD319")
+	ember   = lipgloss.Color("#FF901F")
+	electro = lipgloss.Color("#00B3FE")
 
 	brandStyle   = lipgloss.NewStyle().Foreground(magenta).Bold(true)
 	liveStyle    = lipgloss.NewStyle().Foreground(mint).Bold(true)
@@ -35,13 +39,39 @@ var (
 	errStyle     = lipgloss.NewStyle().Foreground(hotpink)
 )
 
+// stationPalette colors the listeners-bar segments and station bullets,
+// indexed by display order. Hue families alternate so adjacent bar
+// segments stay distinguishable.
+var stationPalette = [...]color.Color{
+	magenta, mint, hotpink, aqua, sunset, purple, ember, electro,
+}
+
+// placeholderArt stands in while a cover is loading or none exists.
+var placeholderArt = func() []string {
+	lines := make([]string, art.Rows)
+	for i := range lines {
+		row := []rune(strings.Repeat("░", art.Cols))
+		if i == art.Rows/2 {
+			row[art.Cols/2] = '♪'
+		}
+		lines[i] = frameStyle.Render(string(row))
+	}
+	return lines
+}()
+
 const (
 	volumeBarCells = 10
 	historyLimit   = 10
+	defaultWidth   = 80
 )
 
 // View implements tea.Model.
 func (m Model) View() tea.View {
+	width := m.width
+	if width <= 0 {
+		width = defaultWidth
+	}
+
 	var b strings.Builder
 
 	// Header.
@@ -51,23 +81,14 @@ func (m Model) View() tea.View {
 	} else {
 		b.WriteString("  " + offlineStyle.Render("○ OFFLINE"))
 	}
-	b.WriteString("\n" + m.stationStrip() + "\n\n")
+	if m.listeners != nil {
+		b.WriteString(dimStyle.Render(fmt.Sprintf("   %d listening", m.totalListeners())))
+	}
+	b.WriteString("\n" + m.listenersBar(width) + "\n\n")
 
-	// Now playing, in a neon-framed window.
-	if np, ok := m.now[m.station]; ok {
-		lines := []string{
-			artistStyle.Render(np.track.Artist),
-			np.track.Title,
-		}
-		// Snapshot entries have an unknowable start; no elapsed line.
-		if np.sinceKnown {
-			if elapsed := time.Since(np.since); elapsed >= 0 {
-				lines = append(lines, elapsedStyle.Render(formatElapsed(elapsed)))
-			}
-		}
-		b.WriteString(window("NOW PLAYING", lines) + "\n\n")
-	} else {
-		b.WriteString(m.spin.View() + " tuning…\n\n")
+	// Stations, laid out vertically: cover, station, track, listeners.
+	for i, s := range m.stations {
+		b.WriteString(m.stationCard(i, s) + "\n\n")
 	}
 
 	// Player line.
@@ -95,52 +116,91 @@ func (m Model) View() tea.View {
 	return v
 }
 
-// stationStrip renders the cycle list with the tuned station highlighted; a
-// custom -station outside the cycle is appended.
-func (m Model) stationStrip() string {
-	parts := make([]string, 0, len(meta.Stations)+1)
-	tunedInCycle := false
-	for _, s := range meta.Stations {
-		if s == m.station {
-			tunedInCycle = true
-			parts = append(parts, tunedStyle.Render(s))
-		} else {
-			parts = append(parts, dimStyle.Render(s))
-		}
+// totalListeners sums the poll counts over the displayed stations.
+func (m Model) totalListeners() int {
+	total := 0
+	for _, s := range m.stations {
+		total += m.listeners[s]
 	}
-	if !tunedInCycle {
-		parts = append(parts, tunedStyle.Render(m.station))
-	}
-	return strings.Join(parts, " ")
+	return total
 }
 
-// window renders a square frame with a pinstriped title bar and a centered
-// label.
-func window(title string, lines []string) string {
-	labelW := lipgloss.Width(title) + 2 // spaces around the label
-	inner := labelW + 8                 // minimum room for the pinstripes
-	for _, l := range lines {
-		if w := lipgloss.Width(l); w > inner {
-			inner = w
+// listenersBar renders one full-width segment per displayed station, sized
+// by its share of the total listener count. Cumulative rounding keeps the
+// segment widths summing exactly to width.
+func (m Model) listenersBar(width int) string {
+	total := m.totalListeners()
+	if total == 0 {
+		return dimStyle.Render(strings.Repeat("░", width))
+	}
+	var b strings.Builder
+	acc, prev := 0, 0
+	for i, s := range m.stations {
+		acc += m.listeners[s]
+		edge := acc * width / total
+		if seg := edge - prev; seg > 0 {
+			b.WriteString(lipgloss.NewStyle().
+				Foreground(stationPalette[i%len(stationPalette)]).
+				Render(strings.Repeat("█", seg)))
+		}
+		prev = edge
+	}
+	return b.String()
+}
+
+// stationCard renders one station entry: the cover (or placeholder) beside
+// the station name, track title, artist, and listener count. The tuned
+// station is highlighted and shows the track's elapsed time when known.
+func (m Model) stationCard(idx int, station string) string {
+	np, ok := m.now[station]
+
+	cover := placeholderArt
+	if ok {
+		switch {
+		case m.kittyOK:
+			// Placeholder cells are drawn only once the slot holds this
+			// track's cover; half-blocks are never mixed in.
+			if m.kittySlots[station] == np.track.TrackID {
+				cover = art.Placeholder(idx + 1)
+			}
+		default:
+			if c := m.artCache[np.track.TrackID]; c.Cells != nil {
+				cover = c.Cells
+			}
 		}
 	}
 
-	leftW := (inner - labelW) / 2
-	rightW := inner - labelW - leftW
-	hbar := strings.Repeat("─", inner+2)
-
-	var b strings.Builder
-	b.WriteString(frameStyle.Render("┌"+hbar+"┐") + "\n")
-	b.WriteString(frameStyle.Render("│ "+strings.Repeat("─", leftW)) +
-		" " + titleStyle.Render(title) + " " +
-		frameStyle.Render(strings.Repeat("─", rightW)+" │") + "\n")
-	b.WriteString(frameStyle.Render("├"+hbar+"┤") + "\n")
-	for _, l := range lines {
-		pad := strings.Repeat(" ", inner-lipgloss.Width(l))
-		b.WriteString(frameStyle.Render("│ ") + l + pad + frameStyle.Render(" │") + "\n")
+	var name string
+	if station == m.station {
+		name = tunedStyle.Render("▶ " + station)
+		if ok && np.sinceKnown {
+			if elapsed := time.Since(np.since); elapsed >= 0 {
+				name += elapsedStyle.Render("  " + formatElapsed(elapsed))
+			}
+		}
+	} else {
+		name = dimStyle.Render("  " + station)
 	}
-	b.WriteString(frameStyle.Render("└" + hbar + "┘"))
-	return b.String()
+
+	title, artist := m.spin.View()+dimStyle.Render(" tuning…"), ""
+	if ok {
+		if station == m.station {
+			title = titleStyle.Render(np.track.Title)
+			artist = artistStyle.Render(np.track.Artist)
+		} else {
+			title = np.track.Title
+			artist = dimStyle.Render(np.track.Artist)
+		}
+	}
+
+	bullet := lipgloss.NewStyle().Foreground(stationPalette[idx%len(stationPalette)]).Render("●")
+	listens := bullet + dimStyle.Render(" …")
+	if m.listeners != nil {
+		listens = bullet + fmt.Sprintf(" %d listening", m.listeners[station])
+	}
+
+	text := name + "\n  " + title + "\n  " + artist + "\n  " + listens
+	return lipgloss.JoinHorizontal(lipgloss.Top, strings.Join(cover, "\n"), "  ", text)
 }
 
 func (m Model) playerLine() string {
