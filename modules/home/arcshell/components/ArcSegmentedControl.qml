@@ -76,7 +76,7 @@ Rectangle {
 
         anchors.fill: parent
         anchors.margins: root.theme.selectorPadding
-        spacing: 0
+        spacing: root.theme.spacing
 
         Repeater {
             id: segments
@@ -96,8 +96,31 @@ Rectangle {
                 implicitWidth: content.implicitWidth + root.theme.segmentPadding.left + root.theme.segmentPadding.right
                 implicitHeight: content.implicitHeight + root.theme.segmentPadding.top + root.theme.segmentPadding.bottom
 
-                MouseArea {
+                // Hover: a hoverLayer surface stacked over the segment
+                // (alphas combine with the container), with the exact
+                // geometry the selector would have on this segment — the
+                // layout already insets segments by selectorPadding. The
+                // selected segment carries the selector pill, so hover is
+                // suppressed there.
+                Rectangle {
                     anchors.fill: parent
+                    radius: root.theme.selectorShape
+                    color: root.theme.hoverLayer
+                    opacity: mouse.containsMouse && !segment.selected ? 1 : 0
+
+                    Behavior on opacity {
+                        AnimatedNumber {
+                            duration: root.theme.animation.duration
+                            easing.bezierCurve: root.theme.animation.curveIn
+                        }
+                    }
+                }
+
+                MouseArea {
+                    id: mouse
+
+                    anchors.fill: parent
+                    hoverEnabled: true
                     cursorShape: Qt.PointingHandCursor
                     onClicked: root.activated(segment.index)
                 }
@@ -109,12 +132,13 @@ Rectangle {
                     anchors.centerIn: parent
                     spacing: root.theme.segmentSpacing
 
-                    MaterialIcon {
+                    AnimatedMaterialIcon {
                         Layout.alignment: Qt.AlignVCenter
-                        text: segment.modelData.icon
+                        icon: segment.modelData.icon
                         style: root.theme.iconTypography
                         fill: segment.selected ? 1 : 0
                         color: segment.selected ? root.theme.selected.content : root.theme.colors.content
+                        animation: root.theme.animation
                     }
 
                     ArcText {

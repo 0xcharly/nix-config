@@ -27,10 +27,16 @@ JsonObject {
         surface: Config.tokens.system.colors.surface_backdrop
         content: Config.tokens.system.colors.on_surface
     }
+    // Hover: backdrop layer over an unselected segment; stacks on the
+    // container surface the same way the selector does.
+    property color hoverLayer: Config.tokens.system.colors.surface_backdrop
     // Selector slide: same default as the workspaces indicator
     // (feature/Workspaces.qml `animation: AnimationValues {}` — standard
     // curve, medium duration).
     property AnimationValues animation: AnimationValues {}
+    // Gap between segments; keeps the selector pill visually separated
+    // from a hovered neighbor's layer.
+    property int spacing: Config.tokens.system.measurements.extraSmall
 
     // Per-segment content (icon + label row).
     property PaddingValues segmentPadding: PaddingValues {

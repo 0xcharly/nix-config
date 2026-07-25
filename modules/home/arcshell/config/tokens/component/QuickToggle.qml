@@ -13,6 +13,11 @@ JsonObject {
         right: Config.tokens.system.measurements.small
         top: Config.tokens.system.measurements.small
     }
+    // Hover: translucent layer stacked on the card surface so the
+    // alphas combine (same trick as the segmented control's selector).
+    property color hoverLayer: Config.tokens.system.colors.surface_backdrop
+    // Inset of the hover layer within the card.
+    property int hoverLayerPadding: Config.tokens.system.measurements.extraSmall
 
     property color trackColorRest: Config.tokens.system.colors.surface_control_track_rest
     property color trackColorChecked: Config.tokens.system.colors.surface_control_track_checked

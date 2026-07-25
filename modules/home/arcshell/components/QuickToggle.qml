@@ -11,7 +11,7 @@ Rectangle {
     property string icon
     property string text
     property bool enabled: false
-    property bool hovered: false
+    property bool hovered: mouseArea.containsMouse
     property bool pressed: false
     property ComponentTokens.QuickToggle theme: Config.theme.defaults.quickToggles
 
@@ -23,6 +23,24 @@ Rectangle {
 
     implicitWidth: implicitHeight * 1.7
     implicitHeight: layout.implicitHeight + root.theme.padding.top + root.theme.padding.bottom
+
+    // Hover: a hoverLayer surface stacked on the card (the alphas
+    // combine into a brighter tone), slightly inset per
+    // hoverLayerPadding.
+    Rectangle {
+        anchors.fill: parent
+        anchors.margins: root.theme.hoverLayerPadding
+        radius: root.radius - root.theme.hoverLayerPadding
+        color: root.theme.hoverLayer
+        opacity: root.hovered ? 1 : 0
+
+        Behavior on opacity {
+            AnimatedNumber {
+                duration: root.theme.animation.duration
+                easing.bezierCurve: root.theme.animation.curveIn
+            }
+        }
+    }
 
     RowLayout {
         id: layout
@@ -44,14 +62,15 @@ Rectangle {
             radius: Config.tokens.system.shapes.cornerFull
             color: root.enabled ? root.theme.iconChecked.surface : root.theme.icon.colors.surface
 
-            MaterialIcon {
+            AnimatedMaterialIcon {
                 id: icon
 
                 anchors.centerIn: parent
 
-                text: root.icon
+                icon: root.icon
                 style: root.theme.icon.typography
                 color: root.enabled ? root.theme.iconChecked.content : root.theme.icon.colors.content
+                animation: root.theme.animation
             }
         }
 
@@ -66,7 +85,10 @@ Rectangle {
     }
 
     MouseArea {
+        id: mouseArea
+
         anchors.fill: parent
+        hoverEnabled: true
         cursorShape: Qt.PointingHandCursor
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         onClicked: mouse => mouse.button === Qt.RightButton ? root.rightClicked() : root.leftClicked()
