@@ -161,13 +161,29 @@ Item {
                 Layout.fillWidth: true
                 spacing: root.theme.horizontalSpacing
 
-                ArcText {
+                // appName (+ optional Chrome-PWA origin) stacked over the summary; both
+                // single-line, eliding right — the timestamp/chevron keep intrinsic width.
+                ColumnLayout {
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignVCenter
-                    elide: Text.ElideRight
-                    color: root.theme.titleContentColor
-                    style: root.theme.titleTypography
-                    text: root.modelData.summary
+                    spacing: 0
+
+                    ArcText {
+                        Layout.fillWidth: true
+                        visible: text !== ""
+                        elide: Text.ElideRight
+                        color: root.theme.appNameContentColor
+                        style: root.theme.appNameTypography
+                        text: [root.modelData.appName, root.modelData.bodyUrl].filter(s => s !== "").join(" · ")
+                    }
+
+                    ArcText {
+                        Layout.fillWidth: true
+                        elide: Text.ElideRight
+                        color: root.theme.titleContentColor
+                        style: root.theme.titleTypography
+                        text: root.modelData.summary
+                    }
                 }
 
                 // Relative arrival time; self-refreshing (wrapper timer).

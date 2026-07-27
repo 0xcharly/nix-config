@@ -26,16 +26,27 @@ QtObject {
 
     property Notification notification
     property string notificationId
+    property string appName
     property string summary
     property string body
     property int urgency: NotificationUrgency.Normal
 
+    // Chrome PWA notifications prefix the body with the site origin as a
+    // hyperlink: `<a href="…">mail.proton.me</a> actual text`. Peel it off
+    // so the card can surface it next to the app name. The anchor text must
+    // look like a hostname/URL so a body merely *starting* with a regular
+    // link is left alone.
+    readonly property var bodyUrlPrefix: /^\s*<a\b[^>]*>\s*((?:https?:\/\/)?[\w-]+(?:\.[\w-]+)+(?:\/\S*)?)\s*<\/a>/.exec(body)
+    readonly property string bodyUrl: bodyUrlPrefix?.[1] ?? ""
+    // Body with the URL prefix removed; always whitespace-trimmed.
+    readonly property string bodyContent: (bodyUrlPrefix ? body.slice(bodyUrlPrefix[0].length) : body).trim()
+
     // True when the body contains fdo-spec/HTML markup or entities.
-    readonly property bool bodyIsHtml: /<\/?(?:b|strong|i|em|u|s|a|img|br|p|div|span|font|h[1-6]|ul|ol|li|pre|code|tt|blockquote)\b[^>]*\/?>|&(?:[a-zA-Z]+|#\d+|#x[0-9a-fA-F]+);/.test(body)
+    readonly property bool bodyIsHtml: /<\/?(?:b|strong|i|em|u|s|a|img|br|p|div|span|font|h[1-6]|ul|ol|li|pre|code|tt|blockquote)\b[^>]*\/?>|&(?:[a-zA-Z]+|#\d+|#x[0-9a-fA-F]+);/.test(bodyContent)
     // Conservative Markdown detection: only unambiguous constructs.
-    readonly property bool bodyIsMarkdown: !bodyIsHtml && /\*\*[^*\n]+\*\*|__[^_\n]+__|`[^`\n]+`|\[[^\]\n]+\]\([^)\s]+\)|^#{1,6}\s+\S|^[-*]\s+\S/m.test(body)
+    readonly property bool bodyIsMarkdown: !bodyIsHtml && /\*\*[^*\n]+\*\*|__[^_\n]+__|`[^`\n]+`|\[[^\]\n]+\]\([^)\s]+\)|^#{1,6}\s+\S|^[-*]\s+\S/m.test(bodyContent)
     readonly property int bodyFormat: bodyIsHtml || bodyIsMarkdown ? Text.StyledText : Text.PlainText
-    readonly property string bodyText: bodyIsMarkdown ? markdownToStyledText(body) : body
+    readonly property string bodyText: bodyIsMarkdown ? markdownToStyledText(bodyContent) : bodyContent
 
     readonly property Connections conn: Connections {
         function onClosed(): void {
@@ -44,6 +55,10 @@ QtObject {
 
         function onSummaryChanged(): void {
             root.summary = root.notification.summary;
+        }
+
+        function onAppNameChanged(): void {
+            root.appName = root.notification.appName;
         }
 
         function onBodyChanged(): void {
@@ -124,6 +139,7 @@ QtObject {
 
         notificationId = notification.id;
         summary = notification.summary;
+        appName = notification.appName;
         body = notification.body;
         urgency = notification.urgency;
     }

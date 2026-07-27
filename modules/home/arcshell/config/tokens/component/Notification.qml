@@ -30,6 +30,9 @@ JsonObject {
     property TypographyValues timestampTypography: Config.tokens.system.typography.mediumLabel
     property color timestampContentColor: Config.tokens.system.colors.on_surface_variant
 
+    property TypographyValues appNameTypography: Config.tokens.system.typography.mediumLabel
+    property color appNameContentColor: Config.tokens.system.colors.on_surface_variant
+
     property int bodyMaxLines: 2
     property color bodyLinkColor: Config.tokens.system.colors.accent
 
