@@ -57,6 +57,7 @@ JsonObject {
         property ComponentTokens.IdleInhibitor idleInhibitor: ComponentTokens.IdleInhibitor {}
         property PowerProfileSwitch powerProfile: PowerProfileSwitch {}
         property Vpn vpn: Vpn {}
+        property ExitNode exitNode: ExitNode {}
     }
 
     component DynamicIsland: JsonObject {
@@ -124,6 +125,13 @@ JsonObject {
         // VpnCheck singleton never starts polling am.i.mullvad.net on
         // hosts without the module.
         property bool enable: false
+    }
+
+    component ExitNode: JsonObject {
+        // Capability gate, on by default: the home-manager module forces
+        // this false when programs.arcshell.tailscale.enable is off (no
+        // tailscale binary on the wrapper's PATH).
+        property bool enable: true
     }
 
     component ComponentDefaults: JsonObject {

@@ -9,7 +9,9 @@
           enable = mkEnableOption "Enable Desktop shell";
           package = mkOption {
             type = types.package;
-            default = perSystem.config.packages.arcshell;
+            default = perSystem.config.packages.arcshell.override {
+              withTailscale = homeManager.config.programs.arcshell.tailscale.enable;
+            };
             description = "The arcshell package to install";
           };
           systemd = {
@@ -33,6 +35,9 @@
                 "QT_QPA_PLATFORMTHEME=gtk3"
               ];
             };
+          };
+          tailscale = {
+            enable = mkEnableOption "tailscale integration (Control Center exit-node selector)";
           };
           settings = mkOption {
             type = types.attrsOf types.anything;
@@ -81,6 +86,11 @@
             };
           };
 
+          # No tailscale on PATH: hard-disable the exit-node widget regardless
+          # of what profiles or user settings ask for.
+          programs.arcshell.settings = lib.mkIf (!cfg.tailscale.enable) {
+            theme.hud.controlCenter.exitNode.enable = lib.mkForce false;
+          };
           xdg.configFile =
             let
               mkConfig =

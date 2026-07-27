@@ -14,6 +14,7 @@
   networkmanager,
   systemd,
   tailscale,
+  withTailscale ? true,
   uwsm,
   nerd-fonts,
   qt6,
@@ -46,9 +47,9 @@ let
     libnotify
     networkmanager
     systemd
-    tailscale
     uwsm
-  ];
+  ]
+  ++ lib.optional withTailscale tailscale;
 
   # A bitmap inspired, open-source, variable, monospace, geometric typeface.
   doto = stdenvNoCC.mkDerivation {

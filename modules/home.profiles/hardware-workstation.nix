@@ -43,6 +43,9 @@
       services-usb-auto-mount
     ];
 
-    config.node.wayland.arcshell.modules.powerProfile = true;
+    config = {
+      node.wayland.arcshell.modules.powerProfile = true;
+      programs.arcshell.tailscale.enable = true;
+    };
   };
 }

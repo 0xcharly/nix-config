@@ -37,7 +37,7 @@ Rectangle {
             // active (not just visible): an inactive Loader never
             // instantiates the widget, so the VpnCheck singleton never
             // starts polling while the module is disabled.
-            active: Config.theme.hud.controlCenter.vpn.enable
+            active: Config.theme.hud.controlCenter.vpn.enable && Config.theme.hud.controlCenter.exitNode.enable
             visible: active
 
             Layout.fillWidth: true
