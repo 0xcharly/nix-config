@@ -14,27 +14,27 @@ MaterialIcon {
     text: {
         const charging = [UPowerDeviceState.Charging, UPowerDeviceState.FullyCharged, UPowerDeviceState.PendingCharge].includes(UPower.displayDevice.state);
         if (charging) {
-          if (UPower.displayDevice.percentage === 1) {
-              return "battery_charging_full";
-          }
-          const level = {
-            0: 20,
-            1: 20,
-            2: 20,
-            3: 30,
-            4: 30,
-            5: 50,
-            6: 60,
-            7: 60,
-            8: 80,
-            9: 90,
-          };
-          return `battery_charging_${level[Math.floor(UPower.displayDevice.percentage * 10)]}`;
+            if (UPower.displayDevice.percentage === 1) {
+                return "battery_charging_full";
+            }
+            const level = {
+                0: 20,
+                1: 20,
+                2: 20,
+                3: 30,
+                4: 30,
+                5: 50,
+                6: 60,
+                7: 60,
+                8: 80,
+                9: 90
+            };
+            return `battery_charging_${level[Math.floor(UPower.displayDevice.percentage * 10)]}`;
         } else {
-          if (UPower.displayDevice.percentage === 1) {
-              return "battery_full";
-          }
-          return `battery_${Math.floor(UPower.displayDevice.percentage * 7)}_bar`;
+            if (UPower.displayDevice.percentage === 1) {
+                return "battery_full";
+            }
+            return `battery_${Math.floor(UPower.displayDevice.percentage * 7)}_bar`;
         }
     }
     color: {

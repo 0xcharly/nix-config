@@ -26,7 +26,10 @@ Singleton {
         for (const e of root.entries) {
             const s = root.score(e.name, q);
             if (s > 0)
-                scored.push({ entry: e, score: s });
+                scored.push({
+                    entry: e,
+                    score: s
+                });
         }
         scored.sort((a, b) => (b.score - a.score) || (a.entry.name.length - b.entry.name.length) || a.entry.name.localeCompare(b.entry.name));
         return scored.slice(0, root.maxResults).map(x => x.entry);
@@ -73,7 +76,10 @@ Singleton {
                     const name = line.slice(line.lastIndexOf("/") + 1);
                     if (!seen.has(name)) {
                         seen.add(name);
-                        out.push({ binary: line, name });
+                        out.push({
+                            binary: line,
+                            name
+                        });
                     }
                 }
                 root.entries = out;

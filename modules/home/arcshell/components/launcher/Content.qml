@@ -175,7 +175,8 @@ Rectangle {
     Keys.onEscapePressed: root.dismiss()
 
     // Focus the text field whenever the launcher opens.
-    Component.onCompleted: if (UiState.showLauncher) input.forceActiveFocus()
+    Component.onCompleted: if (UiState.showLauncher)
+        input.forceActiveFocus()
     Connections {
         target: UiState
 

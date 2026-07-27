@@ -14,7 +14,12 @@ Singleton {
         // `shellCommand`, not `command`: app rows are desktop entries and
         // already carry `.command`, which launchSelected() must not confuse
         // with this mode's rows.
-        return [{ shellCommand: cmd, name: cmd }];
+        return [
+            {
+                shellCommand: cmd,
+                name: cmd
+            }
+        ];
     }
 
     function run(item: var): void {

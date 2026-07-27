@@ -35,10 +35,9 @@ Singleton {
         // Suggested node ranks first: the first row is preselected, so
         // Enter right after entering the mode accepts the suggestion.
         // Then the currently selected node, then alphabetical.
-        const nodes = root.entries
-            .map(e => Object.assign({}, e, { suggested: e.hostname === root.suggested }))
-            .filter(e => q.length === 0 || e.name.toLowerCase().includes(q))
-            .sort((a, b) => (b.suggested - a.suggested) || (b.selected - a.selected) || a.name.localeCompare(b.name));
+        const nodes = root.entries.map(e => Object.assign({}, e, {
+                suggested: e.hostname === root.suggested
+            })).filter(e => q.length === 0 || e.name.toLowerCase().includes(q)).sort((a, b) => (b.suggested - a.suggested) || (b.selected - a.selected) || a.name.localeCompare(b.name));
         // The CLI list collapses Mullvad nodes to the best one per city, so
         // the latency-based suggestion can name a node absent from the list
         // (e.g. suggest says jp-tyo-wg-002 while the list shows

@@ -136,7 +136,10 @@ Singleton {
                     continue;
                 const m = line.match(/#\s(\S+)\sE[\d.]+\s(.+)$/);
                 if (m)
-                    out.push({ glyph: m[1], name: m[2].toLowerCase() });
+                    out.push({
+                        glyph: m[1],
+                        name: m[2].toLowerCase()
+                    });
             }
             root.emoji = out;
         }
@@ -153,7 +156,10 @@ Singleton {
                 // and keep only letters, numbers, punctuation, symbols.
                 if (f.length < 3 || f[1].startsWith("<") || !"LNPS".includes(f[2][0]))
                     continue;
-                out.push({ glyph: String.fromCodePoint(parseInt(f[0], 16)), name: f[1].toLowerCase() });
+                out.push({
+                    glyph: String.fromCodePoint(parseInt(f[0], 16)),
+                    name: f[1].toLowerCase()
+                });
             }
             root.characters = out;
         }

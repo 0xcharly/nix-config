@@ -61,6 +61,7 @@
             projectRootFile = "flake.lock";
             programs = {
               nixfmt.enable = true;
+              qmlformat.enable = true;
               shfmt.enable = true;
               stylua.enable = true;
             };

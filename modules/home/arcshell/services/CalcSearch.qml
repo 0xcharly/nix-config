@@ -34,7 +34,9 @@ Singleton {
         }
         if (q !== root.evaluated && q !== root.pending) {
             root.pending = q;
-            const proc = qalcProcess.createObject(root, { expression: q });
+            const proc = qalcProcess.createObject(root, {
+                expression: q
+            });
             proc.command = [qalc, "-t", q];
             proc.running = true;
         }
@@ -69,7 +71,12 @@ Singleton {
                         // qalc -t output is single-line in practice; the
                         // join guards exotic multiline answers.
                         const out = text.trim().split("\n").join("; ");
-                        root.results = out.length === 0 ? [] : [{ result: out, name: `${proc.expression} = ${out}` }];
+                        root.results = out.length === 0 ? [] : [
+                            {
+                                result: out,
+                                name: `${proc.expression} = ${out}`
+                            }
+                        ];
                     }
                     proc.destroy();
                 }

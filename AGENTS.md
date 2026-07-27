@@ -30,8 +30,8 @@ The commands below are devenv scripts, available on `PATH` inside the dev
 shell. direnv activates it automatically (`.envrc` runs `use devenv`); without
 direnv, run them through `devenv shell -- <command>`.
 
-- **Format:** `format` — treefmt wrapper running nixfmt, shfmt, and stylua.
-  Run it after editing Nix, shell, or Lua files.
+- **Format:** `format` — treefmt wrapper running nixfmt, qmlformat, shfmt,
+  and stylua. Run it after editing Nix, QML, shell, or Lua files.
 - **Validate:** `check` — `nix flake check --show-trace`.
 - **Build (current host):** `build` — `nixos-rebuild build --flake .` plus an
   `nvd` diff against the running system. Builds only; never switches.

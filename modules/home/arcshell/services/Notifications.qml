@@ -17,7 +17,7 @@ Singleton {
     property alias doNotDisturb: props.doNotDisturb
 
     // Emitted after an incoming notification has been prepended to `list`.
-    signal received()
+    signal received
 
     PersistentProperties {
         id: props

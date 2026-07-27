@@ -31,8 +31,7 @@ Canvas {
         // Drawn vertical extent: triHeight + sqrt(3)*o (the diagonal edges'
         // overshoots rise above the top edge / sink below the apex) + 2r
         // (caps). Center that extent, then offset to the top edge's y.
-        const yTop = (height - (triHeight + Math.sqrt(3) * o + 2 * r)) / 2
-                   + (Math.sqrt(3) / 2) * o + r;
+        const yTop = (height - (triHeight + Math.sqrt(3) * o + 2 * r)) / 2 + (Math.sqrt(3) / 2) * o + r;
         const cx = width / 2;
         const a = Qt.point(cx - side / 2, yTop);   // top-left corner
         const b = Qt.point(cx + side / 2, yTop);   // top-right corner
@@ -77,10 +76,20 @@ Canvas {
     onThemeChanged: requestPaint()
     Connections {
         target: root.theme
-        function onSizeChanged() { root.requestPaint(); }
-        function onThicknessChanged() { root.requestPaint(); }
-        function onOvershootChanged() { root.requestPaint(); }
-        function onFadeChanged() { root.requestPaint(); }
-        function onColorChanged() { root.requestPaint(); }
+        function onSizeChanged() {
+            root.requestPaint();
+        }
+        function onThicknessChanged() {
+            root.requestPaint();
+        }
+        function onOvershootChanged() {
+            root.requestPaint();
+        }
+        function onFadeChanged() {
+            root.requestPaint();
+        }
+        function onColorChanged() {
+            root.requestPaint();
+        }
     }
 }

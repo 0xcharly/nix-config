@@ -21,43 +21,43 @@ MouseArea {
     }
 
     function inBottomLeftHotCorner(panel: Item, x: real, y: real): bool {
-      return y >= root.bar.height - root.bar.bottomWidgets.height && x <= root.bar.width;
+        return y >= root.bar.height - root.bar.bottomWidgets.height && x <= root.bar.width;
     }
 
     function showControlCenterPanel(panel: Item, x: real, y: real): bool {
-      return inBottomLeftHotCorner(panel, x, y) || inControlCenterPanel(panel, x, y);
+        return inBottomLeftHotCorner(panel, x, y) || inControlCenterPanel(panel, x, y);
     }
 
     // Dynamic island
     function withinDynamicIslandPanelWidth(panel: Item, x: real, y: real): bool {
-      const panelX = root.bar.width + panel.x;
-      return x >= panelX - Config.theme.hud.dynamicIsland.shape && x <= panelX + panel.width + Config.theme.hud.dynamicIsland.shape;
+        const panelX = root.bar.width + panel.x;
+        return x >= panelX - Config.theme.hud.dynamicIsland.shape && x <= panelX + panel.width + Config.theme.hud.dynamicIsland.shape;
     }
 
     function inDynamicIslandPanel(panel: Item, x: real, y: real): bool {
-      return y <= panel.height && withinDynamicIslandPanelWidth(panel, x, y);
+        return y <= panel.height && withinDynamicIslandPanelWidth(panel, x, y);
     }
 
     function showDynamicIslandPanel(panel: Item, x: real, y: real): bool {
-      return inDynamicIslandPanel(panel, x, y);
+        return inDynamicIslandPanel(panel, x, y);
     }
 
     // NotificationCenter
     function withinNotificationCenterPanelWidth(panel: Item, x: real, y: real): bool {
-      const panelX = root.bar.width + panel.x;
-      return x >= panelX - Config.theme.hud.notificationCenter.line.overshoot && x <= panelX + panel.width + Config.theme.hud.notificationCenter.line.overshoot;
+        const panelX = root.bar.width + panel.x;
+        return x >= panelX - Config.theme.hud.notificationCenter.line.overshoot && x <= panelX + panel.width + Config.theme.hud.notificationCenter.line.overshoot;
     }
 
     function inNotificationCenterPanel(panel: Item, x: real, y: real): bool {
-      return y <= panel.height && withinNotificationCenterPanelWidth(panel, x, y);
+        return y <= panel.height && withinNotificationCenterPanelWidth(panel, x, y);
     }
 
     function inTopRightHotCorner(panel: Item, x: real, y: real): bool {
-      return y <= Config.theme.hud.border.width + 1 && x >= root.width - Config.theme.hud.notificationCenter.hotCornerSize;
+        return y <= Config.theme.hud.border.width + 1 && x >= root.width - Config.theme.hud.notificationCenter.hotCornerSize;
     }
 
     function showNotificationCenterPanel(panel: Item, x: real, y: real): bool {
-      return inTopRightHotCorner(panel, x, y) || inNotificationCenterPanel(panel, x, y);
+        return inTopRightHotCorner(panel, x, y) || inNotificationCenterPanel(panel, x, y);
     }
 
     anchors.fill: parent

@@ -9,8 +9,6 @@ Singleton {
         if (!adapter)
             return [];
         const q = text.trim().toLowerCase();
-        return adapter.devices.values
-            .filter(d => (d.paired || d.bonded) && (q.length === 0 || d.name.toLowerCase().includes(q)))
-            .sort((a, b) => (b.connected - a.connected) || a.name.localeCompare(b.name));
+        return adapter.devices.values.filter(d => (d.paired || d.bonded) && (q.length === 0 || d.name.toLowerCase().includes(q))).sort((a, b) => (b.connected - a.connected) || a.name.localeCompare(b.name));
     }
 }
