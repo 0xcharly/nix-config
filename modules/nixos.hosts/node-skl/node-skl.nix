@@ -66,9 +66,10 @@
         };
         services.mullvad-exit-node-check = {
           enable = true;
-          killswitch.units = [ "qbittorrent.service" ];
-          # killswitch.mode defaults to "latch"; flip to "gate" for auto-recovery
-          # once confidence is built.
+          killswitch = {
+            units = [ "qbittorrent.service" ];
+            mode = "gate";
+          };
         };
         services.qbittorrent.enable = true;
         services.qui.enable = true;
