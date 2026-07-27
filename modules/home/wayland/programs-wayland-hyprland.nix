@@ -191,6 +191,8 @@
                   desktop, etc.), the RAM contents are lost and the session is gone.
               '';
             };
+
+            deferOnSsh = mkEnableOption "Defer idle suspend while established SSH connections exist";
           };
 
           hibernate = {
@@ -586,6 +588,19 @@
 
                   # Avoid starting multiple screenlock instances
                   lock = "${uwsmGetExe' pkgs.procps "pidof"} ${screenlock} || ${screenlock}";
+
+                  pkill = uwsmGetExe' pkgs.procps "pkill";
+
+                  # Poll established inbound SSH connections (sshd listens on the
+                  # default port 22; Tailscale SSH is not used, so tailnet SSH also
+                  # terminates at sshd:22). Suspend once the last connection closes.
+                  # Killed by the listener's on-resume when local activity returns.
+                  suspend-defer-ssh = pkgs.writeShellScript "hypridle-suspend-defer-ssh" ''
+                    while [ -n "$(${lib.getExe' pkgs.iproute2 "ss"} -Htn state established '( sport = :22 )')" ]; do
+                      ${lib.getExe' pkgs.coreutils "sleep"} 60
+                    done
+                    ${lib.getExe' pkgs.systemd "systemctl"} suspend
+                  '';
                 in
                 {
                   general = {
@@ -613,10 +628,19 @@
                       }
                     ]
                     ++ lib.optionals cfg.suspend.enable [
-                      {
-                        inherit (cfg.suspend) timeout;
-                        on-timeout = "${systemctl} suspend";
-                      }
+                      (
+                        {
+                          inherit (cfg.suspend) timeout;
+                          on-timeout =
+                            if cfg.suspend.deferOnSsh then
+                              config.node.wayland.uwsm-wrapper.wrapper "${suspend-defer-ssh}"
+                            else
+                              "${systemctl} suspend";
+                        }
+                        // lib.optionalAttrs cfg.suspend.deferOnSsh {
+                          on-resume = "${pkill} -f hypridle-suspend-defer-ssh";
+                        }
+                      )
                     ]
                     ++ lib.optionals cfg.hibernate.enable [
                       {

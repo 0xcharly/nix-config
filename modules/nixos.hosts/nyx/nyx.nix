@@ -96,10 +96,14 @@
         networking.interfaces.enp115s0.useDHCP = true;
       };
 
-    users.delay.imports = with self.homeModules; [
-      profile-hardware-workstation
-      profile-ssh-identities-ring0
-      profile-ssh-keys-ring-0-tier
-    ];
+    users.delay = {
+      imports = with self.homeModules; [
+        profile-hardware-workstation
+        profile-ssh-identities-ring0
+        profile-ssh-keys-ring-0-tier
+      ];
+
+      node.wayland.idle.suspend.deferOnSsh = true;
+    };
   };
 }
