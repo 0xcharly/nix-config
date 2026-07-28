@@ -23,6 +23,7 @@
         self.nixosModules.fs-zfs-zpool-root-home
         self.nixosModules.hardware-cpu-amd
         self.nixosModules.hardware-gpu-amd
+        self.nixosModules.hardware-i2c
         self.nixosModules.networking-bluetooth
         self.nixosModules.networking-wireless
         self.nixosModules.nix
