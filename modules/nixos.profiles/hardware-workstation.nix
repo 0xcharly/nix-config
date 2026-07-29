@@ -4,6 +4,7 @@
     imports = with self.nixosModules; [
       colors-console
       environment-man-pages
+      programs-password-managers
       programs-power-management
     ];
 
