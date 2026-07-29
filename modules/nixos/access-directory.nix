@@ -10,7 +10,7 @@
 { self, inputs, ... }:
 {
   flake.nixosModules.access-directory =
-    { lib, ... }:
+    { config, lib, ... }:
     {
       imports = [
         inputs.nix-config-secrets.nixosModules.users-delay
@@ -18,12 +18,14 @@
 
         self.nixosModules.users-ayako
         self.nixosModules.users-delay
-        self.nixosModules.users-root
       ];
 
       # TODO: assign common GIDs for these groups
       users = {
+        mutableUsers = false;
         users = {
+          root.hashedPasswordFile = config.age.secrets."passwd/root".path;
+
           # Login users
           delay = {
             # uid = 2000;
