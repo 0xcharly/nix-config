@@ -14,9 +14,11 @@
     {
       imports = [
         inputs.nix-config-secrets.nixosModules.users-delay
+        inputs.nix-config-secrets.nixosModules.users-root
 
         self.nixosModules.users-ayako
         self.nixosModules.users-delay
+        self.nixosModules.users-root
       ];
 
       # TODO: assign common GIDs for these groups

@@ -14,11 +14,11 @@
           inputs.nix-config-secrets.nixosModules.services-hoopsnake-term-nyx
           inputs.nix-config-secrets.nixosModules.services-tailscale
           inputs.nix-config-secrets.nixosModules.ssh-keys-ring-0-tier
-          inputs.nix-config-secrets.nixosModules.users-delay
 
           self.nixosModules.profile-hardware-workstation
           self.nixosModules.profile-ssh-identities-ring0
 
+          self.nixosModules.access-directory
           self.nixosModules.bootloader-systemd-boot
           self.nixosModules.fs-zfs-common
           self.nixosModules.fs-zfs-system-base
@@ -57,7 +57,6 @@
           self.nixosModules.services-zmk-studio
           self.nixosModules.system-common
           self.nixosModules.system-fonts
-          self.nixosModules.users-delay
         ];
 
         # System config

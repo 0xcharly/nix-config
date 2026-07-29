@@ -1,4 +1,3 @@
-{ self, ... }:
 {
   flake.nixosModules.users-delay =
     {
@@ -8,8 +7,6 @@
       ...
     }:
     {
-      imports = [ self.nixosModules.users-common ];
-
       options.node.users.delay = with lib; {
         ssh = {
           authorizeTailscaleInternalKey =

@@ -13,6 +13,7 @@
         inputs.nix-config-secrets.nixosModules.services-hoopsnake-gate-jp
         inputs.nix-config-secrets.nixosModules.services-tailscale
         inputs.nix-config-secrets.nixosModules.users-delay
+        inputs.nix-config-secrets.nixosModules.users-root
 
         self.nixosModules.profile-hardware-linode
         self.nixosModules.profile-hardware-server
@@ -52,6 +53,7 @@
         self.nixosModules.system-common
         self.nixosModules.system-linode
         self.nixosModules.users-delay
+        self.nixosModules.users-root
       ];
 
       # System config

@@ -11,10 +11,10 @@
         inputs.nix-config-secrets.nixosModules.services-gatus-external-endpoints
         inputs.nix-config-secrets.nixosModules.services-hoopsnake-node-skl
         inputs.nix-config-secrets.nixosModules.services-tailscale
-        inputs.nix-config-secrets.nixosModules.users-delay
 
         self.nixosModules.profile-hardware-server
 
+        self.nixosModules.access-directory
         self.nixosModules.bootloader-systemd-boot
         self.nixosModules.fs-zfs-common
         self.nixosModules.fs-zfs-system
@@ -44,7 +44,6 @@
         self.nixosModules.services-servarr
         self.nixosModules.services-tailscale
         self.nixosModules.system-common
-        self.nixosModules.users-delay
       ];
 
       # System config
