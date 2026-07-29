@@ -261,14 +261,21 @@
             systemd.enable = false;
 
             # Layout plugin.
-            # PR outfoxxed/hy3#317: tab bars render in the wrong orientation on
-            # rotated monitors (regression of upstream #314 introduced in hy3
-            # 76010d9, present in 0.55.0).
-            # TODO(26.11): Drop this override once the PR lands in a hy3 release.
+            # PR outfoxxed/hy3#317 (merged upstream as db28808): tab bars render
+            # in the wrong orientation on rotated monitors (regression of
+            # upstream #314 introduced in hy3 76010d9, present in 0.55.0).
+            # TODO(26.11): Drop this override once the fix lands in a hy3 release.
             plugins = [
               (pkgs.hyprlandPlugins.hy3.overrideAttrs (attrs: {
                 patches = (attrs.patches or [ ]) ++ [
-                  ./hy3/pr-317-tab-bars-rotated-monitors.patch
+                  (pkgs.fetchpatch {
+                    name = "pr-317-tab-bars-rotated-monitors.patch";
+                    url = "https://github.com/outfoxxed/hy3/commit/db288088c0e99cb15e72bc4468a2514bb26631a7.patch";
+                    # The CHANGELOG.md hunk targets a post-release changelog and
+                    # does not apply to the packaged source.
+                    excludes = [ "CHANGELOG.md" ];
+                    hash = "sha256-FX2AphqV84hfgHxsQUuxoSV66m04O/h52BUoF89YN84=";
+                  })
                 ];
               }))
             ];
