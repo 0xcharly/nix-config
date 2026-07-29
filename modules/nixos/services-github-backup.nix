@@ -10,15 +10,20 @@
     let
       inherit (self.lib) facts gatus;
 
-      # PR josegonzalez/python-github-backup#521: GitHub deprecated
-      # /users/{username}/subscriptions (2026-06-30 changelog) and the endpoint
-      # now returns empty responses, breaking the watched-repos step of `--all`
-      # backups. Watched repos for the authenticated user now come from
-      # /user/subscriptions; other users warn and skip.
-      # TODO(26.11): Drop this override once the PR lands in a nixpkgs release.
+      # PR josegonzalez/python-github-backup#521 (merged upstream as 3ecae56):
+      # GitHub deprecated /users/{username}/subscriptions (2026-06-30
+      # changelog) and the endpoint now returns empty responses, breaking the
+      # watched-repos step of `--all` backups. Watched repos for the
+      # authenticated user now come from /user/subscriptions; other users warn
+      # and skip.
+      # TODO(26.11): Drop this override once the fix lands in a nixpkgs release.
       github-backup = pkgs.github-backup.overrideAttrs (attrs: {
         patches = (attrs.patches or [ ]) ++ [
-          ./github-backup/pr-521-watched-repositories-endpoint.patch
+          (pkgs.fetchpatch {
+            name = "pr-521-watched-repositories-endpoint.patch";
+            url = "https://github.com/josegonzalez/python-github-backup/commit/3ecae5628bd59f25b1d88ca82621d55779753cde.patch";
+            hash = "sha256-d4SqzjLqZFVc+2OQuSTkgfz+QiOHLivydSxNHXMQ5OY=";
+          })
         ];
       });
 
