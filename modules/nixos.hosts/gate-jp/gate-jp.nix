@@ -12,12 +12,11 @@
         inputs.nix-config-secrets.nixosModules.services-gotify
         inputs.nix-config-secrets.nixosModules.services-hoopsnake-gate-jp
         inputs.nix-config-secrets.nixosModules.services-tailscale
-        inputs.nix-config-secrets.nixosModules.users-delay
-        inputs.nix-config-secrets.nixosModules.users-root
 
         self.nixosModules.profile-hardware-linode
         self.nixosModules.profile-hardware-server
 
+        self.nixosModules.access-directory
         self.nixosModules.bootloader-grub
         self.nixosModules.fs-zfs-common
         self.nixosModules.fs-zfs-system-base
@@ -52,8 +51,6 @@
         self.nixosModules.services-tailscale
         self.nixosModules.system-common
         self.nixosModules.system-linode
-        self.nixosModules.users-delay
-        self.nixosModules.users-root
       ];
 
       # System config
