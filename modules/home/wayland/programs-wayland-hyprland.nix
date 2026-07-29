@@ -555,6 +555,18 @@
                   }", ${toString cfg.pip.margin.y} },
                   size = { ${toString cfg.pip.width}, ${toString cfg.pip.height} },
                 })
+
+                -- grimblast disables the slurp overlay animation via `hyprctl keyword
+                -- layerrule ...` before capturing, but `keyword` is rejected under the
+                -- Lua config parser ("keyword can't work with non-legacy parsers"), so
+                -- the slurp layer animates out while grim captures, baking the dimming
+                -- overlay into area screenshots. Disable animations for slurp's layer
+                -- statically instead.
+                hl.layer_rule({
+                  name = "no-anim-slurp-selection",
+                  match = { namespace = "^selection$" },
+                  no_anim = true,
+                })
               '';
           };
 
