@@ -8,7 +8,7 @@ JsonObject {
     // Gap between the title and the timestamp on the first row.
     property int horizontalSpacing: Config.tokens.system.measurements.small
     // Gap between the summary line and the appName line below it.
-    property int appNameSpacing: Config.tokens.system.measurements.twoExtraSmall
+    property int appNameSpacing: Config.tokens.system.measurements.none
     // Dedicated surface (not theme.defaults.cards, which is shared with the
     // control center): full-bleed cards are square, so shape is 0.
     property SurfaceTokens surface: SurfaceTokens {
