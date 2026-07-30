@@ -12,7 +12,14 @@ Singleton {
 
     // Tracked notifications, newest first.
     property list<Tracked.Notification> list: []
-    readonly property list<Tracked.Notification> notClosed: list.filter(n => !n.closed)
+    // Open notifications with urgent (critical) ones pinned first; each
+    // group keeps the list's newest-first order.
+    readonly property list<Tracked.Notification> notClosed: {
+        const open = list.filter(n => !n.closed);
+        return open.filter(n => n.urgency === NotificationUrgency.Critical).concat(open.filter(n => n.urgency !== NotificationUrgency.Critical));
+    }
+    // Pinning makes the head the urgency witness.
+    readonly property bool hasUrgent: notClosed.length > 0 && notClosed[0].urgency === NotificationUrgency.Critical
     readonly property list<Tracked.Notification> popups: list.filter(n => n.popup)
     property alias doNotDisturb: props.doNotDisturb
 

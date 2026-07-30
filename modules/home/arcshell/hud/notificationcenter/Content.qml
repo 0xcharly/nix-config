@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import qs.hud.notificationcenter.widgets
 import qs.components
 import qs.config
+import qs.config.tokens.types
 import qs.services
 import Quickshell
 import QtQuick
@@ -51,13 +52,81 @@ Rectangle {
                 text: qsTr("Notification Center")
             }
 
-            ArcChip {
+            // "Clear all" — an interfaces.dev-style "shadow" pill: the ring
+            // is a translucent wash of the content color instead of a solid
+            // border (their dark chrome is `box-shadow: 0 0 0 1px #ffffff14`),
+            // so it reads as depth on any backdrop.
+            ArcRectangle {
+                id: clearAll
+
+                // Accent normally; attention while an urgent notification
+                // is pinned in the list below.
+                readonly property SurfaceColorValues badge: Notifications.hasUrgent ? root.theme.attention : root.theme.accent
+
                 visible: Notifications.notClosed.length > 0
                 Layout.alignment: Qt.AlignVCenter
-                text: qsTr("Clear all")
+                implicitWidth: clearAllRow.implicitWidth + Config.tokens.system.measurements.small + Config.tokens.system.measurements.medium
+                implicitHeight: clearAllRow.implicitHeight + 2 * Config.tokens.system.measurements.small
+                radius: height / 2
+                color: clearAllArea.containsMouse ? Config.tokens.system.colors.surface_backdrop : Config.tokens.system.colors.transparent
+                border.width: 1
+                border.color: Qt.alpha(Config.tokens.system.colors.on_surface, 0.08)
+                // Press feedback: sink the whole pill.
+                scale: clearAllArea.pressed ? 0.9 : 1
+
+                Behavior on scale {
+                    AnimatedNumber {
+                        duration: Config.tokens.system.animations.durations.small
+                    }
+                }
+
+                RowLayout {
+                    id: clearAllRow
+
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: Config.tokens.system.measurements.small
+                    spacing: Config.tokens.system.measurements.small
+
+                    // Same disc as the collapsed count badge (Wrapper.qml):
+                    // a bright `on_surface_*` core carrying the glyph in
+                    // `surface_*`, wrapped in a `surface_*` rim.
+                    ArcRectangle {
+                        Layout.alignment: Qt.AlignVCenter
+                        implicitWidth: implicitHeight
+                        implicitHeight: root.theme.clearAllBadgeSize
+                        radius: height / 2
+                        color: clearAll.badge.surface
+
+                        ArcRectangle {
+                            anchors.fill: parent
+                            anchors.margins: root.theme.badgeRim
+                            radius: height / 2
+                            color: clearAll.badge.content
+                        }
+
+                        MaterialIcon {
+                            anchors.centerIn: parent
+                            color: clearAll.badge.surface
+                            font.pointSize: Config.tokens.system.typography.mediumLabel.fontSize
+                            lineHeight: Config.tokens.system.typography.mediumLabel.lineHeight
+                            text: "check"
+                        }
+                    }
+
+                    ArcText {
+                        Layout.alignment: Qt.AlignVCenter
+                        color: Config.tokens.system.colors.on_surface
+                        style: Config.tokens.system.typography.smallTitle
+                        text: qsTr("Clear all")
+                    }
+                }
 
                 MouseArea {
+                    id: clearAllArea
+
                     anchors.fill: parent
+                    hoverEnabled: true
                     cursorShape: Qt.PointingHandCursor
                     onClicked: Notifications.clear()
                 }

@@ -93,6 +93,22 @@ JsonObject {
         }
         property int spacedBy: Config.tokens.system.measurements.medium
 
+        // Status pairs shared by the "Clear all" checkmark disc and the
+        // collapsed count badge: accent normally, attention while an
+        // urgent (critical) notification is open.
+        property SurfaceColorValues accent: SurfaceColorValues {
+            content: Config.tokens.system.colors.on_surface_accent
+            surface: Config.tokens.system.colors.surface_accent
+        }
+        property SurfaceColorValues attention: SurfaceColorValues {
+            content: Config.tokens.system.colors.on_surface_attention
+            surface: Config.tokens.system.colors.surface_attention
+        }
+        // Diameter of the "Clear all" checkmark disc, rim included.
+        property int clearAllBadgeSize: Config.tokens.system.typography.mediumLabel.lineHeight + 2 * (Config.tokens.system.measurements.extraSmall + Config.tokens.system.measurements.twoExtraSmall)
+        // Thickness of the `surface_*` rim around each disc's bright core.
+        property int badgeRim: Config.tokens.system.measurements.extraSmall
+
         property Peek peek: Peek {}
     }
 
@@ -105,9 +121,10 @@ JsonObject {
         property AnimationValues pulseAnimation: AnimationValues {
             duration: Config.tokens.system.animations.durations.twoExtraLarge
         }
-        property TypographyValues typography: Config.tokens.system.typography.body
-        property color countColor: Config.tokens.system.colors.on_surface
-        property color pulseColor: Config.tokens.system.colors.surface_accent
+        property TypographyValues typography: Config.tokens.system.typography.mediumLabel
+        // Height (and minimum width — a circle for single-digit counts)
+        // of the count pill; width grows into a pill for wide counts.
+        property int badgeSize: Config.tokens.system.typography.mediumLabel.lineHeight + 2 * (Config.tokens.system.measurements.extraSmall + Config.tokens.system.measurements.twoExtraSmall)
         // Horizontal slack around the count once it outgrows `size`.
         property int countPadding: Config.tokens.system.measurements.large
     }

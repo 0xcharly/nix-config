@@ -2,6 +2,7 @@ pragma ComponentBehavior: Bound
 
 import qs.components
 import qs.services
+import qs.config.tokens.types
 import qs.config
 import Quickshell
 import Quickshell.Hyprland
@@ -170,7 +171,7 @@ Item {
 
             color: Config.theme.hud.border.color
             implicitHeight: root.theme.peek.size
-            implicitWidth: Math.max(root.theme.peek.size, countLabel.implicitWidth + 2 * root.theme.peek.countPadding)
+            implicitWidth: Math.max(root.theme.peek.size, countBadge.implicitWidth + 2 * root.theme.peek.countPadding)
             opacity: 0
             visible: opacity > 0
 
@@ -182,7 +183,7 @@ Item {
                 width: parent.height
                 height: parent.height
                 radius: height / 2
-                color: root.theme.peek.pulseColor
+                color: countBadge.color
                 // Off between pulses; the animation drives both scale and opacity.
                 opacity: 0
                 scale: 1 / 3
@@ -215,13 +216,32 @@ Item {
                 }
             }
 
-            ArcText {
-                id: countLabel
+            // Count pill — accent/attention pair: a `surface_*` pill
+            // carrying the count in `on_surface_*` (attention set while an
+            // urgent notification is open). A circle for single-digit
+            // counts, growing into a pill for wide ones. The pulse glow
+            // follows the pill fill.
+            ArcRectangle {
+                id: countBadge
+
+                readonly property SurfaceColorValues badge: Notifications.hasUrgent ? root.theme.attention : root.theme.accent
 
                 anchors.centerIn: parent
-                color: root.theme.peek.countColor
-                style: root.theme.peek.typography
-                text: Notifications.notClosed.length
+                implicitHeight: root.theme.peek.badgeSize
+                implicitWidth: Math.max(implicitHeight, countLabel.implicitWidth + 2 * Config.tokens.system.measurements.small)
+                radius: height / 2
+                color: badge.surface
+
+                ArcText {
+                    id: countLabel
+
+                    anchors.centerIn: parent
+                    color: countBadge.badge.content
+                    style: root.theme.peek.typography
+                    tabularFigures: true
+                    horizontalAlignment: Text.AlignHCenter
+                    text: Notifications.notClosed.length
+                }
             }
         }
     }
