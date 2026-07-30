@@ -51,7 +51,7 @@
 
       programs.hyprlock.settings =
         let
-          rgba = self.lib.theme.colors.asRgbaLiterals;
+          rgba = self.lib.theme.colors.asRgbaLiterals 1.0;
           hex = self.lib.theme.colors.asHexStrings;
         in
         {

@@ -14,5 +14,5 @@ in
   noPrefix = project (c: c.hex);
   asHexStrings = project (c: "#${c.hex}");
   asRgbLiterals = project (c: "rgb(${joinRgb c})");
-  asRgbaLiterals = project (c: "rgba(${joinRgb c}, 1)");
+  asRgbaLiterals = alpha: project (c: "rgba(${joinRgb c}, ${builtins.toJSON alpha})");
 }
