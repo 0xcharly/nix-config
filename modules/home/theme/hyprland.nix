@@ -3,19 +3,20 @@
   flake.homeModules.theme-hyprland =
     let
       colors = self.lib.theme.colors.asRgbLiterals;
+      rgba50 = self.lib.theme.colors.asRgbaLiterals 0.5;
     in
     {
       wayland.windowManager.hyprland = {
         settings.config = with colors; {
           general = {
             border_size = 2;
-            gaps_in = 0;
-            gaps_out = 0;
-            "col.active_border" = borders_active;
-            "col.inactive_border" = borders_inactive;
+            gaps_in = 4;
+            gaps_out = 4;
+            "col.active_border" = rgba50.borders_active;
+            "col.inactive_border" = rgba50.borders_inactive;
           };
           decoration = {
-            rounding = 0;
+            rounding = 8;
             blur.enabled = false;
             shadow.enabled = false;
           };
