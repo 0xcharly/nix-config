@@ -406,13 +406,15 @@
                 -- Layout
                 local hy3 = hl.plugin.hy3
 
-                hl.bind("SUPER         + D", hy3.make_group("h"))
-                hl.bind("SUPER         + S", hy3.make_group("v"))
-                hl.bind("SUPER         + Z", hy3.make_group("tab"))
-                hl.bind("SUPER         + A", hy3.change_focus("raise"))
-                hl.bind("SUPER + SHIFT + A", hy3.change_focus("lower"))
-                hl.bind("SUPER         + E", hy3.expand("expand"))
-                hl.bind("SUPER + SHIFT + E", hy3.expand("base"))
+                hl.bind("SUPER         + D",     hy3.make_group("h", { toggle = true }))
+                hl.bind("SUPER         + S",     hy3.make_group("v", { toggle = true }))
+                hl.bind("SUPER         + Z",     hy3.make_group("tab", { toggle = true }))
+                hl.bind("SUPER         + A",     hy3.change_focus("raise"))
+                hl.bind("SUPER + SHIFT + A",     hy3.change_focus("lower"))
+                hl.bind("SUPER         + E",     hy3.expand("expand"))
+                hl.bind("SUPER + SHIFT + E",     hy3.expand("base"))
+                hl.bind("SUPER         + equal", hy3.equalize({ scope = "group" }))
+                hl.bind("SUPER + SHIFT + equal",  hy3.equalize({ scope = "workspace" }))
 
                 hl.bind("SUPER         + R", function()
                   local layout = hl.get_config("general.layout")
