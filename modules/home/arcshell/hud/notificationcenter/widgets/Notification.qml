@@ -157,152 +157,155 @@ Item {
             anchors.topMargin: root.theme.padding.top
             spacing: root.theme.verticalSpacing
 
-            RowLayout {
+            // appName (+ optional Chrome-PWA origin) sits below the summary;
+            // the timestamp/chevron live in the title row so they center
+            // against the summary line only. All text single-line, eliding
+            // right — the timestamp/chevron keep intrinsic width.
+            ColumnLayout {
                 Layout.fillWidth: true
-                spacing: root.theme.horizontalSpacing
+                spacing: root.theme.appNameSpacing
 
-                // appName (+ optional Chrome-PWA origin) stacked over the summary; both
-                // single-line, eliding right — the timestamp/chevron keep intrinsic width.
-                ColumnLayout {
+                RowLayout {
                     Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignVCenter
-                    spacing: 0
+                    spacing: root.theme.horizontalSpacing
 
                     ArcText {
                         Layout.fillWidth: true
-                        visible: text !== ""
-                        elide: Text.ElideRight
-                        color: root.theme.appNameContentColor
-                        style: root.theme.appNameTypography
-                        text: [root.modelData.appName, root.modelData.bodyUrl].filter(s => s !== "").join(" · ")
-                    }
-
-                    ArcText {
-                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignVCenter
                         elide: Text.ElideRight
                         color: root.theme.titleContentColor
                         style: root.theme.titleTypography
                         text: root.modelData.summary
                     }
-                }
 
-                // Relative arrival time; self-refreshing (wrapper timer).
-                // Never elided: the title is the only shrinkable row item.
-                ArcText {
-                    Layout.alignment: Qt.AlignVCenter
-                    color: root.theme.timestampContentColor
-                    style: root.theme.timestampTypography
-                    text: root.modelData.timeStr
-                }
-
-                // Expand/collapse chevron. MaterialIcon's default icon typography and
-                // the timestamp color keep it visually paired with the timestamp.
-                // Glyph swaps follow the ArcSliderLabel recipe: fade+shrink+blur out,
-                // flip the glyph while invisible, animate back in.
-                Item {
-                    id: chevron
-
-                    // Rendered direction; flips at the animation midpoint. Deliberately
-                    // NOT a binding: the ScriptAction below owns updates after init.
-                    property bool displayedExpanded: root.modelData.expanded
-
-                    Layout.alignment: Qt.AlignVCenter
-                    implicitWidth: chevronIcon.implicitWidth
-                    implicitHeight: chevronIcon.implicitHeight
-
-                    Connections {
-                        target: root.modelData
-
-                        function onExpandedChanged(): void {
-                            chevronAnim.restart();
-                        }
+                    // Relative arrival time; self-refreshing (wrapper timer).
+                    // Never elided: the title is the only shrinkable row item.
+                    ArcText {
+                        Layout.alignment: Qt.AlignVCenter
+                        color: root.theme.timestampContentColor
+                        style: root.theme.timestampTypography
+                        text: root.modelData.timeStr
                     }
 
-                    SequentialAnimation {
-                        id: chevronAnim
-
-                        ParallelAnimation {
-                            AnimatedNumber {
-                                target: chevronContent
-                                property: "opacity"
-                                to: 0
-                                duration: root.theme.animation.duration
-                                easing.bezierCurve: root.theme.animation.curveIn
-                            }
-                            AnimatedNumber {
-                                target: chevronContent
-                                property: "scale"
-                                to: 0.25
-                                duration: root.theme.animation.duration
-                                easing.bezierCurve: root.theme.animation.curveIn
-                            }
-                            AnimatedNumber {
-                                target: chevronContent
-                                property: "blurAmount"
-                                to: 1
-                                duration: root.theme.animation.duration
-                                easing.bezierCurve: root.theme.animation.curveIn
-                            }
-                        }
-                        ScriptAction {
-                            script: chevron.displayedExpanded = root.modelData.expanded
-                        }
-                        ParallelAnimation {
-                            AnimatedNumber {
-                                target: chevronContent
-                                property: "opacity"
-                                to: 1
-                                duration: root.theme.animation.duration
-                                easing.bezierCurve: root.theme.animation.curveOut
-                            }
-                            AnimatedNumber {
-                                target: chevronContent
-                                property: "scale"
-                                to: 1
-                                duration: root.theme.animation.duration
-                                easing.bezierCurve: root.theme.animation.curveOut
-                            }
-                            AnimatedNumber {
-                                target: chevronContent
-                                property: "blurAmount"
-                                to: 0
-                                duration: root.theme.animation.duration
-                                easing.bezierCurve: root.theme.animation.curveOut
-                            }
-                        }
-                    }
-
+                    // Expand/collapse chevron. MaterialIcon's default icon typography and
+                    // the timestamp color keep it visually paired with the timestamp.
+                    // Glyph swaps follow the ArcSliderLabel recipe: fade+shrink+blur out,
+                    // flip the glyph while invisible, animate back in.
                     Item {
-                        id: chevronContent
+                        id: chevron
 
-                        // Normalized blur driven by the swap animation; ~4px visible
-                        // blur mid-transition (blurMax 8 x blur 0.5).
-                        property real blurAmount: 0
+                        // Rendered direction; flips at the animation midpoint. Deliberately
+                        // NOT a binding: the ScriptAction below owns updates after init.
+                        property bool displayedExpanded: root.modelData.expanded
 
-                        anchors.fill: parent
-                        layer.enabled: true
-                        layer.effect: MultiEffect {
-                            blurEnabled: true
-                            blur: chevronContent.blurAmount
-                            blurMax: 8
+                        Layout.alignment: Qt.AlignVCenter
+                        implicitWidth: chevronIcon.implicitWidth
+                        implicitHeight: chevronIcon.implicitHeight
+
+                        Connections {
+                            target: root.modelData
+
+                            function onExpandedChanged(): void {
+                                chevronAnim.restart();
+                            }
                         }
 
-                        MaterialIcon {
-                            id: chevronIcon
+                        SequentialAnimation {
+                            id: chevronAnim
 
-                            anchors.centerIn: parent
-                            text: chevron.displayedExpanded ? "expand_less" : "expand_more"
-                            color: root.theme.timestampContentColor
+                            ParallelAnimation {
+                                AnimatedNumber {
+                                    target: chevronContent
+                                    property: "opacity"
+                                    to: 0
+                                    duration: root.theme.animation.duration
+                                    easing.bezierCurve: root.theme.animation.curveIn
+                                }
+                                AnimatedNumber {
+                                    target: chevronContent
+                                    property: "scale"
+                                    to: 0.25
+                                    duration: root.theme.animation.duration
+                                    easing.bezierCurve: root.theme.animation.curveIn
+                                }
+                                AnimatedNumber {
+                                    target: chevronContent
+                                    property: "blurAmount"
+                                    to: 1
+                                    duration: root.theme.animation.duration
+                                    easing.bezierCurve: root.theme.animation.curveIn
+                                }
+                            }
+                            ScriptAction {
+                                script: chevron.displayedExpanded = root.modelData.expanded
+                            }
+                            ParallelAnimation {
+                                AnimatedNumber {
+                                    target: chevronContent
+                                    property: "opacity"
+                                    to: 1
+                                    duration: root.theme.animation.duration
+                                    easing.bezierCurve: root.theme.animation.curveOut
+                                }
+                                AnimatedNumber {
+                                    target: chevronContent
+                                    property: "scale"
+                                    to: 1
+                                    duration: root.theme.animation.duration
+                                    easing.bezierCurve: root.theme.animation.curveOut
+                                }
+                                AnimatedNumber {
+                                    target: chevronContent
+                                    property: "blurAmount"
+                                    to: 0
+                                    duration: root.theme.animation.duration
+                                    easing.bezierCurve: root.theme.animation.curveOut
+                                }
+                            }
+                        }
+
+                        Item {
+                            id: chevronContent
+
+                            // Normalized blur driven by the swap animation; ~4px visible
+                            // blur mid-transition (blurMax 8 x blur 0.5).
+                            property real blurAmount: 0
+
+                            anchors.fill: parent
+                            layer.enabled: true
+                            layer.effect: MultiEffect {
+                                blurEnabled: true
+                                blur: chevronContent.blurAmount
+                                blurMax: 8
+                            }
+
+                            MaterialIcon {
+                                id: chevronIcon
+
+                                anchors.centerIn: parent
+                                text: chevron.displayedExpanded ? "expand_less" : "expand_more"
+                                color: root.theme.timestampContentColor
+                            }
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            // Enlarge the hit target beyond the glyph.
+                            anchors.margins: -Config.tokens.system.measurements.small
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: root.modelData.expanded = !root.modelData.expanded
                         }
                     }
+                }
 
-                    MouseArea {
-                        anchors.fill: parent
-                        // Enlarge the hit target beyond the glyph.
-                        anchors.margins: -Config.tokens.system.measurements.small
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: root.modelData.expanded = !root.modelData.expanded
-                    }
+                ArcText {
+                    Layout.fillWidth: true
+                    visible: text !== ""
+                    elide: Text.ElideRight
+                    color: root.theme.appNameContentColor
+                    style: root.theme.appNameTypography
+                    // Omit the appName when it merely repeats the summary.
+                    text: [root.modelData.appName === root.modelData.summary ? "" : root.modelData.appName, root.modelData.bodyUrl].filter(s => s !== "").join(" · ")
                 }
             }
 
