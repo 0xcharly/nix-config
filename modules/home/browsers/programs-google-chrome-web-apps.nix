@@ -13,17 +13,19 @@
       # to truecolor RGBA — otherwise ImageMagick palettizes low-color icons
       # (indexed + tRNS), which Quickshell's launcher fails to render.
       iconRev = "46b860c70e866212311aef2f98da3775c17f5068";
-      fetchIcon =
-        name: hash:
-        let
-          src = pkgs.fetchurl {
-            url = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons@${iconRev}/png/${name}.png";
-            inherit hash;
-          };
-        in
+      padIcon =
+        name: src:
         pkgs.runCommand "webapp-icon-${name}.png" { nativeBuildInputs = [ pkgs.imagemagick ]; } ''
           magick ${src} -resize 512x512 -background none -gravity center -extent 512x512 PNG32:$out
         '';
+      fetchIcon =
+        name: hash:
+        padIcon name (
+          pkgs.fetchurl {
+            url = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons@${iconRev}/png/${name}.png";
+            inherit hash;
+          }
+        );
 
       webApps = {
         claude = {
@@ -65,6 +67,23 @@
           name = "Proton Calendar";
           url = "https://calendar.proton.me";
           icon = fetchIcon "proton-calendar" "sha256-W+xEWoVQlBe3yr0j5LMRQeQug8+CLCUrLg01D5YyAyo=";
+        };
+        hacker-news = {
+          name = "Hacker News";
+          url = "https://news.ycombinator.com";
+          icon = fetchIcon "hacker-news" "sha256-oNsZFJgD90LUxBuHrYHM3/tPo1qMhk2YrmM9xa/uC94=";
+        };
+        lobsters = {
+          name = "Lobsters";
+          url = "https://lobste.rs";
+          # dashboard-icons has no Lobsters entry; use the official touch icon
+          # from the lobsters repo, pinned to a commit for reproducibility.
+          icon = padIcon "lobsters" (
+            pkgs.fetchurl {
+              url = "https://raw.githubusercontent.com/lobsters/lobsters/4227239d8a8f0dd21b42d4a7219a4ebac005c21b/public/touch-icon-192.png";
+              hash = "sha256-AK3xvZY9uVuMTU82DBJUbvzf2DogTGzMJAv1NsrWp+4=";
+            }
+          );
         };
       };
 
