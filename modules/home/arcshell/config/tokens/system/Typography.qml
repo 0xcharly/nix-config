@@ -38,7 +38,7 @@ JsonObject {
     property TypographyValues body: TypographyValues {
         family: root.families.sansSerif
         fontSize: 12 * root.scale
-        lineHeight: 16 * root.scale
+        lineHeight: 18 * root.scale
         weight: root.weights.normal
         italic: false
         underline: false
@@ -46,7 +46,7 @@ JsonObject {
     property TypographyValues smallTitle: TypographyValues {
         family: root.families.sansSerif
         fontSize: 14 * root.scale
-        lineHeight: 18 * root.scale
+        lineHeight: 20 * root.scale
         weight: root.weights.medium
         italic: false
         underline: false
@@ -54,7 +54,7 @@ JsonObject {
     property TypographyValues mediumTitle: TypographyValues {
         family: root.families.sansSerif
         fontSize: 16 * root.scale
-        lineHeight: 20 * root.scale
+        lineHeight: 22 * root.scale
         weight: root.weights.normal
         italic: false
         underline: false
