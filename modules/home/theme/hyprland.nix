@@ -25,8 +25,8 @@
             blur = false;
             border_width = 0;
             height = 18;
-            padding = 0;
-            radius = 0;
+            padding = 2;
+            radius = 4;
             colors = {
               active = surface_active;
               active_border = borders_active;
