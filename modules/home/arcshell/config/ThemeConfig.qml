@@ -116,15 +116,15 @@ JsonObject {
         // Minimum edge of the collapsed count square; width grows for wide counts.
         property int size: 48
         // Milliseconds between pulse starts.
-        property int pulseInterval: 10000
+        property int pulseInterval: 5000
         // Grow-and-fade duration of one pulse.
         property AnimationValues pulseAnimation: AnimationValues {
             duration: Config.tokens.system.animations.durations.twoExtraLarge
         }
-        property TypographyValues typography: Config.tokens.system.typography.mediumLabel
+        property TypographyValues typography: Config.tokens.system.typography.singleLineSmallLabel
         // Height (and minimum width — a circle for single-digit counts)
         // of the count pill; width grows into a pill for wide counts.
-        property int badgeSize: Config.tokens.system.typography.mediumLabel.lineHeight + 2 * (Config.tokens.system.measurements.extraSmall + Config.tokens.system.measurements.twoExtraSmall)
+        property int badgeSize: Config.tokens.system.typography.singleLineSmallLabel.lineHeight + 2 * (Config.tokens.system.measurements.extraSmall + Config.tokens.system.measurements.twoExtraSmall)
         // Horizontal slack around the count once it outgrows `size`.
         property int countPadding: Config.tokens.system.measurements.large
     }

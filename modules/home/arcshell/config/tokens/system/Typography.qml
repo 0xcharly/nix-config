@@ -23,6 +23,12 @@ JsonObject {
         weight: root.weights.demiBold
         roundness: 40
     }
+    property TypographyValues singleLineSmallLabel: TypographyValues {
+        family: root.families.sansSerif
+        fontSize: 8 * root.scale
+        lineHeight: 8 * root.scale
+        weight: root.weights.bold
+    }
     property TypographyValues smallLabel: TypographyValues {
         family: root.families.sansSerif
         fontSize: 8 * root.scale
