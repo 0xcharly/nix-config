@@ -10,7 +10,7 @@
         settings.config = with colors; {
           general = {
             border_size = 2;
-            gaps_in = 4;
+            gaps_in = 2;
             gaps_out = 4;
             "col.active_border" = rgba50.borders_active;
             "col.inactive_border" = rgba50.borders_inactive;
