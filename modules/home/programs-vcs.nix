@@ -4,6 +4,7 @@
     imports = with self.homeModules; [
       programs-git
       programs-jujutsu
+      programs-jujutsu-extensions
     ];
   };
 }
