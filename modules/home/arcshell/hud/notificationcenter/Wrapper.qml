@@ -218,14 +218,14 @@ Item {
 
             // Count pill — the same disc as the "Clear all" checkmark
             // (Content.qml): a bright `on_surface_*` core carrying the count
-            // in `surface_*`, wrapped in a `surface_*` rim (attention pair
+            // in `surface_*`, wrapped in a `surface_*` rim (accent_alt pair
             // while an urgent notification is open). A circle for
             // single-digit counts, growing into a pill for wide ones. The
             // pulse glow follows the rim fill.
             ArcRectangle {
                 id: countBadge
 
-                readonly property SurfaceColorValues badge: Notifications.hasUrgent ? root.theme.attention : root.theme.accent
+                readonly property SurfaceColorValues badge: Notifications.hasUrgent ? root.theme.accentAlt : root.theme.accent
 
                 anchors.centerIn: parent
                 implicitHeight: root.theme.peek.badgeSize

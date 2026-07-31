@@ -59,9 +59,9 @@ Rectangle {
             ArcRectangle {
                 id: clearAll
 
-                // Accent normally; attention while an urgent notification
-                // is pinned in the list below.
-                readonly property SurfaceColorValues badge: Notifications.hasUrgent ? root.theme.attention : root.theme.accent
+                // Accent normally; the alt accent while an urgent
+                // notification is pinned in the list below.
+                readonly property SurfaceColorValues badge: Notifications.hasUrgent ? root.theme.accentAlt : root.theme.accent
 
                 visible: Notifications.notClosed.length > 0
                 Layout.alignment: Qt.AlignVCenter

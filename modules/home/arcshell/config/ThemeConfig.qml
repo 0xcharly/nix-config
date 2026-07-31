@@ -94,15 +94,15 @@ JsonObject {
         property int spacedBy: Config.tokens.system.measurements.medium
 
         // Status pairs shared by the "Clear all" checkmark disc and the
-        // collapsed count badge: accent normally, attention while an
+        // collapsed count badge: accent normally, the alt accent while an
         // urgent (critical) notification is open.
         property SurfaceColorValues accent: SurfaceColorValues {
             content: Config.tokens.system.colors.on_surface_accent
             surface: Config.tokens.system.colors.surface_accent
         }
-        property SurfaceColorValues attention: SurfaceColorValues {
-            content: Config.tokens.system.colors.on_surface_attention
-            surface: Config.tokens.system.colors.surface_attention
+        property SurfaceColorValues accentAlt: SurfaceColorValues {
+            content: Config.tokens.system.colors.on_surface_accent_alt
+            surface: Config.tokens.system.colors.surface_accent_alt
         }
         // Diameter of the "Clear all" checkmark disc, rim included.
         property int clearAllBadgeSize: Config.tokens.system.typography.mediumLabel.lineHeight + 2 * (Config.tokens.system.measurements.extraSmall + Config.tokens.system.measurements.twoExtraSmall)

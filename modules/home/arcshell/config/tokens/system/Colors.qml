@@ -15,6 +15,8 @@ JsonObject {
     property color wallpaper
     property color accent
     property color accent_dark
+    property color accent_alt
+    property color accent_alt_dark
     property color surface_elevated
     property color surface_elevated_hover
 
@@ -31,6 +33,9 @@ JsonObject {
 
     property color surface_attention
     property color on_surface_attention
+
+    property color surface_accent_alt
+    property color on_surface_accent_alt
 
     property color surface_accent
     property color on_surface_accent

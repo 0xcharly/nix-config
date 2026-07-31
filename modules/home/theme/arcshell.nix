@@ -20,6 +20,8 @@ in
         wallpaper = shell_wallpaper;
         accent = accent;
         accent_dark = accent_dark;
+        accent_alt = accent;
+        accent_alt_dark = accent_dark;
 
         surface_elevated = alpha "1a" raw.shell_on_surface;
         surface_elevated_hover = alpha "33" raw.shell_on_surface;
@@ -38,6 +40,9 @@ in
 
         surface_attention = surface_amber;
         on_surface_attention = on_surface_amber;
+
+        surface_accent_alt = accent_surface;
+        on_surface_accent_alt = on_surface_amber;
 
         surface_accent = surface_blue;
         on_surface_accent = on_surface_blue;
