@@ -124,7 +124,7 @@ JsonObject {
         property TypographyValues typography: Config.tokens.system.typography.singleLineSmallLabel
         // Height (and minimum width — a circle for single-digit counts)
         // of the count pill; width grows into a pill for wide counts.
-        property int badgeSize: Config.tokens.system.typography.singleLineSmallLabel.lineHeight + 2 * (Config.tokens.system.measurements.extraSmall + Config.tokens.system.measurements.twoExtraSmall)
+        property int badgeSize: Config.tokens.system.typography.singleLineSmallLabel.lineHeight + Config.tokens.system.measurements.extraLarge
         // Horizontal slack around the count once it outgrows `size`.
         property int countPadding: Config.tokens.system.measurements.large
     }

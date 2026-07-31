@@ -183,7 +183,7 @@ Item {
                 width: parent.height
                 height: parent.height
                 radius: height / 2
-                color: countBadge.color
+                color: countBadge.badge.surface
                 // Off between pulses; the animation drives both scale and opacity.
                 opacity: 0
                 scale: 1 / 3
@@ -216,11 +216,12 @@ Item {
                 }
             }
 
-            // Count pill — accent/attention pair: a `surface_*` pill
-            // carrying the count in `on_surface_*` (attention set while an
-            // urgent notification is open). A circle for single-digit
-            // counts, growing into a pill for wide ones. The pulse glow
-            // follows the pill fill.
+            // Count pill — the same disc as the "Clear all" checkmark
+            // (Content.qml): a bright `on_surface_*` core carrying the count
+            // in `surface_*`, wrapped in a `surface_*` rim (attention pair
+            // while an urgent notification is open). A circle for
+            // single-digit counts, growing into a pill for wide ones. The
+            // pulse glow follows the rim fill.
             ArcRectangle {
                 id: countBadge
 
@@ -232,11 +233,18 @@ Item {
                 radius: height / 2
                 color: badge.surface
 
+                ArcRectangle {
+                    anchors.fill: parent
+                    anchors.margins: root.theme.badgeRim
+                    radius: height / 2
+                    color: countBadge.badge.content
+                }
+
                 ArcText {
                     id: countLabel
 
                     anchors.centerIn: parent
-                    color: countBadge.badge.content
+                    color: countBadge.badge.surface
                     style: root.theme.peek.typography
                     tabularFigures: true
                     horizontalAlignment: Text.AlignHCenter
