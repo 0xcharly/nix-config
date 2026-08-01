@@ -1,6 +1,6 @@
 { moduleWithSystem, self, ... }:
 {
-  # `wake` powers on nyx over LAN (WOL relayed through node-skl), chaining
+  # `wake` powers on term-nyx over LAN (WOL relayed through node-skl), chaining
   # into `unlock` on cold boot. `unlock` answers a host's initrd LUKS
   # prompt over hoopsnake.
   # Only installed on trusted terminal hosts (via profile-hardware-workstation);
@@ -27,17 +27,17 @@
           pkgs.openssh
         ];
         text = ''
-          # Wake nyx over LAN, relayed through node-skl: WOL magic packets are L2
-          # broadcasts and do not route across subnets or the tailnet.
+          # Wake term-nyx over LAN, relayed through node-skl: WOL magic packets
+          # are L2 broadcasts and do not route across subnets or the tailnet.
           #
           # Resume from suspend (S3) skips initrd entirely: the host simply comes
           # back online. Cold boot / hibernate stops at the LUKS prompt, which is
           # answered by chaining into `unlock`.
 
-          readonly TARGET_HOST=nyx
+          readonly TARGET_HOST=term-nyx
           readonly RELAY_HOST=node-skl
-          readonly MAC="${self.lib.facts.lan.nyx.mac}"
-          readonly BROADCAST="${self.lib.facts.lan.nyx.broadcast}"
+          readonly MAC="${self.lib.facts.lan.term-nyx.mac}"
+          readonly BROADCAST="${self.lib.facts.lan.term-nyx.broadcast}"
           readonly TIMEOUT_SECS=180
 
           log_info() {
@@ -143,7 +143,7 @@
 
           if ! test -r "$IDENTITY"; then
             log_error "Missing or unreadable $IDENTITY."
-            log_error "Remote unlock only works from a trusted terminal host (fwk, nyx, term-x1p) with luks-remote-unlock deployed."
+            log_error "Remote unlock only works from a trusted terminal host (term-fwk, term-nyx, term-x1p) with luks-remote-unlock deployed."
             exit 1
           fi
 

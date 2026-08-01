@@ -4,7 +4,7 @@ domain = "qyrnl.com"
 tailnet = "neko-danio.ts.net"
 
 # Physical LAN (10.0.0.0/24) facts, for wake-on-LAN.
-[lan."nyx"]
+[lan."term-nyx"]
 mac = "60:cf:84:84:31:c4"
 broadcast = "10.0.0.255"
 
