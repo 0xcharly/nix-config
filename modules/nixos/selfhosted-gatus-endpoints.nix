@@ -96,6 +96,20 @@
             (gatus.mkHttpServiceCheck "prometheus" {
               domain = "${facts.services.prometheus.domain}/-/healthy";
             })
+            # Allocation-exhaustion alert for the small btrfs hosts: statfs
+            # free space is blind to it (ENOSPC-with-apparent-free-space), so
+            # query minimum unallocated bytes across the Linodes via the
+            # Prometheus HTTP API. size_bytes is the logical block-group size;
+            # multiply by allocation_ratio for raw consumption (metadata and
+            # system run dup). Label shape verified against node-skl.
+            (gatus.mkApiCheck "btrfs unallocated (Linodes)" {
+              url = "${facts.services.prometheus.domain}/api/v1/query?query=${lib.escapeURL ''min(sum by (host) (node_btrfs_device_size_bytes{host=~"gate-fr|gate-jp|jump-jp"}) - sum by (host) (node_btrfs_size_bytes{host=~"gate-fr|gate-jp|jump-jp"} * node_btrfs_allocation_ratio{host=~"gate-fr|gate-jp|jump-jp"}))''}";
+              conditions = [
+                "[BODY].status == success"
+                # Red under 2GiB unallocated.
+                "[BODY].data.result[0].value[1] > 2147483648"
+              ];
+            })
             (gatus.mkHttpServiceCheck "prowlarr" (facts.services.prowlarr // { group = "servarr"; }))
             (gatus.mkHttpServiceCheck "public files" {
               domain = "xn--7ck8cva5eb.com/public/";

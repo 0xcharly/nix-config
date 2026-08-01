@@ -19,6 +19,7 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
 
     disko.url = "github:nix-community/disko"; # Filesystem management
+    impermanence.url = "github:nix-community/impermanence"; # Ephemeral root support
     golink.url = "github:tailscale/golink"; # go/link service
 
     # Nix packages for AI coding agents and development tools

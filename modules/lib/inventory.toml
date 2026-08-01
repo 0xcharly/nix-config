@@ -9,3 +9,7 @@ smartctl = ["node-skl", "site-fr", "site-jp", "term-fwk", "term-nyx", "term-x1p"
 
 # NAS hosts with a `tank` pool (ZFS encryption check)
 nas = ["site-fr", "site-jp"]
+
+# Hosts still on ZFS root (scraped by the nas_zfs_stats Prometheus job);
+# every other host runs btrfs (node_btrfs_* via the default node collector).
+zfs = ["site-fr", "site-jp"]

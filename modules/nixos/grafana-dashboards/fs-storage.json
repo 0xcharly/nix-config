@@ -2,20 +2,31 @@
   "uid": "fs-storage",
   "title": "FS storage",
   "description": "ZFS pool capacity, health, and tank dataset usage from zfs_exporter; scrub state and error counters from the zfs-scrub textfile collector (node exporter, job .*_system_stats). Job filter .*_zfs_stats avoids double-counting tailscalesd-discovered duplicates.",
-  "tags": ["storage", "zfs"],
+  "tags": [
+    "storage",
+    "zfs"
+  ],
   "timezone": "browser",
   "editable": true,
   "graphTooltip": 1,
   "schemaVersion": 39,
   "version": 1,
   "refresh": "",
-  "time": { "from": "now-24h", "to": "now" },
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
   "panels": [
     {
       "id": 1,
       "type": "timeseries",
       "title": "Pool capacity used",
-      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 0 },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "percentunit",
@@ -24,14 +35,25 @@
           "custom": {
             "fillOpacity": 10,
             "showPoints": "never",
-            "thresholdsStyle": { "mode": "line" }
+            "thresholdsStyle": {
+              "mode": "line"
+            }
           },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "orange", "value": 0.8 },
-              { "color": "red", "value": 0.9 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.8
+              },
+              {
+                "color": "red",
+                "value": 0.9
+              }
             ]
           }
         },
@@ -41,9 +63,14 @@
         "legend": {
           "displayMode": "table",
           "placement": "right",
-          "calcs": ["lastNotNull"]
+          "calcs": [
+            "lastNotNull"
+          ]
         },
-        "tooltip": { "mode": "multi", "sort": "desc" }
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
       },
       "targets": [
         {
@@ -57,26 +84,64 @@
       "id": 2,
       "type": "stat",
       "title": "Pool health",
-      "gridPos": { "h": 9, "w": 6, "x": 12, "y": 0 },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 12,
+        "y": 0
+      },
       "fieldConfig": {
         "defaults": {
           "mappings": [
             {
               "type": "value",
               "options": {
-                "0": { "text": "ONLINE", "color": "green", "index": 0 },
-                "1": { "text": "DEGRADED", "color": "orange", "index": 1 },
-                "2": { "text": "FAULTED", "color": "red", "index": 2 },
-                "3": { "text": "OFFLINE", "color": "red", "index": 3 },
-                "4": { "text": "UNAVAIL", "color": "red", "index": 4 },
-                "5": { "text": "REMOVED", "color": "red", "index": 5 },
-                "6": { "text": "SUSPENDED", "color": "red", "index": 6 }
+                "0": {
+                  "text": "ONLINE",
+                  "color": "green",
+                  "index": 0
+                },
+                "1": {
+                  "text": "DEGRADED",
+                  "color": "orange",
+                  "index": 1
+                },
+                "2": {
+                  "text": "FAULTED",
+                  "color": "red",
+                  "index": 2
+                },
+                "3": {
+                  "text": "OFFLINE",
+                  "color": "red",
+                  "index": 3
+                },
+                "4": {
+                  "text": "UNAVAIL",
+                  "color": "red",
+                  "index": 4
+                },
+                "5": {
+                  "text": "REMOVED",
+                  "color": "red",
+                  "index": 5
+                },
+                "6": {
+                  "text": "SUSPENDED",
+                  "color": "red",
+                  "index": 6
+                }
               }
             }
           ],
           "thresholds": {
             "mode": "absolute",
-            "steps": [{ "color": "green", "value": null }]
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
           }
         },
         "overrides": []
@@ -85,7 +150,13 @@
         "colorMode": "value",
         "graphMode": "none",
         "justifyMode": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
         "textMode": "value_and_name"
       },
       "targets": [
@@ -100,13 +171,23 @@
       "id": 3,
       "type": "stat",
       "title": "tank available",
-      "gridPos": { "h": 9, "w": 6, "x": 18, "y": 0 },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "bytes",
           "thresholds": {
             "mode": "absolute",
-            "steps": [{ "color": "blue", "value": null }]
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
           }
         },
         "overrides": []
@@ -115,7 +196,13 @@
         "colorMode": "value",
         "graphMode": "area",
         "justifyMode": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
         "textMode": "value_and_name"
       },
       "targets": [
@@ -130,12 +217,20 @@
       "id": 4,
       "type": "timeseries",
       "title": "Pool free space",
-      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 9 },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 9
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "bytes",
           "min": 0,
-          "custom": { "fillOpacity": 10, "showPoints": "never" }
+          "custom": {
+            "fillOpacity": 10,
+            "showPoints": "never"
+          }
         },
         "overrides": []
       },
@@ -143,9 +238,14 @@
         "legend": {
           "displayMode": "table",
           "placement": "right",
-          "calcs": ["lastNotNull"]
+          "calcs": [
+            "lastNotNull"
+          ]
         },
-        "tooltip": { "mode": "multi", "sort": "desc" }
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
       },
       "targets": [
         {
@@ -159,12 +259,20 @@
       "id": 5,
       "type": "timeseries",
       "title": "Fragmentation",
-      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 9 },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 9
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "percentunit",
           "min": 0,
-          "custom": { "fillOpacity": 10, "showPoints": "never" }
+          "custom": {
+            "fillOpacity": 10,
+            "showPoints": "never"
+          }
         },
         "overrides": []
       },
@@ -172,9 +280,14 @@
         "legend": {
           "displayMode": "table",
           "placement": "right",
-          "calcs": ["lastNotNull"]
+          "calcs": [
+            "lastNotNull"
+          ]
         },
-        "tooltip": { "mode": "multi", "sort": "desc" }
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
       },
       "targets": [
         {
@@ -189,14 +302,24 @@
       "type": "bargauge",
       "title": "tank datasets by usage",
       "description": "Includes parent dataset rollups; the sorted view is the point.",
-      "gridPos": { "h": 12, "w": 24, "x": 0, "y": 18 },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 18
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "bytes",
           "min": 0,
           "thresholds": {
             "mode": "absolute",
-            "steps": [{ "color": "blue", "value": null }]
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
           }
         },
         "overrides": []
@@ -204,7 +327,13 @@
       "options": {
         "displayMode": "gradient",
         "orientation": "horizontal",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
         "sizing": "auto"
       },
       "targets": [
@@ -221,23 +350,49 @@
       "type": "stat",
       "title": "Scrub state",
       "description": "Last scrub per pool. NEVER also shows when the most recent scan was a resilver.",
-      "gridPos": { "h": 9, "w": 6, "x": 0, "y": 30 },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 0,
+        "y": 30
+      },
       "fieldConfig": {
         "defaults": {
           "mappings": [
             {
               "type": "value",
               "options": {
-                "0": { "text": "NEVER", "color": "orange", "index": 0 },
-                "1": { "text": "SCRUBBING", "color": "blue", "index": 1 },
-                "2": { "text": "FINISHED", "color": "green", "index": 2 },
-                "3": { "text": "CANCELED", "color": "red", "index": 3 }
+                "0": {
+                  "text": "NEVER",
+                  "color": "orange",
+                  "index": 0
+                },
+                "1": {
+                  "text": "SCRUBBING",
+                  "color": "blue",
+                  "index": 1
+                },
+                "2": {
+                  "text": "FINISHED",
+                  "color": "green",
+                  "index": 2
+                },
+                "3": {
+                  "text": "CANCELED",
+                  "color": "red",
+                  "index": 3
+                }
               }
             }
           ],
           "thresholds": {
             "mode": "absolute",
-            "steps": [{ "color": "green", "value": null }]
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
           }
         },
         "overrides": []
@@ -246,7 +401,13 @@
         "colorMode": "value",
         "graphMode": "none",
         "justifyMode": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
         "textMode": "value_and_name"
       },
       "targets": [
@@ -262,16 +423,30 @@
       "type": "stat",
       "title": "Time since last scrub",
       "description": "Pools that never completed a scrub are omitted (see Scrub state). autoScrub runs monthly.",
-      "gridPos": { "h": 9, "w": 6, "x": 6, "y": 30 },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 6,
+        "y": 30
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "s",
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "orange", "value": 3024000 },
-              { "color": "red", "value": 5184000 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 3024000
+              },
+              {
+                "color": "red",
+                "value": 5184000
+              }
             ]
           }
         },
@@ -281,7 +456,13 @@
         "colorMode": "value",
         "graphMode": "none",
         "justifyMode": "auto",
-        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
         "textMode": "value_and_name"
       },
       "targets": [
@@ -297,7 +478,12 @@
       "type": "timeseries",
       "title": "Pool errors",
       "description": "Errors found by the last scrub, known data errors, and root-vdev I/O error counters.",
-      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 30 },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 30
+      },
       "fieldConfig": {
         "defaults": {
           "unit": "short",
@@ -305,13 +491,21 @@
           "custom": {
             "fillOpacity": 10,
             "showPoints": "never",
-            "thresholdsStyle": { "mode": "line" }
+            "thresholdsStyle": {
+              "mode": "line"
+            }
           },
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "red", "value": 1 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
             ]
           }
         },
@@ -321,9 +515,14 @@
         "legend": {
           "displayMode": "table",
           "placement": "right",
-          "calcs": ["lastNotNull"]
+          "calcs": [
+            "lastNotNull"
+          ]
         },
-        "tooltip": { "mode": "multi", "sort": "desc" }
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
       },
       "targets": [
         {
@@ -350,6 +549,254 @@
           "refId": "E",
           "expr": "zfs_pool_checksum_errors{job=~\".*_system_stats\"}",
           "legendFormat": "{{host}} {{pool}} cksum"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "type": "row",
+      "title": "Btrfs",
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 39
+      },
+      "panels": []
+    },
+    {
+      "id": 11,
+      "type": "timeseries",
+      "title": "Unallocated space",
+      "description": "Primary capacity signal: unallocated bytes (device size minus raw block-group allocation; size_bytes is logical, so multiply by allocation_ratio — metadata/system run dup). Deliberately NOT node_filesystem_{avail,size}_bytes: statfs numbers are unreliable on btrfs under compression and blind to allocation exhaustion — ENOSPC-with-apparent-free-space is the failure mode that matters on the near-full Nanodes. Label shape verified against node-skl 2026-08-01.",
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 0,
+        "y": 40
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "min": 0,
+          "custom": {
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "thresholdsStyle": {
+              "mode": "line"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 2147483648
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (host) (node_btrfs_device_size_bytes{job=~\".*_system_stats\"}) - sum by (host) (node_btrfs_size_bytes{job=~\".*_system_stats\"} * node_btrfs_allocation_ratio{job=~\".*_system_stats\"})",
+          "legendFormat": "{{host}}"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "type": "timeseries",
+      "title": "Device errors",
+      "description": "node_btrfs_device_errors_total, verified against node-skl 2026-08-01 (labels: device, type, uuid).",
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 8,
+        "y": 40
+      },
+      "fieldConfig": {
+        "defaults": {
+          "min": 0,
+          "custom": {
+            "fillOpacity": 10,
+            "showPoints": "never"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "node_btrfs_device_errors_total{job=~\".*_system_stats\"}",
+          "legendFormat": "{{host}} {{device}} {{type}}"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "type": "stat",
+      "title": "Scrub",
+      "description": "From the btrfs-scrub textfile metrics (prometheus-exporters-btrfs). Fresh installs report only btrfs_scrub_running until the first scrub.",
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 16,
+        "y": 40
+      },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "type": "value",
+                    "options": {
+                      "0": {
+                        "text": "IDLE",
+                        "color": "green",
+                        "index": 0
+                      },
+                      "1": {
+                        "text": "SCRUBBING",
+                        "color": "blue",
+                        "index": 1
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value_and_name"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "max by (host) (btrfs_scrub_running{job=~\".*_system_stats\"})",
+          "legendFormat": "{{host}} running"
+        },
+        {
+          "refId": "B",
+          "expr": "time() - (max by (host) (btrfs_scrub_start_timestamp_seconds{job=~\".*_system_stats\"}) > 0)",
+          "legendFormat": "{{host}} since start"
+        },
+        {
+          "refId": "C",
+          "expr": "max by (host) (btrfs_scrub_errors{job=~\".*_system_stats\"})",
+          "legendFormat": "{{host}} errors"
         }
       ]
     }

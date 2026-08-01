@@ -84,9 +84,11 @@
                     labels.host = builtins.head (lib.splitString "." facts.services.gatus.host);
                   };
                   servers_system_stats = map mkNodeExporterConfig inventory.servers;
-                  servers_zfs_stats = map mkZfsExporterConfig inventory.servers;
                   workstations_system_stats = map mkNodeExporterConfig inventory.workstations;
-                  workstations_zfs_stats = map mkZfsExporterConfig inventory.workstations;
+                  # Only the NAS hosts still run ZFS (and its 9134 exporter);
+                  # the job name keeps matching the dashboards'
+                  # `job=~".*_zfs_stats"` regex.
+                  nas_zfs_stats = map mkZfsExporterConfig inventory.zfs;
                   smartctl_stats = map mkSmartctlExporterConfig inventory.smartctl;
                   dns_blocky_stats =
                     map

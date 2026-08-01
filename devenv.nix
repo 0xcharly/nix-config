@@ -13,6 +13,7 @@
     dnsutils # dig, nslookup
     file
     jq # JSON
+    linode-cli # wipe-linode.sh / Linode migration tooling
     openssl # cert / TLS debugging
     python3
     sqlite # sqlite3 CLI
@@ -74,8 +75,8 @@
         nix-collect-garbage --delete-older-than 7d
       '';
 
-      provision-generic = {
-        exec = builtins.readFile ./bin/provision-generic.sh;
+      provision-baremetal = {
+        exec = builtins.readFile ./bin/provision-baremetal.sh;
         packages = with pkgs; [
           bitwarden-cli
           jq
@@ -88,6 +89,15 @@
           jq
         ];
       };
+      wipe-linode = {
+        exec = builtins.readFile ./bin/wipe-linode.sh;
+        packages = with pkgs; [
+          jq
+          linode-cli
+          netcat-gnu
+        ];
+      };
+      pre-wipe-check.exec = builtins.readFile ./bin/pre-wipe-check.sh;
       provision-nas = {
         exec = builtins.readFile ./bin/provision-nas.sh;
         packages = with pkgs; [

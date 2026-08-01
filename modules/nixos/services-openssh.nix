@@ -15,8 +15,10 @@
           PermitRootLogin = "no";
         };
 
-        # Removes RSA
-        hostKeys = [
+        # Removes RSA. mkDefault: fs-btrfs-impermanence overrides this at
+        # normal priority to relocate the key onto /persist; non-impermanent
+        # hosts keep the /etc/ssh path.
+        hostKeys = lib.mkDefault [
           {
             path = "/etc/ssh/ssh_host_ed25519_key";
             type = "ed25519";
