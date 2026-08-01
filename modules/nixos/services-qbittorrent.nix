@@ -42,7 +42,13 @@
 
         users.users.qbittorrent.extraGroups = [ "media" ];
         users.groups.media = { };
-        systemd.tmpfiles.rules = [ "d /srv/torrents 2775 qbittorrent media -" ];
+        systemd.tmpfiles.rules = [
+          "d /srv/torrents 2775 qbittorrent media -"
+          # Torrent payloads are a heavy in-place-rewrite CoW workload: set
+          # nodatacow on the directory; new files inherit it. Accepts no
+          # checksums/compression there.
+          "h /srv/torrents - - - - +C"
+        ];
       };
     };
 }
