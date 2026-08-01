@@ -129,7 +129,12 @@
                       "--exclude-datasets=^tank/backups$"
                       "--exclude-datasets=^tank/delay$"
                       "--exclude-datasets=^tank/delay/forge$"
-                      "--exclude-datasets=^tank/migration-backups$" # TODO: delete when migration is complete.
+                      # Unanchored, unlike the four above: the received
+                      # backup children (tank/migration-backups/<host>-*)
+                      # must NOT replicate to site-fr either — this store is
+                      # deliberately non-replicated migration insurance.
+                      # TODO: delete when migration is complete.
+                      "--exclude-datasets=^tank/migration-backups"
                     ];
                     # systemd exports the unit user's login shell as $SHELL,
                     # and the syncoid system user's shell is nologin. OpenSSH
