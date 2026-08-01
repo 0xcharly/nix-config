@@ -129,6 +129,7 @@
                       "--exclude-datasets=^tank/backups$"
                       "--exclude-datasets=^tank/delay$"
                       "--exclude-datasets=^tank/delay/forge$"
+                      "--exclude-datasets=^tank/migration-backups$" # TODO: delete when migration is complete.
                     ];
                     # systemd exports the unit user's login shell as $SHELL,
                     # and the syncoid system user's shell is nologin. OpenSSH
