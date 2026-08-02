@@ -39,6 +39,14 @@
               mapfile -t datasets < <(zfs list -H -o name -r -t filesystem tank) || return 1
               [ "''${#datasets[@]}" -gt 0 ] || return 1
               for ds in "''${datasets[@]}"; do
+                case "$ds" in
+                # Deliberately unencrypted, non-replicated migration insurance
+                # (received via plain send, so encryption=off is expected —
+                # the exact signature this check exists to catch elsewhere).
+                # The bare name matters too: with no children it would count
+                # as a leaf. TODO: delete when migration is complete.
+                tank/migration-backups | tank/migration-backups/*) continue ;;
+                esac
                 if printf '%s\n' "''${datasets[@]}" | grep -q "^$ds/"; then
                   continue # container dataset; its children are checked individually
                 fi
