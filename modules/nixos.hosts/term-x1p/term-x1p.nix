@@ -11,16 +11,12 @@
         inputs.nix-config-secrets.nixosModules.services-tailscale
         inputs.nix-config-secrets.nixosModules.ssh-keys-ring-0-tier
 
+        self.nixosModules.profile-fs-btrfs-workstation-baremetal
         self.nixosModules.profile-hardware-workstation
         self.nixosModules.profile-ssh-identities-ring0
 
         self.nixosModules.access-directory
         self.nixosModules.bootloader-systemd-boot
-        self.nixosModules.fs-zfs-common
-        self.nixosModules.fs-zfs-system
-        self.nixosModules.fs-zfs-system-base
-        self.nixosModules.fs-zfs-zpool-root
-        self.nixosModules.fs-zfs-zpool-root-home
         self.nixosModules.hardware-cpu-amd
         self.nixosModules.hardware-gpu-amd
         self.nixosModules.hardware-i2c
@@ -38,7 +34,6 @@
         self.nixosModules.programs-terminfo
         self.nixosModules.prometheus-exporters-node
         self.nixosModules.prometheus-exporters-smartctl
-        self.nixosModules.prometheus-exporters-zfs
         self.nixosModules.services-adb
         self.nixosModules.services-fail2ban
         self.nixosModules.services-openssh
@@ -51,13 +46,10 @@
 
       # System config
       node = {
-        fs.zfs = {
-          hostId = "be2d9ac1";
-          system = {
-            disk = "/dev/disk/by-id/nvme-KINGSTON_OM8TAP41024K1-A00_50026B7383D8FFFF";
-            luksPasswordFile = "/tmp/root-disk-encryption.key";
-            swapSize = "72G"; # Size of RAM + square root of RAM for hibernate
-          };
+        fs.btrfs.root = {
+          disk = "/dev/disk/by-id/nvme-KINGSTON_OM8TAP41024K1-A00_50026B7383D8FFFF";
+          luksPasswordFile = "/tmp/root-disk-encryption.key";
+          swapSize = "4G";
         };
 
         networking = {
@@ -73,6 +65,10 @@
 
         users.delay.ssh.authorizeTailscaleInternalKey = true;
       };
+
+      environment.persistence."/persist".directories = [
+        "/var/lib/bluetooth" # pairing keys
+      ];
 
       boot.initrd.availableKernelModules = [
         "ahci"
