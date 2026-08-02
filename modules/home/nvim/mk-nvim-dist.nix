@@ -75,6 +75,9 @@ let
           [
             ''
               vim.loader.enable()
+
+              -- Autoload allowlisted local RC files.
+              vim.o.exrc = true
             ''
           ]
           ++ (prependAllToRtp runtime)
