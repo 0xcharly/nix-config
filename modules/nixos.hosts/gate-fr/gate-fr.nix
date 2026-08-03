@@ -9,17 +9,12 @@
         inputs.nix-config-secrets.nixosModules.services-hoopsnake-gate-fr
         inputs.nix-config-secrets.nixosModules.services-tailscale
 
+        self.nixosModules.profile-fs-btrfs-server-linode
         self.nixosModules.profile-hardware-linode
         self.nixosModules.profile-hardware-server
 
         self.nixosModules.access-directory
         self.nixosModules.bootloader-grub
-        self.nixosModules.fs-zfs-common
-        self.nixosModules.fs-zfs-system-base
-        self.nixosModules.fs-zfs-system-linode
-        self.nixosModules.fs-zfs-zpool-root
-        self.nixosModules.fs-zfs-zpool-root-data
-        self.nixosModules.fs-zfs-zpool-root-home
         self.nixosModules.initrd-hoopsnake
         self.nixosModules.nix
         self.nixosModules.nixpkgs
@@ -29,7 +24,6 @@
         self.nixosModules.programs-sudo
         self.nixosModules.programs-terminfo
         self.nixosModules.prometheus-exporters-node
-        self.nixosModules.prometheus-exporters-zfs
         self.nixosModules.selfhosted-dns-catchall
         self.nixosModules.selfhosted-dns-delay-dot-email
         self.nixosModules.selfhosted-dns-pieceofenglish-dot-fr
@@ -44,16 +38,12 @@
 
       # System config
       node = {
-        fs.zfs = {
-          hostId = "0db85ca6";
-          system = {
-            # by-id paths: /dev/sdX enumeration order is not stable across
-            # boots, which intermittently broke swap activation.
-            disk = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi-disk-0";
-            linode.swapDisk = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi-disk-1";
-            luksPasswordFile = "/tmp/root-disk-encryption.key";
-          };
-          zpool.root.reservation = "2GiB";
+        fs.btrfs.root = {
+          # by-id paths: /dev/sdX enumeration order is not stable across
+          # boots, which intermittently broke swap activation.
+          disk = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi-disk-0";
+          luksPasswordFile = "/tmp/root-disk-encryption.key";
+          swapSize = "2G";
         };
 
         networking.tailscale.enableSsh = true;
