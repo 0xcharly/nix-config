@@ -33,9 +33,19 @@
             supportedFilesystems.zfs = true;
           };
 
-          # Await LUKS prompt
+          # The nixpkgs-generated zfs-import-root.service polls for the pool
+          # for a hardcoded ~60s, racing the LUKS passphrase prompt: type
+          # slower than that and the import fails, collapsing sysroot.mount
+          # into emergency mode (observed on term-x1p, boot 9348afe0…,
+          # 2026-08-03). Gate the import on cryptsetup.target so the poll only
+          # starts once the mapping exists. The passphrase prompt itself has
+          # no timeout (crypttab default), so boot waits indefinitely at the
+          # prompt instead.
           # https://github.com/nix-community/disko/issues/1257
-          fileSystems."/".options = [ "x-systemd.device-timeout=infinity" ];
+          boot.initrd.systemd.services.zfs-import-root = {
+            after = [ "cryptsetup.target" ];
+            requires = [ "cryptsetup.target" ];
+          };
 
           disko.devices.disk.system = {
             type = "disk";

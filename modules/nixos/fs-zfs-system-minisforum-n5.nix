@@ -144,9 +144,14 @@
           };
         };
 
-        # Await LUKS prompt
+        # See fs-zfs-system-base.nix: gate the pool import on LUKS unlock.
+        # Both mappings (crypted0/crypted1, ZFS mirror) must exist before the
+        # import — cryptsetup.target orders after both.
         # https://github.com/nix-community/disko/issues/1257
-        fileSystems."/".options = [ "x-systemd.device-timeout=infinity" ];
+        boot.initrd.systemd.services.zfs-import-root = {
+          after = [ "cryptsetup.target" ];
+          requires = [ "cryptsetup.target" ];
+        };
 
         # Sync /boot to /boot-fallback whenever the bootloader is (re)installed.
         # Unlike activation scripts (which only run on `switch`/`test`),
