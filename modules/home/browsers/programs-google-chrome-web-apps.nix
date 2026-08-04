@@ -85,6 +85,16 @@
             }
           );
         };
+        tailscale = {
+          name = "Tailscale";
+          url = "https://console.tailscale.com";
+          icon = fetchIcon "tailscale" "sha256-DU7PSjCHhoVu4WHJFNJIqKIpCcHSiZnus96sTX3mblE=";
+        };
+        linode = {
+          name = "Linode";
+          url = "https://cloud.linode.com";
+          icon = fetchIcon "linode" "sha256-0WMmGJeBQEWsuVG75qpq2fpVD0Be8Cp8xCUb7FjlubU=";
+        };
       };
 
       chrome = lib.getExe config.programs.chromium.package;
