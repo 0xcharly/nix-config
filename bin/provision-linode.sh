@@ -116,13 +116,24 @@ log_info "Loading target host keys…"
 load_ssh_host_key "ssh_host_ed25519_key"
 
 # Setup installation SSH options.
+#
+# The recovery identity: the kexec installer (provisioning-base) authorizes
+# exactly this key for root, with password auth off. The wipe flow kexecs the
+# installer BEFORE this script runs (root over the public IP is impossible
+# against a running fleet host — PermitRootLogin=no; root only exists over
+# the tailnet via Tailscale SSH):
+#   ssh root@<tailnet-ip> 'curl -L https://public.xn--7ck8cva5eb.com/nixos-kexec.tar.gz | tar -xzf - -C /root && /root/kexec/run'
+# nixos-anywhere then detects the target is already an installer and skips
+# its own kexec phase.
 nixos_anywhere_ssh_options=(
+  --ssh-option "IdentityFile=$XDG_RUNTIME_DIR/agenix/keys/nixos_recovery_ed25519_key"
   --ssh-option "PubkeyAuthentication=yes"
   --ssh-option "UserKnownHostsFile=/dev/null"
   --ssh-option "StrictHostKeyChecking=no"
 )
 # Same options, plain-ssh form, for the state push below.
 plain_ssh_options=(
+  -o "IdentityFile=$XDG_RUNTIME_DIR/agenix/keys/nixos_recovery_ed25519_key"
   -o "PubkeyAuthentication=yes"
   -o "UserKnownHostsFile=/dev/null"
   -o "StrictHostKeyChecking=no"

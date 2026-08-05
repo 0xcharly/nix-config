@@ -21,17 +21,12 @@ fi
 LINODE_ID="$1"
 TARGET_HOST="${2,,}"
 
-# 25088MB = 24.5GiB, ~512MB under the Nanode's 25600MB ceiling. NOT required
-# for the plan downsize (Linode's rule is total disk allocation ≤ target plan
-# storage, so 25600 exactly should also downsize) — a safety margin against
-# ceiling-rounding surprises that matches the fleet's likely existing
-# allocation (23040 root + 2048 swap = 25088 — confirm against the disks-list
-# printout below). The trial runs a disk-resize boundary test: attempt
-# --size 25600 on the trial clone; accepted → switch this to 25600 fleet-wide
-# and drop the buffer; rejected → keep 25088 and record the rejection here.
-# The 512MB, if kept, is unallocated, not lost: reclaimable later with
-# `disk-resize --size 25600` (powered off) + `btrfs filesystem resize max /`.
-readonly ROOT_DISK_SIZE_MB=25088
+# 25600MB = the Nanode's exact storage ceiling. Boundary-tested on the trial
+# clone (2026-08-05): `disk-resize --size 25600` accepted, and Linode's
+# downsize rule is total disk allocation ≤ target plan storage, so 25600
+# downsizes back to a Nanode exactly. The earlier 25088 safety buffer is
+# retired.
+readonly ROOT_DISK_SIZE_MB=25600
 
 log_info() {
   echo -e "\033[32;1mINFO\033[0m: $1"
@@ -87,7 +82,9 @@ wait_for_disk_ready() {
 }
 
 echo "Pre-flight reminders:"
-echo "  - The plan must already be resized to ≥2GB RAM (kexec installer footprint)."
+echo "  - The plan must already be resized to ≥4GB RAM: kexec_load EINVALs on"
+echo "    2GB — the ~950MB installer initrd does not fit the segment layout"
+echo "    (trial-tested 2026-08-05). Downsize back to Nanode after smoke checks."
 echo "  - The clone (emergency rollback) must already exist and be powered off."
 if ! confirm "Lish access confirmed?"; then
   log_error "Confirm Lish console access before wiping a remote host."
