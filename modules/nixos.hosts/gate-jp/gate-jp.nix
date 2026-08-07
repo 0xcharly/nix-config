@@ -113,10 +113,13 @@
         # ALL *.qyrnl.com Let's Encrypt certs — wiping repeatedly =
         # rate-limited for days.
         "/var/lib/caddy"
-        # sqlite incl. app tokens (Gatus alerting token must keep matching).
-        "/var/lib/gotify-server"
         {
-          # gatus (DynamicUser): uptime history sqlite.
+          # DynamicUser state: gatus (uptime history sqlite) AND
+          # gotify-server (sqlite incl. app tokens — the Gatus alerting token
+          # must keep matching). NO separate /var/lib/gotify-server entry:
+          # that path is systemd's DynamicUser symlink into private/, and
+          # bind-mounting over it start-limits the unit (found on first
+          # boot, 2026-08-07).
           directory = "/var/lib/private";
           mode = "0700";
         }
