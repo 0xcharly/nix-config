@@ -11,17 +11,12 @@
         inputs.nix-config-secrets.nixosModules.services-mailserver
         inputs.nix-config-secrets.nixosModules.services-tailscale
 
+        self.nixosModules.profile-fs-btrfs-server-linode
         self.nixosModules.profile-hardware-linode
         self.nixosModules.profile-hardware-server
 
         self.nixosModules.access-directory
         self.nixosModules.bootloader-grub
-        self.nixosModules.fs-zfs-common
-        self.nixosModules.fs-zfs-system-base
-        self.nixosModules.fs-zfs-system-linode
-        self.nixosModules.fs-zfs-zpool-root
-        self.nixosModules.fs-zfs-zpool-root-data
-        self.nixosModules.fs-zfs-zpool-root-home
         self.nixosModules.initrd-hoopsnake
         self.nixosModules.nix
         self.nixosModules.nixpkgs
@@ -31,7 +26,6 @@
         self.nixosModules.programs-sudo
         self.nixosModules.programs-terminfo
         self.nixosModules.prometheus-exporters-node
-        self.nixosModules.prometheus-exporters-zfs
         self.nixosModules.selfhosted-mailserver
         self.nixosModules.services-fail2ban
         self.nixosModules.services-openssh
@@ -42,16 +36,12 @@
 
       # System config
       node = {
-        fs.zfs = {
-          hostId = "df18314a";
-          system = {
-            # by-id paths: /dev/sdX enumeration order is not stable across
-            # boots, which intermittently broke swap activation.
-            disk = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi-disk-0";
-            linode.swapDisk = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi-disk-1";
-            luksPasswordFile = "/tmp/root-disk-encryption.key";
-          };
-          zpool.root.reservation = "2GiB";
+        fs.btrfs.root = {
+          # by-id paths: /dev/sdX enumeration order is not stable across
+          # boots, which intermittently broke swap activation.
+          disk = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi-disk-0";
+          luksPasswordFile = "/tmp/root-disk-encryption.key";
+          swapSize = "2G";
         };
 
         networking.tailscale.enableSsh = true;
@@ -60,6 +50,18 @@
 
         users.delay.ssh.authorizeTailscaleInternalKey = true;
       };
+
+      environment.persistence."/persist".directories = [
+        "/var/vmail" # mail storage (SNM default)
+        "/var/dkim" # DKIM keys — published DNS TXT records must keep matching
+        "/var/sieve"
+        "/var/lib/dovecot" # indices (indexDir = /var/lib/dovecot/indices) + FTS
+        "/var/lib/postfix" # queue
+        "/var/lib/rspamd"
+        "/var/lib/redis-rspamd"
+        "/var/lib/acme" # mail FQDN cert — Let's Encrypt rate limits
+        # (knot-resolver cache deliberately not persisted — disposable.)
+      ];
 
       # Jump-only relay hop for the site-jp -> site-fr ZFS replication
       # (syncoid --sshoption ProxyJump=syncoid@jump-jp). The user itself
