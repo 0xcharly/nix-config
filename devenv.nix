@@ -98,6 +98,13 @@
         ];
       };
       pre-wipe-check.exec = builtins.readFile ./bin/pre-wipe-check.sh;
+      fetch-provision-secrets = {
+        exec = builtins.readFile ./bin/fetch-provision-secrets.sh;
+        packages = with pkgs; [
+          bitwarden-cli
+          jq
+        ];
+      };
       provision-nas = {
         exec = builtins.readFile ./bin/provision-nas.sh;
         packages = with pkgs; [

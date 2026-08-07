@@ -4,16 +4,20 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-# Ensure that the script is passed two or three arguments.
-if test $# -lt 2 || test $# -gt 3; then
-  >&2 echo "Illegal number of parameters: expected 2 or 3, got $#"
-  >&2 echo "Usage: $0 <ip-addr> <hostname> [staging-dir]"
+# Ensure that the script is passed two to four arguments.
+if test $# -lt 2 || test $# -gt 4; then
+  >&2 echo "Illegal number of parameters: expected 2-4, got $#"
+  >&2 echo "Usage: $0 <ip-addr> <hostname> [staging-dir] [secrets-dir]"
+  >&2 echo "  secrets-dir: pre-fetched vault material (fetch-provision-secrets.sh);"
+  >&2 echo "  skips Bitwarden entirely — required when the vault is unreachable"
+  >&2 echo "  (gate-jp's wipe takes down the proxy in front of vault.qyrnl.com)."
   exit 1
 fi
 
 REMOTE_ADDR="$1"
 TARGET_HOST="${2,,}"
 STAGING_DIR="${3:-}"
+SECRETS_DIR="${4:-}"
 
 log_info() {
   echo -e "\033[32;1mINFO\033[0m: $1"
@@ -22,6 +26,14 @@ log_info() {
 if test -n "$STAGING_DIR" && ! test -d "$STAGING_DIR/persist"; then
   >&2 echo "Staging dir '$STAGING_DIR' has no persist/ subtree."
   exit 1
+fi
+if test -n "$SECRETS_DIR"; then
+  for f in root.key ssh_host_ed25519_key ssh_host_ed25519_key.pub; do
+    if ! test -r "$SECRETS_DIR/$f"; then
+      >&2 echo "Secrets dir '$SECRETS_DIR' is missing '$f' (build it with fetch-provision-secrets.sh)."
+      exit 1
+    fi
+  done
 fi
 
 # Create temporary directories.
@@ -37,28 +49,28 @@ disk_encryption_key_files=$(mktemp -d)
 # Cleanup temporary data and sessions on exit.
 cleanup() {
   # Delete temporary directories. A user-provided staging tree is kept: it is
-  # the operator's to retain (and reuse on a retry) or delete.
+  # the operator's to retain (and reuse on a retry) or delete; likewise the
+  # secrets dir (delete it manually once the host is up).
   log_info "Cleaning build artifacts…"
   rm -rf "$extra_system_files"
   rm -rf "$disk_encryption_key_files"
 
-  # Close the password vault session.
-  log_info "Locking password vault…"
-  bw lock
+  if test -z "$SECRETS_DIR"; then
+    # Close the password vault session.
+    log_info "Locking password vault…"
+    bw lock
+  fi
 }
 trap cleanup EXIT
 
-log_info "Syncing password vault…"
-bw sync # Sync vault.
+if test -z "$SECRETS_DIR"; then
+  log_info "Syncing password vault…"
+  bw sync # Sync vault.
 
-log_info "Unlocking password vault…"
-BW_SESSION=$(bw unlock --raw)
-export BW_SESSION # Open a new password session.
-
-# Fetch keys in bulk to speed up lookups.
-log_info "Loading disk encryption keys…"
-ROOT_DISK_ENCRYPTION_KEYCHAIN_NAME="Homelab ZFS Root Encryption Passphrases"
-ROOT_DISK_ENCRYPTION_KEYCHAIN=$(bw get item "$ROOT_DISK_ENCRYPTION_KEYCHAIN_NAME")
+  log_info "Unlocking password vault…"
+  BW_SESSION=$(bw unlock --raw)
+  export BW_SESSION # Open a new password session.
+fi
 
 # Extract the given key from the top level Bitwarden entry value.
 get_disk_encryption_key() {
@@ -68,14 +80,20 @@ get_disk_encryption_key() {
   echo "$keychain" | jq -r ".fields[] | select(.name==\"$key_name\") | .value"
 }
 
-# Decrypt root encryption passphrase from the password store.
+# Root encryption passphrase: from the pre-fetched secrets dir, or decrypted
+# from the password store.
 load_root_encryption_key() {
   log_info "Loading root disk encryption key…"
 
   output_path="$disk_encryption_key_files/root.key"
 
   install -d -m 700 "$(dirname "$output_path")"
-  get_disk_encryption_key "$ROOT_DISK_ENCRYPTION_KEYCHAIN" "$TARGET_HOST" >"$output_path"
+  if test -n "$SECRETS_DIR"; then
+    install -m 600 "$SECRETS_DIR/root.key" "$output_path"
+  else
+    ROOT_DISK_ENCRYPTION_KEYCHAIN=$(bw get item "Homelab ZFS Root Encryption Passphrases")
+    get_disk_encryption_key "$ROOT_DISK_ENCRYPTION_KEYCHAIN" "$TARGET_HOST" >"$output_path"
+  fi
 
   disk_encryption_keys+=(--disk-encryption-keys /tmp/root-disk-encryption.key "$output_path")
 }
@@ -95,14 +113,19 @@ load_ssh_host_key() {
   key_name="$1"
   log_info "Loading $key_name key pair…"
 
-  SSH_HOST_KEYCHAIN=$(bw get item "$key_name $TARGET_HOST")
-
   # Host keys live on /persist (services.openssh.hostKeys points there):
   # nixos-anywhere extracts --extra-files over the mounted target root, where
   # disko has /persist mounted.
   output_path="$extra_system_files/persist/etc/ssh/$key_name"
 
   install -d -m 755 "$(dirname "$output_path")"
+  if test -n "$SECRETS_DIR"; then
+    install -m 644 "$SECRETS_DIR/$key_name.pub" "$output_path.pub"
+    install -m 600 "$SECRETS_DIR/$key_name" "$output_path"
+    return
+  fi
+
+  SSH_HOST_KEYCHAIN=$(bw get item "$key_name $TARGET_HOST")
   get_ssh_host_key "$SSH_HOST_KEYCHAIN" 'public' >"$output_path.pub"
   get_ssh_host_key "$SSH_HOST_KEYCHAIN" 'private' >"$output_path"
 
@@ -111,7 +134,7 @@ load_ssh_host_key() {
   chmod 600 "$output_path"
 }
 
-# Decrypt our private keys from the password store and copy them to the temporary directory.
+# Load our private keys into the temporary directory.
 log_info "Loading target host keys…"
 load_ssh_host_key "ssh_host_ed25519_key"
 
