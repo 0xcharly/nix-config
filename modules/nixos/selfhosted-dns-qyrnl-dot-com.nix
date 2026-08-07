@@ -68,8 +68,9 @@
                   nyx           IN CNAME nyx.${tailnetDomainName}.
                   term-nyx      IN CNAME term-nyx.${tailnetDomainName}.
                   fwk           IN CNAME fwk.${tailnetDomainName}.
-                  ; TODO(term-fwk migration): repoint to term-fwk.${tailnetDomainName}. with the console rename.
-                  term-fwk      IN CNAME fwk.${tailnetDomainName}.
+                  ; Goes live at the next gate deploy — deploy gates only
+                  ; AFTER the fwk→term-fwk console rename.
+                  term-fwk      IN CNAME term-fwk.${tailnetDomainName}.
                   term-x1p      IN CNAME term-x1p.${tailnetDomainName}.
 
                   ; Services declaration.
