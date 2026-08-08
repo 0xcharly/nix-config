@@ -65,7 +65,7 @@
 
 { inputs, ... }:
 {
-  flake.nixosModules.fs-zfs-system-minisforum-n5 =
+  flake.nixosModules.fs-zfs-root-minisforum-n5 =
     {
       config,
       lib,
@@ -144,7 +144,8 @@
           };
         };
 
-        # See fs-zfs-system-base.nix: gate the pool import on LUKS unlock.
+        # Gate the pool import on LUKS unlock (same rationale as the btrfs
+        # preamble's x-systemd.device-timeout=infinity).
         # Both mappings (crypted0/crypted1, ZFS mirror) must exist before the
         # import — cryptsetup.target orders after both.
         # https://github.com/nix-community/disko/issues/1257

@@ -1,6 +1,6 @@
 { self, ... }:
 {
-  flake.nixosModules.fs-zfs-zpool-root-data =
+  flake.nixosModules.fs-zfs-root-data =
     {
       config,
       lib,

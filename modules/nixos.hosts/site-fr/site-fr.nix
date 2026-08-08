@@ -16,15 +16,14 @@
         self.nixosModules.access-directory
         self.nixosModules.bootloader-systemd-boot
         self.nixosModules.fs-zfs-backup-minisforum-n5
-        self.nixosModules.fs-zfs-common
+        self.nixosModules.fs-zfs-root-preamble
         self.nixosModules.fs-zfs-encryption-check
         self.nixosModules.fs-zfs-mount-tank
         self.nixosModules.fs-zfs-replication-replica
         self.nixosModules.fs-zfs-snapshots-check
         self.nixosModules.fs-zfs-snapshots-tank
-        self.nixosModules.fs-zfs-system-minisforum-n5
-        self.nixosModules.fs-zfs-zpool-root
-        self.nixosModules.fs-zfs-zpool-root-data
+        self.nixosModules.fs-zfs-root-minisforum-n5
+        self.nixosModules.fs-zfs-root-data
         self.nixosModules.hardware-cpu-amd
         self.nixosModules.initrd-hoopsnake
         self.nixosModules.networking-common
@@ -38,7 +37,6 @@
         self.nixosModules.prometheus-exporters-blackbox
         self.nixosModules.prometheus-exporters-node
         self.nixosModules.prometheus-exporters-smartctl
-        self.nixosModules.prometheus-exporters-zfs
         self.nixosModules.services-fail2ban
         self.nixosModules.services-openssh
         self.nixosModules.services-tailscale

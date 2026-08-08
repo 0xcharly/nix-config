@@ -1,5 +1,5 @@
 {
-  flake.nixosModules.fs-zfs-zpool-root-data-postgresql =
+  flake.nixosModules.fs-zfs-root-data-postgresql =
     { config, lib, ... }:
     {
       options.node.services.postgresql = with lib; {

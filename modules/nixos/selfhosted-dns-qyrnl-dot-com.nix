@@ -65,11 +65,7 @@
                   node-skl      IN CNAME node-skl.${tailnetDomainName}.
                   site-fr       IN CNAME site-fr.${tailnetDomainName}.
                   site-jp       IN CNAME site-jp.${tailnetDomainName}.
-                  nyx           IN CNAME nyx.${tailnetDomainName}.
                   term-nyx      IN CNAME term-nyx.${tailnetDomainName}.
-                  fwk           IN CNAME fwk.${tailnetDomainName}.
-                  ; Goes live at the next gate deploy — deploy gates only
-                  ; AFTER the fwk→term-fwk console rename.
                   term-fwk      IN CNAME term-fwk.${tailnetDomainName}.
                   term-x1p      IN CNAME term-x1p.${tailnetDomainName}.
 

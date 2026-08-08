@@ -377,12 +377,10 @@ ip = "100.64.0.120"
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIBc7+svM9KE66X8lpQzYny0byI47Kr38LsYXVyJIZd+w"
 
 [wireguard.tailscale.vlan."term-fwk"]
-aliases = ["fwk"]
 ip = "100.64.0.110"
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIOOGCAJVRToabx32L6jIUdzDhU43QWa6dXm4sAN/H96m"
 
 [wireguard.tailscale.vlan."term-nyx"]
-aliases = ["nyx"]
 ip = "100.64.0.100"
 ssh-ed25519 = "AAAAC3NzaC1lZDI1NTE5AAAAIHsn07q7SmdP1M09ZIrz0bD9Te+5OMVVlfGEtAP9+iP9"
 
