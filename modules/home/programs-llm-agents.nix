@@ -8,7 +8,10 @@
   flake.homeModules.programs-llm-agents = moduleWithSystem (
     perSystem@{ config, ... }:
     {
-      imports = [ self.homeModules.programs-omp ];
+      imports = with self.homeModules; [
+        programs-claude-code
+        programs-omp
+      ];
 
       # Daily pre-built binaries are available from the Numtide binary cache.
       nix.settings = {
@@ -18,7 +21,7 @@
 
       programs.opencode = {
         enable = true;
-        package = perSystem.config.packages.opencode;
+        package = perSystem.config.packages.opencode2;
       };
     }
   );
@@ -27,7 +30,7 @@
     { pkgs, ... }:
     {
       packages = with inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system}; {
-        inherit opencode;
+        inherit opencode opencode2;
       };
     };
 }
