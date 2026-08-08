@@ -27,15 +27,22 @@ if test -d "$HOME/code"; then
     case "$marker" in
     *.jj)
       # jj repo (possibly colocated): git commands fail on non-colocated jj
-      # repos, so use jj for both checks. The `st` call MUST snapshot the
-      # working copy (no --ignore-working-copy): edits made since the last jj
-      # invocation must count as dirty, or they die with the wipe.
-      if ! (cd "$repo" && jj st 2>/dev/null | grep -q 'The working copy has no changes'); then
-        report "$repo: dirty working copy (jj st)"
+      # repos, so use jj for both checks. The dirty probe MUST snapshot the
+      # working copy (no --ignore-working-copy): edits made since the last
+      # jj invocation must count as dirty, or they die with the wipe. Ask
+      # the template engine, not the human-readable output — its phrasing
+      # varies across jj versions.
+      dirty=$(cd "$repo" && jj log --no-graph -r '@' -T 'if(empty, "", "dirty")' 2>/dev/null)
+      if test "$dirty" = "dirty"; then
+        report "$repo: dirty working copy (jj)"
       fi
-      unpushed=$(cd "$repo" && jj --ignore-working-copy log --no-graph -r 'remote_bookmarks()..' -T 'commit_id ++ "\n"' 2>/dev/null)
+      # `remote_bookmarks()..` alone ALWAYS matches: the working-copy commit
+      # itself is never pushed. Empty commits (the idle working copy,
+      # undescribed heads) carry no content — only non-empty unpushed
+      # revisions are findings.
+      unpushed=$(cd "$repo" && jj --ignore-working-copy log --no-graph -r 'remote_bookmarks().. ~ empty()' -T 'commit_id ++ "\n"' 2>/dev/null)
       if test -n "$unpushed"; then
-        report "$repo: unpushed revisions (jj log -r 'remote_bookmarks()..')"
+        report "$repo: unpushed revisions (jj log -r 'remote_bookmarks().. ~ empty()')"
       fi
       ;;
     *.git)
