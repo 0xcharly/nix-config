@@ -60,6 +60,7 @@
 
       environment.persistence."/persist".directories = [
         "/var/lib/bluetooth" # pairing keys
+        "/var/lib/fprint" # enrolled fingerprints — or fprintd-enroll after every boot
         # declarative profiles (networking-wireless.nix ensureProfiles)
         # regenerate; this persists imperatively-added rescue networks (hotel
         # wifi, incident hotspots)
